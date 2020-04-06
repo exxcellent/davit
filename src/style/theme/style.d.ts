@@ -19,5 +19,14 @@ declare module "styled-components" {
     borderRadius: {
       popup: string;
     };
+
+    textAlin: {
+      left: string;
+      right: string;
+      center: string;
+      start: string;
+      end: string;
+      matchParent: string;
+    };
   }
 }

@@ -9,5 +9,13 @@ export const GlobalTheme: DefaultTheme = {
   },
   borderRadius: {
     popup: "10px"
+  },
+  textAlin: {
+    left: "left",
+    right: "right",
+    center: "center",
+    start: "start",
+    end: "end",
+    matchParent: "matchParent"
   }
 };
