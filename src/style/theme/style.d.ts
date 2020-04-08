@@ -10,6 +10,7 @@ declare module "styled-components" {
   export interface DefaultTheme {
     backgroundcolor: string;
     text: string;
+    fontFamily: string;
 
     color: {
       primary: string;

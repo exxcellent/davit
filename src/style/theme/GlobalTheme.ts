@@ -2,13 +2,14 @@ import { DefaultTheme } from "styled-components";
 
 export const GlobalTheme: DefaultTheme = {
   backgroundcolor: "blue",
-  text: "white",
+  text: "black",
+  fontFamily: "Arial",
   color: {
-    primary: "blue",
-    secondary: "yellow"
+    primary: "#3498db",
+    secondary: "#ADD6D6",
   },
   borderRadius: {
-    popup: "10px"
+    popup: "10px",
   },
   textAlin: {
     left: "left",
@@ -16,6 +17,6 @@ export const GlobalTheme: DefaultTheme = {
     center: "center",
     start: "start",
     end: "end",
-    matchParent: "matchParent"
-  }
+    matchParent: "matchParent",
+  },
 };
