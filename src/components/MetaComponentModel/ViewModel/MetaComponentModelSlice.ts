@@ -1,4 +1,8 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  PayloadAction,
+  bindActionCreators,
+} from "@reduxjs/toolkit";
 import { ComponentTo } from "../access/ComponentTo";
 import { RootState } from "../../../app/store";
 
@@ -13,11 +17,23 @@ export const metaComponentModelSlice = createSlice({
   reducers: {
     addComponent: (state, action: PayloadAction<ComponentTo>) => {
       state.components.push(action.payload);
-    }
-  }
+    },
+    deleteComponent: (state, action: PayloadAction<ComponentTo>) => {
+      let i: number;
+      for (i = 0; i < state.components.length; i++) {
+        if (state.components[i].id === action.payload.id) {
+          state.components.splice(i, 1);
+          break;
+        }
+      }
+    },
+  },
 });
 
-export const {addComponent} = metaComponentModelSlice.actions;
+export const {
+  addComponent,
+  deleteComponent,
+} = metaComponentModelSlice.actions;
 
 export const metaComponentModelReducer = metaComponentModelSlice.reducer;
 
