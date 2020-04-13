@@ -2,11 +2,9 @@ import React, { FunctionComponent } from "react";
 import styled from "styled-components";
 import { CarvButton } from "../../../common/styles/Button";
 
-interface MetaComponentFragmentProps {
+export interface MetaComponentFragmentProps {
   name: string;
   id: string;
-  width: number;
-  heigth: number;
   color: string;
   editCallBack: () => void;
 }
@@ -14,13 +12,13 @@ interface MetaComponentFragmentProps {
 export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps> = (
   props
 ) => {
-  const { name, width, heigth, color, id, editCallBack } = props;
+  const { name, color, id, editCallBack } = props;
 
   // Styling
   const MetaComponent = styled.div`
     padding: 10px;
-    width: ${width}em;
-    height: ${heigth}em;
+    width: 10em;
+    height: 10em;
     background-color: ${color};
     border-radius: ${(props) => props.theme.borderRadius.popup};
   `;

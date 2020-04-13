@@ -1,7 +1,7 @@
 import { DefaultTheme } from "styled-components";
 
 export const GlobalTheme: DefaultTheme = {
-  backgroundcolor: "blue",
+  backgroundcolor: "#E8F6FA",
   text: "black",
   fontFamily: "Arial",
   color: {
