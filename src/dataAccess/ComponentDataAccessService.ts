@@ -1,6 +1,10 @@
 import { ComponentCTO } from "./ComponentCTO";
-import { dataStore } from "../app/store";
 import { DataStoreCTO } from "./DataStoreCTO";
+import ComponentTO from "./ComponentTO";
+import DesignTO from "./DesignTO";
+import GeometricalDataTO from "./GeometricalDataTO";
+import PositionTO from "./PositionTO";
+import dataStore from "./DataStore";
 
 export class ComponentDataAccessService {
   static findAll(): ComponentCTO[] {
@@ -20,14 +24,29 @@ export class ComponentDataAccessService {
   }
 
   static find(id: number): ComponentCTO {
-    return {};
+    return {
+      componentTO: ComponentTO.builder().build(),
+      design: DesignTO.builder().build(),
+      geometricalData: GeometricalDataTO.builder().build(),
+      position: PositionTO.builder().build(),
+    };
   }
 
   static delete(id: number): ComponentCTO {
-    return {};
+    return {
+      componentTO: ComponentTO.builder().build(),
+      design: DesignTO.builder().build(),
+      geometricalData: GeometricalDataTO.builder().build(),
+      position: PositionTO.builder().build(),
+    };
   }
 
   static editOrCreate(componentCTO: ComponentCTO): ComponentCTO {
-    return {};
+    return {
+      componentTO: ComponentTO.builder().build(),
+      design: DesignTO.builder().build(),
+      geometricalData: GeometricalDataTO.builder().build(),
+      position: PositionTO.builder().build(),
+    };
   }
 }

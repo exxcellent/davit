@@ -10,6 +10,7 @@ import styled from "styled-components";
 import { MetaComponentAddPopup } from "./Fragments/MetaComponentAddPopup";
 import { CarvButton } from "../../common/styles/Button";
 import ComponentTO from "../../../dataAccess/ComponentTO";
+import { isNullOrUndefined } from "util";
 
 interface MetaComponentModelControllerProps {}
 
@@ -19,12 +20,9 @@ export const MetaComponentModelController: FunctionComponent<MetaComponentModelC
   const dispatch = useDispatch();
   const components = useSelector(selectComponents);
   const [addPopupVisible, setAddPopupvisible] = React.useState<boolean>(false);
-  const [component, setComponent] = React.useState<ComponentTO>({
-    name: "",
-    id: 0,
-    designFk: 0,
-    geomatricalDataFk: 0,
-  });
+  const [component, setComponent] = React.useState<ComponentTO>(
+    ComponentTO.builder().build()
+  );
 
   const openPopup = (component: ComponentTO) => {
     setComponent(component);
@@ -33,27 +31,19 @@ export const MetaComponentModelController: FunctionComponent<MetaComponentModelC
 
   const updateComponent = (
     componentName: string,
-    componentId: string,
-    componentColor: string
+    componentId: number,
+    componentColor = "yellow"
   ) => {
     setAddPopupvisible(false);
-    setComponent({ name: "", id: "", color: "" });
+    setComponent(ComponentTO.builder().build());
     // do nothing if no id was set.
-    if (componentId !== "") {
-      dispatch(
-        deleteComponent({
-          name: componentName,
-          id: componentId,
-          color: componentColor,
-        })
-      );
-      dispatch(
-        addComponent({
-          name: componentName,
-          id: componentId,
-          color: componentColor,
-        })
-      );
+    if (!isNullOrUndefined(componentId)) {
+      let component = ComponentTO.builder().build();
+      component = ComponentTO.builder(component).name(componentName).build();
+      component = ComponentTO.builder(component).id(componentId).build();
+
+      dispatch(deleteComponent(component));
+      dispatch(addComponent(component));
     }
   };
 

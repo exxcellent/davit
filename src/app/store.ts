@@ -3,8 +3,8 @@ import { metaComponentModelReducer } from "../components/MetaComponentModel/View
 
 export const store = configureStore({
   reducer: {
-    metaComponentModel: metaComponentModelReducer
-  }
+    metaComponentModel: metaComponentModelReducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

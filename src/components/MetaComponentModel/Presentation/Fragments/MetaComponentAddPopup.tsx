@@ -52,7 +52,7 @@ export const MetaComponentAddPopup: FunctionComponent<MetaComponentAddPopupProps
   const onClickCancel = () => {
     console.log("clicked 'Cancel' Button.");
     // set own state to visible false
-    props.onCallBack("", "", "");
+    props.onCallBack("", 0, "");
   };
 
   return (
@@ -73,7 +73,7 @@ export const MetaComponentAddPopup: FunctionComponent<MetaComponentAddPopupProps
         <input
           type="number"
           value={componentId}
-          onChange={(e) => setComponentId(e.target.value)}
+          onChange={(e) => setComponentId(Number(e.target.value))}
         />
       </LabelTextField>
       <LabelTextField>
