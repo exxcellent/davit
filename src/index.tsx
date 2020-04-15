@@ -1,14 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import { store } from './app/store';
 import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
+import { Carv2 } from './app/Carv2';
+import { IntlProvider } from "react-intl";
+import { languages } from './translations/languages';
+
+// TODO: if we rollout to english countries, this must be redefined (changing the locale "de" to "en" already works)
+/* support variables for languages */
+// const locale = navigator.language;
+// DE
+const locale = 'de';
+// EN
+// const locale = 'en';
+const localeData = languages[locale];
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <IntlProvider locale={locale} messages={localeData}>
+      <Carv2 />
+    </IntlProvider>
   </Provider>,
   document.getElementById('root')
 );
