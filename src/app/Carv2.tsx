@@ -13,12 +13,14 @@ library.add(fab, faPlusSquare, faEllipsisH);
 export function Carv2() {
   return (
     <div className="Carv2">
-      <ThemeProvider theme={GlobalTheme}>
-        <label>Sprache: </label>
-        <FormattedMessage id="language"></FormattedMessage>
-        <MetaComponentModelController />
-        <GlobalStyle />
-      </ThemeProvider>
+      <React.StrictMode>
+        <ThemeProvider theme={GlobalTheme}>
+          <label>Sprache: </label>
+          <FormattedMessage id="language"></FormattedMessage>
+          <MetaComponentModelController />
+          <GlobalStyle />
+        </ThemeProvider>
+      </React.StrictMode>
     </div>
   );
 }
