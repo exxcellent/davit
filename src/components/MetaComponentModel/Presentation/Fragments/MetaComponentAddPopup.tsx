@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Footer } from "../../../common/styles/Footer";
 import { CarvButton } from "../../../common/styles/Button";
 import { isNullOrUndefined } from "util";
-import ComponentTO from "../../../../dataAccess/ComponentTO";
+import ComponentTO from "../../../common/access/ComponentTO";
 
 export interface MetaComponentAddPopupProps {
   component: ComponentTO;
@@ -13,7 +13,7 @@ export interface MetaComponentAddPopupProps {
 export const MetaComponentAddPopup: FunctionComponent<MetaComponentAddPopupProps> = (
   props
 ) => {
-  const { name, id } = props.component;
+  const { compName, id } = props.component;
 
   // ---- states ----
   const [componentName, setComponentName] = React.useState<string>("");
@@ -22,8 +22,8 @@ export const MetaComponentAddPopup: FunctionComponent<MetaComponentAddPopupProps
 
   // ---- initial ----
   React.useEffect(() => {
-    if (!isNullOrUndefined(name) && name !== "") {
-      setComponentName(name);
+    if (!isNullOrUndefined(compName) && compName !== "") {
+      setComponentName(compName);
     } else {
       setComponentName("New Component");
     }
@@ -31,7 +31,7 @@ export const MetaComponentAddPopup: FunctionComponent<MetaComponentAddPopupProps
     if (!isNullOrUndefined(id)) {
       setComponentId(id);
     }
-  }, [id, name, props.component]);
+  }, [id, compName, props.component]);
 
   // ---- methods ----
   const onClickOk = () => {

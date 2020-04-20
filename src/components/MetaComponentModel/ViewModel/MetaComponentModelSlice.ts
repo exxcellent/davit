@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../../app/store";
-import ComponentTO from "../../../dataAccess/ComponentTO";
+import ComponentTO from "../../common/access/ComponentTO";
 
 interface MetaComponentModelState {
   components: ComponentTO[];
@@ -12,6 +12,7 @@ export const metaComponentModelSlice = createSlice({
   initialState: initialState,
   reducers: {
     addComponent: (state, action: PayloadAction<ComponentTO>) => {
+      console.info(action.payload);
       state.components.push(action.payload);
     },
     deleteComponent: (state, action: PayloadAction<ComponentTO>) => {

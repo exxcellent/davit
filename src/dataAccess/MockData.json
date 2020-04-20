@@ -1,0 +1,34 @@
+{
+  "components": [
+    { "id": 1, "name": "comp1", "geometricalDataFk": 1, "designFk": 1 },
+    { "id": 2, "name": "comp2", "geometricalDataFk": 2, "designFk": 2 },
+    { "id": 3, "name": "comp3", "geometricalDataFk": 3, "designFk": 3 },
+    { "id": 4, "name": "comp4", "geometricalDataFk": 4, "designFk": 4 },
+    { "id": 5, "name": "comp5", "geometricalDataFk": 5, "designFk": 5 },
+    { "id": 6, "name": "comp6", "geometricalDataFk": 6, "designFk": 6 }
+  ],
+  "geometriacalData": [
+    { "id": 1, "width": 150, "height": 150, "positionFk": 1 },
+    { "id": 2, "width": 150, "height": 150, "positionFk": 2 },
+    { "id": 3, "width": 150, "height": 150, "positionFk": 3 },
+    { "id": 4, "width": 150, "height": 150, "positionFk": 4 },
+    { "id": 5, "width": 150, "height": 150, "positionFk": 5 },
+    { "id": 6, "width": 150, "height": 150, "positionFk": 6 }
+  ],
+  "position": [
+    { "id": 1, "x": 10, "y": 10 },
+    { "id": 2, "x": 10, "y": 10 },
+    { "id": 3, "x": 10, "y": 10 },
+    { "id": 4, "x": 10, "y": 10 },
+    { "id": 5, "x": 10, "y": 10 },
+    { "id": 6, "x": 10, "y": 10 }
+  ],
+  "design": [
+    { "id": 1, "color": "red" },
+    { "id": 2, "color": "red" },
+    { "id": 3, "color": "red" },
+    { "id": 4, "color": "red" },
+    { "id": 5, "color": "red" },
+    { "id": 6, "color": "red" }
+  ]
+}

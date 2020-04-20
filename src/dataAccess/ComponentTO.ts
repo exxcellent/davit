@@ -1,7 +1,7 @@
 export type ComponentJson = {
   name: string;
   id: number;
-  geomatricalDataFk: number;
+  geometricalDataFk: number;
   designFk: number;
 };
 
@@ -24,7 +24,7 @@ export class ComponentBuilder {
     return this;
   }
   geomatricalDataFk(geomatricalDataFk: number): ComponentBuilder {
-    this.json.geomatricalDataFk = geomatricalDataFk;
+    this.json.geometricalDataFk = geomatricalDataFk;
     return this;
   }
   build(): ComponentTO {
@@ -44,7 +44,7 @@ export default class ComponentTO {
     return {
       name: this.name,
       id: this.id,
-      geomatricalDataFk: this.geomatricalDataFk,
+      geometricalDataFk: this.geomatricalDataFk,
       designFk: this.designFk,
     };
   }
@@ -53,7 +53,7 @@ export default class ComponentTO {
     return new ComponentTO(
       json.name,
       json.id,
-      json.geomatricalDataFk,
+      json.geometricalDataFk,
       json.designFk
     );
   }
