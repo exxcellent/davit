@@ -1,5 +1,5 @@
 import React from "react";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, IntlProvider } from "react-intl";
 import { MetaComponentModelController } from "../components/MetaComponentModel/Presentation/MetaComponentModelController";
 import { ThemeProvider } from "styled-components";
 import { GlobalTheme } from "../style/theme/GlobalTheme";
