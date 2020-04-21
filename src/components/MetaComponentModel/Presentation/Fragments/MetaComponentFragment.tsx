@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from "react";
 import styled from "styled-components";
+import { useIntl } from "react-intl";
 
 export interface MetaComponentFragmentProps {
   name: string;
