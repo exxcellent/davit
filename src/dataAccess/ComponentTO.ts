@@ -36,7 +36,7 @@ export default class ComponentTO {
   private constructor(
     readonly name: string,
     readonly id: number,
-    readonly geomatricalDataFk: number,
+    readonly geometricalDataFk: number,
     readonly designFk: number
   ) {}
 
@@ -44,7 +44,7 @@ export default class ComponentTO {
     return {
       name: this.name,
       id: this.id,
-      geometricalDataFk: this.geomatricalDataFk,
+      geometricalDataFk: this.geometricalDataFk,
       designFk: this.designFk,
     };
   }
