@@ -25,18 +25,35 @@ class DataStore {
     MockData.components.forEach((component) => {
       this.data!.components.set(component.id, ComponentTO.fromJSON(component));
     });
-    MockData.geometriacalData.forEach((geometrical) => {
+    MockData.geometricalDatas.forEach((geometrical) => {
       this.data!.geometricalData.set(
         geometrical.id,
         GeometricalDataTO.fromJSON(geometrical)
       );
     });
-    MockData.position.forEach((positions) => {
+    MockData.positions.forEach((positions) => {
       this.data!.positions.set(positions.id, PositionTO.fromJSON(positions));
     });
-    MockData.design.forEach((designs) => {
+    MockData.designs.forEach((designs) => {
       this.data!.designs.set(designs.id, DesignTO.fromJSON(designs));
     });
+  }
+
+  private saveData(): void {
+    if (this.data?.components.values() !== undefined) {
+      MockData.components = Array.from(this.data.components.values());
+    }
+    if (this.data?.designs.values() !== undefined) {
+      MockData.designs = Array.from(this.data.designs.values());
+    }
+    if (this.data?.geometricalData.values() !== undefined) {
+      MockData.geometricalDatas = Array.from(
+        this.data.geometricalData.values()
+      );
+    }
+    if (this.data?.positions.values() !== undefined) {
+      MockData.positions = Array.from(this.data.positions.values());
+    }
   }
 
   private initializeData(): void {
@@ -46,6 +63,15 @@ class DataStore {
       designs: new Map<number, DesignTO>(),
       geometricalData: new Map<number, GeometricalDataTO>(),
     };
+  }
+
+  public commitChanges(): void {
+    this.saveData();
+    this.readData();
+  }
+
+  public roleBack(): void {
+    this.readData();
   }
 
   public getDataStore(): DataStoreCTO {
