@@ -1,56 +1,57 @@
-import ComponentTO from "../ComponentTO";
-import dataStore from "../DataStore";
 import { isNullOrUndefined } from "util";
-import { ComponentDataAccessService } from "../services/ComponentDataAccessService";
-import { useIntl } from "react-intl";
+import { ComponentTO } from "../access/to/ComponentTO";
+import dataStore from "../DataStore";
+import { TechnicalDataAccessService } from "../services/TechnicalDataAccessService";
+import { CheckHelper } from "../util/CheckHelper";
+import { DataAccessUtil } from "../util/DataAccessUtil";
 
-export class ComponentRepository {
-  static find(id: number): ComponentTO | undefined {
+export const ComponentRepository = {
+  find(id: number): ComponentTO | undefined {
     return dataStore.getDataStore().components.get(id);
-  }
+  },
 
-  static findAll(): ComponentTO[] {
+  findAll(): ComponentTO[] {
     return Array.from(dataStore.getDataStore().components.values());
-  }
+  },
 
-  static delete(component: ComponentTO): ComponentTO {
-    let intl = useIntl();
+  delete(component: ComponentTO): ComponentTO {
     if (
       !isNullOrUndefined(
-        ComponentDataAccessService.findGeometricalData(
-          component.geometricalDataFk
+        TechnicalDataAccessService.findGeometricalData(
+          component.geometricalDataFk!
         )
       )
     ) {
-      throw new Error(
-        intl.formatMessage(
-          { id: "dataAccess.repository.error.hasReference" },
-          { Fk: component.geometricalDataFk }
-        )
-      );
+      throw new Error("dataAccess.repository.error.hasReference");
     }
     if (
       !isNullOrUndefined(
-        ComponentDataAccessService.findDesign(component.designFk)
+        TechnicalDataAccessService.findDesign(component.designFk!)
       )
     ) {
-      throw new Error(
-        intl.formatMessage(
-          { id: "dataAccess.repository.error.hasReference" },
-          { Fk: component.designFk }
-        )
-      );
+      throw new Error("dataAccess.repository.error.hasReference");
     }
 
-    let success = dataStore.getDataStore().designs.delete(component.id);
+    let success = dataStore.getDataStore().components.delete(component.id!);
     if (!success) {
-      throw new Error(
-        intl.formatMessage(
-          { id: "dataAccess.repository.error.notExists" },
-          { objectId: component.id }
-        )
-      );
+      throw new Error("dataAccess.repository.error.notExists");
     }
     return component;
-  }
-}
+  },
+
+  save(component: ComponentTO): ComponentTO {
+    CheckHelper.nullCheck(component, "component");
+    let componentTO: ComponentTO;
+    if (component.id === -1) {
+      componentTO = {
+        ...component,
+        id: DataAccessUtil.determineNewId(this.findAll()),
+      };
+      console.info("set new component id: " + componentTO.id);
+    } else {
+      componentTO = { ...component };
+    }
+    dataStore.getDataStore().components.set(componentTO.id!, componentTO);
+    return componentTO;
+  },
+};

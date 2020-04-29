@@ -1,27 +1,35 @@
+import { PositionTO } from "../access/to/PositionTO";
 import dataStore from "../DataStore";
-import PositionTO from "../PositionTO";
-import { useIntl } from "react-intl";
+import { DataAccessUtil } from "../util/DataAccessUtil";
 
-export class PositionRepository {
-  static find(id: number): PositionTO | undefined {
+export const PositionRepository = {
+  find(id: number): PositionTO | undefined {
     return dataStore.getDataStore().positions.get(id);
-  }
+  },
 
-  static findAll(): PositionTO[] {
+  findAll(): PositionTO[] {
     return Array.from(dataStore.getDataStore().positions.values());
-  }
+  },
 
-  static delete(position: PositionTO): boolean {
-    const intl = useIntl();
-    let success = dataStore.getDataStore().positions.delete(position.id);
+  delete(position: PositionTO): boolean {
+    let success = dataStore.getDataStore().positions.delete(position.id!);
     if (!success) {
-      throw new Error(
-        intl.formatMessage(
-          { id: "dataAccess.repository.error.notExists" },
-          { objectId: position.id }
-        )
-      );
+      throw new Error("dataAccess.repository.error.notExists");
     }
     return success;
-  }
-}
+  },
+
+  save(position: PositionTO): PositionTO {
+    let positionTO: PositionTO;
+    if (position.id === -1) {
+      positionTO = {
+        ...position,
+        id: DataAccessUtil.determineNewId(this.findAll()),
+      };
+    } else {
+      positionTO = { ...position };
+    }
+    dataStore.getDataStore().positions.set(positionTO.id!, positionTO);
+    return positionTO;
+  },
+};

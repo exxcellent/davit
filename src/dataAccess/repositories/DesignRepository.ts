@@ -1,27 +1,35 @@
+import { DesignTO } from "../access/to/DesignTO";
 import dataStore from "../DataStore";
-import DesignTO from "../DesignTO";
-import { useIntl } from "react-intl";
+import { DataAccessUtil } from "../util/DataAccessUtil";
 
-export class DesignRepository {
-  static find(id: number): DesignTO | undefined {
+export const DesignRepository = {
+  find(id: number): DesignTO | undefined {
     return dataStore.getDataStore().designs.get(id);
-  }
+  },
 
-  static findAll(): DesignTO[] {
+  findAll(): DesignTO[] {
     return Array.from(dataStore.getDataStore().designs.values());
-  }
+  },
 
-  static delete(design: DesignTO): DesignTO {
-    let intl = useIntl();
-    let success = dataStore.getDataStore().designs.delete(design.id);
+  delete(design: DesignTO): DesignTO {
+    let success = dataStore.getDataStore().designs.delete(design.id!);
     if (!success) {
-      throw new Error(
-        intl.formatMessage(
-          { id: "dataAccess.repository.error.notExists" },
-          { objectId: design.id }
-        )
-      );
+      throw new Error("dataAccess.repository.error.notExists");
     }
     return design;
-  }
-}
+  },
+
+  save(design: DesignTO): DesignTO {
+    let designTO: DesignTO;
+    if (design.id === -1) {
+      designTO = {
+        ...design,
+        id: DataAccessUtil.determineNewId(this.findAll()),
+      };
+    } else {
+      designTO = { ...design };
+    }
+    dataStore.getDataStore().designs.set(designTO.id!, designTO);
+    return designTO;
+  },
+};

@@ -1,43 +1,48 @@
-import dataStore from "../DataStore";
-import GeometricalDataTO from "../GeometricalDataTO";
-import { ComponentDataAccessService } from "../services/ComponentDataAccessService";
 import { isNullOrUndefined } from "util";
-import { useIntl } from "react-intl";
+import { GeometricalDataTO } from "../access/to/GeometricalDataTO";
+import dataStore from "../DataStore";
+import { TechnicalDataAccessService } from "../services/TechnicalDataAccessService";
+import { DataAccessUtil } from "../util/DataAccessUtil";
 
-export class GeometricalDataRepository {
-  static find(id: number): GeometricalDataTO | undefined {
+export const GeometricalDataRepository = {
+  find(id: number): GeometricalDataTO | undefined {
     return dataStore.getDataStore().geometricalData.get(id);
-  }
+  },
 
-  static findAll(): GeometricalDataTO[] {
+  findAll(): GeometricalDataTO[] {
     return Array.from(dataStore.getDataStore().geometricalData.values());
-  }
+  },
 
-  static delete(geometricalData: GeometricalDataTO): boolean {
-    let intl = useIntl();
+  delete(geometricalData: GeometricalDataTO): boolean {
     if (
       !isNullOrUndefined(
-        ComponentDataAccessService.findPosition(geometricalData.positionFk)
+        TechnicalDataAccessService.findPosition(geometricalData.positionFk!)
       )
     ) {
-      throw new Error(
-        intl.formatMessage(
-          { id: "dataAccess.repository.error.hasReference" },
-          { Fk: geometricalData.positionFk }
-        )
-      );
+      throw new Error("dataAccess.repository.error.hasReference");
     }
     let success = dataStore
       .getDataStore()
-      .geometricalData.delete(geometricalData.id);
+      .geometricalData.delete(geometricalData.id!);
     if (!success) {
-      throw new Error(
-        intl.formatMessage(
-          { id: "dataAccess.repository.error.notExists" },
-          { objectId: geometricalData.id }
-        )
-      );
+      throw new Error("dataAccess.repository.error.notExists");
     }
     return success;
-  }
-}
+  },
+
+  save(geometricalData: GeometricalDataTO): GeometricalDataTO {
+    let geometricalDataTO: GeometricalDataTO;
+    if (geometricalData.id === -1) {
+      geometricalDataTO = {
+        ...geometricalData,
+        id: DataAccessUtil.determineNewId(this.findAll()),
+      };
+    } else {
+      geometricalDataTO = { ...geometricalData };
+    }
+    dataStore
+      .getDataStore()
+      .geometricalData.set(geometricalDataTO.id!, geometricalDataTO);
+    return geometricalDataTO;
+  },
+};
