@@ -38,7 +38,7 @@ export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
         console.log("New 'X' position: " + info.point.x);
         console.log("New 'Y' position: " + info.point.y);
       }}
-      style={{ width: "0%" }}
+      style={{ width: "0%", position: "absolute" }}
     >
       {props.children}
     </motion.div>

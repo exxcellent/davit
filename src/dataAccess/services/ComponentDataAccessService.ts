@@ -13,6 +13,14 @@ export const ComponentDataAccessService = {
     );
   },
 
+  findCTO(id: number): ComponentCTO {
+    return createComponentCTO(ComponentRepository.find(id));
+  },
+
+  find(id: number): ComponentTO | undefined {
+    return ComponentRepository.find(id);
+  },
+
   delete(component: ComponentCTO): ComponentCTO {
     console.info("DataAccessService delete called.");
     CheckHelper.nullCheck(component.geometricalData, "GeometricalDataCTO");

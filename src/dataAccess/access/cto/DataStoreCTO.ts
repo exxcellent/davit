@@ -13,11 +13,11 @@ export interface DataStoreCTO {
   // Technical
   designs: Map<number, DesignTO>;
   positions: Map<number, PositionTO>;
-  geometricalData: Map<number, GeometricalDataTO>;
+  geometricalDatas: Map<number, GeometricalDataTO>;
   // Sequence
   sequences: Map<number, SequenceTO>;
   steps: Map<number, SequenceStepTO>;
-  componentData: Map<number, ComponentDataTO>;
+  componentDatas: Map<number, ComponentDataTO>;
   // Data
   datas: Map<number, DataTO>;
 }

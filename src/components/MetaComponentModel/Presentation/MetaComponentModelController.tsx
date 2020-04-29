@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Button } from "semantic-ui-react";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
 import { selectStep } from "../../common/viewModel/GlobalSlice";
@@ -49,24 +50,9 @@ export const MetaComponentModelController: FunctionComponent<MetaComponentModelC
     );
   };
 
-  // // TODO only for testing.
-  // const [steps, setSteps] = React.useState<SequenceStepCTO[]>([]);
-
-  // useEffect(() => {
-  //   if (components.length >= 2) {
-  //     setSteps([
-  //       new SequenceStepCTO(
-  //         components[0],
-  //         components[1],
-  //         new SequenceStepTO()
-  //       ),
-  //     ]);
-  //   }
-  // }, [setSteps, components]);
-
   return (
     <div>
-      <button onClick={createNewComponent}>Add</button>
+      <Button icon="add" onClick={createNewComponent} />
       {createMetaComponentDnDBox()}
     </div>
   );

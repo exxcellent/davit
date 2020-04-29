@@ -9,4 +9,8 @@ export const SequenceStepRepository = {
   findAll(): SequenceStepTO[] {
     return Array.from(dataStore.getDataStore().steps.values());
   },
+
+  findAllForSequence(sequenceId: number) {
+    return this.findAll().filter((step) => step.sequenceFk === sequenceId);
+  },
 };

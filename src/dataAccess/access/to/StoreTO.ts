@@ -17,7 +17,7 @@ export interface StoreTO {
   // Sequence
   sequences: SequenceTO[];
   steps: SequenceStepTO[];
-  componentData: ComponentDataTO[];
+  componentDatas: ComponentDataTO[];
   // Data
   datas: DataTO[];
 }

@@ -1,6 +1,7 @@
-import { Button, Select } from "@chakra-ui/core";
+import { Select } from "@chakra-ui/core";
 import React, { FunctionComponent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Button } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
@@ -63,13 +64,21 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (
       </Select>
       <label>current sequence: {sequence?.sequenceTO.name}</label>
       <label>current step: {step?.step.name}</label>
-      <Button isDisabled={isNullOrUndefined(sequence)}>{"<="}</Button>
+      {/* <Button isDisabled={isNullOrUndefined(sequence)}>{"<="}</Button>
       <Button
         isDisabled={isNullOrUndefined(sequence)}
         onClick={() => dispatch(ControllPanelActions.nextStep())}
       >
+        
         {"=>"}
-      </Button>
+      </Button> */}
+      <Button
+        content="Next"
+        icon="right arrow"
+        labelPosition="right"
+        isDisabled={isNullOrUndefined(sequence)}
+        onClick={() => dispatch(ControllPanelActions.nextStep())}
+      />
     </div>
   );
 };

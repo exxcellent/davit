@@ -1,6 +1,8 @@
 import { Box, Button, Input } from "@chakra-ui/core";
 import React, { FunctionComponent, useEffect } from "react";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
+import { ComponentDataCTO } from "../../../../dataAccess/access/cto/ComponentDataCTO";
+import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
 import { createDataFragment, DataFragmentProps } from "./DataFragment";
 
 export interface MetaComponentFragmentProps {
@@ -63,10 +65,27 @@ export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps
   );
 };
 
+const stepToDataFragmentProps = (
+  step: SequenceStepCTO | undefined,
+  componentId: number
+): DataFragmentProps[] => {
+  const componentData: ComponentDataCTO[] = step
+    ? step.componentDataCTOs.filter(
+        (componentData) => componentData.componentTO.id === componentId
+      )
+    : [];
+  return componentData.map((componentData) => {
+    return {
+      name: componentData.dataTO.name,
+      state: componentData.componentDataTO.componentDataState,
+    };
+  });
+};
+
 export const createMetaComponentFragment = (
   componentCTO: ComponentCTO,
-  dataFragments: DataFragmentProps[],
-  onDeleteCallBack: (componentId: number) => void
+  onDeleteCallBack: (componentId: number) => void,
+  step?: SequenceStepCTO
 ) => {
   return (
     <MetaComponentFragment
@@ -76,7 +95,7 @@ export const createMetaComponentFragment = (
       onDelCallBack={onDeleteCallBack}
       width={componentCTO.geometricalData.geometricalData.width}
       height={componentCTO.geometricalData.geometricalData.height}
-      dataFragments={dataFragments}
+      dataFragments={stepToDataFragmentProps(step, componentCTO.component.id)}
     />
   );
 };

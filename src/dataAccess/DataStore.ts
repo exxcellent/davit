@@ -43,7 +43,7 @@ class DataStore {
     }
     if (objectStore.geometricalDatas !== undefined) {
       objectStore.geometricalDatas.forEach((geometrical) => {
-        this.data!.geometricalData.set(geometrical.id, geometrical);
+        this.data!.geometricalDatas.set(geometrical.id, geometrical);
       });
     }
     if (objectStore.positions !== undefined) {
@@ -66,6 +66,11 @@ class DataStore {
         this.data!.steps.set(step.id, step);
       });
     }
+    if (objectStore.componentDatas !== undefined) {
+      objectStore.componentDatas.forEach((componentData) => {
+        this.data!.componentDatas.set(componentData.id, componentData);
+      });
+    }
     if (objectStore.datas !== undefined) {
       objectStore.datas.forEach((data) => {
         this.data!.datas.set(data.id, data);
@@ -80,11 +85,11 @@ class DataStore {
     let objectStore: StoreTO = {
       components: Array.from(this.data!.components.values()),
       designs: Array.from(this.data!.designs.values()),
-      geometricalDatas: Array.from(this.data!.geometricalData.values()),
+      geometricalDatas: Array.from(this.data!.geometricalDatas.values()),
       positions: Array.from(this.data!.positions.values()),
       sequences: Array.from(this.data!.sequences.values()),
       steps: Array.from(this.data!.steps.values()),
-      componentData: Array.from(this.data!.componentData.values()),
+      componentDatas: Array.from(this.data!.componentDatas.values()),
       datas: Array.from(this.data!.datas.values()),
     };
     console.log("New Store data: " + JSON.stringify(objectStore));
@@ -96,10 +101,10 @@ class DataStore {
       components: new Map<number, ComponentTO>(),
       positions: new Map<number, PositionTO>(),
       designs: new Map<number, DesignTO>(),
-      geometricalData: new Map<number, GeometricalDataTO>(),
+      geometricalDatas: new Map<number, GeometricalDataTO>(),
       sequences: new Map<number, SequenceTO>(),
       steps: new Map<number, SequenceStepTO>(),
-      componentData: new Map<number, ComponentDataTO>(),
+      componentDatas: new Map<number, ComponentDataTO>(),
       datas: new Map<number, DataTO>(),
     };
   }

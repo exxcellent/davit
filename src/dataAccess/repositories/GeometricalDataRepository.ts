@@ -6,11 +6,11 @@ import { DataAccessUtil } from "../util/DataAccessUtil";
 
 export const GeometricalDataRepository = {
   find(id: number): GeometricalDataTO | undefined {
-    return dataStore.getDataStore().geometricalData.get(id);
+    return dataStore.getDataStore().geometricalDatas.get(id);
   },
 
   findAll(): GeometricalDataTO[] {
-    return Array.from(dataStore.getDataStore().geometricalData.values());
+    return Array.from(dataStore.getDataStore().geometricalDatas.values());
   },
 
   delete(geometricalData: GeometricalDataTO): boolean {
@@ -23,7 +23,7 @@ export const GeometricalDataRepository = {
     }
     let success = dataStore
       .getDataStore()
-      .geometricalData.delete(geometricalData.id!);
+      .geometricalDatas.delete(geometricalData.id!);
     if (!success) {
       throw new Error("dataAccess.repository.error.notExists");
     }
@@ -42,7 +42,7 @@ export const GeometricalDataRepository = {
     }
     dataStore
       .getDataStore()
-      .geometricalData.set(geometricalDataTO.id!, geometricalDataTO);
+      .geometricalDatas.set(geometricalDataTO.id!, geometricalDataTO);
     return geometricalDataTO;
   },
 };

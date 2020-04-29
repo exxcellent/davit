@@ -1,16 +1,30 @@
 import React, { FunctionComponent } from "react";
 import styled from "styled-components";
+import { ComponentDataState } from "../../../../dataAccess/access/types/ComponentDataState";
 import { Footer } from "../../../common/fragments/Footer";
 
 export interface DataFragmentProps {
-  color: string;
+  state: ComponentDataState;
   name: string;
 }
 
 export const DataFragment: FunctionComponent<DataFragmentProps> = (props) => {
-  const { color, name } = props;
+  const { name, state } = props;
 
-  return <Data color={color}>{name}</Data>;
+  return <Data color={getColorForComponentDataState(state)}>{name}</Data>;
+};
+
+const getColorForComponentDataState = (state: ComponentDataState) => {
+  switch (state) {
+    case ComponentDataState.NEW:
+      return "green";
+    case ComponentDataState.PERSISTENT:
+      return "blue";
+    case ComponentDataState.DELETED:
+      return "red";
+    default:
+      return "black";
+  }
 };
 
 export const createDataFragment = (
@@ -20,11 +34,7 @@ export const createDataFragment = (
   console.info("create Data.");
   return (
     <Footer key={key}>
-      <DataFragment
-        key={key}
-        name={dataFragmentProps.name}
-        color={dataFragmentProps.color}
-      />
+      <DataFragment key={key} {...dataFragmentProps} />
     </Footer>
   );
 };

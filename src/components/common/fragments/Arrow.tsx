@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import React, { FunctionComponent } from "react";
 import styled from "styled-components";
-import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
+import { GeometricalDataCTO } from "../../../dataAccess/access/cto/GeometraicalDataCTO";
 
 export interface ArrowProps {
   xSource: number;
@@ -26,18 +26,22 @@ export const Arrow: FunctionComponent<ArrowProps> = (props) => {
   );
 };
 
-export const createArrow = (step: SequenceStepCTO, key: number) => {
+export const createArrow = (
+  source: GeometricalDataCTO,
+  target: GeometricalDataCTO
+) => {
   return (
     <Arrow
-      xSource={step.componentCTOSource.geometricalData.position.x}
-      ySource={step.componentCTOSource.geometricalData.position.y}
-      xTarget={step.componentCTOTarget.geometricalData.position.x}
-      yTarget={step.componentCTOTarget.geometricalData.position.y}
+      xSource={source.position.x}
+      ySource={source.position.y}
+      xTarget={target.position.x}
+      yTarget={target.position.y}
     />
   );
 };
 
 const SVG = styled(motion.svg)`
+  position: absolute;
   color: black;
   border-width: 2px;
   width: 100%;
