@@ -7,6 +7,7 @@ export const GlobalTheme: DefaultTheme = {
   color: {
     primary: "#3498db",
     secondary: "#ADD6D6",
+    neutral: "#f5e3c9",
   },
   borderRadius: {
     popup: "10px",

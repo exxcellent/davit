@@ -15,6 +15,7 @@ declare module "styled-components" {
     color: {
       primary: string;
       secondary: string;
+      neutral: string;
     };
 
     borderRadius: {
