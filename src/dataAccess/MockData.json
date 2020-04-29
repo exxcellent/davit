@@ -16,19 +16,90 @@
     { "id": 6, "width": 150, "height": 150, "positionFk": 6 }
   ],
   "positions": [
-    { "id": 1, "x": 10, "y": 10 },
-    { "id": 2, "x": 10, "y": 10 },
-    { "id": 3, "x": 10, "y": 10 },
-    { "id": 4, "x": 10, "y": 10 },
-    { "id": 5, "x": 10, "y": 10 },
-    { "id": 6, "x": 10, "y": 10 }
+    { "id": 1, "x": 300, "y": 10 },
+    { "id": 2, "x": 600, "y": 10 },
+    { "id": 3, "x": 900, "y": 10 },
+    { "id": 4, "x": 300, "y": 300 },
+    { "id": 5, "x": 600, "y": 300 },
+    { "id": 6, "x": 900, "y": 300 }
   ],
   "designs": [
-    { "id": 1, "color": "red" },
+    { "id": 1, "color": "#6fc795" },
     { "id": 2, "color": "red" },
     { "id": 3, "color": "red" },
     { "id": 4, "color": "red" },
     { "id": 5, "color": "red" },
     { "id": 6, "color": "red" }
+  ],
+  "sequences": [{ "id": 1, "name": "seq1" }],
+  "steps": [
+    {
+      "id": 1,
+      "name": "step1",
+      "index": 1,
+      "sequenceFk": 1,
+      "sourceComponentFk": 1,
+      "targetComponentFk": 2
+    },
+    {
+      "id": 2,
+      "name": "step2",
+      "index": 2,
+      "sequenceFk": 1,
+      "sourceComponentFk": 2,
+      "targetComponentFk": 3
+    },
+    {
+      "id": 3,
+      "name": "step3",
+      "index": 3,
+      "sequenceFk": 1,
+      "sourceComponentFk": 3,
+      "targetComponentFk": 4
+    },
+    {
+      "id": 4,
+      "name": "step4",
+      "index": 4,
+      "sequenceFk": 1,
+      "sourceComponentFk": 4,
+      "targetComponentFk": 5
+    }
+  ],
+  "componentData": [
+    {
+      "id": 1,
+      "sequenceStepFk": 1,
+      "componentFk": 1,
+      "dataFk": 1,
+      "componentDataState": "NEW"
+    },
+    {
+      "id": 2,
+      "sequenceStepFk": 2,
+      "componentFk": 2,
+      "dataFk": 2,
+      "componentDataState": "NEW"
+    },
+    {
+      "id": 3,
+      "sequenceStepFk": 3,
+      "componentFk": 3,
+      "dataFk": 3,
+      "componentDataState": "NEW"
+    },
+    {
+      "id": 4,
+      "sequenceStepFk": 4,
+      "componentFk": 4,
+      "dataFk": 4,
+      "componentDataState": "NEW"
+    }
+  ],
+  "datas": [
+    { "id": 1, "name": "data1" },
+    { "id": 2, "name": "data2" },
+    { "id": 3, "name": "data3" },
+    { "id": 4, "name": "data4" }
   ]
 }
