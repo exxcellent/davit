@@ -1,71 +1,86 @@
-import React, { FunctionComponent, useRef } from "react";
-import styled from "styled-components";
+import { Box } from "@chakra-ui/core";
 import { motion } from "framer-motion";
-import { MetaComponentFragment } from "./MetaComponentFragment";
-import { DnDWrapper } from "../../../common/styles/DnDWrapper";
-import PositionTO from "../../../../dataAccess/PositionTO";
-import { ComponentCTO } from "../../../../dataAccess/ComponentCTO";
-import { isNullOrUndefined } from "util";
+import React, { FunctionComponent, useRef } from "react";
+import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
+import { ComponentDataCTO } from "../../../../dataAccess/access/cto/ComponentDataCTO";
+import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
+import { ComponentDataState } from "../../../../dataAccess/access/types/ComponentDataState";
+import { createArrow } from "../../../common/fragments/Arrow";
+import { createDnDItem } from "../../../common/fragments/DnDWrapper";
+import { DataFragmentProps } from "./DataFragment";
+import { createMetaComponentFragment } from "./MetaComponentFragment";
 
 interface MetaComponentDnDBox {
   componentCTOs: ComponentCTO[];
+  step?: SequenceStepCTO;
+  onSaveCallBack: (componentCTO: ComponentCTO) => void;
+  onDeleteCallBack: (id: number) => void;
 }
 
 export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (
   props
 ) => {
-  const { componentCTOs } = props;
+  const { componentCTOs, onSaveCallBack, onDeleteCallBack, step } = props;
   const constraintsRef = useRef(null);
 
-  const createDnDItem = (
-    positionTO: PositionTO,
-    index: number,
-    children: React.ReactNode
-  ) => {
-    // TODO: to be removed for testing...
-    let posX = 0;
-    let posY = 0;
-    if (!isNullOrUndefined(positionTO.x)) {
-      posX = positionTO.x;
+  const onPositionUpdate = (x: number, y: number, id: number) => {
+    for (let i = 0; componentCTOs.length; i++) {
+      if (componentCTOs[i].geometricalData.position.id === id) {
+        let copyComponentCTO: ComponentCTO = JSON.parse(
+          JSON.stringify(componentCTOs[i])
+        );
+        copyComponentCTO.geometricalData.position.x = x;
+        copyComponentCTO.geometricalData.position.y = y;
+        onSaveCallBack(copyComponentCTO);
+        break;
+      }
     }
-    if (!isNullOrUndefined(positionTO.y)) {
-      posY = positionTO.y;
+  };
+
+  const componentDataToDataFragmentProp = (
+    componentData: ComponentDataCTO
+  ): DataFragmentProps => {
+    return {
+      name: componentData.dataTO.name,
+      color: getColorForComponentDataState(
+        componentData.componentDataTO.componentDataState
+      ),
+    };
+  };
+
+  const getColorForComponentDataState = (state: ComponentDataState) => {
+    switch (state) {
+      case ComponentDataState.NEW:
+        return "green";
+      case ComponentDataState.PERSISTENT:
+        return "blue";
+      case ComponentDataState.DELETED:
+        return "red";
+      default:
+        return "black";
     }
-    return (
-      <DnDWrapper
-        key={index}
-        initalX={posX}
-        initalY={posY}
-        constraintsRef={constraintsRef}
-      >
-        {children}
-      </DnDWrapper>
+  };
+
+  const createDnDMetaComponent = (componentCTO: ComponentCTO) => {
+    return createDnDItem(
+      componentCTO.geometricalData.position,
+      componentCTO.component.id,
+      onPositionUpdate,
+      constraintsRef,
+      createMetaComponentFragment(
+        componentCTO,
+        step ? step.componentDataCTOs.map(componentDataToDataFragmentProp) : [],
+        onDeleteCallBack
+      )
     );
   };
 
   return (
-    <DnDBox ref={constraintsRef}>
-      {componentCTOs.map((componentCTO, index: number) => {
-        return createDnDItem(
-          componentCTO.position,
-          index,
-          <MetaComponentFragment
-            name={componentCTO.component.name}
-            x={componentCTO.position.x}
-            y={componentCTO.position.y}
-            id={componentCTO.component.id}
-          />
-        );
-      })}
-    </DnDBox>
+    <Box w="100%" h="100em" bg="#e8ede6" borderWidth="1px">
+      <motion.div ref={constraintsRef} style={{ height: "100vh" }}>
+        {componentCTOs.map(createDnDMetaComponent)}
+        {step && createArrow(step, step.step.id)}
+      </motion.div>
+    </Box>
   );
 };
-
-// ---------- Styling ----------
-
-const DnDBox = styled(motion.div)`
-  background: white;
-  width: 100%;
-  height: 500px;
-  position: relative;
-`;
