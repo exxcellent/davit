@@ -1,86 +1,71 @@
-import { ComponentCTO } from "../ComponentCTO";
-import ComponentTO from "../ComponentTO";
-import DesignTO from "../DesignTO";
-import GeometricalDataTO from "../GeometricalDataTO";
-import PositionTO from "../PositionTO";
-import dataStore from "../DataStore";
+import { ComponentCTO } from "../access/cto/ComponentCTO";
+import { GeometricalDataCTO } from "../access/cto/GeometraicalDataCTO";
+import { ComponentTO } from "../access/to/ComponentTO";
+import { DesignTO } from "../access/to/DesignTO";
 import { ComponentRepository } from "../repositories/ComponentRepository";
-import { DesignRepository } from "../repositories/DesignRepository";
-import { PositionRepository } from "../repositories/PositionRepository";
-import { GeometricalDataRepository } from "../repositories/GeometricalDataRepository";
 import { CheckHelper } from "../util/CheckHelper";
+import { TechnicalDataAccessService } from "./TechnicalDataAccessService";
 
-export class ComponentDataAccessService {
-  // static findAll(): ComponentCTO[] {
-  //   return components;
-  // }
-
-  static find(id: number): ComponentCTO {
-    return createComponentCTO(ComponentRepository.find(id));
-  }
-
-  static findAll(): ComponentCTO[] {
+export const ComponentDataAccessService = {
+  findAll(): ComponentCTO[] {
     return ComponentRepository.findAll().map((component) =>
       createComponentCTO(component)
     );
-  }
+  },
 
-  static findPosition(id: number): PositionTO | undefined {
-    return PositionRepository.find(id);
-  }
-
-  static findGeometricalData(id: number): GeometricalDataTO | undefined {
-    return GeometricalDataRepository.find(id);
-  }
-
-  static findDesign(id: number): DesignTO | undefined {
-    return DesignRepository.find(id);
-  }
-
-  static delete(component: ComponentCTO): ComponentCTO {
-    CheckHelper.nullCheck(component.position, "PositionTO");
-    CheckHelper.nullCheck(component.geometricalData, "GeometricalDataTO");
+  delete(component: ComponentCTO): ComponentCTO {
+    console.info("DataAccessService delete called.");
+    CheckHelper.nullCheck(component.geometricalData, "GeometricalDataCTO");
     CheckHelper.nullCheck(component.design, "DesignTO");
     CheckHelper.nullCheck(component.component, "ComponentTO");
-    PositionRepository.delete(component.position);
-    GeometricalDataRepository.delete(component.geometricalData);
-    DesignRepository.delete(component.design);
+    TechnicalDataAccessService.deleteGeometricalDataCTO(
+      component.geometricalData
+    );
+    TechnicalDataAccessService.deleteDesign(component.design);
     ComponentRepository.delete(component.component);
     return component;
-  }
+  },
 
-  static editOrCreate(componentCTO: ComponentCTO): ComponentCTO {
+  save(componentCTO: ComponentCTO): ComponentCTO {
+    CheckHelper.nullCheck(componentCTO, "ComponentCTO");
+    const savedDesign = TechnicalDataAccessService.saveDesign(
+      componentCTO.design
+    );
+    // TODO: refactor
+    // update FK's
+    componentCTO.component.designFk = savedDesign.id;
+    const savedGeometricalData = TechnicalDataAccessService.saveGeometricalData(
+      componentCTO.geometricalData
+    );
+    componentCTO.component.geometricalDataFk =
+      savedGeometricalData.geometricalData.id;
+    const savedComponent = ComponentRepository.save(componentCTO.component);
     return {
-      component: ComponentTO.builder().build(),
-      design: DesignTO.builder().build(),
-      geometricalData: GeometricalDataTO.builder().build(),
-      position: PositionTO.builder().build(),
+      component: savedComponent,
+      geometricalData: savedGeometricalData,
+      design: savedDesign,
     };
-  }
-}
+  },
+};
 
-const createComponentCTO = (
+// TODO ist export hier gut?
+export const createComponentCTO = (
   component: ComponentTO | undefined
 ): ComponentCTO => {
   CheckHelper.nullCheck(component, "component");
-  let design: DesignTO | undefined = dataStore
-    .getDataStore()
-    .designs.get(component!.designFk);
+  let design: DesignTO | undefined = TechnicalDataAccessService.findDesign(
+    component!.designFk!
+  );
   CheckHelper.nullCheck(design, "design");
   let geometricalData:
-    | GeometricalDataTO
-    | undefined = dataStore
-    .getDataStore()
-    .geometricalData.get(component!.geometricalDataFk);
+    | GeometricalDataCTO
+    | undefined = TechnicalDataAccessService.findGeometricalDataCTO(
+    component!.geometricalDataFk!
+  );
   CheckHelper.nullCheck(geometricalData, "geometricalData");
-  let position: PositionTO | undefined = dataStore
-    .getDataStore()
-    .positions.get(geometricalData!.positionFk);
-  CheckHelper.nullCheck(position, "position");
   return {
     component: component!,
     geometricalData: geometricalData!,
-    position: position!,
     design: design!,
   };
 };
