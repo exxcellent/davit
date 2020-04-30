@@ -27,17 +27,19 @@ export const Arrow: FunctionComponent<ArrowProps> = (props) => {
 };
 
 export const createArrow = (
-  source: GeometricalDataCTO,
-  target: GeometricalDataCTO
+  source: GeometricalDataCTO | undefined,
+  target: GeometricalDataCTO | undefined
 ) => {
-  return (
-    <Arrow
-      xSource={source.position.x}
-      ySource={source.position.y}
-      xTarget={target.position.x}
-      yTarget={target.position.y}
-    />
-  );
+  if (source && target) {
+    return (
+      <Arrow
+        xSource={source.position.x}
+        ySource={source.position.y}
+        xTarget={target.position.x}
+        yTarget={target.position.y}
+      />
+    );
+  }
 };
 
 const SVG = styled(motion.svg)`
