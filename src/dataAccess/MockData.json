@@ -76,20 +76,41 @@
     },
     {
       "id": 2,
+      "sequenceStepFk": 1,
+      "componentFk": 1,
+      "dataFk": 2,
+      "componentDataState": "DELETED"
+    },
+    {
+      "id": 3,
+      "sequenceStepFk": 1,
+      "componentFk": 1,
+      "dataFk": 3,
+      "componentDataState": "PERSISTENT"
+    },
+    {
+      "id": 4,
+      "sequenceStepFk": 1,
+      "componentFk": 1,
+      "dataFk": 4,
+      "componentDataState": "NEW"
+    },
+    {
+      "id": 5,
       "sequenceStepFk": 2,
       "componentFk": 2,
       "dataFk": 2,
       "componentDataState": "NEW"
     },
     {
-      "id": 3,
+      "id": 6,
       "sequenceStepFk": 3,
       "componentFk": 3,
       "dataFk": 3,
       "componentDataState": "NEW"
     },
     {
-      "id": 4,
+      "id": 7,
       "sequenceStepFk": 4,
       "componentFk": 4,
       "dataFk": 4,
