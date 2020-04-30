@@ -11,14 +11,11 @@ import { MetaComponentDnDBox } from "./fragments/MetaComponentDnDBox";
 interface MetaComponentModelControllerProps {}
 
 export const MetaComponentModelController: FunctionComponent<MetaComponentModelControllerProps> = () => {
-  console.info("render Controller.");
-
   const components: ComponentCTO[] = useSelector(selectComponents);
   const selectedStep: SequenceStepCTO | undefined = useSelector(selectStep);
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    console.info("trigerrrer use Effect");
     dispatch(MetaComponentActions.findAllComponents());
   }, [dispatch]);
 
@@ -57,5 +54,3 @@ export const MetaComponentModelController: FunctionComponent<MetaComponentModelC
     </div>
   );
 };
-
-// ---------- Styling ----------

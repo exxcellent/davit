@@ -9,6 +9,7 @@ import { ControllPanelSlice } from "./ControllPanelSlice";
 const { loadSequences } = ControllPanelSlice.actions;
 const { setSequence } = globalSlice.actions;
 const { nextStep } = globalSlice.actions;
+const { clearErrors } = globalSlice.actions;
 
 const findAllSequences = (): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<
@@ -36,4 +37,5 @@ export const ControllPanelActions = {
   findAllSequences,
   findSequence,
   nextStep,
+  clearErrors,
 };

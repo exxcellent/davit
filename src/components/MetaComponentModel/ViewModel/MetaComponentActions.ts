@@ -8,7 +8,6 @@ import { metaComponentModelSlice } from "./MetaComponentModelSlice";
 const { loadComponents } = metaComponentModelSlice.actions;
 
 const findAllComponents = (): AppThunk => async (dispatch) => {
-  console.info("Called Slice findAll function");
   const response: DataAccessResponse<
     ComponentCTO[]
   > = await DataAccess.findAllComponents();
@@ -22,7 +21,6 @@ const findAllComponents = (): AppThunk => async (dispatch) => {
 const saveComponent = (component: ComponentCTO): AppThunk => async (
   dispatch
 ) => {
-  console.info("Called Slice save function");
   const response: DataAccessResponse<ComponentCTO> = await DataAccess.saveComponentCTO(
     component
   );
@@ -37,7 +35,6 @@ const saveComponent = (component: ComponentCTO): AppThunk => async (
 const deleteComponent = (component: ComponentCTO): AppThunk => async (
   dispatch
 ) => {
-  console.info("Called Slice delete function");
   const response: DataAccessResponse<ComponentCTO> = await DataAccess.deleteComponentCTO(
     component
   );

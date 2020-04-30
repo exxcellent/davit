@@ -3,7 +3,7 @@ import { RootState } from "../../../app/store";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
 
-enum Mode {
+export enum Mode {
   EDIT = "EDIT",
   VIEW = "VIEW",
 }
@@ -28,16 +28,11 @@ export const globalSlice = createSlice({
     handleError: (state, action: PayloadAction<string>) => {
       state.errors.push(action.payload);
     },
-    switchMode: (state) => {
-      console.info("Change Operation Mode!");
-      switch (state.mode) {
-        case Mode.VIEW:
-          state.mode = Mode.EDIT;
-          break;
-        case Mode.EDIT:
-          state.mode = Mode.VIEW;
-          break;
-      }
+    clearErrors: (state) => {
+      state.errors = [];
+    },
+    setMode: (state, action: PayloadAction<Mode>) => {
+      state.mode = action.payload;
     },
     setSequence: (state, action: PayloadAction<SequenceCTO>) => {
       action.payload.sequenceStepCTOs.sort(
@@ -59,7 +54,7 @@ export const globalSlice = createSlice({
 });
 
 export const { handleError } = globalSlice.actions;
-export const { switchMode } = globalSlice.actions;
+export const { setMode } = globalSlice.actions;
 
 export const globalReducer = globalSlice.reducer;
 

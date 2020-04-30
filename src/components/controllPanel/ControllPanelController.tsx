@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Dropdown } from "semantic-ui-react";
+import { Button, Dropdown, Message, Transition } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
@@ -10,7 +10,6 @@ import {
   selectGlobalModeState,
   selectSequence,
   selectStep,
-  switchMode,
 } from "../common/viewModel/GlobalSlice";
 import { ControllPanelActions } from "./viewModel/ControllPanelActions";
 import { selectSequences } from "./viewModel/ControllPanelSlice";
@@ -28,10 +27,6 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (
 
   const dispatch = useDispatch();
 
-  const changeMode = () => {
-    dispatch(switchMode());
-  };
-
   useEffect(() => {
     dispatch(ControllPanelActions.findAllSequences());
   }, [dispatch]);
@@ -46,47 +41,44 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (
 
   return (
     <div>
-      <button onClick={changeMode}>Switch</button>
       <label> Mode: {operationMode}</label>
       <br />
-      {/* <div id="messageLabel">{errorMessages[errorMessages.length - 1]}</div> */}
-      <div id="messageLabel">{errorMessages}</div>
       <Dropdown
-        placeholder="Select Friend"
-        fluid
+        placeholder="Select Seqence"
         selection
         options={sequences.map(sequenceToOption)}
         onChange={(event, data) =>
           dispatch(ControllPanelActions.findSequence(Number(data.value)))
         }
       />
-      {/* <Select
-        placeholder="Select option"
-        onChange={(event) =>
-          dispatch(
-            ControllPanelActions.findSequence(Number(event.target.value))
-          )
-        }
-      >
-        {sequences.map(sequenceToOption)}
-      </Select> */}
-      <label>current sequence: {sequence?.sequenceTO.name}</label>
+      {sequence && (
+        <Button.Group>
+          <Button icon="left arrow" />
+          <Button.Or text={step?.step.index} />
+          <Button
+            icon="right arrow"
+            isDisabled={isNullOrUndefined(sequence)}
+            onClick={() => dispatch(ControllPanelActions.nextStep())}
+          />
+        </Button.Group>
+      )}
       <label>current step: {step?.step.name}</label>
-      {/* <Button isDisabled={isNullOrUndefined(sequence)}>{"<="}</Button>
-      <Button
-        isDisabled={isNullOrUndefined(sequence)}
-        onClick={() => dispatch(ControllPanelActions.nextStep())}
+
+      <Transition
+        visible={errorMessages.length > 0}
+        animate="slide down"
+        duration={500}
       >
-        
-        {"=>"}
-      </Button> */}
-      <Button
-        content="Next"
-        icon="right arrow"
-        labelPosition="right"
-        isDisabled={isNullOrUndefined(sequence)}
-        onClick={() => dispatch(ControllPanelActions.nextStep())}
-      />
+        <Message error>
+          <Message.Header>Error</Message.Header>
+          <Button
+            icon="close"
+            size="mini"
+            onClick={() => dispatch(ControllPanelActions.clearErrors())}
+          />
+          {errorMessages}
+        </Message>
+      </Transition>
     </div>
   );
 };

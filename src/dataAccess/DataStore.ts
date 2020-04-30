@@ -34,13 +34,12 @@ class DataStore {
     } else {
       objectStore = JSON.parse(localStorage.getItem(STORE_ID)!);
     }
-    console.log("Store: " + objectStore);
     // TODO: auslagern in map function mit AbstractTO!
-    if (objectStore.components !== undefined) {
-      objectStore.components.forEach((component) => {
-        this.data!.components.set(component.id, component);
-      });
-    }
+    // if (objectStore.components !== undefined) {
+    //   objectStore.components.forEach((component) => {
+    //     this.data!.components.set(component.id, component);
+    //   });
+    // }
     if (objectStore.geometricalDatas !== undefined) {
       objectStore.geometricalDatas.forEach((geometrical) => {
         this.data!.geometricalDatas.set(geometrical.id, geometrical);
@@ -92,7 +91,6 @@ class DataStore {
       componentDatas: Array.from(this.data!.componentDatas.values()),
       datas: Array.from(this.data!.datas.values()),
     };
-    console.log("New Store data: " + JSON.stringify(objectStore));
     localStorage.setItem(STORE_ID, JSON.stringify(objectStore));
   }
 
@@ -110,7 +108,6 @@ class DataStore {
   }
 
   public commitChanges(): void {
-    console.info("Data Store: commit changes.");
     this.saveData();
     this.readData();
   }

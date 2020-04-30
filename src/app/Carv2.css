@@ -1,20 +1,21 @@
 .carvGridContainer {
   display: grid;
-  grid-template-columns: 3em auto;
+  grid-template-columns: 4em auto;
   grid-template-rows: 25% auto;
   grid-template-areas:
-    "leftBar header header"
+    "header header header"
     "leftBar compModel seqModel"
     " leftBar dataModel seqTabel";
 }
 
-.leftMenu {
+.leftPanel {
   grid-area: leftBar;
-  background-color: rgb(34, 141, 241);
+  justify-self: center;
 }
 
 .controllerHeader {
   grid-area: header;
+  padding: 10px;
   background-color: rgb(34, 172, 251);
 }
 

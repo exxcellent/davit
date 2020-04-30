@@ -8,19 +8,16 @@ import { SequenceDataAccessService } from "./services/SequenceDataAccessService"
 
 export const DataAccess = {
   findAllComponents(): DataAccessResponse<ComponentCTO[]> {
-    console.info("Called findAllComponents");
     return makeTransactional(ComponentDataAccessService.findAll);
   },
 
   saveComponentCTO(component: ComponentCTO): DataAccessResponse<ComponentCTO> {
-    console.info("Called saveComponentCTO");
     return makeTransactional(() => ComponentDataAccessService.save(component));
   },
 
   deleteComponentCTO(
     component: ComponentCTO
   ): DataAccessResponse<ComponentCTO> {
-    console.info("Called deleteComponentCTO");
     return makeTransactional(() =>
       ComponentDataAccessService.delete(component)
     );
