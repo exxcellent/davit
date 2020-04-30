@@ -1,27 +1,20 @@
-import React, { FunctionComponent } from "react";
-import styled from "styled-components";
 import { ComponentDataState } from "../../../../dataAccess/access/types/ComponentDataState";
-import { Footer } from "../../../common/fragments/Footer";
+import React from "./node_modules/react";
+import { Card } from "./node_modules/semantic-ui-react";
 
 export interface DataFragmentProps {
   state: ComponentDataState;
   name: string;
 }
 
-export const DataFragment: FunctionComponent<DataFragmentProps> = (props) => {
-  const { name, state } = props;
-
-  return <Data color={getColorForComponentDataState(state)}>{name}</Data>;
-};
-
 const getColorForComponentDataState = (state: ComponentDataState) => {
   switch (state) {
     case ComponentDataState.NEW:
-      return "green";
+      return "#6CBF8F";
     case ComponentDataState.PERSISTENT:
-      return "blue";
+      return "#c8c8c8";
     case ComponentDataState.DELETED:
-      return "red";
+      return "#af0837";
     default:
       return "black";
   }
@@ -33,14 +26,14 @@ export const createDataFragment = (
 ) => {
   console.info("create Data.");
   return (
-    <Footer key={key}>
-      <DataFragment key={key} {...dataFragmentProps} />
-    </Footer>
+    <Card.Content
+      extra
+      key={key}
+      content={dataFragmentProps.name}
+      style={{
+        backgroundColor: getColorForComponentDataState(dataFragmentProps.state),
+        color: "white",
+      }}
+    />
   );
 };
-
-// Styling
-const Data = styled.div`
-  text-align: center;
-  background-color: ${(props) => props.color};
-`;
