@@ -1,9 +1,9 @@
-import { Box, Button, Input } from "@chakra-ui/core";
-import React, { FunctionComponent, useEffect } from "react";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
 import { ComponentDataCTO } from "../../../../dataAccess/access/cto/ComponentDataCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
 import { createDataFragment, DataFragmentProps } from "./DataFragment";
+import React, { FunctionComponent } from "./node_modules/react";
+import { Card } from "./node_modules/semantic-ui-react";
 
 export interface MetaComponentFragmentProps {
   id: number;
@@ -18,50 +18,22 @@ export interface MetaComponentFragmentProps {
 export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps> = (
   props
 ) => {
-  const {
-    id,
-    initalName,
-    initalColor,
-    onDelCallBack,
-    dataFragments,
-    width,
-    height,
-  } = props;
+  const { id, initalName, onDelCallBack, dataFragments, width, height } = props;
 
   const delMetaComponentFragment = () => {
     onDelCallBack(id);
   };
 
-  const [name, setName] = React.useState<string>("");
-  const [color, setColor] = React.useState<string>("");
-
-  useEffect(() => {
-    setName(initalName);
-    setColor(initalColor);
-  }, [setName, setColor, initalName, initalColor]);
-
   return (
-    <Box bg="#f5c6f2" w={width} h={height}>
-      <Button onClick={delMetaComponentFragment}>X</Button>
-      <div>ID:{id}</div>
-      <div>
-        <label>Name: </label>
-        <Input placeholder={name} />
-      </div>
-      <div>
-        <label>Color:</label>
-        <input
-          type="color"
-          placeholder={color}
-          onChange={(event) => {
-            setColor(event.target.value);
-            console.log(event.target.value);
-          }}
-        />
-        <label>{color}</label>
-      </div>
-      {dataFragments.map(createDataFragment)}
-    </Box>
+    <div style={{ width: width, height: height }}>
+      <Card fluid>
+        <Card.Content header={initalName}>
+          {/* <Button size="mini" icon="delete" onClick={delMetaComponentFragment} /> */}
+        </Card.Content>
+        <Card.Content description="" />
+        {dataFragments.map(createDataFragment)}
+      </Card>
+    </div>
   );
 };
 
