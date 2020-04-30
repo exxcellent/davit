@@ -1,22 +1,24 @@
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { fab } from "@fortawesome/free-brands-svg-icons";
-import { faEllipsisH, faPlusSquare } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { FormattedMessage } from "react-intl";
 import { ControllPanelController } from "../components/controllPanel/ControllPanelController";
 import { MetaComponentModelController } from "../components/metaComponentModel/presentation/MetaComponentModelController";
-
-library.add(fab, faPlusSquare, faEllipsisH);
+import "./Carv2.css";
 
 export function Carv2() {
   return (
     <div className="Carv2">
       <React.StrictMode>
-        <ControllPanelController>
-          <label>Sprache: </label>
-          <FormattedMessage id="language"></FormattedMessage>
-        </ControllPanelController>
-        <MetaComponentModelController />
+        <div className="carvGridContainer">
+          <div className="controllerHeader">
+            <ControllPanelController />
+          </div>
+          <div className="componentModel">
+            <MetaComponentModelController />
+          </div>
+          <div className="dataModel"></div>
+          <div className="leftMenu"></div>
+          <div className="sequencModel"></div>
+          <div className="sequenceTable"></div>
+        </div>
       </React.StrictMode>
     </div>
   );

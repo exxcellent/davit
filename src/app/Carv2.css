@@ -1,0 +1,36 @@
+.carvGridContainer {
+  display: grid;
+  grid-template-columns: 3em auto;
+  grid-template-rows: 25% auto;
+  grid-template-areas:
+    "leftBar header header"
+    "leftBar compModel seqModel"
+    " leftBar dataModel seqTabel";
+}
+
+.leftMenu {
+  grid-area: leftBar;
+  background-color: rgb(34, 141, 241);
+}
+
+.controllerHeader {
+  grid-area: header;
+  background-color: rgb(34, 172, 251);
+}
+
+.componentModel {
+  grid-area: compModel;
+  background-color: #e8ede6;
+}
+
+.dataModel {
+  grid-area: dataModel;
+}
+
+.sequencModel {
+  grid-area: seqModel;
+}
+
+.sequenceTable {
+  grid-area: seqTabel;
+}

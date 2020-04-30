@@ -51,10 +51,10 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (
   };
 
   return (
-    <div style={{ width: "100%", height: "100em", backgroundColor: "#e8ede6" }}>
+    <div style={{ width: "100%", height: "50em", backgroundColor: "#e8ede6" }}>
       <motion.div
         ref={constraintsRef}
-        style={{ height: "100vh", width: "100%", position: "relative" }}
+        style={{ height: "50em", width: "100%", position: "relative" }}
       >
         {componentCTOs.map(createDnDMetaComponent)}
         {step &&
