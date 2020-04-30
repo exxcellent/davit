@@ -4,9 +4,9 @@ import { Button } from "semantic-ui-react";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
 import { selectStep } from "../../common/viewModel/GlobalSlice";
-import { MetaComponentActions } from "../ViewModel/MetaComponentActions";
-import { selectComponents } from "../ViewModel/MetaComponentModelSlice";
-import { MetaComponentDnDBox } from "./Fragments/MetaComponentDnDBox";
+import { MetaComponentActions } from "../viewModel/MetaComponentActions";
+import { selectComponents } from "../viewModel/MetaComponentModelSlice";
+import { MetaComponentDnDBox } from "./fragments/MetaComponentDnDBox";
 
 interface MetaComponentModelControllerProps {}
 

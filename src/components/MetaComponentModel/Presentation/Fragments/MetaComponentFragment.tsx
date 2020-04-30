@@ -1,9 +1,9 @@
+import React, { FunctionComponent } from "react";
+import { Card } from "semantic-ui-react";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
 import { ComponentDataCTO } from "../../../../dataAccess/access/cto/ComponentDataCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
 import { createDataFragment, DataFragmentProps } from "./DataFragment";
-import React, { FunctionComponent } from "./node_modules/react";
-import { Card } from "./node_modules/semantic-ui-react";
 
 export interface MetaComponentFragmentProps {
   id: number;

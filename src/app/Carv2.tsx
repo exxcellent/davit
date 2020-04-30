@@ -4,7 +4,7 @@ import { faEllipsisH, faPlusSquare } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { FormattedMessage } from "react-intl";
 import { ControllPanelController } from "../components/controllPanel/ControllPanelController";
-import { MetaComponentModelController } from "../components/MetaComponentModel/Presentation/MetaComponentModelController";
+import { MetaComponentModelController } from "../components/metaComponentModel/presentation/MetaComponentModelController";
 
 library.add(fab, faPlusSquare, faEllipsisH);
 

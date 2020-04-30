@@ -1,7 +1,6 @@
-import { Select } from "@chakra-ui/core";
 import React, { FunctionComponent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "semantic-ui-react";
+import { Button, Dropdown } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
@@ -38,11 +37,11 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (
   }, [dispatch]);
 
   const sequenceToOption = (sequence: SequenceTO) => {
-    return (
-      <option key={sequence.id} value={sequence.id}>
-        {sequence.name}
-      </option>
-    );
+    return {
+      key: sequence.id,
+      text: sequence.name,
+      value: sequence.id,
+    };
   };
 
   return (
@@ -52,7 +51,16 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (
       <br />
       {/* <div id="messageLabel">{errorMessages[errorMessages.length - 1]}</div> */}
       <div id="messageLabel">{errorMessages}</div>
-      <Select
+      <Dropdown
+        placeholder="Select Friend"
+        fluid
+        selection
+        options={sequences.map(sequenceToOption)}
+        onChange={(event, data) =>
+          dispatch(ControllPanelActions.findSequence(Number(data.value)))
+        }
+      />
+      {/* <Select
         placeholder="Select option"
         onChange={(event) =>
           dispatch(
@@ -61,7 +69,7 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (
         }
       >
         {sequences.map(sequenceToOption)}
-      </Select>
+      </Select> */}
       <label>current sequence: {sequence?.sequenceTO.name}</label>
       <label>current step: {step?.step.name}</label>
       {/* <Button isDisabled={isNullOrUndefined(sequence)}>{"<="}</Button>

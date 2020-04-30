@@ -1,6 +1,6 @@
+import React from "react";
+import { Card } from "semantic-ui-react";
 import { ComponentDataState } from "../../../../dataAccess/access/types/ComponentDataState";
-import React from "./node_modules/react";
-import { Card } from "./node_modules/semantic-ui-react";
 
 export interface DataFragmentProps {
   state: ComponentDataState;
