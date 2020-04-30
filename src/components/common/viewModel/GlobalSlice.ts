@@ -16,7 +16,7 @@ interface GlobalState {
 }
 const initialState: GlobalState = {
   errors: [],
-  mode: Mode.EDIT,
+  mode: Mode.VIEW,
   sequence: undefined,
   selectedStep: undefined,
 };
