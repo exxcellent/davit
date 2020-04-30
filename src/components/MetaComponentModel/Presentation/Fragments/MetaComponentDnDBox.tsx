@@ -1,11 +1,10 @@
-import { Box } from "@chakra-ui/core";
-import { motion } from "framer-motion";
-import React, { FunctionComponent, useRef } from "react";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
 import { createArrow } from "../../../common/fragments/Arrow";
 import { createDnDItem } from "../../../common/fragments/DnDWrapper";
 import { createMetaComponentFragment } from "./MetaComponentFragment";
+import { motion } from "./node_modules/framer-motion";
+import React, { FunctionComponent, useRef } from "./node_modules/react";
 
 interface MetaComponentDnDBox {
   componentCTOs: ComponentCTO[];
@@ -20,6 +19,7 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (
   const { componentCTOs, onSaveCallBack, onDeleteCallBack, step } = props;
   const constraintsRef = useRef(null);
 
+  // TODO refactor
   const onPositionUpdate = (x: number, y: number, id: number) => {
     for (let i = 0; componentCTOs.length; i++) {
       if (componentCTOs[i].geometricalData.position.id === id) {
@@ -51,7 +51,7 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (
   };
 
   return (
-    <Box w="100%" h="100em" bg="#e8ede6" borderWidth="1px">
+    <div style={{ width: "100%", height: "100em", backgroundColor: "#e8ede6" }}>
       <motion.div
         ref={constraintsRef}
         style={{ height: "100vh", width: "100%", position: "relative" }}
@@ -59,10 +59,16 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (
         {componentCTOs.map(createDnDMetaComponent)}
         {step &&
           createArrow(
-            step.componentCTOSource.geometricalData,
-            step.componentCTOTarget.geometricalData
+            componentCTOs.find(
+              (componentCTO) =>
+                componentCTO.component.id === step.step.sourceComponentFk
+            )?.geometricalData,
+            componentCTOs.find(
+              (componentCTO) =>
+                componentCTO.component.id === step.step.targetComponentFk
+            )?.geometricalData
           )}
       </motion.div>
-    </Box>
+    </div>
   );
 };
