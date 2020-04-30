@@ -1,5 +1,5 @@
 import React from "react";
-import { ControllPanelController } from "../components/controllPanel/ControllPanelController";
+import { ControllPanelController } from "../components/controllPanel/presentation/ControllPanelController";
 import { MetaComponentModelController } from "../components/metaComponentModel/presentation/MetaComponentModelController";
 import { SidePanelController } from "../components/sidePanel/SidePanelController";
 import "./Carv2.css";

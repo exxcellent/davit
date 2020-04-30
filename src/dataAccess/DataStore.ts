@@ -35,11 +35,11 @@ class DataStore {
       objectStore = JSON.parse(localStorage.getItem(STORE_ID)!);
     }
     // TODO: auslagern in map function mit AbstractTO!
-    // if (objectStore.components !== undefined) {
-    //   objectStore.components.forEach((component) => {
-    //     this.data!.components.set(component.id, component);
-    //   });
-    // }
+    if (objectStore.components !== undefined) {
+      objectStore.components.forEach((component) => {
+        this.data!.components.set(component.id, component);
+      });
+    }
     if (objectStore.geometricalDatas !== undefined) {
       objectStore.geometricalDatas.forEach((geometrical) => {
         this.data!.geometricalDatas.set(geometrical.id, geometrical);
