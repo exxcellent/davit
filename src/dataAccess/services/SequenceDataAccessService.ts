@@ -55,7 +55,7 @@ const createSequenceStepCTO = (
   return {
     componentCTOSource: sourceComponentCTO,
     componentCTOTarget: targetComponentCTO,
-    step: sequenceStepTO,
+    squenceStepTO: sequenceStepTO,
     componentDataCTOs: componentDataCTOs,
   };
 };

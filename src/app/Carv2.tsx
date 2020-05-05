@@ -2,6 +2,7 @@ import React from "react";
 import { ControllPanelController } from "../components/controllPanel/presentation/ControllPanelController";
 import { MetaComponentModelController } from "../components/metaComponentModel/presentation/MetaComponentModelController";
 import { MetaDataModelController } from "../components/metaDataModel/presentation/MetaDataModelController";
+import { SequenceTableModelController } from "../components/sequenceTableModel/presentation/SequenceTableModelController";
 import { SidePanelController } from "../components/sidePanel/SidePanelController";
 import "./Carv2.css";
 
@@ -22,7 +23,9 @@ export function Carv2() {
           <SidePanelController />
         </div>
         <div className="sequencModel"></div>
-        <div className="sequenceTable"></div>
+        <div className="sequenceTable">
+          <SequenceTableModelController />
+        </div>
       </div>
     </div>
   );

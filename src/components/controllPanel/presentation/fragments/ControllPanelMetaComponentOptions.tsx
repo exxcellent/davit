@@ -2,7 +2,7 @@ import React, { FunctionComponent } from "react";
 import { useDispatch } from "react-redux";
 import { Button, Modal } from "semantic-ui-react";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
-import { MetaComponentActions } from "../../../metaComponentModel/viewModel/MetaComponentActions";
+import { ControllPanelActions } from "../../viewModel/ControllPanelActions";
 
 export interface ControllPanelMetaComponentOptionsProps {}
 
@@ -28,7 +28,7 @@ export const ControllPanelMetaComponentOptions: FunctionComponent<ControllPanelM
   };
 
   const createNewComponent = () => {
-    dispatch(MetaComponentActions.saveComponent(new ComponentCTO()));
+    dispatch(ControllPanelActions.saveComponent(new ComponentCTO()));
   };
 
   return (
@@ -37,7 +37,6 @@ export const ControllPanelMetaComponentOptions: FunctionComponent<ControllPanelM
         <input
           type="file"
           onChange={(event) => {
-            // TODO: siehe methode.
             if (event.target.files !== null) {
               readFileToJSON(event.target.files[0]);
             }

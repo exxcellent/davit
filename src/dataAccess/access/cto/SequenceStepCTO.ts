@@ -6,7 +6,7 @@ export class SequenceStepCTO {
   constructor(
     public componentCTOSource: ComponentCTO = new ComponentCTO(),
     public componentCTOTarget: ComponentCTO = new ComponentCTO(),
-    public step: SequenceStepTO = new SequenceStepTO(),
+    public squenceStepTO: SequenceStepTO = new SequenceStepTO(),
     public componentDataCTOs: ComponentDataCTO[] = []
   ) {}
 }

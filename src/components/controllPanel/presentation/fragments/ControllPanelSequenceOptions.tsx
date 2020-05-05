@@ -49,7 +49,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
       <Button.Group>
         {/* TODO: funktion für vorherigen Step */}
         <Button icon="left arrow" content="BACK" labelPosition="left" />
-        <Button.Or text={step?.step.index} />
+        <Button.Or text={step?.squenceStepTO.index} />
         <Button
           icon="right arrow"
           content="NEXT"
@@ -59,7 +59,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
         />
       </Button.Group>
 
-      <label>current step: {step?.step.name}</label>
+      <label>current step: {step?.squenceStepTO.name}</label>
     </div>
   );
 };

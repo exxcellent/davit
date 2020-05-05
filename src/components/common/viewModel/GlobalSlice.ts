@@ -36,7 +36,7 @@ export const globalSlice = createSlice({
     },
     setSequence: (state, action: PayloadAction<SequenceCTO>) => {
       action.payload.sequenceStepCTOs.sort(
-        (step1, step2) => step1.step.index - step2.step.index
+        (step1, step2) => step1.squenceStepTO.index - step2.squenceStepTO.index
       );
       state.sequence = action.payload;
       state.selectedStep = action.payload.sequenceStepCTOs[0];
@@ -44,7 +44,8 @@ export const globalSlice = createSlice({
     nextStep: (state) => {
       if (state.selectedStep) {
         state.selectedStep = state.sequence?.sequenceStepCTOs.find(
-          (step) => step.step.index > state.selectedStep!.step.index
+          (step) =>
+            step.squenceStepTO.index > state.selectedStep!.squenceStepTO.index
         );
       } else {
         state.selectedStep = state.sequence?.sequenceStepCTOs[0];
