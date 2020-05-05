@@ -1,11 +1,13 @@
 .carvGridContainer {
   display: grid;
-  grid-template-columns: 4em auto;
-  grid-template-rows: 25% auto;
+  grid-template-columns: 4em 1fr 1fr;
+  grid-template-rows: minmax(8em, 8em) 1fr 1fr;
   grid-template-areas:
     "header header header"
     "leftBar compModel seqModel"
-    " leftBar dataModel seqTabel";
+    "leftBar dataModel seqTabel";
+  height: 100vh;
+  max-height: 100vh;
 }
 
 .leftPanel {
@@ -26,12 +28,15 @@
 
 .dataModel {
   grid-area: dataModel;
+  background-color: #cff3c0;
 }
 
 .sequencModel {
   grid-area: seqModel;
+  background-color: #f0e4a3;
 }
 
 .sequenceTable {
   grid-area: seqTabel;
+  background-color: #eece75;
 }
