@@ -1,19 +1,33 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Table } from "semantic-ui-react";
 import { ComponentDataCTO } from "../../../dataAccess/access/cto/ComponentDataCTO";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
-import { selectSequence } from "../../common/viewModel/GlobalSlice";
+import { selectSequence, selectStep } from "../../common/viewModel/GlobalSlice";
 
 interface SequenceTableModelControllerProps {}
 
 export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = () => {
   const sequence: SequenceCTO | undefined = useSelector(selectSequence);
+  const selectedStep: SequenceStepCTO | undefined = useSelector(selectStep);
+
+  const [selectedId, setSelectedId] = React.useState<number>(-1);
+
+  useEffect(() => {
+    if (selectedStep !== undefined) {
+      setSelectedId(selectedStep.squenceStepTO.id);
+    } else {
+      setSelectedId(-1);
+    }
+  }, [selectedStep]);
 
   const createTableRow = (sequenceStepCTO: SequenceStepCTO) => {
     return (
-      <Table.Row id={sequenceStepCTO.squenceStepTO.id}>
+      <Table.Row
+        id={sequenceStepCTO.squenceStepTO.id}
+        active={selectedId === sequenceStepCTO.squenceStepTO.id}
+      >
         <Table.Cell>{sequenceStepCTO.squenceStepTO.name}</Table.Cell>
         <Table.Cell>
           {sequenceStepCTO.componentCTOSource.component.name}

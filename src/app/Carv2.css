@@ -39,4 +39,5 @@
 .sequenceTable {
   grid-area: seqTabel;
   background-color: #eece75;
+  overflow-y: auto;
 }
