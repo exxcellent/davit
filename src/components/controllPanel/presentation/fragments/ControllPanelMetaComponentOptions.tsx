@@ -1,11 +1,17 @@
 import React, { FunctionComponent } from "react";
+import { useDispatch } from "react-redux";
 import { Button, Modal } from "semantic-ui-react";
+import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
+import { MetaComponentActions } from "../../../metaComponentModel/viewModel/MetaComponentActions";
 
 export interface ControllPanelMetaComponentOptionsProps {}
 
 export const ControllPanelMetaComponentOptions: FunctionComponent<ControllPanelMetaComponentOptionsProps> = (
   props
 ) => {
+  const dispatch = useDispatch();
+
+  // TODO: FileHandler Klasse erstellen und ins Backend stecken!
   const readFileToJSON = (file: File | null) => {
     const fileReader = new FileReader();
     let content: string;
@@ -18,8 +24,11 @@ export const ControllPanelMetaComponentOptions: FunctionComponent<ControllPanelM
         const STORE_ID = "carv2";
         localStorage.setItem(STORE_ID, JSON.stringify(content));
       };
-      // content = fileReader.readAsText(event.target.result);
     }
+  };
+
+  const createNewComponent = () => {
+    dispatch(MetaComponentActions.saveComponent(new ComponentCTO()));
   };
 
   return (
@@ -28,7 +37,7 @@ export const ControllPanelMetaComponentOptions: FunctionComponent<ControllPanelM
         <input
           type="file"
           onChange={(event) => {
-            // TODO: FileHandler Klasse erstellen und ins Backend stecken!
+            // TODO: siehe methode.
             if (event.target.files !== null) {
               readFileToJSON(event.target.files[0]);
             }
@@ -36,7 +45,7 @@ export const ControllPanelMetaComponentOptions: FunctionComponent<ControllPanelM
         />
       </Modal>
       <Button icon="download" />
-      <Button icon="add"></Button>
+      <Button icon="add" onClick={createNewComponent}></Button>
     </div>
   );
 };
