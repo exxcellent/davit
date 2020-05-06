@@ -47,8 +47,13 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
       />
 
       <Button.Group>
-        {/* TODO: funktion für vorherigen Step */}
-        <Button icon="left arrow" content="BACK" labelPosition="left" />
+        <Button
+          icon="left arrow"
+          content="BACK"
+          labelPosition="left"
+          isDisabled={isNullOrUndefined(sequence)}
+          onClick={() => dispatch(ControllPanelActions.previousStep())}
+        />
         <Button.Or text={step?.squenceStepTO.index} />
         <Button
           icon="right arrow"
@@ -58,8 +63,6 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
           onClick={() => dispatch(ControllPanelActions.nextStep())}
         />
       </Button.Group>
-
-      <label>current step: {step?.squenceStepTO.name}</label>
     </div>
   );
 };

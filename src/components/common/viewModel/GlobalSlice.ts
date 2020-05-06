@@ -51,6 +51,20 @@ export const globalSlice = createSlice({
         state.selectedStep = state.sequence?.sequenceStepCTOs[0];
       }
     },
+    previousStep: (state) => {
+      if (state.selectedStep) {
+        state.selectedStep = state.sequence?.sequenceStepCTOs.find(
+          (step) =>
+            step.squenceStepTO.index ===
+            state.selectedStep!.squenceStepTO.index - 1
+        );
+      } else {
+        state.selectedStep =
+          state.sequence?.sequenceStepCTOs[
+            state.sequence?.sequenceStepCTOs.length - 1
+          ];
+      }
+    },
   },
 });
 

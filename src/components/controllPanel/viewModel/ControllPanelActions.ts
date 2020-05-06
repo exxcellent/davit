@@ -11,6 +11,7 @@ import { ControllPanelSlice } from "./ControllPanelSlice";
 const { loadSequences } = ControllPanelSlice.actions;
 const { setSequence } = globalSlice.actions;
 const { nextStep } = globalSlice.actions;
+const { previousStep } = globalSlice.actions;
 const { clearErrors } = globalSlice.actions;
 const { loadComponents } = metaComponentModelSlice.actions;
 
@@ -67,6 +68,7 @@ export const ControllPanelActions = {
   findAllSequences,
   findSequence,
   nextStep,
+  previousStep,
   clearErrors,
   saveComponent,
 };
