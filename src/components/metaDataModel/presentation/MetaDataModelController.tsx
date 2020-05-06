@@ -2,7 +2,9 @@ import React, { FunctionComponent } from "react";
 
 interface MetaDataModelControllerProps {}
 
-export const MetaDataModelController: FunctionComponent<MetaDataModelControllerProps> = () => {
+export const MetaDataModelController: FunctionComponent<MetaDataModelControllerProps> = (
+  props
+) => {
   //   const components: ComponentCTO[] = useSelector(selectComponents);
   //   const selectedStep: SequenceStepCTO | undefined = useSelector(selectStep);
   //   const dispatch = useDispatch();
@@ -29,7 +31,7 @@ export const MetaDataModelController: FunctionComponent<MetaDataModelControllerP
   //   };
 
   return (
-    <div>
+    <div className="dataModel">
       <label>Data Model</label>
     </div>
   );

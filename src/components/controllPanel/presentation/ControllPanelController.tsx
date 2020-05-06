@@ -15,7 +15,7 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (
   const mode: Mode = useSelector(selectGlobalModeState);
 
   return (
-    <div>
+    <div className="controllerHeader">
       {mode === Mode.VIEW && <ControllPanelSequenceOptions />}
       {mode === Mode.EDIT && <ControllPanelMetaComponentOptions />}
     </div>

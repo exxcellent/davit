@@ -1,4 +1,5 @@
 import React from "react";
+import { ErrorNotification } from "../components/common/fragments/ErrorNotification";
 import { ControllPanelController } from "../components/controllPanel/presentation/ControllPanelController";
 import { MetaComponentModelController } from "../components/metaComponentModel/presentation/MetaComponentModelController";
 import { MetaDataModelController } from "../components/metaDataModel/presentation/MetaDataModelController";
@@ -10,22 +11,13 @@ export function Carv2() {
   return (
     <div className="Carv2">
       <div className="carvGridContainer">
-        <div className="controllerHeader">
-          <ControllPanelController />
-        </div>
-        <div className="componentModel">
-          <MetaComponentModelController />
-        </div>
-        <div className="dataModel">
-          <MetaDataModelController />
-        </div>
-        <div className="leftPanel">
-          <SidePanelController />
-        </div>
+        <ControllPanelController />
+        <MetaComponentModelController />
+        <MetaDataModelController />
+        <SidePanelController />
         <div className="sequencModel"></div>
-        <div className="sequenceTable">
-          <SequenceTableModelController />
-        </div>
+        <SequenceTableModelController />
+        <ErrorNotification />
       </div>
     </div>
   );

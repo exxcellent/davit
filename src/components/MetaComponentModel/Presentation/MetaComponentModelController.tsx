@@ -9,7 +9,9 @@ import { MetaComponentDnDBox } from "./fragments/MetaComponentDnDBox";
 
 interface MetaComponentModelControllerProps {}
 
-export const MetaComponentModelController: FunctionComponent<MetaComponentModelControllerProps> = () => {
+export const MetaComponentModelController: FunctionComponent<MetaComponentModelControllerProps> = (
+  props
+) => {
   const components: ComponentCTO[] = useSelector(selectComponents);
   const selectedStep: SequenceStepCTO | undefined = useSelector(selectStep);
   const dispatch = useDispatch();
@@ -42,5 +44,5 @@ export const MetaComponentModelController: FunctionComponent<MetaComponentModelC
     );
   };
 
-  return <div>{createMetaComponentDnDBox()}</div>;
+  return createMetaComponentDnDBox();
 };

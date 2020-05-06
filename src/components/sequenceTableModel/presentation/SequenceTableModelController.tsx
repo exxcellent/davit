@@ -8,7 +8,9 @@ import { selectSequence, selectStep } from "../../common/viewModel/GlobalSlice";
 
 interface SequenceTableModelControllerProps {}
 
-export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = () => {
+export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (
+  props
+) => {
   const sequence: SequenceCTO | undefined = useSelector(selectSequence);
   const selectedStep: SequenceStepCTO | undefined = useSelector(selectStep);
 
@@ -47,14 +49,18 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
   };
 
   return (
-    <Table celled>
-      <Table.Header>
-        <Table.HeaderCell>Name</Table.HeaderCell>
-        <Table.HeaderCell>Sender</Table.HeaderCell>
-        <Table.HeaderCell>Receiver</Table.HeaderCell>
-        <Table.HeaderCell>Data</Table.HeaderCell>
-      </Table.Header>
-      <Table.Body>{sequence?.sequenceStepCTOs.map(createTableRow)}</Table.Body>
-    </Table>
+    <div className="sequenceTable">
+      <Table celled>
+        <Table.Header>
+          <Table.HeaderCell>Name</Table.HeaderCell>
+          <Table.HeaderCell>Sender</Table.HeaderCell>
+          <Table.HeaderCell>Receiver</Table.HeaderCell>
+          <Table.HeaderCell>Data</Table.HeaderCell>
+        </Table.Header>
+        <Table.Body>
+          {sequence?.sequenceStepCTOs.map(createTableRow)}
+        </Table.Body>
+      </Table>
+    </div>
   );
 };
