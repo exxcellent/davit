@@ -8,6 +8,15 @@
     "leftBar dataModel seqTabel";
   height: 100vh;
   max-height: 100vh;
+  overflow: hidden;
+}
+
+.notificationPanel {
+  grid-column-start: 2;
+  grid-column-end: 4;
+  grid-row-start: 4;
+  grid-row-end: 4;
+  justify-self: center;
 }
 
 .leftPanel {
@@ -24,6 +33,7 @@
 .componentModel {
   grid-area: compModel;
   background-color: #e8ede6;
+  /* height: 45vh; */
 }
 
 .dataModel {
