@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import React, { FunctionComponent } from "react";
-import styled from "styled-components";
 import { GeometricalDataCTO } from "../../../dataAccess/access/cto/GeometraicalDataCTO";
 
 export interface ArrowProps {
@@ -14,15 +13,39 @@ export const Arrow: FunctionComponent<ArrowProps> = (props) => {
   const { xSource, ySource, xTarget, yTarget } = props;
 
   return (
-    <SVG>
+    <motion.svg
+      style={{
+        overflow: "visible",
+        stroke: "black",
+        strokeWidth: "2",
+        position: "absolute",
+        width: 0,
+        height: 0,
+      }}
+    >
+      <defs>
+        <marker
+          id="arrow"
+          markerWidth="10"
+          markerHeight="10"
+          refX="8"
+          refY="3"
+          orient="auto"
+          // markerUnits="strokeWidth"
+          strokeWidth="0"
+        >
+          <path d="M0,0 L0,6 L9,3 z" fill="black" />
+        </marker>
+      </defs>
       <line
-        x1={xSource}
-        y1={ySource}
-        x2={xTarget}
-        y2={yTarget}
+        x1={xSource + 150}
+        y1={ySource + 60}
+        x2={xTarget - 2}
+        y2={yTarget + 60}
         stroke="black"
+        markerEnd="url(#arrow)"
       />
-    </SVG>
+    </motion.svg>
   );
 };
 
@@ -41,11 +64,3 @@ export const createArrow = (
     );
   }
 };
-
-const SVG = styled(motion.svg)`
-  position: absolute;
-  color: black;
-  border-width: 2px;
-  width: 100%;
-  height: 500em;
-`;
