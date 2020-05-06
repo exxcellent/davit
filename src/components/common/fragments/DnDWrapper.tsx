@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import React, { FunctionComponent } from "react";
-import { PositionTO } from "../../../dataAccess/access/to/PositionTO";
+import { GeometricalDataCTO } from "../../../dataAccess/access/cto/GeometraicalDataCTO";
 
 export interface DnDWrapperProps {
-  constraintsRef: any;
+  dragConstraintsRef: any;
   positionId: number;
   initalX: number;
   initalY: number;
@@ -12,22 +12,23 @@ export interface DnDWrapperProps {
 
 export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
   const {
-    constraintsRef,
+    dragConstraintsRef,
     initalX,
     initalY,
     onPositionUpdate,
     positionId,
   } = props;
 
-  console.info("DnDItem rendering!");
-
   return (
     <motion.div
       drag={true}
-      dragConstraints={constraintsRef}
+      dragConstraints={dragConstraintsRef}
       dragMomentum={false}
       dragElastic={0}
-      initial={{ x: initalX, y: initalY }}
+      initial={{
+        x: initalX,
+        y: initalY,
+      }}
       onDragEnd={(event, info) => {
         onPositionUpdate(
           // keine Nachkommastellen.
@@ -35,10 +36,10 @@ export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
           Number(info.point.y.toFixed(0)),
           positionId
         );
-        console.log("New 'X' position: " + info.point.x);
-        console.log("New 'Y' position: " + info.point.y);
+        console.log("X: " + info.point.x);
+        console.log("Y: " + info.point.y);
       }}
-      style={{ width: "0%", position: "absolute" }}
+      style={{ position: "absolute", display: "inline-flex" }}
     >
       {props.children}
     </motion.div>
@@ -46,20 +47,19 @@ export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
 };
 
 export const createDnDItem = (
-  positionTO: PositionTO,
-  key: number,
+  geometricalDataCTO: GeometricalDataCTO,
   onPositionUpdateCallBack: (x: number, y: number, positionId: number) => void,
-  constraintsRef: any,
+  dragConstraintsRef: any,
   children: React.ReactNode
 ) => {
   return (
     <DnDWrapper
-      key={key}
+      key={geometricalDataCTO.position.id}
       onPositionUpdate={onPositionUpdateCallBack}
-      positionId={positionTO.id}
-      initalX={positionTO.x}
-      initalY={positionTO.y}
-      constraintsRef={constraintsRef}
+      positionId={geometricalDataCTO.position.id}
+      initalX={geometricalDataCTO.position.x}
+      initalY={geometricalDataCTO.position.y}
+      dragConstraintsRef={dragConstraintsRef}
     >
       {children}
     </DnDWrapper>

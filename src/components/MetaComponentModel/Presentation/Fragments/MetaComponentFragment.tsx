@@ -1,39 +1,57 @@
 import React, { FunctionComponent } from "react";
-import { Card } from "semantic-ui-react";
+import { useSelector } from "react-redux";
+import { Button, Card } from "semantic-ui-react";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
 import { ComponentDataCTO } from "../../../../dataAccess/access/cto/ComponentDataCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
+import {
+  Mode,
+  selectGlobalModeState,
+} from "../../../common/viewModel/GlobalSlice";
 import { createDataFragment, DataFragmentProps } from "./DataFragment";
 
 export interface MetaComponentFragmentProps {
   id: number;
   initalName: string;
   initalColor: string;
+  initalWidth?: number;
+  initalHeigth?: number;
   dataFragments: DataFragmentProps[];
-  width: number;
-  height: number;
   onDelCallBack: (id: number) => void;
 }
 
 export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps> = (
   props
 ) => {
-  const { id, initalName, onDelCallBack, dataFragments, width, height } = props;
+  const {
+    id,
+    initalName,
+    onDelCallBack,
+    dataFragments,
+    initalWidth,
+    initalHeigth,
+  } = props;
+
+  const mode: Mode = useSelector(selectGlobalModeState);
 
   const delMetaComponentFragment = () => {
     onDelCallBack(id);
   };
 
   return (
-    <div style={{ width: width, height: height }}>
-      <Card fluid>
-        <Card.Content header={initalName}>
-          {/* <Button size="mini" icon="delete" onClick={delMetaComponentFragment} /> */}
-        </Card.Content>
-        <Card.Content description="" />
-        {dataFragments.map(createDataFragment)}
-      </Card>
-    </div>
+    <Card style={{ width: initalWidth, height: initalHeigth }}>
+      <Card.Content header={initalName}></Card.Content>
+      <Card.Content description="">
+        {mode === Mode.EDIT && (
+          <Button
+            size="mini"
+            icon="delete"
+            onClick={delMetaComponentFragment}
+          />
+        )}
+      </Card.Content>
+      {dataFragments.map(createDataFragment)}
+    </Card>
   );
 };
 
@@ -64,9 +82,8 @@ export const createMetaComponentFragment = (
       id={componentCTO.component.id}
       initalName={componentCTO.component.name}
       initalColor={componentCTO.design.color}
+      initalWidth={componentCTO.geometricalData.geometricalData.width}
       onDelCallBack={onDeleteCallBack}
-      width={componentCTO.geometricalData.geometricalData.width}
-      height={componentCTO.geometricalData.geometricalData.height}
       dataFragments={stepToDataFragmentProps(step, componentCTO.component.id)}
     />
   );

@@ -13,20 +13,22 @@ export const ErrorNotification: FunctionComponent<ErrorNotificationProps> = (
   const { clearErrors } = globalSlice.actions;
 
   return (
-    <Transition
-      visible={errorMessages.length > 0}
-      animate="slide up"
-      duration={1000}
-    >
-      <Message error compact>
-        <Message.Header>Error</Message.Header>
-        <Button
-          icon="close"
-          size="mini"
-          onClick={() => dispatch(clearErrors())}
-        />
-        {errorMessages}
-      </Message>
-    </Transition>
+    <div className="notificationPanel">
+      <Transition
+        visible={errorMessages.length > 0}
+        animate="slide up"
+        duration={1000}
+      >
+        <Message error compact>
+          <Message.Header>Error</Message.Header>
+          <Button
+            icon="close"
+            size="mini"
+            onClick={() => dispatch(clearErrors())}
+          />
+          {errorMessages}
+        </Message>
+      </Transition>
+    </div>
   );
 };

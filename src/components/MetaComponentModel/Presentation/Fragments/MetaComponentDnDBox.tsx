@@ -17,10 +17,12 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (
   props
 ) => {
   const { componentCTOs, onSaveCallBack, onDeleteCallBack, step } = props;
+
   const constraintsRef = useRef(null);
 
   // TODO refactor
   const onPositionUpdate = (x: number, y: number, id: number) => {
+    console.info("onPositionUpdate() x: " + x + " y: " + y + ".");
     for (let i = 0; componentCTOs.length; i++) {
       if (componentCTOs[i].geometricalData.position.id === id) {
         let copyComponentCTO: ComponentCTO = JSON.parse(
@@ -40,10 +42,8 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (
       onDeleteCallBack,
       step
     );
-    console.log(step);
     return createDnDItem(
-      componentCTO.geometricalData.position,
-      componentCTO.geometricalData.position.id,
+      componentCTO.geometricalData,
       onPositionUpdate,
       constraintsRef,
       metaComponentFragment
@@ -51,24 +51,28 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (
   };
 
   return (
-    <div style={{ width: "100%", height: "50em", backgroundColor: "#e8ede6" }}>
-      <motion.div
-        ref={constraintsRef}
-        style={{ height: "50em", width: "100%", position: "relative" }}
-      >
-        {componentCTOs.map(createDnDMetaComponent)}
-        {step &&
-          createArrow(
-            componentCTOs.find(
-              (componentCTO) =>
-                componentCTO.component.id === step.step.sourceComponentFk
-            )?.geometricalData,
-            componentCTOs.find(
-              (componentCTO) =>
-                componentCTO.component.id === step.step.targetComponentFk
-            )?.geometricalData
-          )}
-      </motion.div>
-    </div>
+    // <div style={{ width: "100%", height: "40em", backgroundColor: "black" }}>
+    // <motion.div ref={constraintsRef} style={{ position: "relative" }}>
+    <motion.div
+      id="dndBox"
+      ref={constraintsRef}
+      className="componentModel"
+      // TODO: Fläche in css file auslagern.
+      // style={{ height: "45vh" }}
+      // style={{ width: "100%", height: "45vh" }}
+    >
+      {componentCTOs.map(createDnDMetaComponent)}
+      {step &&
+        createArrow(
+          componentCTOs.find(
+            (componentCTO) =>
+              componentCTO.component.id === step.squenceStepTO.sourceComponentFk
+          )?.geometricalData,
+          componentCTOs.find(
+            (componentCTO) =>
+              componentCTO.component.id === step.squenceStepTO.targetComponentFk
+          )?.geometricalData
+        )}
+    </motion.div>
   );
 };
