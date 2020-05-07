@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, Point } from "framer-motion";
 import React, { FunctionComponent } from "react";
 import { GeometricalDataCTO } from "../../../dataAccess/access/cto/GeometraicalDataCTO";
 
@@ -12,13 +12,72 @@ export interface ArrowProps {
 export const Arrow: FunctionComponent<ArrowProps> = (props) => {
   const { xSource, ySource, xTarget, yTarget } = props;
 
-  const getQ2 = (x1: number, x2: number): number => {
-    let q2 = (x2 - x1) / 2 + x1;
-    return q2;
+  const INTERFACE_INPUT: Point = { x: 0, y: 60 };
+  const INTERFACE_OUTPUT: Point = { x: 150, y: 60 };
+  const OFFSET: number = 10;
+
+  const createCurve = (x1: number, y1: number, x2: number, y2: number) => {
+    let startPoint: Point = { x: x1, y: y1 };
+    let endPoint: Point = { x: x2, y: y2 };
+    // set interfaces
+    startPoint = plusPoint(startPoint, INTERFACE_OUTPUT);
+    endPoint = plusPoint(endPoint, INTERFACE_INPUT);
+    // add object offset
+    const offsetStartPoint = setOutPutOffset(startPoint, OFFSET);
+    endPoint = setInputPutOffset(endPoint, OFFSET);
+
+    const middlePoint = getMiddlePoint(offsetStartPoint, endPoint);
+    const curveRefPoint = getCurvRefPoint(offsetStartPoint, middlePoint);
+
+    return (
+      <path
+        d={`M ${startPoint.x},${startPoint.y} 
+        l 10,0
+        Q ${curveRefPoint.x}, 
+        ${curveRefPoint.y} 
+        ${middlePoint.x}, 
+        ${middlePoint.y}
+        T ${endPoint.x}, ${endPoint.y}
+        l 10,0
+        `}
+        fill="transparent"
+        markerEnd="url(#arrow)"
+      />
+    );
   };
 
-  const getStartVal = (x: number, offset: number): number => {
-    return x + offset;
+  const getMiddleValue = (val1: number, val2: number): number => {
+    let middleValue = (val2 - val1) / 2 + val1;
+    return middleValue;
+  };
+
+  const setOutPutOffset = (point: Point, offset: number): Point => {
+    return { x: point.x + offset, y: point.y };
+  };
+
+  const setInputPutOffset = (point: Point, offset: number): Point => {
+    return { x: point.x - offset, y: point.y };
+  };
+
+  const plusPoint = (point1: Point, point2: Point): Point => {
+    return { x: point1.x + point2.x, y: point1.y + point2.y };
+  };
+
+  const getMiddlePoint = (startPoint: Point, endPoint: Point): Point => {
+    return {
+      x: getMiddleValue(startPoint.x, endPoint.x),
+      y: getMiddleValue(startPoint.y, endPoint.y),
+    };
+  };
+
+  const getCurvRefPoint = (
+    curveStartPoint: Point,
+    curveEndPoint: Point
+  ): Point => {
+    return {
+      x: getMiddleValue(curveStartPoint.x, curveEndPoint.x),
+      y: curveStartPoint.y,
+    };
   };
 
   return (
@@ -26,7 +85,6 @@ export const Arrow: FunctionComponent<ArrowProps> = (props) => {
       style={{
         overflow: "visible",
         stroke: "black",
-        // strokeWidth: "2",
         position: "absolute",
         width: 0,
         height: 0,
@@ -40,32 +98,12 @@ export const Arrow: FunctionComponent<ArrowProps> = (props) => {
           refX="8"
           refY="3"
           orient="auto"
-          // markerUnits="strokeWidth"
           strokeWidth="0"
         >
           <path d="M0,0 L0,6 L9,3 z" fill="black" />
         </marker>
       </defs>
-      <path
-        d={`M ${getStartVal(xSource, 150)},${getStartVal(ySource, 60)} 
-        l 10,0
-        Q ${getQ2(getStartVal(xSource, 150), xTarget)}, 
-        ${getStartVal(ySource, 60)} 
-        ${getQ2(getStartVal(xSource, 150), xTarget)}, 
-        ${getQ2(getStartVal(ySource, 60), yTarget)}
-        T ${xTarget}, ${yTarget}
-        `}
-        fill="transparent"
-        markerEnd="url(#arrow)"
-      />
-      {/* <line
-        x1={xSource + 150}
-        y1={ySource + 60}
-        x2={xTarget - 2}
-        y2={yTarget + 60}
-        stroke="black"
-        markerEnd="url(#arrow)"
-      /> */}
+      {createCurve(xSource, ySource, xTarget, yTarget)}
     </motion.svg>
   );
 };
