@@ -34,7 +34,7 @@ export const ComponentDataAccessService = {
     return component;
   },
 
-  save(componentCTO: ComponentCTO): ComponentCTO {
+  saveCTO(componentCTO: ComponentCTO): ComponentCTO {
     CheckHelper.nullCheck(componentCTO, "ComponentCTO");
     const savedDesign = TechnicalDataAccessService.saveDesign(
       componentCTO.design

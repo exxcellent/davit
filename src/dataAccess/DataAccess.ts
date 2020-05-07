@@ -1,9 +1,11 @@
 import { ComponentCTO } from "./access/cto/ComponentCTO";
+import { DataCTO } from "./access/cto/DataCTO";
 import { SequenceCTO } from "./access/cto/SequenceCTO";
 import { SequenceTO } from "./access/to/SequenceTO";
 import { DataAccessResponse } from "./DataAccessResponse";
 import dataStore from "./DataStore";
 import { ComponentDataAccessService } from "./services/ComponentDataAccessService";
+import { DataDataAccessService } from "./services/DataDataAccessService";
 import { SequenceDataAccessService } from "./services/SequenceDataAccessService";
 
 export const DataAccess = {
@@ -12,7 +14,9 @@ export const DataAccess = {
   },
 
   saveComponentCTO(component: ComponentCTO): DataAccessResponse<ComponentCTO> {
-    return makeTransactional(() => ComponentDataAccessService.save(component));
+    return makeTransactional(() =>
+      ComponentDataAccessService.saveCTO(component)
+    );
   },
 
   deleteComponentCTO(
@@ -29,6 +33,14 @@ export const DataAccess = {
 
   findSequence(sequenceId: number): DataAccessResponse<SequenceCTO> {
     return makeTransactional(() => SequenceDataAccessService.find(sequenceId));
+  },
+
+  findAllDatas(): DataAccessResponse<DataCTO[]> {
+    return makeTransactional(DataDataAccessService.findAll);
+  },
+
+  saveDataCTO(dataCTO: DataCTO): DataAccessResponse<DataCTO> {
+    return makeTransactional(() => DataDataAccessService.saveCTO(dataCTO));
   },
 };
 

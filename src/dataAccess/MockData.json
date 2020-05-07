@@ -13,7 +13,11 @@
     { "id": 3, "width": 150, "height": 150, "positionFk": 3 },
     { "id": 4, "width": 150, "height": 150, "positionFk": 4 },
     { "id": 5, "width": 150, "height": 150, "positionFk": 5 },
-    { "id": 6, "width": 150, "height": 150, "positionFk": 6 }
+    { "id": 6, "width": 150, "height": 150, "positionFk": 6 },
+    { "id": 7, "width": 150, "height": 150, "positionFk": 7 },
+    { "id": 8, "width": 150, "height": 150, "positionFk": 8 },
+    { "id": 9, "width": 150, "height": 150, "positionFk": 9 },
+    { "id": 10, "width": 150, "height": 150, "positionFk": 10 }
   ],
   "positions": [
     { "id": 1, "x": 180, "y": 130 },
@@ -21,7 +25,11 @@
     { "id": 3, "x": 580, "y": 130 },
     { "id": 4, "x": 180, "y": 270 },
     { "id": 5, "x": 380, "y": 270 },
-    { "id": 6, "x": 580, "y": 270 }
+    { "id": 6, "x": 580, "y": 270 },
+    { "id": 7, "x": 0, "y": 0 },
+    { "id": 8, "x": 0, "y": 0 },
+    { "id": 9, "x": 0, "y": 0 },
+    { "id": 10, "x": 0, "y": 0 }
   ],
   "designs": [
     { "id": 1, "color": "#6fc795" },
@@ -118,9 +126,9 @@
     }
   ],
   "datas": [
-    { "id": 1, "name": "data1" },
-    { "id": 2, "name": "data2" },
-    { "id": 3, "name": "data3" },
-    { "id": 4, "name": "data4" }
+    { "id": 1, "name": "data1", "geometricalDataFk": 7 },
+    { "id": 2, "name": "data2", "geometricalDataFk": 8 },
+    { "id": 3, "name": "data3", "geometricalDataFk": 9 },
+    { "id": 4, "name": "data4", "geometricalDataFk": 10 }
   ]
 }

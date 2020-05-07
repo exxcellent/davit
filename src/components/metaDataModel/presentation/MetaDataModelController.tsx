@@ -1,25 +1,30 @@
 import React, { FunctionComponent } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
+import { MetaDataActions } from "../viewModel/MetaDataActions";
+import { selectDatas } from "../viewModel/MetaDataModelSlice";
+import { MetaDataDnDBox } from "./fragments/MetaDataDnDBox";
 
 interface MetaDataModelControllerProps {}
 
 export const MetaDataModelController: FunctionComponent<MetaDataModelControllerProps> = (
   props
 ) => {
-  //   const components: ComponentCTO[] = useSelector(selectComponents);
+  const datas: DataCTO[] = useSelector(selectDatas);
   //   const selectedStep: SequenceStepCTO | undefined = useSelector(selectStep);
-  //   const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  //   React.useEffect(() => {
-  //     dispatch(MetaComponentActions.findAllComponents());
-  //   }, [dispatch]);
+  React.useEffect(() => {
+    dispatch(MetaDataActions.findAllDatas());
+  }, [dispatch]);
 
   //   const createNewComponent = () => {
   //     dispatch(MetaComponentActions.saveComponent(new ComponentCTO()));
   //   };
 
-  //   const saveComp = (componentCTO: ComponentCTO) => {
-  //     dispatch(MetaComponentActions.saveComponent(componentCTO));
-  //   };
+  const saveData = (dataCTO: DataCTO) => {
+    dispatch(MetaDataActions.saveData(dataCTO));
+  };
 
   //   const deleteComp = (id: number) => {
   //     const componentToDelete: ComponentCTO | undefined = components.find(
@@ -30,9 +35,16 @@ export const MetaDataModelController: FunctionComponent<MetaDataModelControllerP
   //     }
   //   };
 
-  return (
-    <div className="dataModel">
-      <label>Data Model</label>
-    </div>
-  );
+  const createMetaDataDnDBox = () => {
+    return (
+      <MetaDataDnDBox
+        dataCTOs={datas}
+        onSaveCallBack={saveData}
+        // onDeleteCallBack={deleteComp}
+        // step={selectedStep}
+      />
+    );
+  };
+
+  return createMetaDataDnDBox();
 };
