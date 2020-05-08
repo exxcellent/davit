@@ -38,7 +38,6 @@ export const TechnicalDataAccessService = {
     );
     CheckHelper.nullCheck(geometricalDataCTO.position, "position");
     const savedPosition = PositionRepository.save(geometricalDataCTO.position);
-    // TODO: refactor
     geometricalDataCTO.geometricalData.positionFk = savedPosition.id;
     const savedGeometricalData = GeometricalDataRepository.save(
       geometricalDataCTO.geometricalData

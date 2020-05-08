@@ -15,8 +15,6 @@ export const DataDataAccessService = {
 
   saveCTO(dataCTO: DataCTO) {
     CheckHelper.nullCheck(dataCTO, "dataCTO");
-    // TODO: refactor
-    // update FK's
     const savedGeometricalData = TechnicalDataAccessService.saveGeometricalData(
       dataCTO.geometricalData
     );
@@ -29,8 +27,7 @@ export const DataDataAccessService = {
   },
 };
 
-// TODO ist export hier gut?
-export const createDataCTO = (data: DataTO | undefined): DataCTO => {
+const createDataCTO = (data: DataTO | undefined): DataCTO => {
   CheckHelper.nullCheck(data, "data");
   let geometricalData:
     | GeometricalDataCTO
