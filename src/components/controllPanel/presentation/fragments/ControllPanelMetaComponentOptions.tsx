@@ -11,34 +11,37 @@ export const ControllPanelMetaComponentOptions: FunctionComponent<ControllPanelM
 ) => {
   const dispatch = useDispatch();
 
-  // TODO: FileHandler Klasse erstellen und ins Backend stecken!
-  const readFileToJSON = (file: File | null) => {
-    const fileReader = new FileReader();
-    let content: string;
-    if (file !== null) {
-      fileReader.readAsText(file);
-      fileReader.onload = (event) => {
-        console.log("result: " + event.target!.result);
-        content = JSON.parse(event.target!.result as string);
-        console.warn("content: " + JSON.stringify(content));
-        const STORE_ID = "carv2";
-        localStorage.setItem(STORE_ID, JSON.stringify(content));
-      };
-    }
-  };
+  const [showUploadModal, setShowUploadModal] = React.useState<boolean>(false);
 
   const createNewComponent = () => {
     dispatch(ControllPanelActions.saveComponent(new ComponentCTO()));
   };
 
+  const readFileToString = (file: File | null) => {
+    const fileReader = new FileReader();
+    if (file !== null) {
+      console.log("reading file");
+      fileReader.readAsText(file);
+      fileReader.onload = (event) => {
+        console.log("writing filee to storage");
+        console.log(event.target!.result);
+        dispatch(
+          ControllPanelActions.storefileData(event.target!.result as string)
+        );
+        setShowUploadModal(false);
+      };
+    }
+  };
+
   return (
     <div>
-      <Modal trigger={<Button icon="cloud upload" />}>
+      <Button icon="cloud upload" onClick={() => setShowUploadModal(true)} />
+      <Modal open={showUploadModal}>
         <input
           type="file"
           onChange={(event) => {
             if (event.target.files !== null) {
-              readFileToJSON(event.target.files[0]);
+              readFileToString(event.target.files[0]);
             }
           }}
         />

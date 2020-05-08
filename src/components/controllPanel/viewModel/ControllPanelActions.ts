@@ -64,6 +64,18 @@ const findSequence = (sequenceId: number): AppThunk => async (dispatch) => {
   }
 };
 
+const storefileData = (fileData: string): AppThunk => async (dispatch) => {
+  const response: DataAccessResponse<void> = await DataAccess.storeFileData(
+    fileData
+  );
+  if (response.code === 200) {
+    console.log("load components after fileread");
+    dispatch(findAllComponents());
+  } else {
+    dispatch(handleError(response.message));
+  }
+};
+
 export const ControllPanelActions = {
   findAllSequences,
   findSequence,
@@ -71,4 +83,5 @@ export const ControllPanelActions = {
   previousStep,
   clearErrors,
   saveComponent,
+  storefileData,
 };

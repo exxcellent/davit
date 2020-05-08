@@ -9,6 +9,20 @@ import { DataDataAccessService } from "./services/DataDataAccessService";
 import { SequenceDataAccessService } from "./services/SequenceDataAccessService";
 
 export const DataAccess = {
+  storeFileData(fileData: string): DataAccessResponse<void> {
+    let response: DataAccessResponse<void> = {
+      object: undefined,
+      message: "",
+      code: 500,
+    };
+    try {
+      dataStore.storeFileData(fileData);
+      return { ...response, code: 200 };
+    } catch (error) {
+      return { ...response, message: error.message };
+    }
+  },
+
   findAllComponents(): DataAccessResponse<ComponentCTO[]> {
     return makeTransactional(ComponentDataAccessService.findAll);
   },
@@ -51,7 +65,11 @@ function makeTransactional<T>(callback: () => T): DataAccessResponse<T> {
     code: 500,
   };
   try {
-    response.object = JSON.parse(JSON.stringify(callback()));
+    const object = callback();
+    response.object =
+      typeof object === "undefined"
+        ? undefined
+        : JSON.parse(JSON.stringify(callback()));
     response.code = 200;
     dataStore.commitChanges();
   } catch (error) {

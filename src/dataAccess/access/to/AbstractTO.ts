@@ -1,3 +1,3 @@
-export interface AbstractTO {
-  id: number;
+export class AbstractTO {
+  constructor(public id: number = -1) {}
 }

@@ -1,5 +1,7 @@
 import { AbstractTO } from "./AbstractTO";
 
-export class SequenceTO implements AbstractTO {
-  constructor(public name: string = "", public id: number = -1) {}
+export class SequenceTO extends AbstractTO {
+  constructor(public name: string = "") {
+    super();
+  }
 }

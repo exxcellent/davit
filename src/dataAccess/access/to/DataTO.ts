@@ -1,7 +1,7 @@
-export class DataTO {
-  constructor(
-    public id: number = -1,
-    public name: string = "",
-    public geometricalDataFk: number = -1
-  ) {}
+import { AbstractTO } from "./AbstractTO";
+
+export class DataTO extends AbstractTO {
+  constructor(public name: string = "", public geometricalDataFk: number = -1) {
+    super();
+  }
 }

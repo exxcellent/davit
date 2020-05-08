@@ -1,0 +1,138 @@
+{
+  "components": [
+    { "id": 1, "name": "comp1", "geometricalDataFk": 1, "designFk": 1 },
+    { "id": 2, "name": "comp2", "geometricalDataFk": 2, "designFk": 2 },
+    { "id": 3, "name": "comp3", "geometricalDataFk": 3, "designFk": 3 },
+    { "id": 4, "name": "comp4", "geometricalDataFk": 4, "designFk": 4 },
+    { "id": 5, "name": "comp5", "geometricalDataFk": 5, "designFk": 5 },
+    { "id": 6, "name": "comp6", "geometricalDataFk": 6, "designFk": 6 },
+    { "id": 7, "name": "", "geometricalDataFk": 11, "designFk": 7 }
+  ],
+  "designs": [
+    { "id": 1, "color": "#6fc795" },
+    { "id": 2, "color": "red" },
+    { "id": 3, "color": "red" },
+    { "id": 4, "color": "red" },
+    { "id": 5, "color": "red" },
+    { "id": 6, "color": "red" },
+    { "id": 7, "color": "#3498db" }
+  ],
+  "geometricalDatas": [
+    { "id": 1, "width": 150, "height": 150, "positionFk": 1 },
+    { "id": 2, "width": 150, "height": 150, "positionFk": 2 },
+    { "id": 3, "width": 150, "height": 150, "positionFk": 3 },
+    { "id": 4, "width": 150, "height": 150, "positionFk": 4 },
+    { "id": 5, "width": 150, "height": 150, "positionFk": 5 },
+    { "id": 6, "width": 150, "height": 150, "positionFk": 6 },
+    { "id": 7, "width": 150, "height": 150, "positionFk": 7 },
+    { "id": 8, "width": 150, "height": 150, "positionFk": 8 },
+    { "id": 9, "width": 150, "height": 150, "positionFk": 9 },
+    { "id": 10, "width": 150, "height": 150, "positionFk": 10 },
+    { "id": 11, "width": 150, "height": 150, "positionFk": 11 }
+  ],
+  "positions": [
+    { "id": 1, "x": 165, "y": 96 },
+    { "id": 2, "x": 380, "y": 130 },
+    { "id": 3, "x": 580, "y": 130 },
+    { "id": 4, "x": 180, "y": 270 },
+    { "id": 5, "x": 380, "y": 270 },
+    { "id": 6, "x": 580, "y": 270 },
+    { "id": 7, "x": 199, "y": 91 },
+    { "id": 8, "x": 538, "y": 97 },
+    { "id": 9, "x": 194, "y": 270 },
+    { "id": 10, "x": 540, "y": 279 },
+    { "id": 11, "x": 44, "y": 183 }
+  ],
+  "sequences": [{ "id": 1, "name": "seq1" }],
+  "steps": [
+    {
+      "id": 1,
+      "name": "step1",
+      "index": 1,
+      "sequenceFk": 1,
+      "sourceComponentFk": 1,
+      "targetComponentFk": 2
+    },
+    {
+      "id": 2,
+      "name": "step2",
+      "index": 2,
+      "sequenceFk": 1,
+      "sourceComponentFk": 2,
+      "targetComponentFk": 3
+    },
+    {
+      "id": 3,
+      "name": "step3",
+      "index": 3,
+      "sequenceFk": 1,
+      "sourceComponentFk": 3,
+      "targetComponentFk": 4
+    },
+    {
+      "id": 4,
+      "name": "step4",
+      "index": 4,
+      "sequenceFk": 1,
+      "sourceComponentFk": 4,
+      "targetComponentFk": 5
+    }
+  ],
+  "componentDatas": [
+    {
+      "id": 1,
+      "sequenceStepFk": 1,
+      "componentFk": 1,
+      "dataFk": 1,
+      "componentDataState": "NEW"
+    },
+    {
+      "id": 2,
+      "sequenceStepFk": 1,
+      "componentFk": 1,
+      "dataFk": 2,
+      "componentDataState": "DELETED"
+    },
+    {
+      "id": 3,
+      "sequenceStepFk": 1,
+      "componentFk": 1,
+      "dataFk": 3,
+      "componentDataState": "PERSISTENT"
+    },
+    {
+      "id": 4,
+      "sequenceStepFk": 1,
+      "componentFk": 1,
+      "dataFk": 4,
+      "componentDataState": "NEW"
+    },
+    {
+      "id": 5,
+      "sequenceStepFk": 2,
+      "componentFk": 2,
+      "dataFk": 2,
+      "componentDataState": "NEW"
+    },
+    {
+      "id": 6,
+      "sequenceStepFk": 3,
+      "componentFk": 3,
+      "dataFk": 3,
+      "componentDataState": "NEW"
+    },
+    {
+      "id": 7,
+      "sequenceStepFk": 4,
+      "componentFk": 4,
+      "dataFk": 4,
+      "componentDataState": "NEW"
+    }
+  ],
+  "datas": [
+    { "id": 1, "name": "data1", "geometricalDataFk": 7 },
+    { "id": 2, "name": "data2", "geometricalDataFk": 8 },
+    { "id": 3, "name": "data3", "geometricalDataFk": 9 },
+    { "id": 4, "name": "data4", "geometricalDataFk": 10 }
+  ]
+}

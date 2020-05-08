@@ -1,12 +1,4 @@
 import { DataStoreCTO } from "./access/cto/DataStoreCTO";
-import { ComponentDataTO } from "./access/to/ComponentDataTO";
-import { ComponentTO } from "./access/to/ComponentTO";
-import { DataTO } from "./access/to/DataTO";
-import { DesignTO } from "./access/to/DesignTO";
-import { GeometricalDataTO } from "./access/to/GeometricalDataTO";
-import { PositionTO } from "./access/to/PositionTO";
-import { SequenceStepTO } from "./access/to/SequenceStepTO";
-import { SequenceTO } from "./access/to/SequenceTO";
 import { StoreTO } from "./access/to/StoreTO";
 
 const STORE_ID = "carv2";
@@ -17,7 +9,7 @@ class DataStore {
 
   public constructor() {
     if (!DataStore.instance || !DataStore.instance.data) {
-      this.readData();
+      this.readDataFromStorage();
     }
     if (DataStore.instance) {
       return DataStore.instance;
@@ -25,8 +17,7 @@ class DataStore {
     DataStore.instance = this;
   }
 
-  private readData() {
-    this.initializeData();
+  private readDataFromStorage() {
     const dataObeject: string | null = localStorage.getItem(STORE_ID);
     let objectStore: StoreTO = {} as StoreTO;
     if (!dataObeject) {
@@ -34,53 +25,32 @@ class DataStore {
     } else {
       objectStore = JSON.parse(localStorage.getItem(STORE_ID)!);
     }
-    // TODO: auslagern in map function mit AbstractTO!
-    if (objectStore.components !== undefined) {
-      objectStore.components.forEach((component) => {
-        this.data!.components.set(component.id, component);
-      });
-    }
-    if (objectStore.geometricalDatas !== undefined) {
-      objectStore.geometricalDatas.forEach((geometrical) => {
-        this.data!.geometricalDatas.set(geometrical.id, geometrical);
-      });
-    }
-    if (objectStore.positions !== undefined) {
-      objectStore.positions.forEach((positions) => {
-        this.data!.positions.set(positions.id, positions);
-      });
-    }
-    if (objectStore.designs !== undefined) {
-      objectStore.designs.forEach((designs) => {
-        this.data!.designs.set(designs.id, designs);
-      });
-    }
-    if (objectStore.sequences !== undefined) {
-      objectStore.sequences.forEach((sequence) => {
-        this.data!.sequences.set(sequence.id, sequence);
-      });
-    }
-    if (objectStore.steps !== undefined) {
-      objectStore.steps.forEach((step) => {
-        this.data!.steps.set(step.id, step);
-      });
-    }
-    if (objectStore.componentDatas !== undefined) {
-      objectStore.componentDatas.forEach((componentData) => {
-        this.data!.componentDatas.set(componentData.id, componentData);
-      });
-    }
-    if (objectStore.datas !== undefined) {
-      objectStore.datas.forEach((data) => {
-        this.data!.datas.set(data.id, data);
-      });
-    }
+    this.readData(objectStore);
+  }
+
+  private readData(objectStore: StoreTO) {
+    console.log("Reading data");
+    this.data = new DataStoreCTO();
+
+    Object.entries(objectStore).map(([key, value]) => {
+      if (value !== undefined) {
+        const dataEntry = Object.entries(this.data!).find(
+          ([dataKey, dataValue]) => dataKey === key
+        );
+        if (dataEntry) {
+          value.forEach((abstractTO: any) => {
+            dataEntry[1].set(abstractTO.id, abstractTO);
+          });
+        } else {
+          throw new Error(`Data has wrong format: key ${key}, value ${value}`);
+        }
+      } else {
+        throw new Error(`No value found for key ${key}`);
+      }
+    });
   }
 
   private saveData(): void {
-    // let s: StoreTO = {} as StoreTO;
-    // // ["components"] als Enum, dann über Enum loopen.
-    // s["components"] = Array.from(this.data!["components"].values());
     let objectStore: StoreTO = {
       components: Array.from(this.data!.components.values()),
       designs: Array.from(this.data!.designs.values()),
@@ -94,32 +64,28 @@ class DataStore {
     localStorage.setItem(STORE_ID, JSON.stringify(objectStore));
   }
 
-  private initializeData(): void {
-    this.data = {
-      components: new Map<number, ComponentTO>(),
-      positions: new Map<number, PositionTO>(),
-      designs: new Map<number, DesignTO>(),
-      geometricalDatas: new Map<number, GeometricalDataTO>(),
-      sequences: new Map<number, SequenceTO>(),
-      steps: new Map<number, SequenceStepTO>(),
-      componentDatas: new Map<number, ComponentDataTO>(),
-      datas: new Map<number, DataTO>(),
-    };
-  }
+  public storeFileData = (fileData: string) => {
+    console.log("Writing to storage:");
+    console.log(fileData);
+    const objectStore: StoreTO = JSON.parse(fileData);
+    this.readData(objectStore);
+    localStorage.setItem(STORE_ID, fileData);
+  };
 
   public commitChanges(): void {
+    console.log("commit");
     this.saveData();
-    this.readData();
+    this.readDataFromStorage();
   }
 
   public roleBack(): void {
     console.warn("Data Store: role back.");
-    this.readData();
+    this.readDataFromStorage();
   }
 
   public getDataStore(): DataStoreCTO {
     if (!this.data) {
-      this.readData();
+      this.readDataFromStorage();
     }
     return this.data!;
   }
