@@ -24,13 +24,17 @@ import { SequenceTO } from "../to/SequenceTO";
 
 export class DataStoreCTO {
   constructor(
+    // Components
     public components = new Map<number, ComponentTO>(),
+    // Technical
     public positions = new Map<number, PositionTO>(),
     public designs = new Map<number, DesignTO>(),
     public geometricalDatas = new Map<number, GeometricalDataTO>(),
+    // Sequence
     public sequences = new Map<number, SequenceTO>(),
     public steps = new Map<number, SequenceStepTO>(),
     public componentDatas = new Map<number, ComponentDataTO>(),
+    // Data
     public datas = new Map<number, DataTO>()
   ) {}
 }

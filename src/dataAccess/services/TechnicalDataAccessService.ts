@@ -56,6 +56,7 @@ export const TechnicalDataAccessService = {
   deleteGeometricalDataCTO(
     geometricalDataCTO: GeometricalDataCTO
   ): GeometricalDataCTO {
+    CheckHelper.nullCheck(geometricalDataCTO, "geometricalDataCTO");
     const isdeletedPosition = PositionRepository.delete(
       geometricalDataCTO.position
     );

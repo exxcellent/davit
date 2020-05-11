@@ -30,8 +30,21 @@ const saveData = (dataCTO: DataCTO): AppThunk => async (dispatch) => {
   }
 };
 
+const deleteData = (data: DataCTO): AppThunk => async (dispatch) => {
+  const response: DataAccessResponse<DataCTO> = await DataAccess.deleteDataCTO(
+    data
+  );
+  console.log(response);
+  if (response.code === 200) {
+    dispatch(findAllDatas());
+  } else {
+    dispatch(handleError(response.message));
+  }
+};
+
 export const MetaDataActions = {
   loadDatas,
   findAllDatas,
   saveData,
+  deleteData,
 };

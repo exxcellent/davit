@@ -26,21 +26,21 @@ export const MetaDataModelController: FunctionComponent<MetaDataModelControllerP
     dispatch(MetaDataActions.saveData(dataCTO));
   };
 
-  //   const deleteComp = (id: number) => {
-  //     const componentToDelete: ComponentCTO | undefined = components.find(
-  //       (component) => component.component.id === id
-  //     );
-  //     if (componentToDelete) {
-  //       dispatch(MetaComponentActions.deleteComponent(componentToDelete));
-  //     }
-  //   };
+  const deleteDat = (id: number) => {
+    const dataToDelete: DataCTO | undefined = datas.find(
+      (data) => data.data.id === id
+    );
+    if (dataToDelete) {
+      dispatch(MetaDataActions.deleteData(dataToDelete));
+    }
+  };
 
   const createMetaDataDnDBox = () => {
     return (
       <MetaDataDnDBox
         dataCTOs={datas}
         onSaveCallBack={saveData}
-        // onDeleteCallBack={deleteComp}
+        onDeleteCallBack={deleteDat}
         // step={selectedStep}
       />
     );

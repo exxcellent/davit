@@ -39,8 +39,6 @@ export const ComponentDataAccessService = {
     const savedDesign = TechnicalDataAccessService.saveDesign(
       componentCTO.design
     );
-    // TODO: refactor
-    // update FK's
     componentCTO.component.designFk = savedDesign.id;
     const savedGeometricalData = TechnicalDataAccessService.saveGeometricalData(
       componentCTO.geometricalData
@@ -56,8 +54,7 @@ export const ComponentDataAccessService = {
   },
 };
 
-// TODO ist export hier gut?
-export const createComponentCTO = (
+const createComponentCTO = (
   component: ComponentTO | undefined
 ): ComponentCTO => {
   CheckHelper.nullCheck(component, "component");

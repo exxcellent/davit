@@ -9,11 +9,11 @@ interface MetaDataDnDBox {
   dataCTOs: DataCTO[];
   step?: SequenceStepCTO;
   onSaveCallBack: (dataCTO: DataCTO) => void;
-  // onDeleteCallBack: (id: number) => void;
+  onDeleteCallBack: (id: number) => void;
 }
 
 export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
-  const { dataCTOs, onSaveCallBack, step } = props;
+  const { dataCTOs, onSaveCallBack, onDeleteCallBack, step } = props;
 
   const constraintsRef = useRef(null);
 
@@ -32,7 +32,7 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
   const createDnDMetaDataFragment = (dataCTO: DataCTO) => {
     let metaDataFragment = createMetaDataFragment(
       dataCTO,
-      // onDeleteCallBack,
+      onDeleteCallBack,
       step
     );
     return createDnDItem(

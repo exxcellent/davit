@@ -16,16 +16,16 @@ export interface MetaDataFragmentProps {
   initalWidth?: number;
   initalHeigth?: number;
   // componentFragments: ComponentFragmentProps[];
-  // onDelCallBack: (id: number) => void;
+  onDelCallBack: (id: number) => void;
 }
 
 export const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (
   props
 ) => {
   const {
-    // id,
+    id,
     initalName,
-    // onDelCallBack,
+    onDelCallBack,
     // componentFragments,
     initalWidth,
     initalHeigth,
@@ -36,7 +36,7 @@ export const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (
   const mode: Mode = useSelector(selectGlobalModeState);
 
   const delMetaComponentFragment = () => {
-    // onDelCallBack(id);
+    onDelCallBack(id);
   };
 
   return (
@@ -75,7 +75,7 @@ const stepToDataFragmentProps = (
 
 export const createMetaDataFragment = (
   dataCTO: DataCTO,
-  // onDeleteCallBack: (componentId: number) => void,
+  onDeleteCallBack: (componentId: number) => void,
   step?: SequenceStepCTO
 ) => {
   return (
@@ -83,6 +83,7 @@ export const createMetaDataFragment = (
       id={dataCTO.data.id}
       initalName={dataCTO.data.name}
       initalWidth={dataCTO.geometricalData.geometricalData.width}
+      onDelCallBack={onDeleteCallBack}
       // componentFragments={stepToDataFragmentProps(
       //   step,
       //   componentDataCTO.componentTO.id

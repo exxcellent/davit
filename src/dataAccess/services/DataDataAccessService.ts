@@ -25,6 +25,16 @@ export const DataDataAccessService = {
       geometricalData: savedGeometricalData,
     };
   },
+
+  deleteCTO(dataCTO: DataCTO): DataCTO {
+    CheckHelper.nullCheck(dataCTO.geometricalData, "GeometricalDataCTO");
+    CheckHelper.nullCheck(dataCTO.data, "DataTO");
+    TechnicalDataAccessService.deleteGeometricalDataCTO(
+      dataCTO.geometricalData
+    );
+    DataRepository.delete(dataCTO.data);
+    return dataCTO;
+  },
 };
 
 const createDataCTO = (data: DataTO | undefined): DataCTO => {

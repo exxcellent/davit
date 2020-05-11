@@ -56,6 +56,10 @@ export const DataAccess = {
   saveDataCTO(dataCTO: DataCTO): DataAccessResponse<DataCTO> {
     return makeTransactional(() => DataDataAccessService.saveCTO(dataCTO));
   },
+
+  deleteDataCTO(dataCTO: DataCTO): DataAccessResponse<DataCTO> {
+    return makeTransactional(() => DataDataAccessService.deleteCTO(dataCTO));
+  },
 };
 
 function makeTransactional<T>(callback: () => T): DataAccessResponse<T> {
@@ -69,7 +73,8 @@ function makeTransactional<T>(callback: () => T): DataAccessResponse<T> {
     response.object =
       typeof object === "undefined"
         ? undefined
-        : JSON.parse(JSON.stringify(callback()));
+        : // : JSON.parse(JSON.stringify(callback()));
+          JSON.parse(JSON.stringify(object));
     response.code = 200;
     dataStore.commitChanges();
   } catch (error) {
