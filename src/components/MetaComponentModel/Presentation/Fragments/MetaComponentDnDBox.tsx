@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import React, { FunctionComponent, useRef } from "react";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
-import { createArrow } from "../../../common/fragments/Arrow";
+import { createCurveArrow } from "../../../common/fragments/Arrow";
 import { createDnDItem } from "../../../common/fragments/DnDWrapper";
 import { createMetaComponentFragment } from "./MetaComponentFragment";
 
@@ -54,7 +54,7 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (
     <motion.div id="dndBox" ref={constraintsRef} className="componentModel">
       {componentCTOs.map(createDnDMetaComponent)}
       {step &&
-        createArrow(
+        createCurveArrow(
           componentCTOs.find(
             (componentCTO) =>
               componentCTO.component.id === step.squenceStepTO.sourceComponentFk
