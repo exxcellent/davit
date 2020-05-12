@@ -1,0 +1,7 @@
+.controllPanelView {
+  display: flex;
+  justify-content: flex-start;
+}
+.controllPanelViewChild {
+  margin: 10px;
+}

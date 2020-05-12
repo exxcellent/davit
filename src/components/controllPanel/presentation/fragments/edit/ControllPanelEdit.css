@@ -1,0 +1,8 @@
+.controllPanelEdit {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.controllPanelEditChild {
+  margin: 10px;
+}

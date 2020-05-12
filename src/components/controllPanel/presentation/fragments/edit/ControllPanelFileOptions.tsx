@@ -1,26 +1,16 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch } from "react-redux";
 import { Button, Modal } from "semantic-ui-react";
-import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
-import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
-import { ControllPanelActions } from "../../viewModel/ControllPanelActions";
+import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
 
-export interface ControllPanelMetaComponentOptionsProps {}
+export interface ControllPanelFileOptionsProps {}
 
-export const ControllPanelMetaComponentOptions: FunctionComponent<ControllPanelMetaComponentOptionsProps> = (
+export const ControllPanelFileOptions: FunctionComponent<ControllPanelFileOptionsProps> = (
   props
 ) => {
   const dispatch = useDispatch();
 
   const [showUploadModal, setShowUploadModal] = React.useState<boolean>(false);
-
-  const createNewComponent = () => {
-    dispatch(ControllPanelActions.saveComponent(new ComponentCTO()));
-  };
-
-  const createNewData = () => {
-    dispatch(ControllPanelActions.saveData(new DataCTO()));
-  };
 
   const readFileToString = (file: File | null) => {
     const fileReader = new FileReader();
@@ -52,8 +42,7 @@ export const ControllPanelMetaComponentOptions: FunctionComponent<ControllPanelM
         />
       </Modal>
       <Button icon="download" />
-      <Button icon="add" onClick={createNewComponent}></Button>
-      <Button icon="add" onClick={createNewData}></Button>
+      <Button icon="edit" />
     </div>
   );
 };

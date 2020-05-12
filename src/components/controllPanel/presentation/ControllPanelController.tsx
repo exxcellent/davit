@@ -4,8 +4,8 @@ import {
   Mode,
   selectGlobalModeState,
 } from "../../common/viewModel/GlobalSlice";
-import { ControllPanelMetaComponentOptions } from "./fragments/ControllPanelMetaComponentOptions";
-import { ControllPanelSequenceOptions } from "./fragments/ControllPanelSequenceOptions";
+import { ControllPanelEdit } from "./fragments/edit/ControllPanelEdit";
+import { ControllPanelSequenceOptions } from "./fragments/view/ControllPanelSequenceOptions";
 
 export interface ControllPanelProps {}
 
@@ -17,7 +17,7 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (
   return (
     <div className="controllerHeader">
       {mode === Mode.VIEW && <ControllPanelSequenceOptions />}
-      {mode === Mode.EDIT && <ControllPanelMetaComponentOptions />}
+      {mode === Mode.EDIT && <ControllPanelEdit />}
     </div>
   );
 };
