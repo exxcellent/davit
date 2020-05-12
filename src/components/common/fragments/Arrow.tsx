@@ -7,10 +7,16 @@ export interface ArrowProps {
   ySource: number;
   xTarget: number;
   yTarget: number;
+  type: ArrowType;
 }
 
-export const Arrow: FunctionComponent<ArrowProps> = (props) => {
-  const { xSource, ySource, xTarget, yTarget } = props;
+enum ArrowType {
+  CURVE = "Curve",
+  CORNER = "CORNER",
+}
+
+const Arrow: FunctionComponent<ArrowProps> = (props) => {
+  const { xSource, ySource, xTarget, yTarget, type } = props;
 
   const INTERFACE_INPUT: Point = { x: 0, y: 60 };
   const INTERFACE_OUTPUT: Point = { x: 150, y: 60 };
@@ -39,6 +45,28 @@ export const Arrow: FunctionComponent<ArrowProps> = (props) => {
         ${middlePoint.y}
         T ${endPoint.x}, ${endPoint.y}
         l 10,0
+        `}
+        fill="transparent"
+        markerEnd="url(#arrow)"
+      />
+    );
+  };
+
+  const createCornerLine = (x1: number, y1: number, x2: number, y2: number) => {
+    let startPoint: Point = { x: x1, y: y1 };
+    let endPoint: Point = { x: x2, y: y2 };
+    // set interfaces
+    startPoint = plusPoint(startPoint, INTERFACE_OUTPUT);
+    endPoint = plusPoint(endPoint, INTERFACE_INPUT);
+
+    const middlePoint = getMiddlePoint(startPoint, endPoint);
+
+    return (
+      <path
+        d={`M ${startPoint.x},${startPoint.y} 
+        l ${middlePoint.x - startPoint.x},0
+        l 0,${endPoint.y - startPoint.y}
+        l ${endPoint.x - middlePoint.x},0
         `}
         fill="transparent"
         markerEnd="url(#arrow)"
@@ -103,12 +131,15 @@ export const Arrow: FunctionComponent<ArrowProps> = (props) => {
           <path d="M0,0 L0,6 L9,3 z" fill="black" />
         </marker>
       </defs>
-      {createCurve(xSource, ySource, xTarget, yTarget)}
+      {type === ArrowType.CURVE &&
+        createCurve(xSource, ySource, xTarget, yTarget)}
+      {type === ArrowType.CORNER &&
+        createCornerLine(xSource, ySource, xTarget, yTarget)}
     </motion.svg>
   );
 };
 
-export const createArrow = (
+export const createCurveArrow = (
   source: GeometricalDataCTO | undefined,
   target: GeometricalDataCTO | undefined
 ) => {
@@ -119,6 +150,24 @@ export const createArrow = (
         ySource={source.position.y}
         xTarget={target.position.x}
         yTarget={target.position.y}
+        type={ArrowType.CURVE}
+      />
+    );
+  }
+};
+
+export const createCornerArrow = (
+  source: GeometricalDataCTO | undefined,
+  target: GeometricalDataCTO | undefined
+) => {
+  if (source && target) {
+    return (
+      <Arrow
+        xSource={source.position.x}
+        ySource={source.position.y}
+        xTarget={target.position.x}
+        yTarget={target.position.y}
+        type={ArrowType.CORNER}
       />
     );
   }
