@@ -24,7 +24,7 @@ export const createComponentFragment = (
   componentFragmentProps: ComponentFragmentProps,
   key: number
 ) => {
-  console.info("create Data.");
+  console.info("Create Component Fragment.");
   return (
     <Card.Content
       extra

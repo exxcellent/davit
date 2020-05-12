@@ -51,16 +51,7 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (
   };
 
   return (
-    // <div style={{ width: "100%", height: "40em", backgroundColor: "black" }}>
-    // <motion.div ref={constraintsRef} style={{ position: "relative" }}>
-    <motion.div
-      id="dndBox"
-      ref={constraintsRef}
-      className="componentModel"
-      // TODO: Fläche in css file auslagern.
-      // style={{ height: "45vh" }}
-      // style={{ width: "100%", height: "45vh" }}
-    >
+    <motion.div id="dndBox" ref={constraintsRef} className="componentModel">
       {componentCTOs.map(createDnDMetaComponent)}
       {step &&
         createArrow(

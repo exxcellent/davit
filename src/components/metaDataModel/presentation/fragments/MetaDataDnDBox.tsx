@@ -48,9 +48,9 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
       {dataCTOs.map(createDnDMetaDataFragment)}
       {/* {step &&
         createArrow(
-          componentDataCTOs.find(
-            (componentCTO) =>
-              componentCTO.component.id === step.squenceStepTO.sourceComponentFk
+          dataCTOs.find(
+            (dataCTO) =>
+              dataCTO.data.id === step.squenceStepTO.sourceComponentFk
           )?.geometricalData,
           componentCTOs.find(
             (componentCTO) =>

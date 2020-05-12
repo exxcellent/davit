@@ -8,14 +8,17 @@ import {
   Mode,
   selectGlobalModeState,
 } from "../../../common/viewModel/GlobalSlice";
-import { DataFragmentProps } from "../../../metaComponentModel/presentation/fragments/DataFragment";
+import {
+  ComponentFragmentProps,
+  createComponentFragment,
+} from "./ComponentFragment";
 
 export interface MetaDataFragmentProps {
   id: number;
   initalName: string;
   initalWidth?: number;
   initalHeigth?: number;
-  // componentFragments: ComponentFragmentProps[];
+  componentFragments: ComponentFragmentProps[];
   onDelCallBack: (id: number) => void;
 }
 
@@ -26,7 +29,7 @@ export const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (
     id,
     initalName,
     onDelCallBack,
-    // componentFragments,
+    componentFragments,
     initalWidth,
     initalHeigth,
   } = props;
@@ -51,15 +54,15 @@ export const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (
           />
         )}
       </Card.Content>
-      {/* {componentFragments.map(createDataFragment)} */}
+      {componentFragments.map(createComponentFragment)}
     </Card>
   );
 };
 
-const stepToDataFragmentProps = (
+const stepToComponentFragmentProps = (
   step: SequenceStepCTO | undefined,
   dataId: number
-): DataFragmentProps[] => {
+): ComponentFragmentProps[] => {
   const componentData: ComponentDataCTO[] = step
     ? step.componentDataCTOs.filter(
         (componentData) => componentData.dataTO.id === dataId
@@ -67,7 +70,7 @@ const stepToDataFragmentProps = (
     : [];
   return componentData.map((componentData) => {
     return {
-      name: componentData.dataTO.name,
+      name: componentData.componentTO.name,
       state: componentData.componentDataTO.componentDataState,
     };
   });
@@ -84,10 +87,7 @@ export const createMetaDataFragment = (
       initalName={dataCTO.data.name}
       initalWidth={dataCTO.geometricalData.geometricalData.width}
       onDelCallBack={onDeleteCallBack}
-      // componentFragments={stepToDataFragmentProps(
-      //   step,
-      //   componentDataCTO.componentTO.id
-      // )}
+      componentFragments={stepToComponentFragmentProps(step, dataCTO.data.id)}
     />
   );
 };

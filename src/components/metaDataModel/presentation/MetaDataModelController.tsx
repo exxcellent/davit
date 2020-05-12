@@ -1,6 +1,8 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
+import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
+import { selectStep } from "../../common/viewModel/GlobalSlice";
 import { MetaDataActions } from "../viewModel/MetaDataActions";
 import { selectDatas } from "../viewModel/MetaDataModelSlice";
 import { MetaDataDnDBox } from "./fragments/MetaDataDnDBox";
@@ -11,16 +13,12 @@ export const MetaDataModelController: FunctionComponent<MetaDataModelControllerP
   props
 ) => {
   const datas: DataCTO[] = useSelector(selectDatas);
-  //   const selectedStep: SequenceStepCTO | undefined = useSelector(selectStep);
+  const selectedStep: SequenceStepCTO | undefined = useSelector(selectStep);
   const dispatch = useDispatch();
 
   React.useEffect(() => {
     dispatch(MetaDataActions.findAllDatas());
   }, [dispatch]);
-
-  //   const createNewComponent = () => {
-  //     dispatch(MetaComponentActions.saveComponent(new ComponentCTO()));
-  //   };
 
   const saveData = (dataCTO: DataCTO) => {
     dispatch(MetaDataActions.saveData(dataCTO));
@@ -41,7 +39,7 @@ export const MetaDataModelController: FunctionComponent<MetaDataModelControllerP
         dataCTOs={datas}
         onSaveCallBack={saveData}
         onDeleteCallBack={deleteDat}
-        // step={selectedStep}
+        step={selectedStep}
       />
     );
   };
