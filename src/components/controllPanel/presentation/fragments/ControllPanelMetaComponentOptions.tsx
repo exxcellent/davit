@@ -2,6 +2,7 @@ import React, { FunctionComponent } from "react";
 import { useDispatch } from "react-redux";
 import { Button, Modal } from "semantic-ui-react";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
+import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { ControllPanelActions } from "../../viewModel/ControllPanelActions";
 
 export interface ControllPanelMetaComponentOptionsProps {}
@@ -15,6 +16,10 @@ export const ControllPanelMetaComponentOptions: FunctionComponent<ControllPanelM
 
   const createNewComponent = () => {
     dispatch(ControllPanelActions.saveComponent(new ComponentCTO()));
+  };
+
+  const createNewData = () => {
+    dispatch(ControllPanelActions.saveData(new DataCTO()));
   };
 
   const readFileToString = (file: File | null) => {
@@ -48,6 +53,7 @@ export const ControllPanelMetaComponentOptions: FunctionComponent<ControllPanelM
       </Modal>
       <Button icon="download" />
       <Button icon="add" onClick={createNewComponent}></Button>
+      <Button icon="add" onClick={createNewData}></Button>
     </div>
   );
 };
