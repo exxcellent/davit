@@ -60,6 +60,7 @@ class DataStore {
       steps: Array.from(this.data!.steps.values()),
       componentDatas: Array.from(this.data!.componentDatas.values()),
       datas: Array.from(this.data!.datas.values()),
+      dataConnections: Array.from(this.data!.dataConnections.values()),
     };
     localStorage.setItem(STORE_ID, JSON.stringify(objectStore));
   }

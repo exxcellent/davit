@@ -126,9 +126,35 @@
     }
   ],
   "datas": [
-    { "id": 1, "name": "data1", "geometricalDataFk": 7 },
-    { "id": 2, "name": "data2", "geometricalDataFk": 8 },
-    { "id": 3, "name": "data3", "geometricalDataFk": 9 },
-    { "id": 4, "name": "data4", "geometricalDataFk": 10 }
+    {
+      "id": 1,
+      "name": "data1",
+      "geometricalDataFk": 7,
+      "dataConnectionFk": [1]
+    },
+    {
+      "id": 2,
+      "name": "data2",
+      "geometricalDataFk": 8,
+      "dataConnectionFk": [1, 2, 4]
+    },
+    {
+      "id": 3,
+      "name": "data3",
+      "geometricalDataFk": 9,
+      "dataConnectionFk": [2, 3]
+    },
+    {
+      "id": 4,
+      "name": "data4",
+      "geometricalDataFk": 10,
+      "dataConnectionFk": [3, 4]
+    }
+  ],
+  "dataConnections": [
+    { "id": 1, "data1Fk": 1, "data2Fk": 2 },
+    { "id": 2, "data1Fk": 2, "data2Fk": 3 },
+    { "id": 3, "data1Fk": 3, "data2Fk": 4 },
+    { "id": 4, "data1Fk": 2, "data2Fk": 4 }
   ]
 }

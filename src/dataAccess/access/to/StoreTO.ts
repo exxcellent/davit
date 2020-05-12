@@ -11,4 +11,5 @@ export interface StoreTO {
   componentDatas: any[];
   // Data
   datas: any[];
+  dataConnections: any[];
 }
