@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Table } from "semantic-ui-react";
-import { ComponentDataCTO } from "../../../dataAccess/access/cto/ComponentDataCTO";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
 import { selectSequence, selectStep } from "../../common/viewModel/GlobalSlice";
@@ -37,15 +36,8 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
         <Table.Cell>
           {sequenceStepCTO.componentCTOTarget.component.name}
         </Table.Cell>
-        <Table.Cell>
-          {sequenceStepCTO.componentDataCTOs.map(createDataNameLabel)}
-        </Table.Cell>
       </Table.Row>
     );
-  };
-
-  const createDataNameLabel = (componentDataCTO: ComponentDataCTO) => {
-    return <label>{componentDataCTO.dataTO.name}, </label>;
   };
 
   return (
@@ -55,7 +47,6 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
           <Table.HeaderCell>Name</Table.HeaderCell>
           <Table.HeaderCell>Sender</Table.HeaderCell>
           <Table.HeaderCell>Receiver</Table.HeaderCell>
-          <Table.HeaderCell>Data</Table.HeaderCell>
         </Table.Header>
         <Table.Body>
           {sequence?.sequenceStepCTOs.map(createTableRow)}
