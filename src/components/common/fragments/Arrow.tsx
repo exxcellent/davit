@@ -158,7 +158,8 @@ export const createCurveArrow = (
 
 export const createCornerArrow = (
   source: GeometricalDataCTO | undefined,
-  target: GeometricalDataCTO | undefined
+  target: GeometricalDataCTO | undefined,
+  key: number
 ) => {
   if (source && target) {
     return (
@@ -168,6 +169,7 @@ export const createCornerArrow = (
         xTarget={target.position.x}
         yTarget={target.position.y}
         type={ArrowType.CORNER}
+        key={key}
       />
     );
   }
