@@ -23,6 +23,7 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
 
   const saveComponentChanges = () => {
     dispatch(ControllPanelActions.saveComponent(component));
+    dispatch(ControllPanelActions.setMode(Mode.EDIT));
   };
 
   const cancelEditComponent = () => {
@@ -37,10 +38,8 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
           placeholder="Componentname"
           onChange={setComponentName}
         />
-      </div>
-      <div className="controllPanelEditChild">
-        <Button icon="times" onClick={() => cancelEditComponent} />
-        <Button icon="check" onClick={() => saveComponentChanges} />
+        <Button icon="times" onClick={cancelEditComponent} />
+        <Button icon="check" onClick={saveComponentChanges} />
       </div>
     </div>
   );

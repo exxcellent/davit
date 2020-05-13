@@ -3,7 +3,7 @@
   grid-template-columns: 4em 1fr 1fr;
   grid-template-rows: minmax(8em, 8em) 1fr 1fr;
   grid-template-areas:
-    "header header header"
+    "leftBar header header"
     "leftBar compModel seqModel"
     "leftBar dataModel seqTabel";
   height: 100vh;
