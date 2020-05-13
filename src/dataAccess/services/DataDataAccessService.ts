@@ -73,12 +73,14 @@ const createDataCTO = (data: DataTO | undefined): DataCTO => {
   );
   CheckHelper.nullCheck(geometricalData, "geometricalData");
   let dataConnections: DataConnectionCTO[] = [];
-  for (let i = 0; i < data!.dataConnectionFks.length; i++) {
-    let dataConnectionTO:
-      | DataConnectionTO
-      | undefined = DataConnectionRepository.find(data!.dataConnectionFks[i]);
-    CheckHelper.nullCheck(dataConnectionTO, "dataConnectionTO");
-    dataConnections.push(createDataConnectionCTO(dataConnectionTO!));
+  if (data?.dataConnectionFks !== undefined) {
+    for (let i = 0; i < data!.dataConnectionFks.length; i++) {
+      let dataConnectionTO:
+        | DataConnectionTO
+        | undefined = DataConnectionRepository.find(data!.dataConnectionFks[i]);
+      CheckHelper.nullCheck(dataConnectionTO, "dataConnectionTO");
+      dataConnections.push(createDataConnectionCTO(dataConnectionTO!));
+    }
   }
   return {
     data: data!,
