@@ -20,19 +20,18 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (
 
   const constraintsRef = useRef(null);
 
-  // TODO refactor
   const onPositionUpdate = (x: number, y: number, id: number) => {
     console.info("onPositionUpdate() x: " + x + " y: " + y + ".");
-    for (let i = 0; componentCTOs.length; i++) {
-      if (componentCTOs[i].geometricalData.position.id === id) {
-        let copyComponentCTO: ComponentCTO = JSON.parse(
-          JSON.stringify(componentCTOs[i])
-        );
-        copyComponentCTO.geometricalData.position.x = x;
-        copyComponentCTO.geometricalData.position.y = y;
-        onSaveCallBack(copyComponentCTO);
-        break;
-      }
+    const componentCTO = componentCTOs.find(
+      (componentCTO) => componentCTO.geometricalData.position.id === id
+    );
+    if (componentCTO) {
+      let copyComponentCTO: ComponentCTO = JSON.parse(
+        JSON.stringify(componentCTO)
+      );
+      copyComponentCTO.geometricalData.position.x = x;
+      copyComponentCTO.geometricalData.position.y = y;
+      onSaveCallBack(copyComponentCTO);
     }
   };
 

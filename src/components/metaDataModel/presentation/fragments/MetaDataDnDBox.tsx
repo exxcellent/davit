@@ -1,19 +1,28 @@
 import { motion } from "framer-motion";
 import React, { FunctionComponent, useRef } from "react";
+import { DataConnectionCTO } from "../../../../dataAccess/access/cto/DataConnectionCTO";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
+import { createCurveArrow } from "../../../common/fragments/Arrow";
 import { createDnDItem } from "../../../common/fragments/DnDWrapper";
 import { createMetaDataFragment } from "./MetaDataFragment";
 
 interface MetaDataDnDBox {
   dataCTOs: DataCTO[];
+  connections: DataConnectionCTO[];
   step?: SequenceStepCTO;
   onSaveCallBack: (dataCTO: DataCTO) => void;
   onDeleteCallBack: (id: number) => void;
 }
 
 export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
-  const { dataCTOs, onSaveCallBack, onDeleteCallBack, step } = props;
+  const {
+    dataCTOs,
+    onSaveCallBack,
+    onDeleteCallBack,
+    step,
+    connections,
+  } = props;
 
   const constraintsRef = useRef(null);
 
@@ -27,6 +36,20 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
       copyDataCTO.geometricalData.position.y = y;
       onSaveCallBack(copyDataCTO);
     }
+  };
+
+  const createConnections = () => {
+    return connections.map((connection) => {
+      // return createCornerArrow(
+      return createCurveArrow(
+        dataCTOs.find(
+          (data) => connection.dataConnectionTO.data1Fk === data.data.id
+        )?.geometricalData,
+        dataCTOs.find(
+          (data) => connection.dataConnectionTO.data2Fk === data.data.id
+        )?.geometricalData
+      );
+    });
   };
 
   const createDnDMetaDataFragment = (dataCTO: DataCTO) => {
@@ -46,17 +69,7 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
   return (
     <motion.div id="datadndBox" ref={constraintsRef} className="dataModel">
       {dataCTOs.map(createDnDMetaDataFragment)}
-      {/* {step &&
-        createArrow(
-          dataCTOs.find(
-            (dataCTO) =>
-              dataCTO.data.id === step.squenceStepTO.sourceComponentFk
-          )?.geometricalData,
-          componentCTOs.find(
-            (componentCTO) =>
-              componentCTO.component.id === step.squenceStepTO.targetComponentFk
-          )?.geometricalData
-        )} */}
+      {createConnections()}
     </motion.div>
   );
 };

@@ -68,7 +68,7 @@ const createComponentDataCTO = (
     componentData.componentFk
   );
   CheckHelper.nullCheck(component, "component");
-  const data: DataTO | undefined = DataDataAccessService.find(
+  const data: DataTO | undefined = DataDataAccessService.findData(
     componentData.dataFk
   );
   CheckHelper.nullCheck(data, "data");

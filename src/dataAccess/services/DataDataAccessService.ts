@@ -9,51 +9,52 @@ import { CheckHelper } from "../util/CheckHelper";
 import { TechnicalDataAccessService } from "./TechnicalDataAccessService";
 
 export const DataDataAccessService = {
-  find(id: number): DataTO | undefined {
+  findData(id: number): DataTO | undefined {
     return DataRepository.find(id);
   },
 
-  findAll(): DataCTO[] {
+  findAllDatas(): DataCTO[] {
     return DataRepository.findAll().map((data) => createDataCTO(data));
   },
 
-  saveCTO(dataCTO: DataCTO): DataCTO {
+  saveDataCTO(dataCTO: DataCTO): DataCTO {
     CheckHelper.nullCheck(dataCTO, "dataCTO");
     const savedGeometricalData = TechnicalDataAccessService.saveGeometricalData(
       dataCTO.geometricalData
     );
     dataCTO.data.geometricalDataFk = savedGeometricalData.geometricalData.id;
     const savedData = DataRepository.save(dataCTO.data);
-    // save DataConnection
-    const savedDataConnections = dataCTO.dataConnections.map((dataConnection) =>
-      this.saveDataConnectionCTO(dataConnection)
-    );
     return {
       data: savedData,
       geometricalData: savedGeometricalData,
-      dataConnections: savedDataConnections,
     };
+  },
+
+  findAllDataConnections(): DataConnectionCTO[] {
+    return DataConnectionRepository.findAll().map((dataConnection) =>
+      createDataConnectionCTO(dataConnection)
+    );
   },
 
   saveDataConnectionCTO(
     dataConnectionCTO: DataConnectionCTO
   ): DataConnectionCTO {
     CheckHelper.nullCheck(dataConnectionCTO, "dataConnectionCTO");
-    const saveData1 = DataRepository.save(dataConnectionCTO.data1);
+    const saveData1 = this.saveDataCTO(dataConnectionCTO.data1);
     CheckHelper.nullCheck(saveData1, "saveData1");
-    const saveData2 = DataRepository.save(dataConnectionCTO.data2);
+    const saveData2 = this.saveDataCTO(dataConnectionCTO.data2);
     CheckHelper.nullCheck(saveData2, "saveData2");
     const savedDataConnection = DataConnectionRepository.save(
       dataConnectionCTO.dataConnectionTO
     );
     return {
+      dataConnectionTO: savedDataConnection,
       data1: saveData1,
       data2: saveData2,
-      dataConnectionTO: savedDataConnection,
     };
   },
 
-  deleteCTO(dataCTO: DataCTO): DataCTO {
+  deleteDataCTO(dataCTO: DataCTO): DataCTO {
     CheckHelper.nullCheck(dataCTO.geometricalData, "GeometricalDataCTO");
     CheckHelper.nullCheck(dataCTO.data, "DataTO");
     TechnicalDataAccessService.deleteGeometricalDataCTO(
@@ -85,7 +86,6 @@ const createDataCTO = (data: DataTO | undefined): DataCTO => {
   return {
     data: data!,
     geometricalData: geometricalData!,
-    dataConnections: dataConnections!,
   };
 };
 
@@ -93,13 +93,19 @@ const createDataConnectionCTO = (
   dataConnection: DataConnectionTO
 ): DataConnectionCTO => {
   CheckHelper.nullCheck(dataConnection, "dataConnection");
-  let data1: DataTO | undefined = DataDataAccessService.find(
+  const dataTO1: DataTO | undefined = DataDataAccessService.findData(
     dataConnection.data1Fk
   );
-  CheckHelper.nullCheck(data1, "data1");
-  let data2: DataTO | undefined = DataDataAccessService.find(
+  CheckHelper.nullCheck(dataTO1, "data1");
+  const dataTO2: DataTO | undefined = DataDataAccessService.findData(
     dataConnection.data2Fk
   );
-  CheckHelper.nullCheck(data2, "data2");
-  return { dataConnectionTO: dataConnection, data1: data1!, data2: data2! };
+  CheckHelper.nullCheck(dataTO2, "data2");
+  const dataCTO1: DataCTO = createDataCTO(dataTO1);
+  const dataCTO2: DataCTO = createDataCTO(dataTO2);
+  return {
+    dataConnectionTO: dataConnection,
+    data1: dataCTO1,
+    data2: dataCTO2,
+  };
 };

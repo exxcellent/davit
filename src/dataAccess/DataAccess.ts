@@ -1,4 +1,5 @@
 import { ComponentCTO } from "./access/cto/ComponentCTO";
+import { DataConnectionCTO } from "./access/cto/DataConnectionCTO";
 import { DataCTO } from "./access/cto/DataCTO";
 import { SequenceCTO } from "./access/cto/SequenceCTO";
 import { SequenceTO } from "./access/to/SequenceTO";
@@ -50,15 +51,21 @@ export const DataAccess = {
   },
 
   findAllDatas(): DataAccessResponse<DataCTO[]> {
-    return makeTransactional(DataDataAccessService.findAll);
+    return makeTransactional(DataDataAccessService.findAllDatas);
   },
 
   saveDataCTO(dataCTO: DataCTO): DataAccessResponse<DataCTO> {
-    return makeTransactional(() => DataDataAccessService.saveCTO(dataCTO));
+    return makeTransactional(() => DataDataAccessService.saveDataCTO(dataCTO));
   },
 
   deleteDataCTO(dataCTO: DataCTO): DataAccessResponse<DataCTO> {
-    return makeTransactional(() => DataDataAccessService.deleteCTO(dataCTO));
+    return makeTransactional(() =>
+      DataDataAccessService.deleteDataCTO(dataCTO)
+    );
+  },
+
+  findAllDataConnections(): DataAccessResponse<DataConnectionCTO[]> {
+    return makeTransactional(DataDataAccessService.findAllDataConnections);
   },
 };
 
