@@ -1,15 +1,15 @@
 import { motion } from "framer-motion";
 import React, { FunctionComponent, useRef } from "react";
-import { DataConnectionCTO } from "../../../../dataAccess/access/cto/DataConnectionCTO";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
+import { DataConnectionTO } from "../../../../dataAccess/access/to/DataConnectionTO";
 import { createCurveArrow } from "../../../common/fragments/Arrow";
 import { createDnDItem } from "../../../common/fragments/DnDWrapper";
 import { createMetaDataFragment } from "./MetaDataFragment";
 
 interface MetaDataDnDBox {
   dataCTOs: DataCTO[];
-  connections: DataConnectionCTO[];
+  connections: DataConnectionTO[];
   step?: SequenceStepCTO;
   onSaveCallBack: (dataCTO: DataCTO) => void;
   onDeleteCallBack: (id: number) => void;
@@ -42,12 +42,10 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
     return connections.map((connection) => {
       // return createCornerArrow(
       return createCurveArrow(
-        dataCTOs.find(
-          (data) => connection.dataConnectionTO.data1Fk === data.data.id
-        )?.geometricalData,
-        dataCTOs.find(
-          (data) => connection.dataConnectionTO.data2Fk === data.data.id
-        )?.geometricalData
+        dataCTOs.find((data) => connection.data1Fk === data.data.id)
+          ?.geometricalData,
+        dataCTOs.find((data) => connection.data2Fk === data.data.id)
+          ?.geometricalData
       );
     });
   };

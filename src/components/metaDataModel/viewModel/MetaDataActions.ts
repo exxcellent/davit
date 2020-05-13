@@ -1,6 +1,6 @@
 import { AppThunk } from "../../../app/store";
-import { DataConnectionCTO } from "../../../dataAccess/access/cto/DataConnectionCTO";
 import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
+import { DataConnectionTO } from "../../../dataAccess/access/to/DataConnectionTO";
 import { DataAccess } from "../../../dataAccess/DataAccess";
 import { DataAccessResponse } from "../../../dataAccess/DataAccessResponse";
 import { handleError } from "../../common/viewModel/GlobalSlice";
@@ -22,7 +22,7 @@ const findAllDatas = (): AppThunk => async (dispatch) => {
 
 const findAllConnections = (): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<
-    DataConnectionCTO[]
+    DataConnectionTO[]
   > = await DataAccess.findAllDataConnections();
   if (response.code === 200) {
     dispatch(loadDataConnections(response.object));

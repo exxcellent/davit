@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DataConnectionCTO } from "../../../dataAccess/access/cto/DataConnectionCTO";
 import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
+import { DataConnectionTO } from "../../../dataAccess/access/to/DataConnectionTO";
 import { selectStep } from "../../common/viewModel/GlobalSlice";
 import { MetaDataActions } from "../viewModel/MetaDataActions";
 import {
@@ -17,7 +17,7 @@ export const MetaDataModelController: FunctionComponent<MetaDataModelControllerP
   props
 ) => {
   const datas: DataCTO[] = useSelector(selectDatas);
-  const dataConnections: DataConnectionCTO[] = useSelector(
+  const dataConnections: DataConnectionTO[] = useSelector(
     selectDataConnections
   );
   const selectedStep: SequenceStepCTO | undefined = useSelector(selectStep);

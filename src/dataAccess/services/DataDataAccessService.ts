@@ -1,4 +1,3 @@
-import { DataConnectionCTO } from "../access/cto/DataConnectionCTO";
 import { DataCTO } from "../access/cto/DataCTO";
 import { GeometricalDataCTO } from "../access/cto/GeometraicalDataCTO";
 import { DataConnectionTO } from "../access/to/DataConnectionTO";
@@ -30,28 +29,8 @@ export const DataDataAccessService = {
     };
   },
 
-  findAllDataConnections(): DataConnectionCTO[] {
-    return DataConnectionRepository.findAll().map((dataConnection) =>
-      createDataConnectionCTO(dataConnection)
-    );
-  },
-
-  saveDataConnectionCTO(
-    dataConnectionCTO: DataConnectionCTO
-  ): DataConnectionCTO {
-    CheckHelper.nullCheck(dataConnectionCTO, "dataConnectionCTO");
-    const saveData1 = this.saveDataCTO(dataConnectionCTO.data1);
-    CheckHelper.nullCheck(saveData1, "saveData1");
-    const saveData2 = this.saveDataCTO(dataConnectionCTO.data2);
-    CheckHelper.nullCheck(saveData2, "saveData2");
-    const savedDataConnection = DataConnectionRepository.save(
-      dataConnectionCTO.dataConnectionTO
-    );
-    return {
-      dataConnectionTO: savedDataConnection,
-      data1: saveData1,
-      data2: saveData2,
-    };
+  findAllDataConnections(): DataConnectionTO[] {
+    return DataConnectionRepository.findAll();
   },
 
   deleteDataCTO(dataCTO: DataCTO): DataCTO {
@@ -73,39 +52,8 @@ const createDataCTO = (data: DataTO | undefined): DataCTO => {
     data!.geometricalDataFk!
   );
   CheckHelper.nullCheck(geometricalData, "geometricalData");
-  let dataConnections: DataConnectionCTO[] = [];
-  if (data?.dataConnectionFks !== undefined) {
-    for (let i = 0; i < data!.dataConnectionFks.length; i++) {
-      let dataConnectionTO:
-        | DataConnectionTO
-        | undefined = DataConnectionRepository.find(data!.dataConnectionFks[i]);
-      CheckHelper.nullCheck(dataConnectionTO, "dataConnectionTO");
-      dataConnections.push(createDataConnectionCTO(dataConnectionTO!));
-    }
-  }
   return {
     data: data!,
     geometricalData: geometricalData!,
-  };
-};
-
-const createDataConnectionCTO = (
-  dataConnection: DataConnectionTO
-): DataConnectionCTO => {
-  CheckHelper.nullCheck(dataConnection, "dataConnection");
-  const dataTO1: DataTO | undefined = DataDataAccessService.findData(
-    dataConnection.data1Fk
-  );
-  CheckHelper.nullCheck(dataTO1, "data1");
-  const dataTO2: DataTO | undefined = DataDataAccessService.findData(
-    dataConnection.data2Fk
-  );
-  CheckHelper.nullCheck(dataTO2, "data2");
-  const dataCTO1: DataCTO = createDataCTO(dataTO1);
-  const dataCTO2: DataCTO = createDataCTO(dataTO2);
-  return {
-    dataConnectionTO: dataConnection,
-    data1: dataCTO1,
-    data2: dataCTO2,
   };
 };
