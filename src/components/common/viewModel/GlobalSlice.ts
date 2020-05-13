@@ -6,6 +6,9 @@ import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO"
 export enum Mode {
   EDIT = "EDIT",
   VIEW = "VIEW",
+  EDIT_COMPONENT = "EDIT_COMPONENT",
+  EDIT_DATA = "EDIT_DATA",
+  EDIT_SEQUENCE = "EDIT_SEQUENCE",
 }
 
 interface GlobalState {
@@ -74,6 +77,6 @@ export const { setMode } = globalSlice.actions;
 export const globalReducer = globalSlice.reducer;
 
 export const selectGlobalErrorState = (state: RootState) => state.global.errors;
-export const selectGlobalModeState = (state: RootState) => state.global.mode;
+export const selectMode = (state: RootState) => state.global.mode;
 export const selectSequence = (state: RootState) => state.global.sequence;
 export const selectStep = (state: RootState) => state.global.selectedStep;

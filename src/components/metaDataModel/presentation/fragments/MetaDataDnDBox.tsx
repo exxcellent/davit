@@ -3,7 +3,7 @@ import React, { FunctionComponent, useRef } from "react";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
 import { DataConnectionTO } from "../../../../dataAccess/access/to/DataConnectionTO";
-import { createCurveArrow } from "../../../common/fragments/Arrow";
+import { createCornerArrow } from "../../../common/fragments/Arrow";
 import { createDnDItem } from "../../../common/fragments/DnDWrapper";
 import { createMetaDataFragment } from "./MetaDataFragment";
 
@@ -40,12 +40,13 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
 
   const createConnections = () => {
     return connections.map((connection) => {
-      // return createCornerArrow(
-      return createCurveArrow(
+      return createCornerArrow(
+        // return createCurveArrow(
         dataCTOs.find((data) => connection.data1Fk === data.data.id)
           ?.geometricalData,
         dataCTOs.find((data) => connection.data2Fk === data.data.id)
-          ?.geometricalData
+          ?.geometricalData,
+        connection.id
       );
     });
   };

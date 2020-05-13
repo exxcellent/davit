@@ -15,6 +15,7 @@ const { setSequence } = globalSlice.actions;
 const { nextStep } = globalSlice.actions;
 const { previousStep } = globalSlice.actions;
 const { clearErrors } = globalSlice.actions;
+const { setMode } = globalSlice.actions;
 const { loadComponents } = metaComponentModelSlice.actions;
 const { loadDatas } = metaDataModelSlice.actions;
 
@@ -111,4 +112,5 @@ export const ControllPanelActions = {
   saveComponent,
   storefileData,
   saveData,
+  setMode,
 };

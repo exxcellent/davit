@@ -47,6 +47,8 @@ class DataStore {
       } else {
         throw new Error(`No value found for key ${key}`);
       }
+      // nur damit eslint ruhig ist...
+      return true;
     });
   }
 

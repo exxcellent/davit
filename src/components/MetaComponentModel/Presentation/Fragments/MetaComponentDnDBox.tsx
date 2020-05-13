@@ -20,10 +20,10 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (
 
   const constraintsRef = useRef(null);
 
-  const onPositionUpdate = (x: number, y: number, id: number) => {
+  const onPositionUpdate = (x: number, y: number, positionId: number) => {
     console.info("onPositionUpdate() x: " + x + " y: " + y + ".");
     const componentCTO = componentCTOs.find(
-      (componentCTO) => componentCTO.geometricalData.position.id === id
+      (componentCTO) => componentCTO.geometricalData.position.id === positionId
     );
     if (componentCTO) {
       let copyComponentCTO: ComponentCTO = JSON.parse(

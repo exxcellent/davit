@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch } from "react-redux";
 import { Button } from "semantic-ui-react";
-import { ComponentCTO } from "../../../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
+import { Mode } from "../../../../common/viewModel/GlobalSlice";
 import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
 import "./ControllPanelEdit.css";
 import { ControllPanelFileOptions } from "./ControllPanelFileOptions";
@@ -15,7 +15,7 @@ export const ControllPanelEdit: FunctionComponent<ControllPanelEditProps> = (
   const dispatch = useDispatch();
 
   const createNewComponent = () => {
-    dispatch(ControllPanelActions.saveComponent(new ComponentCTO()));
+    dispatch(ControllPanelActions.setMode(Mode.EDIT_COMPONENT));
   };
 
   const createNewData = () => {

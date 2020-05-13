@@ -54,7 +54,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
             icon="left arrow"
             content="BACK"
             labelPosition="left"
-            isDisabled={isNullOrUndefined(sequence)}
+            disabled={isNullOrUndefined(sequence)}
             onClick={() => dispatch(ControllPanelActions.previousStep())}
           />
           <Button.Or text={step?.squenceStepTO.index} />
@@ -62,7 +62,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
             icon="right arrow"
             content="NEXT"
             labelPosition="right"
-            isDisabled={isNullOrUndefined(sequence)}
+            disabled={isNullOrUndefined(sequence)}
             onClick={() => dispatch(ControllPanelActions.nextStep())}
           />
         </Button.Group>

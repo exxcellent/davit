@@ -44,9 +44,11 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
     <div className="sequenceTable">
       <Table celled>
         <Table.Header>
-          <Table.HeaderCell>Name</Table.HeaderCell>
-          <Table.HeaderCell>Sender</Table.HeaderCell>
-          <Table.HeaderCell>Receiver</Table.HeaderCell>
+          <Table.Row>
+            <Table.HeaderCell>Name</Table.HeaderCell>
+            <Table.HeaderCell>Sender</Table.HeaderCell>
+            <Table.HeaderCell>Receiver</Table.HeaderCell>
+          </Table.Row>
         </Table.Header>
         <Table.Body>
           {sequence?.sequenceStepCTOs.map(createTableRow)}

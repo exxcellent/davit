@@ -4,10 +4,7 @@ import { Button, Card } from "semantic-ui-react";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
 import { ComponentDataCTO } from "../../../../dataAccess/access/cto/ComponentDataCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
-import {
-  Mode,
-  selectGlobalModeState,
-} from "../../../common/viewModel/GlobalSlice";
+import { Mode, selectMode } from "../../../common/viewModel/GlobalSlice";
 import { createDataFragment, DataFragmentProps } from "./DataFragment";
 
 export interface MetaComponentFragmentProps {
@@ -32,7 +29,7 @@ export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps
     initalHeigth,
   } = props;
 
-  const mode: Mode = useSelector(selectGlobalModeState);
+  const mode: Mode = useSelector(selectMode);
 
   const delMetaComponentFragment = () => {
     onDelCallBack(id);
