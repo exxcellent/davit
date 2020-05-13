@@ -95,6 +95,8 @@ const storefileData = (fileData: string): AppThunk => async (dispatch) => {
   if (response.code === 200) {
     console.log("load components after fileread");
     dispatch(findAllComponents());
+    // TODO: workaround, es gibt bestimmt eine bessere Lösung.
+    window.location.reload(true);
   } else {
     dispatch(handleError(response.message));
   }

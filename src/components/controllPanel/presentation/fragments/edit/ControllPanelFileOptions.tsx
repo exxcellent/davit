@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch } from "react-redux";
-import { Button, Modal } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
 
 export interface ControllPanelFileOptionsProps {}
@@ -10,7 +10,9 @@ export const ControllPanelFileOptions: FunctionComponent<ControllPanelFileOption
 ) => {
   const dispatch = useDispatch();
 
-  const [showUploadModal, setShowUploadModal] = React.useState<boolean>(false);
+  const [showUploadButton, setShowUploadButton] = React.useState<boolean>(
+    false
+  );
 
   const readFileToString = (file: File | null) => {
     const fileReader = new FileReader();
@@ -23,15 +25,17 @@ export const ControllPanelFileOptions: FunctionComponent<ControllPanelFileOption
         dispatch(
           ControllPanelActions.storefileData(event.target!.result as string)
         );
-        setShowUploadModal(false);
+        setShowUploadButton(false);
       };
     }
   };
 
   return (
     <div>
-      <Button icon="cloud upload" onClick={() => setShowUploadModal(true)} />
-      <Modal open={showUploadModal}>
+      <Button icon="cloud upload" onClick={() => setShowUploadButton(true)} />
+      <Button icon="download" />
+      <Button icon="edit" />
+      {showUploadButton && (
         <input
           type="file"
           onChange={(event) => {
@@ -40,9 +44,7 @@ export const ControllPanelFileOptions: FunctionComponent<ControllPanelFileOption
             }
           }}
         />
-      </Modal>
-      <Button icon="download" />
-      <Button icon="edit" />
+      )}
     </div>
   );
 };
