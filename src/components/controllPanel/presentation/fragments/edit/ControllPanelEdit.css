@@ -1,12 +1,26 @@
 .controllPanelEdit {
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  height: 100%;
 }
 
 .controllPanelEditChild {
-  /* margin: 10px; */
-  flex-grow: 1;
-  height: 100%;
-  border: 1px;
-  border-color: black;
+  margin-left: 10px;
+}
+
+.columnDivider {
+  border-style: solid;
+  border-width: 0 2px 0 0;
+  border-image: linear-gradient(
+      to bottom,
+      transparent,
+      #e0e1e2,
+      #e0e1e2,
+      #e0e1e2,
+      #e0e1e2,
+      transparent
+    )
+    0 100%;
+  padding-right: 10px; /* size of gutter */
+  /* padding-right: 10px; size of gutter */
 }

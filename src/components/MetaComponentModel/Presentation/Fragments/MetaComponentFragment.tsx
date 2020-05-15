@@ -36,7 +36,7 @@ export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps
   };
 
   return (
-    <Card style={{ width: initalWidth, height: initalHeigth }}>
+    <Card raised style={{ width: initalWidth, height: initalHeigth }}>
       <Card.Content header={initalName}></Card.Content>
       <Card.Content>
         {mode === Mode.EDIT && (

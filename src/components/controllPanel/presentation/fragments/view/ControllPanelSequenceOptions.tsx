@@ -39,26 +39,38 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
   return (
     <div className="controllPanelView">
       <div className="controllPanelViewChild">
-        <Dropdown
-          placeholder="Select Seqence"
-          selection
-          options={sequences.map(sequenceToOption)}
-          onChange={(event, data) =>
-            dispatch(ControllPanelActions.findSequence(Number(data.value)))
-          }
-        />
+        <Button.Group inverted color="orange">
+          <Dropdown
+            className="button"
+            placeholder="Select Seqence"
+            selection
+            options={sequences.map(sequenceToOption)}
+            onChange={(event, data) =>
+              dispatch(ControllPanelActions.findSequence(Number(data.value)))
+            }
+          />
+        </Button.Group>
       </div>
       <div className="controllPanelViewChild">
-        <Button.Group>
+        <Button.Group inverted color="orange">
           <Button
+            inverted
+            color="orange"
             icon="left arrow"
             content="BACK"
             labelPosition="left"
             disabled={isNullOrUndefined(sequence)}
             onClick={() => dispatch(ControllPanelActions.previousStep())}
           />
-          <Button.Or text={step?.squenceStepTO.index} />
           <Button
+            inverted
+            color="orange"
+            content={step?.squenceStepTO.index || 0}
+            disabled={true}
+          />
+          <Button
+            inverted
+            color="orange"
             icon="right arrow"
             content="NEXT"
             labelPosition="right"

@@ -1,9 +1,9 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Button, Input } from "semantic-ui-react";
 import { ComponentCTO } from "../../../../../dataAccess/access/cto/ComponentCTO";
 import { Mode } from "../../../../common/viewModel/GlobalSlice";
 import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
+import { ControllPanelCreate } from "./common/ControllPanelCreate";
 import "./ControllPanelEdit.css";
 
 export interface ControllPanelEditComponentProps {
@@ -14,16 +14,20 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
   props
 ) => {
   const { component } = props;
+  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
+
+  const switchIsCreateAnother = () => {
+    setIsCreateAnother(!isCreateAnother);
+  };
 
   const dispatch = useDispatch();
 
-  const setComponentName = (event: any) => {
-    component.component.name = event.target.value;
-  };
-
-  const saveComponentChanges = () => {
+  const saveComponentChanges = (name: string) => {
+    component.component.name = name;
     dispatch(ControllPanelActions.saveComponent(component));
-    dispatch(ControllPanelActions.setMode(Mode.EDIT));
+    if (!isCreateAnother) {
+      dispatch(ControllPanelActions.setMode(Mode.EDIT));
+    }
   };
 
   const cancelEditComponent = () => {
@@ -31,16 +35,11 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
   };
 
   return (
-    <div className="controllPanelEdit">
-      <div className="controllPanelEditChild">
-        <Input
-          label="Name: "
-          placeholder="Componentname"
-          onChange={setComponentName}
-        />
-        <Button icon="times" onClick={cancelEditComponent} />
-        <Button icon="check" onClick={saveComponentChanges} />
-      </div>
-    </div>
+    <ControllPanelCreate
+      placeholder="Component name"
+      onCancelCallBack={cancelEditComponent}
+      onCreateCallBack={saveComponentChanges}
+      setIsCreateAnother={switchIsCreateAnother}
+    />
   );
 };

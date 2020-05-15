@@ -42,7 +42,7 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
 
   return (
     <div className="sequenceTable">
-      <Table celled>
+      <Table celled inverted>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Name</Table.HeaderCell>

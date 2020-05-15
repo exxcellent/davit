@@ -1,0 +1,11 @@
+.optionField {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.optionFieldSpacer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}

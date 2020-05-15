@@ -46,7 +46,7 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
         T ${endPoint.x}, ${endPoint.y}
         l 10,0
         `}
-        fill="transparent"
+        className="carvPath"
         markerEnd="url(#arrow)"
       />
     );
@@ -68,8 +68,8 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
         l 0,${endPoint.y - startPoint.y}
         l ${endPoint.x - middlePoint.x},0
         `}
-        fill="transparent"
         markerEnd="url(#arrow)"
+        className="carvPath"
       />
     );
   };
@@ -128,7 +128,7 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
           orient="auto"
           strokeWidth="0"
         >
-          <path d="M0,0 L0,6 L9,3 z" fill="black" />
+          <path d="M0,0 L0,6 L9,3 z" className="carvArrowMarker" />
         </marker>
       </defs>
       {type === ArrowType.CURVE &&

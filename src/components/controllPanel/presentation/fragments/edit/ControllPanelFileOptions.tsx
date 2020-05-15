@@ -32,19 +32,29 @@ export const ControllPanelFileOptions: FunctionComponent<ControllPanelFileOption
 
   return (
     <div>
-      <Button icon="cloud upload" onClick={() => setShowUploadButton(true)} />
-      <Button icon="download" />
-      <Button icon="edit" />
-      {showUploadButton && (
-        <input
-          type="file"
-          onChange={(event) => {
-            if (event.target.files !== null) {
-              readFileToString(event.target.files[0]);
-            }
-          }}
+      <div className="optionField">
+        <Button
+          inverted
+          color="orange"
+          icon="cloud upload"
+          onClick={() => setShowUploadButton(true)}
         />
-      )}
+        <Button inverted color="orange" icon="download" />
+        <Button inverted color="orange" icon="edit" />
+        {showUploadButton && (
+          <input
+            type="file"
+            onChange={(event) => {
+              if (event.target.files !== null) {
+                readFileToString(event.target.files[0]);
+              }
+            }}
+          />
+        )}
+      </div>
+      <div style={{ textAlign: "center", color: "white" }}>
+        {"file".toUpperCase()}
+      </div>
     </div>
   );
 };

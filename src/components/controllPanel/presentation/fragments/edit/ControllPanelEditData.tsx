@@ -1,9 +1,9 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Button, Input } from "semantic-ui-react";
 import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
 import { Mode } from "../../../../common/viewModel/GlobalSlice";
 import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
+import { ControllPanelCreate } from "./common/ControllPanelCreate";
 import "./ControllPanelEdit.css";
 
 export interface ControllPanelEditDataProps {
@@ -15,15 +15,20 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
 ) => {
   const { data } = props;
 
-  const dispatch = useDispatch();
+  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
 
-  const setDataName = (event: any) => {
-    data.data.name = event.target.value;
+  const switchIsCreateAnother = () => {
+    setIsCreateAnother(!isCreateAnother);
   };
 
-  const saveDataChanges = () => {
+  const dispatch = useDispatch();
+
+  const saveDataChanges = (name: string) => {
+    data.data.name = name;
     dispatch(ControllPanelActions.saveData(data));
-    dispatch(ControllPanelActions.setMode(Mode.EDIT));
+    if (!isCreateAnother) {
+      dispatch(ControllPanelActions.setMode(Mode.EDIT));
+    }
   };
 
   const cancelEditData = () => {
@@ -31,14 +36,11 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
   };
 
   return (
-    <div className="controllPanelEdit">
-      <div className="controllPanelEditChild">
-        <Input label="Name: " placeholder="Dataname" onChange={setDataName} />
-      </div>
-      <div className="controllPanelEditChild">
-        <Button icon="times" onClick={cancelEditData} />
-        <Button icon="check" onClick={saveDataChanges} />
-      </div>
-    </div>
+    <ControllPanelCreate
+      placeholder="Data name"
+      onCancelCallBack={cancelEditData}
+      onCreateCallBack={saveDataChanges}
+      setIsCreateAnother={switchIsCreateAnother}
+    />
   );
 };
