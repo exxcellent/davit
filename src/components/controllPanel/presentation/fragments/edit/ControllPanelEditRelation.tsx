@@ -1,5 +1,5 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
+import React, { FunctionComponent, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Dropdown, Input } from "semantic-ui-react";
 import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
 import {
@@ -7,7 +7,11 @@ import {
   Direction,
   RelationType,
 } from "../../../../../dataAccess/access/to/DataConnectionTO";
+import { Mode } from "../../../../common/viewModel/GlobalSlice";
 import { selectDatas } from "../../../../metaDataModel/viewModel/MetaDataModelSlice";
+import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
+import { ControllPanelEditSub } from "./common/ControllPanelEditSub";
+import { Carv2SubmitCancel } from "./common/fragments/Carv2SubmitCancel";
 
 export interface ControllPanelEditRelationProps {
   dataConnection: DataConnectionTO;
@@ -18,6 +22,12 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
 ) => {
   const { dataConnection } = props;
 
+  const [isAnother, setIsAnother] = useState<boolean>(false);
+
+  const dispatch = useDispatch();
+  const cancelEditRelation = () => {
+    dispatch(ControllPanelActions.setMode(Mode.EDIT));
+  };
   const datas: DataCTO[] = useSelector(selectDatas);
   //   const types: string[] = Object.values(RelationType);
 
@@ -50,33 +60,103 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
   };
 
   return (
-    <div>
-      <Dropdown
-        placeholder="Select Data1"
-        selection
-        options={datas.map(dataToOption)}
+    <ControllPanelEditSub label="Edit Data Relation">
+      <div className="columnDivider" />
+      <div
+        className="columnDivider"
+        style={{ display: "flex", justifyContent: "center" }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-around",
+            width: "100%",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
+            <Dropdown
+              placeholder="Select Data1"
+              selection
+              options={datas.map(dataToOption)}
+            />
+            <Dropdown
+              placeholder="Select Type1"
+              selection
+              options={getTypes()}
+            />
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
+            <Input placeholder="Label1" onChangeCallBack={setLabel1} />
+            <Dropdown
+              placeholder="Select Direction1"
+              selection
+              options={getDirections()}
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="columnDivider"
+        style={{ display: "flex", justifyContent: "center" }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-around",
+            width: "100%",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
+            <Dropdown
+              placeholder="Select Data2"
+              selection
+              options={datas.map(dataToOption)}
+            />
+            <Dropdown
+              placeholder="Select Type2"
+              selection
+              options={getTypes()}
+            />
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
+            <Input placeholder="Label2" onChangeCallBack={setLabel1} />
+            <Dropdown
+              placeholder="Select Direction2"
+              selection
+              options={getDirections()}
+            />
+          </div>
+        </div>
+      </div>
+      <Carv2SubmitCancel
+        onSubmit={() => {}}
+        onChange={() => setIsAnother(!isAnother)}
+        onCancel={cancelEditRelation}
       />
-      <Input placeholder="Label1" onChange={setLabel1} />
-      <Dropdown placeholder="Select Type1" selection options={getTypes()} />
-      {/* <Dropdown placeholder="Select Type1" selection /> */}
-      <Dropdown
-        placeholder="Select Direction1"
-        selection
-        options={getDirections()}
-      />
-      <br />
-      <Dropdown
-        placeholder="Select Data2"
-        selection
-        options={datas.map(dataToOption)}
-      />
-      <Input placeholder="Label2" onChange={setLabel1} />
-      <Dropdown placeholder="Select Type2" selection options={getTypes()} />
-      <Dropdown
-        placeholder="Select Direction2"
-        selection
-        options={getDirections()}
-      />
-    </div>
+    </ControllPanelEditSub>
   );
 };

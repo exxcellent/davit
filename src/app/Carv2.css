@@ -127,6 +127,7 @@
     )
     0 100%;
   overflow-y: auto;
+  padding: 10px;
 }
 
 .ui.inverted.orange.button,
@@ -134,6 +135,14 @@
   background-color: transparent;
   box-shadow: 0 0 0 2px var(--carv2-color-secondary) inset !important;
   color: var(--carv2-color-secondary);
+}
+
+.ui.inverted.orange.button:focus,
+.ui.inverted.orange.buttons .button:focus,
+.ui.inverted.orange.orange.button:hover,
+.ui.inverted.orange.orange.buttons .button:hover {
+  background-color: var(--carv2-color-secondary);
+  color: transparent !important;
 }
 
 .carvPath {
@@ -146,11 +155,12 @@
   fill: var(--carv2-color-secondary);
 }
 
-.ui.buttons .or::before {
-  color: orange;
-  border-color: orange;
-  opacity: 1;
-  background-color: var(--carv2-background-color-header);
+i.icon::before {
+  color: var(--carv2-color-primary);
+}
+
+i.icon.delete::before :hover {
+  color: red;
 }
 
 .ui.card > .content > .header,
@@ -166,17 +176,114 @@
 .ui.table td.active,
 .ui.table tr.active {
   background: var(--carv2-color-secondary) !important;
-  color: white !important;
+  color: black !important;
+}
+
+.ui.toggle.checkbox input:focus:checked ~ .box::before,
+.ui.toggle.checkbox input:focus:checked ~ label::before {
+  background-color: var(--carv2-color-secondary) !important;
+}
+
+.ui.toggle.checkbox input:checked ~ .box::before,
+.ui.toggle.checkbox input:checked ~ label::before {
+  background-color: var(--carv2-color-secondary) !important;
+}
+
+.ui.checkbox input:checked ~ .box::after,
+.ui.checkbox input:checked ~ label::after {
+  color: var(--carv2-text-color) !important;
+}
+
+.ui.checkbox .box::before,
+.ui.checkbox label::before {
+  border: 2px solid var(--carv2-color-secondary) !important;
+}
+
+.ui.labeled.input > .label {
+  background-color: var(--carv2-color-secondary);
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.ui.input > input,
+.ui.input.focus > input {
+  background-color: transparent !important;
+  color: var(--carv2-text-color) !important;
+  border: 2px solid var(--carv2-color-secondary) !important;
+}
+
+input::selection,
+textarea::selection {
+  background-color: var(--carv2-color-secondary) !important;
+}
+
+.ui.input {
+  background-color: transparent !important;
+  color: var(--carv2-text-color);
+}
+
+.ui.input.focus > input::placeholder,
+.ui.input > input:focus::placeholder {
+  background-color: transparent !important;
+  color: var(--carv2-text-color);
+}
+
+.ui.default.dropdown:not(.button) > .text,
+.ui.dropdown:not(.button) > .default.text {
+  color: rgba(250, 250, 250, 0.6);
+}
+
+.ui.selection.dropdown {
+  background-color: transparent;
+  border: solid 2px var(--carv2-color-secondary);
+  color: var(--carv2-text-color);
+}
+.ui.selection.dropdown:hover {
+  background-color: var(--carv2-color-secondary);
+  color: var(--carv2-text-color);
+  border: solid 2px var(--carv2-color-secondary);
+}
+.ui.selection.dropdown:focus {
+  border: solid 2px var(--carv2-color-secondary);
+  color: var(--carv2-color-secondary);
+}
+
+.ui.dropdown .menu > .item:hover,
+.ui.dropdown .menu .selected.item > item:hover {
+  background-color: var(--carv2-color-secondary);
+  color: var(--carv2-text-color);
+}
+
+.ui.dropdown .menu .selected.item,
+.ui.dropdown.selected {
+  background-color: var(--carv2-color-secondary);
+  opacity: 0.5;
+}
+
+.ui.selection.active.dropdown:hover,
+.ui.selection.active.dropdown:focus {
+  background-color: var(--carv2-color-secondary);
+  color: var(--carv2-text-color);
+}
+
+.carv2label {
+  color: var(--carv2-text-color) !important;
+}
+
+.pLeft1 {
+  padding-left: 0.5em;
 }
 
 :root {
-  --carv2-background-color: rgb(108, 122, 122);
+  --carv2-background-color: rgb(134, 134, 134);
   --carv2-background-color-header: rgba(0, 0, 0, 0.5);
   /* --carv2-background-color-header: rgb(23, 47, 48); */
   --carv2-background-color-shadow: black;
   --carv2-color-primary: #e0e1e2;
-  /* --carv2-color-secondary: #00cdf1; */
-  --carv2-color-secondary: #f17000;
+  /* --carv2-color-secondary: #3bc97b; */
+  --carv2-color-secondary: #00cdf1;
+  /* --carv2-color-secondary: #f17000; */
+  /* --carv2-color-secondary: #6d00c7; */
   /* --carv2-color-primary: orange; */
   --carv2-background-color-lidebar: rgba(0, 0, 0, 0.3);
+  --carv2-text-color: white;
 }

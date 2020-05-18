@@ -1,9 +1,13 @@
-import React, { FunctionComponent, useEffect } from "react";
+import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
 import { DataConnectionTO } from "../../../dataAccess/access/to/DataConnectionTO";
 import { Mode, selectMode } from "../../common/viewModel/GlobalSlice";
+import {
+  selectComponentToEdit,
+  selectDataToEdit,
+} from "../viewModel/ControllPanelSlice";
 import { ControllPanelEdit } from "./fragments/edit/ControllPanelEdit";
 import { ControllPanelEditComponent } from "./fragments/edit/ControllPanelEditComponent";
 import { ControllPanelEditData } from "./fragments/edit/ControllPanelEditData";
@@ -16,21 +20,30 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (
   props
 ) => {
   const mode: Mode = useSelector(selectMode);
+  const componentToEdit: ComponentCTO | null = useSelector(
+    selectComponentToEdit
+  );
 
-  useEffect(() => {
-    getViewByMode(mode);
-  }, [mode]);
+  const dataToEdit: DataCTO | null = useSelector(selectDataToEdit);
 
-  const getViewByMode = (mode: Mode) => {
+  console.log("rendering " + mode);
+
+  const useGetViewByMode = (mode: Mode) => {
     switch (mode) {
       case Mode.VIEW:
         return <ControllPanelSequenceOptions />;
       case Mode.EDIT:
         return <ControllPanelEdit />;
       case Mode.EDIT_COMPONENT:
-        return <ControllPanelEditComponent component={new ComponentCTO()} />;
+        if (componentToEdit) {
+          return <ControllPanelEditComponent component={componentToEdit} />;
+        }
+        break;
       case Mode.EDIT_DATA:
-        return <ControllPanelEditData data={new DataCTO()} />;
+        if (dataToEdit) {
+          return <ControllPanelEditData data={dataToEdit} />;
+        }
+        break;
       case Mode.EDIT_DATA_RELATION:
         return (
           <ControllPanelEditRelation dataConnection={new DataConnectionTO()} />
@@ -41,5 +54,5 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (
     }
   };
 
-  return <div className="controllerHeader">{getViewByMode(mode)}</div>;
+  return <div className="controllerHeader">{useGetViewByMode(mode)}</div>;
 };

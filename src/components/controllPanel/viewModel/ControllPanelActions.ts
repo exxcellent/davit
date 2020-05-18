@@ -5,12 +5,20 @@ import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceTO } from "../../../dataAccess/access/to/SequenceTO";
 import { DataAccess } from "../../../dataAccess/DataAccess";
 import { DataAccessResponse } from "../../../dataAccess/DataAccessResponse";
-import { globalSlice, handleError } from "../../common/viewModel/GlobalSlice";
+import {
+  globalSlice,
+  handleError,
+  Mode,
+} from "../../common/viewModel/GlobalSlice";
 import { metaComponentModelSlice } from "../../metaComponentModel/viewModel/MetaComponentModelSlice";
 import { metaDataModelSlice } from "../../metaDataModel/viewModel/MetaDataModelSlice";
 import { ControllPanelSlice } from "./ControllPanelSlice";
 
-const { loadSequences } = ControllPanelSlice.actions;
+const {
+  loadSequences,
+  pickComponentToEdit,
+  pickDataToEdit,
+} = ControllPanelSlice.actions;
 const { setSequence } = globalSlice.actions;
 const { nextStep } = globalSlice.actions;
 const { previousStep } = globalSlice.actions;
@@ -103,6 +111,18 @@ const storefileData = (fileData: string): AppThunk => async (dispatch) => {
   }
 };
 
+const setComponentToEdit = (component: ComponentCTO | null): AppThunk => async (
+  dispatch
+) => {
+  dispatch(pickComponentToEdit(component));
+  dispatch(setMode(Mode.EDIT_COMPONENT));
+};
+
+const setDataToEdit = (data: DataCTO | null): AppThunk => async (dispatch) => {
+  dispatch(pickDataToEdit(data));
+  dispatch(setMode(Mode.EDIT_DATA));
+};
+
 export const ControllPanelActions = {
   findAllSequences,
   findSequence,
@@ -113,4 +133,6 @@ export const ControllPanelActions = {
   storefileData,
   saveData,
   setMode,
+  setComponentToEdit,
+  setDataToEdit,
 };

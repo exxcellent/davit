@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch } from "react-redux";
-import { Button } from "semantic-ui-react";
+import { Carv2Button } from "../../../../common/fragments/buttons/Carv2Button";
 import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
 
 export interface ControllPanelFileOptionsProps {}
@@ -33,14 +33,12 @@ export const ControllPanelFileOptions: FunctionComponent<ControllPanelFileOption
   return (
     <div>
       <div className="optionField">
-        <Button
-          inverted
-          color="orange"
+        <Carv2Button
           icon="cloud upload"
           onClick={() => setShowUploadButton(true)}
         />
-        <Button inverted color="orange" icon="download" />
-        <Button inverted color="orange" icon="edit" />
+        <Carv2Button icon="download" onClick={() => {}} />
+        <Carv2Button icon="edit" onClick={() => {}} />
         {showUploadButton && (
           <input
             type="file"

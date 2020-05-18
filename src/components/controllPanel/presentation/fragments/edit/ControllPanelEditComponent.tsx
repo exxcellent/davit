@@ -1,9 +1,15 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
+import { Input } from "semantic-ui-react";
 import { ComponentCTO } from "../../../../../dataAccess/access/cto/ComponentCTO";
+import { Carv2Util } from "../../../../../utils/Carv2Util";
+import { Carv2DeleteButton } from "../../../../common/fragments/buttons/Carv2DeleteButton";
 import { Mode } from "../../../../common/viewModel/GlobalSlice";
+import { MetaComponentActions } from "../../../../metaComponentModel/viewModel/MetaComponentActions";
 import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
-import { ControllPanelCreate } from "./common/ControllPanelCreate";
+import { ControllPanelEditSub } from "./common/ControllPanelEditSub";
+import { Carv2LabelTextfield } from "./common/fragments/Carv2LabelTextfield";
+import { Carv2SubmitCancel } from "./common/fragments/Carv2SubmitCancel";
 import "./ControllPanelEdit.css";
 
 export interface ControllPanelEditComponentProps {
@@ -14,19 +20,26 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
   props
 ) => {
   const { component } = props;
+  const [name, setName] = useState<string>("");
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
 
-  const switchIsCreateAnother = () => {
-    setIsCreateAnother(!isCreateAnother);
-  };
+  const textInput = useRef<Input>(null);
 
   const dispatch = useDispatch();
 
-  const saveComponentChanges = (name: string) => {
-    component.component.name = name;
-    dispatch(ControllPanelActions.saveComponent(component));
+  useEffect(() => {
+    setName(component.component.name);
+  }, [component]);
+
+  const saveComponentChanges = () => {
+    let copyComponent = Carv2Util.deepCopy(component);
+    copyComponent.component.name = name;
+    setName("");
+    dispatch(ControllPanelActions.saveComponent(copyComponent));
     if (!isCreateAnother) {
       dispatch(ControllPanelActions.setMode(Mode.EDIT));
+    } else {
+      textInput.current!.focus();
     }
   };
 
@@ -34,12 +47,34 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
     dispatch(ControllPanelActions.setMode(Mode.EDIT));
   };
 
+  const deleteComponent = () => {
+    dispatch(MetaComponentActions.deleteComponent(component));
+    cancelEditComponent();
+  };
+
   return (
-    <ControllPanelCreate
-      placeholder="Component name"
-      onCancelCallBack={cancelEditComponent}
-      onCreateCallBack={saveComponentChanges}
-      setIsCreateAnother={switchIsCreateAnother}
-    />
+    <ControllPanelEditSub label="Create Component">
+      <div />
+      <div className="columnDivider">
+        <Carv2LabelTextfield
+          label="Name:"
+          placeholder="Component Name"
+          onChange={(event: any) => setName(event.target.value)}
+          value={name}
+          autoFocus
+          ref={textInput}
+        />
+      </div>
+      <Carv2SubmitCancel
+        onSubmit={saveComponentChanges}
+        onCancel={cancelEditComponent}
+        onChange={() => setIsCreateAnother(!isCreateAnother)}
+      />
+      <div className="controllPanelEditChild">
+        {component.component.id !== -1 && (
+          <Carv2DeleteButton onClick={deleteComponent} />
+        )}
+      </div>
+    </ControllPanelEditSub>
   );
 };
