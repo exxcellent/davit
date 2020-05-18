@@ -36,6 +36,7 @@ export const globalSlice = createSlice({
       state.errors = [];
     },
     setMode: (state, action: PayloadAction<Mode>) => {
+      console.log("setting mode " + action.payload);
       state.mode = action.payload;
     },
     setSequence: (state, action: PayloadAction<SequenceCTO>) => {
