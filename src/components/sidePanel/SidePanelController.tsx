@@ -21,9 +21,9 @@ export const SidePanelController: FunctionComponent<SidePanelProps> = (
 
   return (
     <div className="leftPanel">
-      <Button.Group basic vertical size="big">
-        <Button icon="write" onClick={setModeToEdit} />
-        <Button icon="eye" onClick={setModeToView} />
+      <Button.Group basic vertical size="big" inverted color="orange">
+        <Button inverted color="orange" icon="write" onClick={setModeToEdit} />
+        <Button inverted color="orange" icon="eye" onClick={setModeToView} />
       </Button.Group>
     </div>
   );
