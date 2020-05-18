@@ -44,9 +44,7 @@ export const ControllPanelEdit: FunctionComponent<ControllPanelEditProps> = (
   return (
     <div className="controllPanelEdit">
       <div className="optionFieldSpacer">
-        <div className="columnDivider">
-          <ControllPanelFileOptions />
-        </div>
+        <ControllPanelFileOptions />
       </div>
       <div className="optionFieldSpacer">
         <div className="columnDivider">
@@ -68,7 +66,7 @@ export const ControllPanelEdit: FunctionComponent<ControllPanelEditProps> = (
           </OptionField>
         </div>
       </div>
-      <div className="optionFieldSpacer">
+      <div className="optionFieldSpacer columnDivider">
         <OptionField label="sequence">
           <Carv2AddButton onClick={() => {}} />
         </OptionField>
