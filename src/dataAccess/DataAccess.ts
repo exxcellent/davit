@@ -67,6 +67,14 @@ export const DataAccess = {
   findAllDataConnections(): DataAccessResponse<DataConnectionTO[]> {
     return makeTransactional(DataDataAccessService.findAllDataConnections);
   },
+
+  saveDataConnection(
+    dataConnection: DataConnectionTO
+  ): DataAccessResponse<DataConnectionTO> {
+    return makeTransactional(() =>
+      DataDataAccessService.saveDataConnection(dataConnection)
+    );
+  },
 };
 
 function makeTransactional<T>(callback: () => T): DataAccessResponse<T> {

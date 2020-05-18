@@ -33,6 +33,14 @@ export const DataDataAccessService = {
     return DataConnectionRepository.findAll();
   },
 
+  saveDataConnection(dataConnection: DataConnectionTO): DataConnectionTO {
+    CheckHelper.nullCheck(dataConnection, "dataConnection");
+    const saveDataConnection = DataDataAccessService.saveDataConnection(
+      dataConnection
+    );
+    return saveDataConnection;
+  },
+
   deleteDataCTO(dataCTO: DataCTO): DataCTO {
     CheckHelper.nullCheck(dataCTO.geometricalData, "GeometricalDataCTO");
     CheckHelper.nullCheck(dataCTO.data, "DataTO");
