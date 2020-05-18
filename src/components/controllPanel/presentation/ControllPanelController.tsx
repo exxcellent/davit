@@ -37,13 +37,15 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (
       case Mode.EDIT_COMPONENT:
         if (componentToEdit) {
           return <ControllPanelEditComponent component={componentToEdit} />;
+        } else {
+          return <ControllPanelEdit />;
         }
-        break;
       case Mode.EDIT_DATA:
         if (dataToEdit) {
           return <ControllPanelEditData data={dataToEdit} />;
+        } else {
+          return <ControllPanelEdit />;
         }
-        break;
       case Mode.EDIT_DATA_RELATION:
         return (
           <ControllPanelEditRelation dataConnection={new DataConnectionTO()} />

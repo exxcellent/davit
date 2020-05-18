@@ -7,6 +7,7 @@ import {
   Direction,
   RelationType,
 } from "../../../../../dataAccess/access/to/DataConnectionTO";
+import { Carv2Util } from "../../../../../utils/Carv2Util";
 import { Mode } from "../../../../common/viewModel/GlobalSlice";
 import { selectDatas } from "../../../../metaDataModel/viewModel/MetaDataModelSlice";
 import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
@@ -22,12 +23,29 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
 ) => {
   const { dataConnection } = props;
 
-  const [isAnother, setIsAnother] = useState<boolean>(true);
+  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
+
+  const [data1, setData1] = useState<number>(0);
+  const [data2, setData2] = useState<number>(0);
+  const [type1, setType1] = useState<RelationType>(RelationType.DEFAULT);
+  const [type2, setType2] = useState<RelationType>(RelationType.DEFAULT);
 
   const dispatch = useDispatch();
   const cancelEditRelation = () => {
     dispatch(ControllPanelActions.setMode(Mode.EDIT));
   };
+
+  const saveRelation = () => {
+    let copyRelation: DataConnectionTO = Carv2Util.deepCopy(dataConnection);
+
+    dispatch(ControllPanelActions.saveDataConnection(copyRelation));
+    if (!isCreateAnother) {
+      dispatch(ControllPanelActions.setMode(Mode.EDIT));
+    } else {
+      // TODO: clean feelds.
+    }
+  };
+
   const datas: DataCTO[] = useSelector(selectDatas);
   //   const types: string[] = Object.values(RelationType);
 
@@ -61,7 +79,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
 
   return (
     <ControllPanelEditSub label="Edit Data Relation">
-      <div className="columnDivider" />
+      <div />
       <div
         className="columnDivider"
         style={{ display: "flex", justifyContent: "center" }}
@@ -84,11 +102,17 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
               placeholder="Select Data1"
               selection
               options={datas.map(dataToOption)}
+              onChange={(event, data) => {
+                setData1(Number(data.value));
+              }}
             />
             <Dropdown
               placeholder="Select Type1"
               selection
               options={getTypes()}
+              onChange={(event, data) => {
+                setType1(RelationType[data.value as RelationType]);
+              }}
             />
           </div>
           <div
@@ -129,6 +153,9 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
               placeholder="Select Data2"
               selection
               options={datas.map(dataToOption)}
+              onChange={(event, data) => {
+                setData2(Number(data.value));
+              }}
             />
             <Dropdown
               placeholder="Select Type2"
@@ -152,11 +179,13 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
           </div>
         </div>
       </div>
-      <Carv2SubmitCancel
-        onSubmit={() => {}}
-        onChange={() => setIsAnother(!isAnother)}
-        onCancel={cancelEditRelation}
-      />
+      <div className="columnDivider">
+        <Carv2SubmitCancel
+          onSubmit={() => saveRelation}
+          onChange={() => setIsCreateAnother(!isCreateAnother)}
+          onCancel={cancelEditRelation}
+        />
+      </div>
     </ControllPanelEditSub>
   );
 };

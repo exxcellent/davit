@@ -55,26 +55,31 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
   return (
     <ControllPanelEditSub label="Create Component">
       <div />
-      <div className="columnDivider">
-        <Carv2LabelTextfield
-          label="Name:"
-          placeholder="Component Name"
-          onChange={(event: any) => setName(event.target.value)}
-          value={name}
-          autoFocus
-          ref={textInput}
+      <Carv2LabelTextfield
+        label="Name:"
+        placeholder="Component Name"
+        onChange={(event: any) => setName(event.target.value)}
+        value={name}
+        autoFocus
+        ref={textInput}
+      />
+      <div className="columnDivider" style={{ display: "flex" }}>
+        <Carv2SubmitCancel
+          onSubmit={saveComponentChanges}
+          onCancel={cancelEditComponent}
+          onChange={() => setIsCreateAnother(!isCreateAnother)}
         />
       </div>
-      <Carv2SubmitCancel
-        onSubmit={saveComponentChanges}
-        onCancel={cancelEditComponent}
-        onChange={() => setIsCreateAnother(!isCreateAnother)}
-      />
-      <div className="controllPanelEditChild">
-        {component.component.id !== -1 && (
-          <Carv2DeleteButton onClick={deleteComponent} />
-        )}
-      </div>
+      {component.component.id !== -1 && (
+        <div className="columnDivider">
+          <div
+            className="controllPanelEditChild"
+            style={{ display: "flex", alignItems: "center", height: "100%" }}
+          >
+            <Carv2DeleteButton onClick={deleteComponent} />
+          </div>
+        </div>
+      )}
     </ControllPanelEditSub>
   );
 };

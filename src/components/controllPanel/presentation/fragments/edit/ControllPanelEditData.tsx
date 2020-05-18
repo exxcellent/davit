@@ -55,24 +55,31 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
   return (
     <ControllPanelEditSub label="Create Data">
       <div />
-      <div className="columnDivider">
-        <Carv2LabelTextfield
-          label="Name:"
-          placeholder="Data Name"
-          onChange={(event: any) => setName(event.target.value)}
-          value={name}
-          autoFocus
-          ref={textInput}
+      <Carv2LabelTextfield
+        label="Name:"
+        placeholder="Data Name"
+        onChange={(event: any) => setName(event.target.value)}
+        value={name}
+        autoFocus
+        ref={textInput}
+      />
+      <div className="columnDivider" style={{ display: "flex" }}>
+        <Carv2SubmitCancel
+          onSubmit={saveDataChanges}
+          onCancel={cancelEditData}
+          onChange={() => setIsCreateAnother(!isCreateAnother)}
         />
       </div>
-      <Carv2SubmitCancel
-        onSubmit={saveDataChanges}
-        onCancel={cancelEditData}
-        onChange={() => setIsCreateAnother(!isCreateAnother)}
-      />
-      <div className="controllPanelEditChild">
-        {data.data.id !== -1 && <Carv2DeleteButton onClick={deleteData} />}
-      </div>
+      {data.data.id !== -1 && (
+        <div className="columnDivider">
+          <div
+            className="controllPanelEditChild"
+            style={{ display: "felx", alignItems: "center", height: "100%" }}
+          >
+            <Carv2DeleteButton onClick={deleteData} />
+          </div>
+        </div>
+      )}
     </ControllPanelEditSub>
   );
 };
