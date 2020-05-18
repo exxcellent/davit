@@ -1,7 +1,5 @@
-import { globalSlice } from "../../common/viewModel/GlobalSlice";
-
-const { setMode } = globalSlice.actions;
+import { setModeWithStorage } from "../../common/viewModel/GlobalSlice";
 
 export const SidePanelActions = {
-  setMode,
+  setMode: setModeWithStorage,
 };
