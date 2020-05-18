@@ -1,7 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../../../app/store";
+import { AppThunk, RootState } from "../../../app/store";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
+
+const MODE_LOCAL_STORAGE = "MODE";
 
 export enum Mode {
   EDIT = "EDIT",
@@ -18,16 +20,23 @@ interface GlobalState {
   selectedStep: SequenceStepCTO | undefined;
   mode: Mode;
 }
-const initialState: GlobalState = {
-  errors: [],
-  mode: Mode.VIEW,
-  sequence: undefined,
-  selectedStep: undefined,
+const getInitialState = (): GlobalState => {
+  return {
+    errors: [],
+    mode: determinInitalMode(),
+    sequence: undefined,
+    selectedStep: undefined,
+  };
+};
+
+const determinInitalMode = () => {
+  const mode: string | null = localStorage.getItem(MODE_LOCAL_STORAGE);
+  return mode ? Mode[mode as Mode] : Mode.VIEW;
 };
 
 export const globalSlice = createSlice({
   name: "global",
-  initialState: initialState,
+  initialState: getInitialState(),
   reducers: {
     handleError: (state, action: PayloadAction<string>) => {
       state.errors.push(action.payload);
@@ -73,8 +82,16 @@ export const globalSlice = createSlice({
   },
 });
 
+export const setModeWithStorage = (mode: Mode): AppThunk => async (
+  dispatch
+) => {
+  console.log("set Mode.");
+  localStorage.setItem(MODE_LOCAL_STORAGE, mode);
+  dispatch(setMode(mode));
+};
+
 export const { handleError } = globalSlice.actions;
-export const { setMode } = globalSlice.actions;
+const { setMode } = globalSlice.actions;
 
 export const globalReducer = globalSlice.reducer;
 
