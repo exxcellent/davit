@@ -27,29 +27,49 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
 
   const [data1, setData1] = useState<number>(0);
   const [data2, setData2] = useState<number>(0);
-  const [type1, setType1] = useState<RelationType>(RelationType.DEFAULT);
-  const [type2, setType2] = useState<RelationType>(RelationType.DEFAULT);
+  const [type1, setType1] = useState<RelationType>(RelationType.IN);
+  const [type2, setType2] = useState<RelationType>(RelationType.OUT);
+  const [label1, setLabel1] = useState<string>("");
+  const [label2, setLabel2] = useState<string>("");
+  const [direction1, setDirection1] = useState<Direction>(Direction.RIGHT);
+  const [direction2, setDirection2] = useState<Direction>(Direction.LEFT);
 
   const dispatch = useDispatch();
+
   const cancelEditRelation = () => {
     dispatch(ControllPanelActions.setMode(Mode.EDIT));
   };
 
   const saveRelation = () => {
+    console.log("saving relation.");
     let copyRelation: DataConnectionTO = Carv2Util.deepCopy(dataConnection);
-
+    copyRelation.data1Fk = data1;
+    copyRelation.data2Fk = data2;
+    copyRelation.type1 = type1;
+    copyRelation.type2 = type2;
+    copyRelation.label1 = label1;
+    copyRelation.label2 = label2;
+    copyRelation.direction1 = direction1;
+    copyRelation.direction2 = direction2;
     dispatch(ControllPanelActions.saveDataConnection(copyRelation));
     if (!isCreateAnother) {
       dispatch(ControllPanelActions.setMode(Mode.EDIT));
     } else {
-      // TODO: clean feelds.
+      setData1(0);
+      setData2(0);
+      setType1(RelationType.IN);
+      setType2(RelationType.OUT);
+      setLabel1("");
+      setLabel2("");
+      setDirection1(Direction.RIGHT);
+      setDirection2(Direction.LEFT);
     }
   };
 
   const datas: DataCTO[] = useSelector(selectDatas);
   //   const types: string[] = Object.values(RelationType);
 
-  const setLabel1 = (event: any) => {
+  const setLabel = (event: any) => {
     dataConnection.label1 = event.target.value;
   };
 
@@ -122,11 +142,19 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
               justifyContent: "center",
             }}
           >
-            <Input placeholder="Label1" onChangeCallBack={setLabel1} />
+            <Input
+              placeholder="Label1"
+              onChange={(event: any) => {
+                setLabel1(event.target.value);
+              }}
+            />
             <Dropdown
               placeholder="Select Direction1"
               selection
               options={getDirections()}
+              onChange={(event, data) => {
+                setDirection1(Direction[data.value as Direction]);
+              }}
             />
           </div>
         </div>
@@ -161,6 +189,9 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
               placeholder="Select Type2"
               selection
               options={getTypes()}
+              onChange={(event, data) => {
+                setType2(RelationType[data.value as RelationType]);
+              }}
             />
           </div>
           <div
@@ -170,18 +201,27 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
               justifyContent: "center",
             }}
           >
-            <Input placeholder="Label2" onChangeCallBack={setLabel1} />
+            <Input
+              placeholder="Label2"
+              onChangeCallBack={setLabel}
+              onChange={(event: any) => {
+                setLabel2(event.target.value);
+              }}
+            />
             <Dropdown
               placeholder="Select Direction2"
               selection
               options={getDirections()}
+              onChange={(event, data) => {
+                setDirection2(Direction[data.value as Direction]);
+              }}
             />
           </div>
         </div>
       </div>
       <div className="columnDivider">
         <Carv2SubmitCancel
-          onSubmit={() => saveRelation}
+          onSubmit={saveRelation}
           onChange={() => setIsCreateAnother(!isCreateAnother)}
           onCancel={cancelEditRelation}
         />

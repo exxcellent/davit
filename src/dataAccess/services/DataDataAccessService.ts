@@ -35,9 +35,7 @@ export const DataDataAccessService = {
 
   saveDataConnection(dataConnection: DataConnectionTO): DataConnectionTO {
     CheckHelper.nullCheck(dataConnection, "dataConnection");
-    const saveDataConnection = DataDataAccessService.saveDataConnection(
-      dataConnection
-    );
+    const saveDataConnection = DataConnectionRepository.save(dataConnection);
     return saveDataConnection;
   },
 

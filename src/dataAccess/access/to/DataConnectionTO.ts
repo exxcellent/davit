@@ -8,7 +8,8 @@ export enum Direction {
 }
 
 export enum RelationType {
-  DEFAULT = "DEFAULT",
+  IN = "IN",
+  OUT = "OUT",
 }
 
 export class DataConnectionTO extends AbstractTO {
@@ -17,8 +18,10 @@ export class DataConnectionTO extends AbstractTO {
     public data2Fk: number = -1,
     public label1: string = "",
     public label2: string = "",
-    public direction: Direction = Direction.RIGHT,
-    public type: RelationType = RelationType.DEFAULT
+    public direction1: Direction = Direction.RIGHT,
+    public direction2: Direction = Direction.RIGHT,
+    public type1: RelationType = RelationType.OUT,
+    public type2: RelationType = RelationType.IN
   ) {
     super();
   }

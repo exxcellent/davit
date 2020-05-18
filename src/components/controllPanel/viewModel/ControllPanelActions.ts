@@ -27,6 +27,7 @@ const { previousStep } = globalSlice.actions;
 const { clearErrors } = globalSlice.actions;
 const { loadComponents } = metaComponentModelSlice.actions;
 const { loadDatas } = metaDataModelSlice.actions;
+const { loadDataConnections } = metaDataModelSlice.actions;
 
 const findAllSequences = (): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<
@@ -34,6 +35,17 @@ const findAllSequences = (): AppThunk => async (dispatch) => {
   > = await DataAccess.findAllSequences();
   if (response.code === 200) {
     dispatch(loadSequences(response.object));
+  } else {
+    dispatch(handleError(response.message));
+  }
+};
+
+const findSequence = (sequenceId: number): AppThunk => async (dispatch) => {
+  const response: DataAccessResponse<SequenceCTO> = await DataAccess.findSequence(
+    sequenceId
+  );
+  if (response.code === 200) {
+    dispatch(setSequence(response.object));
   } else {
     dispatch(handleError(response.message));
   }
@@ -56,6 +68,17 @@ const findAllDatas = (): AppThunk => async (dispatch) => {
   > = await DataAccess.findAllDatas();
   if (response.code === 200) {
     dispatch(loadDatas(response.object));
+  } else {
+    dispatch(handleError(response.message));
+  }
+};
+
+const findAllConnections = (): AppThunk => async (dispatch) => {
+  const response: DataAccessResponse<
+    DataConnectionTO[]
+  > = await DataAccess.findAllDataConnections();
+  if (response.code === 200) {
+    dispatch(loadDataConnections(response.object));
   } else {
     dispatch(handleError(response.message));
   }
@@ -95,18 +118,7 @@ const saveDataConnection = (
   );
   console.log(response);
   if (response.code === 200) {
-    dispatch(findAllDatas());
-  } else {
-    dispatch(handleError(response.message));
-  }
-};
-
-const findSequence = (sequenceId: number): AppThunk => async (dispatch) => {
-  const response: DataAccessResponse<SequenceCTO> = await DataAccess.findSequence(
-    sequenceId
-  );
-  if (response.code === 200) {
-    dispatch(setSequence(response.object));
+    dispatch(findAllConnections());
   } else {
     dispatch(handleError(response.message));
   }
