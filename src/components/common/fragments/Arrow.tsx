@@ -18,8 +18,8 @@ enum ArrowType {
 const Arrow: FunctionComponent<ArrowProps> = (props) => {
   const { xSource, ySource, xTarget, yTarget, type } = props;
 
-  const INTERFACE_INPUT: Point = { x: 0, y: 60 };
-  const INTERFACE_OUTPUT: Point = { x: 150, y: 60 };
+  const INTERFACE_INPUT: Point = { x: 0, y: 25 };
+  const INTERFACE_OUTPUT: Point = { x: 150, y: 25 };
   const OFFSET: number = 10;
 
   const createCurve = (x1: number, y1: number, x2: number, y2: number) => {
