@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
-import { Button, Card } from "semantic-ui-react";
+import { Card } from "semantic-ui-react";
 import { ComponentDataCTO } from "../../../../dataAccess/access/cto/ComponentDataCTO";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
@@ -35,22 +35,9 @@ export const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (
 
   const mode: Mode = useSelector(selectMode);
 
-  const delMetaComponentFragment = () => {
-    onDelCallBack(id);
-  };
-
   return (
     <Card style={{ width: initalWidth, height: initalHeigth }}>
       <Card.Content header={initalName}></Card.Content>
-      <Card.Content>
-        {mode === Mode.EDIT && (
-          <Button
-            size="mini"
-            icon="delete"
-            onClick={delMetaComponentFragment}
-          />
-        )}
-      </Card.Content>
       {componentFragments.map(createComponentFragment)}
     </Card>
   );
