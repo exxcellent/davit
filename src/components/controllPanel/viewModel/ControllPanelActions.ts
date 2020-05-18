@@ -2,6 +2,7 @@ import { AppThunk } from "../../../app/store";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
+import { DataConnectionTO } from "../../../dataAccess/access/to/DataConnectionTO";
 import { SequenceTO } from "../../../dataAccess/access/to/SequenceTO";
 import { DataAccess } from "../../../dataAccess/DataAccess";
 import { DataAccessResponse } from "../../../dataAccess/DataAccessResponse";
@@ -9,6 +10,7 @@ import {
   globalSlice,
   handleError,
   Mode,
+  setModeWithStorage,
 } from "../../common/viewModel/GlobalSlice";
 import { metaComponentModelSlice } from "../../metaComponentModel/viewModel/MetaComponentModelSlice";
 import { metaDataModelSlice } from "../../metaDataModel/viewModel/MetaDataModelSlice";
@@ -23,7 +25,6 @@ const { setSequence } = globalSlice.actions;
 const { nextStep } = globalSlice.actions;
 const { previousStep } = globalSlice.actions;
 const { clearErrors } = globalSlice.actions;
-const { setMode } = globalSlice.actions;
 const { loadComponents } = metaComponentModelSlice.actions;
 const { loadDatas } = metaDataModelSlice.actions;
 
@@ -86,6 +87,20 @@ const saveData = (data: DataCTO): AppThunk => async (dispatch) => {
   }
 };
 
+const saveDataConnection = (
+  dataConnection: DataConnectionTO
+): AppThunk => async (dispatch) => {
+  const response: DataAccessResponse<DataConnectionTO> = await DataAccess.saveDataConnection(
+    dataConnection
+  );
+  console.log(response);
+  if (response.code === 200) {
+    dispatch(findAllDatas());
+  } else {
+    dispatch(handleError(response.message));
+  }
+};
+
 const findSequence = (sequenceId: number): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<SequenceCTO> = await DataAccess.findSequence(
     sequenceId
@@ -115,12 +130,12 @@ const setComponentToEdit = (component: ComponentCTO | null): AppThunk => async (
   dispatch
 ) => {
   dispatch(pickComponentToEdit(component));
-  dispatch(setMode(Mode.EDIT_COMPONENT));
+  dispatch(setModeWithStorage(Mode.EDIT_COMPONENT));
 };
 
 const setDataToEdit = (data: DataCTO | null): AppThunk => async (dispatch) => {
   dispatch(pickDataToEdit(data));
-  dispatch(setMode(Mode.EDIT_DATA));
+  dispatch(setModeWithStorage(Mode.EDIT_DATA));
 };
 
 export const ControllPanelActions = {
@@ -132,7 +147,8 @@ export const ControllPanelActions = {
   saveComponent,
   storefileData,
   saveData,
-  setMode,
+  setMode: setModeWithStorage,
   setComponentToEdit,
   setDataToEdit,
+  saveDataConnection,
 };
