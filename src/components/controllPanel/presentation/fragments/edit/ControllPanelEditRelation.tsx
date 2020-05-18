@@ -22,7 +22,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
 ) => {
   const { dataConnection } = props;
 
-  const [isAnother, setIsAnother] = useState<boolean>(false);
+  const [isAnother, setIsAnother] = useState<boolean>(true);
 
   const dispatch = useDispatch();
   const cancelEditRelation = () => {

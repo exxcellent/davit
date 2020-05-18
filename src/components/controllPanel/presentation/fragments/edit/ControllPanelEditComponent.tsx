@@ -21,7 +21,7 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
 ) => {
   const { component } = props;
   const [name, setName] = useState<string>("");
-  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
+  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
 
   const textInput = useRef<Input>(null);
 
