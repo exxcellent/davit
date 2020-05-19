@@ -1,6 +1,6 @@
 import { motion, Point } from "framer-motion";
 import React, { FunctionComponent } from "react";
-import { GeometricalDataCTO } from "../../../dataAccess/access/cto/GeometraicalDataCTO";
+import { GeometricalDataCTO } from "../../../../dataAccess/access/cto/GeometraicalDataCTO";
 
 export interface ArrowProps {
   xSource: number;
