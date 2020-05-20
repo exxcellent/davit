@@ -23,7 +23,7 @@ const findAllDatas = (): AppThunk => async (dispatch) => {
 const findAllRelations = (): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<
     DataRelationCTO[]
-  > = await DataAccess.findAllDataConnections();
+  > = await DataAccess.findAllDataRelations();
   if (response.code === 200) {
     dispatch(loadDataRelations(response.object));
   } else {

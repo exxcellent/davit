@@ -61,6 +61,12 @@ export const DataDataAccessService = {
     DataRepository.delete(dataCTO.data);
     return dataCTO;
   },
+
+  deleteDataRelationCTO(dataRelationCTO: DataRelationCTO): DataRelationCTO {
+    CheckHelper.nullCheck(dataRelationCTO, "dataRelationCTO");
+    DataConnectionRepository.delete(dataRelationCTO.dataRelationTO);
+    return dataRelationCTO;
+  },
 };
 
 const createDataRelationCTO = (

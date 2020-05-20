@@ -28,7 +28,7 @@ const { previousStep } = globalSlice.actions;
 const { clearErrors } = globalSlice.actions;
 const { loadComponents } = metaComponentModelSlice.actions;
 const { loadDatas } = metaDataModelSlice.actions;
-const { loadDataRelations: loadDataConnections } = metaDataModelSlice.actions;
+const { loadDataRelations: loadDataRelations } = metaDataModelSlice.actions;
 
 const findAllSequences = (): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<
@@ -74,12 +74,12 @@ const findAllDatas = (): AppThunk => async (dispatch) => {
   }
 };
 
-const findAllConnections = (): AppThunk => async (dispatch) => {
+const findAllDataRelations = (): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<
     DataRelationCTO[]
-  > = await DataAccess.findAllDataConnections();
+  > = await DataAccess.findAllDataRelations();
   if (response.code === 200) {
-    dispatch(loadDataConnections(response.object));
+    dispatch(loadDataRelations(response.object));
   } else {
     dispatch(handleError(response.message));
   }
@@ -119,7 +119,7 @@ const saveDataConnection = (dataRelation: DataRelationCTO): AppThunk => async (
   );
   console.log(response);
   if (response.code === 200) {
-    dispatch(findAllConnections());
+    dispatch(findAllDataRelations());
   } else {
     dispatch(handleError(response.message));
   }
@@ -142,7 +142,6 @@ const storefileData = (fileData: string): AppThunk => async (dispatch) => {
 const cancelEditData = (): AppThunk => async (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT));
   dispatch(setDataToEdit(null));
-  // dispatch(findAllDatas());
 };
 
 const setComponentToEdit = (component: ComponentCTO | null): AppThunk => async (
@@ -164,6 +163,20 @@ const setDataRelationToEdit = (
   dispatch(setModeWithStorage(Mode.EDIT_DATA_RELATION));
 };
 
+const deleteRelation = (dataRelation: DataRelationCTO): AppThunk => async (
+  dispatch
+) => {
+  const response: DataAccessResponse<DataRelationCTO> = await DataAccess.deleteDataRelation(
+    dataRelation
+  );
+  console.log(response);
+  if (response.code === 200) {
+    dispatch(findAllDataRelations());
+  } else {
+    dispatch(handleError(response.message));
+  }
+};
+
 export const ControllPanelActions = {
   findAllSequences,
   findSequence,
@@ -179,4 +192,5 @@ export const ControllPanelActions = {
   saveDataConnection,
   setDataRelationToEdit,
   cancelEditData,
+  deleteRelation,
 };

@@ -9,6 +9,7 @@ import {
   RelationType,
 } from "../../../../../dataAccess/access/to/DataRelationTO";
 import { Carv2Util } from "../../../../../utils/Carv2Util";
+import { Carv2DeleteButton } from "../../../../common/fragments/buttons/Carv2DeleteButton";
 import { Mode } from "../../../../common/viewModel/GlobalSlice";
 import { selectDatas } from "../../../../metaDataModel/viewModel/MetaDataModelSlice";
 import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
@@ -58,6 +59,11 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
     } else {
       setDataRelationCopy(new DataRelationTO());
     }
+  };
+
+  const deleteRelation = () => {
+    dispatch(ControllPanelActions.deleteRelation(dataRelation));
+    cancelEditRelation();
   };
 
   const dataToOption = (data: DataCTO) => {
@@ -259,6 +265,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
           onChange={() => setIsCreateAnother(!isCreateAnother)}
           onCancel={cancelEditRelation}
         />
+        <Carv2DeleteButton onClick={deleteRelation} />
       </div>
     </ControllPanelEditSub>
   );

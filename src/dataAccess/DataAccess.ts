@@ -64,7 +64,15 @@ export const DataAccess = {
     );
   },
 
-  findAllDataConnections(): DataAccessResponse<DataRelationCTO[]> {
+  deleteDataRelation(
+    dataRelationCTO: DataRelationCTO
+  ): DataAccessResponse<DataRelationCTO> {
+    return makeTransactional(() =>
+      DataDataAccessService.deleteDataRelationCTO(dataRelationCTO)
+    );
+  },
+
+  findAllDataRelations(): DataAccessResponse<DataRelationCTO[]> {
     return makeTransactional(DataDataAccessService.findAllDataRelationCTOs);
   },
 

@@ -27,4 +27,15 @@ export const DataConnectionRepository = {
       .dataConnections.set(dataRelationTO.id!, dataRelationTO);
     return dataRelationTO;
   },
+
+  delete(dataRelation: DataRelationTO) {
+    CheckHelper.nullCheck(dataRelation, "dataRelationTO");
+    let success = dataStore
+      .getDataStore()
+      .dataConnections.delete(dataRelation.id!);
+    if (!success) {
+      throw new Error("dataAccess.repository.error.notExists");
+    }
+    return dataRelation;
+  },
 };
