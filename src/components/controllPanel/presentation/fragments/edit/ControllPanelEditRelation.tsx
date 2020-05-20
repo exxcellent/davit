@@ -27,13 +27,16 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
 
   const datas: DataCTO[] = useSelector(selectDatas);
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
-
+  const [label, setLabel] = useState<string>("Create Data Relation");
   const [dataRelationCopy, setDataRelationCopy] = useState<DataRelationTO>(
     new DataRelationTO()
   );
 
   useEffect(() => {
     setDataRelationCopy({ ...dataRelation.dataRelationTO });
+    if (dataRelation.dataRelationTO.id !== -1) {
+      setLabel("Edit Data Relation");
+    }
   }, [dataRelation]);
 
   const dispatch = useDispatch();
@@ -91,12 +94,8 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
   };
 
   return (
-    <ControllPanelEditSub label="Edit Data Relation">
-      <div />
-      <div
-        className="columnDivider"
-        style={{ display: "flex", justifyContent: "center" }}
-      >
+    <ControllPanelEditSub label={label}>
+      <div style={{ display: "flex", justifyContent: "center" }}>
         <div
           style={{
             display: "flex",
@@ -259,14 +258,23 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
           </div>
         </div>
       </div>
-      <div className="columnDivider">
+      <div className="columnDivider" style={{ display: "flex" }}>
         <Carv2SubmitCancel
           onSubmit={saveRelation}
           onChange={() => setIsCreateAnother(!isCreateAnother)}
           onCancel={cancelEditRelation}
         />
-        <Carv2DeleteButton onClick={deleteRelation} />
       </div>
+      {dataRelation.dataRelationTO.id !== -1 && (
+        <div className="columnDivider">
+          <div
+            className="controllPanelEditChild"
+            style={{ display: "flex", alignItems: "center", height: "100%" }}
+          >
+            <Carv2DeleteButton onClick={deleteRelation} />
+          </div>
+        </div>
+      )}
     </ControllPanelEditSub>
   );
 };

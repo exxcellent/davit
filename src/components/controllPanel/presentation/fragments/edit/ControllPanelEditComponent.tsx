@@ -22,6 +22,7 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
   const { component } = props;
   const [name, setName] = useState<string>("");
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
+  const [label, setLabel] = useState<string>("Create Component");
 
   const textInput = useRef<Input>(null);
 
@@ -29,6 +30,9 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
 
   useEffect(() => {
     setName(component.component.name);
+    if (component.component.id !== -1) {
+      setLabel("Edit Component");
+    }
   }, [component]);
 
   const saveComponentChanges = () => {
@@ -53,7 +57,7 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
   };
 
   return (
-    <ControllPanelEditSub label="Create Component">
+    <ControllPanelEditSub label={label}>
       <div />
       <Carv2LabelTextfield
         label="Name:"

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useRef, useState } from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Input } from "semantic-ui-react";
 import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
@@ -23,9 +23,15 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
 
   // const [dataToEdit, setDataToEdit] = useState<DataCTO>(new DataCTO());
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
+  const [label, setLabel] = useState<string>("Create Data");
   const textInput = useRef<Input>(null);
-
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (data.data.id !== -1) {
+      setLabel("Edit Data");
+    }
+  }, [data]);
 
   const setDataToEdit = (dataToEdit: DataCTO | null) => {
     dispatch(ControllPanelActions.setDataToEdit(dataToEdit));
@@ -53,7 +59,7 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
   };
 
   return (
-    <ControllPanelEditSub label="Create Data">
+    <ControllPanelEditSub label={label}>
       <div />
       <Carv2LabelTextfield
         label="Name:"
