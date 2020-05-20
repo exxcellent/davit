@@ -145,6 +145,34 @@
   color: transparent !important;
 }
 
+.ui.orange.label,
+.ui.orange.labels .label {
+  background-color: var(--carv2-color-secondary) !important;
+  border-color: var(--carv2-color-secondary) !important;
+  color: var(--carv2-text-color) !important;
+  text-align: center;
+  vertical-align: center !important;
+}
+
+#buttonGroupLabel {
+  opacity: 1 !important;
+  color: var(--carv2-text-color);
+}
+
+.ui.buttons .button,
+.ui.button {
+  background-color: transparent;
+  box-shadow: 0 0 0 2px var(--carv2-color-secondary) inset,
+    0 0 0 0 rgba(34, 36, 38, 0.15) inset !important;
+}
+
+.ui.button:hover {
+  background-color: var(--carv2-color-secondary);
+  color: var(--carv2-text-color);
+  box-shadow: 0 0 0 2px var(--carv2-color-secondary) inset,
+    0 0 0 0 rgba(34, 36, 38, 0.15) inset !important;
+}
+
 .carvPath {
   stroke: var(--carv2-color-secondary);
   stroke-width: 2px;
