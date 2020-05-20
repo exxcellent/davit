@@ -8,6 +8,7 @@ import { createMetaComponentFragment } from "./MetaComponentFragment";
 
 interface MetaComponentDnDBox {
   componentCTOs: ComponentCTO[];
+  componentCTOToEdit: ComponentCTO | null;
   step?: SequenceStepCTO;
   onSaveCallBack: (componentCTO: ComponentCTO) => void;
   onDeleteCallBack: (id: number) => void;
@@ -16,7 +17,13 @@ interface MetaComponentDnDBox {
 export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (
   props
 ) => {
-  const { componentCTOs, onSaveCallBack, onDeleteCallBack, step } = props;
+  const {
+    componentCTOs,
+    onSaveCallBack,
+    onDeleteCallBack,
+    step,
+    componentCTOToEdit,
+  } = props;
 
   const constraintsRef = useRef(null);
 
@@ -32,6 +39,19 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (
       copyComponentCTO.geometricalData.position.x = x;
       copyComponentCTO.geometricalData.position.y = y;
       onSaveCallBack(copyComponentCTO);
+    }
+  };
+
+  const createDnDMetaComponentFragmentIfNotInEdit = (
+    componentCTO: ComponentCTO
+  ) => {
+    if (
+      !(
+        componentCTOToEdit &&
+        componentCTOToEdit.component.id === componentCTO.component.id
+      )
+    ) {
+      return createDnDMetaComponent(componentCTO);
     }
   };
 
@@ -51,7 +71,8 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (
 
   return (
     <motion.div id="dndBox" ref={constraintsRef} className="componentModel">
-      {componentCTOs.map(createDnDMetaComponent)}
+      {componentCTOs.map(createDnDMetaComponentFragmentIfNotInEdit)}
+      {componentCTOToEdit && createDnDMetaComponent(componentCTOToEdit)}
       {step &&
         createCurveArrow(
           componentCTOs.find(

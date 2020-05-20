@@ -144,6 +144,11 @@ const cancelEditData = (): AppThunk => async (dispatch) => {
   dispatch(setDataToEdit(null));
 };
 
+const cancelEditComponent = (): AppThunk => async (dispatch) => {
+  dispatch(setModeWithStorage(Mode.EDIT));
+  dispatch(setComponentToEdit(null));
+};
+
 const setComponentToEdit = (component: ComponentCTO | null): AppThunk => async (
   dispatch
 ) => {
@@ -193,4 +198,5 @@ export const ControllPanelActions = {
   setDataRelationToEdit,
   cancelEditData,
   deleteRelation,
+  cancelEditComponent,
 };

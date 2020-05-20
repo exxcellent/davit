@@ -20,38 +20,38 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
   props
 ) => {
   const { component } = props;
-  const [name, setName] = useState<string>("");
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
   const [label, setLabel] = useState<string>("Create Component");
-
   const textInput = useRef<Input>(null);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setName(component.component.name);
     if (component.component.id !== -1) {
       setLabel("Edit Component");
     }
   }, [component]);
 
+  const setComponentToEdit = (componentToEdit: ComponentCTO | null) => {
+    dispatch(ControllPanelActions.setComponentToEdit(componentToEdit));
+  };
+
   const saveComponentChanges = () => {
-    let copyComponent = Carv2Util.deepCopy(component);
-    copyComponent.component.name = name;
-    setName("");
-    dispatch(ControllPanelActions.saveComponent(copyComponent));
+    dispatch(ControllPanelActions.saveComponent(Carv2Util.deepCopy(component)));
     if (!isCreateAnother) {
+      dispatch(ControllPanelActions.setComponentToEdit(null));
       dispatch(ControllPanelActions.setMode(Mode.EDIT));
     } else {
+      dispatch(ControllPanelActions.setComponentToEdit(new ComponentCTO()));
       textInput.current!.focus();
     }
   };
 
   const cancelEditComponent = () => {
-    dispatch(ControllPanelActions.setMode(Mode.EDIT));
+    dispatch(ControllPanelActions.cancelEditComponent());
   };
 
   const deleteComponent = () => {
+    dispatch(ControllPanelActions.setComponentToEdit(null));
     dispatch(MetaComponentActions.deleteComponent(component));
     cancelEditComponent();
   };
@@ -62,8 +62,13 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
       <Carv2LabelTextfield
         label="Name:"
         placeholder="Component Name"
-        onChange={(event: any) => setName(event.target.value)}
-        value={name}
+        onChange={(event: any) =>
+          setComponentToEdit({
+            ...component,
+            component: { ...component.component, name: event.target.value },
+          })
+        }
+        value={component.component.name}
         autoFocus
         ref={textInput}
       />

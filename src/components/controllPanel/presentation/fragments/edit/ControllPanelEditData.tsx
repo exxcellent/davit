@@ -21,7 +21,6 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
 ) => {
   const { data } = props;
 
-  // const [dataToEdit, setDataToEdit] = useState<DataCTO>(new DataCTO());
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
   const [label, setLabel] = useState<string>("Create Data");
   const textInput = useRef<Input>(null);

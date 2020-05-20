@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
 import { selectStep } from "../../common/viewModel/GlobalSlice";
+import { selectComponentToEdit } from "../../controllPanel/viewModel/ControllPanelSlice";
 import { MetaComponentActions } from "../viewModel/MetaComponentActions";
 import { selectComponents } from "../viewModel/MetaComponentModelSlice";
 import { MetaComponentDnDBox } from "./fragments/MetaComponentDnDBox";
@@ -13,6 +14,9 @@ export const MetaComponentModelController: FunctionComponent<MetaComponentModelC
   props
 ) => {
   const components: ComponentCTO[] = useSelector(selectComponents);
+  const componentCTOToEdit: ComponentCTO | null = useSelector(
+    selectComponentToEdit
+  );
   const selectedStep: SequenceStepCTO | undefined = useSelector(selectStep);
   const dispatch = useDispatch();
 
@@ -40,6 +44,7 @@ export const MetaComponentModelController: FunctionComponent<MetaComponentModelC
         onSaveCallBack={saveComp}
         onDeleteCallBack={deleteComp}
         step={selectedStep}
+        componentCTOToEdit={componentCTOToEdit}
       />
     );
   };
