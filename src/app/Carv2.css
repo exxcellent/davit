@@ -178,6 +178,9 @@
   stroke-width: 2px;
   fill: transparent;
 }
+.carvStrokeDasharray {
+  stroke-dasharray: 0.5em;
+}
 
 .carvArrowMarker {
   fill: var(--carv2-color-secondary);

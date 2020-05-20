@@ -19,6 +19,7 @@ export interface Carv2PathProps {
   type1: RelationType;
   type2: RelationType;
   id: number;
+  stroked?: boolean;
 }
 
 const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
@@ -34,6 +35,7 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
     // type1,
     // type2,
     id,
+    stroked,
   } = props;
 
   const iId = "#" + id.toString();
@@ -58,6 +60,8 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
     const offsetPoint1 = plusPoint(startPoint, offset1);
     const offsetPoint2 = plusPoint(endPoint, offset2);
 
+    const className = stroked ? "carvPath carvStrokeDasharray" : "carvPath";
+
     return (
       <path
         d={`M ${startPoint.x},${startPoint.y} 
@@ -65,7 +69,7 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
         L ${offsetPoint2.x},${offsetPoint2.y}
         L ${endPoint.x},${endPoint.y}
         `}
-        className="carvPath"
+        className={className}
         id={id.toString()}
         ref={pathRef}
       />
@@ -147,7 +151,8 @@ export const createCornerConnection = (
   source: GeometricalDataCTO | undefined,
   target: GeometricalDataCTO | undefined,
   dataRelation: DataRelationTO,
-  key: number
+  key: number,
+  stroked?: boolean
 ) => {
   if (source && target) {
     return (
@@ -164,6 +169,7 @@ export const createCornerConnection = (
         type1={dataRelation.type1}
         type2={dataRelation.type2}
         id={dataRelation.id}
+        stroked={stroked}
       />
     );
   }
