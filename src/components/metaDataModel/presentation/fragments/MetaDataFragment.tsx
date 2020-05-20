@@ -1,10 +1,8 @@
 import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
 import { Card } from "semantic-ui-react";
 import { ComponentDataCTO } from "../../../../dataAccess/access/cto/ComponentDataCTO";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
-import { Mode, selectMode } from "../../../common/viewModel/GlobalSlice";
 import {
   ComponentFragmentProps,
   createComponentFragment,
@@ -23,17 +21,14 @@ export const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (
   props
 ) => {
   const {
-    id,
+    // id,
     initalName,
-    onDelCallBack,
     componentFragments,
     initalWidth,
     initalHeigth,
   } = props;
 
-  console.log("Create Data Fragment!");
-
-  const mode: Mode = useSelector(selectMode);
+  // const mode: Mode = useSelector(selectMode);
 
   return (
     <Card style={{ width: initalWidth, height: initalHeigth }}>

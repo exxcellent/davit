@@ -43,7 +43,7 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
 
   const createRowPlaceholder = (index: number) => {
     return (
-      <Table.Row id={index}>
+      <Table.Row id={index} key={index}>
         <Table.Cell textAlign="center">{index}</Table.Cell>
         <Table.Cell></Table.Cell>
         <Table.Cell></Table.Cell>

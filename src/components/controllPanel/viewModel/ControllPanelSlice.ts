@@ -2,17 +2,20 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../../app/store";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
+import { DataRelationCTO } from "../../../dataAccess/access/cto/DataRelationCTO";
 import { SequenceTO } from "../../../dataAccess/access/to/SequenceTO";
 
 interface ControllPanelState {
   sequences: SequenceTO[];
   selectedComponentToEdit: ComponentCTO | null;
   selectedDataToEdit: DataCTO | null;
+  selectedDataRelationToEdit: DataRelationCTO | null;
 }
 const initialState: ControllPanelState = {
   sequences: [],
   selectedComponentToEdit: null,
   selectedDataToEdit: null,
+  selectedDataRelationToEdit: null,
 };
 
 export const ControllPanelSlice = createSlice({
@@ -31,6 +34,12 @@ export const ControllPanelSlice = createSlice({
     pickDataToEdit: (state, action: PayloadAction<DataCTO | null>) => {
       state.selectedDataToEdit = action.payload;
     },
+    pickDataRelationToEdit: (
+      state,
+      action: PayloadAction<DataRelationCTO | null>
+    ) => {
+      state.selectedDataRelationToEdit = action.payload;
+    },
   },
 });
 
@@ -44,3 +53,6 @@ export const selectComponentToEdit = (state: RootState) =>
 
 export const selectDataToEdit = (state: RootState) =>
   state.controllPannel.selectedDataToEdit;
+
+export const selectDataRelationToEdit = (state: RootState) =>
+  state.controllPannel.selectedDataRelationToEdit;

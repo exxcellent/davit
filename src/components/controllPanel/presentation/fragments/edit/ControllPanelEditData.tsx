@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import React, { FunctionComponent, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Input } from "semantic-ui-react";
 import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
@@ -21,33 +21,33 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
 ) => {
   const { data } = props;
 
+  // const [dataToEdit, setDataToEdit] = useState<DataCTO>(new DataCTO());
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
-  const [name, setName] = useState<string>("");
   const textInput = useRef<Input>(null);
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    setName(data.data.name);
-  }, [data.data.name]);
+  const setDataToEdit = (dataToEdit: DataCTO | null) => {
+    dispatch(ControllPanelActions.setDataToEdit(dataToEdit));
+  };
 
   const saveDataChanges = () => {
-    let copyData: DataCTO = Carv2Util.deepCopy(data);
-    copyData.data.name = name;
-    setName("");
-    dispatch(ControllPanelActions.saveData(copyData));
+    dispatch(ControllPanelActions.saveData(Carv2Util.deepCopy(data)));
     if (!isCreateAnother) {
+      dispatch(ControllPanelActions.setDataToEdit(null));
       dispatch(ControllPanelActions.setMode(Mode.EDIT));
     } else {
+      dispatch(ControllPanelActions.setDataToEdit(new DataCTO()));
       textInput.current!.focus();
     }
   };
 
   const cancelEditData = () => {
-    dispatch(ControllPanelActions.setMode(Mode.EDIT));
+    dispatch(ControllPanelActions.cancelEditData());
   };
 
   const deleteData = () => {
+    dispatch(ControllPanelActions.setDataToEdit(null));
     dispatch(MetaDataActions.deleteData(data));
     cancelEditData();
   };
@@ -58,8 +58,13 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
       <Carv2LabelTextfield
         label="Name:"
         placeholder="Data Name"
-        onChange={(event: any) => setName(event.target.value)}
-        value={name}
+        onChange={(event: any) =>
+          setDataToEdit({
+            ...data,
+            data: { ...data.data, name: event.target.value },
+          })
+        }
+        value={data.data.name}
         autoFocus
         ref={textInput}
       />

@@ -2,8 +2,8 @@ import { motion } from "framer-motion";
 import React, { FunctionComponent, useRef } from "react";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
-import { createCurveArrow } from "../../../common/fragments/Arrow";
 import { createDnDItem } from "../../../common/fragments/DnDWrapper";
+import { createCurveArrow } from "../../../common/fragments/svg/Arrow";
 import { createMetaComponentFragment } from "./MetaComponentFragment";
 
 interface MetaComponentDnDBox {

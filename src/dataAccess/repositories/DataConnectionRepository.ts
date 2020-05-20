@@ -1,30 +1,30 @@
-import { DataConnectionTO } from "../access/to/DataConnectionTO";
+import { DataRelationTO } from "../access/to/DataRelationTO";
 import dataStore from "../DataStore";
 import { CheckHelper } from "../util/CheckHelper";
 import { DataAccessUtil } from "../util/DataAccessUtil";
 
 export const DataConnectionRepository = {
-  find(dataConnectionId: number): DataConnectionTO | undefined {
+  find(dataConnectionId: number): DataRelationTO | undefined {
     return dataStore.getDataStore().dataConnections.get(dataConnectionId);
   },
-  findAll(): DataConnectionTO[] {
+  findAll(): DataRelationTO[] {
     return Array.from(dataStore.getDataStore().dataConnections.values());
   },
-  save(dataConnection: DataConnectionTO) {
-    CheckHelper.nullCheck(dataConnection, "dataConnection");
-    let dataConnectionTO: DataConnectionTO;
-    if (dataConnection.id === -1) {
-      dataConnectionTO = {
-        ...dataConnection,
+  save(dataRelation: DataRelationTO) {
+    CheckHelper.nullCheck(dataRelation, "dataConnection");
+    let dataRelationTO: DataRelationTO;
+    if (dataRelation.id === -1) {
+      dataRelationTO = {
+        ...dataRelation,
         id: DataAccessUtil.determineNewId(this.findAll()),
       };
-      console.info("set new component id: " + dataConnectionTO.id);
+      console.info("set new component id: " + dataRelationTO.id);
     } else {
-      dataConnectionTO = { ...dataConnection };
+      dataRelationTO = { ...dataRelation };
     }
     dataStore
       .getDataStore()
-      .dataConnections.set(dataConnectionTO.id!, dataConnectionTO);
-    return dataConnectionTO;
+      .dataConnections.set(dataRelationTO.id!, dataRelationTO);
+    return dataRelationTO;
   },
 };

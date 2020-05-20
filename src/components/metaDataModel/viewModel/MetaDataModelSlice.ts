@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../../app/store";
 import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
-import { DataConnectionTO } from "../../../dataAccess/access/to/DataConnectionTO";
+import { DataRelationCTO } from "../../../dataAccess/access/cto/DataRelationCTO";
 
 interface MetaDataModelState {
   datas: DataCTO[];
-  dataConnections: DataConnectionTO[];
+  dataRelations: DataRelationCTO[];
 }
-const initialState: MetaDataModelState = { datas: [], dataConnections: [] };
+const initialState: MetaDataModelState = { datas: [], dataRelations: [] };
 
 export const metaDataModelSlice = createSlice({
   name: "metaDataModel",
@@ -16,8 +16,8 @@ export const metaDataModelSlice = createSlice({
     loadDatas: (state, action: PayloadAction<DataCTO[]>) => {
       state.datas = action.payload;
     },
-    loadDataConnections: (state, action: PayloadAction<DataConnectionTO[]>) => {
-      state.dataConnections = action.payload;
+    loadDataRelations: (state, action: PayloadAction<DataRelationCTO[]>) => {
+      state.dataRelations = action.payload;
     },
   },
 });
@@ -25,5 +25,5 @@ export const metaDataModelSlice = createSlice({
 export const metaDataModelReducer = metaDataModelSlice.reducer;
 
 export const selectDatas = (state: RootState) => state.metaDataModel.datas;
-export const selectDataConnections = (state: RootState) =>
-  state.metaDataModel.dataConnections;
+export const selectDataRelations = (state: RootState) =>
+  state.metaDataModel.dataRelations;

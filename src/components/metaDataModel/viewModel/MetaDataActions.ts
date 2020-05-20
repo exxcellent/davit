@@ -1,13 +1,13 @@
 import { AppThunk } from "../../../app/store";
 import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
-import { DataConnectionTO } from "../../../dataAccess/access/to/DataConnectionTO";
+import { DataRelationCTO } from "../../../dataAccess/access/cto/DataRelationCTO";
 import { DataAccess } from "../../../dataAccess/DataAccess";
 import { DataAccessResponse } from "../../../dataAccess/DataAccessResponse";
 import { handleError } from "../../common/viewModel/GlobalSlice";
 import { metaDataModelSlice } from "./MetaDataModelSlice";
 
 const { loadDatas } = metaDataModelSlice.actions;
-const { loadDataConnections } = metaDataModelSlice.actions;
+const { loadDataRelations } = metaDataModelSlice.actions;
 
 const findAllDatas = (): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<
@@ -20,12 +20,12 @@ const findAllDatas = (): AppThunk => async (dispatch) => {
   }
 };
 
-const findAllConnections = (): AppThunk => async (dispatch) => {
+const findAllRelations = (): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<
-    DataConnectionTO[]
+    DataRelationCTO[]
   > = await DataAccess.findAllDataConnections();
   if (response.code === 200) {
-    dispatch(loadDataConnections(response.object));
+    dispatch(loadDataRelations(response.object));
   } else {
     dispatch(handleError(response.message));
   }
@@ -57,9 +57,9 @@ const deleteData = (data: DataCTO): AppThunk => async (dispatch) => {
 
 export const MetaDataActions = {
   loadDatas,
-  loadDataConnections,
+  loadDataRelations,
   findAllDatas,
-  findAllConnections,
+  findAllRelations,
   saveData,
   deleteData,
 };

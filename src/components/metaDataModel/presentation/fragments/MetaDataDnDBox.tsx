@@ -1,15 +1,16 @@
 import { motion } from "framer-motion";
 import React, { FunctionComponent, useRef } from "react";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
+import { DataRelationCTO } from "../../../../dataAccess/access/cto/DataRelationCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
-import { DataConnectionTO } from "../../../../dataAccess/access/to/DataConnectionTO";
-import { createCornerArrow } from "../../../common/fragments/Arrow";
 import { createDnDItem } from "../../../common/fragments/DnDWrapper";
+import { createCornerConnection } from "../../../common/fragments/svg/Carv2Path";
 import { createMetaDataFragment } from "./MetaDataFragment";
 
 interface MetaDataDnDBox {
   dataCTOs: DataCTO[];
-  connections: DataConnectionTO[];
+  dataCTOToEdit: DataCTO | null;
+  dataRelations: DataRelationCTO[];
   step?: SequenceStepCTO;
   onSaveCallBack: (dataCTO: DataCTO) => void;
   onDeleteCallBack: (id: number) => void;
@@ -18,10 +19,11 @@ interface MetaDataDnDBox {
 export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
   const {
     dataCTOs,
+    dataCTOToEdit,
     onSaveCallBack,
     onDeleteCallBack,
     step,
-    connections,
+    dataRelations,
   } = props;
 
   const constraintsRef = useRef(null);
@@ -39,16 +41,20 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
   };
 
   const createConnections = () => {
-    return connections.map((connection) => {
-      return createCornerArrow(
-        // return createCurveArrow(
-        dataCTOs.find((data) => connection.data1Fk === data.data.id)
-          ?.geometricalData,
-        dataCTOs.find((data) => connection.data2Fk === data.data.id)
-          ?.geometricalData,
-        connection.id
+    return dataRelations.map((dataRelation) => {
+      return createCornerConnection(
+        dataRelation.dataCTO1.geometricalData,
+        dataRelation.dataCTO2.geometricalData,
+        dataRelation.dataRelationTO,
+        dataRelation.dataRelationTO.id
       );
     });
+  };
+
+  const createDnDMetaDataFragmentIfNotinEdit = (dataCTO: DataCTO) => {
+    if (!(dataCTOToEdit && dataCTOToEdit.data.id === dataCTO.data.id)) {
+      return createDnDMetaDataFragment(dataCTO);
+    }
   };
 
   const createDnDMetaDataFragment = (dataCTO: DataCTO) => {
@@ -67,7 +73,11 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
 
   return (
     <motion.div id="datadndBox" ref={constraintsRef} className="dataModel">
-      {dataCTOs.map(createDnDMetaDataFragment)}
+      {
+        dataCTOs.map(createDnDMetaDataFragmentIfNotinEdit)
+        // .filter((dndBox) => !isNullOrUndefined(dndBox))
+      }
+      {dataCTOToEdit && createDnDMetaDataFragment(dataCTOToEdit)}
       {createConnections()}
     </motion.div>
   );

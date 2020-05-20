@@ -1,12 +1,13 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
+import { DataRelationCTO } from "../../../dataAccess/access/cto/DataRelationCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
-import { DataConnectionTO } from "../../../dataAccess/access/to/DataConnectionTO";
 import { selectStep } from "../../common/viewModel/GlobalSlice";
+import { selectDataToEdit } from "../../controllPanel/viewModel/ControllPanelSlice";
 import { MetaDataActions } from "../viewModel/MetaDataActions";
 import {
-  selectDataConnections,
+  selectDataRelations,
   selectDatas,
 } from "../viewModel/MetaDataModelSlice";
 import { MetaDataDnDBox } from "./fragments/MetaDataDnDBox";
@@ -17,19 +18,23 @@ export const MetaDataModelController: FunctionComponent<MetaDataModelControllerP
   props
 ) => {
   const datas: DataCTO[] = useSelector(selectDatas);
-  const dataConnections: DataConnectionTO[] = useSelector(
-    selectDataConnections
-  );
+  const dataCTOToEdit: DataCTO | null = useSelector(selectDataToEdit);
+  const dataRelations: DataRelationCTO[] = useSelector(selectDataRelations);
   const selectedStep: SequenceStepCTO | undefined = useSelector(selectStep);
   const dispatch = useDispatch();
 
   React.useEffect(() => {
+    console.log("dataCTOToEdit:", dataCTOToEdit);
+  }, [dataCTOToEdit]);
+
+  React.useEffect(() => {
     dispatch(MetaDataActions.findAllDatas());
-    dispatch(MetaDataActions.findAllConnections());
+    dispatch(MetaDataActions.findAllRelations());
   }, [dispatch]);
 
   const saveData = (dataCTO: DataCTO) => {
     dispatch(MetaDataActions.saveData(dataCTO));
+    dispatch(MetaDataActions.findAllRelations());
   };
 
   const deleteDat = (id: number) => {
@@ -48,7 +53,8 @@ export const MetaDataModelController: FunctionComponent<MetaDataModelControllerP
         onSaveCallBack={saveData}
         onDeleteCallBack={deleteDat}
         step={selectedStep}
-        connections={dataConnections}
+        dataRelations={dataRelations}
+        dataCTOToEdit={dataCTOToEdit}
       />
     );
   };

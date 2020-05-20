@@ -1,14 +1,15 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch } from "react-redux";
+import { Button } from "semantic-ui-react";
 import { ComponentCTO } from "../../../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
+import { DataRelationCTO } from "../../../../../dataAccess/access/cto/DataRelationCTO";
 import { Carv2AddButton } from "../../../../common/fragments/buttons/Carv2AddButton";
-import { Carv2Button } from "../../../../common/fragments/buttons/Carv2Button";
-import { Mode } from "../../../../common/viewModel/GlobalSlice";
 import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
 import {
   useGetComponentDropdown,
   useGetDataDropdown,
+  useGetRelationDropdown,
 } from "./common/fragments/Carv2DropDown";
 import { OptionField } from "./common/OptionField";
 import "./ControllPanelEdit.css";
@@ -29,8 +30,8 @@ export const ControllPanelEdit: FunctionComponent<ControllPanelEditProps> = (
     dispatch(ControllPanelActions.setDataToEdit(new DataCTO()));
   };
 
-  const editRelation = () => {
-    dispatch(ControllPanelActions.setMode(Mode.EDIT_DATA_RELATION));
+  const createNewRelation = () => {
+    dispatch(ControllPanelActions.setDataRelationToEdit(new DataRelationCTO()));
   };
 
   const selectComponent = (component: ComponentCTO | undefined) => {
@@ -41,6 +42,10 @@ export const ControllPanelEdit: FunctionComponent<ControllPanelEditProps> = (
     dispatch(ControllPanelActions.setDataToEdit(data || null));
   };
 
+  const selectDataRelation = (dataRelation: DataRelationCTO | undefined) => {
+    dispatch(ControllPanelActions.setDataRelationToEdit(dataRelation || null));
+  };
+
   return (
     <div className="controllPanelEdit">
       <div className="optionFieldSpacer">
@@ -49,20 +54,48 @@ export const ControllPanelEdit: FunctionComponent<ControllPanelEditProps> = (
       <div className="optionFieldSpacer">
         <div className="columnDivider">
           <OptionField label="component">
-            <Carv2AddButton onClick={createNewComponent} />
-            {useGetComponentDropdown(selectComponent, "wrench")}
+            <Button.Group>
+              <Button
+                icon="add"
+                inverted
+                color="orange"
+                onClick={createNewComponent}
+              />
+              <Button id="buttonGroupLabel" disabled inverted color="orange">
+                Component
+              </Button>
+              {useGetComponentDropdown(selectComponent, "wrench")}
+            </Button.Group>
           </OptionField>
         </div>
       </div>
       <div className="optionFieldSpacer">
         <div className="columnDivider">
           <OptionField label="Data">
-            <Carv2AddButton onClick={createNewData} />
-            {useGetDataDropdown(selectData, "wrench")}
-            <Carv2Button
-              icon="arrows alternate horizontal"
-              onClick={editRelation}
-            />
+            <Button.Group>
+              <Button
+                icon="add"
+                inverted
+                color="orange"
+                onClick={createNewData}
+              />
+              <Button id="buttonGroupLabel" disabled inverted color="orange">
+                Data
+              </Button>
+              {useGetDataDropdown(selectData, "wrench")}
+            </Button.Group>
+            <Button.Group>
+              <Button
+                icon="add"
+                inverted
+                color="orange"
+                onClick={createNewRelation}
+              />
+              <Button id="buttonGroupLabel" disabled inverted color="orange">
+                Relation
+              </Button>
+              {useGetRelationDropdown(selectDataRelation, "wrench")}
+            </Button.Group>
           </OptionField>
         </div>
       </div>

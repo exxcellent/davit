@@ -1,8 +1,8 @@
 import { AppThunk } from "../../../app/store";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
+import { DataRelationCTO } from "../../../dataAccess/access/cto/DataRelationCTO";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
-import { DataConnectionTO } from "../../../dataAccess/access/to/DataConnectionTO";
 import { SequenceTO } from "../../../dataAccess/access/to/SequenceTO";
 import { DataAccess } from "../../../dataAccess/DataAccess";
 import { DataAccessResponse } from "../../../dataAccess/DataAccessResponse";
@@ -20,6 +20,7 @@ const {
   loadSequences,
   pickComponentToEdit,
   pickDataToEdit,
+  pickDataRelationToEdit,
 } = ControllPanelSlice.actions;
 const { setSequence } = globalSlice.actions;
 const { nextStep } = globalSlice.actions;
@@ -27,7 +28,7 @@ const { previousStep } = globalSlice.actions;
 const { clearErrors } = globalSlice.actions;
 const { loadComponents } = metaComponentModelSlice.actions;
 const { loadDatas } = metaDataModelSlice.actions;
-const { loadDataConnections } = metaDataModelSlice.actions;
+const { loadDataRelations: loadDataConnections } = metaDataModelSlice.actions;
 
 const findAllSequences = (): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<
@@ -75,7 +76,7 @@ const findAllDatas = (): AppThunk => async (dispatch) => {
 
 const findAllConnections = (): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<
-    DataConnectionTO[]
+    DataRelationCTO[]
   > = await DataAccess.findAllDataConnections();
   if (response.code === 200) {
     dispatch(loadDataConnections(response.object));
@@ -110,11 +111,11 @@ const saveData = (data: DataCTO): AppThunk => async (dispatch) => {
   }
 };
 
-const saveDataConnection = (
-  dataConnection: DataConnectionTO
-): AppThunk => async (dispatch) => {
-  const response: DataAccessResponse<DataConnectionTO> = await DataAccess.saveDataConnection(
-    dataConnection
+const saveDataConnection = (dataRelation: DataRelationCTO): AppThunk => async (
+  dispatch
+) => {
+  const response: DataAccessResponse<DataRelationCTO> = await DataAccess.saveDataRelationCTO(
+    dataRelation
   );
   console.log(response);
   if (response.code === 200) {
@@ -138,6 +139,12 @@ const storefileData = (fileData: string): AppThunk => async (dispatch) => {
   }
 };
 
+const cancelEditData = (): AppThunk => async (dispatch) => {
+  dispatch(setModeWithStorage(Mode.EDIT));
+  dispatch(setDataToEdit(null));
+  // dispatch(findAllDatas());
+};
+
 const setComponentToEdit = (component: ComponentCTO | null): AppThunk => async (
   dispatch
 ) => {
@@ -148,6 +155,13 @@ const setComponentToEdit = (component: ComponentCTO | null): AppThunk => async (
 const setDataToEdit = (data: DataCTO | null): AppThunk => async (dispatch) => {
   dispatch(pickDataToEdit(data));
   dispatch(setModeWithStorage(Mode.EDIT_DATA));
+};
+
+const setDataRelationToEdit = (
+  dataRelation: DataRelationCTO | null
+): AppThunk => async (dispatch) => {
+  dispatch(pickDataRelationToEdit(dataRelation));
+  dispatch(setModeWithStorage(Mode.EDIT_DATA_RELATION));
 };
 
 export const ControllPanelActions = {
@@ -163,4 +177,6 @@ export const ControllPanelActions = {
   setComponentToEdit,
   setDataToEdit,
   saveDataConnection,
+  setDataRelationToEdit,
+  cancelEditData,
 };

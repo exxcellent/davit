@@ -1,6 +1,6 @@
 import { ComponentDataTO } from "../to/ComponentDataTO";
 import { ComponentTO } from "../to/ComponentTO";
-import { DataConnectionTO } from "../to/DataConnectionTO";
+import { DataRelationTO } from "../to/DataRelationTO";
 import { DataTO } from "../to/DataTO";
 import { DesignTO } from "../to/DesignTO";
 import { GeometricalDataTO } from "../to/GeometricalDataTO";
@@ -22,6 +22,6 @@ export class DataStoreCTO {
     public componentDatas = new Map<number, ComponentDataTO>(),
     // Data
     public datas = new Map<number, DataTO>(),
-    public dataConnections = new Map<number, DataConnectionTO>()
+    public dataConnections = new Map<number, DataRelationTO>()
   ) {}
 }

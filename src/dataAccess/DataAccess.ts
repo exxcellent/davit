@@ -1,7 +1,7 @@
 import { ComponentCTO } from "./access/cto/ComponentCTO";
 import { DataCTO } from "./access/cto/DataCTO";
+import { DataRelationCTO } from "./access/cto/DataRelationCTO";
 import { SequenceCTO } from "./access/cto/SequenceCTO";
-import { DataConnectionTO } from "./access/to/DataConnectionTO";
 import { SequenceTO } from "./access/to/SequenceTO";
 import { DataAccessResponse } from "./DataAccessResponse";
 import dataStore from "./DataStore";
@@ -64,15 +64,15 @@ export const DataAccess = {
     );
   },
 
-  findAllDataConnections(): DataAccessResponse<DataConnectionTO[]> {
-    return makeTransactional(DataDataAccessService.findAllDataConnections);
+  findAllDataConnections(): DataAccessResponse<DataRelationCTO[]> {
+    return makeTransactional(DataDataAccessService.findAllDataRelationCTOs);
   },
 
-  saveDataConnection(
-    dataConnection: DataConnectionTO
-  ): DataAccessResponse<DataConnectionTO> {
+  saveDataRelationCTO(
+    dataRelation: DataRelationCTO
+  ): DataAccessResponse<DataRelationCTO> {
     return makeTransactional(() =>
-      DataDataAccessService.saveDataConnection(dataConnection)
+      DataDataAccessService.saveDataRelation(dataRelation)
     );
   },
 };

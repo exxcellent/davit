@@ -2,10 +2,11 @@ import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
-import { DataConnectionTO } from "../../../dataAccess/access/to/DataConnectionTO";
+import { DataRelationCTO } from "../../../dataAccess/access/cto/DataRelationCTO";
 import { Mode, selectMode } from "../../common/viewModel/GlobalSlice";
 import {
   selectComponentToEdit,
+  selectDataRelationToEdit,
   selectDataToEdit,
 } from "../viewModel/ControllPanelSlice";
 import { ControllPanelEdit } from "./fragments/edit/ControllPanelEdit";
@@ -25,6 +26,10 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (
   );
 
   const dataToEdit: DataCTO | null = useSelector(selectDataToEdit);
+
+  const dataRelationToEdit: DataRelationCTO | null = useSelector(
+    selectDataRelationToEdit
+  );
 
   console.log("rendering " + mode);
 
@@ -47,9 +52,13 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (
           return <ControllPanelEdit />;
         }
       case Mode.EDIT_DATA_RELATION:
-        return (
-          <ControllPanelEditRelation dataConnection={new DataConnectionTO()} />
-        );
+        if (dataRelationToEdit) {
+          return (
+            <ControllPanelEditRelation dataRelation={dataRelationToEdit} />
+          );
+        } else {
+          return <ControllPanelEdit />;
+        }
       case Mode.EDIT_SEQUENCE:
         // TODO: muss noch implementiert werden!
         return null;
