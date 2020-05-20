@@ -1,7 +1,7 @@
 .optionField {
   padding: 10px;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
 }
 
 .optionFieldSpacer {
