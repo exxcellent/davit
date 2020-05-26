@@ -10,6 +10,7 @@ import { createMetaDataFragment } from "./MetaDataFragment";
 interface MetaDataDnDBox {
   dataCTOs: DataCTO[];
   dataCTOToEdit: DataCTO | null;
+  dataRelationToEdit: DataRelationCTO | null;
   dataRelations: DataRelationCTO[];
   step?: SequenceStepCTO;
   onSaveCallBack: (dataCTO: DataCTO) => void;
@@ -24,6 +25,7 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
     onDeleteCallBack,
     step,
     dataRelations,
+    dataRelationToEdit,
   } = props;
 
   const constraintsRef = useRef(null);
@@ -42,12 +44,19 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
 
   const createConnections = () => {
     return dataRelations.map((dataRelation) => {
-      return createCornerConnection(
-        dataRelation.dataCTO1.geometricalData,
-        dataRelation.dataCTO2.geometricalData,
-        dataRelation.dataRelationTO,
-        dataRelation.dataRelationTO.id
-      );
+      if (
+        !(
+          dataRelationToEdit &&
+          dataRelationToEdit.dataRelationTO.id ===
+            dataRelation.dataRelationTO.id
+        )
+      )
+        return createCornerConnection(
+          dataRelation.dataCTO1.geometricalData,
+          dataRelation.dataCTO2.geometricalData,
+          dataRelation.dataRelationTO,
+          dataRelation.dataRelationTO.id
+        );
     });
   };
 
@@ -71,6 +80,24 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
     );
   };
 
+  const createDataRelationToEdit = (dataRelation: DataRelationCTO) => {
+    console.log(dataRelation);
+    if (
+      dataRelation.dataCTO1.data.id !== -1 &&
+      dataRelation.dataCTO2.data.id !== -1 &&
+      dataRelation.dataRelationTO.direction1 &&
+      dataRelation.dataRelationTO.direction2
+    ) {
+      return createCornerConnection(
+        dataRelation.dataCTO1.geometricalData,
+        dataRelation.dataCTO2.geometricalData,
+        dataRelation.dataRelationTO,
+        dataRelation.dataRelationTO.id,
+        true
+      );
+    }
+  };
+
   return (
     <motion.div id="datadndBox" ref={constraintsRef} className="dataModel">
       {
@@ -79,6 +106,7 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
       }
       {dataCTOToEdit && createDnDMetaDataFragment(dataCTOToEdit)}
       {createConnections()}
+      {dataRelationToEdit && createDataRelationToEdit(dataRelationToEdit)}
     </motion.div>
   );
 };

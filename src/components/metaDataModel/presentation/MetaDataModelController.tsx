@@ -4,7 +4,11 @@ import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../dataAccess/access/cto/DataRelationCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
 import { selectStep } from "../../common/viewModel/GlobalSlice";
-import { selectDataToEdit } from "../../controllPanel/viewModel/ControllPanelSlice";
+import { ControllPanelActions } from "../../controllPanel/viewModel/ControllPanelActions";
+import {
+  selectDataRelationToEdit,
+  selectDataToEdit,
+} from "../../controllPanel/viewModel/ControllPanelSlice";
 import { MetaDataActions } from "../viewModel/MetaDataActions";
 import {
   selectDataRelations,
@@ -19,13 +23,12 @@ export const MetaDataModelController: FunctionComponent<MetaDataModelControllerP
 ) => {
   const datas: DataCTO[] = useSelector(selectDatas);
   const dataCTOToEdit: DataCTO | null = useSelector(selectDataToEdit);
+  const dataRelationToEdit: DataRelationCTO | null = useSelector(
+    selectDataRelationToEdit
+  );
   const dataRelations: DataRelationCTO[] = useSelector(selectDataRelations);
   const selectedStep: SequenceStepCTO | undefined = useSelector(selectStep);
   const dispatch = useDispatch();
-
-  React.useEffect(() => {
-    console.log("dataCTOToEdit:", dataCTOToEdit);
-  }, [dataCTOToEdit]);
 
   React.useEffect(() => {
     dispatch(MetaDataActions.findAllDatas());
@@ -35,6 +38,22 @@ export const MetaDataModelController: FunctionComponent<MetaDataModelControllerP
   const saveData = (dataCTO: DataCTO) => {
     dispatch(MetaDataActions.saveData(dataCTO));
     dispatch(MetaDataActions.findAllRelations());
+    if (dataCTO.data.id === dataRelationToEdit?.dataCTO1.data.id) {
+      dispatch(
+        ControllPanelActions.setDataRelationToEdit({
+          ...dataRelationToEdit,
+          dataCTO1: dataCTO,
+        })
+      );
+    }
+    if (dataCTO.data.id === dataRelationToEdit?.dataCTO2.data.id) {
+      dispatch(
+        ControllPanelActions.setDataRelationToEdit({
+          ...dataRelationToEdit,
+          dataCTO2: dataCTO,
+        })
+      );
+    }
   };
 
   const deleteDat = (id: number) => {
@@ -55,6 +74,7 @@ export const MetaDataModelController: FunctionComponent<MetaDataModelControllerP
         step={selectedStep}
         dataRelations={dataRelations}
         dataCTOToEdit={dataCTOToEdit}
+        dataRelationToEdit={dataRelationToEdit}
       />
     );
   };
