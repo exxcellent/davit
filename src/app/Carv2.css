@@ -180,6 +180,7 @@
 }
 .carvStrokeDasharray {
   stroke-dasharray: 0.5em;
+  stroke-width: 3px;
 }
 
 .carvArrowMarker {
