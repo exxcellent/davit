@@ -1,11 +1,30 @@
 import { SequenceTO } from "../access/to/SequenceTO";
 import dataStore from "../DataStore";
+import { CheckHelper } from "../util/CheckHelper";
+import { DataAccessUtil } from "../util/DataAccessUtil";
 
 export const SequenceRepository = {
   find(sequenceId: number): SequenceTO | undefined {
     return dataStore.getDataStore().sequences.get(sequenceId);
   },
+
   findAll(): SequenceTO[] {
     return Array.from(dataStore.getDataStore().sequences.values());
+  },
+
+  save(sequence: SequenceTO): SequenceTO {
+    CheckHelper.nullCheck(sequence, "sequence");
+    let sequenceTO: SequenceTO;
+    if (sequence.id === -1) {
+      sequenceTO = {
+        ...sequence,
+        id: DataAccessUtil.determineNewId(this.findAll()),
+      };
+      console.info("set new component id: " + sequenceTO.id);
+    } else {
+      sequenceTO = { ...sequence };
+    }
+    dataStore.getDataStore().sequences.set(sequenceTO.id!, sequenceTO);
+    return sequenceTO;
   },
 };

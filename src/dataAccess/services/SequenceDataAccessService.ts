@@ -19,8 +19,20 @@ export const SequenceDataAccessService = {
     return createSequenceCTO(SequenceRepository.find(sequenceId));
   },
 
-  findAll(): SequenceTO[] {
-    return SequenceRepository.findAll();
+  findAll(): SequenceCTO[] {
+    return SequenceRepository.findAll().map((sequenceTO) =>
+      createSequenceCTO(sequenceTO)
+    );
+  },
+
+  save(sequence: SequenceCTO): SequenceCTO {
+    return createSequenceCTO(SequenceRepository.save(sequence.sequenceTO));
+  },
+
+  saveSequenceStep(sequenceStep: SequenceStepCTO): SequenceStepCTO {
+    return createSequenceStepCTO(
+      SequenceStepRepository.save(sequenceStep.squenceStepTO)
+    );
   },
 };
 

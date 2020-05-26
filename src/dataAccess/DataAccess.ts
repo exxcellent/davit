@@ -2,7 +2,7 @@ import { ComponentCTO } from "./access/cto/ComponentCTO";
 import { DataCTO } from "./access/cto/DataCTO";
 import { DataRelationCTO } from "./access/cto/DataRelationCTO";
 import { SequenceCTO } from "./access/cto/SequenceCTO";
-import { SequenceTO } from "./access/to/SequenceTO";
+import { SequenceStepCTO } from "./access/cto/SequenceStepCTO";
 import { DataAccessResponse } from "./DataAccessResponse";
 import dataStore from "./DataStore";
 import { ComponentDataAccessService } from "./services/ComponentDataAccessService";
@@ -42,12 +42,24 @@ export const DataAccess = {
     );
   },
 
-  findAllSequences(): DataAccessResponse<SequenceTO[]> {
+  findAllSequences(): DataAccessResponse<SequenceCTO[]> {
     return makeTransactional(SequenceDataAccessService.findAll);
   },
 
   findSequence(sequenceId: number): DataAccessResponse<SequenceCTO> {
     return makeTransactional(() => SequenceDataAccessService.find(sequenceId));
+  },
+
+  saveSequenceCTO(sequence: SequenceCTO): DataAccessResponse<SequenceCTO> {
+    return makeTransactional(() => SequenceDataAccessService.save(sequence));
+  },
+
+  saveSequenceStepCTO(
+    sequenceStep: SequenceStepCTO
+  ): DataAccessResponse<SequenceStepCTO> {
+    return makeTransactional(() =>
+      SequenceDataAccessService.saveSequenceStep(sequenceStep)
+    );
   },
 
   findAllDatas(): DataAccessResponse<DataCTO[]> {

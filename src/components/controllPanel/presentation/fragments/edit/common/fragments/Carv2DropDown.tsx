@@ -4,11 +4,13 @@ import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { ComponentCTO } from "../../../../../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../../../../../dataAccess/access/cto/DataRelationCTO";
+import { SequenceCTO } from "../../../../../../../dataAccess/access/cto/SequenceCTO";
 import { selectComponents } from "../../../../../../metaComponentModel/viewModel/MetaComponentModelSlice";
 import {
   selectDataRelations,
   selectDatas,
 } from "../../../../../../metaDataModel/viewModel/MetaDataModelSlice";
+import { selectSequences } from "../../../../../viewModel/ControllPanelSlice";
 
 interface Carv2DropdownProps extends DropdownProps {}
 
@@ -38,14 +40,38 @@ export const useGetComponentDropdown = (
     <Dropdown
       options={components.map(componentToOption)}
       icon={icon}
-      // placeholder="Select Component"
-      // selection
       onChange={(event, data) => selectComponent(Number(data.value))}
-      // labeled
       className="button icon"
       floating
-      // button
       trigger={<React.Fragment />}
+    />
+  );
+};
+
+export const useGetComponentDropdownLable = (
+  onSelect: (component: ComponentCTO | undefined) => void,
+  placeholder?: string
+) => {
+  const components: ComponentCTO[] = useSelector(selectComponents);
+
+  const componentToOption = (component: ComponentCTO): DropdownItemProps => {
+    return {
+      key: component.component.id,
+      value: component.component.id,
+      text: component.component.name,
+    };
+  };
+
+  const selectComponent = (id: number) => {
+    onSelect(components.find((component) => component.component.id === id));
+  };
+
+  return (
+    <Dropdown
+      options={components.map(componentToOption)}
+      selection
+      placeholder={placeholder}
+      onChange={(event, data) => selectComponent(Number(data.value))}
     />
   );
 };
@@ -75,6 +101,41 @@ export const useGetDataDropdown = (
       // placeholder="Select Data"
       // selection
       onChange={(event, data) => selectData(Number(data.value))}
+      // labeled
+      className="button icon"
+      inverted="true"
+      color="orange"
+      floating
+      // button
+      trigger={<React.Fragment />}
+    />
+  );
+};
+
+export const useGetSequenceDropdown = (
+  onSelect: (sequence: SequenceCTO | undefined) => void,
+  icon?: string
+) => {
+  const sequences: SequenceCTO[] = useSelector(selectSequences);
+  const sequenceToOption = (sequence: SequenceCTO): DropdownItemProps => {
+    return {
+      key: sequence.sequenceTO.id,
+      value: sequence.sequenceTO.id,
+      text: sequence.sequenceTO.name,
+    };
+  };
+
+  const selectSequence = (id: number) => {
+    onSelect(sequences.find((sequence) => sequence.sequenceTO.id === id));
+  };
+
+  return (
+    <Dropdown
+      options={sequences.map(sequenceToOption)}
+      icon={icon}
+      // placeholder="Select Data"
+      // selection
+      onChange={(event, sequence) => selectSequence(Number(sequence.value))}
       // labeled
       className="button icon"
       inverted="true"

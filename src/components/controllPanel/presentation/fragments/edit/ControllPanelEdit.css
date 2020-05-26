@@ -13,6 +13,7 @@
 }
 
 .columnDivider {
+  display: flex;
   border-style: solid;
   border-width: 0 0 0 2px;
   border-image: linear-gradient(

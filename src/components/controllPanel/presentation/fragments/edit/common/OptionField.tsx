@@ -2,7 +2,7 @@ import React, { FunctionComponent } from "react";
 import "./OptionField.css";
 
 export interface OptionFieldProps {
-  label: string;
+  label?: string;
 }
 
 export const OptionField: FunctionComponent<OptionFieldProps> = (props) => {
@@ -12,7 +12,7 @@ export const OptionField: FunctionComponent<OptionFieldProps> = (props) => {
     <div>
       <div className="optionField">{children}</div>
       <div style={{ textAlign: "center", color: "white" }}>
-        {label.toUpperCase()}
+        {label && label.toUpperCase()}
       </div>
     </div>
   );

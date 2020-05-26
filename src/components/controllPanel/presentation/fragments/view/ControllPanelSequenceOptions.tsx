@@ -4,7 +4,6 @@ import { Button, Dropdown } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
-import { SequenceTO } from "../../../../../dataAccess/access/to/SequenceTO";
 import {
   selectSequence,
   selectStep,
@@ -18,7 +17,7 @@ export interface ControllPanelSequenceOptionsProps {}
 export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequenceOptionsProps> = (
   props
 ) => {
-  const sequences: SequenceTO[] = useSelector(selectSequences);
+  const sequences: SequenceCTO[] = useSelector(selectSequences);
   const sequence: SequenceCTO | undefined = useSelector(selectSequence);
   const step: SequenceStepCTO | undefined = useSelector(selectStep);
 
@@ -28,11 +27,11 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
     dispatch(ControllPanelActions.findAllSequences());
   }, [dispatch]);
 
-  const sequenceToOption = (sequence: SequenceTO) => {
+  const sequenceToOption = (sequence: SequenceCTO) => {
     return {
-      key: sequence.id,
-      text: sequence.name,
-      value: sequence.id,
+      key: sequence.sequenceTO.id,
+      text: sequence.sequenceTO.name,
+      value: sequence.sequenceTO.id,
     };
   };
 
