@@ -12,6 +12,8 @@ export enum Mode {
   EDIT_DATA = "EDIT_DATA",
   EDIT_DATA_RELATION = "EDIT_DATA_RELATION",
   EDIT_SEQUENCE = "EDIT_SEQUENCE",
+  EDIT_SEQUENCE_STEP = "EDIT_SEQUENCE_STEP",
+  EDIT_SEQUENCE_STEP_COMPONENT_DATA = "EDIT_SEQUENCE_STEP_COMPONENT_DATA",
 }
 
 interface GlobalState {
@@ -85,7 +87,6 @@ export const globalSlice = createSlice({
 export const setModeWithStorage = (mode: Mode): AppThunk => async (
   dispatch
 ) => {
-  console.log("set Mode.");
   localStorage.setItem(MODE_LOCAL_STORAGE, mode);
   dispatch(setMode(mode));
 };
