@@ -1,16 +1,14 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Dropdown, Input } from "semantic-ui-react";
+import { Dropdown, DropdownItemProps, Input } from "semantic-ui-react";
 import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../../../dataAccess/access/cto/DataRelationCTO";
 import {
-  DataRelationTO,
   Direction,
   RelationType,
 } from "../../../../../dataAccess/access/to/DataRelationTO";
 import { Carv2Util } from "../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../common/fragments/buttons/Carv2DeleteButton";
-import { Mode } from "../../../../common/viewModel/GlobalSlice";
 import { selectDatas } from "../../../../metaDataModel/viewModel/MetaDataModelSlice";
 import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
 import { ControllPanelEditSub } from "./common/ControllPanelEditSub";
@@ -28,39 +26,44 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
   const datas: DataCTO[] = useSelector(selectDatas);
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
   const [label, setLabel] = useState<string>("Create Data Relation");
-  const [dataRelationCopy, setDataRelationCopy] = useState<DataRelationTO>(
-    new DataRelationTO()
-  );
+  // const [dataRelationCopy, setDataRelationCopy] = useState<DataRelationTO>(
+  //   new DataRelationTO()
+  // );
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    setDataRelationCopy({ ...dataRelation.dataRelationTO });
+    // setDataRelationCopy({ ...dataRelation.dataRelationTO });
     if (dataRelation.dataRelationTO.id !== -1) {
       setLabel("Edit Data Relation");
     }
   }, [dataRelation]);
 
-  const dispatch = useDispatch();
+  const setRelationToEdit = (dataRelation: DataRelationCTO | null) => {
+    console.info("setRelationToEdit: ", dataRelation);
+    dispatch(ControllPanelActions.setDataRelationToEdit(dataRelation));
+  };
 
   const cancelEditRelation = () => {
-    dispatch(ControllPanelActions.setMode(Mode.EDIT));
+    dispatch(ControllPanelActions.cancelEditDataRelation());
   };
 
   const saveRelation = () => {
     // TODO Felder validieren.
     console.log("saving relation.");
     let copyRelation: DataRelationCTO = Carv2Util.deepCopy(dataRelation);
-    copyRelation.dataRelationTO = dataRelationCopy;
     copyRelation.dataCTO1 = datas.find(
-      (data) => data.data.id === dataRelationCopy.data1Fk
+      (data) => data.data.id === dataRelation.dataRelationTO.data1Fk
     )!;
     copyRelation.dataCTO2 = datas.find(
-      (data) => data.data.id === dataRelationCopy.data2Fk
+      (data) => data.data.id === dataRelation.dataRelationTO.data2Fk
     )!;
-    dispatch(ControllPanelActions.saveDataConnection(copyRelation));
+    dispatch(
+      ControllPanelActions.saveDataConnection(Carv2Util.deepCopy(copyRelation))
+    );
     if (!isCreateAnother) {
-      dispatch(ControllPanelActions.setMode(Mode.EDIT));
+      cancelEditRelation();
     } else {
-      setDataRelationCopy(new DataRelationTO());
+      setRelationToEdit(new DataRelationCTO());
     }
   };
 
@@ -69,7 +72,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
     cancelEditRelation();
   };
 
-  const dataToOption = (data: DataCTO) => {
+  const dataToOption = (data: DataCTO): DropdownItemProps => {
     return {
       key: data.data.id,
       text: data.data.name,
@@ -115,28 +118,41 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
               selection
               options={datas.map(dataToOption)}
               onChange={(event, data) => {
-                setDataRelationCopy({
-                  ...dataRelationCopy,
-                  data1Fk: Number(data.value),
+                setRelationToEdit({
+                  ...dataRelation,
+                  dataRelationTO: {
+                    ...dataRelation.dataRelationTO,
+                    data1Fk: Number(data.value),
+                  },
+                  dataCTO1: datas.find(
+                    (item) => item.data.id === Number(data.value)
+                  )!,
                 });
               }}
               value={
-                dataRelationCopy.data1Fk === -1
+                dataRelation.dataRelationTO.data1Fk === -1
                   ? undefined
-                  : dataRelationCopy.data1Fk
+                  : dataRelation.dataRelationTO.data1Fk
               }
             />
             <Dropdown
               placeholder="Select Type1"
               selection
               options={getTypes()}
-              onChange={(event, data) => {
-                setDataRelationCopy({
-                  ...dataRelationCopy,
-                  type1: RelationType[data.value as RelationType],
-                });
-              }}
-              value={dataRelationCopy.type1}
+              onChange={(event: any) =>
+                setRelationToEdit({
+                  ...dataRelation,
+                  dataRelationTO: {
+                    ...dataRelation.dataRelationTO,
+                    type1: event.target.value,
+                  },
+                })
+              }
+              // setDataRelationCopy({
+              //   ...dataRelationCopy,
+              //   type1: RelationType[data.value as RelationType],
+              // });
+              value={dataRelation.dataRelationTO.type1}
             />
           </div>
           <div
@@ -148,29 +164,35 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
           >
             <Input
               placeholder="Label1"
-              onChange={(event: any) => {
-                setDataRelationCopy({
-                  ...dataRelationCopy,
-                  label1: event.target.value,
-                });
-              }}
+              onChange={(event: any) =>
+                setRelationToEdit({
+                  ...dataRelation,
+                  dataRelationTO: {
+                    ...dataRelation.dataRelationTO,
+                    label1: event.target.value,
+                  },
+                })
+              }
               value={
-                dataRelationCopy.label1 === ""
+                dataRelation.dataRelationTO.label1 === ""
                   ? undefined
-                  : dataRelationCopy.label1
+                  : dataRelation.dataRelationTO.label1
               }
             />
             <Dropdown
               placeholder="Select Direction1"
               selection
               options={getDirections()}
-              onChange={(event, data) => {
-                setDataRelationCopy({
-                  ...dataRelationCopy,
-                  direction1: Direction[data.value as Direction],
-                });
-              }}
-              value={dataRelationCopy.direction1}
+              onChange={(event, data) =>
+                setRelationToEdit({
+                  ...dataRelation,
+                  dataRelationTO: {
+                    ...dataRelation.dataRelationTO,
+                    direction1: Direction[data.value as Direction],
+                  },
+                })
+              }
+              value={dataRelation.dataRelationTO.direction1}
             />
           </div>
         </div>
@@ -198,28 +220,37 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
               selection
               options={datas.map(dataToOption)}
               onChange={(event, data) => {
-                setDataRelationCopy({
-                  ...dataRelationCopy,
-                  data2Fk: Number(data.value),
+                setRelationToEdit({
+                  ...dataRelation,
+                  dataRelationTO: {
+                    ...dataRelation.dataRelationTO,
+                    data2Fk: Number(data.value),
+                  },
+                  dataCTO2: datas.find(
+                    (item) => item.data.id === Number(data.value)
+                  )!,
                 });
               }}
               value={
-                dataRelationCopy.data2Fk === -1
+                dataRelation.dataRelationTO.data2Fk === -1
                   ? undefined
-                  : dataRelationCopy.data2Fk
+                  : dataRelation.dataRelationTO.data2Fk
               }
             />
             <Dropdown
               placeholder="Select Type2"
               selection
               options={getTypes()}
-              onChange={(event, data) => {
-                setDataRelationCopy({
-                  ...dataRelationCopy,
-                  type2: RelationType[data.value as RelationType],
-                });
-              }}
-              value={dataRelationCopy.type2}
+              onChange={(event: any) =>
+                setRelationToEdit({
+                  ...dataRelation,
+                  dataRelationTO: {
+                    ...dataRelation.dataRelationTO,
+                    type2: event.target.value,
+                  },
+                })
+              }
+              value={dataRelation.dataRelationTO.type2}
             />
           </div>
           <div
@@ -231,29 +262,35 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
           >
             <Input
               placeholder="Label2"
-              onChange={(event: any) => {
-                setDataRelationCopy({
-                  ...dataRelationCopy,
-                  label2: event.target.value,
-                });
-              }}
+              onChange={(event: any) =>
+                setRelationToEdit({
+                  ...dataRelation,
+                  dataRelationTO: {
+                    ...dataRelation.dataRelationTO,
+                    label2: event.target.value,
+                  },
+                })
+              }
               value={
-                dataRelationCopy.label2 === ""
+                dataRelation.dataRelationTO.label2 === ""
                   ? undefined
-                  : dataRelationCopy.label2
+                  : dataRelation.dataRelationTO.label2
               }
             />
             <Dropdown
               placeholder="Select Direction2"
               selection
               options={getDirections()}
-              onChange={(event, data) => {
-                setDataRelationCopy({
-                  ...dataRelationCopy,
-                  direction2: Direction[data.value as Direction],
-                });
-              }}
-              value={dataRelationCopy.direction2}
+              onChange={(event, data) =>
+                setRelationToEdit({
+                  ...dataRelation,
+                  dataRelationTO: {
+                    ...dataRelation.dataRelationTO,
+                    direction2: Direction[data.value as Direction],
+                  },
+                })
+              }
+              value={dataRelation.dataRelationTO.direction2}
             />
           </div>
         </div>
