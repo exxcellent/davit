@@ -3,20 +3,13 @@ import { useSelector } from "react-redux";
 import { Table } from "semantic-ui-react";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
-import {
-  selectSequenceStepToEdit,
-  selectSequenceToEdit,
-} from "../../controllPanel/viewModel/ControllPanelSlice";
+import { selectSequenceStepToEdit, selectSequenceToEdit } from "../../controllPanel/viewModel/ControllPanelSlice";
 
 interface SequenceTableModelControllerProps {}
 
-export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (
-  props
-) => {
+export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (props) => {
   const sequence: SequenceCTO | null = useSelector(selectSequenceToEdit);
-  const selectedStep: SequenceStepCTO | null = useSelector(
-    selectSequenceStepToEdit
-  );
+  const selectedStep: SequenceStepCTO | null = useSelector(selectSequenceStepToEdit);
 
   const [selectedId, setSelectedId] = React.useState<number>(-1);
 
@@ -31,18 +24,11 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
 
   const createTableRow = (sequenceStepCTO: SequenceStepCTO) => {
     return (
-      <Table.Row
-        id={sequenceStepCTO.squenceStepTO.id}
-        active={selectedId === sequenceStepCTO.squenceStepTO.id}
-      >
+      <Table.Row id={sequenceStepCTO.squenceStepTO.id} active={selectedId === sequenceStepCTO.squenceStepTO.id}>
         <Table.Cell>{sequenceStepCTO.squenceStepTO.index}</Table.Cell>
         <Table.Cell>{sequenceStepCTO.squenceStepTO.name}</Table.Cell>
-        <Table.Cell>
-          {sequenceStepCTO.componentCTOSource.component.name}
-        </Table.Cell>
-        <Table.Cell>
-          {sequenceStepCTO.componentCTOTarget.component.name}
-        </Table.Cell>
+        <Table.Cell>{sequenceStepCTO.componentCTOSource.component.name}</Table.Cell>
+        <Table.Cell>{sequenceStepCTO.componentCTOTarget.component.name}</Table.Cell>
       </Table.Row>
     );
   };
@@ -69,6 +55,11 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
 
   return (
     <div className="sequenceTable">
+      {sequence && (
+        <div style={{ display: "flex", justifyContent: "center", width: "100%", color: "white" }}>
+          <label>{sequence.sequenceTO.name}</label>
+        </div>
+      )}
       <Table celled inverted>
         <Table.Header>
           <Table.Row>
