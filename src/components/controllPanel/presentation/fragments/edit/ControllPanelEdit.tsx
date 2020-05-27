@@ -1,12 +1,6 @@
-import React, { FunctionComponent, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React, { FunctionComponent } from "react";
 import { Button } from "semantic-ui-react";
-import { ComponentCTO } from "../../../../../dataAccess/access/cto/ComponentCTO";
-import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
-import { DataRelationCTO } from "../../../../../dataAccess/access/cto/DataRelationCTO";
-import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
-import { Mode } from "../../../../common/viewModel/GlobalSlice";
-import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
+import { useControllPanelEditViewModel } from "../../../viewModel/ControllPanelEditViewModel";
 import {
   useGetComponentDropdown,
   useGetDataDropdown,
@@ -19,47 +13,50 @@ import { ControllPanelFileOptions } from "./ControllPanelFileOptions";
 
 export interface ControllPanelEditProps {}
 
-export const ControllPanelEdit: FunctionComponent<ControllPanelEditProps> = (
-  props
-) => {
-  const dispatch = useDispatch();
+export const ControllPanelEdit: FunctionComponent<ControllPanelEditProps> = (props) => {
+  const {
+    createComponent,
+    createData,
+    createRelation,
+    createSequence,
+    selectComponent,
+    selectData,
+    selectRelation,
+    selectSequence,
+  } = useControllPanelEditViewModel();
 
-  useEffect(() => {
-    dispatch(ControllPanelActions.findAllSequences());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(ControllPanelActions.findAllSequences());
+  // }, [dispatch]);
 
-  const createNewComponent = () => {
-    dispatch(ControllPanelActions.setComponentToEdit(new ComponentCTO()));
-  };
+  // const createNewData = () => {
+  //   dispatch(ControllPanelActions.setDataToEdit(new DataCTO()));
+  // };
 
-  const createNewData = () => {
-    dispatch(ControllPanelActions.setDataToEdit(new DataCTO()));
-  };
+  // const createNewRelation = () => {
+  //   dispatch(ControllPanelActions.setDataRelationToEdit(new DataRelationCTO()));
+  // };
 
-  const createNewRelation = () => {
-    dispatch(ControllPanelActions.setDataRelationToEdit(new DataRelationCTO()));
-  };
+  // const createNewSequence = () => {
+  //   dispatch(ControllPanelActions.setSequenceToEdit(new SequenceCTO()));
+  // };
 
-  const createNewSequence = () => {
-    dispatch(ControllPanelActions.setSequenceToEdit(new SequenceCTO()));
-  };
+  // const selectComponent = (component: ComponentCTO | undefined) => {
+  //   dispatch(ControllPanelActions.setComponentToEdit(component || null));
+  // };
 
-  const selectComponent = (component: ComponentCTO | undefined) => {
-    dispatch(ControllPanelActions.setComponentToEdit(component || null));
-  };
+  // const selectData = (data: DataCTO | undefined) => {
+  //   dispatch(ControllPanelActions.setDataToEdit(data || null));
+  // };
 
-  const selectData = (data: DataCTO | undefined) => {
-    dispatch(ControllPanelActions.setDataToEdit(data || null));
-  };
+  // const selectSequence = (sequence: SequenceCTO | undefined) => {
+  //   dispatch(ControllPanelActions.setSequenceToEdit(sequence || null));
+  //   dispatch(ControllPanelActions.setMode(Mode.EDIT_SEQUENCE));
+  // };
 
-  const selectSequence = (sequence: SequenceCTO | undefined) => {
-    dispatch(ControllPanelActions.setSequenceToEdit(sequence || null));
-    dispatch(ControllPanelActions.setMode(Mode.EDIT_SEQUENCE));
-  };
-
-  const selectDataRelation = (dataRelation: DataRelationCTO | undefined) => {
-    dispatch(ControllPanelActions.setDataRelationToEdit(dataRelation || null));
-  };
+  // const selectDataRelation = (dataRelation: DataRelationCTO | undefined) => {
+  //   dispatch(ControllPanelActions.setDataRelationToEdit(dataRelation || null));
+  // };
 
   return (
     <div className="controllPanelEdit">
@@ -69,12 +66,7 @@ export const ControllPanelEdit: FunctionComponent<ControllPanelEditProps> = (
       <div className="optionFieldSpacer columnDivider">
         <OptionField label="component">
           <Button.Group>
-            <Button
-              icon="add"
-              inverted
-              color="orange"
-              onClick={createNewComponent}
-            />
+            <Button icon="add" inverted color="orange" onClick={createComponent} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Component
             </Button>
@@ -85,40 +77,25 @@ export const ControllPanelEdit: FunctionComponent<ControllPanelEditProps> = (
       <div className="optionFieldSpacer columnDivider">
         <OptionField label="Data">
           <Button.Group>
-            <Button
-              icon="add"
-              inverted
-              color="orange"
-              onClick={createNewData}
-            />
+            <Button icon="add" inverted color="orange" onClick={createData} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Data
             </Button>
             {useGetDataDropdown(selectData, "wrench")}
           </Button.Group>
           <Button.Group>
-            <Button
-              icon="add"
-              inverted
-              color="orange"
-              onClick={createNewRelation}
-            />
+            <Button icon="add" inverted color="orange" onClick={createRelation} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Relation
             </Button>
-            {useGetRelationDropdown(selectDataRelation, "wrench")}
+            {useGetRelationDropdown(selectRelation, "wrench")}
           </Button.Group>
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
         <OptionField label="sequence">
           <Button.Group>
-            <Button
-              icon="add"
-              inverted
-              color="orange"
-              onClick={createNewSequence}
-            />
+            <Button icon="add" inverted color="orange" onClick={createSequence} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Sequence
             </Button>
