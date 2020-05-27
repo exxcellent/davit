@@ -16,11 +16,13 @@ export const SequenceSlice = createSlice({
   name: "sequence",
   initialState: getInitialState,
   reducers: {
-    setCurrentSequence: (state, action: PayloadAction<SequenceCTO>) => {
-      action.payload.sequenceStepCTOs.sort((step1, step2) => step1.squenceStepTO.index - step2.squenceStepTO.index);
+    setCurrentSequence: (state, action: PayloadAction<SequenceCTO | null>) => {
+      if (action.payload !== null) {
+        action.payload.sequenceStepCTOs.sort((step1, step2) => step1.squenceStepTO.index - step2.squenceStepTO.index);
+      }
       state.currentSequence = action.payload;
     },
-    setCurrentStepIndex: (state, action: PayloadAction<number>) => {
+    setCurrentStepIndex: (state, action: PayloadAction<number | null>) => {
       state.currentStepIndex = action.payload;
       // state.currentSequence?.sequenceStepCTOs.find((step) => step.squenceStepTO.index === action.payload) || null;
     },
