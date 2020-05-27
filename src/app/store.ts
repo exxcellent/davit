@@ -3,6 +3,7 @@ import { globalReducer } from "../components/common/viewModel/GlobalSlice";
 import { controllPanelReducer } from "../components/controllPanel/viewModel/ControllPanelSlice";
 import { metaComponentModelReducer } from "../components/metaComponentModel/viewModel/MetaComponentModelSlice";
 import { metaDataModelReducer } from "../components/metaDataModel/viewModel/MetaDataModelSlice";
+import { SequenceReducer } from "../viewModel/SequenceSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     metaDataModel: metaDataModelReducer,
     controllPannel: controllPanelReducer,
     global: globalReducer,
+    sequenceModel: SequenceReducer,
   },
 });
 
