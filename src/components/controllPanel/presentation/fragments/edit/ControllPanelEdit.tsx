@@ -5,6 +5,7 @@ import { ComponentCTO } from "../../../../../dataAccess/access/cto/ComponentCTO"
 import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../../../dataAccess/access/cto/DataRelationCTO";
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
+import { Mode } from "../../../../common/viewModel/GlobalSlice";
 import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
 import {
   useGetComponentDropdown,
@@ -53,6 +54,7 @@ export const ControllPanelEdit: FunctionComponent<ControllPanelEditProps> = (
 
   const selectSequence = (sequence: SequenceCTO | undefined) => {
     dispatch(ControllPanelActions.setSequenceToEdit(sequence || null));
+    dispatch(ControllPanelActions.setMode(Mode.EDIT_SEQUENCE));
   };
 
   const selectDataRelation = (dataRelation: DataRelationCTO | undefined) => {

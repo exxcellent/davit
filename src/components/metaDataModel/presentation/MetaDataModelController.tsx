@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../dataAccess/access/cto/DataRelationCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
-import { selectStep } from "../../common/viewModel/GlobalSlice";
 import { ControllPanelActions } from "../../controllPanel/viewModel/ControllPanelActions";
 import {
   selectDataRelationToEdit,
   selectDataToEdit,
+  selectSequenceStepToEdit,
 } from "../../controllPanel/viewModel/ControllPanelSlice";
 import { MetaDataActions } from "../viewModel/MetaDataActions";
 import {
@@ -27,7 +27,9 @@ export const MetaDataModelController: FunctionComponent<MetaDataModelControllerP
     selectDataRelationToEdit
   );
   const dataRelations: DataRelationCTO[] = useSelector(selectDataRelations);
-  const selectedStep: SequenceStepCTO | undefined = useSelector(selectStep);
+  const selectedStep: SequenceStepCTO | null = useSelector(
+    selectSequenceStepToEdit
+  );
   const dispatch = useDispatch();
 
   React.useEffect(() => {

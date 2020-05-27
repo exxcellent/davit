@@ -2,8 +2,10 @@ import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
-import { selectStep } from "../../common/viewModel/GlobalSlice";
-import { selectComponentToEdit } from "../../controllPanel/viewModel/ControllPanelSlice";
+import {
+  selectComponentToEdit,
+  selectSequenceStepToEdit,
+} from "../../controllPanel/viewModel/ControllPanelSlice";
 import { MetaComponentActions } from "../viewModel/MetaComponentActions";
 import { selectComponents } from "../viewModel/MetaComponentModelSlice";
 import { MetaComponentDnDBox } from "./fragments/MetaComponentDnDBox";
@@ -17,7 +19,9 @@ export const MetaComponentModelController: FunctionComponent<MetaComponentModelC
   const componentCTOToEdit: ComponentCTO | null = useSelector(
     selectComponentToEdit
   );
-  const selectedStep: SequenceStepCTO | undefined = useSelector(selectStep);
+  const selectedStep: SequenceStepCTO | null = useSelector(
+    selectSequenceStepToEdit
+  );
   const dispatch = useDispatch();
 
   React.useEffect(() => {

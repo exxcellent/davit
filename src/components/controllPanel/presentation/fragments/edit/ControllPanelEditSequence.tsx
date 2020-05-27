@@ -8,7 +8,6 @@ import { Carv2DeleteButton } from "../../../../common/fragments/buttons/Carv2Del
 import { Mode } from "../../../../common/viewModel/GlobalSlice";
 import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
 import { ControllPanelEditSub } from "./common/ControllPanelEditSub";
-import { useGetDataDropdown } from "./common/fragments/Carv2DropDown";
 import { Carv2LabelTextfield } from "./common/fragments/Carv2LabelTextfield";
 import { Carv2SubmitCancel } from "./common/fragments/Carv2SubmitCancel";
 import "./ControllPanelEdit.css";
@@ -28,10 +27,11 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(ControllPanelActions.setSequenceToEdit);
     if (sequence.sequenceTO.id !== -1) {
       setLabel("Edit Sequence");
     }
-  }, [sequence]);
+  }, [sequence, dispatch]);
 
   const setSequenceToEdit = (sequenceToEdit: SequenceCTO | null) => {
     dispatch(ControllPanelActions.setSequenceToEdit(sequenceToEdit));
@@ -57,12 +57,6 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
     dispatch(ControllPanelActions.setMode(Mode.EDIT_SEQUENCE_STEP));
   };
 
-  //   const deleteData = () => {
-  //     dispatch(ControllPanelActions.setDataToEdit(null));
-  //     dispatch(MetaDataActions.deleteData(data));
-  //     cancelEditData();
-  //   };
-
   return (
     <ControllPanelEditSub label={label}>
       <Carv2LabelTextfield
@@ -84,7 +78,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
           <Button id="buttonGroupLabel" disabled inverted color="orange">
             Step
           </Button>
-          {useGetDataDropdown(() => {}, "wrench")}
+          {/* {useGetDataDropdown(() => {}, "wrench")} */}
         </Button.Group>
       </div>
       <div className="columnDivider" style={{ display: "flex" }}>

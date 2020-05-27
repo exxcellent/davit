@@ -9,7 +9,7 @@ import { createMetaComponentFragment } from "./MetaComponentFragment";
 interface MetaComponentDnDBox {
   componentCTOs: ComponentCTO[];
   componentCTOToEdit: ComponentCTO | null;
-  step?: SequenceStepCTO;
+  step: SequenceStepCTO | null;
   onSaveCallBack: (componentCTO: ComponentCTO) => void;
   onDeleteCallBack: (id: number) => void;
 }
@@ -77,11 +77,11 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (
         createCurveArrow(
           componentCTOs.find(
             (componentCTO) =>
-              componentCTO.component.id === step.squenceStepTO.sourceComponentFk
+              componentCTO.component.id === step.componentCTOSource.component.id
           )?.geometricalData,
           componentCTOs.find(
             (componentCTO) =>
-              componentCTO.component.id === step.squenceStepTO.targetComponentFk
+              componentCTO.component.id === step.componentCTOTarget.component.id
           )?.geometricalData
         )}
     </motion.div>

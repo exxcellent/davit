@@ -7,7 +7,7 @@ export interface DataFragmentProps {
   name: string;
 }
 
-const getColorForComponentDataState = (state: ComponentDataState) => {
+export const getColorForComponentDataState = (state: ComponentDataState) => {
   switch (state) {
     case ComponentDataState.NEW:
       return "#6CBF8F";

@@ -4,12 +4,12 @@ import { Button, Dropdown } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
-import {
-  selectSequence,
-  selectStep,
-} from "../../../../common/viewModel/GlobalSlice";
 import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
-import { selectSequences } from "../../../viewModel/ControllPanelSlice";
+import {
+  selectSequences,
+  selectSequenceStepToEdit,
+  selectSequenceToEdit,
+} from "../../../viewModel/ControllPanelSlice";
 import "./ControllPanelSequenceOptions.css";
 
 export interface ControllPanelSequenceOptionsProps {}
@@ -18,8 +18,8 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
   props
 ) => {
   const sequences: SequenceCTO[] = useSelector(selectSequences);
-  const sequence: SequenceCTO | undefined = useSelector(selectSequence);
-  const step: SequenceStepCTO | undefined = useSelector(selectStep);
+  const sequence: SequenceCTO | null = useSelector(selectSequenceToEdit);
+  const step: SequenceStepCTO | null = useSelector(selectSequenceStepToEdit);
 
   const dispatch = useDispatch();
 
@@ -56,7 +56,8 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
             content="BACK"
             labelPosition="left"
             disabled={isNullOrUndefined(sequence)}
-            onClick={() => dispatch(ControllPanelActions.previousStep())}
+            // previousStep method neu schreiben.
+            // onClick={() => dispatch(ControllPanelActions.previousStep())}
           />
           <Button
             inverted
@@ -71,7 +72,8 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
             content="NEXT"
             labelPosition="right"
             disabled={isNullOrUndefined(sequence)}
-            onClick={() => dispatch(ControllPanelActions.nextStep())}
+            // nextStep method neu schreiben.
+            // onClick={() => dispatch(ControllPanelActions.nextStep())}
           />
         </Button.Group>
       </div>

@@ -12,7 +12,7 @@ interface MetaDataDnDBox {
   dataCTOToEdit: DataCTO | null;
   dataRelationToEdit: DataRelationCTO | null;
   dataRelations: DataRelationCTO[];
-  step?: SequenceStepCTO;
+  step: SequenceStepCTO | null;
   onSaveCallBack: (dataCTO: DataCTO) => void;
   onDeleteCallBack: (id: number) => void;
 }

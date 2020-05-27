@@ -1,15 +1,22 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Dropdown, DropdownItemProps } from "semantic-ui-react";
+import { Button, Dropdown, DropdownItemProps } from "semantic-ui-react";
 import { ComponentCTO } from "../../../../../dataAccess/access/cto/ComponentCTO";
+import { ComponentDataCTO } from "../../../../../dataAccess/access/cto/ComponentDataCTO";
 import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
-import { Carv2DeleteButton } from "../../../../common/fragments/buttons/Carv2DeleteButton";
+import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
+import { Carv2Util } from "../../../../../utils/Carv2Util";
 import { Mode } from "../../../../common/viewModel/GlobalSlice";
+import { getColorForComponentDataState } from "../../../../metaComponentModel/presentation/fragments/DataFragment";
 import { selectDatas } from "../../../../metaDataModel/viewModel/MetaDataModelSlice";
 import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
+import {
+  selectSequenceStepToEdit,
+  selectSequenceToEdit,
+} from "../../../viewModel/ControllPanelSlice";
 import { ControllPanelEditSub } from "./common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "./common/fragments/Carv2LabelTextfield";
-import { Carv2SubmitCancel } from "./common/fragments/Carv2SubmitCancel";
 import "./ControllPanelEdit.css";
 
 export interface ControllPanelEditComponentDataProps {
@@ -21,13 +28,43 @@ export const ControllPanelEditComponentData: FunctionComponent<ControllPanelEdit
 ) => {
   const { component } = props;
 
-  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
   const [label, setLabel] = useState<string>("Add Data");
-  // const textInput = useRef<Input>(null);
   const dispatch = useDispatch();
   const datas: DataCTO[] = useSelector(selectDatas);
+  const sequenceStep: SequenceStepCTO | null = useSelector(
+    selectSequenceStepToEdit
+  );
+  const sequence: SequenceCTO | null = useSelector(selectSequenceToEdit);
 
-  useEffect(() => {}, [component]);
+  const [selectedDatas, setSelectedDatas] = useState<number[]>([]);
+
+  useEffect(() => {
+    if (component !== null) {
+      const selection = sequenceStep!.componentDataCTOs
+        .filter(
+          (componentData) =>
+            componentData.componentTO.id === component?.component.id
+        )
+        .map((componentData) => componentData.dataTO.id);
+      setSelectedDatas(selection);
+    }
+  }, [component, sequenceStep, setSelectedDatas]);
+
+  const addComponentDataToSequenceStep = (componentData: ComponentDataCTO) => {
+    let copySequenceStep: SequenceStepCTO = Carv2Util.deepCopy(sequenceStep);
+    copySequenceStep.componentDataCTOs.push(componentData);
+    dispatch(ControllPanelActions.setSequenceStepToEdit(copySequenceStep));
+  };
+
+  const updateSequence = (sequenceStep: SequenceStepCTO) => {
+    let copySequence: SequenceCTO = Carv2Util.deepCopy(sequence);
+    copySequence.sequenceStepCTOs.splice(
+      sequenceStep.squenceStepTO.index,
+      1,
+      sequenceStep
+    );
+    dispatch(ControllPanelActions.setSequenceToEdit(copySequence));
+  };
 
   const dataToOption = (data: DataCTO): DropdownItemProps => {
     return {
@@ -37,12 +74,50 @@ export const ControllPanelEditComponentData: FunctionComponent<ControllPanelEdit
     };
   };
 
-  const selectData = (id: number) => {
-    // onSelect(datas.find((data) => data.data.id === id));
+  const closeEditComponentData = () => {
+    dispatch(ControllPanelActions.setMode(Mode.EDIT_SEQUENCE_STEP));
   };
 
-  const cancelEditComponentData = () => {
-    dispatch(ControllPanelActions.setMode(Mode.EDIT_SEQUENCE_STEP));
+  const setComponentData = (dataId: number) => {
+    console.info("Data id: ", dataId);
+    if (sequenceStep !== null) {
+      // suche componentdata wenn sie existiert.
+      let componentData:
+        | ComponentDataCTO
+        | undefined = sequenceStep.componentDataCTOs.find(
+        (componentData) =>
+          componentData.componentTO.id === component?.component.id &&
+          componentData.dataTO.id === dataId
+      );
+      if (componentData === undefined) {
+        // wenn sie nicht existert erstelle sie.
+        componentData = new ComponentDataCTO();
+        componentData.componentTO = component?.component!;
+        console.info("DataCTOs: ", datas);
+        componentData.dataTO = datas.find(
+          (data) => data.data.id === dataId
+        )?.data!;
+        console.warn("componentdata.dataTO:", componentData.dataTO);
+        componentData.componentDataTO.componentFk =
+          componentData.componentTO.id;
+        componentData.componentDataTO.dataFk = componentData.dataTO.id;
+        componentData.componentDataTO.sequenceStepFk =
+          sequenceStep.squenceStepTO.id;
+      }
+      console.info("componentData: ", componentData);
+      // componentdata zum sequence step hinzufügen.
+      addComponentDataToSequenceStep(componentData);
+      // step in der sequence updaten.
+      updateSequence(sequenceStep);
+      console.info("Sequence after add componetdata", sequence);
+      // bau das label.
+      return {
+        color: getColorForComponentDataState(
+          componentData.componentDataTO.componentDataState
+        ),
+        content: componentData.dataTO.name,
+      };
+    }
   };
 
   return (
@@ -59,17 +134,18 @@ export const ControllPanelEditComponentData: FunctionComponent<ControllPanelEdit
           search
           selection
           options={datas.map(dataToOption)}
+          onChange={(event, data) => {
+            if (data.value !== undefined) {
+              (data.value as number[]).map(setComponentData);
+            }
+          }}
+          value={selectedDatas}
+          // renderLabel={dataLabel}
         />
       </div>
+      <div className="columnDivider controllPanelEditChild"></div>
       <div className="columnDivider controllPanelEditChild">
-        <Carv2SubmitCancel
-          onSubmit={() => {}}
-          onCancel={cancelEditComponentData}
-          onChange={() => setIsCreateAnother(!isCreateAnother)}
-        />
-      </div>
-      <div className="columnDivider controllPanelEditChild">
-        <Carv2DeleteButton onClick={() => {}} />
+        <Button onClick={closeEditComponentData}>OK</Button>
       </div>
     </ControllPanelEditSub>
   );

@@ -39,7 +39,7 @@ export const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (
 };
 
 const stepToComponentFragmentProps = (
-  step: SequenceStepCTO | undefined,
+  step: SequenceStepCTO | null,
   dataId: number
 ): ComponentFragmentProps[] => {
   const componentData: ComponentDataCTO[] = step
@@ -58,7 +58,7 @@ const stepToComponentFragmentProps = (
 export const createMetaDataFragment = (
   dataCTO: DataCTO,
   onDeleteCallBack: (componentId: number) => void,
-  step?: SequenceStepCTO
+  step: SequenceStepCTO | null
 ) => {
   return (
     <MetaDataFragment

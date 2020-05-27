@@ -3,21 +3,27 @@ import { useSelector } from "react-redux";
 import { Table } from "semantic-ui-react";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
-import { selectSequence, selectStep } from "../../common/viewModel/GlobalSlice";
+import {
+  selectSequenceStepToEdit,
+  selectSequenceToEdit,
+} from "../../controllPanel/viewModel/ControllPanelSlice";
 
 interface SequenceTableModelControllerProps {}
 
 export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (
   props
 ) => {
-  const sequence: SequenceCTO | undefined = useSelector(selectSequence);
-  const selectedStep: SequenceStepCTO | undefined = useSelector(selectStep);
+  const sequence: SequenceCTO | null = useSelector(selectSequenceToEdit);
+  const selectedStep: SequenceStepCTO | null = useSelector(
+    selectSequenceStepToEdit
+  );
 
   const [selectedId, setSelectedId] = React.useState<number>(-1);
 
   useEffect(() => {
-    if (selectedStep !== undefined) {
+    if (selectedStep !== null) {
       setSelectedId(selectedStep.squenceStepTO.id);
+      console.warn("useEffect Tabel");
     } else {
       setSelectedId(-1);
     }
@@ -29,7 +35,7 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
         id={sequenceStepCTO.squenceStepTO.id}
         active={selectedId === sequenceStepCTO.squenceStepTO.id}
       >
-        <Table.Cell>{sequenceStepCTO.squenceStepTO.id}</Table.Cell>
+        <Table.Cell>{sequenceStepCTO.squenceStepTO.index}</Table.Cell>
         <Table.Cell>{sequenceStepCTO.squenceStepTO.name}</Table.Cell>
         <Table.Cell>
           {sequenceStepCTO.componentCTOSource.component.name}
@@ -52,8 +58,8 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
     );
   };
 
-  const createTable = (sequence: SequenceCTO | undefined) => {
-    if (sequence !== undefined) {
+  const createTable = (sequence: SequenceCTO | null) => {
+    if (sequence !== null) {
       return sequence.sequenceStepCTOs.map(createTableRow);
     } else {
       const placeholder: number[] = Array.from(Array(10).keys());
