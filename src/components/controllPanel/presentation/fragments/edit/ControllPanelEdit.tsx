@@ -25,39 +25,6 @@ export const ControllPanelEdit: FunctionComponent<ControllPanelEditProps> = (pro
     selectSequence,
   } = useControllPanelEditViewModel();
 
-  // useEffect(() => {
-  //   dispatch(ControllPanelActions.findAllSequences());
-  // }, [dispatch]);
-
-  // const createNewData = () => {
-  //   dispatch(ControllPanelActions.setDataToEdit(new DataCTO()));
-  // };
-
-  // const createNewRelation = () => {
-  //   dispatch(ControllPanelActions.setDataRelationToEdit(new DataRelationCTO()));
-  // };
-
-  // const createNewSequence = () => {
-  //   dispatch(ControllPanelActions.setSequenceToEdit(new SequenceCTO()));
-  // };
-
-  // const selectComponent = (component: ComponentCTO | undefined) => {
-  //   dispatch(ControllPanelActions.setComponentToEdit(component || null));
-  // };
-
-  // const selectData = (data: DataCTO | undefined) => {
-  //   dispatch(ControllPanelActions.setDataToEdit(data || null));
-  // };
-
-  // const selectSequence = (sequence: SequenceCTO | undefined) => {
-  //   dispatch(ControllPanelActions.setSequenceToEdit(sequence || null));
-  //   dispatch(ControllPanelActions.setMode(Mode.EDIT_SEQUENCE));
-  // };
-
-  // const selectDataRelation = (dataRelation: DataRelationCTO | undefined) => {
-  //   dispatch(ControllPanelActions.setDataRelationToEdit(dataRelation || null));
-  // };
-
   return (
     <div className="controllPanelEdit">
       <div className="optionFieldSpacer">

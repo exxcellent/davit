@@ -2,28 +2,22 @@ import { AppThunk } from "../../../app/store";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { DataAccess } from "../../../dataAccess/DataAccess";
 import { DataAccessResponse } from "../../../dataAccess/DataAccessResponse";
+import { ComponentSlice } from "../../../viewModel/ComponentSlice";
 import { handleError } from "../../common/viewModel/GlobalSlice";
-import { metaComponentModelSlice } from "./MetaComponentModelSlice";
 
-const { loadComponents } = metaComponentModelSlice.actions;
+const { setComponents } = ComponentSlice.actions;
 
 const findAllComponents = (): AppThunk => async (dispatch) => {
-  const response: DataAccessResponse<
-    ComponentCTO[]
-  > = await DataAccess.findAllComponents();
+  const response: DataAccessResponse<ComponentCTO[]> = await DataAccess.findAllComponents();
   if (response.code === 200) {
-    dispatch(loadComponents(response.object));
+    dispatch(setComponents(response.object));
   } else {
     dispatch(handleError(response.message));
   }
 };
 
-const saveComponent = (component: ComponentCTO): AppThunk => async (
-  dispatch
-) => {
-  const response: DataAccessResponse<ComponentCTO> = await DataAccess.saveComponentCTO(
-    component
-  );
+const saveComponent = (component: ComponentCTO): AppThunk => async (dispatch) => {
+  const response: DataAccessResponse<ComponentCTO> = await DataAccess.saveComponentCTO(component);
   console.log(response);
   if (response.code === 200) {
     dispatch(findAllComponents());
@@ -32,12 +26,8 @@ const saveComponent = (component: ComponentCTO): AppThunk => async (
   }
 };
 
-const deleteComponent = (component: ComponentCTO): AppThunk => async (
-  dispatch
-) => {
-  const response: DataAccessResponse<ComponentCTO> = await DataAccess.deleteComponentCTO(
-    component
-  );
+const deleteComponent = (component: ComponentCTO): AppThunk => async (dispatch) => {
+  const response: DataAccessResponse<ComponentCTO> = await DataAccess.deleteComponentCTO(component);
   console.log(response);
   if (response.code === 200) {
     dispatch(findAllComponents());

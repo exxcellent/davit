@@ -5,11 +5,8 @@ import { ComponentCTO } from "../../../../../../../dataAccess/access/cto/Compone
 import { DataCTO } from "../../../../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../../../../../dataAccess/access/cto/DataRelationCTO";
 import { SequenceCTO } from "../../../../../../../dataAccess/access/cto/SequenceCTO";
-import { selectComponents } from "../../../../../../metaComponentModel/viewModel/MetaComponentModelSlice";
-import {
-  selectDataRelations,
-  selectDatas,
-} from "../../../../../../metaDataModel/viewModel/MetaDataModelSlice";
+import { selectComponents } from "../../../../../../../viewModel/ComponentSlice";
+import { selectDataRelations, selectDatas } from "../../../../../../metaDataModel/viewModel/MetaDataModelSlice";
 import { selectSequences } from "../../../../../viewModel/ControllPanelSlice";
 
 interface Carv2DropdownProps extends DropdownProps {}
@@ -18,10 +15,7 @@ export const Carv2Dropdown: FunctionComponent<Carv2DropdownProps> = (props) => {
   return <Dropdown {...props.other} />;
 };
 
-export const useGetComponentDropdown = (
-  onSelect: (component: ComponentCTO | undefined) => void,
-  icon?: string
-) => {
+export const useGetComponentDropdown = (onSelect: (component: ComponentCTO | undefined) => void, icon?: string) => {
   const components: ComponentCTO[] = useSelector(selectComponents);
 
   const componentToOption = (component: ComponentCTO): DropdownItemProps => {
@@ -76,10 +70,7 @@ export const useGetComponentDropdownLable = (
   );
 };
 
-export const useGetDataDropdown = (
-  onSelect: (data: DataCTO | undefined) => void,
-  icon?: string
-) => {
+export const useGetDataDropdown = (onSelect: (data: DataCTO | undefined) => void, icon?: string) => {
   const datas: DataCTO[] = useSelector(selectDatas);
 
   const dataToOption = (data: DataCTO): DropdownItemProps => {
@@ -112,10 +103,7 @@ export const useGetDataDropdown = (
   );
 };
 
-export const useGetSequenceDropdown = (
-  onSelect: (sequence: SequenceCTO | undefined) => void,
-  icon?: string
-) => {
+export const useGetSequenceDropdown = (onSelect: (sequence: SequenceCTO | undefined) => void, icon?: string) => {
   const sequences: SequenceCTO[] = useSelector(selectSequences);
   const sequenceToOption = (sequence: SequenceCTO): DropdownItemProps => {
     return {
@@ -147,15 +135,11 @@ export const useGetSequenceDropdown = (
   );
 };
 
-export const useGetRelationDropdown = (
-  onSelect: (relation: DataRelationCTO | undefined) => void,
-  icon?: string
-) => {
+export const useGetRelationDropdown = (onSelect: (relation: DataRelationCTO | undefined) => void, icon?: string) => {
   const relations: DataRelationCTO[] = useSelector(selectDataRelations);
 
   const relationToOption = (relation: DataRelationCTO): DropdownItemProps => {
-    const text: string =
-      relation.dataCTO1.data.name + " - " + relation.dataCTO2.data.name;
+    const text: string = relation.dataCTO1.data.name + " - " + relation.dataCTO2.data.name;
     return {
       key: relation.dataRelationTO.id,
       value: relation.dataRelationTO.id,

@@ -4,6 +4,7 @@ import { Button, Input } from "semantic-ui-react";
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { Carv2Util } from "../../../../../utils/Carv2Util";
+import { SequenceSlice } from "../../../../../viewModel/SequenceSlice";
 import { Carv2DeleteButton } from "../../../../common/fragments/buttons/Carv2DeleteButton";
 import { Mode } from "../../../../common/viewModel/GlobalSlice";
 import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
@@ -16,10 +17,9 @@ export interface ControllPanelEditSequenceProps {
   sequence: SequenceCTO;
 }
 
-export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSequenceProps> = (
-  props
-) => {
+export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSequenceProps> = (props) => {
   const { sequence } = props;
+  const { setCurrentSequence } = SequenceSlice.actions;
 
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
   const [label, setLabel] = useState<string>("Create Sequence");
@@ -27,15 +27,11 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(ControllPanelActions.setSequenceToEdit);
+    dispatch(setCurrentSequence(sequence));
     if (sequence.sequenceTO.id !== -1) {
       setLabel("Edit Sequence");
     }
-  }, [sequence, dispatch]);
-
-  const setSequenceToEdit = (sequenceToEdit: SequenceCTO | null) => {
-    dispatch(ControllPanelActions.setSequenceToEdit(sequenceToEdit));
-  };
+  }, [sequence, dispatch, setCurrentSequence]);
 
   const saveSequenceChanges = () => {
     dispatch(ControllPanelActions.saveSequence(Carv2Util.deepCopy(sequence)));
@@ -49,6 +45,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
   };
 
   const cancelEditSequence = () => {
+    dispatch(setCurrentSequence(null));
     dispatch(ControllPanelActions.cancelEditSequence());
   };
 
@@ -63,10 +60,10 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
         label="Name:"
         placeholder="Sequence Name"
         onChange={(event: any) => {
-          setSequenceToEdit({
-            ...sequence,
-            sequenceTO: { ...sequence.sequenceTO, name: event.target.value },
-          });
+          // setSequenceToEdit({
+          //   ...sequence,
+          //   sequenceTO: { ...sequence.sequenceTO, name: event.target.value },
+          // });
         }}
         value={sequence.sequenceTO.name}
         autoFocus

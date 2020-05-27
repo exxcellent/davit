@@ -1,18 +1,6 @@
 import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
-import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
-import { DataRelationCTO } from "../../../dataAccess/access/cto/DataRelationCTO";
-import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
-import { Mode, selectMode } from "../../common/viewModel/GlobalSlice";
-import {
-  selectComponentToEdit,
-  selectDataRelationToEdit,
-  selectDataToEdit,
-  selectSequenceStepToEdit,
-  selectSequenceToEdit,
-} from "../viewModel/ControllPanelSlice";
+import { Mode } from "../../common/viewModel/GlobalSlice";
+import { useControllPanelViewModel } from "../viewModel/ControllPanelViewModel";
 import { ControllPanelEdit } from "./fragments/edit/ControllPanelEdit";
 import { ControllPanelEditComponent } from "./fragments/edit/ControllPanelEditComponent";
 import { ControllPanelEditComponentData } from "./fragments/edit/ControllPanelEditComponentData";
@@ -24,24 +12,8 @@ import { ControllPanelSequenceOptions } from "./fragments/view/ControllPanelSequ
 
 export interface ControllPanelProps {}
 
-export const ControllPanelController: FunctionComponent<ControllPanelProps> = (
-  props
-) => {
-  const mode: Mode = useSelector(selectMode);
-  const componentToEdit: ComponentCTO | null = useSelector(
-    selectComponentToEdit
-  );
-
-  const dataToEdit: DataCTO | null = useSelector(selectDataToEdit);
-
-  const dataRelationToEdit: DataRelationCTO | null = useSelector(
-    selectDataRelationToEdit
-  );
-
-  const sequenceToEdit: SequenceCTO | null = useSelector(selectSequenceToEdit);
-  const sequenceStepToEdit: SequenceStepCTO | null = useSelector(
-    selectSequenceStepToEdit
-  );
+export const ControllPanelController: FunctionComponent<ControllPanelProps> = (props) => {
+  const { component, data, relation, sequence, mode, step } = useControllPanelViewModel();
 
   const useGetViewByMode = (mode: Mode) => {
     switch (mode) {
@@ -50,40 +22,38 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (
       case Mode.EDIT:
         return <ControllPanelEdit />;
       case Mode.EDIT_COMPONENT:
-        if (componentToEdit) {
-          return <ControllPanelEditComponent component={componentToEdit} />;
+        if (component) {
+          return <ControllPanelEditComponent component={component} />;
         } else {
           return <ControllPanelEdit />;
         }
       case Mode.EDIT_DATA:
-        if (dataToEdit) {
-          return <ControllPanelEditData data={dataToEdit} />;
+        if (data) {
+          return <ControllPanelEditData data={data} />;
         } else {
           return <ControllPanelEdit />;
         }
       case Mode.EDIT_DATA_RELATION:
-        if (dataRelationToEdit) {
-          return (
-            <ControllPanelEditRelation dataRelation={dataRelationToEdit} />
-          );
+        if (relation) {
+          return <ControllPanelEditRelation dataRelation={relation} />;
         } else {
           return <ControllPanelEdit />;
         }
       case Mode.EDIT_SEQUENCE:
-        if (sequenceToEdit) {
-          return <ControllPanelEditSequence sequence={sequenceToEdit} />;
+        if (sequence) {
+          return <ControllPanelEditSequence sequence={sequence} />;
         } else {
           return <ControllPanelEdit />;
         }
       case Mode.EDIT_SEQUENCE_STEP:
-        if (sequenceStepToEdit) {
-          return <ControllPanelEditStep sequenceStep={sequenceStepToEdit} />;
+        if (step) {
+          return <ControllPanelEditStep sequenceStep={step} />;
         } else {
           return <ControllPanelEdit />;
         }
 
       case Mode.EDIT_SEQUENCE_STEP_COMPONENT_DATA:
-        return <ControllPanelEditComponentData component={componentToEdit} />;
+        return <ControllPanelEditComponentData component={component} />;
     }
   };
 
