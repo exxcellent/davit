@@ -1,40 +1,48 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../dataAccess/access/cto/DataRelationCTO";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
-import { currentComponent } from "../../../viewModel/ComponentSlice";
+import { ComponentSlice, currentComponent } from "../../../viewModel/ComponentSlice";
 import { currentData, currentRelation } from "../../../viewModel/DataSlice";
 import { currentSequence, currentStep } from "../../../viewModel/SequenceSlice";
 import { globalSlice, Mode, selectMode } from "../../common/viewModel/GlobalSlice";
 
-export const ControllPanelViewModel = {
-  setMode(mode: Mode) {
-    globalSlice.actions.setMode(mode);
-  },
+export interface ControllPanelViewModel {
+  mode: Mode;
+  component: ComponentCTO | null;
+  data: DataCTO | null;
+  relation: DataRelationCTO | null;
+  sequence: SequenceCTO | null;
+  step: SequenceStepCTO | null;
+}
 
-  useGetMode(): Mode {
-    return useSelector(selectMode);
-  },
+export const useControllPanelViewModel = (): ControllPanelViewModel => {
+  const dispatch = useDispatch();
 
-  useGetComponent(): ComponentCTO | null {
-    return useSelector(currentComponent);
-  },
+  const setMode = (mode: Mode) => {
+    dispatch(globalSlice.actions.setMode(mode));
+  };
 
-  useGetData(): DataCTO | null {
-    return useSelector(currentData);
-  },
+  const mode: Mode = useSelector(selectMode);
+  const component: ComponentCTO | null = useSelector(currentComponent);
+  const data: DataCTO | null = useSelector(currentData);
+  const relation: DataRelationCTO | null = useSelector(currentRelation);
+  const sequence: SequenceCTO | null = useSelector(currentSequence);
+  const step: SequenceStepCTO | null = useSelector(currentStep);
 
-  useGetRelation(): DataRelationCTO | null {
-    return useSelector(currentRelation);
-  },
+  const createNewComponent = (): void => {
+    console.info("create new component");
+    const newComponent = new ComponentCTO();
+    dispatch(ComponentSlice.actions.setCurrentComponent(newComponent));
+    dispatch(globalSlice.actions.setMode(Mode.EDIT_COMPONENT));
+  };
 
-  useGetSequence(): SequenceCTO | null {
-    return useSelector(currentSequence);
-  },
+  const editComponent = (component: ComponentCTO): void => {
+    dispatch(ComponentSlice.actions.setCurrentComponent(component));
+    dispatch(globalSlice.actions.setMode(Mode.EDIT_COMPONENT));
+  };
 
-  useGetStep(): SequenceStepCTO | null {
-    return useSelector(currentStep);
-  },
+  return { mode, component, data, relation, sequence, step };
 };
