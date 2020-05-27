@@ -3,13 +3,13 @@ import { useSelector } from "react-redux";
 import { Table } from "semantic-ui-react";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
-import { selectSequenceStepToEdit, selectSequenceToEdit } from "../../controllPanel/viewModel/ControllPanelSlice";
+import { currentSequence, currentStep } from "../../../viewModel/SequenceSlice";
 
 interface SequenceTableModelControllerProps {}
 
 export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (props) => {
-  const sequence: SequenceCTO | null = useSelector(selectSequenceToEdit);
-  const selectedStep: SequenceStepCTO | null = useSelector(selectSequenceStepToEdit);
+  const sequence: SequenceCTO | null = useSelector(currentSequence);
+  const selectedStep: SequenceStepCTO | null = useSelector(currentStep);
 
   const [selectedId, setSelectedId] = React.useState<number>(-1);
 
