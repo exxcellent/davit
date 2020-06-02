@@ -1,19 +1,19 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Input } from "semantic-ui-react";
-import { ComponentCTO } from "../../../../../dataAccess/access/cto/ComponentCTO";
-import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
-import { Mode } from "../../../../../slices/GlobalSlice";
-import { currentSequence } from "../../../../../slices/SequenceSlice";
-import { Carv2Util } from "../../../../../utils/Carv2Util";
-import { Carv2DeleteButton } from "../../../../common/fragments/buttons/Carv2DeleteButton";
-import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
-import { ControllPanelEditSub } from "./common/ControllPanelEditSub";
-import { useGetComponentDropdown, useGetComponentDropdownLable } from "./common/fragments/Carv2DropDown";
-import { Carv2LabelTextfield } from "./common/fragments/Carv2LabelTextfield";
-import { Carv2SubmitCancel } from "./common/fragments/Carv2SubmitCancel";
-import { OptionField } from "./common/OptionField";
+import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
+import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
+import { Mode } from "../../../../../../slices/GlobalSlice";
+import { currentSequence } from "../../../../../../slices/SequenceSlice";
+import { Carv2Util } from "../../../../../../utils/Carv2Util";
+import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
+import { ControllPanelActions } from "../../../../viewModel/ControllPanelActions";
+import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import { useGetComponentDropdown, useGetComponentDropdownLable } from "../common/fragments/Carv2DropDown";
+import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
+import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
+import { OptionField } from "../common/OptionField";
 import "./ControllPanelEdit.css";
 
 export interface ControllPanelEditStepProps {
