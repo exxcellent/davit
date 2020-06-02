@@ -3,43 +3,63 @@ import { useDispatch, useSelector } from "react-redux";
 import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../dataAccess/access/cto/DataRelationCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
-import { ControllPanelActions } from "../../controllPanel/viewModel/ControllPanelActions";
 import {
-  selectDataRelationToEdit,
-  selectDataToEdit,
-  selectSequenceStepToEdit,
-} from "../../controllPanel/viewModel/ControllPanelSlice";
-import { MetaDataActions } from "../viewModel/MetaDataActions";
-import {
-  selectDataRelations,
+  DataActions,
+  selectCurrentData,
+  selectCurrentRelation,
   selectDatas,
-} from "../viewModel/MetaDataModelSlice";
+  selectRelations,
+} from "../../../slices/DataSlice";
+import { currentStep } from "../../../slices/SequenceSlice";
+import { ControllPanelActions } from "../../controllPanel/viewModel/ControllPanelActions";
 import { MetaDataDnDBox } from "./fragments/MetaDataDnDBox";
 
 interface MetaDataModelControllerProps {}
 
-export const MetaDataModelController: FunctionComponent<MetaDataModelControllerProps> = (
-  props
-) => {
+export const MetaDataModelController: FunctionComponent<MetaDataModelControllerProps> = (props) => {
+  const {
+    datas,
+    dataRelations,
+    dataRelationToEdit,
+    dataCTOToEdit,
+    selectedStep,
+    saveData,
+  } = useMetaDataModelViewModel();
+
+  const createMetaDataDnDBox = () => {
+    return (
+      <MetaDataDnDBox
+        dataCTOs={datas}
+        onSaveCallBack={saveData}
+        step={selectedStep}
+        dataRelations={dataRelations}
+        dataCTOToEdit={dataCTOToEdit}
+        dataRelationToEdit={dataRelationToEdit}
+      />
+    );
+  };
+
+  return createMetaDataDnDBox();
+};
+
+const useMetaDataModelViewModel = () => {
   const datas: DataCTO[] = useSelector(selectDatas);
-  const dataCTOToEdit: DataCTO | null = useSelector(selectDataToEdit);
-  const dataRelationToEdit: DataRelationCTO | null = useSelector(
-    selectDataRelationToEdit
-  );
-  const dataRelations: DataRelationCTO[] = useSelector(selectDataRelations);
-  const selectedStep: SequenceStepCTO | null = useSelector(
-    selectSequenceStepToEdit
-  );
+  const dataCTOToEdit: DataCTO | null = useSelector(selectCurrentData);
+  const dataRelationToEdit: DataRelationCTO | null = useSelector(selectCurrentRelation);
+  const dataRelations: DataRelationCTO[] = useSelector(selectRelations);
+  const selectedStep: SequenceStepCTO | null = useSelector(currentStep);
   const dispatch = useDispatch();
 
+  console.log("Controller", dataCTOToEdit);
+
   React.useEffect(() => {
-    dispatch(MetaDataActions.findAllDatas());
-    dispatch(MetaDataActions.findAllRelations());
+    dispatch(DataActions.loadDatasFromBackend());
+    dispatch(DataActions.loadRelationsFromBackend());
   }, [dispatch]);
 
   const saveData = (dataCTO: DataCTO) => {
-    dispatch(MetaDataActions.saveData(dataCTO));
-    dispatch(MetaDataActions.findAllRelations());
+    dispatch(DataActions.saveData(dataCTO));
+    dispatch(DataActions.loadRelationsFromBackend());
     if (dataCTO.data.id === dataRelationToEdit?.dataCTO1.data.id) {
       dispatch(
         ControllPanelActions.setDataRelationToEdit({
@@ -58,28 +78,12 @@ export const MetaDataModelController: FunctionComponent<MetaDataModelControllerP
     }
   };
 
-  const deleteDat = (id: number) => {
-    const dataToDelete: DataCTO | undefined = datas.find(
-      (data) => data.data.id === id
-    );
-    if (dataToDelete) {
-      dispatch(MetaDataActions.deleteData(dataToDelete));
-    }
+  return {
+    datas,
+    dataRelations,
+    dataRelationToEdit,
+    dataCTOToEdit,
+    selectedStep,
+    saveData,
   };
-
-  const createMetaDataDnDBox = () => {
-    return (
-      <MetaDataDnDBox
-        dataCTOs={datas}
-        onSaveCallBack={saveData}
-        onDeleteCallBack={deleteDat}
-        step={selectedStep}
-        dataRelations={dataRelations}
-        dataCTOToEdit={dataCTOToEdit}
-        dataRelationToEdit={dataRelationToEdit}
-      />
-    );
-  };
-
-  return createMetaDataDnDBox();
 };

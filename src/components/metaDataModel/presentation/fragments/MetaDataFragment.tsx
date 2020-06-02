@@ -3,10 +3,7 @@ import { Card } from "semantic-ui-react";
 import { ComponentDataCTO } from "../../../../dataAccess/access/cto/ComponentDataCTO";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
-import {
-  ComponentFragmentProps,
-  createComponentFragment,
-} from "./ComponentFragment";
+import { ComponentFragmentProps, createComponentFragment } from "./ComponentFragment";
 
 export interface MetaDataFragmentProps {
   id: number;
@@ -14,12 +11,9 @@ export interface MetaDataFragmentProps {
   initalWidth?: number;
   initalHeigth?: number;
   componentFragments: ComponentFragmentProps[];
-  onDelCallBack: (id: number) => void;
 }
 
-export const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (
-  props
-) => {
+export const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (props) => {
   const {
     // id,
     initalName,
@@ -38,14 +32,9 @@ export const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (
   );
 };
 
-const stepToComponentFragmentProps = (
-  step: SequenceStepCTO | null,
-  dataId: number
-): ComponentFragmentProps[] => {
+const stepToComponentFragmentProps = (step: SequenceStepCTO | null, dataId: number): ComponentFragmentProps[] => {
   const componentData: ComponentDataCTO[] = step
-    ? step.componentDataCTOs.filter(
-        (componentData) => componentData.dataTO.id === dataId
-      )
+    ? step.componentDataCTOs.filter((componentData) => componentData.dataTO.id === dataId)
     : [];
   return componentData.map((componentData) => {
     return {
@@ -55,17 +44,12 @@ const stepToComponentFragmentProps = (
   });
 };
 
-export const createMetaDataFragment = (
-  dataCTO: DataCTO,
-  onDeleteCallBack: (componentId: number) => void,
-  step: SequenceStepCTO | null
-) => {
+export const createMetaDataFragment = (dataCTO: DataCTO, step: SequenceStepCTO | null) => {
   return (
     <MetaDataFragment
       id={dataCTO.data.id}
       initalName={dataCTO.data.name}
       initalWidth={dataCTO.geometricalData.geometricalData.width}
-      onDelCallBack={onDeleteCallBack}
       componentFragments={stepToComponentFragmentProps(step, dataCTO.data.id)}
     />
   );

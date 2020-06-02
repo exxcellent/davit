@@ -6,15 +6,12 @@ import { ComponentDataCTO } from "../../../../../dataAccess/access/cto/Component
 import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
+import { selectDatas } from "../../../../../slices/DataSlice";
+import { currentSequence, currentStep } from "../../../../../slices/SequenceSlice";
 import { Carv2Util } from "../../../../../utils/Carv2Util";
 import { Mode } from "../../../../common/viewModel/GlobalSlice";
 import { getColorForComponentDataState } from "../../../../metaComponentModel/presentation/fragments/DataFragment";
-import { selectDatas } from "../../../../metaDataModel/viewModel/MetaDataModelSlice";
 import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
-import {
-  selectSequenceStepToEdit,
-  selectSequenceToEdit,
-} from "../../../viewModel/ControllPanelSlice";
 import { ControllPanelEditSub } from "./common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "./common/fragments/Carv2LabelTextfield";
 import "./ControllPanelEdit.css";
@@ -23,28 +20,21 @@ export interface ControllPanelEditComponentDataProps {
   component: ComponentCTO | null;
 }
 
-export const ControllPanelEditComponentData: FunctionComponent<ControllPanelEditComponentDataProps> = (
-  props
-) => {
+export const ControllPanelEditComponentData: FunctionComponent<ControllPanelEditComponentDataProps> = (props) => {
   const { component } = props;
 
   const [label, setLabel] = useState<string>("Add Data");
   const dispatch = useDispatch();
   const datas: DataCTO[] = useSelector(selectDatas);
-  const sequenceStep: SequenceStepCTO | null = useSelector(
-    selectSequenceStepToEdit
-  );
-  const sequence: SequenceCTO | null = useSelector(selectSequenceToEdit);
+  const sequenceStep: SequenceStepCTO | null = useSelector(currentStep);
+  const sequence: SequenceCTO | null = useSelector(currentSequence);
 
   const [selectedDatas, setSelectedDatas] = useState<number[]>([]);
 
   useEffect(() => {
     if (component !== null) {
       const selection = sequenceStep!.componentDataCTOs
-        .filter(
-          (componentData) =>
-            componentData.componentTO.id === component?.component.id
-        )
+        .filter((componentData) => componentData.componentTO.id === component?.component.id)
         .map((componentData) => componentData.dataTO.id);
       setSelectedDatas(selection);
     }
@@ -58,11 +48,7 @@ export const ControllPanelEditComponentData: FunctionComponent<ControllPanelEdit
 
   const updateSequence = (sequenceStep: SequenceStepCTO) => {
     let copySequence: SequenceCTO = Carv2Util.deepCopy(sequence);
-    copySequence.sequenceStepCTOs.splice(
-      sequenceStep.squenceStepTO.index,
-      1,
-      sequenceStep
-    );
+    copySequence.sequenceStepCTOs.splice(sequenceStep.squenceStepTO.index, 1, sequenceStep);
     dispatch(ControllPanelActions.setSequenceToEdit(copySequence));
   };
 
@@ -82,27 +68,20 @@ export const ControllPanelEditComponentData: FunctionComponent<ControllPanelEdit
     console.info("Data id: ", dataId);
     if (sequenceStep !== null) {
       // suche componentdata wenn sie existiert.
-      let componentData:
-        | ComponentDataCTO
-        | undefined = sequenceStep.componentDataCTOs.find(
+      let componentData: ComponentDataCTO | undefined = sequenceStep.componentDataCTOs.find(
         (componentData) =>
-          componentData.componentTO.id === component?.component.id &&
-          componentData.dataTO.id === dataId
+          componentData.componentTO.id === component?.component.id && componentData.dataTO.id === dataId
       );
       if (componentData === undefined) {
         // wenn sie nicht existert erstelle sie.
         componentData = new ComponentDataCTO();
         componentData.componentTO = component?.component!;
         console.info("DataCTOs: ", datas);
-        componentData.dataTO = datas.find(
-          (data) => data.data.id === dataId
-        )?.data!;
+        componentData.dataTO = datas.find((data) => data.data.id === dataId)?.data!;
         console.warn("componentdata.dataTO:", componentData.dataTO);
-        componentData.componentDataTO.componentFk =
-          componentData.componentTO.id;
+        componentData.componentDataTO.componentFk = componentData.componentTO.id;
         componentData.componentDataTO.dataFk = componentData.dataTO.id;
-        componentData.componentDataTO.sequenceStepFk =
-          sequenceStep.squenceStepTO.id;
+        componentData.componentDataTO.sequenceStepFk = sequenceStep.squenceStepTO.id;
       }
       console.info("componentData: ", componentData);
       // componentdata zum sequence step hinzufügen.
@@ -112,9 +91,7 @@ export const ControllPanelEditComponentData: FunctionComponent<ControllPanelEdit
       console.info("Sequence after add componetdata", sequence);
       // bau das label.
       return {
-        color: getColorForComponentDataState(
-          componentData.componentDataTO.componentDataState
-        ),
+        color: getColorForComponentDataState(componentData.componentDataTO.componentDataState),
         content: componentData.dataTO.name,
       };
     }
@@ -122,10 +99,7 @@ export const ControllPanelEditComponentData: FunctionComponent<ControllPanelEdit
 
   return (
     <ControllPanelEditSub label={label}>
-      <Carv2LabelTextfield
-        label="Component:"
-        value={component?.component.name}
-      />
+      <Carv2LabelTextfield label="Component:" value={component?.component.name} />
       <div className="optionFieldSpacer columnDivider">
         <Dropdown
           placeholder="Select Data"

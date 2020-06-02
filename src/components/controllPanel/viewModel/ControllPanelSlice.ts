@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../../../app/store";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { ComponentDataCTO } from "../../../dataAccess/access/cto/ComponentDataCTO";
 import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
@@ -33,10 +32,7 @@ export const ControllPanelSlice = createSlice({
     loadSequences: (state, action: PayloadAction<SequenceCTO[]>) => {
       state.sequences = action.payload;
     },
-    pickComponentToEdit: (
-      state,
-      action: PayloadAction<ComponentCTO | null>
-    ) => {
+    pickComponentToEdit: (state, action: PayloadAction<ComponentCTO | null>) => {
       console.log("Set component to edit", action.payload);
       state.selectedComponentToEdit = action.payload;
     },
@@ -44,10 +40,7 @@ export const ControllPanelSlice = createSlice({
       console.log("Set data to edit", action.payload);
       state.selectedDataToEdit = action.payload;
     },
-    pickDataRelationToEdit: (
-      state,
-      action: PayloadAction<DataRelationCTO | null>
-    ) => {
+    pickDataRelationToEdit: (state, action: PayloadAction<DataRelationCTO | null>) => {
       console.log("Set relation to edit", action.payload);
       state.selectedDataRelationToEdit = action.payload;
     },
@@ -57,43 +50,14 @@ export const ControllPanelSlice = createSlice({
       state.selectedSequenceToEdit = action.payload;
     },
 
-    pickSequenceStepToEdit: (
-      state,
-      action: PayloadAction<SequenceStepCTO | null>
-    ) => {
+    pickSequenceStepToEdit: (state, action: PayloadAction<SequenceStepCTO | null>) => {
       console.log("Set step to edit", action.payload);
       state.selectedSequenceStepToEdit = action.payload;
     },
 
-    pickComponentDatasToEdit: (
-      state,
-      action: PayloadAction<ComponentDataCTO[] | null>
-    ) => {
+    pickComponentDatasToEdit: (state, action: PayloadAction<ComponentDataCTO[] | null>) => {
       console.log("Set componentdata to edit", action.payload);
       state.selectedComponentDatasToEdit = action.payload;
     },
   },
 });
-
-export const controllPanelReducer = ControllPanelSlice.reducer;
-
-export const selectSequences = (state: RootState) =>
-  state.controllPannel.sequences;
-
-export const selectComponentToEdit = (state: RootState) =>
-  state.controllPannel.selectedComponentToEdit;
-
-export const selectDataToEdit = (state: RootState) =>
-  state.controllPannel.selectedDataToEdit;
-
-export const selectDataRelationToEdit = (state: RootState) =>
-  state.controllPannel.selectedDataRelationToEdit;
-
-export const selectSequenceToEdit = (state: RootState) =>
-  state.controllPannel.selectedSequenceToEdit;
-
-export const selectSequenceStepToEdit = (state: RootState) =>
-  state.controllPannel.selectedSequenceStepToEdit;
-
-export const selectComponentDatasToEdit = (state: RootState) =>
-  state.controllPannel.selectedComponentDatasToEdit;

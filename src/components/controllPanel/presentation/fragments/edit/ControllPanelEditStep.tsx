@@ -4,16 +4,13 @@ import { Button, Input } from "semantic-ui-react";
 import { ComponentCTO } from "../../../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
+import { currentSequence } from "../../../../../slices/SequenceSlice";
 import { Carv2Util } from "../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../common/fragments/buttons/Carv2DeleteButton";
 import { Mode } from "../../../../common/viewModel/GlobalSlice";
 import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
-import { selectSequenceToEdit } from "../../../viewModel/ControllPanelSlice";
 import { ControllPanelEditSub } from "./common/ControllPanelEditSub";
-import {
-  useGetComponentDropdown,
-  useGetComponentDropdownLable,
-} from "./common/fragments/Carv2DropDown";
+import { useGetComponentDropdown, useGetComponentDropdownLable } from "./common/fragments/Carv2DropDown";
 import { Carv2LabelTextfield } from "./common/fragments/Carv2LabelTextfield";
 import { Carv2SubmitCancel } from "./common/fragments/Carv2SubmitCancel";
 import { OptionField } from "./common/OptionField";
@@ -23,16 +20,14 @@ export interface ControllPanelEditStepProps {
   sequenceStep: SequenceStepCTO;
 }
 
-export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps> = (
-  props
-) => {
+export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps> = (props) => {
   const { sequenceStep } = props;
 
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
   const [label, setLabel] = useState<string>("Create Step");
   const textInput = useRef<Input>(null);
   const dispatch = useDispatch();
-  const sequence: SequenceCTO | null = useSelector(selectSequenceToEdit);
+  const sequence: SequenceCTO | null = useSelector(currentSequence);
 
   useEffect(() => {
     dispatch(ControllPanelActions.setSequenceStepToEdit(sequenceStep));
@@ -47,11 +42,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
     dispatch(ControllPanelActions.setSequenceStepToEdit(sequenceStep));
     // setSequenceStepToEdit(sequenceStep);
     let copySequence: SequenceCTO = Carv2Util.deepCopy(sequence);
-    copySequence.sequenceStepCTOs.splice(
-      sequenceStep.squenceStepTO.index,
-      1,
-      sequenceStep
-    );
+    copySequence.sequenceStepCTOs.splice(sequenceStep.squenceStepTO.index, 1, sequenceStep);
     dispatch(ControllPanelActions.setSequenceToEdit(copySequence));
   };
 
@@ -76,9 +67,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
 
   const selectComponentDatas = (component: ComponentCTO | undefined) => {
     dispatch(ControllPanelActions.setComponentToEdit(component || null));
-    dispatch(
-      ControllPanelActions.setMode(Mode.EDIT_SEQUENCE_STEP_COMPONENT_DATA)
-    );
+    dispatch(ControllPanelActions.setMode(Mode.EDIT_SEQUENCE_STEP_COMPONENT_DATA));
   };
 
   const addSourceToStep = (sourceComponent: ComponentCTO | undefined) => {

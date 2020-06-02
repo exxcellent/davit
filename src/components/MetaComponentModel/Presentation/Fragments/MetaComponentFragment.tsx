@@ -12,12 +12,9 @@ export interface MetaComponentFragmentProps {
   initalWidth?: number;
   initalHeigth?: number;
   dataFragments: DataFragmentProps[];
-  onDelCallBack: (id: number) => void;
 }
 
-export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps> = (
-  props
-) => {
+export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps> = (props) => {
   const {
     // id,
     initalName,
@@ -36,14 +33,9 @@ export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps
   );
 };
 
-const stepToDataFragmentProps = (
-  step: SequenceStepCTO | null,
-  componentId: number
-): DataFragmentProps[] => {
+const stepToDataFragmentProps = (step: SequenceStepCTO | null, componentId: number): DataFragmentProps[] => {
   const componentData: ComponentDataCTO[] = step
-    ? step.componentDataCTOs.filter(
-        (componentData) => componentData.componentTO.id === componentId
-      )
+    ? step.componentDataCTOs.filter((componentData) => componentData.componentTO.id === componentId)
     : [];
   return componentData.map((componentData) => {
     return {
@@ -53,18 +45,13 @@ const stepToDataFragmentProps = (
   });
 };
 
-export const createMetaComponentFragment = (
-  componentCTO: ComponentCTO,
-  onDeleteCallBack: (componentId: number) => void,
-  step: SequenceStepCTO | null
-) => {
+export const createMetaComponentFragment = (componentCTO: ComponentCTO, step: SequenceStepCTO | null) => {
   return (
     <MetaComponentFragment
       id={componentCTO.component.id}
       initalName={componentCTO.component.name}
       initalColor={componentCTO.design.color}
       initalWidth={componentCTO.geometricalData.geometricalData.width}
-      onDelCallBack={onDeleteCallBack}
       dataFragments={stepToDataFragmentProps(step, componentCTO.component.id)}
     />
   );

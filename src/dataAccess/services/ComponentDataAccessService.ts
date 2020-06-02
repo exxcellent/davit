@@ -1,3 +1,4 @@
+import { Carv2Util } from "../../utils/Carv2Util";
 import { ComponentCTO } from "../access/cto/ComponentCTO";
 import { GeometricalDataCTO } from "../access/cto/GeometraicalDataCTO";
 import { ComponentTO } from "../access/to/ComponentTO";
@@ -8,9 +9,7 @@ import { TechnicalDataAccessService } from "./TechnicalDataAccessService";
 
 export const ComponentDataAccessService = {
   findAll(): ComponentCTO[] {
-    return ComponentRepository.findAll().map((component) =>
-      createComponentCTO(component)
-    );
+    return ComponentRepository.findAll().map((component) => createComponentCTO(component));
   },
 
   findCTO(id: number): ComponentCTO {
@@ -26,9 +25,7 @@ export const ComponentDataAccessService = {
     CheckHelper.nullCheck(component.geometricalData, "GeometricalDataCTO");
     CheckHelper.nullCheck(component.design, "DesignTO");
     CheckHelper.nullCheck(component.component, "ComponentTO");
-    TechnicalDataAccessService.deleteGeometricalDataCTO(
-      component.geometricalData
-    );
+    TechnicalDataAccessService.deleteGeometricalDataCTO(component.geometricalData);
     TechnicalDataAccessService.deleteDesign(component.design);
     ComponentRepository.delete(component.component);
     return component;
@@ -36,16 +33,12 @@ export const ComponentDataAccessService = {
 
   saveCTO(componentCTO: ComponentCTO): ComponentCTO {
     CheckHelper.nullCheck(componentCTO, "ComponentCTO");
-    const savedDesign = TechnicalDataAccessService.saveDesign(
-      componentCTO.design
-    );
-    componentCTO.component.designFk = savedDesign.id;
-    const savedGeometricalData = TechnicalDataAccessService.saveGeometricalData(
-      componentCTO.geometricalData
-    );
-    componentCTO.component.geometricalDataFk =
-      savedGeometricalData.geometricalData.id;
-    const savedComponent = ComponentRepository.save(componentCTO.component);
+    let copy: ComponentCTO = Carv2Util.deepCopy(componentCTO);
+    const savedDesign = TechnicalDataAccessService.saveDesign(copy.design);
+    copy.component.designFk = savedDesign.id;
+    const savedGeometricalData = TechnicalDataAccessService.saveGeometricalData(copy.geometricalData);
+    copy.component.geometricalDataFk = savedGeometricalData.geometricalData.id;
+    const savedComponent = ComponentRepository.save(copy.component);
     return {
       component: savedComponent,
       geometricalData: savedGeometricalData,
@@ -54,17 +47,11 @@ export const ComponentDataAccessService = {
   },
 };
 
-const createComponentCTO = (
-  component: ComponentTO | undefined
-): ComponentCTO => {
+const createComponentCTO = (component: ComponentTO | undefined): ComponentCTO => {
   CheckHelper.nullCheck(component, "component");
-  let design: DesignTO | undefined = TechnicalDataAccessService.findDesign(
-    component!.designFk!
-  );
+  let design: DesignTO | undefined = TechnicalDataAccessService.findDesign(component!.designFk!);
   CheckHelper.nullCheck(design, "design");
-  let geometricalData:
-    | GeometricalDataCTO
-    | undefined = TechnicalDataAccessService.findGeometricalDataCTO(
+  let geometricalData: GeometricalDataCTO | undefined = TechnicalDataAccessService.findGeometricalDataCTO(
     component!.geometricalDataFk!
   );
   CheckHelper.nullCheck(geometricalData, "geometricalData");

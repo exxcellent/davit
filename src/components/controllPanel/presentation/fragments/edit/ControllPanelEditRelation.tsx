@@ -1,100 +1,43 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, Input } from "semantic-ui-react";
+import { isNullOrUndefined } from "util";
 import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../../../dataAccess/access/cto/DataRelationCTO";
-import {
-  Direction,
-  RelationType,
-} from "../../../../../dataAccess/access/to/DataRelationTO";
+import { Direction, RelationType } from "../../../../../dataAccess/access/to/DataRelationTO";
+import { DataActions, selectCurrentRelation, selectDatas } from "../../../../../slices/DataSlice";
 import { Carv2Util } from "../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../common/fragments/buttons/Carv2DeleteButton";
-import { selectDatas } from "../../../../metaDataModel/viewModel/MetaDataModelSlice";
-import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
+import { GlobalActions, handleError } from "../../../../common/viewModel/GlobalSlice";
 import { ControllPanelEditSub } from "./common/ControllPanelEditSub";
 import { Carv2SubmitCancel } from "./common/fragments/Carv2SubmitCancel";
 
-export interface ControllPanelEditRelationProps {
-  dataRelation: DataRelationCTO;
-}
+export interface ControllPanelEditRelationProps {}
 
-export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelationProps> = (
-  props
-) => {
-  const { dataRelation } = props;
-
-  const datas: DataCTO[] = useSelector(selectDatas);
-  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
-  const [label, setLabel] = useState<string>("Create Data Relation");
-  // const [dataRelationCopy, setDataRelationCopy] = useState<DataRelationTO>(
-  //   new DataRelationTO()
-  // );
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    // setDataRelationCopy({ ...dataRelation.dataRelationTO });
-    if (dataRelation.dataRelationTO.id !== -1) {
-      setLabel("Edit Data Relation");
-    }
-  }, [dataRelation]);
-
-  const setRelationToEdit = (dataRelation: DataRelationCTO | null) => {
-    console.info("setRelationToEdit: ", dataRelation);
-    dispatch(ControllPanelActions.setDataRelationToEdit(dataRelation));
-  };
-
-  const cancelEditRelation = () => {
-    dispatch(ControllPanelActions.cancelEditDataRelation());
-  };
-
-  const saveRelation = () => {
-    // TODO Felder validieren.
-    console.log("saving relation.");
-    let copyRelation: DataRelationCTO = Carv2Util.deepCopy(dataRelation);
-    copyRelation.dataCTO1 = datas.find(
-      (data) => data.data.id === dataRelation.dataRelationTO.data1Fk
-    )!;
-    copyRelation.dataCTO2 = datas.find(
-      (data) => data.data.id === dataRelation.dataRelationTO.data2Fk
-    )!;
-    dispatch(
-      ControllPanelActions.saveDataConnection(Carv2Util.deepCopy(copyRelation))
-    );
-    if (!isCreateAnother) {
-      cancelEditRelation();
-    } else {
-      setRelationToEdit(new DataRelationCTO());
-    }
-  };
-
-  const deleteRelation = () => {
-    dispatch(ControllPanelActions.deleteRelation(dataRelation));
-    cancelEditRelation();
-  };
-
-  const dataToOption = (data: DataCTO): DropdownItemProps => {
-    return {
-      key: data.data.id,
-      text: data.data.name,
-      value: data.data.id,
-    };
-  };
-
-  const getDirections = () => {
-    return Object.entries(Direction).map(([key, value]) => ({
-      key: key,
-      text: key,
-      value: value,
-    }));
-  };
-
-  const getTypes = () => {
-    return Object.entries(RelationType).map(([key, value]) => ({
-      key: key,
-      text: key,
-      value: value,
-    }));
-  };
+export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelationProps> = (props) => {
+  const {
+    label,
+    label1,
+    label2,
+    data1,
+    data2,
+    direction1,
+    direction2,
+    type1,
+    type2,
+    setLabel,
+    setType,
+    setDirection,
+    setData,
+    saveRelation,
+    deleteRelation,
+    cancel,
+    toggleIsCreateAnother,
+    showDelete,
+    dataOptions,
+    directionOptions,
+    typeOptions,
+  } = useControllPanelEditRelationViewModel();
 
   return (
     <ControllPanelEditSub label={label}>
@@ -116,43 +59,18 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
             <Dropdown
               placeholder="Select Data1"
               selection
-              options={datas.map(dataToOption)}
+              options={dataOptions}
               onChange={(event, data) => {
-                setRelationToEdit({
-                  ...dataRelation,
-                  dataRelationTO: {
-                    ...dataRelation.dataRelationTO,
-                    data1Fk: Number(data.value),
-                  },
-                  dataCTO1: datas.find(
-                    (item) => item.data.id === Number(data.value)
-                  )!,
-                });
+                setData(Number(data.value));
               }}
-              value={
-                dataRelation.dataRelationTO.data1Fk === -1
-                  ? undefined
-                  : dataRelation.dataRelationTO.data1Fk
-              }
+              value={data1}
             />
             <Dropdown
               placeholder="Select Type1"
               selection
-              options={getTypes()}
-              onChange={(event: any) =>
-                setRelationToEdit({
-                  ...dataRelation,
-                  dataRelationTO: {
-                    ...dataRelation.dataRelationTO,
-                    type1: event.target.value,
-                  },
-                })
-              }
-              // setDataRelationCopy({
-              //   ...dataRelationCopy,
-              //   type1: RelationType[data.value as RelationType],
-              // });
-              value={dataRelation.dataRelationTO.type1}
+              options={typeOptions}
+              onChange={(event: any) => setType(event.target.value)}
+              value={type1}
             />
           </div>
           <div
@@ -162,45 +80,18 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
               justifyContent: "center",
             }}
           >
-            <Input
-              placeholder="Label1"
-              onChange={(event: any) =>
-                setRelationToEdit({
-                  ...dataRelation,
-                  dataRelationTO: {
-                    ...dataRelation.dataRelationTO,
-                    label1: event.target.value,
-                  },
-                })
-              }
-              value={
-                dataRelation.dataRelationTO.label1 === ""
-                  ? undefined
-                  : dataRelation.dataRelationTO.label1
-              }
-            />
+            <Input placeholder="Label1" onChange={(event: any) => setLabel(event.target.value)} value={label1} />
             <Dropdown
               placeholder="Select Direction1"
               selection
-              options={getDirections()}
-              onChange={(event, data) =>
-                setRelationToEdit({
-                  ...dataRelation,
-                  dataRelationTO: {
-                    ...dataRelation.dataRelationTO,
-                    direction1: Direction[data.value as Direction],
-                  },
-                })
-              }
-              value={dataRelation.dataRelationTO.direction1}
+              options={directionOptions}
+              onChange={(event, data) => setDirection(Direction[data.value as Direction])}
+              value={direction1}
             />
           </div>
         </div>
       </div>
-      <div
-        className="columnDivider"
-        style={{ display: "flex", justifyContent: "center" }}
-      >
+      <div className="columnDivider" style={{ display: "flex", justifyContent: "center" }}>
         <div
           style={{
             display: "flex",
@@ -218,39 +109,18 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
             <Dropdown
               placeholder="Select Data2"
               selection
-              options={datas.map(dataToOption)}
+              options={dataOptions}
               onChange={(event, data) => {
-                setRelationToEdit({
-                  ...dataRelation,
-                  dataRelationTO: {
-                    ...dataRelation.dataRelationTO,
-                    data2Fk: Number(data.value),
-                  },
-                  dataCTO2: datas.find(
-                    (item) => item.data.id === Number(data.value)
-                  )!,
-                });
+                setData(Number(data.value), true);
               }}
-              value={
-                dataRelation.dataRelationTO.data2Fk === -1
-                  ? undefined
-                  : dataRelation.dataRelationTO.data2Fk
-              }
+              value={data2}
             />
             <Dropdown
               placeholder="Select Type2"
               selection
-              options={getTypes()}
-              onChange={(event: any) =>
-                setRelationToEdit({
-                  ...dataRelation,
-                  dataRelationTO: {
-                    ...dataRelation.dataRelationTO,
-                    type2: event.target.value,
-                  },
-                })
-              }
-              value={dataRelation.dataRelationTO.type2}
+              options={typeOptions}
+              onChange={(event: any) => setType(event.target.value, true)}
+              value={type2}
             />
           </div>
           <div
@@ -260,58 +130,130 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
               justifyContent: "center",
             }}
           >
-            <Input
-              placeholder="Label2"
-              onChange={(event: any) =>
-                setRelationToEdit({
-                  ...dataRelation,
-                  dataRelationTO: {
-                    ...dataRelation.dataRelationTO,
-                    label2: event.target.value,
-                  },
-                })
-              }
-              value={
-                dataRelation.dataRelationTO.label2 === ""
-                  ? undefined
-                  : dataRelation.dataRelationTO.label2
-              }
-            />
+            <Input placeholder="Label2" onChange={(event: any) => setLabel(event.target.value, true)} value={label2} />
             <Dropdown
               placeholder="Select Direction2"
               selection
-              options={getDirections()}
-              onChange={(event, data) =>
-                setRelationToEdit({
-                  ...dataRelation,
-                  dataRelationTO: {
-                    ...dataRelation.dataRelationTO,
-                    direction2: Direction[data.value as Direction],
-                  },
-                })
-              }
-              value={dataRelation.dataRelationTO.direction2}
+              options={directionOptions}
+              onChange={(event, data) => setDirection(Direction[data.value as Direction], true)}
+              value={direction2}
             />
           </div>
         </div>
       </div>
       <div className="columnDivider" style={{ display: "flex" }}>
-        <Carv2SubmitCancel
-          onSubmit={saveRelation}
-          onChange={() => setIsCreateAnother(!isCreateAnother)}
-          onCancel={cancelEditRelation}
-        />
+        <Carv2SubmitCancel onSubmit={saveRelation} onChange={toggleIsCreateAnother} onCancel={cancel} />
       </div>
-      {dataRelation.dataRelationTO.id !== -1 && (
+      {showDelete && (
         <div className="columnDivider">
-          <div
-            className="controllPanelEditChild"
-            style={{ display: "flex", alignItems: "center", height: "100%" }}
-          >
+          <div className="controllPanelEditChild" style={{ display: "flex", alignItems: "center", height: "100%" }}>
             <Carv2DeleteButton onClick={deleteRelation} />
           </div>
         </div>
       )}
     </ControllPanelEditSub>
   );
+};
+
+const useControllPanelEditRelationViewModel = () => {
+  const datas: DataCTO[] = useSelector(selectDatas);
+  const relationToEdit: DataRelationCTO | null = useSelector(selectCurrentRelation);
+  const dispatch = useDispatch();
+  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
+
+  useEffect(() => {
+    // check if component to edit is really set or go back to edit mode
+    if (isNullOrUndefined(relationToEdit)) {
+      GlobalActions.setModeToEdit();
+      handleError("Tried to go to edit relation without relationToedit specified");
+    }
+  }, [relationToEdit]);
+
+  const dataToOption = (data: DataCTO): DropdownItemProps => {
+    return {
+      key: data.data.id,
+      text: data.data.name,
+      value: data.data.id,
+    };
+  };
+
+  const setData = (dataId: number, isSnd?: boolean) => {
+    const data: DataCTO | undefined = datas.find((data) => data.data.id === dataId);
+    if (data) {
+      const relationCopy: DataRelationCTO = Carv2Util.deepCopy(relationToEdit);
+      isSnd ? (relationCopy.dataCTO2 = data) : (relationCopy.dataCTO1 = data);
+      isSnd
+        ? (relationCopy.dataRelationTO.data2Fk = data.data.id)
+        : (relationCopy.dataRelationTO.data1Fk = data.data.id);
+      dispatch(DataActions.saveRelation(relationCopy));
+    }
+  };
+
+  const setLabel = (label: string, isSnd?: boolean) => {
+    const relationCopy: DataRelationCTO = Carv2Util.deepCopy(relationToEdit);
+    isSnd ? (relationCopy.dataRelationTO.label2 = label) : (relationCopy.dataRelationTO.label1 = label);
+    dispatch(DataActions.saveRelation(relationCopy));
+  };
+
+  const setDirection = (direction: Direction, isSnd?: boolean) => {
+    const relationCopy: DataRelationCTO = Carv2Util.deepCopy(relationToEdit);
+    isSnd ? (relationCopy.dataRelationTO.direction2 = direction) : (relationCopy.dataRelationTO.direction1 = direction);
+    dispatch(DataActions.saveRelation(relationCopy));
+  };
+
+  const setType = (relationType: RelationType, isSnd?: boolean) => {
+    const relationCopy: DataRelationCTO = Carv2Util.deepCopy(relationToEdit);
+    isSnd ? (relationCopy.dataRelationTO.type2 = relationType) : (relationCopy.dataRelationTO.type1 = relationType);
+    dispatch(DataActions.saveRelation(relationCopy));
+  };
+
+  const saveRelation = () => {
+    dispatch(DataActions.saveRelation(relationToEdit!));
+    if (isCreateAnother) {
+      dispatch(GlobalActions.setModeToEditRelation());
+    } else {
+      dispatch(GlobalActions.setModeToEdit());
+    }
+  };
+
+  const deleteRelation = () => {
+    dispatch(DataActions.deleteRelation(relationToEdit!));
+    dispatch(GlobalActions.setModeToEdit());
+  };
+
+  const directionOptions = Object.entries(Direction).map(([key, value]) => ({
+    key: key,
+    text: key,
+    value: value,
+  }));
+
+  const typeOptions = Object.entries(RelationType).map(([key, value]) => ({
+    key: key,
+    text: key,
+    value: value,
+  }));
+
+  return {
+    label: relationToEdit!.dataRelationTO.id === -1 ? "ADD RELATION" : "EDIT RELATION",
+    label1: relationToEdit?.dataRelationTO.label1,
+    label2: relationToEdit?.dataRelationTO.label2,
+    data1: relationToEdit!.dataRelationTO.data1Fk === -1 ? undefined : relationToEdit!.dataRelationTO.data1Fk,
+    data2: relationToEdit!.dataRelationTO.data2Fk === -1 ? undefined : relationToEdit!.dataRelationTO.data2Fk,
+    direction1: relationToEdit!.dataRelationTO.direction1,
+    direction2: relationToEdit!.dataRelationTO.direction2,
+    type1: relationToEdit!.dataRelationTO.type1,
+    type2: relationToEdit!.dataRelationTO.type2,
+    setLabel,
+    setType,
+    setDirection,
+    setData,
+    saveRelation,
+    deleteRelation,
+    cancel: () => dispatch(GlobalActions.setModeToEdit()),
+    toggleIsCreateAnother: () => setIsCreateAnother(!isCreateAnother),
+    showDelete: relationToEdit?.dataRelationTO.id !== -1,
+    dataOptions: datas.map(dataToOption),
+    directionOptions,
+    typeOptions,
+  };
 };

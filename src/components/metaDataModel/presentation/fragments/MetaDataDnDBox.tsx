@@ -14,26 +14,15 @@ interface MetaDataDnDBox {
   dataRelations: DataRelationCTO[];
   step: SequenceStepCTO | null;
   onSaveCallBack: (dataCTO: DataCTO) => void;
-  onDeleteCallBack: (id: number) => void;
 }
 
 export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
-  const {
-    dataCTOs,
-    dataCTOToEdit,
-    onSaveCallBack,
-    onDeleteCallBack,
-    step,
-    dataRelations,
-    dataRelationToEdit,
-  } = props;
+  const { dataCTOs, dataCTOToEdit, onSaveCallBack, step, dataRelations, dataRelationToEdit } = props;
 
   const constraintsRef = useRef(null);
 
   const onPositionUpdate = (x: number, y: number, positionId: number) => {
-    const dataCTO = dataCTOs.find(
-      (dataCTO) => dataCTO.geometricalData.position.id === positionId
-    );
+    const dataCTO = dataCTOs.find((dataCTO) => dataCTO.geometricalData.position.id === positionId);
     if (dataCTO) {
       let copyDataCTO: DataCTO = JSON.parse(JSON.stringify(dataCTO));
       copyDataCTO.geometricalData.position.x = x;
@@ -44,19 +33,16 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
 
   const createConnections = () => {
     return dataRelations.map((dataRelation) => {
-      if (
-        !(
-          dataRelationToEdit &&
-          dataRelationToEdit.dataRelationTO.id ===
-            dataRelation.dataRelationTO.id
-        )
-      )
+      if (!(dataRelationToEdit && dataRelationToEdit.dataRelationTO.id === dataRelation.dataRelationTO.id)) {
         return createCornerConnection(
           dataRelation.dataCTO1.geometricalData,
           dataRelation.dataCTO2.geometricalData,
           dataRelation.dataRelationTO,
           dataRelation.dataRelationTO.id
         );
+      } else {
+        return <></>;
+      }
     });
   };
 
@@ -67,17 +53,8 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
   };
 
   const createDnDMetaDataFragment = (dataCTO: DataCTO) => {
-    let metaDataFragment = createMetaDataFragment(
-      dataCTO,
-      onDeleteCallBack,
-      step
-    );
-    return createDnDItem(
-      dataCTO.geometricalData,
-      onPositionUpdate,
-      constraintsRef,
-      metaDataFragment
-    );
+    let metaDataFragment = createMetaDataFragment(dataCTO, step);
+    return createDnDItem(dataCTO.geometricalData, onPositionUpdate, constraintsRef, metaDataFragment);
   };
 
   const createDataRelationToEdit = (dataRelation: DataRelationCTO) => {

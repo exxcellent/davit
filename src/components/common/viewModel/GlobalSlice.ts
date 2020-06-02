@@ -1,5 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../../../app/store";
+import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
+import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
+import { DataRelationCTO } from "../../../dataAccess/access/cto/DataRelationCTO";
+import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
+import { ComponentActions, ComponentInternalActions } from "../../../slices/ComponentSlice";
+import { DataActions, DataInternalActions } from "../../../slices/DataSlice";
+import { SequenceSlice } from "../../../slices/SequenceSlice";
 
 const MODE_LOCAL_STORAGE = "MODE";
 
@@ -44,43 +51,72 @@ export const globalSlice = createSlice({
       console.log("setting mode " + action.payload);
       state.mode = action.payload;
     },
-
-    // nextStep: (state) => {
-    //   if (state.selectedStep) {
-    //     state.selectedStep = state.sequence?.sequenceStepCTOs.find(
-    //       (step) =>
-    //         step.squenceStepTO.index > state.selectedStep!.squenceStepTO.index
-    //     );
-    //   } else {
-    //     state.selectedStep = state.sequence?.sequenceStepCTOs[0];
-    //   }
-    // },
-    // previousStep: (state) => {
-    //   if (state.selectedStep) {
-    //     state.selectedStep = state.sequence?.sequenceStepCTOs.find(
-    //       (step) =>
-    //         step.squenceStepTO.index ===
-    //         state.selectedStep!.squenceStepTO.index - 1
-    //     );
-    //   } else {
-    //     state.selectedStep =
-    //       state.sequence?.sequenceStepCTOs[
-    //         state.sequence?.sequenceStepCTOs.length - 1
-    //       ];
-    //   }
-    // },
   },
 });
 
-export const setModeWithStorage = (mode: Mode): AppThunk => async (
-  dispatch
-) => {
+export const setModeWithStorage = (mode: Mode): AppThunk => async (dispatch) => {
+  console.log("setMode", mode);
   localStorage.setItem(MODE_LOCAL_STORAGE, mode);
-  dispatch(setMode(mode));
+  dispatch(globalSlice.actions.setMode(mode));
+};
+
+const reset = (): AppThunk => async (dispatch) => {
+  console.log("reset");
+  dispatch(ComponentInternalActions.resetCurrentComponent());
+  dispatch(DataInternalActions.resetCurrentData());
+  dispatch(DataInternalActions.resetCurrentRelation());
+};
+
+const setModeToView = (): AppThunk => async (dispatch) => {
+  dispatch(reset());
+  dispatch(setModeWithStorage(Mode.VIEW));
+};
+
+const setModeToEdit = (): AppThunk => async (dispatch) => {
+  dispatch(reset());
+  dispatch(setModeWithStorage(Mode.EDIT));
+};
+
+const setModeToEditComponent = (component?: ComponentCTO): AppThunk => async (dispatch) => {
+  dispatch(reset());
+  dispatch(setModeWithStorage(Mode.EDIT_COMPONENT));
+  dispatch(ComponentActions.setCompoenentToEdit(component || new ComponentCTO()));
+};
+
+const setModeToEditData = (data?: DataCTO): AppThunk => async (dispatch) => {
+  dispatch(reset());
+  dispatch(DataActions.setDataToEdit(data || new DataCTO()));
+  dispatch(setModeWithStorage(Mode.EDIT_DATA));
+};
+
+const setModeToEditRelation = (relation?: DataRelationCTO): AppThunk => async (dispatch) => {
+  dispatch(reset());
+  dispatch(DataActions.setRelationToEdit(relation || new DataRelationCTO()));
+  dispatch(setModeWithStorage(Mode.EDIT_DATA));
+};
+
+const setModeToEditSequence = (sequence?: SequenceCTO): AppThunk => async (dispatch) => {
+  dispatch(reset());
+  dispatch(SequenceSlice.actions.setCurrentSequence(sequence || new SequenceCTO()));
+  dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE));
+};
+
+const setModeToEditCurrentSequence = (): AppThunk => async (dispatch) => {
+  dispatch(reset());
+  dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE));
+};
+
+export const GlobalActions = {
+  setModeToView,
+  setModeToEdit,
+  setModeToEditComponent,
+  setModeToEditData,
+  setModeToEditRelation,
+  setModeToEditSequence,
+  setModeToEditCurrentSequence,
 };
 
 export const { handleError } = globalSlice.actions;
-const { setMode } = globalSlice.actions;
 
 export const globalReducer = globalSlice.reducer;
 

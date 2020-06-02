@@ -4,22 +4,16 @@ import { Button, Dropdown } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
+import { currentSequence, currentStep } from "../../../../../slices/SequenceSlice";
 import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
-import {
-  selectSequences,
-  selectSequenceStepToEdit,
-  selectSequenceToEdit,
-} from "../../../viewModel/ControllPanelSlice";
 import "./ControllPanelSequenceOptions.css";
 
 export interface ControllPanelSequenceOptionsProps {}
 
-export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequenceOptionsProps> = (
-  props
-) => {
-  const sequences: SequenceCTO[] = useSelector(selectSequences);
-  const sequence: SequenceCTO | null = useSelector(selectSequenceToEdit);
-  const step: SequenceStepCTO | null = useSelector(selectSequenceStepToEdit);
+export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequenceOptionsProps> = (props) => {
+  const sequences: SequenceCTO[] = [];
+  const sequence: SequenceCTO | null = useSelector(currentSequence);
+  const step: SequenceStepCTO | null = useSelector(currentStep);
 
   const dispatch = useDispatch();
 
@@ -42,9 +36,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
           placeholder="Select Seqence"
           selection
           options={sequences.map(sequenceToOption)}
-          onChange={(event, data) =>
-            dispatch(ControllPanelActions.findSequence(Number(data.value)))
-          }
+          onChange={(event, data) => dispatch(ControllPanelActions.findSequence(Number(data.value)))}
         />
       </div>
       <div className="controllPanelViewChild">
@@ -59,12 +51,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
             // previousStep method neu schreiben.
             // onClick={() => dispatch(ControllPanelActions.previousStep())}
           />
-          <Button
-            inverted
-            color="orange"
-            content={step?.squenceStepTO.index || 0}
-            disabled={true}
-          />
+          <Button inverted color="orange" content={step?.squenceStepTO.index || 0} disabled={true} />
           <Button
             inverted
             color="orange"
