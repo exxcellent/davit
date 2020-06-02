@@ -1,13 +1,12 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Input } from "semantic-ui-react";
+import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
-import { Mode } from "../../../../../../slices/GlobalSlice";
-import { SequenceSlice } from "../../../../../../slices/SequenceSlice";
+import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice";
+import { currentSequence, SequenceActions } from "../../../../../../slices/SequenceSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
-import { ControllPanelActions } from "../../../../viewModel/ControllPanelActions";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
@@ -15,59 +14,31 @@ import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
 export interface ControllPanelEditSequenceProps {}
 
 export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSequenceProps> = (props) => {
-  const { setCurrentSequence } = SequenceSlice.actions;
-
-  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
-  const [label, setLabel] = useState<string>("Create Sequence");
-  const textInput = useRef<Input>(null);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(setCurrentSequence(sequence));
-    if (sequence.sequenceTO.id !== -1) {
-      setLabel("Edit Sequence");
-    }
-  }, [sequence, dispatch, setCurrentSequence]);
-
-  const saveSequenceChanges = () => {
-    dispatch(ControllPanelActions.saveSequence(Carv2Util.deepCopy(sequence)));
-    if (!isCreateAnother) {
-      dispatch(ControllPanelActions.setSequenceToEdit(null));
-      dispatch(ControllPanelActions.setMode(Mode.EDIT));
-    } else {
-      dispatch(ControllPanelActions.setSequenceToEdit(new SequenceCTO()));
-      textInput.current!.focus();
-    }
-  };
-
-  const cancelEditSequence = () => {
-    dispatch(setCurrentSequence(null));
-    dispatch(ControllPanelActions.cancelEditSequence());
-  };
-
-  const createNewStep = () => {
-    dispatch(ControllPanelActions.setSequenceStepToEdit(new SequenceStepCTO()));
-    dispatch(ControllPanelActions.setMode(Mode.EDIT_SEQUENCE_STEP));
-  };
+  const {
+    label,
+    name,
+    textInput,
+    cancel,
+    changeName,
+    deleteSequence,
+    saveSequence,
+    showDelete,
+    toggleIsCreateAnother,
+  } = useControllPanelEditSequenceViewModel();
 
   return (
     <ControllPanelEditSub label={label}>
       <Carv2LabelTextfield
         label="Name:"
         placeholder="Sequence Name"
-        onChange={(event: any) => {
-          // setSequenceToEdit({
-          //   ...sequence,
-          //   sequenceTO: { ...sequence.sequenceTO, name: event.target.value },
-          // });
-        }}
-        value={sequence.sequenceTO.name}
+        onChange={(event: any) => changeName(event.target.value)}
+        value={name}
         autoFocus
         ref={textInput}
       />
       <div className="columnDivider controllPanelEditChild">
         <Button.Group>
-          <Button icon="add" inverted color="orange" onClick={createNewStep} />
+          <Button icon="add" inverted color="orange" onClick={() => {}} />
           <Button id="buttonGroupLabel" disabled inverted color="orange">
             Step
           </Button>
@@ -75,64 +46,62 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
         </Button.Group>
       </div>
       <div className="columnDivider" style={{ display: "flex" }}>
-        <Carv2SubmitCancel
-          onSubmit={saveSequenceChanges}
-          onCancel={cancelEditSequence}
-          onChange={() => setIsCreateAnother(!isCreateAnother)}
-        />
+        <Carv2SubmitCancel onSubmit={saveSequence} onCancel={cancel} onChange={toggleIsCreateAnother} />
       </div>
-      <div className="columnDivider controllPanelEditChild">
-        <Carv2DeleteButton onClick={() => {}} />
-      </div>
+      {showDelete && (
+        <div className="columnDivider controllPanelEditChild">
+          <Carv2DeleteButton onClick={deleteSequence} />
+        </div>
+      )}
     </ControllPanelEditSub>
   );
 };
 
 const useControllPanelEditSequenceViewModel = () => {
-  const componentToEdit: ComponentCTO | null = useSelector(currentComponent);
+  const sequenceToEdit: SequenceCTO | null = useSelector(currentSequence);
   const dispatch = useDispatch();
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
   const textInput = useRef<Input>(null);
 
   useEffect(() => {
     // check if component to edit is really set or gos back to edit mode
-    if (isNullOrUndefined(componentToEdit)) {
+    if (isNullOrUndefined(sequenceToEdit)) {
       GlobalActions.setModeToEdit();
-      handleError("Tried to go to edit component without componentToedit specified");
+      handleError("Tried to go to edit sequence without sequenceToedit specified");
     }
     // used to focus the textfield on create another
     textInput.current!.focus();
-  }, [componentToEdit]);
+  }, [sequenceToEdit]);
 
   const changeName = (name: string) => {
-    let copyComponentToEdit: ComponentCTO = Carv2Util.deepCopy(componentToEdit);
-    copyComponentToEdit.component.name = name;
-    dispatch(ComponentActions.setCompoenentToEdit(copyComponentToEdit));
+    let copySequenceToEdit: SequenceCTO = Carv2Util.deepCopy(sequenceToEdit);
+    copySequenceToEdit.sequenceTO.name = name;
+    dispatch(SequenceActions.setSequenceToEdit(copySequenceToEdit));
   };
 
-  const saveComponent = () => {
-    dispatch(ComponentActions.saveComponent(componentToEdit!));
+  const saveSequence = () => {
+    dispatch(SequenceActions.saveSequence(sequenceToEdit!));
     if (isCreateAnother) {
-      dispatch(GlobalActions.setModeToEditComponent());
+      dispatch(GlobalActions.setModeToEditSequence());
     } else {
       dispatch(GlobalActions.setModeToEdit());
     }
   };
 
-  const deleteComponent = () => {
-    dispatch(ComponentActions.deleteComponent(componentToEdit!));
+  const deleteSequence = () => {
+    dispatch(SequenceActions.deleteSequence(sequenceToEdit!));
     dispatch(GlobalActions.setModeToEdit());
   };
 
   return {
-    label: componentToEdit!.component.id === -1 ? "ADD COMPONENT" : "EDIT COMPONENT",
-    name: componentToEdit!.component.name,
+    label: sequenceToEdit!.sequenceTO.id === -1 ? "ADD SEQUENCE" : "EDIT SEQUENCE",
+    name: sequenceToEdit!.sequenceTO.name,
     changeName,
-    saveComponent,
-    deleteComponent,
+    saveSequence,
+    deleteSequence,
     cancel: () => dispatch(GlobalActions.setModeToEdit()),
     toggleIsCreateAnother: () => setIsCreateAnother(!isCreateAnother),
     textInput,
-    showDelete: componentToEdit!.component.id !== -1,
+    showDelete: sequenceToEdit!.sequenceTO.id !== -1,
   };
 };

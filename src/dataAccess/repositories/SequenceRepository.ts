@@ -27,4 +27,12 @@ export const SequenceRepository = {
     dataStore.getDataStore().sequences.set(sequenceTO.id!, sequenceTO);
     return sequenceTO;
   },
+
+  delete(sequence: SequenceTO): SequenceTO {
+    let success = dataStore.getDataStore().sequences.delete(sequence.id!);
+    if (!success) {
+      throw new Error("dataAccess.repository.error.notExists");
+    }
+    return sequence;
+  },
 };

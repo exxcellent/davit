@@ -29,17 +29,15 @@ export const DataAccess = {
   },
 
   saveComponentCTO(component: ComponentCTO): DataAccessResponse<ComponentCTO> {
-    return makeTransactional(() =>
-      ComponentDataAccessService.saveCTO(component)
-    );
+    return makeTransactional(() => ComponentDataAccessService.saveCTO(component));
   },
 
-  deleteComponentCTO(
-    component: ComponentCTO
-  ): DataAccessResponse<ComponentCTO> {
-    return makeTransactional(() =>
-      ComponentDataAccessService.delete(component)
-    );
+  deleteComponentCTO(component: ComponentCTO): DataAccessResponse<ComponentCTO> {
+    return makeTransactional(() => ComponentDataAccessService.delete(component));
+  },
+
+  deleteSequenceCTO(sequence: SequenceCTO): DataAccessResponse<SequenceCTO> {
+    return makeTransactional(() => SequenceDataAccessService.delete(sequence));
   },
 
   findAllSequences(): DataAccessResponse<SequenceCTO[]> {
@@ -54,12 +52,8 @@ export const DataAccess = {
     return makeTransactional(() => SequenceDataAccessService.save(sequence));
   },
 
-  saveSequenceStepCTO(
-    sequenceStep: SequenceStepCTO
-  ): DataAccessResponse<SequenceStepCTO> {
-    return makeTransactional(() =>
-      SequenceDataAccessService.saveSequenceStep(sequenceStep)
-    );
+  saveSequenceStepCTO(sequenceStep: SequenceStepCTO): DataAccessResponse<SequenceStepCTO> {
+    return makeTransactional(() => SequenceDataAccessService.saveSequenceStep(sequenceStep));
   },
 
   findAllDatas(): DataAccessResponse<DataCTO[]> {
@@ -71,29 +65,19 @@ export const DataAccess = {
   },
 
   deleteDataCTO(dataCTO: DataCTO): DataAccessResponse<DataCTO> {
-    return makeTransactional(() =>
-      DataDataAccessService.deleteDataCTO(dataCTO)
-    );
+    return makeTransactional(() => DataDataAccessService.deleteDataCTO(dataCTO));
   },
 
-  deleteDataRelation(
-    dataRelationCTO: DataRelationCTO
-  ): DataAccessResponse<DataRelationCTO> {
-    return makeTransactional(() =>
-      DataDataAccessService.deleteDataRelationCTO(dataRelationCTO)
-    );
+  deleteDataRelation(dataRelationCTO: DataRelationCTO): DataAccessResponse<DataRelationCTO> {
+    return makeTransactional(() => DataDataAccessService.deleteDataRelationCTO(dataRelationCTO));
   },
 
   findAllDataRelations(): DataAccessResponse<DataRelationCTO[]> {
     return makeTransactional(DataDataAccessService.findAllDataRelationCTOs);
   },
 
-  saveDataRelationCTO(
-    dataRelation: DataRelationCTO
-  ): DataAccessResponse<DataRelationCTO> {
-    return makeTransactional(() =>
-      DataDataAccessService.saveDataRelation(dataRelation)
-    );
+  saveDataRelationCTO(dataRelation: DataRelationCTO): DataAccessResponse<DataRelationCTO> {
+    return makeTransactional(() => DataDataAccessService.saveDataRelation(dataRelation));
   },
 };
 
