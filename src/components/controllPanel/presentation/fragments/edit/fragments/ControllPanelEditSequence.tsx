@@ -81,6 +81,7 @@ const useControllPanelEditSequenceViewModel = () => {
 
   const saveSequence = () => {
     dispatch(SequenceActions.saveSequence(sequenceToEdit!));
+    dispatch(SequenceActions.setSequenceToEdit(null));
     if (isCreateAnother) {
       dispatch(GlobalActions.setModeToEditSequence());
     } else {
@@ -90,6 +91,7 @@ const useControllPanelEditSequenceViewModel = () => {
 
   const deleteSequence = () => {
     dispatch(SequenceActions.deleteSequence(sequenceToEdit!));
+    dispatch(SequenceActions.setSequenceToEdit(null));
     dispatch(GlobalActions.setModeToEdit());
   };
 
