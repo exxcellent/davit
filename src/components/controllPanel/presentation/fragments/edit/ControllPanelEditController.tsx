@@ -13,6 +13,7 @@ import { ControllPanelEditData } from "./fragments/ControllPanelEditData";
 import { ControllPanelEditMenu } from "./fragments/ControllPanelEditMenu";
 import { ControllPanelEditRelation } from "./fragments/ControllPanelEditRelation";
 import { ControllPanelEditSequence } from "./fragments/ControllPanelEditSequence";
+import { ControllPanelEditStep } from "./fragments/ControllPanelEditStep";
 
 export interface ControllPanelEditControllerProps {}
 
@@ -35,8 +36,8 @@ export const ControllPanelEditController: FunctionComponent<ControllPanelEditCon
         return <ControllPanelEditRelation />;
       case Mode.EDIT_SEQUENCE:
         return <ControllPanelEditSequence />;
-      // case Mode.EDIT_SEQUENCE_STEP:
-      //   return <ControllPanelEditStep sequenceStep={step} />;
+      case Mode.EDIT_SEQUENCE_STEP:
+        return <ControllPanelEditStep />;
       // case Mode.EDIT_SEQUENCE_STEP_COMPONENT_DATA:
       //   return <ControllPanelEditComponentData component={component} />;
       default:

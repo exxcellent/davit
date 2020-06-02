@@ -24,6 +24,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
     saveSequence,
     showDelete,
     toggleIsCreateAnother,
+    editOrAddSequenceStep,
   } = useControllPanelEditSequenceViewModel();
 
   return (
@@ -38,7 +39,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
       />
       <div className="columnDivider controllPanelEditChild">
         <Button.Group>
-          <Button icon="add" inverted color="orange" onClick={() => {}} />
+          <Button icon="add" inverted color="orange" onClick={() => editOrAddSequenceStep()} />
           <Button id="buttonGroupLabel" disabled inverted color="orange">
             Step
           </Button>
@@ -64,7 +65,7 @@ const useControllPanelEditSequenceViewModel = () => {
   const textInput = useRef<Input>(null);
 
   useEffect(() => {
-    // check if component to edit is really set or gos back to edit mode
+    // check if sequence to edit is really set or gos back to edit mode
     if (isNullOrUndefined(sequenceToEdit)) {
       GlobalActions.setModeToEdit();
       handleError("Tried to go to edit sequence without sequenceToedit specified");
@@ -81,6 +82,7 @@ const useControllPanelEditSequenceViewModel = () => {
 
   const saveSequence = () => {
     dispatch(SequenceActions.saveSequence(sequenceToEdit!));
+    // TODO: kann dass evtl der global slice machen?
     dispatch(SequenceActions.setSequenceToEdit(null));
     if (isCreateAnother) {
       dispatch(GlobalActions.setModeToEditSequence());
@@ -91,6 +93,12 @@ const useControllPanelEditSequenceViewModel = () => {
 
   const deleteSequence = () => {
     dispatch(SequenceActions.deleteSequence(sequenceToEdit!));
+    // TODO: kann dass evtl der global slice machen?
+    dispatch(SequenceActions.setSequenceToEdit(null));
+    dispatch(GlobalActions.setModeToEdit());
+  };
+
+  const cancelEditSequence = () => {
     dispatch(SequenceActions.setSequenceToEdit(null));
     dispatch(GlobalActions.setModeToEdit());
   };
@@ -101,9 +109,10 @@ const useControllPanelEditSequenceViewModel = () => {
     changeName,
     saveSequence,
     deleteSequence,
-    cancel: () => dispatch(GlobalActions.setModeToEdit()),
+    cancel: cancelEditSequence,
     toggleIsCreateAnother: () => setIsCreateAnother(!isCreateAnother),
     textInput,
     showDelete: sequenceToEdit!.sequenceTO.id !== -1,
+    editOrAddSequenceStep: (step?: number) => dispatch(GlobalActions.setModeToEditStep(step)),
   };
 };

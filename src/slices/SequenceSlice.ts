@@ -46,7 +46,7 @@ export const SequenceSlice = createSlice({
 export const SequenceReducer = SequenceSlice.reducer;
 export const selectSequences = (state: RootState): SequenceCTO[] => state.sequenceModel.sequences;
 export const currentSequence = (state: RootState): SequenceCTO | null => state.sequenceModel.currentSequence;
-const currentStepIndex = (state: RootState): number | null => state.sequenceModel.currentStepIndex;
+export const currentStepIndex = (state: RootState): number | null => state.sequenceModel.currentStepIndex;
 export const currentStep = (state: RootState): SequenceStepCTO | null => {
   return (
     currentSequence(state)?.sequenceStepCTOs.find((step) => step.squenceStepTO.index === currentStepIndex(state)) ||

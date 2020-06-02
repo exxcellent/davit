@@ -6,7 +6,7 @@ import { DataRelationCTO } from "../dataAccess/access/cto/DataRelationCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { ComponentActions, ComponentInternalActions } from "./ComponentSlice";
 import { DataActions, DataInternalActions } from "./DataSlice";
-import { SequenceSlice } from "./SequenceSlice";
+import { SequenceActions, SequenceSlice } from "./SequenceSlice";
 
 const MODE_LOCAL_STORAGE = "MODE";
 
@@ -106,6 +106,11 @@ const setModeToEditCurrentSequence = (): AppThunk => async (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE));
 };
 
+const setModeToEditStep = (stepIndex?: number): AppThunk => async (dispatch) => {
+  dispatch(SequenceActions.setSequenceStepToEdit(stepIndex || null));
+  dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_STEP));
+};
+
 export const GlobalActions = {
   setModeToView,
   setModeToEdit,
@@ -114,6 +119,7 @@ export const GlobalActions = {
   setModeToEditRelation,
   setModeToEditSequence,
   setModeToEditCurrentSequence,
+  setModeToEditStep,
 };
 
 export const { handleError } = globalSlice.actions;
