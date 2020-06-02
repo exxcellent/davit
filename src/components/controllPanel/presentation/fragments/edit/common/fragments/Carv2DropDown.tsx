@@ -7,6 +7,7 @@ import { DataRelationCTO } from "../../../../../../../dataAccess/access/cto/Data
 import { SequenceCTO } from "../../../../../../../dataAccess/access/cto/SequenceCTO";
 import { selectComponents } from "../../../../../../../slices/ComponentSlice";
 import { selectDatas, selectRelations } from "../../../../../../../slices/DataSlice";
+import { selectSequences } from "../../../../../../../slices/SequenceSlice";
 
 interface Carv2DropdownProps extends DropdownProps {}
 
@@ -103,7 +104,8 @@ export const useGetDataDropdown = (onSelect: (data: DataCTO | undefined) => void
 };
 
 export const useGetSequenceDropdown = (onSelect: (sequence: SequenceCTO | undefined) => void, icon?: string) => {
-  const sequences: SequenceCTO[] = [];
+  const sequences: SequenceCTO[] = useSelector(selectSequences);
+
   const sequenceToOption = (sequence: SequenceCTO): DropdownItemProps => {
     return {
       key: sequence.sequenceTO.id,

@@ -1,10 +1,13 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ComponentCTO } from "../../../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../../../dataAccess/access/cto/DataRelationCTO";
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
+import { ComponentActions } from "../../../../../slices/ComponentSlice";
+import { DataActions } from "../../../../../slices/DataSlice";
 import { GlobalActions, Mode, selectMode } from "../../../../../slices/GlobalSlice";
+import { SequenceActions } from "../../../../../slices/SequenceSlice";
 import { ControllPanelEditComponent } from "./fragments/ControllPanelEditComponent";
 import { ControllPanelEditData } from "./fragments/ControllPanelEditData";
 import { ControllPanelEditMenu } from "./fragments/ControllPanelEditMenu";
@@ -53,8 +56,14 @@ export const ControllPanelEditController: FunctionComponent<ControllPanelEditCon
 
 const useControllPanelEditViewModel = () => {
   const dispatch = useDispatch();
-
   const mode: Mode = useSelector(selectMode);
+
+  useEffect(() => {
+    dispatch(SequenceActions.loadSequencesFromBackend());
+    dispatch(ComponentActions.loadComponentsFromBackend());
+    dispatch(DataActions.loadDatasFromBackend());
+    dispatch(DataActions.loadRelationsFromBackend());
+  });
 
   return {
     mode,
