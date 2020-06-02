@@ -1,16 +1,16 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button, Input } from "semantic-ui-react";
-import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
-import { SequenceSlice } from "../../../../../slices/SequenceSlice";
-import { Carv2Util } from "../../../../../utils/Carv2Util";
-import { Carv2DeleteButton } from "../../../../common/fragments/buttons/Carv2DeleteButton";
-import { Mode } from "../../../../common/viewModel/GlobalSlice";
-import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
-import { ControllPanelEditSub } from "./common/ControllPanelEditSub";
-import { Carv2LabelTextfield } from "./common/fragments/Carv2LabelTextfield";
-import { Carv2SubmitCancel } from "./common/fragments/Carv2SubmitCancel";
+import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
+import { SequenceSlice } from "../../../../../../slices/SequenceSlice";
+import { Carv2Util } from "../../../../../../utils/Carv2Util";
+import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
+import { Mode } from "../../../../../common/viewModel/GlobalSlice";
+import { ControllPanelActions } from "../../../../viewModel/ControllPanelActions";
+import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
+import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
 import "./ControllPanelEdit.css";
 
 export interface ControllPanelEditSequenceProps {

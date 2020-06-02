@@ -92,7 +92,7 @@ const setModeToEditData = (data?: DataCTO): AppThunk => async (dispatch) => {
 const setModeToEditRelation = (relation?: DataRelationCTO): AppThunk => async (dispatch) => {
   dispatch(reset());
   dispatch(DataActions.setRelationToEdit(relation || new DataRelationCTO()));
-  dispatch(setModeWithStorage(Mode.EDIT_DATA));
+  dispatch(setModeWithStorage(Mode.EDIT_DATA_RELATION));
 };
 
 const setModeToEditSequence = (sequence?: SequenceCTO): AppThunk => async (dispatch) => {

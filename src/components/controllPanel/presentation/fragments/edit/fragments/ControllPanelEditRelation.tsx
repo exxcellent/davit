@@ -2,15 +2,15 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
-import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
-import { DataRelationCTO } from "../../../../../dataAccess/access/cto/DataRelationCTO";
-import { Direction, RelationType } from "../../../../../dataAccess/access/to/DataRelationTO";
-import { DataActions, selectCurrentRelation, selectDatas } from "../../../../../slices/DataSlice";
-import { Carv2Util } from "../../../../../utils/Carv2Util";
-import { Carv2DeleteButton } from "../../../../common/fragments/buttons/Carv2DeleteButton";
-import { GlobalActions, handleError } from "../../../../common/viewModel/GlobalSlice";
-import { ControllPanelEditSub } from "./common/ControllPanelEditSub";
-import { Carv2SubmitCancel } from "./common/fragments/Carv2SubmitCancel";
+import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
+import { DataRelationCTO } from "../../../../../../dataAccess/access/cto/DataRelationCTO";
+import { Direction, RelationType } from "../../../../../../dataAccess/access/to/DataRelationTO";
+import { DataActions, selectCurrentRelation, selectDatas } from "../../../../../../slices/DataSlice";
+import { Carv2Util } from "../../../../../../utils/Carv2Util";
+import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
+import { GlobalActions, handleError } from "../../../../../common/viewModel/GlobalSlice";
+import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
 
 export interface ControllPanelEditRelationProps {}
 
@@ -185,26 +185,26 @@ const useControllPanelEditRelationViewModel = () => {
       isSnd
         ? (relationCopy.dataRelationTO.data2Fk = data.data.id)
         : (relationCopy.dataRelationTO.data1Fk = data.data.id);
-      dispatch(DataActions.saveRelation(relationCopy));
+      dispatch(DataActions.setRelationToEdit(relationCopy));
     }
   };
 
   const setLabel = (label: string, isSnd?: boolean) => {
     const relationCopy: DataRelationCTO = Carv2Util.deepCopy(relationToEdit);
     isSnd ? (relationCopy.dataRelationTO.label2 = label) : (relationCopy.dataRelationTO.label1 = label);
-    dispatch(DataActions.saveRelation(relationCopy));
+    dispatch(DataActions.setRelationToEdit(relationCopy));
   };
 
   const setDirection = (direction: Direction, isSnd?: boolean) => {
     const relationCopy: DataRelationCTO = Carv2Util.deepCopy(relationToEdit);
     isSnd ? (relationCopy.dataRelationTO.direction2 = direction) : (relationCopy.dataRelationTO.direction1 = direction);
-    dispatch(DataActions.saveRelation(relationCopy));
+    dispatch(DataActions.setRelationToEdit(relationCopy));
   };
 
   const setType = (relationType: RelationType, isSnd?: boolean) => {
     const relationCopy: DataRelationCTO = Carv2Util.deepCopy(relationToEdit);
     isSnd ? (relationCopy.dataRelationTO.type2 = relationType) : (relationCopy.dataRelationTO.type1 = relationType);
-    dispatch(DataActions.saveRelation(relationCopy));
+    dispatch(DataActions.setRelationToEdit(relationCopy));
   };
 
   const saveRelation = () => {

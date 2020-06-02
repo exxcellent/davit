@@ -8,6 +8,7 @@ import { GlobalActions, Mode, selectMode } from "../../../../common/viewModel/Gl
 import { ControllPanelEditComponent } from "./fragments/ControllPanelEditComponent";
 import { ControllPanelEditData } from "./fragments/ControllPanelEditData";
 import { ControllPanelEditMenu } from "./fragments/ControllPanelEditMenu";
+import { ControllPanelEditRelation } from "./fragments/ControllPanelEditRelation";
 
 export interface ControllPanelEditControllerProps {}
 
@@ -26,8 +27,8 @@ export const ControllPanelEditController: FunctionComponent<ControllPanelEditCon
         return <ControllPanelEditComponent />;
       case Mode.EDIT_DATA:
         return <ControllPanelEditData />;
-      // case Mode.EDIT_DATA_RELATION:
-      //   return <ControllPanelEditRelation dataRelation={relation} />;
+      case Mode.EDIT_DATA_RELATION:
+        return <ControllPanelEditRelation />;
       // case Mode.EDIT_SEQUENCE:
       //   return <ControllPanelEditSequence sequence={sequence} />;
       // case Mode.EDIT_SEQUENCE_STEP:

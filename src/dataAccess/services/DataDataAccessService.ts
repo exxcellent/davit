@@ -1,3 +1,4 @@
+import { Carv2Util } from "../../utils/Carv2Util";
 import { DataCTO } from "../access/cto/DataCTO";
 import { DataRelationCTO } from "../access/cto/DataRelationCTO";
 import { GeometricalDataCTO } from "../access/cto/GeometraicalDataCTO";
@@ -19,11 +20,10 @@ export const DataDataAccessService = {
 
   saveDataCTO(dataCTO: DataCTO): DataCTO {
     CheckHelper.nullCheck(dataCTO, "dataCTO");
-    const savedGeometricalData = TechnicalDataAccessService.saveGeometricalData(
-      dataCTO.geometricalData
-    );
-    dataCTO.data.geometricalDataFk = savedGeometricalData.geometricalData.id;
-    const savedData = DataRepository.save(dataCTO.data);
+    const savedGeometricalData = TechnicalDataAccessService.saveGeometricalData(dataCTO.geometricalData);
+    const copyDataCTO: DataCTO = Carv2Util.deepCopy(dataCTO);
+    copyDataCTO.data.geometricalDataFk = savedGeometricalData.geometricalData.id;
+    const savedData = DataRepository.save(copyDataCTO.data);
     return {
       data: savedData,
       geometricalData: savedGeometricalData,
@@ -35,16 +35,12 @@ export const DataDataAccessService = {
   },
 
   findAllDataRelationCTOs(): DataRelationCTO[] {
-    return DataDataAccessService.findAllDataRelationTOs().map(
-      createDataRelationCTO
-    );
+    return DataDataAccessService.findAllDataRelationTOs().map(createDataRelationCTO);
   },
 
   saveDataRelation(dataRelation: DataRelationCTO): DataRelationCTO {
     CheckHelper.nullCheck(dataRelation, "dataRelation");
-    const saveDataConnection = DataConnectionRepository.save(
-      dataRelation.dataRelationTO
-    );
+    const saveDataConnection = DataConnectionRepository.save(dataRelation.dataRelationTO);
     return {
       dataCTO1: dataRelation.dataCTO1,
       dataCTO2: dataRelation.dataCTO2,
@@ -55,9 +51,7 @@ export const DataDataAccessService = {
   deleteDataCTO(dataCTO: DataCTO): DataCTO {
     CheckHelper.nullCheck(dataCTO.geometricalData, "GeometricalDataCTO");
     CheckHelper.nullCheck(dataCTO.data, "DataTO");
-    TechnicalDataAccessService.deleteGeometricalDataCTO(
-      dataCTO.geometricalData
-    );
+    TechnicalDataAccessService.deleteGeometricalDataCTO(dataCTO.geometricalData);
     DataRepository.delete(dataCTO.data);
     return dataCTO;
   },
@@ -69,17 +63,11 @@ export const DataDataAccessService = {
   },
 };
 
-const createDataRelationCTO = (
-  dataRelationTO: DataRelationTO
-): DataRelationCTO => {
+const createDataRelationCTO = (dataRelationTO: DataRelationTO): DataRelationCTO => {
   CheckHelper.nullCheck(dataRelationTO, "DataRelationTO");
-  const dataCTO1: DataCTO | undefined = createDataCTO(
-    DataDataAccessService.findData(dataRelationTO.data1Fk)
-  );
+  const dataCTO1: DataCTO | undefined = createDataCTO(DataDataAccessService.findData(dataRelationTO.data1Fk));
   CheckHelper.nullCheck(dataCTO1, "dataTO1");
-  const dataCTO2: DataCTO | undefined = createDataCTO(
-    DataDataAccessService.findData(dataRelationTO.data2Fk)
-  );
+  const dataCTO2: DataCTO | undefined = createDataCTO(DataDataAccessService.findData(dataRelationTO.data2Fk));
   CheckHelper.nullCheck(dataCTO2, "dataTO2");
   return {
     dataCTO1: dataCTO1!,
@@ -90,9 +78,7 @@ const createDataRelationCTO = (
 
 const createDataCTO = (data: DataTO | undefined): DataCTO => {
   CheckHelper.nullCheck(data, "data");
-  let geometricalData:
-    | GeometricalDataCTO
-    | undefined = TechnicalDataAccessService.findGeometricalDataCTO(
+  let geometricalData: GeometricalDataCTO | undefined = TechnicalDataAccessService.findGeometricalDataCTO(
     data!.geometricalDataFk!
   );
   CheckHelper.nullCheck(geometricalData, "geometricalData");

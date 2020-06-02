@@ -1,3 +1,4 @@
+import { Carv2Util } from "../../utils/Carv2Util";
 import { GeometricalDataCTO } from "../access/cto/GeometraicalDataCTO";
 import { DesignTO } from "../access/to/DesignTO";
 import { GeometricalDataTO } from "../access/to/GeometricalDataTO";
@@ -28,20 +29,13 @@ export const TechnicalDataAccessService = {
     return DesignRepository.find(id);
   },
 
-  saveGeometricalData(
-    geometricalDataCTO: GeometricalDataCTO
-  ): GeometricalDataCTO {
+  saveGeometricalData(geometricalDataCTO: GeometricalDataCTO): GeometricalDataCTO {
     CheckHelper.nullCheck(geometricalDataCTO, "geometricalDataCTO");
-    CheckHelper.nullCheck(
-      geometricalDataCTO.geometricalData,
-      "geometricalData"
-    );
     CheckHelper.nullCheck(geometricalDataCTO.position, "position");
     const savedPosition = PositionRepository.save(geometricalDataCTO.position);
-    geometricalDataCTO.geometricalData.positionFk = savedPosition.id;
-    const savedGeometricalData = GeometricalDataRepository.save(
-      geometricalDataCTO.geometricalData
-    );
+    const copyGeometricalDataCTO: GeometricalDataCTO = Carv2Util.deepCopy(geometricalDataCTO);
+    copyGeometricalDataCTO.geometricalData.positionFk = savedPosition.id;
+    const savedGeometricalData = GeometricalDataRepository.save(copyGeometricalDataCTO.geometricalData);
     return {
       position: savedPosition,
       geometricalData: savedGeometricalData,
@@ -53,16 +47,10 @@ export const TechnicalDataAccessService = {
     return DesignRepository.save(design);
   },
 
-  deleteGeometricalDataCTO(
-    geometricalDataCTO: GeometricalDataCTO
-  ): GeometricalDataCTO {
+  deleteGeometricalDataCTO(geometricalDataCTO: GeometricalDataCTO): GeometricalDataCTO {
     CheckHelper.nullCheck(geometricalDataCTO, "geometricalDataCTO");
-    const isdeletedPosition = PositionRepository.delete(
-      geometricalDataCTO.position
-    );
-    const isDeletedGeoData = GeometricalDataRepository.delete(
-      geometricalDataCTO.geometricalData
-    );
+    const isdeletedPosition = PositionRepository.delete(geometricalDataCTO.position);
+    const isDeletedGeoData = GeometricalDataRepository.delete(geometricalDataCTO.geometricalData);
     if (!(isdeletedPosition && isDeletedGeoData)) {
       // TODO: use intl id
       throw new Error("Couldn't delete");

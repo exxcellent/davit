@@ -58,7 +58,7 @@ const useControllPanelEditComponentViewModel = () => {
   const textInput = useRef<Input>(null);
 
   useEffect(() => {
-    // check if component to edit is really set or gso back to edit mode
+    // check if component to edit is really set or gos back to edit mode
     if (isNullOrUndefined(componentToEdit)) {
       GlobalActions.setModeToEdit();
       handleError("Tried to go to edit component without componentToedit specified");
