@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../app/store";
-import { handleError } from "../components/common/viewModel/GlobalSlice";
 import { ComponentCTO } from "../dataAccess/access/cto/ComponentCTO";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
+import { handleError } from "./GlobalSlice";
 
 interface ComponentState {
   currentComponent: ComponentCTO | null;

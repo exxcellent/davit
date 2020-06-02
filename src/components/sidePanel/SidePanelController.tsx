@@ -1,14 +1,12 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch } from "react-redux";
 import { Button } from "semantic-ui-react";
-import { Mode } from "../common/viewModel/GlobalSlice";
+import { Mode } from "../../slices/GlobalSlice";
 import { SidePanelActions } from "./viewModel/SidePanelActions";
 
 export interface SidePanelProps {}
 
-export const SidePanelController: FunctionComponent<SidePanelProps> = (
-  props
-) => {
+export const SidePanelController: FunctionComponent<SidePanelProps> = (props) => {
   const dispatch = useDispatch();
 
   const setModeToEdit = () => {

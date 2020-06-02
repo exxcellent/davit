@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { isNullOrUndefined } from "util";
-import { Mode, selectMode } from "../../common/viewModel/GlobalSlice";
+import { Mode, selectMode } from "../../../slices/GlobalSlice";
 import { ControllPanelEditController } from "./fragments/edit/ControllPanelEditController";
 import { ControllPanelSequenceOptions } from "./fragments/view/ControllPanelSequenceOptions";
 

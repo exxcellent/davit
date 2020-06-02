@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../app/store";
-import { handleError } from "../components/common/viewModel/GlobalSlice";
 import { DataCTO } from "../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../dataAccess/access/cto/DataRelationCTO";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
+import { handleError } from "./GlobalSlice";
 
 interface DataState {
   datas: DataCTO[];

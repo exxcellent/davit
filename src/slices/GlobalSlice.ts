@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk, RootState } from "../../../app/store";
-import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
-import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
-import { DataRelationCTO } from "../../../dataAccess/access/cto/DataRelationCTO";
-import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
-import { ComponentActions, ComponentInternalActions } from "../../../slices/ComponentSlice";
-import { DataActions, DataInternalActions } from "../../../slices/DataSlice";
-import { SequenceSlice } from "../../../slices/SequenceSlice";
+import { AppThunk, RootState } from "../app/store";
+import { ComponentCTO } from "../dataAccess/access/cto/ComponentCTO";
+import { DataCTO } from "../dataAccess/access/cto/DataCTO";
+import { DataRelationCTO } from "../dataAccess/access/cto/DataRelationCTO";
+import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
+import { ComponentActions, ComponentInternalActions } from "./ComponentSlice";
+import { DataActions, DataInternalActions } from "./DataSlice";
+import { SequenceSlice } from "./SequenceSlice";
 
 const MODE_LOCAL_STORAGE = "MODE";
 

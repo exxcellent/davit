@@ -7,7 +7,7 @@ import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
 import { DataAccess } from "../../../dataAccess/DataAccess";
 import { DataAccessResponse } from "../../../dataAccess/DataAccessResponse";
-import { handleError, Mode, setModeWithStorage } from "../../common/viewModel/GlobalSlice";
+import { handleError, Mode, setModeWithStorage } from "../../../slices/GlobalSlice";
 import { ControllPanelSlice } from "./ControllPanelSlice";
 
 const {

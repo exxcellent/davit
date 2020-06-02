@@ -1,7 +1,7 @@
 import { configureStore, ThunkAction } from "@reduxjs/toolkit";
-import { globalReducer } from "../components/common/viewModel/GlobalSlice";
 import { ComponentReducer } from "../slices/ComponentSlice";
 import { DataReducer } from "../slices/DataSlice";
+import { globalReducer } from "../slices/GlobalSlice";
 import { SequenceReducer } from "../slices/SequenceSlice";
 
 export const store = configureStore({

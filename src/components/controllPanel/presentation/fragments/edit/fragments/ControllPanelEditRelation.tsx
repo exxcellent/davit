@@ -6,9 +6,9 @@ import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../../../../dataAccess/access/cto/DataRelationCTO";
 import { Direction, RelationType } from "../../../../../../dataAccess/access/to/DataRelationTO";
 import { DataActions, selectCurrentRelation, selectDatas } from "../../../../../../slices/DataSlice";
+import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
-import { GlobalActions, handleError } from "../../../../../common/viewModel/GlobalSlice";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
 
