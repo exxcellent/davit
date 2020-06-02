@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Table } from "semantic-ui-react";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
-import { currentSequence, currentStep } from "../../../viewModel/SequenceSlice";
+import { currentSequence, currentStep } from "../../../slices/SequenceSlice";
 
 interface SequenceTableModelControllerProps {}
 
