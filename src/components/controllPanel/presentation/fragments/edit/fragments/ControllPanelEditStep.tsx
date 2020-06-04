@@ -33,6 +33,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
     setComponent,
     indexToOptions,
     selectSourcePlaceholder,
+    selectTargetPlaceholder,
   } = useControllPanelEditSequenceStepViewModel();
 
   return (
@@ -59,7 +60,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
       <div className="optionFieldSpacer columnDivider">
         <OptionField>
           {useGetComponentDropdownLable((comp) => setComponent(comp, true), selectSourcePlaceholder as string)}
-          {useGetComponentDropdownLable((comp) => setComponent(comp, false), "Select Target")}
+          {useGetComponentDropdownLable((comp) => setComponent(comp, false), selectTargetPlaceholder as string)}
         </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
@@ -141,6 +142,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
     if (!isNullOrUndefined(sequenceToEdit)) {
       dispatch(SequenceActions.saveSequence(sequenceToEdit));
       dispatch(GlobalActions.setModeToEditSequence(sequenceToEdit));
+      // dispatch(GlobalActions.setModeToEditCurrentSequence());
     }
   };
 
@@ -165,8 +167,15 @@ const useControllPanelEditSequenceStepViewModel = () => {
     textInput,
     showDelete: sequenceStepToEdit ? true : false,
     indexToOptions,
-    selectSourcePlaceholder: sequenceStepToEdit?.componentCTOSource
-      ? sequenceStepToEdit?.componentCTOSource.component.name
-      : "Select Source",
+    //TODO: to fix: "Select Source is not shown if Source is empty.
+    selectSourcePlaceholder:
+      sequenceStepToEdit?.componentCTOSource.component.name === ""
+        ? "Select Source"
+        : sequenceStepToEdit?.componentCTOSource.component.name,
+    // TODO: to fix: "Select Target" is not shown if Target is empty.
+    selectTargetPlaceholder:
+      sequenceStepToEdit?.componentCTOTarget.component.name === ""
+        ? "Select Target"
+        : sequenceStepToEdit?.componentCTOTarget.component.name,
   };
 };
