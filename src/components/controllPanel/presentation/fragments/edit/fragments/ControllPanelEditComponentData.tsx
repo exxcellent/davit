@@ -1,19 +1,19 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Dropdown, DropdownItemProps } from "semantic-ui-react";
-import { ComponentCTO } from "../../../../../dataAccess/access/cto/ComponentCTO";
-import { ComponentDataCTO } from "../../../../../dataAccess/access/cto/ComponentDataCTO";
-import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
-import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
-import { selectDatas } from "../../../../../slices/DataSlice";
-import { Mode } from "../../../../../slices/GlobalSlice";
-import { currentSequence, currentStep } from "../../../../../slices/SequenceSlice";
-import { Carv2Util } from "../../../../../utils/Carv2Util";
-import { getColorForComponentDataState } from "../../../../metaComponentModel/presentation/fragments/DataFragment";
-import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
-import { ControllPanelEditSub } from "./common/ControllPanelEditSub";
-import { Carv2LabelTextfield } from "./common/fragments/Carv2LabelTextfield";
+import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
+import { ComponentDataCTO } from "../../../../../../dataAccess/access/cto/ComponentDataCTO";
+import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
+import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
+import { selectDatas } from "../../../../../../slices/DataSlice";
+import { Mode } from "../../../../../../slices/GlobalSlice";
+import { currentSequence, currentStep } from "../../../../../../slices/SequenceSlice";
+import { Carv2Util } from "../../../../../../utils/Carv2Util";
+import { getColorForComponentDataState } from "../../../../../metaComponentModel/presentation/fragments/DataFragment";
+import { ControllPanelActions } from "../../../../viewModel/ControllPanelActions";
+import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import "./ControllPanelEdit.css";
 
 export interface ControllPanelEditComponentDataProps {
