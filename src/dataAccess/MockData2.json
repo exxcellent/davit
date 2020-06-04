@@ -1,0 +1,90 @@
+{
+  "components": [
+    { "id": 1, "name": "comp1", "geometricalDataFk": 1, "designFk": 1 },
+    { "id": 2, "name": "comp2", "geometricalDataFk": 2, "designFk": 2 },
+    { "id": 3, "name": "comp3", "geometricalDataFk": 3, "designFk": 3 }
+  ],
+  "designs": [
+    { "id": 1, "color": "#3498db" },
+    { "id": 2, "color": "#3498db" },
+    { "id": 3, "color": "#3498db" }
+  ],
+  "geometricalDatas": [
+    { "id": 1, "width": 150, "height": 150, "positionFk": 1 },
+    { "id": 2, "width": 150, "height": 150, "positionFk": 2 },
+    { "id": 3, "width": 150, "height": 150, "positionFk": 3 },
+    { "id": 4, "width": 150, "height": 150, "positionFk": 4 },
+    { "id": 5, "width": 150, "height": 150, "positionFk": 5 },
+    { "id": 6, "width": 150, "height": 150, "positionFk": 6 }
+  ],
+  "positions": [
+    { "id": 1, "x": 153, "y": 89 },
+    { "id": 2, "x": 378, "y": 271 },
+    { "id": 3, "x": 568, "y": 99 },
+    { "id": 4, "x": 133, "y": 109 },
+    { "id": 5, "x": 369, "y": 226 },
+    { "id": 6, "x": 610, "y": 84 }
+  ],
+  "sequences": [
+    { "id": 1, "name": "sequence222" },
+    { "id": 2, "name": "sequence1" }
+  ],
+  "steps": [
+    { "id": 1, "name": "step1", "index": 1, "sequenceFk": 2, "sourceComponentFk": 1, "targetComponentFk": 2 },
+    { "id": 2, "name": "step2", "index": 2, "sequenceFk": 2, "sourceComponentFk": 3, "targetComponentFk": 2 },
+    { "id": 3, "name": "step3", "index": 3, "sequenceFk": 2, "sourceComponentFk": 1, "targetComponentFk": 3 },
+    { "id": 4, "name": "st1", "index": 1, "sequenceFk": 1, "sourceComponentFk": 1, "targetComponentFk": 2 },
+    { "id": 5, "name": "stp2", "index": 3, "sequenceFk": 1, "sourceComponentFk": 2, "targetComponentFk": 3 },
+    { "id": 6, "name": "step4", "index": 4, "sequenceFk": 1, "sourceComponentFk": 3, "targetComponentFk": 1 },
+    { "id": 7, "name": "step9", "index": 5, "sequenceFk": 1, "sourceComponentFk": 1, "targetComponentFk": 2 },
+    { "id": 8, "name": "step11", "index": 6, "sequenceFk": 1, "sourceComponentFk": 1, "targetComponentFk": 2 },
+    { "id": 9, "name": "stea12", "index": 2, "sequenceFk": 1, "sourceComponentFk": 1, "targetComponentFk": 3 }
+  ],
+  "componentDatas": [
+    { "id": 1, "sequenceStepFk": 4, "componentFk": 1, "dataFk": 1, "componentDataState": "NEW" },
+    { "id": 2, "sequenceStepFk": 4, "componentFk": 1, "dataFk": 2, "componentDataState": "PERSISTENT" },
+    { "id": 3, "sequenceStepFk": 4, "componentFk": 1, "dataFk": 3, "componentDataState": "DELETED" },
+    { "id": 4, "sequenceStepFk": 4, "componentFk": 2, "dataFk": 3, "componentDataState": "NEW" },
+    { "id": 5, "sequenceStepFk": 4, "componentFk": 3, "dataFk": 2, "componentDataState": "NEW" },
+
+    { "id": 6, "sequenceStepFk": 9, "componentFk": 1, "dataFk": 1, "componentDataState": "PERSISTENT" },
+    { "id": 7, "sequenceStepFk": 9, "componentFk": 1, "dataFk": 2, "componentDataState": "PERSISTENT" },
+    { "id": 8, "sequenceStepFk": 9, "componentFk": 2, "dataFk": 3, "componentDataState": "PERSISTENT" },
+    { "id": 9, "sequenceStepFk": 9, "componentFk": 3, "dataFk": 2, "componentDataState": "PERSISTENT" },
+
+    { "id": 10, "sequenceStepFk": 5, "componentFk": 1, "dataFk": 1, "componentDataState": "PERSISTENT" },
+    { "id": 11, "sequenceStepFk": 5, "componentFk": 1, "dataFk": 2, "componentDataState": "DELETED" },
+    { "id": 12, "sequenceStepFk": 5, "componentFk": 2, "dataFk": 3, "componentDataState": "PERSISTENT" },
+    { "id": 13, "sequenceStepFk": 5, "componentFk": 3, "dataFk": 2, "componentDataState": "PERSISTENT" },
+    { "id": 13, "sequenceStepFk": 5, "componentFk": 3, "dataFk": 1, "componentDataState": "NEW" }
+  ],
+  "datas": [
+    { "id": 1, "name": "dat1", "geometricalDataFk": 4, "dataConnectionFks": [] },
+    { "id": 2, "name": "dat2", "geometricalDataFk": 5, "dataConnectionFks": [] },
+    { "id": 3, "name": "data3", "geometricalDataFk": 6, "dataConnectionFks": [] }
+  ],
+  "dataConnections": [
+    {
+      "id": 1,
+      "data1Fk": 1,
+      "data2Fk": 2,
+      "label1": "",
+      "label2": "",
+      "direction1": "RIGHT",
+      "direction2": "LEFT",
+      "type1": "OUT",
+      "type2": "IN"
+    },
+    {
+      "id": 2,
+      "data1Fk": 1,
+      "data2Fk": 3,
+      "label1": "",
+      "label2": "",
+      "direction1": "RIGHT",
+      "direction2": "LEFT",
+      "type1": "OUT",
+      "type2": "IN"
+    }
+  ]
+}
