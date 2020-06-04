@@ -16,7 +16,6 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
   useEffect(() => {
     if (selectedStep !== null) {
       setSelectedId(selectedStep.squenceStepTO.id);
-      console.warn("useEffect Tabel");
     } else {
       setSelectedId(-1);
     }
@@ -24,7 +23,11 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
 
   const createTableRow = (sequenceStepCTO: SequenceStepCTO) => {
     return (
-      <Table.Row id={sequenceStepCTO.squenceStepTO.id} active={selectedId === sequenceStepCTO.squenceStepTO.id}>
+      <Table.Row
+        id={sequenceStepCTO.squenceStepTO.id}
+        active={selectedId === sequenceStepCTO.squenceStepTO.id}
+        key={sequenceStepCTO.squenceStepTO.id}
+      >
         <Table.Cell>{sequenceStepCTO.squenceStepTO.index}</Table.Cell>
         <Table.Cell>{sequenceStepCTO.squenceStepTO.name}</Table.Cell>
         <Table.Cell>{sequenceStepCTO.componentCTOSource.component.name}</Table.Cell>

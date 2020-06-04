@@ -48,20 +48,17 @@ export const globalSlice = createSlice({
       state.errors = [];
     },
     setMode: (state, action: PayloadAction<Mode>) => {
-      console.log("setting mode " + action.payload);
       state.mode = action.payload;
     },
   },
 });
 
 export const setModeWithStorage = (mode: Mode): AppThunk => async (dispatch) => {
-  console.log("setMode", mode);
   localStorage.setItem(MODE_LOCAL_STORAGE, mode);
   dispatch(globalSlice.actions.setMode(mode));
 };
 
 const reset = (): AppThunk => async (dispatch) => {
-  console.log("reset");
   dispatch(ComponentInternalActions.resetCurrentComponent());
   dispatch(DataInternalActions.resetCurrentData());
   dispatch(DataInternalActions.resetCurrentRelation());
@@ -96,6 +93,8 @@ const setModeToEditRelation = (relation?: DataRelationCTO): AppThunk => async (d
 };
 
 const setModeToEditSequence = (sequence?: SequenceCTO): AppThunk => async (dispatch) => {
+  console.log("call set edit sequence mode in globalSlice.");
+  console.log("sequence? " + sequence);
   dispatch(reset());
   dispatch(SequenceSlice.actions.setCurrentSequence(sequence || new SequenceCTO()));
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE));
@@ -103,6 +102,8 @@ const setModeToEditSequence = (sequence?: SequenceCTO): AppThunk => async (dispa
 
 const setModeToEditCurrentSequence = (): AppThunk => async (dispatch) => {
   dispatch(reset());
+  dispatch(SequenceSlice.actions.resetCurrentStepIndex());
+  dispatch(SequenceActions.loadSequencesFromBackend);
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE));
 };
 

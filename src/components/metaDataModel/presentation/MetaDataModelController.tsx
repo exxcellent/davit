@@ -50,8 +50,6 @@ const useMetaDataModelViewModel = () => {
   const selectedStep: SequenceStepCTO | null = useSelector(currentStep);
   const dispatch = useDispatch();
 
-  console.log("Controller", dataCTOToEdit);
-
   React.useEffect(() => {
     dispatch(DataActions.loadDatasFromBackend());
     dispatch(DataActions.loadRelationsFromBackend());

@@ -29,14 +29,10 @@ class DataStore {
   }
 
   private readData(objectStore: StoreTO) {
-    console.log("Reading data");
     this.data = new DataStoreCTO();
-
     Object.entries(objectStore).map(([key, value]) => {
       if (value !== undefined) {
-        const dataEntry = Object.entries(this.data!).find(
-          ([dataKey, dataValue]) => dataKey === key
-        );
+        const dataEntry = Object.entries(this.data!).find(([dataKey, dataValue]) => dataKey === key);
         if (dataEntry) {
           value.forEach((abstractTO: any) => {
             dataEntry[1].set(abstractTO.id, abstractTO);
@@ -76,7 +72,6 @@ class DataStore {
   };
 
   public commitChanges(): void {
-    console.log("commit");
     this.saveData();
     this.readDataFromStorage();
   }

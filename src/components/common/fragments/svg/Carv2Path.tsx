@@ -1,11 +1,7 @@
 import { motion, Point } from "framer-motion";
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { GeometricalDataCTO } from "../../../../dataAccess/access/cto/GeometraicalDataCTO";
-import {
-  DataRelationTO,
-  Direction,
-  RelationType,
-} from "../../../../dataAccess/access/to/DataRelationTO";
+import { DataRelationTO, Direction, RelationType } from "../../../../dataAccess/access/to/DataRelationTO";
 
 export interface Carv2PathProps {
   xSource: number;
@@ -119,7 +115,6 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
     let pathLength = 0;
     if (pathRef !== null && pathRef.current !== null) {
       pathLength = pathRef.current?.getTotalLength();
-      console.info("Path Length: " + pathLength);
     }
     return pathLength;
   };

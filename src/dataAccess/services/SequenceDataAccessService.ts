@@ -24,6 +24,7 @@ export const SequenceDataAccessService = {
   },
 
   save(sequence: SequenceCTO): SequenceCTO {
+    sequence.sequenceStepCTOs.map((step) => SequenceStepRepository.save(step.squenceStepTO));
     return createSequenceCTO(SequenceRepository.save(sequence.sequenceTO));
   },
 
@@ -38,6 +39,12 @@ export const SequenceDataAccessService = {
     }
     SequenceRepository.delete(sequence.sequenceTO);
     return sequence;
+  },
+
+  deleteSequenceStep(sequenceStep: SequenceStepCTO): SequenceStepCTO {
+    CheckHelper.nullCheck(sequenceStep, "step");
+    SequenceStepRepository.delete(sequenceStep.squenceStepTO);
+    return sequenceStep;
   },
 };
 

@@ -56,6 +56,10 @@ export const DataAccess = {
     return makeTransactional(() => SequenceDataAccessService.saveSequenceStep(sequenceStep));
   },
 
+  deleteSequenceStepCTO(sequenceStep: SequenceStepCTO): DataAccessResponse<SequenceStepCTO> {
+    return makeTransactional(() => SequenceDataAccessService.deleteSequenceStep(sequenceStep));
+  },
+
   findAllDatas(): DataAccessResponse<DataCTO[]> {
     return makeTransactional(DataDataAccessService.findAllDatas);
   },

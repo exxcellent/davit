@@ -1,13 +1,15 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
+import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../../../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../../../../../dataAccess/access/cto/DataRelationCTO";
 import { SequenceCTO } from "../../../../../../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { selectComponents } from "../../../../../../../slices/ComponentSlice";
 import { selectDatas, selectRelations } from "../../../../../../../slices/DataSlice";
-import { selectSequences } from "../../../../../../../slices/SequenceSlice";
+import { currentSequence, selectSequences } from "../../../../../../../slices/SequenceSlice";
 
 interface Carv2DropdownProps extends DropdownProps {}
 
@@ -35,6 +37,42 @@ export const useGetComponentDropdown = (onSelect: (component: ComponentCTO | und
       options={components.map(componentToOption)}
       icon={icon}
       onChange={(event, data) => selectComponent(Number(data.value))}
+      className="button icon"
+      floating
+      trigger={<React.Fragment />}
+    />
+  );
+};
+
+export const useGetStepDropDown = (onSelect: (step: SequenceStepCTO | undefined) => void, icon?: string) => {
+  const sequence: SequenceCTO | null = useSelector(currentSequence);
+
+  const stepOptions = (): DropdownItemProps[] => {
+    if (!isNullOrUndefined(sequence)) {
+      return sequence.sequenceStepCTOs.map(stepToOption);
+    }
+    return [];
+  };
+
+  const stepToOption = (step: SequenceStepCTO): DropdownItemProps => {
+    return {
+      key: step.squenceStepTO.id,
+      value: step.squenceStepTO.id,
+      text: step.squenceStepTO.name,
+    };
+  };
+
+  const selectStep = (id: number) => {
+    if (!isNullOrUndefined(sequence)) {
+      onSelect(sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.id === id));
+    }
+  };
+
+  return (
+    <Dropdown
+      options={stepOptions()}
+      icon={icon}
+      onChange={(event, data) => selectStep(Number(data.value))}
       className="button icon"
       floating
       trigger={<React.Fragment />}

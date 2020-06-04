@@ -12,8 +12,16 @@ export const SequenceStepRepository = {
     return Array.from(dataStore.getDataStore().steps.values());
   },
 
-  findAllForSequence(sequenceId: number) {
-    return this.findAll().filter((step) => step.sequenceFk === sequenceId);
+  findAllForSequence(sequenceStepId: number) {
+    return this.findAll().filter((step) => step.sequenceFk === sequenceStepId);
+  },
+
+  delete(step: SequenceStepTO) {
+    let success = dataStore.getDataStore().steps.delete(step.id);
+    if (!success) {
+      throw new Error("dataAccess.repository.error.notExists");
+    }
+    return step;
   },
 
   save(sequenceStep: SequenceStepTO): SequenceStepTO {

@@ -20,7 +20,6 @@ export const SequenceRepository = {
         ...sequence,
         id: DataAccessUtil.determineNewId(this.findAll()),
       };
-      console.info("set new component id: " + sequenceTO.id);
     } else {
       sequenceTO = { ...sequence };
     }

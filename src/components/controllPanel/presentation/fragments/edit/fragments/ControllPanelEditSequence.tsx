@@ -8,6 +8,7 @@ import { currentSequence, SequenceActions } from "../../../../../../slices/Seque
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import { useGetStepDropDown } from "../common/fragments/Carv2DropDown";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
 
@@ -43,7 +44,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
           <Button id="buttonGroupLabel" disabled inverted color="orange">
             Step
           </Button>
-          {/* {useGetDataDropdown(() => {}, "wrench")} */}
+          {useGetStepDropDown((step) => editOrAddSequenceStep(step?.squenceStepTO.index), "wrench")}
         </Button.Group>
       </div>
       <div className="columnDivider" style={{ display: "flex" }}>
@@ -60,6 +61,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
 
 const useControllPanelEditSequenceViewModel = () => {
   const sequenceToEdit: SequenceCTO | null = useSelector(currentSequence);
+  console.log("edit Sequence currentSequence: " + sequenceToEdit);
   const dispatch = useDispatch();
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
   const textInput = useRef<Input>(null);
@@ -75,9 +77,11 @@ const useControllPanelEditSequenceViewModel = () => {
   }, [sequenceToEdit]);
 
   const changeName = (name: string) => {
-    let copySequenceToEdit: SequenceCTO = Carv2Util.deepCopy(sequenceToEdit);
-    copySequenceToEdit.sequenceTO.name = name;
-    dispatch(SequenceActions.setSequenceToEdit(copySequenceToEdit));
+    if (!isNullOrUndefined(sequenceToEdit)) {
+      let copySequenceToEdit: SequenceCTO = Carv2Util.deepCopy(sequenceToEdit);
+      copySequenceToEdit.sequenceTO.name = name;
+      dispatch(SequenceActions.setSequenceToEdit(copySequenceToEdit));
+    }
   };
 
   const saveSequence = () => {
@@ -104,15 +108,15 @@ const useControllPanelEditSequenceViewModel = () => {
   };
 
   return {
-    label: sequenceToEdit!.sequenceTO.id === -1 ? "ADD SEQUENCE" : "EDIT SEQUENCE",
-    name: sequenceToEdit!.sequenceTO.name,
+    label: sequenceToEdit?.sequenceTO.id === -1 ? "ADD SEQUENCE" : "EDIT SEQUENCE",
+    name: sequenceToEdit?.sequenceTO.name,
     changeName,
     saveSequence,
     deleteSequence,
     cancel: cancelEditSequence,
     toggleIsCreateAnother: () => setIsCreateAnother(!isCreateAnother),
     textInput,
-    showDelete: sequenceToEdit!.sequenceTO.id !== -1,
+    showDelete: sequenceToEdit?.sequenceTO.id !== -1,
     editOrAddSequenceStep: (step?: number) => dispatch(GlobalActions.setModeToEditStep(step)),
   };
 };
