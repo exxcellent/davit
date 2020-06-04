@@ -83,6 +83,26 @@ export const SequenceSlice = createSlice({
         }
       }
     },
+    getNextStepFormCurrentSequence: (state) => {
+      console.log("get NextStep.");
+      if (state.currentSequence !== null) {
+        console.log("current Sequence is not null");
+        if (state.currentStepIndex === null) {
+          state.currentStepIndex = 1;
+          return;
+        }
+        if (state.currentStepIndex < state.currentSequence.sequenceStepCTOs.length) {
+          const index: number = state.currentStepIndex;
+          state.currentStepIndex = index + 1;
+          return;
+        }
+        if (state.currentStepIndex === state.currentSequence.sequenceStepCTOs.length) {
+          state.currentStepIndex = null;
+          return;
+        }
+        console.log("current Step: " + state.currentStepIndex);
+      }
+    },
   },
 });
 
