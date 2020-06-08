@@ -34,6 +34,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
     indexToOptions,
     selectSourcePlaceholder,
     selectTargetPlaceholder,
+    editComponentData,
   } = useControllPanelEditSequenceStepViewModel();
 
   return (
@@ -68,7 +69,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
           <Button id="buttonGroupLabel" disabled inverted color="orange">
             Component Data
           </Button>
-          {useGetComponentDropdown(() => {}, "wrench")}
+          {useGetComponentDropdown(editComponentData, "wrench")}
         </Button.Group>
       </div>
       <div className="columnDivider controllPanelEditChild">
@@ -82,6 +83,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
 const useControllPanelEditSequenceStepViewModel = () => {
   const sequenceStepToEdit: SequenceStepCTO | null = useSelector(currentStep);
   const sequenceToEdit: SequenceCTO | null = useSelector(currentSequence);
+  // const prevStep: SequenceStepCTO | null = useSelector(previousStep);
   const dispatch = useDispatch();
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
   const textInput = useRef<Input>(null);
@@ -153,6 +155,18 @@ const useControllPanelEditSequenceStepViewModel = () => {
     }
   };
 
+  const editComponentData = (component?: ComponentCTO | undefined) => {
+    console.log("component: ", component);
+    if (!isNullOrUndefined(sequenceToEdit) && !isNullOrUndefined(sequenceStepToEdit)) {
+      if (component !== undefined) {
+        console.log("set current Component: ", component);
+        dispatch(GlobalActions.setModeToEditComponentData(component));
+      } else {
+        dispatch(GlobalActions.setModeToEditComponentData());
+      }
+    }
+  };
+
   return {
     label: sequenceStepToEdit ? "EDIT SEQUENCE STEP" : "ADD SEQUENCE STEP",
     name: sequenceStepToEdit ? sequenceStepToEdit!.squenceStepTO.name : "",
@@ -167,15 +181,14 @@ const useControllPanelEditSequenceStepViewModel = () => {
     textInput,
     showDelete: sequenceStepToEdit ? true : false,
     indexToOptions,
-    //TODO: to fix: "Select Source is not shown if Source is empty.
     selectSourcePlaceholder:
       sequenceStepToEdit?.componentCTOSource.component.name === ""
         ? "Select Source"
         : sequenceStepToEdit?.componentCTOSource.component.name,
-    // TODO: to fix: "Select Target" is not shown if Target is empty.
     selectTargetPlaceholder:
       sequenceStepToEdit?.componentCTOTarget.component.name === ""
         ? "Select Target"
         : sequenceStepToEdit?.componentCTOTarget.component.name,
+    editComponentData,
   };
 };

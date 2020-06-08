@@ -24,12 +24,27 @@ export const SequenceDataAccessService = {
   },
 
   save(sequence: SequenceCTO): SequenceCTO {
-    sequence.sequenceStepCTOs.map((step) => SequenceStepRepository.save(step.squenceStepTO));
+    sequence.sequenceStepCTOs.forEach(this.saveSequenceStep);
     return createSequenceCTO(SequenceRepository.save(sequence.sequenceTO));
   },
 
   saveSequenceStep(sequenceStep: SequenceStepCTO): SequenceStepCTO {
-    return createSequenceStepCTO(SequenceStepRepository.save(sequenceStep.squenceStepTO));
+    CheckHelper.nullCheck(sequenceStep, "sequenceStep");
+    const persistedComponentDatas: ComponentDataTO[] = ComponentDataRepository.findAllForStep(
+      sequenceStep.squenceStepTO.id
+    );
+    const componentDataToDelete: ComponentDataTO[] = persistedComponentDatas.filter(
+      (componentData) => !sequenceStep.componentDataCTOs.some((cDCTO) => cDCTO.componentDataTO.id === componentData.id)
+    );
+    componentDataToDelete.map((cptd) => cptd.id).forEach(ComponentDataRepository.delete);
+
+    const savedStep: SequenceStepTO = SequenceStepRepository.save(sequenceStep.squenceStepTO);
+
+    sequenceStep.componentDataCTOs.forEach((compData) => {
+      compData.componentDataTO.sequenceStepFk = savedStep.id;
+      ComponentDataRepository.save(compData.componentDataTO);
+    });
+    return createSequenceStepCTO(savedStep);
   },
 
   delete(sequence: SequenceCTO): SequenceCTO {
@@ -53,7 +68,7 @@ const createSequenceCTO = (sequence: SequenceTO | undefined): SequenceCTO => {
   const sequenceStepCTOs: SequenceStepCTO[] = SequenceStepRepository.findAllForSequence(sequence!.id).map(
     createSequenceStepCTO
   );
-
+  sequenceStepCTOs.sort((step1, step2) => step1.squenceStepTO.index - step2.squenceStepTO.index);
   return { sequenceTO: sequence!, sequenceStepCTOs: sequenceStepCTOs };
 };
 
