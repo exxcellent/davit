@@ -105,7 +105,7 @@ export const SequenceSlice = createSlice({
 
 const updateComponentDataStates = (sequence: SequenceCTO): SequenceCTO => {
   const copySequence: SequenceCTO = Carv2Util.deepCopy(sequence);
-  updatenextStep(
+  updateNextStep(
     [],
     sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.index === 1),
     copySequence
@@ -113,7 +113,7 @@ const updateComponentDataStates = (sequence: SequenceCTO): SequenceCTO => {
   return copySequence;
 };
 
-const updatenextStep = (
+const updateNextStep = (
   prevCompData: ComponentDataCTO[],
   stepToEdit: SequenceStepCTO | undefined,
   sequence: SequenceCTO
@@ -122,7 +122,7 @@ const updatenextStep = (
     const copyPrevCompData: ComponentDataCTO[] = Carv2Util.deepCopy(prevCompData);
     stepToEdit.componentDataCTOs = determineComponentDatas(copyPrevCompData, stepToEdit.componentDataCTOs);
     sequence.sequenceStepCTOs[stepToEdit.squenceStepTO.index - 1] = stepToEdit;
-    updatenextStep(
+    updateNextStep(
       stepToEdit.componentDataCTOs,
       sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.index === stepToEdit.squenceStepTO.index + 1),
       sequence
@@ -135,7 +135,12 @@ const determineComponentDatas = (prevComponentDatas: ComponentDataCTO[], curComp
     (componentData) => componentData.componentDataTO.componentDataState !== ComponentDataState.DELETED
   );
 
-  const deletedComponentDatas: ComponentDataCTO[] = prevComponentDatas
+  const prevComponentDatasNotDeleted = prevComponentDatas.filter(
+    (pcd) => pcd.componentDataTO.componentDataState !== ComponentDataState.DELETED
+  );
+
+  // const deletedComponentDatas: ComponentDataCTO[] = prevComponentDatas
+  const deletedComponentDatas: ComponentDataCTO[] = prevComponentDatasNotDeleted
     .filter(
       (prevCompData) =>
         !curComponentDatasNotDeleted.some((curCompData) => compareComponentDatas(prevCompData, curCompData))
@@ -149,7 +154,13 @@ const determineComponentDatas = (prevComponentDatas: ComponentDataCTO[], curComp
 
   const updatedCurComponentDatas = curComponentDatasNotDeleted.map((componentData) => {
     let updatedCompData: ComponentDataCTO = Carv2Util.deepCopy(componentData);
-    if (prevComponentDatas.some((prevCompData) => compareComponentDatas(prevCompData, componentData))) {
+    if (
+      prevComponentDatas.some(
+        (prevCompData) =>
+          compareComponentDatas(prevCompData, componentData) &&
+          prevCompData.componentDataTO.componentDataState !== ComponentDataState.DELETED
+      )
+    ) {
       updatedCompData.componentDataTO.componentDataState = ComponentDataState.PERSISTENT;
     } else {
       updatedCompData.componentDataTO.componentDataState = ComponentDataState.NEW;
@@ -186,7 +197,6 @@ const findStepInSequence = (id: number, sequenceCTO: SequenceCTO): number => {
 };
 
 const getDefaultComponentDatas = (prevStep: SequenceStepCTO | null): ComponentDataCTO[] => {
-  console.log("prevsTep", prevStep);
   const copyPrevStepComponentDatas: ComponentDataCTO[] = prevStep ? Carv2Util.deepCopy(prevStep.componentDataCTOs) : [];
   return copyPrevStepComponentDatas
     .filter((compData) => compData.componentDataTO.componentDataState !== ComponentDataState.DELETED)
