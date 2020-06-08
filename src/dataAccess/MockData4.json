@@ -1,0 +1,70 @@
+{
+  "components": [
+    { "id": 1, "name": "comp1", "geometricalDataFk": 1, "designFk": 1 },
+    { "id": 2, "name": "comp2", "geometricalDataFk": 2, "designFk": 2 },
+    { "id": 3, "name": "comp3", "geometricalDataFk": 3, "designFk": 3 }
+  ],
+  "designs": [
+    { "id": 1, "color": "#3498db" },
+    { "id": 2, "color": "#3498db" },
+    { "id": 3, "color": "#3498db" }
+  ],
+  "geometricalDatas": [
+    { "id": 1, "width": 150, "height": 150, "positionFk": 1 },
+    { "id": 2, "width": 150, "height": 150, "positionFk": 2 },
+    { "id": 3, "width": 150, "height": 150, "positionFk": 3 },
+    { "id": 4, "width": 150, "height": 150, "positionFk": 4 },
+    { "id": 5, "width": 150, "height": 150, "positionFk": 5 },
+    { "id": 6, "width": 150, "height": 150, "positionFk": 6 }
+  ],
+  "positions": [
+    { "id": 1, "x": 157, "y": 106 },
+    { "id": 2, "x": 399, "y": 294 },
+    { "id": 3, "x": 668, "y": 84 },
+    { "id": 4, "x": 127, "y": 88 },
+    { "id": 5, "x": 285, "y": 250 },
+    { "id": 6, "x": 570, "y": 93 }
+  ],
+  "sequences": [{ "id": 1, "name": "seq1" }],
+  "steps": [
+    { "id": 1, "name": "stp1", "index": 1, "sequenceFk": 1, "sourceComponentFk": 1, "targetComponentFk": 2 },
+    { "id": 2, "name": "stp2", "index": 2, "sequenceFk": 1, "sourceComponentFk": 2, "targetComponentFk": 3 }
+  ],
+  "componentDatas": [
+    { "id": 1, "sequenceStepFk": 1, "componentFk": 1, "dataFk": 1, "componentDataState": "NEW" },
+    { "id": 2, "sequenceStepFk": 1, "componentFk": 3, "dataFk": 2, "componentDataState": "NEW" },
+    { "id": 3, "sequenceStepFk": 2, "componentFk": 2, "dataFk": 2, "componentDataState": "NEW" },
+    { "id": 4, "sequenceStepFk": 2, "componentFk": 1, "dataFk": 1, "componentDataState": "PERSISTENT" },
+    { "id": 5, "sequenceStepFk": 2, "componentFk": 1, "dataFk": 3, "componentDataState": "NEW" },
+    { "id": 6, "sequenceStepFk": 2, "componentFk": 3, "dataFk": 2, "componentDataState": "DELETED" }
+  ],
+  "datas": [
+    { "id": 1, "name": "data1", "geometricalDataFk": 4, "dataConnectionFks": [] },
+    { "id": 2, "name": "data2", "geometricalDataFk": 5, "dataConnectionFks": [] },
+    { "id": 3, "name": "data3", "geometricalDataFk": 6, "dataConnectionFks": [] }
+  ],
+  "dataConnections": [
+    {
+      "id": 1,
+      "data1Fk": 1,
+      "data2Fk": 2,
+      "label1": "",
+      "label2": "",
+      "direction1": "BOTTOM",
+      "direction2": "LEFT",
+      "type1": "OUT",
+      "type2": "IN"
+    },
+    {
+      "id": 2,
+      "data1Fk": 2,
+      "data2Fk": 3,
+      "label1": "",
+      "label2": "",
+      "direction1": "RIGHT",
+      "direction2": "LEFT",
+      "type1": "OUT",
+      "type2": "IN"
+    }
+  ]
+}
