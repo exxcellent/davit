@@ -37,6 +37,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
     dataOptions,
     directionOptions,
     typeOptions,
+    validRelation,
   } = useControllPanelEditRelationViewModel();
 
   return (
@@ -142,7 +143,12 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
         </div>
       </div>
       <div className="columnDivider" style={{ display: "flex" }}>
-        <Carv2SubmitCancel onSubmit={saveRelation} onChange={toggleIsCreateAnother} onCancel={cancel} />
+        <Carv2SubmitCancel
+          onSubmit={saveRelation}
+          onChange={toggleIsCreateAnother}
+          onCancel={cancel}
+          submitCondition={validRelation()}
+        />
       </div>
       {showDelete && (
         <div className="columnDivider">
@@ -233,16 +239,24 @@ const useControllPanelEditRelationViewModel = () => {
     value: value,
   }));
 
+  const validRelation = (): boolean => {
+    let valid: boolean = false;
+    if (!isNullOrUndefined(relationToEdit)) {
+      valid = relationToEdit.dataRelationTO.data1Fk !== -1 && relationToEdit.dataRelationTO.data2Fk !== -1;
+    }
+    return valid;
+  };
+
   return {
-    label: relationToEdit!.dataRelationTO.id === -1 ? "ADD RELATION" : "EDIT RELATION",
+    label: relationToEdit?.dataRelationTO.id === -1 ? "ADD RELATION" : "EDIT RELATION",
     label1: relationToEdit?.dataRelationTO.label1,
     label2: relationToEdit?.dataRelationTO.label2,
-    data1: relationToEdit!.dataRelationTO.data1Fk === -1 ? undefined : relationToEdit!.dataRelationTO.data1Fk,
-    data2: relationToEdit!.dataRelationTO.data2Fk === -1 ? undefined : relationToEdit!.dataRelationTO.data2Fk,
-    direction1: relationToEdit!.dataRelationTO.direction1,
-    direction2: relationToEdit!.dataRelationTO.direction2,
-    type1: relationToEdit!.dataRelationTO.type1,
-    type2: relationToEdit!.dataRelationTO.type2,
+    data1: relationToEdit?.dataRelationTO.data1Fk === -1 ? undefined : relationToEdit?.dataRelationTO.data1Fk,
+    data2: relationToEdit?.dataRelationTO.data2Fk === -1 ? undefined : relationToEdit?.dataRelationTO.data2Fk,
+    direction1: relationToEdit?.dataRelationTO.direction1,
+    direction2: relationToEdit?.dataRelationTO.direction2,
+    type1: relationToEdit?.dataRelationTO.type1,
+    type2: relationToEdit?.dataRelationTO.type2,
     setLabel,
     setType,
     setDirection,
@@ -255,5 +269,6 @@ const useControllPanelEditRelationViewModel = () => {
     dataOptions: datas.map(dataToOption),
     directionOptions,
     typeOptions,
+    validRelation,
   };
 };
