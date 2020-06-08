@@ -96,6 +96,7 @@ const setModeToEditSequence = (sequence?: SequenceCTO): AppThunk => async (dispa
   console.log("call set edit sequence mode in globalSlice.");
   console.log("sequence? " + sequence);
   dispatch(reset());
+  dispatch(SequenceSlice.actions.resetCurrentStepIndex());
   dispatch(SequenceSlice.actions.setCurrentSequence(sequence || new SequenceCTO()));
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE));
 };
@@ -103,13 +104,18 @@ const setModeToEditSequence = (sequence?: SequenceCTO): AppThunk => async (dispa
 const setModeToEditCurrentSequence = (): AppThunk => async (dispatch) => {
   dispatch(reset());
   dispatch(SequenceSlice.actions.resetCurrentStepIndex());
-  dispatch(SequenceActions.loadSequencesFromBackend);
+  dispatch(SequenceActions.loadSequencesFromBackend());
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE));
 };
 
 const setModeToEditStep = (stepIndex?: number): AppThunk => async (dispatch) => {
   dispatch(SequenceActions.setSequenceStepToEdit(stepIndex || null));
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_STEP));
+};
+
+const setModeToEditComponentData = (component?: ComponentCTO): AppThunk => async (dispatch) => {
+  dispatch(ComponentActions.setCompoenentToEdit(component || new ComponentCTO()));
+  dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_STEP_COMPONENT_DATA));
 };
 
 export const GlobalActions = {
@@ -121,6 +127,7 @@ export const GlobalActions = {
   setModeToEditSequence,
   setModeToEditCurrentSequence,
   setModeToEditStep,
+  setModeToEditComponentData,
 };
 
 export const { handleError } = globalSlice.actions;
