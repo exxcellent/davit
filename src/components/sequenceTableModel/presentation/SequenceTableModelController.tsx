@@ -24,9 +24,9 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
   const createTableRow = (sequenceStepCTO: SequenceStepCTO) => {
     return (
       <Table.Row
-        id={sequenceStepCTO.squenceStepTO.id}
+        id={sequenceStepCTO.squenceStepTO.index}
         active={selectedId === sequenceStepCTO.squenceStepTO.id}
-        key={sequenceStepCTO.squenceStepTO.id}
+        key={sequenceStepCTO.squenceStepTO.index}
       >
         <Table.Cell>{sequenceStepCTO.squenceStepTO.index}</Table.Cell>
         <Table.Cell>{sequenceStepCTO.squenceStepTO.name}</Table.Cell>
