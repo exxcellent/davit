@@ -108,6 +108,44 @@ export const useGetComponentDropdownLable = (
   );
 };
 
+export const useGetMultiSelectDataDropdown = (onSelect: (datas: DataCTO[]) => void, selected: number[]) => {
+  const datas: DataCTO[] = useSelector(selectDatas);
+
+  const dataToOption = (data: DataCTO): DropdownItemProps => {
+    return {
+      key: data.data.id,
+      value: data.data.id,
+      text: data.data.name,
+    };
+  };
+
+  const selectData = (dataIds: number[]) => {
+    let dataToReturn: DataCTO[] = [];
+    if (dataIds !== undefined) {
+      dataIds.map((id) => dataToReturn.push(datas.find((data) => data.data.id === id)!));
+      onSelect(dataToReturn);
+    } else {
+      onSelect([]);
+    }
+  };
+
+  return (
+    <Dropdown
+      placeholder="Select Data"
+      fluid
+      multiple
+      search
+      selection
+      options={datas.map(dataToOption)}
+      onChange={(event, data) => {
+        selectData((data.value as number[]) || undefined);
+      }}
+      value={selected}
+      // renderLabel={dataLabel}
+    />
+  );
+};
+
 export const useGetDataDropdown = (onSelect: (data: DataCTO | undefined) => void, icon?: string) => {
   const datas: DataCTO[] = useSelector(selectDatas);
 
