@@ -24,6 +24,7 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
     toggleIsCreateAnother,
     textInput,
     showDelete,
+    validName,
   } = useControllPanelEditComponentViewModel();
 
   return (
@@ -38,7 +39,12 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
         ref={textInput}
       />
       <div className="columnDivider" style={{ display: "flex" }}>
-        <Carv2SubmitCancel onSubmit={saveComponent} onCancel={cancel} onChange={toggleIsCreateAnother} />
+        <Carv2SubmitCancel
+          onSubmit={saveComponent}
+          onCancel={cancel}
+          onChange={toggleIsCreateAnother}
+          submitCondition={validName()}
+        />
       </div>
       {showDelete && (
         <div className="columnDivider">
@@ -87,15 +93,23 @@ const useControllPanelEditComponentViewModel = () => {
     dispatch(GlobalActions.setModeToEdit());
   };
 
+  const validName = (): boolean => {
+    if (!isNullOrUndefined(componentToEdit)) {
+      return Carv2Util.isValidName(componentToEdit.component.name);
+    }
+    return false;
+  };
+
   return {
-    label: componentToEdit!.component.id === -1 ? "ADD COMPONENT" : "EDIT COMPONENT",
-    name: componentToEdit!.component.name,
+    label: componentToEdit?.component.id === -1 ? "ADD COMPONENT" : "EDIT COMPONENT",
+    name: componentToEdit?.component.name,
     changeName,
     saveComponent,
     deleteComponent,
     cancel: () => dispatch(GlobalActions.setModeToEdit()),
     toggleIsCreateAnother: () => setIsCreateAnother(!isCreateAnother),
     textInput,
-    showDelete: componentToEdit!.component.id !== -1,
+    showDelete: componentToEdit?.component.id !== -1,
+    validName,
   };
 };

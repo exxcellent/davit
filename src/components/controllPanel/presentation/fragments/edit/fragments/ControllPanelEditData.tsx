@@ -24,6 +24,7 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
     saveData,
     showDelete,
     toggleIsCreateAnother,
+    validName,
   } = useControllPanelEditDataViewModel();
 
   return (
@@ -38,7 +39,12 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
         ref={textInput}
       />
       <div className="columnDivider" style={{ display: "flex" }}>
-        <Carv2SubmitCancel onSubmit={saveData} onCancel={cancel} onChange={toggleIsCreateAnother} />
+        <Carv2SubmitCancel
+          onSubmit={saveData}
+          onCancel={cancel}
+          onChange={toggleIsCreateAnother}
+          submitCondition={validName()}
+        />
       </div>
       {showDelete && (
         <div className="columnDivider">
@@ -63,7 +69,6 @@ const useControllPanelEditDataViewModel = () => {
   }, [dataToEdit]);
 
   useEffect(() => {
-    console.log(dataToEdit);
     // check if component to edit is really set or gso back to edit mode
     if (isNullOrUndefined(dataToEdit)) {
       dispatch(GlobalActions.setModeToEdit());
@@ -91,6 +96,13 @@ const useControllPanelEditDataViewModel = () => {
     dispatch(GlobalActions.setModeToEdit());
   };
 
+  const validName = (): boolean => {
+    if (!isNullOrUndefined(dataToEdit)) {
+      return Carv2Util.isValidName(dataToEdit.data.name);
+    }
+    return false;
+  };
+
   return {
     label: dataToEdit?.data.id === -1 ? "ADD DATA" : "EDIT DATA",
     name: dataToEdit?.data.name,
@@ -101,5 +113,6 @@ const useControllPanelEditDataViewModel = () => {
     toggleIsCreateAnother: () => setIsCreateAnother(!isCreateAnother),
     textInput,
     showDelete: dataToEdit?.data.id !== -1,
+    validName,
   };
 };

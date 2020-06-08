@@ -26,6 +26,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
     showDelete,
     toggleIsCreateAnother,
     editOrAddSequenceStep,
+    validateInput,
   } = useControllPanelEditSequenceViewModel();
 
   return (
@@ -48,7 +49,12 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
         </Button.Group>
       </div>
       <div className="columnDivider" style={{ display: "flex" }}>
-        <Carv2SubmitCancel onSubmit={saveSequence} onCancel={cancel} onChange={toggleIsCreateAnother} />
+        <Carv2SubmitCancel
+          onSubmit={saveSequence}
+          onCancel={cancel}
+          onChange={toggleIsCreateAnother}
+          submitCondition={validateInput()}
+        />
       </div>
       {showDelete && (
         <div className="columnDivider controllPanelEditChild">
@@ -107,6 +113,14 @@ const useControllPanelEditSequenceViewModel = () => {
     dispatch(GlobalActions.setModeToEdit());
   };
 
+  const validateInput = (): boolean => {
+    if (!isNullOrUndefined(sequenceToEdit)) {
+      return Carv2Util.isValidName(sequenceToEdit.sequenceTO.name);
+    } else {
+      return false;
+    }
+  };
+
   return {
     label: sequenceToEdit?.sequenceTO.id === -1 ? "ADD SEQUENCE" : "EDIT SEQUENCE",
     name: sequenceToEdit?.sequenceTO.name,
@@ -118,5 +132,6 @@ const useControllPanelEditSequenceViewModel = () => {
     textInput,
     showDelete: sequenceToEdit?.sequenceTO.id !== -1,
     editOrAddSequenceStep: (step?: number) => dispatch(GlobalActions.setModeToEditStep(step)),
+    validateInput,
   };
 };
