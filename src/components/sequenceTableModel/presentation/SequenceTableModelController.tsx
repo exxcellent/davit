@@ -10,7 +10,6 @@ interface SequenceTableModelControllerProps {}
 export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (props) => {
   const sequence: SequenceCTO | null = useSelector(currentSequence);
   const selectedStep: SequenceStepCTO | null = useSelector(currentStep);
-
   const [selectedId, setSelectedId] = React.useState<number>(-1);
 
   useEffect(() => {
@@ -63,7 +62,7 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
           <label>{sequence.sequenceTO.name}</label>
         </div>
       )}
-      <Table celled inverted>
+      <Table celled inverted collapsing={false}>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell style={{ width: "15px" }}>Nr.</Table.HeaderCell>

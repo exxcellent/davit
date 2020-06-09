@@ -6,7 +6,6 @@ export const DataAccessUtil = {
     if (id === -Infinity) {
       id = 1;
     }
-    console.log("DataAccessUtil: new id: " + id);
     return id;
   },
 };

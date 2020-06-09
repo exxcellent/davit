@@ -10,7 +10,7 @@ import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { useGetStepDropDown } from "../common/fragments/Carv2DropDown";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
-import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
+import { Carv2SubmitCancel, Carv2SubmitCancelNoCheckBox } from "../common/fragments/Carv2SubmitCancel";
 
 export interface ControllPanelEditSequenceProps {}
 
@@ -23,10 +23,11 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
     changeName,
     deleteSequence,
     saveSequence,
-    showDelete,
+    showExistingOptions,
     toggleIsCreateAnother,
     editOrAddSequenceStep,
     validateInput,
+    sequencesDropdown,
   } = useControllPanelEditSequenceViewModel();
 
   return (
@@ -40,23 +41,35 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
         ref={textInput}
       />
       <div className="columnDivider controllPanelEditChild">
-        <Button.Group>
-          <Button icon="add" inverted color="orange" onClick={() => editOrAddSequenceStep()} />
-          <Button id="buttonGroupLabel" disabled inverted color="orange">
-            Step
-          </Button>
-          {useGetStepDropDown((step) => editOrAddSequenceStep(step?.squenceStepTO.index), "wrench")}
-        </Button.Group>
+        {showExistingOptions && (
+          <Button.Group>
+            <Button icon="add" inverted color="orange" onClick={() => editOrAddSequenceStep()} />
+            <Button id="buttonGroupLabel" disabled inverted color="orange">
+              Step
+            </Button>
+            {sequencesDropdown}
+          </Button.Group>
+        )}
       </div>
       <div className="columnDivider" style={{ display: "flex" }}>
-        <Carv2SubmitCancel
-          onSubmit={saveSequence}
-          onCancel={cancel}
-          onChange={toggleIsCreateAnother}
-          submitCondition={validateInput()}
-        />
+        {!showExistingOptions && (
+          <Carv2SubmitCancel
+            onSubmit={saveSequence}
+            onCancel={cancel}
+            onChange={toggleIsCreateAnother}
+            submitCondition={validateInput()}
+          />
+        )}
+        {showExistingOptions && (
+          <Carv2SubmitCancelNoCheckBox
+            onSubmit={saveSequence}
+            onCancel={cancel}
+            onChange={toggleIsCreateAnother}
+            submitCondition={validateInput()}
+          />
+        )}
       </div>
-      {showDelete && (
+      {showExistingOptions && (
         <div className="columnDivider controllPanelEditChild">
           <Carv2DeleteButton onClick={deleteSequence} />
         </div>
@@ -78,6 +91,9 @@ const useControllPanelEditSequenceViewModel = () => {
       GlobalActions.setModeToEdit();
       handleError("Tried to go to edit sequence without sequenceToedit specified");
     }
+    if (sequenceToEdit?.sequenceTO.id !== -1) {
+      setIsCreateAnother(false);
+    }
     // used to focus the textfield on create another
     textInput.current!.focus();
   }, [sequenceToEdit]);
@@ -92,7 +108,6 @@ const useControllPanelEditSequenceViewModel = () => {
 
   const saveSequence = () => {
     dispatch(SequenceActions.saveSequence(sequenceToEdit!));
-    // TODO: kann dass evtl der global slice machen?
     dispatch(SequenceActions.setSequenceToEdit(null));
     if (isCreateAnother) {
       dispatch(GlobalActions.setModeToEditSequence());
@@ -121,6 +136,10 @@ const useControllPanelEditSequenceViewModel = () => {
     }
   };
 
+  const editOrAddSequenceStep = (step?: number) => {
+    dispatch(GlobalActions.setModeToEditStep(step));
+  };
+
   return {
     label: sequenceToEdit?.sequenceTO.id === -1 ? "ADD SEQUENCE" : "EDIT SEQUENCE",
     name: sequenceToEdit?.sequenceTO.name,
@@ -130,8 +149,9 @@ const useControllPanelEditSequenceViewModel = () => {
     cancel: cancelEditSequence,
     toggleIsCreateAnother: () => setIsCreateAnother(!isCreateAnother),
     textInput,
-    showDelete: sequenceToEdit?.sequenceTO.id !== -1,
-    editOrAddSequenceStep: (step?: number) => dispatch(GlobalActions.setModeToEditStep(step)),
+    showExistingOptions: sequenceToEdit?.sequenceTO.id !== -1,
+    editOrAddSequenceStep,
     validateInput,
+    sequencesDropdown: useGetStepDropDown((step) => editOrAddSequenceStep(step?.squenceStepTO.index), "wrench"),
   };
 };

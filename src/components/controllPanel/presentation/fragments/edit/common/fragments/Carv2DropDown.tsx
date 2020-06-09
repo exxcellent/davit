@@ -44,7 +44,10 @@ export const useGetComponentDropdown = (onSelect: (component: ComponentCTO | und
   );
 };
 
-export const useGetStepDropDown = (onSelect: (step: SequenceStepCTO | undefined) => void, icon?: string) => {
+export const useGetStepDropDown = (
+  onSelect: (step: SequenceStepCTO | undefined) => void,
+  icon?: string
+): JSX.Element => {
   const sequence: SequenceCTO | null = useSelector(currentSequence);
 
   const stepOptions = (): DropdownItemProps[] => {
