@@ -5,7 +5,7 @@ import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { currentSequence, currentStep, SequenceActions, SequenceSlice } from "../../../../../slices/SequenceSlice";
-import { useGetSequenceDropdown } from "../edit/common/fragments/Carv2DropDown";
+import { useGetSequenceLabelDropdown } from "../edit/common/fragments/Carv2DropDown";
 
 export interface ControllPanelSequenceOptionsProps {}
 
@@ -29,8 +29,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
   return (
     <div className="controllPanelView">
       <div className="controllPanelViewChild">
-        {/* TODO: Dropdown schön machen! */}
-        {useGetSequenceDropdown((sequence) => selectSequence(sequence))}
+        {useGetSequenceLabelDropdown((sequence) => selectSequence(sequence), "Select Sequence ...")}
       </div>
       <div className="controllPanelViewChild">
         <Button.Group inverted color="orange">

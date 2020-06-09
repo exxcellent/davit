@@ -210,6 +210,21 @@ export const useGetSequenceDropdown = (onSelect: (sequence: SequenceCTO | undefi
   );
 };
 
+export const useGetSequenceLabelDropdown = (
+  onSelect: (sequence: SequenceCTO | undefined) => void,
+  placeholder?: string
+) => {
+  const sequences: SequenceCTO[] = useSelector(selectSequences);
+  return (
+    <Dropdown
+      options={sequences.map(sequenceToOption)}
+      selection
+      placeholder={placeholder}
+      onChange={(event, data) => onSelect(selectSequence(Number(data.value), sequences))}
+    />
+  );
+};
+
 export const useGetRelationDropdown = (onSelect: (relation: DataRelationCTO | undefined) => void, icon?: string) => {
   const relations: DataRelationCTO[] = useSelector(selectRelations);
   return (

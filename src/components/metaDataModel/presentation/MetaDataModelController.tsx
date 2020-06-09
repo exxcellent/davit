@@ -50,20 +50,9 @@ const useMetaDataModelViewModel = () => {
   const selectedStep: SequenceStepCTO | null = useSelector(currentStep);
   const dispatch = useDispatch();
 
-  // const [dimensions, setDimensions] = useState({ height: window.innerHeight, width: window.innerWidth });
-
-  // const useHandleResize = () => {
-  //   setDimensions({ height: window.innerHeight, width: window.innerWidth });
-  //   window.addEventListener("resize", handleResize);
-
-  //   return () => window.removeEventListener("resize", handleResize);
-  // };
-
   React.useEffect(() => {
     dispatch(DataActions.loadDatasFromBackend());
     dispatch(DataActions.loadRelationsFromBackend());
-
-    // handleResize();
   }, [dispatch]);
 
   const saveData = (dataCTO: DataCTO) => {
