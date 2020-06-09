@@ -11,7 +11,6 @@ import {
   selectRelations,
 } from "../../../slices/DataSlice";
 import { currentStep } from "../../../slices/SequenceSlice";
-import { ControllPanelActions } from "../../controllPanel/viewModel/ControllPanelActions";
 import { MetaDataDnDBox } from "./fragments/MetaDataDnDBox";
 
 interface MetaDataModelControllerProps {}
@@ -60,7 +59,7 @@ const useMetaDataModelViewModel = () => {
     dispatch(DataActions.loadRelationsFromBackend());
     if (dataCTO.data.id === dataRelationToEdit?.dataCTO1.data.id) {
       dispatch(
-        ControllPanelActions.setDataRelationToEdit({
+        DataActions.setRelationToEdit({
           ...dataRelationToEdit,
           dataCTO1: dataCTO,
         })
@@ -68,7 +67,7 @@ const useMetaDataModelViewModel = () => {
     }
     if (dataCTO.data.id === dataRelationToEdit?.dataCTO2.data.id) {
       dispatch(
-        ControllPanelActions.setDataRelationToEdit({
+        DataActions.setRelationToEdit({
           ...dataRelationToEdit,
           dataCTO2: dataCTO,
         })
