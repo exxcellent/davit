@@ -40,6 +40,11 @@ const DataSlice = createSlice({
     },
     setRelations: (state, action: PayloadAction<DataRelationCTO[]>) => {
       state.relations = action.payload;
+      if (state.currentRelation !== null) {
+        state.currentRelation =
+          action.payload.find((relation) => relation.dataRelationTO.id === state.currentRelation!.dataRelationTO.id) ||
+          null;
+      }
     },
   },
 });

@@ -33,12 +33,12 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
         <OptionField></OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
-        <OptionField>
+        <OptionField label="SEQUENCE">
           {useGetSequenceLabelDropdown((sequence) => selectSequence(sequence), "Select Sequence ...")}
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
-        <OptionField>
+        <OptionField label="STEP">
           <Button.Group inverted color="orange">
             <Button
               inverted

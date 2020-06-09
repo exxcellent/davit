@@ -3,6 +3,7 @@ import React, { FunctionComponent, useRef } from "react";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../../dataAccess/access/cto/DataRelationCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
+import { Carv2Util } from "../../../../utils/Carv2Util";
 import { createDnDItem } from "../../../common/fragments/DnDWrapper";
 import { createCornerConnection } from "../../../common/fragments/svg/Carv2Path";
 import { createMetaDataFragment } from "./MetaDataFragment";
@@ -24,7 +25,7 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
   const onPositionUpdate = (x: number, y: number, positionId: number) => {
     const dataCTO = dataCTOs.find((dataCTO) => dataCTO.geometricalData.position.id === positionId);
     if (dataCTO) {
-      let copyDataCTO: DataCTO = JSON.parse(JSON.stringify(dataCTO));
+      let copyDataCTO: DataCTO = Carv2Util.deepCopy(dataCTO);
       copyDataCTO.geometricalData.position.x = x;
       copyDataCTO.geometricalData.position.y = y;
       onSaveCallBack(copyDataCTO);
@@ -58,7 +59,6 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
   };
 
   const createDataRelationToEdit = (dataRelation: DataRelationCTO) => {
-    console.log(dataRelation);
     if (
       dataRelation.dataCTO1.data.id !== -1 &&
       dataRelation.dataCTO2.data.id !== -1 &&
@@ -77,10 +77,7 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
 
   return (
     <motion.div id="datadndBox" ref={constraintsRef} className="dataModel">
-      {
-        dataCTOs.map(createDnDMetaDataFragmentIfNotinEdit)
-        // .filter((dndBox) => !isNullOrUndefined(dndBox))
-      }
+      {dataCTOs.map(createDnDMetaDataFragmentIfNotinEdit)}
       {dataCTOToEdit && createDnDMetaDataFragment(dataCTOToEdit)}
       {createConnections()}
       {dataRelationToEdit && createDataRelationToEdit(dataRelationToEdit)}

@@ -59,10 +59,6 @@ export const SequenceSlice = createSlice({
     setSequences: (state, action: PayloadAction<SequenceCTO[]>) => {
       state.sequences = action.payload;
       if (state.currentSequence !== null) {
-        console.info("Current Sequence is not null!");
-        console.info("Current Sequence Name: ", state.currentSequence.sequenceTO.name);
-        console.info("Current Sequence Id: ", state.currentSequence.sequenceTO.id);
-
         state.currentSequence =
           action.payload.find((sequence) => sequence.sequenceTO.id === state.currentSequence!.sequenceTO.id) || null;
       }
