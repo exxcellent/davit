@@ -105,6 +105,14 @@
   padding: 10px;
 }
 
+.controllPanelView {
+  display: flex;
+  justify-content: flex-start;
+}
+.controllPanelViewChild {
+  margin: 10px;
+}
+
 .ui.inverted.orange.button,
 .ui.inverted.orange.buttons .button {
   background-color: transparent;

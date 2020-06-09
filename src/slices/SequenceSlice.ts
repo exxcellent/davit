@@ -87,7 +87,7 @@ export const SequenceSlice = createSlice({
         state.currentSequence = updateComponentDataStates(state.currentSequence);
       }
     },
-    getNextStepFormCurrentSequence: (state) => {
+    setNextStepToCurrentStep: (state) => {
       if (state.currentSequence !== null) {
         if (state.currentStepIndex === null) {
           state.currentStepIndex = 1;
@@ -101,6 +101,21 @@ export const SequenceSlice = createSlice({
         if (state.currentStepIndex === state.currentSequence.sequenceStepCTOs.length) {
           state.currentStepIndex = null;
           return;
+        }
+      }
+    },
+    setPreviousStepToCurrentStep: (state) => {
+      if (state.currentSequence !== null) {
+        if (state.currentStepIndex === null) {
+          state.currentStepIndex = state.currentSequence.sequenceStepCTOs.length;
+          return;
+        }
+        if (state.currentStepIndex <= state.currentSequence.sequenceStepCTOs.length) {
+          const index: number = state.currentStepIndex;
+          state.currentStepIndex = index - 1;
+        }
+        if (state.currentStepIndex < 1) {
+          state.currentStepIndex = null;
         }
       }
     },

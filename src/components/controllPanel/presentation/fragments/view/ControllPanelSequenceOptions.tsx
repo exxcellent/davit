@@ -6,7 +6,6 @@ import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { currentSequence, currentStep, SequenceActions, SequenceSlice } from "../../../../../slices/SequenceSlice";
 import { useGetSequenceDropdown } from "../edit/common/fragments/Carv2DropDown";
-import "./ControllPanelSequenceOptions.css";
 
 export interface ControllPanelSequenceOptionsProps {}
 
@@ -22,6 +21,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
 
   const selectSequence = (sequence: SequenceCTO | undefined) => {
     if (!isNullOrUndefined(sequence)) {
+      dispatch(SequenceSlice.actions.resetCurrentStepIndex());
       dispatch(SequenceActions.setSequenceToEdit(sequence));
     }
   };
@@ -40,11 +40,8 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
             icon="left arrow"
             content="BACK"
             labelPosition="left"
-            // TODO: Button function hinzufügen.
-            // disabled={isNullOrUndefined(sequence)}
-            disabled={true}
-            // previousStep method neu schreiben.
-            // onClick={() => dispatch(SequenceSlice.actions.getNextStepFormCurrentSequence())}
+            disabled={isNullOrUndefined(sequence)}
+            onClick={() => dispatch(SequenceSlice.actions.setPreviousStepToCurrentStep())}
           />
           <Button inverted color="orange" content={step?.squenceStepTO.index || 0} disabled={true} />
           <Button
@@ -54,8 +51,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
             content="NEXT"
             labelPosition="right"
             disabled={isNullOrUndefined(sequence)}
-            // TODO: action in SequenceAction umlagern.
-            onClick={() => dispatch(SequenceSlice.actions.getNextStepFormCurrentSequence())}
+            onClick={() => dispatch(SequenceSlice.actions.setNextStepToCurrentStep())}
           />
         </Button.Group>
       </div>
