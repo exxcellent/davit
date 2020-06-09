@@ -30,7 +30,6 @@
 .controllerHeader {
   grid-area: header;
   padding: 10px;
-  /* box-shadow: 0px 2px rgb(39, 202, 207); */
   background-color: var(--carv2-background-color-header);
 
   border-style: solid;
@@ -40,11 +39,6 @@
 
 .componentModel {
   grid-area: compModel;
-  /* background-color: #e8ede6; */
-  /* border-top: 0px;
-  border-right: 0.25px;
-  border-bottom: 0.25px;
-  border-left: 0px; */
   border-style: solid;
   border-width: 0 2px 2px 0;
   border-image: linear-gradient(
@@ -63,13 +57,6 @@
 
 .dataModel {
   grid-area: dataModel;
-  /* background-color: #cff3c0; */
-  /* border-top: 0.25px;
-  border-right: 0.25px;
-  border-bottom: 0px;
-  border-left: 0px;
-  border-color: #e0e1e2;
-  border-style: solid; */
   border-style: solid;
   border-width: 2px 0 0 0;
   border-image: linear-gradient(
@@ -86,13 +73,6 @@
 
 .sequencModel {
   grid-area: seqModel;
-  /* border-top: 0px;
-  border-right: 0px;
-  border-bottom: 0.25px;
-  border-left: 0.25px;
-  border-color: #e0e1e2;
-  border-style: solid; */
-  /* background-color: #f0e4a3; */
   border-style: solid;
   border-width: 0 0 2px 0;
   border-image: linear-gradient(
