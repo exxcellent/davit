@@ -20,20 +20,14 @@ const getColorForComponentDataState = (state: ComponentDataState) => {
   }
 };
 
-export const createComponentFragment = (
-  componentFragmentProps: ComponentFragmentProps,
-  key: number
-) => {
-  console.info("Create Component Fragment.");
+export const createComponentFragment = (componentFragmentProps: ComponentFragmentProps, key: number) => {
   return (
     <Card.Content
       extra
       key={key}
       content={componentFragmentProps.name}
       style={{
-        backgroundColor: getColorForComponentDataState(
-          componentFragmentProps.state
-        ),
+        backgroundColor: getColorForComponentDataState(componentFragmentProps.state),
         color: "white",
       }}
     />

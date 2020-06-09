@@ -81,9 +81,8 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
 };
 
 const useControllPanelEditSequenceStepViewModel = () => {
-  const sequenceStepToEdit: SequenceStepCTO | null = useSelector(currentStep);
   const sequenceToEdit: SequenceCTO | null = useSelector(currentSequence);
-  // const prevStep: SequenceStepCTO | null = useSelector(previousStep);
+  const sequenceStepToEdit: SequenceStepCTO | null = useSelector(currentStep);
   const dispatch = useDispatch();
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
   const textInput = useRef<Input>(null);
@@ -143,8 +142,11 @@ const useControllPanelEditSequenceStepViewModel = () => {
   const saveSequenceStep = () => {
     if (!isNullOrUndefined(sequenceToEdit)) {
       dispatch(SequenceActions.saveSequence(sequenceToEdit));
-      dispatch(GlobalActions.setModeToEditSequence(sequenceToEdit));
-      // dispatch(GlobalActions.setModeToEditCurrentSequence());
+      if (isCreateAnother) {
+        dispatch(GlobalActions.setModeToEditStep());
+      } else {
+        dispatch(GlobalActions.setModeToEditCurrentSequence());
+      }
     }
   };
 

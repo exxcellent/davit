@@ -231,9 +231,9 @@ export const previousStep = (state: RootState): SequenceStepCTO | null => {
   return getPreviousStep(state.sequenceModel.currentStepIndex, state.sequenceModel.currentSequence);
 };
 
-const loadSequencesFromBackend = (): AppThunk => async (dispatch) => {
+const loadSequencesFromBackend = (): AppThunk => (dispatch) => {
   console.info("load Sequences from backend.");
-  const response: DataAccessResponse<SequenceCTO[]> = await DataAccess.findAllSequences();
+  const response: DataAccessResponse<SequenceCTO[]> = DataAccess.findAllSequences();
   if (response.code === 200) {
     dispatch(SequenceSlice.actions.setSequences(response.object));
   } else {
@@ -241,12 +241,12 @@ const loadSequencesFromBackend = (): AppThunk => async (dispatch) => {
   }
 };
 
-const saveSequenceThunk = (sequence: SequenceCTO): AppThunk => async (dispatch) => {
+const saveSequenceThunk = (sequence: SequenceCTO): AppThunk => (dispatch) => {
   console.log("save sequence thunk with sequence: ", sequence);
   // sort steps befor save.
   let copySequence: SequenceCTO = Carv2Util.deepCopy(sequence);
   copySequence.sequenceStepCTOs.sort((step1, step2) => step1.squenceStepTO.index - step2.squenceStepTO.index);
-  const response: DataAccessResponse<SequenceCTO> = await DataAccess.saveSequenceCTO(copySequence);
+  const response: DataAccessResponse<SequenceCTO> = DataAccess.saveSequenceCTO(copySequence);
   console.log(response);
   if (response.code !== 200) {
     dispatch(handleError(response.message));

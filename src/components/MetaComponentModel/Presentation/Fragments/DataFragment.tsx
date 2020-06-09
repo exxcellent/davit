@@ -20,11 +20,7 @@ export const getColorForComponentDataState = (state: ComponentDataState) => {
   }
 };
 
-export const createDataFragment = (
-  dataFragmentProps: DataFragmentProps,
-  key: number
-) => {
-  console.info("create Data.");
+export const createDataFragment = (dataFragmentProps: DataFragmentProps, key: number) => {
   return (
     <Card.Content
       extra
