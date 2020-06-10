@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import { Button } from "semantic-ui-react";
 import { GlobalActions } from "../../../../../slices/GlobalSlice";
 import { Carv2Button } from "../../../../common/fragments/buttons/Carv2Button";
-import { ControllPanelActions } from "../../../viewModel/ControllPanelActions";
 
 export interface ControllPanelFileOptionsProps {}
 
@@ -20,7 +19,7 @@ export const ControllPanelFileOptions: FunctionComponent<ControllPanelFileOption
       fileReader.onload = (event) => {
         console.log("writing filee to storage");
         console.log(event.target!.result);
-        dispatch(ControllPanelActions.storefileData(event.target!.result as string));
+        dispatch(GlobalActions.storefileData(event.target!.result as string));
         setShowUploadButton(false);
       };
     }
