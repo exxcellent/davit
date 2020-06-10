@@ -49,6 +49,7 @@ export const SequenceDataAccessService = {
 
   delete(sequence: SequenceCTO): SequenceCTO {
     CheckHelper.nullCheck(sequence.sequenceTO, "sequenceTO");
+    sequence.sequenceStepCTOs.forEach(this.deleteSequenceStep);
     if (sequence.sequenceStepCTOs.length > 0) {
       throw new Error("can not delete sequence, at least one step is containing in this sequence.");
     }
