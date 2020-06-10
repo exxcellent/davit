@@ -38,63 +38,6 @@ const findSequence = (sequenceId: number): AppThunk => async (dispatch) => {
   }
 };
 
-// const findAllComponents = (): AppThunk => async (dispatch) => {
-//   const response: DataAccessResponse<ComponentCTO[]> = await DataAccess.findAllComponents();
-//   if (response.code === 200) {
-//     dispatch(setComponents(response.object));
-//   } else {
-//     dispatch(handleError(response.message));
-//   }
-// };
-
-// const findAllDatas = (): AppThunk => async (dispatch) => {
-//   const response: DataAccessResponse<DataCTO[]> = await DataAccess.findAllDatas();
-//   if (response.code === 200) {
-//     dispatch(loadDatas(response.object));
-//   } else {
-//     dispatch(handleError(response.message));
-//   }
-// };
-
-// const findAllDataRelations = (): AppThunk => async (dispatch) => {
-//   const response: DataAccessResponse<DataRelationCTO[]> = await DataAccess.findAllDataRelations();
-//   if (response.code === 200) {
-//     dispatch(loadDataRelations(response.object));
-//   } else {
-//     dispatch(handleError(response.message));
-//   }
-// };
-
-// const saveComponent = (component: ComponentCTO): AppThunk => async (dispatch) => {
-//   const response: DataAccessResponse<ComponentCTO> = await DataAccess.saveComponentCTO(component);
-//   console.log(response);
-//   if (response.code === 200) {
-//     dispatch(findAllComponents());
-//   } else {
-//     dispatch(handleError(response.message));
-//   }
-// };
-
-// const saveData = (data: DataCTO): AppThunk => async (dispatch) => {
-//   const response: DataAccessResponse<DataCTO> = await DataAccess.saveDataCTO(data);
-//   console.log(response);
-//   if (response.code === 200) {
-//     dispatch(findAllDatas());
-//   } else {
-//     dispatch(handleError(response.message));
-//   }
-// };
-
-// const saveDataConnection = (dataRelation: DataRelationCTO): AppThunk => async (dispatch) => {
-//   const response: DataAccessResponse<DataRelationCTO> = await DataAccess.saveDataRelationCTO(dataRelation);
-//   console.log(response);
-//   if (response.code === 200) {
-//     dispatch(findAllDataRelations());
-//   } else {
-//     dispatch(handleError(response.message));
-//   }
-// };
-
 const saveSequence = (sequence: SequenceCTO): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<SequenceCTO> = await DataAccess.saveSequenceCTO(sequence);
   console.log(response);
@@ -178,16 +121,6 @@ const setSequenceStepToEdit = (sequenceStep: SequenceStepCTO | null): AppThunk =
 const setComponentDatasToEdit = (componentDatas: ComponentDataCTO[] | null): AppThunk => async (dispatch) => {
   dispatch(pickComponentDatasToEdit(componentDatas));
 };
-
-// const deleteRelation = (dataRelation: DataRelationCTO): AppThunk => async (dispatch) => {
-//   const response: DataAccessResponse<DataRelationCTO> = await DataAccess.deleteDataRelation(dataRelation);
-//   console.log(response);
-//   if (response.code === 200) {
-//     dispatch(findAllDataRelations());
-//   } else {
-//     dispatch(handleError(response.message));
-//   }
-// };
 
 export const ControllPanelActions = {
   findAllSequences,

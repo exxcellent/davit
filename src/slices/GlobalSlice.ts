@@ -4,6 +4,8 @@ import { ComponentCTO } from "../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../dataAccess/access/cto/DataRelationCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
+import { DataAccess } from "../dataAccess/DataAccess";
+import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
 import { ComponentActions, ComponentInternalActions } from "./ComponentSlice";
 import { DataActions, DataInternalActions } from "./DataSlice";
 import { SequenceActions, SequenceSlice } from "./SequenceSlice";
@@ -52,6 +54,18 @@ export const globalSlice = createSlice({
     },
   },
 });
+
+const storefileData = (fileData: string): AppThunk => async (dispatch) => {
+  const response: DataAccessResponse<void> = await DataAccess.storeFileData(fileData);
+  if (response.code === 200) {
+    console.log("load components after fileread");
+    // dispatch(findAllComponents());
+    // TODO: workaround, es gibt bestimmt eine bessere Lösung.
+    window.location.reload(true);
+  } else {
+    dispatch(handleError(response.message));
+  }
+};
 
 export const setModeWithStorage = (mode: Mode): AppThunk => async (dispatch) => {
   localStorage.setItem(MODE_LOCAL_STORAGE, mode);
@@ -128,6 +142,7 @@ export const GlobalActions = {
   setModeToEditCurrentSequence,
   setModeToEditStep,
   setModeToEditComponentData,
+  storefileData,
 };
 
 export const { handleError } = globalSlice.actions;
