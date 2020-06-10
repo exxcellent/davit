@@ -58,6 +58,14 @@ export const SequenceDataAccessService = {
 
   deleteSequenceStep(sequenceStep: SequenceStepCTO): SequenceStepCTO {
     CheckHelper.nullCheck(sequenceStep, "step");
+    const persistedComponentDatas: ComponentDataTO[] = ComponentDataRepository.findAllForStep(
+      sequenceStep.squenceStepTO.id
+    );
+    const componentDataToDelete: ComponentDataTO[] = persistedComponentDatas.filter(
+      (componentData) => !sequenceStep.componentDataCTOs.some((cDCTO) => cDCTO.componentDataTO.id === componentData.id)
+    );
+    componentDataToDelete.map((cptd) => cptd.id).forEach(ComponentDataRepository.delete);
+
     SequenceStepRepository.delete(sequenceStep.squenceStepTO);
     return sequenceStep;
   },
