@@ -99,6 +99,7 @@ const deleteDataThunk = (data: DataCTO): AppThunk => async (dispatch) => {
     dispatch(handleError(response.message));
   }
   dispatch(loadDatasFromBackend());
+  dispatch(loadRelationsFromBackend());
 };
 
 const deleteRelationThunk = (relation: DataRelationCTO): AppThunk => async (dispatch) => {
