@@ -1,7 +1,5 @@
-import { isNullOrUndefined } from "util";
 import { DataTO } from "../access/to/DataTO";
 import dataStore from "../DataStore";
-import { TechnicalDataAccessService } from "../services/TechnicalDataAccessService";
 import { CheckHelper } from "../util/CheckHelper";
 import { DataAccessUtil } from "../util/DataAccessUtil";
 
@@ -29,16 +27,6 @@ export const DataRepository = {
   },
 
   delete(dataTO: DataTO): DataTO {
-    if (
-      !isNullOrUndefined(
-        TechnicalDataAccessService.findGeometricalData(
-          dataTO.geometricalDataFk!
-        )
-      )
-    ) {
-      throw new Error("dataAccess.repository.error.hasReference");
-    }
-
     let success = dataStore.getDataStore().datas.delete(dataTO.id!);
     if (!success) {
       throw new Error("dataAccess.repository.error.notExists");
