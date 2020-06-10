@@ -1,7 +1,6 @@
-import { isNullOrUndefined } from "util";
 import { GeometricalDataTO } from "../access/to/GeometricalDataTO";
+import { ConstraintsHelper } from "../ConstraintsHelper";
 import dataStore from "../DataStore";
-import { TechnicalDataAccessService } from "../services/TechnicalDataAccessService";
 import { DataAccessUtil } from "../util/DataAccessUtil";
 
 export const GeometricalDataRepository = {
@@ -14,16 +13,8 @@ export const GeometricalDataRepository = {
   },
 
   delete(geometricalData: GeometricalDataTO): boolean {
-    if (
-      !isNullOrUndefined(
-        TechnicalDataAccessService.findPosition(geometricalData.positionFk!)
-      )
-    ) {
-      throw new Error("dataAccess.repository.error.hasReference");
-    }
-    let success = dataStore
-      .getDataStore()
-      .geometricalDatas.delete(geometricalData.id!);
+    ConstraintsHelper.deleteGeometricalDataConstraintCheck(geometricalData.id, dataStore.getDataStore());
+    let success = dataStore.getDataStore().geometricalDatas.delete(geometricalData.id!);
     if (!success) {
       throw new Error("dataAccess.repository.error.notExists");
     }
@@ -40,9 +31,7 @@ export const GeometricalDataRepository = {
     } else {
       geometricalDataTO = { ...geometricalData };
     }
-    dataStore
-      .getDataStore()
-      .geometricalDatas.set(geometricalDataTO.id!, geometricalDataTO);
+    dataStore.getDataStore().geometricalDatas.set(geometricalDataTO.id!, geometricalDataTO);
     return geometricalDataTO;
   },
 };

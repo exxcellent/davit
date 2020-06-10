@@ -41,4 +41,34 @@ export const ConstraintsHelper = {
       throw new Error(`delete.error! sequence: ${sequenceId} is still connected to step(s)!`);
     }
   },
+
+  deleteGeometricalDataConstraintCheck(geometDataId: number, dataStore: DataStoreCTO) {
+    const componentExists: boolean = Array.from(dataStore.components.values()).some(
+      (component) => component.geometricalDataFk === geometDataId
+    );
+    const dataExists: boolean = Array.from(dataStore.datas.values()).some(
+      (data) => data.geometricalDataFk === geometDataId
+    );
+    if (componentExists || dataExists) {
+      throw new Error(`delete.error! geometrical data with id: ${geometDataId} is still connected to Object(s)!`);
+    }
+  },
+
+  deletePositionConstraintCheck(positionId: number, dataStore: DataStoreCTO) {
+    const geometDataExists: boolean = Array.from(dataStore.geometricalDatas.values()).some(
+      (geoData) => geoData.positionFk === positionId
+    );
+    if (geometDataExists) {
+      throw new Error(`delete.error! position with id: ${positionId} is still connected to GeometricalData(s)!`);
+    }
+  },
+
+  deleteDesignConstraintCheck(designId: number, dataStore: DataStoreCTO) {
+    const componentExists: boolean = Array.from(dataStore.components.values()).some(
+      (component) => component.designFk === designId
+    );
+    if (componentExists) {
+      throw new Error(`delete.error! design with id: ${designId} is still connected to Component(s)!`);
+    }
+  },
 };

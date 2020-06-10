@@ -1,4 +1,5 @@
 import { DesignTO } from "../access/to/DesignTO";
+import { ConstraintsHelper } from "../ConstraintsHelper";
 import dataStore from "../DataStore";
 import { DataAccessUtil } from "../util/DataAccessUtil";
 
@@ -12,6 +13,7 @@ export const DesignRepository = {
   },
 
   delete(design: DesignTO): DesignTO {
+    ConstraintsHelper.deleteDesignConstraintCheck(design.id, dataStore.getDataStore());
     let success = dataStore.getDataStore().designs.delete(design.id!);
     if (!success) {
       throw new Error("dataAccess.repository.error.notExists");
