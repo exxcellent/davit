@@ -1,4 +1,5 @@
 import { SequenceStepTO } from "../access/to/SequenceStepTO";
+import { ConstraintsHelper } from "../ConstraintsHelper";
 import dataStore from "../DataStore";
 import { CheckHelper } from "../util/CheckHelper";
 import { DataAccessUtil } from "../util/DataAccessUtil";
@@ -17,6 +18,7 @@ export const SequenceStepRepository = {
   },
 
   delete(step: SequenceStepTO) {
+    ConstraintsHelper.deleteStep(step, dataStore.getDataStore());
     let success = dataStore.getDataStore().steps.delete(step.id);
     if (!success) {
       throw new Error("dataAccess.repository.error.notExists");

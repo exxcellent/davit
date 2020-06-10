@@ -1,4 +1,5 @@
 import { SequenceTO } from "../access/to/SequenceTO";
+import { ConstraintsHelper } from "../ConstraintsHelper";
 import dataStore from "../DataStore";
 import { CheckHelper } from "../util/CheckHelper";
 import { DataAccessUtil } from "../util/DataAccessUtil";
@@ -28,6 +29,7 @@ export const SequenceRepository = {
   },
 
   delete(sequence: SequenceTO): SequenceTO {
+    ConstraintsHelper.deleteSequence(sequence, dataStore.getDataStore());
     let success = dataStore.getDataStore().sequences.delete(sequence.id!);
     if (!success) {
       throw new Error("dataAccess.repository.error.notExists");

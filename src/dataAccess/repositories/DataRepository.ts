@@ -1,4 +1,5 @@
 import { DataTO } from "../access/to/DataTO";
+import { ConstraintsHelper } from "../ConstraintsHelper";
 import dataStore from "../DataStore";
 import { CheckHelper } from "../util/CheckHelper";
 import { DataAccessUtil } from "../util/DataAccessUtil";
@@ -27,6 +28,7 @@ export const DataRepository = {
   },
 
   delete(dataTO: DataTO): DataTO {
+    ConstraintsHelper.deleteData(dataTO, dataStore.getDataStore());
     let success = dataStore.getDataStore().datas.delete(dataTO.id!);
     if (!success) {
       throw new Error("dataAccess.repository.error.notExists");

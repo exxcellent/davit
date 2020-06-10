@@ -1,7 +1,6 @@
-import { isNullOrUndefined } from "util";
 import { ComponentTO } from "../access/to/ComponentTO";
+import { ConstraintsHelper } from "../ConstraintsHelper";
 import dataStore from "../DataStore";
-import { TechnicalDataAccessService } from "../services/TechnicalDataAccessService";
 import { CheckHelper } from "../util/CheckHelper";
 import { DataAccessUtil } from "../util/DataAccessUtil";
 
@@ -15,23 +14,7 @@ export const ComponentRepository = {
   },
 
   delete(component: ComponentTO): ComponentTO {
-    if (
-      !isNullOrUndefined(
-        TechnicalDataAccessService.findGeometricalData(
-          component.geometricalDataFk!
-        )
-      )
-    ) {
-      throw new Error("dataAccess.repository.error.hasReference");
-    }
-    if (
-      !isNullOrUndefined(
-        TechnicalDataAccessService.findDesign(component.designFk!)
-      )
-    ) {
-      throw new Error("dataAccess.repository.error.hasReference");
-    }
-
+    ConstraintsHelper.deleteComponent(component, dataStore.getDataStore());
     let success = dataStore.getDataStore().components.delete(component.id!);
     if (!success) {
       throw new Error("dataAccess.repository.error.notExists");
