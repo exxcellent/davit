@@ -28,7 +28,7 @@ export const DataRepository = {
   },
 
   delete(dataTO: DataTO): DataTO {
-    ConstraintsHelper.deleteData(dataTO, dataStore.getDataStore());
+    ConstraintsHelper.deleteDataConstraintCheck(dataTO.id, dataStore.getDataStore());
     let success = dataStore.getDataStore().datas.delete(dataTO.id!);
     if (!success) {
       throw new Error("dataAccess.repository.error.notExists");

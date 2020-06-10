@@ -14,7 +14,7 @@ export const ComponentRepository = {
   },
 
   delete(component: ComponentTO): ComponentTO {
-    ConstraintsHelper.deleteComponent(component, dataStore.getDataStore());
+    ConstraintsHelper.deleteComponentConstraintCheck(component.id, dataStore.getDataStore());
     let success = dataStore.getDataStore().components.delete(component.id!);
     if (!success) {
       throw new Error("dataAccess.repository.error.notExists");

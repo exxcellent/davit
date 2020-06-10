@@ -18,7 +18,7 @@ export const SequenceStepRepository = {
   },
 
   delete(step: SequenceStepTO) {
-    ConstraintsHelper.deleteStep(step, dataStore.getDataStore());
+    ConstraintsHelper.deleteStepConstraintCheck(step.id, dataStore.getDataStore());
     let success = dataStore.getDataStore().steps.delete(step.id);
     if (!success) {
       throw new Error("dataAccess.repository.error.notExists");

@@ -29,7 +29,7 @@ export const SequenceRepository = {
   },
 
   delete(sequence: SequenceTO): SequenceTO {
-    ConstraintsHelper.deleteSequence(sequence, dataStore.getDataStore());
+    ConstraintsHelper.deleteSequenceConstraintCheck(sequence.id, dataStore.getDataStore());
     let success = dataStore.getDataStore().sequences.delete(sequence.id!);
     if (!success) {
       throw new Error("dataAccess.repository.error.notExists");
