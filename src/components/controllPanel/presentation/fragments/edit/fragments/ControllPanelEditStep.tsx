@@ -39,7 +39,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
 
   return (
     <ControllPanelEditSub label={label}>
-      <div className=" controllPanelEditChild">
+      <div className="controllPanelEditChild">
         <OptionField>
           <Carv2LabelTextfield
             label="Name:"
