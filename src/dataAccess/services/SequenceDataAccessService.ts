@@ -1,3 +1,4 @@
+import { Carv2Util } from "../../utils/Carv2Util";
 import { ComponentCTO } from "../access/cto/ComponentCTO";
 import { ComponentDataCTO } from "../access/cto/ComponentDataCTO";
 import { SequenceCTO } from "../access/cto/SequenceCTO";
@@ -61,6 +62,12 @@ export const SequenceDataAccessService = {
     CheckHelper.nullCheck(sequenceStep, "step");
     sequenceStep.componentDataCTOs.map((compData) => ComponentDataRepository.delete(compData.componentDataTO.id));
     SequenceStepRepository.delete(sequenceStep.squenceStepTO);
+    let seqSteps: SequenceStepTO[] = Carv2Util.deepCopy(
+      SequenceStepRepository.findAllForSequence(sequenceStep.squenceStepTO.sequenceFk)
+    );
+    seqSteps.sort((a, b) => a.index - b.index);
+    seqSteps.forEach((step, index) => (step.index = index + 1));
+    seqSteps.forEach(SequenceStepRepository.save);
     return sequenceStep;
   },
 };
