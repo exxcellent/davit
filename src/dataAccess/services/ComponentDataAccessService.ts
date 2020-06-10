@@ -25,9 +25,9 @@ export const ComponentDataAccessService = {
     CheckHelper.nullCheck(component.geometricalData, "GeometricalDataCTO");
     CheckHelper.nullCheck(component.design, "DesignTO");
     CheckHelper.nullCheck(component.component, "ComponentTO");
+    ComponentRepository.delete(component.component);
     TechnicalDataAccessService.deleteGeometricalDataCTO(component.geometricalData);
     TechnicalDataAccessService.deleteDesign(component.design);
-    ComponentRepository.delete(component.component);
     return component;
   },
 

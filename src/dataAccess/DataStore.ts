@@ -49,7 +49,11 @@ class DataStore {
   }
 
   private saveData(): void {
-    let objectStore: StoreTO = {
+    localStorage.setItem(STORE_ID, JSON.stringify(this.getDataStoreObject()));
+  }
+
+  private getDataStoreObject(): StoreTO {
+    return {
       components: Array.from(this.data!.components.values()),
       designs: Array.from(this.data!.designs.values()),
       geometricalDatas: Array.from(this.data!.geometricalDatas.values()),
@@ -60,7 +64,6 @@ class DataStore {
       datas: Array.from(this.data!.datas.values()),
       dataConnections: Array.from(this.data!.dataConnections.values()),
     };
-    localStorage.setItem(STORE_ID, JSON.stringify(objectStore));
   }
 
   public storeFileData = (fileData: string) => {
@@ -69,6 +72,18 @@ class DataStore {
     const objectStore: StoreTO = JSON.parse(fileData);
     this.readData(objectStore);
     localStorage.setItem(STORE_ID, fileData);
+  };
+
+  public downloadData = () => {
+    let dataStr = JSON.stringify(this.getDataStoreObject());
+    let dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+
+    let exportFileDefaultName = "carv2.json";
+
+    let linkElement = document.createElement("a");
+    linkElement.setAttribute("href", dataUri);
+    linkElement.setAttribute("download", exportFileDefaultName);
+    linkElement.click();
   };
 
   public commitChanges(): void {

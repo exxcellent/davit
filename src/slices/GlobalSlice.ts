@@ -67,6 +67,15 @@ const storefileData = (fileData: string): AppThunk => async (dispatch) => {
   }
 };
 
+const downloadData = (): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<void> = DataAccess.downloadData();
+  if (response.code === 200) {
+    console.info("download success");
+  } else {
+    dispatch(handleError(response.message));
+  }
+};
+
 export const setModeWithStorage = (mode: Mode): AppThunk => async (dispatch) => {
   localStorage.setItem(MODE_LOCAL_STORAGE, mode);
   dispatch(globalSlice.actions.setMode(mode));
@@ -143,6 +152,7 @@ export const GlobalActions = {
   setModeToEditStep,
   setModeToEditComponentData,
   storefileData,
+  downloadData,
 };
 
 export const { handleError } = globalSlice.actions;

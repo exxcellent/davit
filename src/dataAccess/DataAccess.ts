@@ -24,6 +24,20 @@ export const DataAccess = {
     }
   },
 
+  downloadData(): DataAccessResponse<void> {
+    let response: DataAccessResponse<void> = {
+      object: undefined,
+      message: "",
+      code: 500,
+    };
+    try {
+      dataStore.downloadData();
+      return { ...response, code: 200 };
+    } catch (error) {
+      return { ...response, message: error.message };
+    }
+  },
+
   findAllComponents(): DataAccessResponse<ComponentCTO[]> {
     return makeTransactional(ComponentDataAccessService.findAll);
   },

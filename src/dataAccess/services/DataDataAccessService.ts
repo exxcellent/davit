@@ -51,15 +51,14 @@ export const DataDataAccessService = {
   deleteDataCTO(dataCTO: DataCTO): DataCTO {
     CheckHelper.nullCheck(dataCTO.geometricalData, "GeometricalDataCTO");
     CheckHelper.nullCheck(dataCTO.data, "DataTO");
-    // remove all existing relations with data id
     let relations: DataRelationCTO[] = this.findAllDataRelationCTOs();
     const relationsToDelete: DataRelationCTO[] | undefined = relations.filter(
       (relation) =>
         relation.dataRelationTO.data1Fk === dataCTO.data.id || relation.dataRelationTO.data2Fk === dataCTO.data.id
     );
     relationsToDelete.map((relation) => this.deleteDataRelationCTO(relation));
-    TechnicalDataAccessService.deleteGeometricalDataCTO(dataCTO.geometricalData);
     DataRepository.delete(dataCTO.data);
+    TechnicalDataAccessService.deleteGeometricalDataCTO(dataCTO.geometricalData);
     return dataCTO;
   },
 

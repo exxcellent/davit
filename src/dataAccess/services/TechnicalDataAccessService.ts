@@ -49,8 +49,8 @@ export const TechnicalDataAccessService = {
 
   deleteGeometricalDataCTO(geometricalDataCTO: GeometricalDataCTO): GeometricalDataCTO {
     CheckHelper.nullCheck(geometricalDataCTO, "geometricalDataCTO");
-    const isdeletedPosition = PositionRepository.delete(geometricalDataCTO.position);
     const isDeletedGeoData = GeometricalDataRepository.delete(geometricalDataCTO.geometricalData);
+    const isdeletedPosition = PositionRepository.delete(geometricalDataCTO.position);
     if (!(isdeletedPosition && isDeletedGeoData)) {
       // TODO: use intl id
       throw new Error("Couldn't delete");
