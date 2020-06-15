@@ -11,13 +11,7 @@ export interface DnDWrapperProps {
 }
 
 export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
-  const {
-    dragConstraintsRef,
-    initalX,
-    initalY,
-    onPositionUpdate,
-    positionId,
-  } = props;
+  const { dragConstraintsRef, initalX, initalY, onPositionUpdate, positionId } = props;
 
   return (
     <motion.div
@@ -39,7 +33,7 @@ export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
         console.log("X: " + info.point.x);
         console.log("Y: " + info.point.y);
       }}
-      style={{ position: "absolute", display: "inline-flex" }}
+      style={{ position: "absolute", display: "inline-flex", zIndex: 1 }}
     >
       {props.children}
     </motion.div>

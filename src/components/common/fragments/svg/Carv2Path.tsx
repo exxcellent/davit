@@ -1,4 +1,4 @@
-import { motion, Point } from "framer-motion";
+import { Point } from "framer-motion";
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { GeometricalDataCTO } from "../../../../dataAccess/access/cto/GeometraicalDataCTO";
 import { DataRelationTO, Direction, RelationType } from "../../../../dataAccess/access/to/DataRelationTO";
@@ -119,27 +119,21 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
     return pathLength;
   };
 
-  return (
-    <motion.svg
-      style={{
-        overflow: "visible",
-        stroke: "black",
-        position: "absolute",
-        width: 0,
-        height: 0,
-      }}
-    >
-      {createCornerLine()}
-      <g fill="black" stroke="none">
-        <text fontFamily="Arial" fontSize="14">
-          <textPath xlinkHref={iId}>{label1}</textPath>
-        </text>
-        <text x={pLength} fontFamily="Arial" fontSize="14">
-          <textPath xlinkHref={iId}>{label2}</textPath>
-        </text>
-      </g>
-    </motion.svg>
-  );
+  return createCornerLine();
+
+  // return (
+  //   <motion.svg className="dataSVGArea">
+  //     {createCornerLine()}
+  //     <g fill="black" stroke="none">
+  //       <text fontFamily="Arial" fontSize="14">
+  //         <textPath xlinkHref={iId}>{label1}</textPath>
+  //       </text>
+  //       <text x={pLength} fontFamily="Arial" fontSize="14">
+  //         <textPath xlinkHref={iId}>{label2}</textPath>
+  //       </text>
+  //     </g>
+  //   </motion.svg>
+  // );
 };
 
 export const createCornerConnection = (

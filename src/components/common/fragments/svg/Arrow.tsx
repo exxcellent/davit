@@ -98,10 +98,7 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
     };
   };
 
-  const getCurvRefPoint = (
-    curveStartPoint: Point,
-    curveEndPoint: Point
-  ): Point => {
+  const getCurvRefPoint = (curveStartPoint: Point, curveEndPoint: Point): Point => {
     return {
       x: getMiddleValue(curveStartPoint.x, curveEndPoint.x),
       y: curveStartPoint.y,
@@ -109,40 +106,19 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
   };
 
   return (
-    <motion.svg
-      style={{
-        overflow: "visible",
-        stroke: "black",
-        position: "absolute",
-        width: 0,
-        height: 0,
-      }}
-    >
+    <motion.svg className="componentSVGArea">
       <defs>
-        <marker
-          id="arrow"
-          markerWidth="10"
-          markerHeight="10"
-          refX="8"
-          refY="3"
-          orient="auto"
-          strokeWidth="0"
-        >
+        <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" strokeWidth="0">
           <path d="M0,0 L0,6 L9,3 z" className="carvArrowMarker" />
         </marker>
       </defs>
-      {type === ArrowType.CURVE &&
-        createCurve(xSource, ySource, xTarget, yTarget)}
-      {type === ArrowType.CORNER &&
-        createCornerLine(xSource, ySource, xTarget, yTarget)}
+      {type === ArrowType.CURVE && createCurve(xSource, ySource, xTarget, yTarget)}
+      {type === ArrowType.CORNER && createCornerLine(xSource, ySource, xTarget, yTarget)}
     </motion.svg>
   );
 };
 
-export const createCurveArrow = (
-  source: GeometricalDataCTO | undefined,
-  target: GeometricalDataCTO | undefined
-) => {
+export const createCurveArrow = (source: GeometricalDataCTO | undefined, target: GeometricalDataCTO | undefined) => {
   if (source && target) {
     return (
       <Arrow

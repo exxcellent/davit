@@ -79,8 +79,10 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
     <motion.div id="datadndBox" ref={constraintsRef} className="dataModel">
       {dataCTOs.map(createDnDMetaDataFragmentIfNotinEdit)}
       {dataCTOToEdit && createDnDMetaDataFragment(dataCTOToEdit)}
-      {createConnections()}
-      {dataRelationToEdit && createDataRelationToEdit(dataRelationToEdit)}
+      <motion.svg className="dataSVGArea">
+        {createConnections()}
+        {dataRelationToEdit && createDataRelationToEdit(dataRelationToEdit)}
+      </motion.svg>
     </motion.div>
   );
 };

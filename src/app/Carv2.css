@@ -105,6 +105,24 @@
   padding: 10px;
 }
 
+.dataSVGArea {
+  grid-area: dataModel;
+  overflow: "visible";
+  stroke: "black";
+  position: "absolute";
+  width: 100%;
+  height: 100%;
+}
+
+.componentSVGArea {
+  grid-area: compModel;
+  overflow: "visible";
+  stroke: "black";
+  position: "absolute";
+  width: 100%;
+  height: 100%;
+}
+
 .controllPanelView {
   display: flex;
   justify-content: flex-start;
