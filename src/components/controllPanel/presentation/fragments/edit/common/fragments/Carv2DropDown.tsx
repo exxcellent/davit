@@ -118,12 +118,15 @@ export const useGetComponentDropdown = (onSelect: (component: ComponentCTO | und
   const components: ComponentCTO[] = useSelector(selectComponents);
   return (
     <Dropdown
-      options={components.map(componentToOption)}
+      options={components.map(componentToOption).sort((a, b) => {
+        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
+      })}
       icon={icon}
       onChange={(event, data) => onSelect(selectComponent(Number(data.value), components))}
       className="button icon"
       floating
       trigger={<React.Fragment />}
+      scrolling
     />
   );
 };
@@ -141,6 +144,7 @@ export const useGetStepDropDown = (
       className="button icon"
       floating
       trigger={<React.Fragment />}
+      scrolling
     />
   );
 };
@@ -152,10 +156,13 @@ export const useGetComponentDropdownLable = (
   const components: ComponentCTO[] = useSelector(selectComponents);
   return (
     <Dropdown
-      options={components.map(componentToOption)}
+      options={components.map(componentToOption).sort((a, b) => {
+        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
+      })}
       selection
       placeholder={placeholder}
       onChange={(event, data) => onSelect(selectComponent(Number(data.value), components))}
+      scrolling
     />
   );
 };
@@ -174,6 +181,7 @@ export const useGetMultiSelectDataDropdown = (onSelect: (datas: DataCTO[]) => vo
         onSelect(selectDataOptions((data.value as number[]) || undefined, datas));
       }}
       value={selected}
+      scrolling
     />
   );
 };
@@ -182,7 +190,9 @@ export const useGetDataDropdown = (onSelect: (data: DataCTO | undefined) => void
   const datas: DataCTO[] = useSelector(selectDatas);
   return (
     <Dropdown
-      options={datas.map(dataToOption)}
+      options={datas.map(dataToOption).sort((a, b) => {
+        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
+      })}
       icon={icon}
       onChange={(event, data) => onSelect(selectData(Number(data.value), datas))}
       className="button icon"
@@ -190,6 +200,7 @@ export const useGetDataDropdown = (onSelect: (data: DataCTO | undefined) => void
       color="orange"
       floating
       trigger={<React.Fragment />}
+      scrolling
     />
   );
 };
@@ -206,6 +217,7 @@ export const useGetSequenceDropdown = (onSelect: (sequence: SequenceCTO | undefi
       color="orange"
       floating
       trigger={<React.Fragment />}
+      scrolling
     />
   );
 };
@@ -221,6 +233,7 @@ export const useGetSequenceLabelDropdown = (
       selection
       placeholder={placeholder}
       onChange={(event, data) => onSelect(selectSequence(Number(data.value), sequences))}
+      scrolling
     />
   );
 };
@@ -237,6 +250,7 @@ export const useGetRelationDropdown = (onSelect: (relation: DataRelationCTO | un
       color="orange"
       floating
       trigger={<React.Fragment />}
+      scrolling
     />
   );
 };
