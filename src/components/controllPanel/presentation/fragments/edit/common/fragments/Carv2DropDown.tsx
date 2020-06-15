@@ -31,7 +31,7 @@ const stepToOption = (step: SequenceStepCTO): DropdownItemProps => {
   return {
     key: step.squenceStepTO.id,
     value: step.squenceStepTO.id,
-    text: step.squenceStepTO.name,
+    text: step.squenceStepTO.index,
   };
 };
 
