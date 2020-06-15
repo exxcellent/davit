@@ -38,10 +38,11 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
     directionOptions,
     typeOptions,
     validRelation,
+    key,
   } = useControllPanelEditRelationViewModel();
 
   return (
-    <ControllPanelEditSub label={label}>
+    <ControllPanelEditSub label={label} key={key}>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <div
           style={{
@@ -166,6 +167,7 @@ const useControllPanelEditRelationViewModel = () => {
   const relationToEdit: DataRelationCTO | null = useSelector(selectCurrentRelation);
   const dispatch = useDispatch();
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
+  const [key, setKey] = useState<number>(0);
 
   useEffect(() => {
     // check if component to edit is really set or go back to edit mode
@@ -216,6 +218,7 @@ const useControllPanelEditRelationViewModel = () => {
   const saveRelation = () => {
     dispatch(DataActions.saveRelation(relationToEdit!));
     if (isCreateAnother) {
+      setKey(key + 1);
       dispatch(GlobalActions.setModeToEditRelation());
     } else {
       dispatch(GlobalActions.setModeToEdit());
@@ -270,5 +273,6 @@ const useControllPanelEditRelationViewModel = () => {
     directionOptions,
     typeOptions,
     validRelation,
+    key,
   };
 };
