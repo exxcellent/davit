@@ -73,7 +73,12 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
         </Button.Group>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <Carv2SubmitCancel onSubmit={saveSequenceStep} onCancel={cancel} onChange={toggleIsCreateAnother} />
+        <Carv2SubmitCancel
+          onSubmit={saveSequenceStep}
+          onCancel={cancel}
+          onChange={toggleIsCreateAnother}
+          toggleLabel="Edit next"
+        />
         {showDelete && <Carv2DeleteButton onClick={deleteSequenceStep} />}
       </div>
     </ControllPanelEditSub>
@@ -84,7 +89,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
   const sequenceToEdit: SequenceCTO | null = useSelector(currentSequence);
   const sequenceStepToEdit: SequenceStepCTO | null = useSelector(currentStep);
   const dispatch = useDispatch();
-  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
+  const [isEditNext, setIsEditNext] = useState<boolean>(true);
   const textInput = useRef<Input>(null);
 
   useEffect(() => {
@@ -140,10 +145,14 @@ const useControllPanelEditSequenceStepViewModel = () => {
   };
 
   const saveSequenceStep = () => {
-    if (!isNullOrUndefined(sequenceToEdit)) {
+    if (!isNullOrUndefined(sequenceToEdit) && !isNullOrUndefined(sequenceStepToEdit)) {
       dispatch(SequenceActions.saveSequence(sequenceToEdit));
-      if (isCreateAnother) {
-        dispatch(GlobalActions.setModeToEditStep());
+      if (isEditNext) {
+        if (sequenceStepToEdit.squenceStepTO.index < sequenceToEdit.sequenceStepCTOs.length) {
+          dispatch(GlobalActions.setModeToEditStep(sequenceStepToEdit.squenceStepTO.index + 1));
+        } else {
+          dispatch(GlobalActions.setModeToEditStep());
+        }
       } else {
         dispatch(GlobalActions.setModeToEditCurrentSequence());
       }
@@ -179,7 +188,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
     deleteSequenceStep,
     setComponent,
     cancel: () => dispatch(GlobalActions.setModeToEditCurrentSequence()),
-    toggleIsCreateAnother: () => setIsCreateAnother(!isCreateAnother),
+    toggleIsCreateAnother: () => setIsEditNext(!isEditNext),
     textInput,
     showDelete: sequenceStepToEdit ? true : false,
     indexToOptions,

@@ -6,13 +6,15 @@ interface Carv2SubmitCancelProps {
   onSubmit: () => void;
   onCancel: () => void;
   onChange: () => void;
+  toggleLabel?: string;
   submitCondition?: boolean;
 }
 
 export const Carv2SubmitCancel: FunctionComponent<Carv2SubmitCancelProps> = (props) => {
-  const { onCancel, onChange, onSubmit, submitCondition } = props;
+  const { onCancel, onChange, onSubmit, submitCondition, toggleLabel } = props;
 
   const [disable, setDisable] = useState<boolean>(false);
+  const [label, setToggleLabel] = useState<string>("Create another");
 
   useEffect(() => {
     if (submitCondition === undefined) {
@@ -20,13 +22,16 @@ export const Carv2SubmitCancel: FunctionComponent<Carv2SubmitCancelProps> = (pro
     } else {
       setDisable(!submitCondition);
     }
-  }, [submitCondition]);
+    if (toggleLabel !== undefined) {
+      setToggleLabel(toggleLabel);
+    }
+  }, [submitCondition, toggleLabel]);
 
   return (
     <div className="controllPanelEditChild">
       <Carv2Button icon="check" onClick={onSubmit} disable={disable} />
       <Carv2Button icon="times" onClick={onCancel} />
-      <Carv2Checkbox label="Create another" onChange={onChange} />
+      <Carv2Checkbox label={label} onChange={onChange} />
     </div>
   );
 };
