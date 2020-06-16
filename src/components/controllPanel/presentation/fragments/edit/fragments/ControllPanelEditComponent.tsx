@@ -60,7 +60,7 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
 const useControllPanelEditComponentViewModel = () => {
   const componentToEdit: ComponentCTO | null = useSelector(currentComponent);
   const dispatch = useDispatch();
-  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
+  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
   const textInput = useRef<Input>(null);
 
   useEffect(() => {

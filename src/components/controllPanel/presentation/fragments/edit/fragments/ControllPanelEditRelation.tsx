@@ -61,6 +61,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
             <Dropdown
               placeholder="Select Data1"
               selection
+              selectOnBlur={false}
               options={dataOptions}
               onChange={(event, data) => {
                 setData(Number(data.value));
@@ -111,6 +112,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
             <Dropdown
               placeholder="Select Data2"
               selection
+              selectOnBlur={false}
               options={dataOptions}
               onChange={(event, data) => {
                 setData(Number(data.value), true);
@@ -166,7 +168,7 @@ const useControllPanelEditRelationViewModel = () => {
   const datas: DataCTO[] = useSelector(selectDatas);
   const relationToEdit: DataRelationCTO | null = useSelector(selectCurrentRelation);
   const dispatch = useDispatch();
-  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
+  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
   const [key, setKey] = useState<number>(0);
 
   useEffect(() => {

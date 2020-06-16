@@ -60,7 +60,7 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
 const useControllPanelEditDataViewModel = () => {
   const dataToEdit: DataCTO | null = useSelector(selectCurrentData);
   const dispatch = useDispatch();
-  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
+  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
   const textInput = useRef<Input>(null);
 
   useEffect(() => {

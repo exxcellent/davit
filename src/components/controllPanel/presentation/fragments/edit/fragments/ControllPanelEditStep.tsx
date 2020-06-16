@@ -89,7 +89,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
   const sequenceToEdit: SequenceCTO | null = useSelector(currentSequence);
   const sequenceStepToEdit: SequenceStepCTO | null = useSelector(currentStep);
   const dispatch = useDispatch();
-  const [isEditNext, setIsEditNext] = useState<boolean>(true);
+  const [isEditNext, setIsEditNext] = useState<boolean>(false);
   const textInput = useRef<Input>(null);
 
   useEffect(() => {

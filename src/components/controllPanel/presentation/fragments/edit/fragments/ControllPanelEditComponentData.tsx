@@ -39,7 +39,7 @@ const useControllPanelEditComponentDataViewModel = () => {
   const stepToEdit: SequenceStepCTO | null = useSelector(currentStep);
   const componentToEdit: ComponentCTO | null = useSelector(currentComponent);
   const dispatch = useDispatch();
-  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(true);
+  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
 
   useEffect(() => {
     // check if component to edit is really set or gos back to edit mode
