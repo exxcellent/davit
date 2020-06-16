@@ -3,13 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
+import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
 import { ComponentActions, currentComponent } from "../../../../../../slices/ComponentSlice";
 import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import { useGetGroupDropdownLabel } from "../common/fragments/Carv2DropDown";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
+import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditComponentProps {}
 
@@ -25,19 +28,25 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
     textInput,
     showDelete,
     validName,
+    setGroup,
+    compGroup,
   } = useControllPanelEditComponentViewModel();
 
   return (
     <ControllPanelEditSub label={label}>
-      <div />
-      <Carv2LabelTextfield
-        label="Name:"
-        placeholder="Component Name"
-        onChange={(event: any) => changeName(event.target.value)}
-        value={name}
-        autoFocus
-        ref={textInput}
-      />
+      <div className="optionFieldSpacer">
+        <OptionField>{useGetGroupDropdownLabel((group) => setGroup(group), "Select Group...", compGroup)}</OptionField>
+      </div>
+      <div className="columnDivider" style={{ display: "flex" }}>
+        <Carv2LabelTextfield
+          label="Name:"
+          placeholder="Component Name"
+          onChange={(event: any) => changeName(event.target.value)}
+          value={name}
+          autoFocus
+          ref={textInput}
+        />
+      </div>
       <div className="columnDivider" style={{ display: "flex" }}>
         <Carv2SubmitCancel
           onSubmit={saveComponent}
@@ -100,6 +109,18 @@ const useControllPanelEditComponentViewModel = () => {
     return false;
   };
 
+  const setGroup = (group: GroupTO | undefined) => {
+    if (!isNullOrUndefined(componentToEdit)) {
+      let copyComponentToEdit: ComponentCTO = Carv2Util.deepCopy(componentToEdit);
+      if (group !== undefined) {
+        copyComponentToEdit.component.groupFks = group.id;
+      } else {
+        copyComponentToEdit.component.groupFks = -1;
+      }
+      dispatch(ComponentActions.setCompoenentToEdit(copyComponentToEdit));
+    }
+  };
+
   return {
     label: componentToEdit?.component.id === -1 ? "ADD COMPONENT" : "EDIT COMPONENT",
     name: componentToEdit?.component.name,
@@ -111,5 +132,7 @@ const useControllPanelEditComponentViewModel = () => {
     textInput,
     showDelete: componentToEdit?.component.id !== -1,
     validName,
+    setGroup,
+    compGroup: componentToEdit?.component.groupFks !== -1 ? componentToEdit?.component.groupFks : undefined,
   };
 };

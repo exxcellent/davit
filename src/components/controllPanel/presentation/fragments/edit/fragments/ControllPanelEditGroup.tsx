@@ -29,6 +29,7 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
 
   return (
     <ControllPanelEditSub label={label}>
+      <div />
       <Carv2LabelTextfield
         label="Name:"
         placeholder="Group Name ..."

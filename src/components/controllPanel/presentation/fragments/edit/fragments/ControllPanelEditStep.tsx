@@ -10,7 +10,7 @@ import { currentSequence, currentStep, SequenceActions } from "../../../../../..
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { useGetComponentDropdown, useGetComponentDropdownLable } from "../common/fragments/Carv2DropDown";
+import { useGetComponentDropdown, useGetComponentDropdownLabel } from "../common/fragments/Carv2DropDown";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
 import { OptionField } from "../common/OptionField";
@@ -60,8 +60,8 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
       </div>
       <div className="optionFieldSpacer columnDivider">
         <OptionField>
-          {useGetComponentDropdownLable((comp) => setComponent(comp, true), selectSourcePlaceholder as string)}
-          {useGetComponentDropdownLable((comp) => setComponent(comp, false), selectTargetPlaceholder as string)}
+          {useGetComponentDropdownLabel((comp) => setComponent(comp, true), selectSourcePlaceholder as string)}
+          {useGetComponentDropdownLabel((comp) => setComponent(comp, false), selectTargetPlaceholder as string)}
         </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">

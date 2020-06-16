@@ -166,6 +166,28 @@ export const useGetGroupDropdown = (onSelect: (group: GroupTO | undefined) => vo
   );
 };
 
+export const useGetGroupDropdownLabel = (
+  onSelect: (group: GroupTO | undefined) => void,
+  placeholder?: string,
+  value?: number
+) => {
+  const groups: GroupTO[] = useSelector(selectGroups);
+  return (
+    <Dropdown
+      options={groups.map(groupToOption).sort((a, b) => {
+        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
+      })}
+      selection
+      selectOnBlur={false}
+      placeholder={placeholder}
+      onChange={(event, data) => onSelect(selectGroup(Number(data.value), groups))}
+      scrolling
+      clearable
+      value={value}
+    />
+  );
+};
+
 export const useGetStepDropDown = (
   onSelect: (step: SequenceStepCTO | undefined) => void,
   icon?: string
@@ -185,7 +207,7 @@ export const useGetStepDropDown = (
   );
 };
 
-export const useGetComponentDropdownLable = (
+export const useGetComponentDropdownLabel = (
   onSelect: (component: ComponentCTO | undefined) => void,
   placeholder?: string
 ) => {
