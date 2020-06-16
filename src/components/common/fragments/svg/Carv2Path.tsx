@@ -1,5 +1,5 @@
 import { Point } from "framer-motion";
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import React, { FunctionComponent, useRef } from "react";
 import { GeometricalDataCTO } from "../../../../dataAccess/access/cto/GeometraicalDataCTO";
 import { DataRelationTO, Direction, RelationType } from "../../../../dataAccess/access/to/DataRelationTO";
 
@@ -26,15 +26,15 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
     yTarget,
     direction1,
     direction2,
-    label1,
-    label2,
+    // label1,
+    // label2,
     // type1,
     // type2,
     id,
     stroked,
   } = props;
 
-  const iId = "#" + id.toString();
+  // const iId = "#" + id.toString();
 
   const TOP: Point = { x: 80, y: 0 };
   const BOTTOM: Point = { x: 80, y: 50 };
@@ -105,19 +105,19 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
 
   const pathRef = useRef<SVGPathElement>(null);
 
-  const [pLength, setPLength] = useState<number>(0);
+  // const [pLength, setPLength] = useState<number>(0);
 
-  useEffect(() => {
-    setPLength((getPathLength() / 100) * 90);
-  }, [pathRef]);
+  // useEffect(() => {
+  //   setPLength((getPathLength() / 100) * 90);
+  // }, [pathRef]);
 
-  const getPathLength = () => {
-    let pathLength = 0;
-    if (pathRef !== null && pathRef.current !== null) {
-      pathLength = pathRef.current?.getTotalLength();
-    }
-    return pathLength;
-  };
+  // const getPathLength = () => {
+  //   let pathLength = 0;
+  //   if (pathRef !== null && pathRef.current !== null) {
+  //     pathLength = pathRef.current?.getTotalLength();
+  //   }
+  //   return pathLength;
+  // };
 
   return createCornerLine();
 
