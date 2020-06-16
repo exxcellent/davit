@@ -122,6 +122,7 @@ export const useGetComponentDropdown = (onSelect: (component: ComponentCTO | und
         return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
       })}
       icon={icon}
+      selectOnBlur={false}
       onChange={(event, data) => onSelect(selectComponent(Number(data.value), components))}
       className="button icon"
       floating
@@ -143,6 +144,7 @@ export const useGetStepDropDown = (
       onChange={(event, data) => onSelect(selectSequenceStep(Number(data.value), sequence))}
       className="button icon"
       floating
+      selectOnBlur={false}
       trigger={<React.Fragment />}
       scrolling
     />
@@ -160,6 +162,7 @@ export const useGetComponentDropdownLable = (
         return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
       })}
       selection
+      selectOnBlur={false}
       placeholder={placeholder}
       onChange={(event, data) => onSelect(selectComponent(Number(data.value), components))}
       scrolling
@@ -176,6 +179,7 @@ export const useGetMultiSelectDataDropdown = (onSelect: (datas: DataCTO[]) => vo
       multiple
       search
       selection
+      selectOnBlur={false}
       options={datas.map(dataToOption)}
       onChange={(event, data) => {
         onSelect(selectDataOptions((data.value as number[]) || undefined, datas));
@@ -199,6 +203,7 @@ export const useGetDataDropdown = (onSelect: (data: DataCTO | undefined) => void
       inverted="true"
       color="orange"
       floating
+      selectOnBlur={false}
       trigger={<React.Fragment />}
       scrolling
     />
@@ -216,6 +221,7 @@ export const useGetSequenceDropdown = (onSelect: (sequence: SequenceCTO | undefi
       inverted="true"
       color="orange"
       floating
+      selectOnBlur={false}
       trigger={<React.Fragment />}
       scrolling
     />
@@ -231,6 +237,8 @@ export const useGetSequenceLabelDropdown = (
     <Dropdown
       options={sequences.map(sequenceToOption)}
       selection
+      clearable
+      selectOnBlur={false}
       placeholder={placeholder}
       onChange={(event, data) => onSelect(selectSequence(Number(data.value), sequences))}
       scrolling
@@ -249,6 +257,7 @@ export const useGetRelationDropdown = (onSelect: (relation: DataRelationCTO | un
       inverted="true"
       color="orange"
       floating
+      selectOnBlur={false}
       trigger={<React.Fragment />}
       scrolling
     />
