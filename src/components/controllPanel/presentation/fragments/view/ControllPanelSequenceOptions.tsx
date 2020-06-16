@@ -25,6 +25,10 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
       dispatch(SequenceSlice.actions.resetCurrentStepIndex());
       dispatch(SequenceActions.setSequenceToEdit(sequence));
     }
+    if (sequence === undefined) {
+      dispatch(SequenceSlice.actions.resetCurrentStepIndex());
+      dispatch(SequenceSlice.actions.resetCurrentSequence());
+    }
   };
 
   return (
