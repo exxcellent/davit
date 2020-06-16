@@ -8,6 +8,7 @@ import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import { colorDropDown } from "../common/fragments/Carv2DropDown";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { Carv2SubmitCancel, Carv2SubmitCancelNoCheckBox } from "../common/fragments/Carv2SubmitCancel";
 
@@ -25,19 +26,23 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
     showExistingOptions,
     toggleIsCreateAnother,
     validateInput,
+    getGroupColor,
+    setGroupColor,
   } = useControllPanelEditGroupViewModel();
 
   return (
     <ControllPanelEditSub label={label}>
-      <div />
-      <Carv2LabelTextfield
-        label="Name:"
-        placeholder="Group Name ..."
-        onChange={(event: any) => changeName(event.target.value)}
-        value={name}
-        autoFocus
-        ref={textInput}
-      />
+      {colorDropDown(setGroupColor, getGroupColor())}
+      <div className="columnDivider controllPanelEditChild">
+        <Carv2LabelTextfield
+          label="Name:"
+          placeholder="Group Name ..."
+          onChange={(event: any) => changeName(event.target.value)}
+          value={name}
+          autoFocus
+          ref={textInput}
+        />
+      </div>
       <div className="columnDivider" style={{ display: "flex" }}>
         {!showExistingOptions && (
           <Carv2SubmitCancel
@@ -119,6 +124,24 @@ const useControllPanelEditGroupViewModel = () => {
     }
   };
 
+  const getGroupColor = (): string => {
+    if (!isNullOrUndefined(groupToEdit)) {
+      return groupToEdit.color;
+    } else {
+      return "";
+    }
+  };
+
+  const setGroupColor = (color: string | undefined) => {
+    if (!isNullOrUndefined(groupToEdit)) {
+      let copyGroupToEdit: GroupTO = Carv2Util.deepCopy(groupToEdit);
+      if (color !== undefined) {
+        copyGroupToEdit.color = color;
+      }
+      dispatch(ComponentActions.setGroupToEdit(copyGroupToEdit));
+    }
+  };
+
   return {
     label: groupToEdit?.id === -1 ? "ADD GROUP" : "EDIT GROUP",
     name: groupToEdit?.name,
@@ -130,5 +153,7 @@ const useControllPanelEditGroupViewModel = () => {
     textInput,
     showExistingOptions: groupToEdit?.id !== -1,
     validateInput,
+    getGroupColor,
+    setGroupColor,
   };
 };

@@ -28,6 +28,14 @@ const componentToOption = (component: ComponentCTO): DropdownItemProps => {
   };
 };
 
+const colorToOption = (color: string): DropdownItemProps => {
+  return {
+    key: color,
+    value: color,
+    text: color,
+  };
+};
+
 const groupToOption = (group: GroupTO): DropdownItemProps => {
   return {
     key: group.id,
@@ -129,6 +137,22 @@ const selectDataRelation = (relationId: number, relations: DataRelationCTO[]): D
 };
 
 // ------ Dropdowns ------
+
+export const colorDropDown = (onSelect: (color: string | undefined) => void, value: string) => {
+  const colors: string[] = ["red", "blue", "green"];
+  return (
+    <Dropdown
+      options={colors.map(colorToOption).sort((a, b) => {
+        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
+      })}
+      selection
+      selectOnBlur={false}
+      onChange={(event, data) => onSelect(data.value as string)}
+      scrolling
+      value={value}
+    />
+  );
+};
 
 export const useGetComponentDropdown = (onSelect: (component: ComponentCTO | undefined) => void, icon?: string) => {
   const components: ComponentCTO[] = useSelector(selectComponents);

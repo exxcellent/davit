@@ -2,24 +2,25 @@ import { motion } from "framer-motion";
 import React, { FunctionComponent, useRef } from "react";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
+import { GroupTO } from "../../../../dataAccess/access/to/GroupTO";
 import { createDnDItem } from "../../../common/fragments/DnDWrapper";
 import { createCurveArrow } from "../../../common/fragments/svg/Arrow";
 import { createMetaComponentFragment } from "./MetaComponentFragment";
 
 interface MetaComponentDnDBox {
   componentCTOs: ComponentCTO[];
+  groups: GroupTO[];
   componentCTOToEdit: ComponentCTO | null;
   step: SequenceStepCTO | null;
   onSaveCallBack: (componentCTO: ComponentCTO) => void;
 }
 
 export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (props) => {
-  const { componentCTOs, onSaveCallBack, step, componentCTOToEdit } = props;
+  const { componentCTOs, onSaveCallBack, step, componentCTOToEdit, groups } = props;
 
   const constraintsRef = useRef(null);
 
   const onPositionUpdate = (x: number, y: number, positionId: number) => {
-    console.info("onPositionUpdate() x: " + x + " y: " + y + ".");
     const componentCTO = componentCTOs.find((componentCTO) => componentCTO.geometricalData.position.id === positionId);
     if (componentCTO) {
       let copyComponentCTO: ComponentCTO = JSON.parse(JSON.stringify(componentCTO));
@@ -37,7 +38,11 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (prop
 
   const createDnDMetaComponent = (componentCTO: ComponentCTO) => {
     let metaComponentFragment = createMetaComponentFragment(componentCTO, step);
-    return createDnDItem(componentCTO.geometricalData, onPositionUpdate, constraintsRef, metaComponentFragment);
+    let shadow: string = "";
+    if (componentCTO.component.groupFks !== -1) {
+      shadow = groups.find((group) => group.id === componentCTO.component.groupFks)?.color || "";
+    }
+    return createDnDItem(componentCTO.geometricalData, onPositionUpdate, constraintsRef, metaComponentFragment, shadow);
   };
 
   return (

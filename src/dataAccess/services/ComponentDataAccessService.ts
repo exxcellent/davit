@@ -38,6 +38,13 @@ export const ComponentDataAccessService = {
 
   deleteGroup(group: GroupTO): GroupTO {
     CheckHelper.nullCheck(group, "group");
+    const componentsToClean: ComponentCTO[] = this.findAll().filter(
+      (component) => component.component.groupFks === group.id
+    );
+    componentsToClean.forEach((component) => {
+      component.component.groupFks = -1;
+      this.saveCTO(component);
+    });
     GroupRepository.delete(group);
     return group;
   },

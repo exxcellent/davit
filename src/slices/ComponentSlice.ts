@@ -102,6 +102,7 @@ const deleteGroupThunk = (group: GroupTO): AppThunk => async (dispatch) => {
     dispatch(handleError(response.message));
   }
   dispatch(loadGroupsFromBackend());
+  dispatch(loadComponentsFromBackend());
 };
 
 export const ComponentActions = {

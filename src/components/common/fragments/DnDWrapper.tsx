@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { GeometricalDataCTO } from "../../../dataAccess/access/cto/GeometraicalDataCTO";
 
 export interface DnDWrapperProps {
@@ -8,10 +8,20 @@ export interface DnDWrapperProps {
   initalX: number;
   initalY: number;
   onPositionUpdate: (x: number, y: number, positionId: number) => void;
+  shadow?: string;
 }
 
 export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
-  const { dragConstraintsRef, initalX, initalY, onPositionUpdate, positionId } = props;
+  const { dragConstraintsRef, initalX, initalY, onPositionUpdate, positionId, shadow } = props;
+  const [shadowColor, setShadowColor] = useState<string>("");
+
+  useEffect(() => {
+    if (shadow) {
+      setShadowColor("3px 3px 3px " + shadow);
+    } else {
+      setShadowColor("");
+    }
+  }, [shadow]);
 
   return (
     <motion.div
@@ -30,10 +40,8 @@ export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
           Number(info.point.y.toFixed(0)),
           positionId
         );
-        console.log("X: " + info.point.x);
-        console.log("Y: " + info.point.y);
       }}
-      style={{ position: "absolute", display: "inline-flex", zIndex: 1 }}
+      style={{ position: "absolute", display: "inline-flex", zIndex: 1, boxShadow: shadowColor }}
     >
       {props.children}
     </motion.div>
@@ -44,7 +52,8 @@ export const createDnDItem = (
   geometricalDataCTO: GeometricalDataCTO,
   onPositionUpdateCallBack: (x: number, y: number, positionId: number) => void,
   dragConstraintsRef: any,
-  children: React.ReactNode
+  children: React.ReactNode,
+  shadow?: string
 ) => {
   return (
     <DnDWrapper
@@ -54,6 +63,7 @@ export const createDnDItem = (
       initalX={geometricalDataCTO.position.x}
       initalY={geometricalDataCTO.position.y}
       dragConstraintsRef={dragConstraintsRef}
+      shadow={shadow}
     >
       {children}
     </DnDWrapper>
