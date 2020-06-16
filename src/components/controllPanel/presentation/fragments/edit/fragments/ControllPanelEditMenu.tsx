@@ -4,9 +4,11 @@ import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentC
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../../../../dataAccess/access/cto/DataRelationCTO";
 import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
+import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
 import {
   useGetComponentDropdown,
   useGetDataDropdown,
+  useGetGroupDropdown,
   useGetRelationDropdown,
   useGetSequenceDropdown,
 } from "../common/fragments/Carv2DropDown";
@@ -18,10 +20,11 @@ export interface ControllPanelEditMenuProps {
   editOrAddData: (data?: DataCTO) => void;
   editOrAddRelation: (relation?: DataRelationCTO) => void;
   editOrAddSequence: (sequence?: SequenceCTO) => void;
+  editOrAddGroup: (group?: GroupTO) => void;
 }
 
 export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps> = (props) => {
-  const { editOrAddComponent, editOrAddData, editOrAddRelation, editOrAddSequence } = props;
+  const { editOrAddComponent, editOrAddData, editOrAddRelation, editOrAddSequence, editOrAddGroup } = props;
 
   return (
     <div className="controllPanelEdit">
@@ -36,6 +39,13 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
               Component
             </Button>
             {useGetComponentDropdown(editOrAddComponent, "wrench")}
+          </Button.Group>
+          <Button.Group>
+            <Button icon="add" inverted color="orange" onClick={() => editOrAddGroup()} />
+            <Button id="buttonGroupLabel" disabled inverted color="orange">
+              Group
+            </Button>
+            {useGetGroupDropdown(editOrAddGroup, "wrench")}
           </Button.Group>
         </OptionField>
       </div>

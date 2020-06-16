@@ -1,6 +1,7 @@
 export interface StoreTO {
   // Component
   components: any[];
+  groups: any[];
   // Technical
   geometricalDatas: any[];
   positions: any[];

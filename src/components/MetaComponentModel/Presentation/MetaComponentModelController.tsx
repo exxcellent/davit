@@ -29,6 +29,7 @@ const useViewModel = () => {
 
   React.useEffect(() => {
     dispatch(ComponentActions.loadComponentsFromBackend());
+    dispatch(ComponentActions.loadGroupsFromBackend());
   }, [dispatch]);
 
   const saveComp = (componentCTO: ComponentCTO) => {

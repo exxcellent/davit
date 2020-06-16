@@ -55,6 +55,7 @@ class DataStore {
   private getDataStoreObject(): StoreTO {
     return {
       components: Array.from(this.data!.components.values()),
+      groups: Array.from(this.data!.groups.values()),
       designs: Array.from(this.data!.designs.values()),
       geometricalDatas: Array.from(this.data!.geometricalDatas.values()),
       positions: Array.from(this.data!.positions.values()),

@@ -71,4 +71,13 @@ export const ConstraintsHelper = {
       throw new Error(`delete.error! design with id: ${designId} is still connected to Component(s)!`);
     }
   },
+
+  deleteGroupConstraintCheck(groupId: number, dataStore: DataStoreCTO) {
+    const componentExists: boolean = Array.from(dataStore.components.values()).some(
+      (component) => component.groupFks === groupId
+    );
+    if (componentExists) {
+      throw new Error(`delete.error! group with id: ${groupId} is still connected to Component(s)!`);
+    }
+  },
 };

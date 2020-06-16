@@ -3,8 +3,10 @@ import { DataCTO } from "./access/cto/DataCTO";
 import { DataRelationCTO } from "./access/cto/DataRelationCTO";
 import { SequenceCTO } from "./access/cto/SequenceCTO";
 import { SequenceStepCTO } from "./access/cto/SequenceStepCTO";
+import { GroupTO } from "./access/to/GroupTO";
 import { DataAccessResponse } from "./DataAccessResponse";
 import dataStore from "./DataStore";
+import { GroupRepository } from "./repositories/GroupRepository";
 import { ComponentDataAccessService } from "./services/ComponentDataAccessService";
 import { DataDataAccessService } from "./services/DataDataAccessService";
 import { SequenceDataAccessService } from "./services/SequenceDataAccessService";
@@ -96,6 +98,18 @@ export const DataAccess = {
 
   saveDataRelationCTO(dataRelation: DataRelationCTO): DataAccessResponse<DataRelationCTO> {
     return makeTransactional(() => DataDataAccessService.saveDataRelation(dataRelation));
+  },
+
+  findAllGroups(): DataAccessResponse<GroupTO[]> {
+    return makeTransactional(GroupRepository.findAll);
+  },
+
+  saveGroup(group: GroupTO): DataAccessResponse<GroupTO> {
+    return makeTransactional(() => GroupRepository.save(group));
+  },
+
+  deleteGroupTO(group: GroupTO): DataAccessResponse<GroupTO> {
+    return makeTransactional(() => GroupRepository.delete(group));
   },
 };
 

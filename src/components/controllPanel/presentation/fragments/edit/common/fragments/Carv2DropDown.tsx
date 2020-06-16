@@ -7,7 +7,8 @@ import { DataCTO } from "../../../../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../../../../../dataAccess/access/cto/DataRelationCTO";
 import { SequenceCTO } from "../../../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../../../dataAccess/access/cto/SequenceStepCTO";
-import { selectComponents } from "../../../../../../../slices/ComponentSlice";
+import { GroupTO } from "../../../../../../../dataAccess/access/to/GroupTO";
+import { selectComponents, selectGroups } from "../../../../../../../slices/ComponentSlice";
 import { selectDatas, selectRelations } from "../../../../../../../slices/DataSlice";
 import { currentSequence, selectSequences } from "../../../../../../../slices/SequenceSlice";
 
@@ -24,6 +25,14 @@ const componentToOption = (component: ComponentCTO): DropdownItemProps => {
     key: component.component.id,
     value: component.component.id,
     text: component.component.name,
+  };
+};
+
+const groupToOption = (group: GroupTO): DropdownItemProps => {
+  return {
+    key: group.id,
+    value: group.id,
+    text: group.name,
   };
 };
 
@@ -76,6 +85,13 @@ const selectComponent = (componentId: number, components: ComponentCTO[]): Compo
   return undefined;
 };
 
+const selectGroup = (groupId: number, groups: GroupTO[]): GroupTO | undefined => {
+  if (!isNullOrUndefined(groups) && !isNullOrUndefined(groupId)) {
+    return groups.find((group) => group.id === groupId);
+  }
+  return undefined;
+};
+
 const selectSequenceStep = (stepId: number, sequence: SequenceCTO | null): SequenceStepCTO | undefined => {
   if (!isNullOrUndefined(sequence) && !isNullOrUndefined(stepId)) {
     return sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.id === stepId);
@@ -124,6 +140,24 @@ export const useGetComponentDropdown = (onSelect: (component: ComponentCTO | und
       icon={icon}
       selectOnBlur={false}
       onChange={(event, data) => onSelect(selectComponent(Number(data.value), components))}
+      className="button icon"
+      floating
+      trigger={<React.Fragment />}
+      scrolling
+    />
+  );
+};
+
+export const useGetGroupDropdown = (onSelect: (group: GroupTO | undefined) => void, icon?: string) => {
+  const groups: GroupTO[] = useSelector(selectGroups);
+  return (
+    <Dropdown
+      options={groups.map(groupToOption).sort((a, b) => {
+        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
+      })}
+      icon={icon}
+      selectOnBlur={false}
+      onChange={(event, data) => onSelect(selectGroup(Number(data.value), groups))}
       className="button icon"
       floating
       trigger={<React.Fragment />}

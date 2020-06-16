@@ -4,10 +4,12 @@ import { ComponentCTO } from "../../../../../dataAccess/access/cto/ComponentCTO"
 import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../../../dataAccess/access/cto/DataRelationCTO";
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
+import { GroupTO } from "../../../../../dataAccess/access/to/GroupTO";
 import { GlobalActions, Mode, selectMode } from "../../../../../slices/GlobalSlice";
 import { ControllPanelEditComponent } from "./fragments/ControllPanelEditComponent";
 import { ControllPanelEditComponentData } from "./fragments/ControllPanelEditComponentData";
 import { ControllPanelEditData } from "./fragments/ControllPanelEditData";
+import { ControllPanelEditGroup } from "./fragments/ControllPanelEditGroup";
 import { ControllPanelEditMenu } from "./fragments/ControllPanelEditMenu";
 import { ControllPanelEditRelation } from "./fragments/ControllPanelEditRelation";
 import { ControllPanelEditSequence } from "./fragments/ControllPanelEditSequence";
@@ -22,12 +24,15 @@ export const ControllPanelEditController: FunctionComponent<ControllPanelEditCon
     editOrAddData,
     editOrAddRelation,
     editOrAddSequence,
+    editOrAddGroup,
   } = useControllPanelEditViewModel();
 
   const getViewByMode = (currentMode: Mode) => {
     switch (currentMode) {
       case Mode.EDIT_COMPONENT:
         return <ControllPanelEditComponent />;
+      case Mode.EDIT_GROUP:
+        return <ControllPanelEditGroup />;
       case Mode.EDIT_DATA:
         return <ControllPanelEditData />;
       case Mode.EDIT_DATA_RELATION:
@@ -45,6 +50,7 @@ export const ControllPanelEditController: FunctionComponent<ControllPanelEditCon
             editOrAddData={editOrAddData}
             editOrAddRelation={editOrAddRelation}
             editOrAddSequence={editOrAddSequence}
+            editOrAddGroup={editOrAddGroup}
           />
         );
     }
@@ -63,5 +69,6 @@ const useControllPanelEditViewModel = () => {
     editOrAddData: (data?: DataCTO) => dispatch(GlobalActions.setModeToEditData(data)),
     editOrAddRelation: (relation?: DataRelationCTO) => dispatch(GlobalActions.setModeToEditRelation(relation)),
     editOrAddSequence: (sequence?: SequenceCTO) => dispatch(GlobalActions.setModeToEditSequence(sequence)),
+    editOrAddGroup: (group?: GroupTO) => dispatch(GlobalActions.setModeToEditGroup(group)),
   };
 };
