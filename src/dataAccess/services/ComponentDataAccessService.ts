@@ -3,7 +3,9 @@ import { ComponentCTO } from "../access/cto/ComponentCTO";
 import { GeometricalDataCTO } from "../access/cto/GeometraicalDataCTO";
 import { ComponentTO } from "../access/to/ComponentTO";
 import { DesignTO } from "../access/to/DesignTO";
+import { GroupTO } from "../access/to/GroupTO";
 import { ComponentRepository } from "../repositories/ComponentRepository";
+import { GroupRepository } from "../repositories/GroupRepository";
 import { CheckHelper } from "../util/CheckHelper";
 import { TechnicalDataAccessService } from "./TechnicalDataAccessService";
 
@@ -20,8 +22,11 @@ export const ComponentDataAccessService = {
     return ComponentRepository.find(id);
   },
 
+  findAllGroups(): GroupTO[] {
+    return GroupRepository.findAll();
+  },
+
   delete(component: ComponentCTO): ComponentCTO {
-    console.info("DataAccessService delete called.");
     CheckHelper.nullCheck(component.geometricalData, "GeometricalDataCTO");
     CheckHelper.nullCheck(component.design, "DesignTO");
     CheckHelper.nullCheck(component.component, "ComponentTO");
@@ -29,6 +34,12 @@ export const ComponentDataAccessService = {
     TechnicalDataAccessService.deleteGeometricalDataCTO(component.geometricalData);
     TechnicalDataAccessService.deleteDesign(component.design);
     return component;
+  },
+
+  deleteGroup(group: GroupTO): GroupTO {
+    CheckHelper.nullCheck(group, "group");
+    GroupRepository.delete(group);
+    return group;
   },
 
   saveCTO(componentCTO: ComponentCTO): ComponentCTO {
@@ -44,6 +55,11 @@ export const ComponentDataAccessService = {
       geometricalData: savedGeometricalData,
       design: savedDesign,
     };
+  },
+
+  saveGroup(group: GroupTO): GroupTO {
+    CheckHelper.nullCheck(group, "group");
+    return GroupRepository.save(group);
   },
 };
 

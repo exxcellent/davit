@@ -6,7 +6,6 @@ import { SequenceStepCTO } from "./access/cto/SequenceStepCTO";
 import { GroupTO } from "./access/to/GroupTO";
 import { DataAccessResponse } from "./DataAccessResponse";
 import dataStore from "./DataStore";
-import { GroupRepository } from "./repositories/GroupRepository";
 import { ComponentDataAccessService } from "./services/ComponentDataAccessService";
 import { DataDataAccessService } from "./services/DataDataAccessService";
 import { SequenceDataAccessService } from "./services/SequenceDataAccessService";
@@ -101,15 +100,15 @@ export const DataAccess = {
   },
 
   findAllGroups(): DataAccessResponse<GroupTO[]> {
-    return makeTransactional(GroupRepository.findAll);
+    return makeTransactional(ComponentDataAccessService.findAllGroups);
   },
 
   saveGroup(group: GroupTO): DataAccessResponse<GroupTO> {
-    return makeTransactional(() => GroupRepository.save(group));
+    return makeTransactional(() => ComponentDataAccessService.saveGroup(group));
   },
 
   deleteGroupTO(group: GroupTO): DataAccessResponse<GroupTO> {
-    return makeTransactional(() => GroupRepository.delete(group));
+    return makeTransactional(() => ComponentDataAccessService.deleteGroup(group));
   },
 };
 
