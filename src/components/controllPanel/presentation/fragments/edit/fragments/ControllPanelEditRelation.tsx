@@ -39,6 +39,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
     typeOptions,
     validRelation,
     key,
+    isCreateAnother,
   } = useControllPanelEditRelationViewModel();
 
   return (
@@ -151,6 +152,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
           onChange={toggleIsCreateAnother}
           onCancel={cancel}
           submitCondition={validRelation()}
+          checked={isCreateAnother}
         />
       </div>
       {showDelete && (
@@ -276,5 +278,6 @@ const useControllPanelEditRelationViewModel = () => {
     typeOptions,
     validRelation,
     key,
+    isCreateAnother,
   };
 };

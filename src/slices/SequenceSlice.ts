@@ -257,8 +257,6 @@ const loadSequencesFromBackend = (): AppThunk => (dispatch) => {
 };
 
 const saveSequenceThunk = (sequence: SequenceCTO): AppThunk => (dispatch) => {
-  console.log("save sequence thunk with sequence: ", sequence);
-  // sort steps befor save.
   let copySequence: SequenceCTO = Carv2Util.deepCopy(sequence);
   copySequence.sequenceStepCTOs.sort((step1, step2) => step1.squenceStepTO.index - step2.squenceStepTO.index);
   const response: DataAccessResponse<SequenceCTO> = DataAccess.saveSequenceCTO(copySequence);

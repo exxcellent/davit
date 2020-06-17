@@ -6,6 +6,7 @@ import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO
 import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice";
 import { currentSequence, SequenceActions } from "../../../../../../slices/SequenceSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
+import { Carv2Button } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { useGetStepDropDown } from "../common/fragments/Carv2DropDown";
@@ -28,18 +29,21 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
     editOrAddSequenceStep,
     validateInput,
     sequencesDropdown,
+    copySequence,
   } = useControllPanelEditSequenceViewModel();
 
   return (
     <ControllPanelEditSub label={label}>
-      <Carv2LabelTextfield
-        label="Name:"
-        placeholder="Sequence Name"
-        onChange={(event: any) => changeName(event.target.value)}
-        value={name}
-        autoFocus
-        ref={textInput}
-      />
+      <div className="controllPanelEditChild">
+        <Carv2LabelTextfield
+          label="Name:"
+          placeholder="Sequence Name"
+          onChange={(event: any) => changeName(event.target.value)}
+          value={name}
+          autoFocus
+          ref={textInput}
+        />
+      </div>
       <div className="columnDivider controllPanelEditChild">
         {showExistingOptions && (
           <Button.Group>
@@ -70,8 +74,13 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
         )}
       </div>
       {showExistingOptions && (
-        <div className="columnDivider controllPanelEditChild">
-          <Carv2DeleteButton onClick={deleteSequence} />
+        <div className="controllPanelEditChild columnDivider">
+          <div>
+            <Carv2Button icon="copy" onClick={copySequence} />
+          </div>
+          <div>
+            <Carv2DeleteButton onClick={deleteSequence} />
+          </div>
         </div>
       )}
     </ControllPanelEditSub>
@@ -118,7 +127,6 @@ const useControllPanelEditSequenceViewModel = () => {
 
   const deleteSequence = () => {
     dispatch(SequenceActions.deleteSequence(sequenceToEdit!));
-    // TODO: kann dass evtl der global slice machen?
     dispatch(SequenceActions.setSequenceToEdit(null));
     dispatch(GlobalActions.setModeToEdit());
   };
@@ -140,6 +148,17 @@ const useControllPanelEditSequenceViewModel = () => {
     dispatch(GlobalActions.setModeToEditStep(step));
   };
 
+  const copySequence = () => {
+    let copySequence: SequenceCTO = Carv2Util.deepCopy(sequenceToEdit);
+    copySequence.sequenceTO.name = "copy-" + sequenceToEdit?.sequenceTO.name;
+    copySequence.sequenceTO.id = -1;
+    copySequence.sequenceStepCTOs.map((step) => {
+      step.squenceStepTO.id = -1;
+      step.squenceStepTO.sequenceFk = -1;
+    });
+    dispatch(GlobalActions.setModeToEditSequence(copySequence));
+  };
+
   return {
     label: sequenceToEdit?.sequenceTO.id === -1 ? "ADD SEQUENCE" : "EDIT SEQUENCE",
     name: sequenceToEdit?.sequenceTO.name,
@@ -153,5 +172,6 @@ const useControllPanelEditSequenceViewModel = () => {
     editOrAddSequenceStep,
     validateInput,
     sequencesDropdown: useGetStepDropDown((step) => editOrAddSequenceStep(step?.squenceStepTO.index), "wrench"),
+    copySequence,
   };
 };

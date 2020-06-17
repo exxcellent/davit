@@ -25,12 +25,22 @@ export const SequenceDataAccessService = {
   },
 
   save(sequence: SequenceCTO): SequenceCTO {
-    sequence.sequenceStepCTOs.forEach(this.saveSequenceStep);
-    return createSequenceCTO(SequenceRepository.save(sequence.sequenceTO));
+    const sequenceTO: SequenceTO = SequenceRepository.save(sequence.sequenceTO);
+    sequence.sequenceStepCTOs.forEach((step) => {
+      if (step.squenceStepTO.sequenceFk === -1) {
+        step.squenceStepTO.sequenceFk = sequenceTO.id;
+      }
+      this.saveSequenceStep(step);
+    });
+    return createSequenceCTO(sequenceTO);
   },
 
   saveSequenceStep(sequenceStep: SequenceStepCTO): SequenceStepCTO {
     CheckHelper.nullCheck(sequenceStep, "sequenceStep");
+    // TODO: move this in a CheckSaveCondition class.
+    if (sequenceStep.squenceStepTO.sequenceFk === -1) {
+      throw new Error("Sequence step sequenceFk is '-1'!");
+    }
     const persistedComponentDatas: ComponentDataTO[] = ComponentDataRepository.findAllForStep(
       sequenceStep.squenceStepTO.id
     );
