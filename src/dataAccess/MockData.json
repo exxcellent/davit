@@ -1,13 +1,22 @@
 {
   "components": [
-    { "id": 1, "name": "comp1", "geometricalDataFk": 1, "designFk": 1 },
-    { "id": 2, "name": "comp2", "geometricalDataFk": 2, "designFk": 2 },
-    { "id": 3, "name": "comp3", "geometricalDataFk": 3, "designFk": 3 }
+    { "id": 1, "name": "comp1", "geometricalDataFk": 1, "designFk": 1, "groupFks": 1 },
+    { "id": 2, "name": "comp2", "geometricalDataFk": 2, "designFk": 2, "groupFks": 1 },
+    { "id": 3, "name": "comp3", "geometricalDataFk": 3, "designFk": 3, "groupFks": 3 },
+    { "id": 4, "name": "comp4", "geometricalDataFk": 4, "designFk": 4, "groupFks": 2 },
+    { "id": 5, "name": "comp5", "geometricalDataFk": 5, "designFk": 5, "groupFks": -1 }
+  ],
+  "groups": [
+    { "id": 1, "name": "A-Team", "color": "green" },
+    { "id": 2, "name": "Avangers", "color": "blue" },
+    { "id": 3, "name": "T-Trio", "color": "red" }
   ],
   "designs": [
     { "id": 1, "color": "#3498db" },
     { "id": 2, "color": "#3498db" },
-    { "id": 3, "color": "#3498db" }
+    { "id": 3, "color": "#3498db" },
+    { "id": 4, "color": "#3498db" },
+    { "id": 5, "color": "#3498db" }
   ],
   "geometricalDatas": [
     { "id": 1, "width": 150, "height": 150, "positionFk": 1 },
@@ -15,23 +24,117 @@
     { "id": 3, "width": 150, "height": 150, "positionFk": 3 },
     { "id": 4, "width": 150, "height": 150, "positionFk": 4 },
     { "id": 5, "width": 150, "height": 150, "positionFk": 5 },
-    { "id": 6, "width": 150, "height": 150, "positionFk": 6 }
+    { "id": 6, "width": 150, "height": 150, "positionFk": 6 },
+    { "id": 7, "width": 150, "height": 150, "positionFk": 7 },
+    { "id": 8, "width": 150, "height": 150, "positionFk": 8 },
+    { "id": 9, "width": 150, "height": 150, "positionFk": 9 },
+    { "id": 10, "width": 150, "height": 150, "positionFk": 10 },
+    { "id": 11, "width": 150, "height": 150, "positionFk": 11 }
   ],
   "positions": [
-    { "id": 1, "x": 118, "y": 79 },
-    { "id": 2, "x": 341, "y": 211 },
-    { "id": 3, "x": 587, "y": 54 },
-    { "id": 4, "x": 381, "y": 64 },
-    { "id": 5, "x": 146, "y": 196 },
-    { "id": 6, "x": 595, "y": 203 }
+    { "id": 1, "x": 89, "y": 67 },
+    { "id": 2, "x": 91, "y": 243 },
+    { "id": 3, "x": 357, "y": 44 },
+    { "id": 4, "x": 475, "y": 309 },
+    { "id": 5, "x": 663, "y": 171 },
+    { "id": 6, "x": 138, "y": 49 },
+    { "id": 7, "x": 138, "y": 216 },
+    { "id": 8, "x": 404, "y": 213 },
+    { "id": 9, "x": 405, "y": 48 },
+    { "id": 10, "x": 674, "y": 52 },
+    { "id": 11, "x": 676, "y": 213 }
   ],
-  "sequences": [],
-  "steps": [],
-  "componentDatas": [],
+  "sequences": [
+    { "id": 1, "name": "ablauf1" },
+    { "id": 2, "name": "tanos" }
+  ],
+  "steps": [
+    { "id": 1, "name": "start", "index": 1, "sequenceFk": 1, "sourceComponentFk": 1, "targetComponentFk": 4 },
+    { "id": 2, "name": "verarbeitung", "index": 2, "sequenceFk": 1, "sourceComponentFk": 4, "targetComponentFk": 4 },
+    { "id": 3, "name": "send new data", "index": 3, "sequenceFk": 1, "sourceComponentFk": 4, "targetComponentFk": 5 },
+    { "id": 4, "name": "finish work", "index": 4, "sequenceFk": 1, "sourceComponentFk": 5, "targetComponentFk": 3 },
+    { "id": 5, "name": "start", "index": 1, "sequenceFk": 2, "sourceComponentFk": 1, "targetComponentFk": 4 },
+    { "id": 6, "name": "verarbeitung", "index": 2, "sequenceFk": 2, "sourceComponentFk": 4, "targetComponentFk": 4 },
+    { "id": 7, "name": "send new data", "index": 3, "sequenceFk": 2, "sourceComponentFk": 4, "targetComponentFk": 5 },
+    { "id": 8, "name": "finish work", "index": 4, "sequenceFk": 2, "sourceComponentFk": 5, "targetComponentFk": 3 }
+  ],
+  "componentDatas": [
+    { "id": 1, "sequenceStepFk": 5, "componentFk": 1, "dataFk": 4, "componentDataState": "NEW" },
+    { "id": 2, "sequenceStepFk": 5, "componentFk": 4, "dataFk": 1, "componentDataState": "NEW" },
+    { "id": 3, "sequenceStepFk": 6, "componentFk": 1, "dataFk": 4, "componentDataState": "PERSISTENT" },
+    { "id": 4, "sequenceStepFk": 6, "componentFk": 4, "dataFk": 1, "componentDataState": "PERSISTENT" },
+    { "id": 5, "sequenceStepFk": 6, "componentFk": 4, "dataFk": 6, "componentDataState": "NEW" },
+    { "id": 6, "sequenceStepFk": 7, "componentFk": 1, "dataFk": 4, "componentDataState": "PERSISTENT" },
+    { "id": 7, "sequenceStepFk": 7, "componentFk": 5, "dataFk": 6, "componentDataState": "NEW" },
+    { "id": 8, "sequenceStepFk": 7, "componentFk": 4, "dataFk": 1, "componentDataState": "DELETED" },
+    { "id": 9, "sequenceStepFk": 7, "componentFk": 4, "dataFk": 6, "componentDataState": "DELETED" },
+    { "id": 10, "sequenceStepFk": 8, "componentFk": 1, "dataFk": 4, "componentDataState": "PERSISTENT" },
+    { "id": 11, "sequenceStepFk": 8, "componentFk": 3, "dataFk": 2, "componentDataState": "NEW" },
+    { "id": 12, "sequenceStepFk": 8, "componentFk": 5, "dataFk": 6, "componentDataState": "DELETED" }
+  ],
   "datas": [
-    { "id": 1, "name": "data1", "geometricalDataFk": 4, "dataConnectionFks": [] },
-    { "id": 2, "name": "data2", "geometricalDataFk": 5, "dataConnectionFks": [] },
-    { "id": 3, "name": "data3", "geometricalDataFk": 6, "dataConnectionFks": [] }
+    { "id": 1, "name": "dat1", "geometricalDataFk": 6, "dataConnectionFks": [] },
+    { "id": 2, "name": "dat2", "geometricalDataFk": 7, "dataConnectionFks": [] },
+    { "id": 3, "name": "dat3", "geometricalDataFk": 8, "dataConnectionFks": [] },
+    { "id": 4, "name": "dat4", "geometricalDataFk": 9, "dataConnectionFks": [] },
+    { "id": 5, "name": "dat5", "geometricalDataFk": 10, "dataConnectionFks": [] },
+    { "id": 6, "name": "dat6", "geometricalDataFk": 11, "dataConnectionFks": [] }
   ],
-  "dataConnections": []
+  "dataConnections": [
+    {
+      "id": 1,
+      "data1Fk": 1,
+      "data2Fk": 2,
+      "label1": "",
+      "label2": "",
+      "direction1": "BOTTOM",
+      "direction2": "TOP",
+      "type1": "OUT",
+      "type2": "IN"
+    },
+    {
+      "id": 2,
+      "data1Fk": 5,
+      "data2Fk": 6,
+      "label1": "",
+      "label2": "",
+      "direction1": "RIGHT",
+      "direction2": "RIGHT",
+      "type1": "OUT",
+      "type2": "IN"
+    },
+    {
+      "id": 3,
+      "data1Fk": 4,
+      "data2Fk": 6,
+      "label1": "",
+      "label2": "",
+      "direction1": "RIGHT",
+      "direction2": "LEFT",
+      "type1": "OUT",
+      "type2": "IN"
+    },
+    {
+      "id": 4,
+      "data1Fk": 2,
+      "data2Fk": 3,
+      "label1": "",
+      "label2": "",
+      "direction1": "RIGHT",
+      "direction2": "LEFT",
+      "type1": "OUT",
+      "type2": "IN"
+    },
+    {
+      "id": 5,
+      "data1Fk": 2,
+      "data2Fk": 4,
+      "label1": "",
+      "label2": "",
+      "direction1": "RIGHT",
+      "direction2": "LEFT",
+      "type1": "OUT",
+      "type2": "IN"
+    }
+  ]
 }
