@@ -32,7 +32,7 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
 
   return (
     <ControllPanelEditSub label={label}>
-      {colorDropDown(setGroupColor, getGroupColor())}
+      <div className="controllPanelEditChild">{colorDropDown(setGroupColor, getGroupColor())}</div>
       <div className="columnDivider controllPanelEditChild">
         <Carv2LabelTextfield
           label="Name:"

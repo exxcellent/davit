@@ -150,6 +150,8 @@ export const colorDropDown = (onSelect: (color: string | undefined) => void, val
       onChange={(event, data) => onSelect(data.value as string)}
       scrolling
       value={value}
+      floating
+      compact
     />
   );
 };
@@ -165,7 +167,6 @@ export const useGetComponentDropdown = (onSelect: (component: ComponentCTO | und
       selectOnBlur={false}
       onChange={(event, data) => onSelect(selectComponent(Number(data.value), components))}
       className="button icon"
-      floating
       trigger={<React.Fragment />}
       scrolling
     />
