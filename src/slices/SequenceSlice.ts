@@ -247,7 +247,6 @@ export const previousStep = (state: RootState): SequenceStepCTO | null => {
 };
 
 const loadSequencesFromBackend = (): AppThunk => (dispatch) => {
-  console.info("load Sequences from backend.");
   const response: DataAccessResponse<SequenceCTO[]> = DataAccess.findAllSequences();
   if (response.code === 200) {
     dispatch(SequenceSlice.actions.setSequences(response.object));
