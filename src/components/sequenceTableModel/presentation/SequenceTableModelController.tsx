@@ -2,13 +2,13 @@ import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
-import { currentSequence } from "../../../slices/SequenceSlice";
+import { currentSequence, currentStep } from "../../../slices/SequenceSlice";
 
 interface SequenceTableModelControllerProps {}
 
 export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (props) => {
   const sequence: SequenceCTO | null = useSelector(currentSequence);
-  // const selectedStep: SequenceStepCTO | null = useSelector(currentStep);
+  const selectedStep: SequenceStepCTO | null = useSelector(currentStep);
   // const [selectedId, setSelectedId] = React.useState<number>(-1);
 
   // useEffect(() => {
@@ -55,8 +55,9 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
   // };
 
   const createStepColumn = (step: SequenceStepCTO) => {
+    const trClass: string = selectedStep?.squenceStepTO.id === step.squenceStepTO.id ? "carv2TrMarked" : "carv2Tr";
     return (
-      <tr key={step.squenceStepTO.id}>
+      <tr key={step.squenceStepTO.id} className={trClass}>
         <td className="carv2Td">{step.squenceStepTO.index}</td>
         <td className="carv2Td">{step.squenceStepTO.name}</td>
         <td className="carv2Td">{step.componentCTOSource.component.name}</td>
@@ -70,21 +71,12 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
       <div style={{ display: "flex", justifyContent: "center", width: "100%", color: "white" }}>
         <label>{sequence?.sequenceTO.name ? sequence?.sequenceTO.name : "Select Sequence..."}</label>
       </div>
-      {/* <Table celled inverted collapsing={false}> 
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell style={{ width: "15px" }}>Nr.</Table.HeaderCell>
-            <Table.HeaderCell>Name</Table.HeaderCell>
-            <Table.HeaderCell>Sender</Table.HeaderCell>
-            <Table.HeaderCell>Receiver</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>{createTable(sequence)}</Table.Body>
-      </Table> */}
       <table className="carv2Table">
         <thead>
           <tr>
-            <th className="carv2Th">INDEX</th>
+            <th className="carv2Th" style={{ width: "15px" }}>
+              INDEX
+            </th>
             <th className="carv2Th">NAME</th>
             <th className="carv2Th">SENDER</th>
             <th className="carv2Th">RECEIVER</th>
