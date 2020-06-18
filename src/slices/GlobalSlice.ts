@@ -60,7 +60,6 @@ export const globalSlice = createSlice({
 const storefileData = (fileData: string): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<void> = await DataAccess.storeFileData(fileData);
   if (response.code === 200) {
-    console.log("load components after fileread");
     // dispatch(findAllComponents());
     // TODO: workaround, es gibt bestimmt eine bessere Lösung.
     window.location.reload(true);
@@ -72,7 +71,6 @@ const storefileData = (fileData: string): AppThunk => async (dispatch) => {
 const downloadData = (): AppThunk => (dispatch) => {
   const response: DataAccessResponse<void> = DataAccess.downloadData();
   if (response.code === 200) {
-    console.info("download success");
   } else {
     dispatch(handleError(response.message));
   }
@@ -118,8 +116,6 @@ const setModeToEditRelation = (relation?: DataRelationCTO): AppThunk => async (d
 };
 
 const setModeToEditSequence = (sequence?: SequenceCTO): AppThunk => async (dispatch) => {
-  console.log("call set edit sequence mode in globalSlice.");
-  console.log("sequence? " + sequence);
   dispatch(reset());
   dispatch(SequenceSlice.actions.resetCurrentStepIndex());
   dispatch(SequenceSlice.actions.setCurrentSequence(sequence || new SequenceCTO()));

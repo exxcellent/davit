@@ -23,8 +23,8 @@ export const ControllPanelEditComponentData: FunctionComponent<ControllPanelEdit
     label,
     name,
     cancel,
-    createComponentData,
-    removeComponentData,
+    addDataToComponent,
+    deleteDataFromComponent,
   } = useControllPanelEditComponentDataViewModel();
 
   return (
@@ -35,11 +35,11 @@ export const ControllPanelEditComponentData: FunctionComponent<ControllPanelEdit
       </div>
       <div className="columnDivider controllPanelEditChild">
         <Button.Group>
-          {useGetDataDropdown(createComponentData, "add")}
+          {useGetDataDropdown(addDataToComponent, "add")}
           <Button id="buttonGroupLabel" disabled inverted color="orange">
             Data
           </Button>
-          {useGetDataDropdown(removeComponentData, "remove")}
+          {useGetDataDropdown(deleteDataFromComponent, "remove")}
         </Button.Group>
       </div>
       <div className="columnDivider controllPanelEditChild">
@@ -64,63 +64,60 @@ const useControllPanelEditComponentDataViewModel = () => {
     // used to focus the textfield on create another
   }, [componentToEdit]);
 
-  const setComponentData = (datas: DataCTO[]) => {
-    if (!isNullOrUndefined(componentToEdit) && !isNullOrUndefined(stepToEdit)) {
-      const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
+  // const setComponentData = (datas: DataCTO[]) => {
+  //   if (!isNullOrUndefined(componentToEdit) && !isNullOrUndefined(stepToEdit)) {
+  //     const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
 
-      const persistentCompDatas = copyStepToEdit.componentDataCTOs.filter(
-        (compData) => compData.componentDataTO.id !== -1 && compData.componentTO.id === componentToEdit.component.id
-      );
-      // filter out all component datas with current component.
-      copyStepToEdit.componentDataCTOs = copyStepToEdit.componentDataCTOs.filter(
-        (compDat) => compDat.componentTO.id !== componentToEdit.component.id
-      );
+  //     const persistentCompDatas = copyStepToEdit.componentDataCTOs.filter(
+  //       (compData) => compData.componentDataTO.id !== -1 && compData.componentTO.id === componentToEdit.component.id
+  //     );
+  //     // filter out all component datas with current component.
+  //     copyStepToEdit.componentDataCTOs = copyStepToEdit.componentDataCTOs.filter(
+  //       (compDat) => compDat.componentTO.id !== componentToEdit.component.id
+  //     );
 
-      // create componentDatas from selected datas.
-      const selectedComponentData: ComponentDataCTO[] = datas.map((data) => {
-        return new ComponentDataCTO(
-          new ComponentDataTO(
-            stepToEdit.squenceStepTO.id,
-            componentToEdit.component.id,
-            data.data.id,
-            ComponentDataState.NEW
-          ),
-          componentToEdit.component,
-          data.data
-        );
-      });
-      // // setIds
-      selectedComponentData.forEach((compData) => {
-        const foundCompData = persistentCompDatas.find((item) => item.dataTO.id === compData.dataTO.id);
-        if (foundCompData) {
-          compData.componentDataTO.id = foundCompData.componentDataTO.id;
-        }
-      });
+  //     // create componentDatas from selected datas.
+  //     const selectedComponentData: ComponentDataCTO[] = datas.map((data) => {
+  //       return new ComponentDataCTO(
+  //         new ComponentDataTO(
+  //           stepToEdit.squenceStepTO.id,
+  //           componentToEdit.component.id,
+  //           data.data.id,
+  //           ComponentDataState.NEW
+  //         ),
+  //         componentToEdit.component,
+  //         data.data
+  //       );
+  //     });
+  //     // // setIds
+  //     selectedComponentData.forEach((compData) => {
+  //       const foundCompData = persistentCompDatas.find((item) => item.dataTO.id === compData.dataTO.id);
+  //       if (foundCompData) {
+  //         compData.componentDataTO.id = foundCompData.componentDataTO.id;
+  //       }
+  //     });
 
-      copyStepToEdit.componentDataCTOs.push(...selectedComponentData);
-      // save in state
-      dispatch(SequenceActions.updateCurrentSequenceStep(copyStepToEdit));
-    }
-  };
+  //     copyStepToEdit.componentDataCTOs.push(...selectedComponentData);
+  //     // save in state
+  //     dispatch(SequenceActions.updateCurrentSequenceStep(copyStepToEdit));
+  //   }
+  // };
 
-  const createComponentData = (data: DataCTO | undefined) => {
+  const createComponentData = (data: DataCTO | undefined, toDelete: boolean) => {
     if (!isNullOrUndefined(data) && !isNullOrUndefined(componentToEdit) && !isNullOrUndefined(stepToEdit)) {
       const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
-      if (
-        copyStepToEdit.componentDataCTOs.find(
-          (compData) => compData.dataTO.id === data.data.id && compData.componentTO.id === componentToEdit.component.id
-        )
-      ) {
-        console.log("Component Data already exist!");
-        return;
-      }
+      // check if compdata already exists.
+      // if (
+      //   copyStepToEdit.componentDataCTOs.find(
+      //     (compData) => compData.dataTO.id === data.data.id && compData.componentTO.id === componentToEdit.component.id
+      //   )
+      // ) {
+      //   console.log("Component Data already exist!");
+      //   return;
+      // }
+      const compDataState: ComponentDataState = toDelete ? ComponentDataState.DELETED : ComponentDataState.NEW;
       const componentData: ComponentDataCTO = new ComponentDataCTO(
-        new ComponentDataTO(
-          stepToEdit.squenceStepTO.id,
-          componentToEdit.component.id,
-          data.data.id,
-          ComponentDataState.NEW
-        ),
+        new ComponentDataTO(stepToEdit.squenceStepTO.id, componentToEdit.component.id, data.data.id, compDataState),
         Carv2Util.deepCopy(componentToEdit.component),
         Carv2Util.deepCopy(data.data)
       );
@@ -145,12 +142,53 @@ const useControllPanelEditComponentDataViewModel = () => {
     }
   };
 
+  const addDataToComponent = (data: DataCTO | undefined) => {
+    if (!isNullOrUndefined(data) && !isNullOrUndefined(componentToEdit) && !isNullOrUndefined(stepToEdit)) {
+      if (stepToEdit.componentDataCTOs.find((compData) => isComponentData(compData, data, componentToEdit))) {
+        // check component data status
+        const state: ComponentDataState = stepToEdit.componentDataCTOs.find((compData) =>
+          isComponentData(compData, data, componentToEdit)
+        )!.componentDataTO.componentDataState;
+        if (state === ComponentDataState.DELETED) {
+          removeComponentData(data);
+        } else {
+          // TODO: put this in a propert message.
+          console.warn("Component Data already exists!");
+        }
+      } else {
+        createComponentData(data, false);
+      }
+    }
+  };
+
+  const deleteDataFromComponent = (data: DataCTO | undefined) => {
+    if (!isNullOrUndefined(data) && !isNullOrUndefined(componentToEdit) && !isNullOrUndefined(stepToEdit)) {
+      if (stepToEdit.componentDataCTOs.find((compData) => isComponentData(compData, data, componentToEdit))) {
+        // check component data status
+        const state: ComponentDataState = stepToEdit.componentDataCTOs.find((compData) =>
+          isComponentData(compData, data, componentToEdit)
+        )!.componentDataTO.componentDataState;
+        if (state === ComponentDataState.NEW) {
+          removeComponentData(data);
+          return;
+        }
+        if (state === ComponentDataState.PERSISTENT) {
+          createComponentData(data, true);
+          return;
+        }
+      }
+      // Return a message if state == DELETE or comp.data dos not exist.
+      // TODO: put this in a propert message.
+      console.warn("Component data dos not exist or is already deleted!");
+    }
+  };
+
   return {
     label: componentToEdit?.component.id === -1 ? "ADD COMPONENT DATA" : "EDIT COMPONENT DATA",
     name: componentToEdit?.component.name,
     cancel: () => dispatch(GlobalActions.setModeToEditStep(stepToEdit?.squenceStepTO.index)),
     toggleIsCreateAnother: () => setIsCreateAnother(!isCreateAnother),
-    createComponentData,
-    removeComponentData,
+    addDataToComponent,
+    deleteDataFromComponent,
   };
 };

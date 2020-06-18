@@ -167,10 +167,8 @@ const useControllPanelEditSequenceStepViewModel = () => {
   };
 
   const editComponentData = (component?: ComponentCTO | undefined) => {
-    console.log("component: ", component);
     if (!isNullOrUndefined(sequenceToEdit) && !isNullOrUndefined(sequenceStepToEdit)) {
       if (component !== undefined) {
-        console.log("set current Component: ", component);
         dispatch(GlobalActions.setModeToEditComponentData(component));
       } else {
         dispatch(GlobalActions.setModeToEditComponentData());
