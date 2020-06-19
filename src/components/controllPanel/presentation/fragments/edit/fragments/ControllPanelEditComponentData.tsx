@@ -106,15 +106,6 @@ const useControllPanelEditComponentDataViewModel = () => {
   const createComponentData = (data: DataCTO | undefined, toDelete: boolean) => {
     if (!isNullOrUndefined(data) && !isNullOrUndefined(componentToEdit) && !isNullOrUndefined(stepToEdit)) {
       const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
-      // check if compdata already exists.
-      // if (
-      //   copyStepToEdit.componentDataCTOs.find(
-      //     (compData) => compData.dataTO.id === data.data.id && compData.componentTO.id === componentToEdit.component.id
-      //   )
-      // ) {
-      //   console.log("Component Data already exist!");
-      //   return;
-      // }
       const compDataState: ComponentDataState = toDelete ? ComponentDataState.DELETED : ComponentDataState.NEW;
       const componentData: ComponentDataCTO = new ComponentDataCTO(
         new ComponentDataTO(stepToEdit.squenceStepTO.id, componentToEdit.component.id, data.data.id, compDataState),
@@ -173,7 +164,8 @@ const useControllPanelEditComponentDataViewModel = () => {
           return;
         }
         if (state === ComponentDataState.PERSISTENT) {
-          createComponentData(data, true);
+          removeComponentData(data);
+          // createComponentData(data, true);
           return;
         }
       }
