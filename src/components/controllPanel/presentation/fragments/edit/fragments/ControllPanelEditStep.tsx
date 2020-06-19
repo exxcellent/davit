@@ -35,6 +35,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
     selectSourcePlaceholder,
     selectTargetPlaceholder,
     editComponentData,
+    validStep,
   } = useControllPanelEditSequenceStepViewModel();
 
   return (
@@ -78,6 +79,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
           onCancel={cancel}
           onChange={toggleIsCreateAnother}
           toggleLabel="Edit next"
+          submitCondition={validStep()}
         />
         {showDelete && <Carv2DeleteButton onClick={deleteSequenceStep} />}
       </div>
@@ -176,6 +178,20 @@ const useControllPanelEditSequenceStepViewModel = () => {
     }
   };
 
+  const validStep = (): boolean => {
+    let valid: boolean = false;
+    if (!isNullOrUndefined(sequenceStepToEdit) && !isNullOrUndefined(sequenceToEdit)) {
+      if (
+        sequenceStepToEdit.squenceStepTO.name !== "" &&
+        sequenceStepToEdit.squenceStepTO.sourceComponentFk !== -1 &&
+        sequenceStepToEdit.squenceStepTO.targetComponentFk !== -1
+      ) {
+        valid = true;
+      }
+    }
+    return valid;
+  };
+
   return {
     label: sequenceStepToEdit ? "EDIT SEQUENCE STEP" : "ADD SEQUENCE STEP",
     name: sequenceStepToEdit ? sequenceStepToEdit!.squenceStepTO.name : "",
@@ -199,5 +215,6 @@ const useControllPanelEditSequenceStepViewModel = () => {
         ? "Select Target"
         : sequenceStepToEdit?.componentCTOTarget.component.name,
     editComponentData,
+    validStep,
   };
 };
