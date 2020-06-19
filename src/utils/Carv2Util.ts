@@ -6,12 +6,9 @@ export const Carv2Util = {
   },
 
   isValidName(name: string): boolean {
-    const nameRegExp: RegExp = /^[A-Za-z0-9_./-]+$/;
     let valid: boolean = false;
     if (!isNullOrUndefined(name)) {
-      if (!isNullOrUndefined(name)) {
-        valid = nameRegExp.test(name);
-      }
+      valid = name.length < 13;
     }
     return valid;
   },
