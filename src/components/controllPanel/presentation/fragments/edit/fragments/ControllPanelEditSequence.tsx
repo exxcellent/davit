@@ -149,9 +149,9 @@ const useControllPanelEditSequenceViewModel = () => {
 
   const copySequence = () => {
     let copySequence: SequenceCTO = Carv2Util.deepCopy(sequenceToEdit);
-    copySequence.sequenceTO.name = "copy-" + sequenceToEdit?.sequenceTO.name;
+    copySequence.sequenceTO.name = sequenceToEdit?.sequenceTO.name + "-copy";
     copySequence.sequenceTO.id = -1;
-    copySequence.sequenceStepCTOs.map((step) => {
+    copySequence.sequenceStepCTOs.forEach((step) => {
       step.squenceStepTO.id = -1;
       step.squenceStepTO.sequenceFk = -1;
     });
