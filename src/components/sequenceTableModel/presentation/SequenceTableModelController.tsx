@@ -9,50 +9,6 @@ interface SequenceTableModelControllerProps {}
 export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (props) => {
   const sequence: SequenceCTO | null = useSelector(currentSequence);
   const selectedStep: SequenceStepCTO | null = useSelector(currentStep);
-  // const [selectedId, setSelectedId] = React.useState<number>(-1);
-
-  // useEffect(() => {
-  //   if (selectedStep !== null) {
-  //     setSelectedId(selectedStep.squenceStepTO.id);
-  //   } else {
-  //     setSelectedId(-1);
-  //   }
-  // }, [selectedStep]);
-
-  // const createTableRow = (sequenceStepCTO: SequenceStepCTO) => {
-  //   return (
-  //     <Table.Row
-  //       id={sequenceStepCTO.squenceStepTO.index}
-  //       active={selectedId === sequenceStepCTO.squenceStepTO.id}
-  //       key={sequenceStepCTO.squenceStepTO.index}
-  //     >
-  //       <Table.Cell>{sequenceStepCTO.squenceStepTO.index}</Table.Cell>
-  //       <Table.Cell>{sequenceStepCTO.squenceStepTO.name}</Table.Cell>
-  //       <Table.Cell>{sequenceStepCTO.componentCTOSource.component.name}</Table.Cell>
-  //       <Table.Cell>{sequenceStepCTO.componentCTOTarget.component.name}</Table.Cell>
-  //     </Table.Row>
-  //   );
-  // };
-
-  // const createRowPlaceholder = (index: number) => {
-  //   return (
-  //     <Table.Row id={index} key={index}>
-  //       <Table.Cell textAlign="center">{index}</Table.Cell>
-  //       <Table.Cell></Table.Cell>
-  //       <Table.Cell></Table.Cell>
-  //       <Table.Cell></Table.Cell>
-  //     </Table.Row>
-  //   );
-  // };
-
-  // const createTable = (sequence: SequenceCTO | null) => {
-  //   if (sequence !== null) {
-  //     return sequence.sequenceStepCTOs.map(createTableRow);
-  //   } else {
-  //     const placeholder: number[] = Array.from(Array(10).keys());
-  //     return placeholder.map(createRowPlaceholder);
-  //   }
-  // };
 
   const createStepColumn = (step: SequenceStepCTO) => {
     const trClass: string = selectedStep?.squenceStepTO.id === step.squenceStepTO.id ? "carv2TrMarked" : "carv2Tr";
