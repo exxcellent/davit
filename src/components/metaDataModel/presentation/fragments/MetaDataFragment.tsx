@@ -14,15 +14,7 @@ export interface MetaDataFragmentProps {
 }
 
 export const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (props) => {
-  const {
-    // id,
-    initalName,
-    componentFragments,
-    initalWidth,
-    initalHeigth,
-  } = props;
-
-  // const mode: Mode = useSelector(selectMode);
+  const { initalName, componentFragments, initalWidth, initalHeigth } = props;
 
   return (
     <Card style={{ width: initalWidth, height: initalHeigth }}>

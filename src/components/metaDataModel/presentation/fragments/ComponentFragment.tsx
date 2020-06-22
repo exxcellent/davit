@@ -33,10 +33,7 @@ export const createComponentFragment = (componentFragmentProps: ComponentFragmen
       extra
       key={key}
       content={componentFragmentProps.name}
-      style={{
-        backgroundColor: getColorForComponentDataState(componentFragmentProps.state),
-        color: "white",
-      }}
+      className={getColorForComponentDataState(componentFragmentProps.state)}
     />
   );
 };
