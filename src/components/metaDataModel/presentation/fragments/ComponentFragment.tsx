@@ -1,20 +1,27 @@
 import React from "react";
 import { Card } from "semantic-ui-react";
+import { ActionType } from "../../../../dataAccess/access/types/ActionType";
 import { ComponentDataState } from "../../../../dataAccess/access/types/ComponentDataState";
 
 export interface ComponentFragmentProps {
-  state: ComponentDataState;
+  state: ComponentDataState | ActionType;
   name: string;
 }
 
-const getColorForComponentDataState = (state: ComponentDataState) => {
+const getColorForComponentDataState = (state: ComponentDataState | ActionType) => {
   switch (state) {
     case ComponentDataState.NEW:
-      return "#6CBF8F";
+      return "carv2ComponentDataNEW";
     case ComponentDataState.PERSISTENT:
-      return "#c8c8c8";
+      return "carv2ComponentDataPERSISTENT";
     case ComponentDataState.DELETED:
-      return "#af0837";
+      return "carv2ComponentDataDELETED";
+    case ActionType.ADD:
+      return "carv2ComponentDataADD";
+    case ActionType.CHECK:
+      return "carv2ComponentDataCHECK";
+    case ActionType.DELETE:
+      return "carv2ComponentDataDELETE";
     default:
       return "black";
   }

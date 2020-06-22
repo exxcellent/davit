@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import React, { FunctionComponent, useRef } from "react";
+import { ActionCTO } from "../../../../dataAccess/access/cto/ActionCTO";
 import { ComponentDataCTO } from "../../../../dataAccess/access/cto/ComponentDataCTO";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../../dataAccess/access/cto/DataRelationCTO";
@@ -13,7 +14,7 @@ interface MetaDataDnDBox {
   dataCTOToEdit: DataCTO | null;
   dataRelationToEdit: DataRelationCTO | null;
   dataRelations: DataRelationCTO[];
-  componentDatas: ComponentDataCTO[];
+  componentDatas: (ComponentDataCTO | ActionCTO)[];
   onSaveCallBack: (dataCTO: DataCTO) => void;
 }
 
