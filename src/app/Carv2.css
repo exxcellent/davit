@@ -162,6 +162,35 @@
   padding: 0.5em;
 }
 
+.carv2ComponentDataNEW {
+  background-color: var(--carv2-data-add-color);
+  color: var(--carv2-data-text-color);
+}
+.carv2ComponentDataPERSISTENT {
+  background-color: var(--carv2-data-persistent-color);
+  color: var(--carv2-data-text-color);
+}
+.carv2ComponentDataDELETED {
+  background-color: var(--carv2-data-delete-color);
+  color: var(--carv2-data-text-color);
+}
+
+.carv2ComponentDataADD {
+  background-color: var(--carv2-background-color-header);
+  color: var(--carv2-text-color);
+  box-shadow: 6px 6px 10px var(--carv2-data-add-color) inset;
+}
+.carv2ComponentDataCHECK {
+  background-color: var(--carv2-background-color-header);
+  color: var(--carv2-text-color);
+  box-shadow: 6px 6px 10px var(--carv2-data-persistent-color) inset;
+}
+.carv2ComponentDataDELETE {
+  background-color: var(--carv2-background-color-header);
+  color: var(--carv2-text-color);
+  box-shadow: 6px 6px 10px var(--carv2-data-delete-color) inset;
+}
+
 .ui.inverted.orange.button,
 .ui.inverted.orange.buttons .button {
   background-color: transparent;
@@ -348,6 +377,10 @@ textarea::selection {
   /* --carv2-color-primary: orange; */
   --carv2-background-color-lidebar: rgba(0, 0, 0, 0.3);
   --carv2-text-color: white;
+  --carv2-data-add-color: #6cbf8f;
+  --carv2-data-delete-color: #af0837;
+  --carv2-data-persistent-color: #c8c8c8;
+  --carv2-data-text-color: black;
 }
 
 .controllPanelEdit {

@@ -1,12 +1,12 @@
 import { SequenceStepTO } from "../to/SequenceStepTO";
+import { ActionCTO } from "./ActionCTO";
 import { ComponentCTO } from "./ComponentCTO";
-import { ComponentDataCTO } from "./ComponentDataCTO";
 
 export class SequenceStepCTO {
   constructor(
     public componentCTOSource: ComponentCTO = new ComponentCTO(),
     public componentCTOTarget: ComponentCTO = new ComponentCTO(),
     public squenceStepTO: SequenceStepTO = new SequenceStepTO(),
-    public componentDataCTOs: ComponentDataCTO[] = []
+    public actions: ActionCTO[] = []
   ) {}
 }

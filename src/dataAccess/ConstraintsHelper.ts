@@ -5,7 +5,7 @@ export const ConstraintsHelper = {
     const dataRelationExists: boolean = Array.from(dataStore.dataConnections.values()).some(
       (relation) => relation.data1Fk === dataId || relation.data2Fk === dataId
     );
-    const compDataExist: boolean = Array.from(dataStore.componentDatas.values()).some(
+    const compDataExist: boolean = Array.from(dataStore.actions.values()).some(
       (compData) => compData.dataFk === dataId
     );
     if (dataRelationExists || compDataExist) {
@@ -14,7 +14,7 @@ export const ConstraintsHelper = {
   },
 
   deleteComponentConstraintCheck(componentId: number, dataStore: DataStoreCTO) {
-    const compDataExists: boolean = Array.from(dataStore.componentDatas.values()).some(
+    const compDataExists: boolean = Array.from(dataStore.actions.values()).some(
       (compData) => compData.componentFk === componentId
     );
     const stepContainsComponent: boolean = Array.from(dataStore.steps.values()).some(
@@ -27,7 +27,7 @@ export const ConstraintsHelper = {
   },
 
   deleteStepConstraintCheck(stepId: number, dataStore: DataStoreCTO) {
-    const componentDataExists: boolean = Array.from(dataStore.componentDatas.values()).some(
+    const componentDataExists: boolean = Array.from(dataStore.actions.values()).some(
       (compData) => compData.sequenceStepFk === stepId
     );
     if (componentDataExists) {

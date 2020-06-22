@@ -1,4 +1,4 @@
-import { ComponentDataTO } from "../to/ComponentDataTO";
+import { ActionTO } from "../to/ActionTO";
 import { ComponentTO } from "../to/ComponentTO";
 import { DataRelationTO } from "../to/DataRelationTO";
 import { DataTO } from "../to/DataTO";
@@ -21,7 +21,7 @@ export class DataStoreCTO {
     // Sequence
     public sequences = new Map<number, SequenceTO>(),
     public steps = new Map<number, SequenceStepTO>(),
-    public componentDatas = new Map<number, ComponentDataTO>(),
+    public actions = new Map<number, ActionTO>(),
     // Data
     public datas = new Map<number, DataTO>(),
     public dataConnections = new Map<number, DataRelationTO>()

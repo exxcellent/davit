@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../app/store";
+import { ActionCTO } from "../dataAccess/access/cto/ActionCTO";
 import { ComponentDataCTO } from "../dataAccess/access/cto/ComponentDataCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
@@ -13,11 +14,15 @@ interface SequenceState {
   currentSequence: SequenceCTO | null;
   currentStepIndex: number | null;
   sequences: SequenceCTO[];
+  currentComponentDatas: ComponentDataCTO[];
+  currentActionToEdit: ActionCTO | null;
 }
 const getInitialState: SequenceState = {
   currentSequence: null,
   currentStepIndex: null,
   sequences: [],
+  currentComponentDatas: [],
+  currentActionToEdit: null,
 };
 
 export const SequenceSlice = createSlice({
@@ -32,6 +37,12 @@ export const SequenceSlice = createSlice({
       state.currentSequence = copyPayload;
       // if sequence is new save in backend, to get a id.
     },
+    setCurrentActionToEdit: (state, action: PayloadAction<ActionCTO | null>) => {
+      state.currentActionToEdit = action.payload;
+    },
+    setCurrentComponentDatas: (state, action: PayloadAction<ComponentDataCTO[]>) => {
+      state.currentComponentDatas = action.payload;
+    },
     setCurrentStepIndex: (state, action: PayloadAction<number | null>) => {
       if (state.currentSequence !== null) {
         if (action.payload === null) {
@@ -42,7 +53,6 @@ export const SequenceSlice = createSlice({
           state.currentSequence.sequenceStepCTOs.splice(newIndex, 0, step);
           udpateIndices(state.currentSequence);
           state.currentStepIndex = newIndex;
-          step.componentDataCTOs = getDefaultComponentDatas(getPreviousStep(newIndex, state.currentSequence));
         } else {
           state.currentStepIndex = action.payload;
         }
@@ -80,7 +90,7 @@ export const SequenceSlice = createSlice({
           }
           // TODO check what happens when more than one steps have id -1
         }
-        state.currentSequence = updateComponentDataStates(state.currentSequence);
+        // state.currentSequence = updateComponentDataStates(state.currentSequence);
       }
     },
     setNextStepToCurrentStep: (state) => {
@@ -118,32 +128,32 @@ export const SequenceSlice = createSlice({
   },
 });
 
-const updateComponentDataStates = (sequence: SequenceCTO): SequenceCTO => {
-  const copySequence: SequenceCTO = Carv2Util.deepCopy(sequence);
-  updateNextStep(
-    [],
-    sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.index === 1),
-    copySequence
-  );
-  return copySequence;
-};
+// const updateComponentDataStates = (sequence: SequenceCTO): SequenceCTO => {
+//   const copySequence: SequenceCTO = Carv2Util.deepCopy(sequence);
+//   updateNextStep(
+//     [],
+//     sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.index === 1),
+//     copySequence
+//   );
+//   return copySequence;
+// };
 
-const updateNextStep = (
-  prevCompData: ComponentDataCTO[],
-  stepToEdit: SequenceStepCTO | undefined,
-  sequence: SequenceCTO
-) => {
-  if (stepToEdit) {
-    const copyPrevCompData: ComponentDataCTO[] = Carv2Util.deepCopy(prevCompData);
-    stepToEdit.componentDataCTOs = determineComponentDatas(copyPrevCompData, stepToEdit.componentDataCTOs);
-    sequence.sequenceStepCTOs[stepToEdit.squenceStepTO.index - 1] = stepToEdit;
-    updateNextStep(
-      stepToEdit.componentDataCTOs,
-      sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.index === stepToEdit.squenceStepTO.index + 1),
-      sequence
-    );
-  }
-};
+// const updateNextStep = (
+//   prevCompData: ComponentDataCTO[],
+//   stepToEdit: SequenceStepCTO | undefined,
+//   sequence: SequenceCTO
+// ) => {
+//   if (stepToEdit) {
+//     const copyPrevCompData: ComponentDataCTO[] = Carv2Util.deepCopy(prevCompData);
+//     stepToEdit.componentDataCTOs = determineComponentDatas(copyPrevCompData, stepToEdit.componentDataCTOs);
+//     sequence.sequenceStepCTOs[stepToEdit.squenceStepTO.index - 1] = stepToEdit;
+//     updateNextStep(
+//       stepToEdit.componentDataCTOs,
+//       sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.index === stepToEdit.squenceStepTO.index + 1),
+//       sequence
+//     );
+//   }
+// };
 
 const determineComponentDatas = (prevComponentDatas: ComponentDataCTO[], curComponentDatas: ComponentDataCTO[]) => {
   const curComponentDatasNotDeleted = curComponentDatas.filter(
@@ -211,29 +221,39 @@ const findStepInSequence = (id: number, sequenceCTO: SequenceCTO): number => {
   return sequenceCTO.sequenceStepCTOs.findIndex((step) => step.squenceStepTO.id === id);
 };
 
-const getDefaultComponentDatas = (prevStep: SequenceStepCTO | null): ComponentDataCTO[] => {
-  const copyPrevStepComponentDatas: ComponentDataCTO[] = prevStep ? Carv2Util.deepCopy(prevStep.componentDataCTOs) : [];
-  return copyPrevStepComponentDatas
-    .filter((compData) => compData.componentDataTO.componentDataState !== ComponentDataState.DELETED)
-    .map((compData) => {
-      let newcompData: ComponentDataCTO = Carv2Util.deepCopy(compData);
-      newcompData.componentDataTO.id = -1;
-      if (newcompData.componentDataTO.componentDataState === ComponentDataState.NEW) {
-        newcompData.componentDataTO.componentDataState = ComponentDataState.PERSISTENT;
-      }
-      return newcompData;
-    });
-};
+// const getDefaultComponentDatas = (prevStep: SequenceStepCTO | null): ComponentDataCTO[] => {
+//   const copyPrevStepComponentDatas: ComponentDataCTO[] = prevStep ? Carv2Util.deepCopy(prevStep.actions) : [];
+//   return copyPrevStepComponentDatas
+//     .filter((compData) => compData.componentDataTO.componentDataState !== ComponentDataState.DELETED)
+//     .map((compData) => {
+//       let newcompData: ComponentDataCTO = Carv2Util.deepCopy(compData);
+//       newcompData.componentDataTO.id = -1;
+//       if (newcompData.componentDataTO.componentDataState === ComponentDataState.NEW) {
+//         newcompData.componentDataTO.componentDataState = ComponentDataState.PERSISTENT;
+//       }
+//       return newcompData;
+//     });
+// };
 
 export const SequenceReducer = SequenceSlice.reducer;
 export const selectSequences = (state: RootState): SequenceCTO[] => state.sequenceModel.sequences;
+export const currentActionToEdit = (state: RootState): ActionCTO | null => state.sequenceModel.currentActionToEdit;
 export const currentSequence = (state: RootState): SequenceCTO | null => state.sequenceModel.currentSequence;
 export const currentStepIndex = (state: RootState): number | null => state.sequenceModel.currentStepIndex;
+export const currentComponentDatas = (state: RootState): ComponentDataCTO[] =>
+  state.sequenceModel.currentComponentDatas;
 export const currentStep = (state: RootState): SequenceStepCTO | null => {
   return (
     state.sequenceModel.currentSequence?.sequenceStepCTOs.find(
       (step) => step.squenceStepTO.index === state.sequenceModel.currentStepIndex
     ) || null
+  );
+};
+export const currentActions = (state: RootState): ActionCTO[] => {
+  return (
+    state.sequenceModel.currentSequence?.sequenceStepCTOs.find(
+      (step) => step.squenceStepTO.index === state.sequenceModel.currentStepIndex
+    )?.actions || []
   );
 };
 
@@ -291,4 +311,6 @@ export const SequenceActions = {
   saveSequence: saveSequenceThunk,
   deleteSequence: deleteSequenceThunk,
   deleteSequenceStep: deleteSequenceStepThunk,
+  setCurrentComponentDatas: SequenceSlice.actions.setCurrentComponentDatas,
+  setActionToEdit: SequenceSlice.actions.setCurrentActionToEdit,
 };

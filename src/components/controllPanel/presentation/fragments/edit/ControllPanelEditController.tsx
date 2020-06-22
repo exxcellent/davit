@@ -6,8 +6,8 @@ import { DataRelationCTO } from "../../../../../dataAccess/access/cto/DataRelati
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
 import { GroupTO } from "../../../../../dataAccess/access/to/GroupTO";
 import { GlobalActions, Mode, selectMode } from "../../../../../slices/GlobalSlice";
+import { ControllPanelEditAction } from "./fragments/ControllPanelEditAction";
 import { ControllPanelEditComponent } from "./fragments/ControllPanelEditComponent";
-import { ControllPanelEditComponentData } from "./fragments/ControllPanelEditComponentData";
 import { ControllPanelEditData } from "./fragments/ControllPanelEditData";
 import { ControllPanelEditGroup } from "./fragments/ControllPanelEditGroup";
 import { ControllPanelEditMenu } from "./fragments/ControllPanelEditMenu";
@@ -41,8 +41,8 @@ export const ControllPanelEditController: FunctionComponent<ControllPanelEditCon
         return <ControllPanelEditSequence />;
       case Mode.EDIT_SEQUENCE_STEP:
         return <ControllPanelEditStep />;
-      case Mode.EDIT_SEQUENCE_STEP_COMPONENT_DATA:
-        return <ControllPanelEditComponentData />;
+      case Mode.EDIT_SEQUENCE_STEP_ACTION:
+        return <ControllPanelEditAction />;
       default:
         return (
           <ControllPanelEditMenu

@@ -2,7 +2,6 @@ import React, { FunctionComponent } from "react";
 import { Card } from "semantic-ui-react";
 import { ComponentDataCTO } from "../../../../dataAccess/access/cto/ComponentDataCTO";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
-import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
 import { ComponentFragmentProps, createComponentFragment } from "./ComponentFragment";
 
 export interface MetaDataFragmentProps {
@@ -32,11 +31,8 @@ export const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (props
   );
 };
 
-const stepToComponentFragmentProps = (step: SequenceStepCTO | null, dataId: number): ComponentFragmentProps[] => {
-  const componentData: ComponentDataCTO[] = step
-    ? step.componentDataCTOs.filter((componentData) => componentData.dataTO.id === dataId)
-    : [];
-  return componentData.map((componentData) => {
+const stepToComponentFragmentProps = (componentDatas: ComponentDataCTO[]): ComponentFragmentProps[] => {
+  return componentDatas.map((componentData) => {
     return {
       name: componentData.componentTO.name,
       state: componentData.componentDataTO.componentDataState,
@@ -44,13 +40,13 @@ const stepToComponentFragmentProps = (step: SequenceStepCTO | null, dataId: numb
   });
 };
 
-export const createMetaDataFragment = (dataCTO: DataCTO, step: SequenceStepCTO | null) => {
+export const createMetaDataFragment = (dataCTO: DataCTO, componentDatas: ComponentDataCTO[]) => {
   return (
     <MetaDataFragment
       id={dataCTO.data.id}
       initalName={dataCTO.data.name}
       initalWidth={dataCTO.geometricalData.geometricalData.width}
-      componentFragments={stepToComponentFragmentProps(step, dataCTO.data.id)}
+      componentFragments={stepToComponentFragmentProps(componentDatas)}
     />
   );
 };

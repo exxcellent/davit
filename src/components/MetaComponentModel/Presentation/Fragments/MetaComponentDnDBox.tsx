@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import React, { FunctionComponent, useRef } from "react";
+import { ActionCTO } from "../../../../dataAccess/access/cto/ActionCTO";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
+import { ComponentDataCTO } from "../../../../dataAccess/access/cto/ComponentDataCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
 import { GroupTO } from "../../../../dataAccess/access/to/GroupTO";
 import { createDnDItem } from "../../../common/fragments/DnDWrapper";
@@ -12,11 +14,12 @@ interface MetaComponentDnDBox {
   groups: GroupTO[];
   componentCTOToEdit: ComponentCTO | null;
   step: SequenceStepCTO | null;
+  componentDatas: (ComponentDataCTO | ActionCTO)[];
   onSaveCallBack: (componentCTO: ComponentCTO) => void;
 }
 
 export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (props) => {
-  const { componentCTOs, onSaveCallBack, step, componentCTOToEdit, groups } = props;
+  const { componentCTOs, onSaveCallBack, step, componentCTOToEdit, groups, componentDatas } = props;
 
   const constraintsRef = useRef(null);
 
@@ -37,7 +40,7 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (prop
   };
 
   const createDnDMetaComponent = (componentCTO: ComponentCTO) => {
-    let metaComponentFragment = createMetaComponentFragment(componentCTO, step);
+    let metaComponentFragment = createMetaComponentFragment(componentCTO, componentDatas);
     let shadow: string = "";
     if (componentCTO.component.groupFks !== -1) {
       shadow = groups.find((group) => group.id === componentCTO.component.groupFks)?.color || "";

@@ -2,6 +2,7 @@ import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
+import { ActionCTO } from "../../../../../../../dataAccess/access/cto/ActionCTO";
 import { ComponentCTO } from "../../../../../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../../../../../dataAccess/access/cto/DataRelationCTO";
@@ -10,7 +11,7 @@ import { SequenceStepCTO } from "../../../../../../../dataAccess/access/cto/Sequ
 import { GroupTO } from "../../../../../../../dataAccess/access/to/GroupTO";
 import { selectComponents, selectGroups } from "../../../../../../../slices/ComponentSlice";
 import { selectDatas, selectRelations } from "../../../../../../../slices/DataSlice";
-import { currentSequence, selectSequences } from "../../../../../../../slices/SequenceSlice";
+import { currentActions, currentSequence, selectSequences } from "../../../../../../../slices/SequenceSlice";
 
 interface Carv2DropdownProps extends DropdownProps {}
 
@@ -84,6 +85,15 @@ const relationToOption = (relation: DataRelationCTO): DropdownItemProps => {
   };
 };
 
+const actionToOption = (action: ActionCTO): DropdownItemProps => {
+  const text: string = `${action.componentTO.name} - ${action.actionTO.actionType} - ${action.dataTO.name}`;
+  return {
+    key: action.actionTO.id,
+    value: action.actionTO.id,
+    text: text,
+  };
+};
+
 // ----- On Select Methods -----
 
 const selectComponent = (componentId: number, components: ComponentCTO[]): ComponentCTO | undefined => {
@@ -136,7 +146,33 @@ const selectDataRelation = (relationId: number, relations: DataRelationCTO[]): D
   return undefined;
 };
 
+const selectAction = (actionId: number, actions: ActionCTO[]): ActionCTO | undefined => {
+  if (!isNullOrUndefined(actionId) && !isNullOrUndefined(actions)) {
+    return actions.find((action) => action.actionTO.id === actionId);
+  }
+  return undefined;
+};
+
 // ------ Dropdowns ------
+
+export const useGetActionDropDown = (onSelect: (action: ActionCTO | undefined) => void, icon: string) => {
+  const actions: ActionCTO[] = useSelector(currentActions);
+  return (
+    <Dropdown
+      options={actions.map(actionToOption).sort((a, b) => {
+        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
+      })}
+      selection
+      selectOnBlur={false}
+      onChange={(event, data) => onSelect(selectAction(Number(data.value), actions))}
+      scrolling
+      floating
+      compact
+      className="button icon"
+      icon={icon}
+    />
+  );
+};
 
 export const colorDropDown = (onSelect: (color: string | undefined) => void, value: string) => {
   const colors: string[] = ["red", "blue", "green"];

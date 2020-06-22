@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../app/store";
+import { ActionCTO } from "../dataAccess/access/cto/ActionCTO";
 import { ComponentCTO } from "../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../dataAccess/access/cto/DataRelationCTO";
@@ -22,7 +23,7 @@ export enum Mode {
   EDIT_DATA_RELATION = "EDIT_DATA_RELATION",
   EDIT_SEQUENCE = "EDIT_SEQUENCE",
   EDIT_SEQUENCE_STEP = "EDIT_SEQUENCE_STEP",
-  EDIT_SEQUENCE_STEP_COMPONENT_DATA = "EDIT_SEQUENCE_STEP_COMPONENT_DATA",
+  EDIT_SEQUENCE_STEP_ACTION = "EDIT_SEQUENCE_STEP_ACTION",
 }
 
 interface GlobalState {
@@ -134,9 +135,9 @@ const setModeToEditStep = (stepIndex?: number): AppThunk => async (dispatch) => 
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_STEP));
 };
 
-const setModeToEditComponentData = (component?: ComponentCTO): AppThunk => async (dispatch) => {
-  dispatch(ComponentActions.setCompoenentToEdit(component || new ComponentCTO()));
-  dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_STEP_COMPONENT_DATA));
+const setModeToEditAction = (action?: ActionCTO): AppThunk => async (dispatch) => {
+  dispatch(SequenceActions.setActionToEdit(action || new ActionCTO()));
+  dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_STEP_ACTION));
 };
 
 const setModeToEditGroup = (group?: GroupTO): AppThunk => async (dispatch) => {
@@ -153,10 +154,10 @@ export const GlobalActions = {
   setModeToEditSequence,
   setModeToEditCurrentSequence,
   setModeToEditStep,
-  setModeToEditComponentData,
   storefileData,
   downloadData,
   setModeToEditGroup,
+  setModeToEditAction,
 };
 
 export const { handleError } = globalSlice.actions;

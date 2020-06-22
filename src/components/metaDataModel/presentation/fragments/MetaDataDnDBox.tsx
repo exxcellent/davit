@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import React, { FunctionComponent, useRef } from "react";
+import { ComponentDataCTO } from "../../../../dataAccess/access/cto/ComponentDataCTO";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../../dataAccess/access/cto/DataRelationCTO";
-import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
 import { Carv2Util } from "../../../../utils/Carv2Util";
 import { createDnDItem } from "../../../common/fragments/DnDWrapper";
 import { createCornerConnection } from "../../../common/fragments/svg/Carv2Path";
@@ -13,12 +13,12 @@ interface MetaDataDnDBox {
   dataCTOToEdit: DataCTO | null;
   dataRelationToEdit: DataRelationCTO | null;
   dataRelations: DataRelationCTO[];
-  step: SequenceStepCTO | null;
+  componentDatas: ComponentDataCTO[];
   onSaveCallBack: (dataCTO: DataCTO) => void;
 }
 
 export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
-  const { dataCTOs, dataCTOToEdit, onSaveCallBack, step, dataRelations, dataRelationToEdit } = props;
+  const { dataCTOs, dataCTOToEdit, onSaveCallBack, dataRelations, dataRelationToEdit, componentDatas } = props;
 
   const constraintsRef = useRef(null);
 
@@ -54,7 +54,7 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
   };
 
   const createDnDMetaDataFragment = (dataCTO: DataCTO) => {
-    let metaDataFragment = createMetaDataFragment(dataCTO, step);
+    let metaDataFragment = createMetaDataFragment(dataCTO, componentDatas);
     return createDnDItem(dataCTO.geometricalData, onPositionUpdate, constraintsRef, metaDataFragment);
   };
 

@@ -61,7 +61,7 @@ class DataStore {
       positions: Array.from(this.data!.positions.values()),
       sequences: Array.from(this.data!.sequences.values()),
       steps: Array.from(this.data!.steps.values()),
-      componentDatas: Array.from(this.data!.componentDatas.values()),
+      actions: Array.from(this.data!.actions.values()),
       datas: Array.from(this.data!.datas.values()),
       dataConnections: Array.from(this.data!.dataConnections.values()),
     };

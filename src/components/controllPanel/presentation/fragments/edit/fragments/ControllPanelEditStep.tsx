@@ -2,6 +2,7 @@ import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Dropdown, DropdownItemProps, Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
+import { ActionCTO } from "../../../../../../dataAccess/access/cto/ActionCTO";
 import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
@@ -10,7 +11,7 @@ import { currentSequence, currentStep, SequenceActions } from "../../../../../..
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { useGetComponentDropdown, useGetComponentDropdownLabel } from "../common/fragments/Carv2DropDown";
+import { useGetActionDropDown, useGetComponentDropdownLabel } from "../common/fragments/Carv2DropDown";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
 import { OptionField } from "../common/OptionField";
@@ -36,6 +37,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
     selectTargetPlaceholder,
     editComponentData,
     validStep,
+    editOrAddAction,
   } = useControllPanelEditSequenceStepViewModel();
 
   return (
@@ -67,11 +69,18 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
       </div>
       <div className="columnDivider controllPanelEditChild">
         <Button.Group>
+          <Button icon="add" inverted color="orange" onClick={() => editOrAddAction()} />
+          <Button id="buttonGroupLabel" disabled inverted color="orange">
+            Action
+          </Button>
+          {useGetActionDropDown(editOrAddAction, "wrench")}
+        </Button.Group>
+        {/* <Button.Group>
           <Button id="buttonGroupLabel" disabled inverted color="orange">
             Component Data
           </Button>
           {useGetComponentDropdown(editComponentData, "wrench")}
-        </Button.Group>
+        </Button.Group> */}
       </div>
       <div className="columnDivider controllPanelEditChild">
         <Carv2SubmitCancel
@@ -168,13 +177,9 @@ const useControllPanelEditSequenceStepViewModel = () => {
     }
   };
 
-  const editComponentData = (component?: ComponentCTO | undefined) => {
+  const editOrAddAction = (action?: ActionCTO) => {
     if (!isNullOrUndefined(sequenceToEdit) && !isNullOrUndefined(sequenceStepToEdit)) {
-      if (component !== undefined) {
-        dispatch(GlobalActions.setModeToEditComponentData(component));
-      } else {
-        dispatch(GlobalActions.setModeToEditComponentData());
-      }
+      dispatch(GlobalActions.setModeToEditAction(action));
     }
   };
 
@@ -214,7 +219,8 @@ const useControllPanelEditSequenceStepViewModel = () => {
       sequenceStepToEdit?.componentCTOTarget.component.name === ""
         ? "Select Target"
         : sequenceStepToEdit?.componentCTOTarget.component.name,
-    editComponentData,
+    editComponentData: editOrAddAction,
     validStep,
+    editOrAddAction,
   };
 };

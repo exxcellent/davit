@@ -9,7 +9,7 @@ export interface StoreTO {
   // Sequence
   sequences: any[];
   steps: any[];
-  componentDatas: any[];
+  actions: any[];
   // Data
   datas: any[];
   dataConnections: any[];

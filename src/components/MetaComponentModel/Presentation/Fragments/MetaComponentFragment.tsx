@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from "react";
 import { Card } from "semantic-ui-react";
+import { ActionCTO } from "../../../../dataAccess/access/cto/ActionCTO";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
 import { ComponentDataCTO } from "../../../../dataAccess/access/cto/ComponentDataCTO";
-import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
 import { createDataFragment, DataFragmentProps } from "./DataFragment";
 
 export interface MetaComponentFragmentProps {
@@ -15,16 +15,7 @@ export interface MetaComponentFragmentProps {
 }
 
 export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps> = (props) => {
-  const {
-    // id,
-    initalName,
-    dataFragments,
-    initalWidth,
-    initalHeigth,
-  } = props;
-
-  // const mode: Mode = useSelector(selectMode);
-
+  const { initalName, dataFragments, initalWidth, initalHeigth } = props;
   return (
     <Card raised style={{ width: initalWidth, height: initalHeigth }}>
       <Card.Content header={initalName}></Card.Content>
@@ -33,26 +24,29 @@ export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps
   );
 };
 
-const stepToDataFragmentProps = (step: SequenceStepCTO | null, componentId: number): DataFragmentProps[] => {
-  const componentData: ComponentDataCTO[] = step
-    ? step.componentDataCTOs.filter((componentData) => componentData.componentTO.id === componentId)
-    : [];
-  return componentData.map((componentData) => {
+const componentDataToDataFragmentProps = (componentDatas: (ComponentDataCTO | ActionCTO)[]): DataFragmentProps[] => {
+  return componentDatas.map((componentData: ComponentDataCTO | ActionCTO) => {
     return {
       name: componentData.dataTO.name,
-      state: componentData.componentDataTO.componentDataState,
+      state:
+        componentData instanceof ComponentDataCTO
+          ? componentData.componentDataTO.componentDataState
+          : componentData.actionTO.actionType,
     };
   });
 };
 
-export const createMetaComponentFragment = (componentCTO: ComponentCTO, step: SequenceStepCTO | null) => {
+export const createMetaComponentFragment = (
+  componentCTO: ComponentCTO,
+  componentDatas: (ComponentDataCTO | ActionCTO)[]
+) => {
   return (
     <MetaComponentFragment
       id={componentCTO.component.id}
       initalName={componentCTO.component.name}
       initalColor={componentCTO.design.color}
       initalWidth={componentCTO.geometricalData.geometricalData.width}
-      dataFragments={stepToDataFragmentProps(step, componentCTO.component.id)}
+      dataFragments={componentDataToDataFragmentProps(componentDatas)}
     />
   );
 };
