@@ -5,7 +5,7 @@ import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { currentSequence, currentStep, SequenceActions, SequenceSlice } from "../../../../../slices/SequenceSlice";
-import { useGetSequenceLabelDropdown } from "../edit/common/fragments/Carv2DropDown";
+import { SequenceDropDown } from "../edit/common/fragments/dropdowns/SequenceDropDown";
 import { OptionField } from "../edit/common/OptionField";
 
 export interface ControllPanelSequenceOptionsProps {}
@@ -38,7 +38,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
       </div>
       <div className="optionFieldSpacer columnDivider">
         <OptionField label="SEQUENCE">
-          {useGetSequenceLabelDropdown((sequence) => selectSequence(sequence), "Select Sequence ...")}
+          <SequenceDropDown onSelect={selectSequence} placeholder="Select Sequence" />
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">

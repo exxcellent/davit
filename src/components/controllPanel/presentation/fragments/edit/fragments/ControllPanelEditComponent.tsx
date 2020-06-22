@@ -9,9 +9,9 @@ import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { useGetGroupDropdownLabel } from "../common/fragments/Carv2DropDown";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
+import { GroupDropDown } from "../common/fragments/dropdowns/GroupDropDown";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditComponentProps {}
@@ -35,7 +35,9 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
   return (
     <ControllPanelEditSub label={label}>
       <div className="optionFieldSpacer">
-        <OptionField>{useGetGroupDropdownLabel((group) => setGroup(group), "Select Group...", compGroup)}</OptionField>
+        <OptionField>
+          <GroupDropDown onSelect={setGroup} placeholder="Select Group..." value={compGroup} />
+        </OptionField>
       </div>
       <div className="columnDivider" style={{ display: "flex" }}>
         <Carv2LabelTextfield

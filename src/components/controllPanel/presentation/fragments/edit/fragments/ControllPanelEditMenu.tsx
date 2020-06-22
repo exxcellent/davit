@@ -5,13 +5,11 @@ import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../../../../dataAccess/access/cto/DataRelationCTO";
 import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
 import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
-import {
-  useGetComponentDropdown,
-  useGetDataDropdown,
-  useGetGroupDropdown,
-  useGetRelationDropdown,
-  useGetSequenceDropdown,
-} from "../common/fragments/Carv2DropDown";
+import { ComponentDropDown } from "../common/fragments/dropdowns/ComponentDropDown";
+import { DataDropDown } from "../common/fragments/dropdowns/DataDropDown";
+import { GroupDropDown } from "../common/fragments/dropdowns/GroupDropDown";
+import { RelationDropDown } from "../common/fragments/dropdowns/RelationDropDown";
+import { SequenceDropDown } from "../common/fragments/dropdowns/SequenceDropDown";
 import { OptionField } from "../common/OptionField";
 import { ControllPanelFileOptions } from "../ControllPanelFileOptions";
 
@@ -38,14 +36,14 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Component
             </Button>
-            {useGetComponentDropdown(editOrAddComponent, "wrench")}
+            <ComponentDropDown onSelect={editOrAddComponent} icon="wrench" />
           </Button.Group>
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddGroup()} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Group
             </Button>
-            {useGetGroupDropdown(editOrAddGroup, "wrench")}
+            <GroupDropDown onSelect={editOrAddGroup} icon="wrench" />
           </Button.Group>
         </OptionField>
       </div>
@@ -56,14 +54,14 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Data
             </Button>
-            {useGetDataDropdown(editOrAddData, "wrench")}
+            <DataDropDown onSelect={editOrAddData} icon={"wrench"} />
           </Button.Group>
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddRelation()} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Relation
             </Button>
-            {useGetRelationDropdown(editOrAddRelation, "wrench")}
+            <RelationDropDown onSelect={editOrAddRelation} icon={"wrench"} />
           </Button.Group>
         </OptionField>
       </div>
@@ -74,7 +72,7 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Sequence
             </Button>
-            {useGetSequenceDropdown(editOrAddSequence, "wrench")}
+            <SequenceDropDown onSelect={editOrAddSequence} icon="wrench" />
           </Button.Group>
         </OptionField>
       </div>

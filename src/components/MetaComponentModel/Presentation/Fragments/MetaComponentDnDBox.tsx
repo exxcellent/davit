@@ -5,6 +5,7 @@ import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
 import { ComponentDataCTO } from "../../../../dataAccess/access/cto/ComponentDataCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
 import { GroupTO } from "../../../../dataAccess/access/to/GroupTO";
+import { Carv2Util } from "../../../../utils/Carv2Util";
 import { createDnDItem } from "../../../common/fragments/DnDWrapper";
 import { createCurveArrow } from "../../../common/fragments/svg/Arrow";
 import { createMetaComponentFragment } from "./MetaComponentFragment";
@@ -26,7 +27,7 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (prop
   const onPositionUpdate = (x: number, y: number, positionId: number) => {
     const componentCTO = componentCTOs.find((componentCTO) => componentCTO.geometricalData.position.id === positionId);
     if (componentCTO) {
-      let copyComponentCTO: ComponentCTO = JSON.parse(JSON.stringify(componentCTO));
+      let copyComponentCTO: ComponentCTO = Carv2Util.deepCopy(componentCTO);
       copyComponentCTO.geometricalData.position.x = x;
       copyComponentCTO.geometricalData.position.y = y;
       onSaveCallBack(copyComponentCTO);

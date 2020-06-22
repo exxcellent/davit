@@ -3,15 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice";
 import { currentSequence, SequenceActions } from "../../../../../../slices/SequenceSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2Button } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { useGetStepDropDown } from "../common/fragments/Carv2DropDown";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { Carv2SubmitCancel, Carv2SubmitCancelNoCheckBox } from "../common/fragments/Carv2SubmitCancel";
+import { StepDropDown } from "../common/fragments/dropdowns/StepDropDown";
 
 export interface ControllPanelEditSequenceProps {}
 
@@ -28,7 +29,6 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
     toggleIsCreateAnother,
     editOrAddSequenceStep,
     validateInput,
-    sequencesDropdown,
     copySequence,
   } = useControllPanelEditSequenceViewModel();
 
@@ -51,7 +51,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Step
             </Button>
-            {sequencesDropdown}
+            <StepDropDown onSelect={editOrAddSequenceStep} icon="wrench" />
           </Button.Group>
         )}
       </div>
@@ -143,8 +143,8 @@ const useControllPanelEditSequenceViewModel = () => {
     }
   };
 
-  const editOrAddSequenceStep = (step?: number) => {
-    dispatch(GlobalActions.setModeToEditStep(step));
+  const editOrAddSequenceStep = (step?: SequenceStepCTO) => {
+    dispatch(GlobalActions.setModeToEditStep(step?.squenceStepTO.index));
   };
 
   const copySequence = () => {
@@ -170,7 +170,7 @@ const useControllPanelEditSequenceViewModel = () => {
     showExistingOptions: sequenceToEdit?.sequenceTO.id !== -1,
     editOrAddSequenceStep,
     validateInput,
-    sequencesDropdown: useGetStepDropDown((step) => editOrAddSequenceStep(step?.squenceStepTO.index), "wrench"),
+    // sequencesDropdown: useGetStepDropDown((step) => editOrAddSequenceStep(step?.squenceStepTO.index), "wrench"),
     copySequence,
   };
 };

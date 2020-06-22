@@ -8,9 +8,9 @@ import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { colorDropDown } from "../common/fragments/Carv2DropDown";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { Carv2SubmitCancel, Carv2SubmitCancelNoCheckBox } from "../common/fragments/Carv2SubmitCancel";
+import { ColorDropDown } from "../common/fragments/dropdowns/ColorDropDown";
 
 export interface ControllPanelEditGroupProps {}
 
@@ -32,7 +32,9 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
 
   return (
     <ControllPanelEditSub label={label}>
-      <div className="controllPanelEditChild">{colorDropDown(setGroupColor, getGroupColor())}</div>
+      <div className="controllPanelEditChild">
+        <ColorDropDown onSelect={setGroupColor} placeholder={getGroupColor()} colors={["red", "blue", "green"]} />
+      </div>
       <div className="columnDivider controllPanelEditChild">
         <Carv2LabelTextfield
           label="Name:"

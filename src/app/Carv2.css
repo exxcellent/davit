@@ -163,32 +163,32 @@
 }
 
 .carv2ComponentDataNEW {
-  background-color: var(--carv2-data-add-color);
-  color: var(--carv2-data-text-color);
+  background-color: var(--carv2-data-add-color) !important;
+  color: var(--carv2-data-text-color) !important;
 }
 .carv2ComponentDataPERSISTENT {
-  background-color: var(--carv2-data-persistent-color);
-  color: var(--carv2-data-text-color);
+  background-color: var(--carv2-data-persistent-color) !important;
+  color: var(--carv2-data-text-color) !important;
 }
 .carv2ComponentDataDELETED {
-  background-color: var(--carv2-data-delete-color);
-  color: var(--carv2-data-text-color);
+  background-color: var(--carv2-data-delete-color) !important;
+  color: var(--carv2-data-text-color) !important;
 }
 
 .carv2ComponentDataADD {
-  background-color: var(--carv2-background-color-header);
-  color: var(--carv2-text-color);
-  box-shadow: 6px 6px 10px var(--carv2-data-add-color) inset;
+  background-color: var(--carv2-background-color-header) !important;
+  color: var(--carv2-text-color) !important;
+  box-shadow: 6px 6px 10px var(--carv2-data-add-color) inset !important;
 }
 .carv2ComponentDataCHECK {
-  background-color: var(--carv2-background-color-header);
-  color: var(--carv2-text-color);
-  box-shadow: 6px 6px 10px var(--carv2-data-persistent-color) inset;
+  background-color: var(--carv2-background-color-header) !important;
+  color: var(--carv2-text-color) !important;
+  box-shadow: 6px 6px 10px var(--carv2-data-persistent-color) inset !important;
 }
 .carv2ComponentDataDELETE {
-  background-color: var(--carv2-background-color-header);
-  color: var(--carv2-text-color);
-  box-shadow: 6px 6px 10px var(--carv2-data-delete-color) inset;
+  background-color: var(--carv2-background-color-header) !important;
+  color: var(--carv2-text-color) !important;
+  box-shadow: 6px 6px 10px var(--carv2-data-delete-color) inset !important;
 }
 
 .ui.inverted.orange.button,

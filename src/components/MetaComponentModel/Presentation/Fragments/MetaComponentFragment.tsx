@@ -24,8 +24,14 @@ export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps
   );
 };
 
-const componentDataToDataFragmentProps = (componentDatas: (ComponentDataCTO | ActionCTO)[]): DataFragmentProps[] => {
-  return componentDatas.map((componentData: ComponentDataCTO | ActionCTO) => {
+const componentDataToDataFragmentProps = (
+  componentDatas: (ComponentDataCTO | ActionCTO)[],
+  component: ComponentCTO
+): DataFragmentProps[] => {
+  const filteredCompData: (ComponentDataCTO | ActionCTO)[] = componentDatas.filter(
+    (compData) => compData.componentTO.id === component.component.id
+  );
+  return filteredCompData.map((componentData: ComponentDataCTO | ActionCTO) => {
     return {
       name: componentData.dataTO.name,
       state:
@@ -46,7 +52,7 @@ export const createMetaComponentFragment = (
       initalName={componentCTO.component.name}
       initalColor={componentCTO.design.color}
       initalWidth={componentCTO.geometricalData.geometricalData.width}
-      dataFragments={componentDataToDataFragmentProps(componentDatas)}
+      dataFragments={componentDataToDataFragmentProps(componentDatas, componentCTO)}
     />
   );
 };

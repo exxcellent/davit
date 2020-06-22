@@ -11,9 +11,10 @@ import { currentSequence, currentStep, SequenceActions } from "../../../../../..
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { useGetActionDropDown, useGetComponentDropdownLabel } from "../common/fragments/Carv2DropDown";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
+import { ActionDropDown } from "../common/fragments/dropdowns/ActionDropDown";
+import { ComponentDropDown } from "../common/fragments/dropdowns/ComponentDropDown";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditStepProps {}
@@ -63,8 +64,8 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
       </div>
       <div className="optionFieldSpacer columnDivider">
         <OptionField>
-          {useGetComponentDropdownLabel((comp) => setComponent(comp, true), selectSourcePlaceholder as string)}
-          {useGetComponentDropdownLabel((comp) => setComponent(comp, false), selectTargetPlaceholder as string)}
+          <ComponentDropDown onSelect={(comp) => setComponent(comp, true)} placeholder={selectSourcePlaceholder} />
+          <ComponentDropDown onSelect={(comp) => setComponent(comp, false)} placeholder={selectTargetPlaceholder} />
         </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
@@ -73,7 +74,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
           <Button id="buttonGroupLabel" disabled inverted color="orange">
             Action
           </Button>
-          {useGetActionDropDown(editOrAddAction, "wrench")}
+          <ActionDropDown onSelect={editOrAddAction} icon={"wrench"} />
         </Button.Group>
       </div>
       <div className="columnDivider controllPanelEditChild">

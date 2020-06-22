@@ -16,12 +16,10 @@ import {
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import {
-  actionTypeDropDownLabel,
-  useGetComponentDropdownLabel,
-  useGetDataDropdownLabel,
-} from "../common/fragments/Carv2DropDown";
 import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
+import { ActionTypeDropDown } from "../common/fragments/dropdowns/ActionTypeDropDown";
+import { ComponentDropDown } from "../common/fragments/dropdowns/ComponentDropDown";
+import { DataDropDown } from "../common/fragments/dropdowns/DataDropDown";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditActionProps {}
@@ -35,18 +33,26 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
     setData,
     saveAction,
     selectComponentPlaceholder,
+    selectActionTypePlaceholder,
+    selectDataPlaceholder,
   } = useControllPanelEditActionViewModel();
 
   return (
     <ControllPanelEditSub label={label}>
       <div className="optionFieldSpacer">
-        <OptionField>{useGetComponentDropdownLabel(setComponent, "Select Component...")}</OptionField>
+        <OptionField>
+          <ComponentDropDown onSelect={setComponent} placeholder={selectComponentPlaceholder} />
+        </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
-        <OptionField>{actionTypeDropDownLabel(setAction, "Select Action...")}</OptionField>
+        <OptionField>
+          <ActionTypeDropDown onSelect={setAction} placeholder={selectActionTypePlaceholder as string} />
+        </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
-        <OptionField>{useGetDataDropdownLabel(setData, "Select Data ...")}</OptionField>
+        <OptionField>
+          <DataDropDown onSelect={setData} placeholder={selectDataPlaceholder} />
+        </OptionField>
       </div>
       <div className="columnDivider" style={{ display: "flex" }}>
         <Carv2SubmitCancel onSubmit={saveAction} onCancel={cancel} onChange={() => {}} />
@@ -60,6 +66,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
 
 const useControllPanelEditActionViewModel = () => {
   const actionToEdit: ActionCTO | null = useSelector(currentActionToEdit);
+  console.info("action to edit: ", actionToEdit);
   const stepToEdit: SequenceStepCTO | null = useSelector(currentStep);
   const dispatch = useDispatch();
   //   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
@@ -77,7 +84,6 @@ const useControllPanelEditActionViewModel = () => {
     if (!isNullOrUndefined(actionToEdit) && !isNullOrUndefined(stepToEdit)) {
       const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
       copyStepToEdit.actions.push(actionToEdit);
-      // save in state
       dispatch(SequenceActions.updateCurrentSequenceStep(copyStepToEdit));
       dispatch(GlobalActions.setModeToEditStep(stepToEdit.squenceStepTO.index));
     }
