@@ -38,6 +38,7 @@ export const SequenceSlice = createSlice({
       // if sequence is new save in backend, to get a id.
     },
     setCurrentActionToEdit: (state, action: PayloadAction<ActionCTO | null>) => {
+      console.info("setCurrentActionToEdit: ", action.payload);
       state.currentActionToEdit = action.payload;
     },
     setCurrentComponentDatas: (state, action: PayloadAction<ComponentDataCTO[]>) => {

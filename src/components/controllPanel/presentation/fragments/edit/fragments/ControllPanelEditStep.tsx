@@ -75,12 +75,6 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
           </Button>
           {useGetActionDropDown(editOrAddAction, "wrench")}
         </Button.Group>
-        {/* <Button.Group>
-          <Button id="buttonGroupLabel" disabled inverted color="orange">
-            Component Data
-          </Button>
-          {useGetComponentDropdown(editComponentData, "wrench")}
-        </Button.Group> */}
       </div>
       <div className="columnDivider controllPanelEditChild">
         <Carv2SubmitCancel

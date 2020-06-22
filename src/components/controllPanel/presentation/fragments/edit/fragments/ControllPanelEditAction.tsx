@@ -1,30 +1,67 @@
 import React, { FunctionComponent, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { isNullOrUndefined } from "util";
 import { ActionCTO } from "../../../../../../dataAccess/access/cto/ActionCTO";
+import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
+import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
+import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
+import { ActionType } from "../../../../../../dataAccess/access/types/ActionType";
 import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice";
-import { currentActionToEdit } from "../../../../../../slices/SequenceSlice";
+import {
+  currentActionToEdit,
+  currentStep,
+  SequenceActions,
+  SequenceSlice,
+} from "../../../../../../slices/SequenceSlice";
+import { Carv2Util } from "../../../../../../utils/Carv2Util";
+import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import {
+  actionTypeDropDownLabel,
+  useGetComponentDropdownLabel,
+  useGetDataDropdownLabel,
+} from "../common/fragments/Carv2DropDown";
+import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
+import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditActionProps {}
 
 export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionProps> = (props) => {
   const {
     label,
-    // name,
-    // cancel,
-    // addDataToComponent,
-    // deleteDataFromComponent,
+    cancel,
+    setComponent,
+    setAction,
+    setData,
+    saveAction,
+    selectComponentPlaceholder,
   } = useControllPanelEditActionViewModel();
 
-  return <ControllPanelEditSub label={label}></ControllPanelEditSub>;
+  return (
+    <ControllPanelEditSub label={label}>
+      <div className="optionFieldSpacer">
+        <OptionField>{useGetComponentDropdownLabel(setComponent, "Select Component...")}</OptionField>
+      </div>
+      <div className="optionFieldSpacer columnDivider">
+        <OptionField>{actionTypeDropDownLabel(setAction, "Select Action...")}</OptionField>
+      </div>
+      <div className="optionFieldSpacer columnDivider">
+        <OptionField>{useGetDataDropdownLabel(setData, "Select Data ...")}</OptionField>
+      </div>
+      <div className="columnDivider" style={{ display: "flex" }}>
+        <Carv2SubmitCancel onSubmit={saveAction} onCancel={cancel} onChange={() => {}} />
+        <div className="controllPanelEditChild" style={{ display: "flex", alignItems: "center", height: "100%" }}>
+          <Carv2DeleteButton onClick={() => {}} />
+        </div>
+      </div>
+    </ControllPanelEditSub>
+  );
 };
 
 const useControllPanelEditActionViewModel = () => {
   const actionToEdit: ActionCTO | null = useSelector(currentActionToEdit);
-  //   const stepToEdit: SequenceStepCTO | null = useSelector(currentStep);
-  //   const componentToEdit: ComponentCTO | null = useSelector(currentComponent);
-  //   const dispatch = useDispatch();
+  const stepToEdit: SequenceStepCTO | null = useSelector(currentStep);
+  const dispatch = useDispatch();
   //   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
 
   useEffect(() => {
@@ -36,123 +73,53 @@ const useControllPanelEditActionViewModel = () => {
     // used to focus the textfield on create another
   }, [actionToEdit]);
 
-  // const setComponentData = (datas: DataCTO[]) => {
-  //   if (!isNullOrUndefined(componentToEdit) && !isNullOrUndefined(stepToEdit)) {
-  //     const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
+  const saveAction = () => {
+    if (!isNullOrUndefined(actionToEdit) && !isNullOrUndefined(stepToEdit)) {
+      const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
+      copyStepToEdit.actions.push(actionToEdit);
+      // save in state
+      dispatch(SequenceActions.updateCurrentSequenceStep(copyStepToEdit));
+      dispatch(GlobalActions.setModeToEditStep(stepToEdit.squenceStepTO.index));
+    }
+  };
 
-  //     const persistentCompDatas = copyStepToEdit.componentDataCTOs.filter(
-  //       (compData) => compData.componentDataTO.id !== -1 && compData.componentTO.id === componentToEdit.component.id
-  //     );
-  //     // filter out all component datas with current component.
-  //     copyStepToEdit.componentDataCTOs = copyStepToEdit.componentDataCTOs.filter(
-  //       (compDat) => compDat.componentTO.id !== componentToEdit.component.id
-  //     );
-
-  //     // create componentDatas from selected datas.
-  //     const selectedComponentData: ComponentDataCTO[] = datas.map((data) => {
-  //       return new ComponentDataCTO(
-  //         new ComponentDataTO(
-  //           stepToEdit.squenceStepTO.id,
-  //           componentToEdit.component.id,
-  //           data.data.id,
-  //           ComponentDataState.NEW
-  //         ),
-  //         componentToEdit.component,
-  //         data.data
-  //       );
-  //     });
-  //     // // setIds
-  //     selectedComponentData.forEach((compData) => {
-  //       const foundCompData = persistentCompDatas.find((item) => item.dataTO.id === compData.dataTO.id);
-  //       if (foundCompData) {
-  //         compData.componentDataTO.id = foundCompData.componentDataTO.id;
-  //       }
-  //     });
-
-  //     copyStepToEdit.componentDataCTOs.push(...selectedComponentData);
-  //     // save in state
-  //     dispatch(SequenceActions.updateCurrentSequenceStep(copyStepToEdit));
-  //   }
-  // };
-
-  //   const createComponentData = (data: DataCTO | undefined, toDelete: boolean) => {
-  //     if (!isNullOrUndefined(data) && !isNullOrUndefined(componentToEdit) && !isNullOrUndefined(stepToEdit)) {
-  //       const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
-  //       const compDataState: ComponentDataState = toDelete ? ComponentDataState.DELETED : ComponentDataState.NEW;
-  //       const componentData: ComponentDataCTO = new ComponentDataCTO(
-  //         new ComponentDataTO(stepToEdit.squenceStepTO.id, componentToEdit.component.id, data.data.id, compDataState),
-  //         Carv2Util.deepCopy(componentToEdit.component),
-  //         Carv2Util.deepCopy(data.data)
-  //       );
-  //       copyStepToEdit.componentDataCTOs.push(componentData);
-  //       dispatch(SequenceActions.updateCurrentSequenceStep(copyStepToEdit));
-  //     }
-  //   };
-
-  //   const isComponentData = (componentData: ComponentDataCTO, data: DataCTO, component: ComponentCTO): boolean => {
-  //     return componentData.componentTO.id === component.component.id && componentData.dataTO.id === data.data.id
-  //       ? true
-  //       : false;
-  //   };
-
-  //   const removeComponentData = (data: DataCTO | undefined) => {
-  //     if (!isNullOrUndefined(data) && !isNullOrUndefined(componentToEdit) && !isNullOrUndefined(stepToEdit)) {
-  //       const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
-  //       copyStepToEdit.componentDataCTOs = copyStepToEdit.componentDataCTOs.filter(
-  //         (compData) => !isComponentData(compData, data, componentToEdit)
-  //       );
-  //       dispatch(SequenceActions.updateCurrentSequenceStep(copyStepToEdit));
-  //     }
-  //   };
-
-  //   const addDataToComponent = (data: DataCTO | undefined) => {
-  //     if (!isNullOrUndefined(data) && !isNullOrUndefined(componentToEdit) && !isNullOrUndefined(stepToEdit)) {
-  //       if (stepToEdit.componentDataCTOs.find((compData) => isComponentData(compData, data, componentToEdit))) {
-  //         // check component data status
-  //         const state: ComponentDataState = stepToEdit.componentDataCTOs.find((compData) =>
-  //           isComponentData(compData, data, componentToEdit)
-  //         )!.componentDataTO.componentDataState;
-  //         if (state === ComponentDataState.DELETED) {
-  //           removeComponentData(data);
-  //         } else {
-  //           // TODO: put this in a propert message.
-  //           console.warn("Component Data already exists!");
-  //         }
-  //       } else {
-  //         createComponentData(data, false);
-  //       }
-  //     }
-  //   };
-
-  //   const deleteDataFromComponent = (data: DataCTO | undefined) => {
-  //     if (!isNullOrUndefined(data) && !isNullOrUndefined(componentToEdit) && !isNullOrUndefined(stepToEdit)) {
-  //       if (stepToEdit.componentDataCTOs.find((compData) => isComponentData(compData, data, componentToEdit))) {
-  //         // check component data status
-  //         const state: ComponentDataState = stepToEdit.componentDataCTOs.find((compData) =>
-  //           isComponentData(compData, data, componentToEdit)
-  //         )!.componentDataTO.componentDataState;
-  //         if (state === ComponentDataState.NEW) {
-  //           removeComponentData(data);
-  //           return;
-  //         }
-  //         if (state === ComponentDataState.PERSISTENT) {
-  //           removeComponentData(data);
-  //           // createComponentData(data, true);
-  //           return;
-  //         }
-  //       }
-  //       // Return a message if state == DELETE or comp.data dos not exist.
-  //       // TODO: put this in a propert message.
-  //       console.warn("Component data dos not exist or is already deleted!");
-  //     }
-  //   };
+  const setComponent = (component: ComponentCTO | undefined): void => {
+    if (!isNullOrUndefined(component) && !isNullOrUndefined(actionToEdit)) {
+      let copyActionToEdit: ActionCTO = Carv2Util.deepCopy(actionToEdit);
+      copyActionToEdit.componentTO = component.component;
+      copyActionToEdit.actionTO.componentFk = component.component.id;
+      dispatch(SequenceSlice.actions.setCurrentActionToEdit(copyActionToEdit));
+    }
+  };
+  const setAction = (actionType: ActionType | undefined): void => {
+    if (!isNullOrUndefined(actionType) && !isNullOrUndefined(actionToEdit)) {
+      let copyActionToEdit: ActionCTO = Carv2Util.deepCopy(actionToEdit);
+      copyActionToEdit.actionTO.actionType = actionType;
+      dispatch(SequenceSlice.actions.setCurrentActionToEdit(copyActionToEdit));
+    }
+  };
+  const setData = (data: DataCTO | undefined): void => {
+    if (!isNullOrUndefined(data) && !isNullOrUndefined(actionToEdit)) {
+      let copyActionToEdit: ActionCTO = Carv2Util.deepCopy(actionToEdit);
+      copyActionToEdit.dataTO = data.data;
+      copyActionToEdit.actionTO.dataFk = data.data.id;
+      dispatch(SequenceSlice.actions.setCurrentActionToEdit(copyActionToEdit));
+    }
+  };
 
   return {
     label: actionToEdit?.actionTO.id === -1 ? "ADD ACTION" : "EDIT ACTION",
-    // name: componentToEdit?.component.name,
-    // cancel: () => dispatch(GlobalActions.setModeToEditStep(stepToEdit?.squenceStepTO.index)),
-    // toggleIsCreateAnother: () => setIsCreateAnother(!isCreateAnother),
-    // addDataToComponent,
-    // deleteDataFromComponent,
+    component: actionToEdit?.componentTO,
+    action: actionToEdit?.actionTO,
+    data: actionToEdit?.dataTO,
+    cancel: () => dispatch(GlobalActions.setModeToEditStep(stepToEdit?.squenceStepTO.index)),
+    setComponent,
+    setAction,
+    setData,
+    saveAction,
+    selectComponentPlaceholder:
+      actionToEdit?.componentTO.name === "" ? "Select Component..." : actionToEdit?.componentTO.name,
+    selectActionTypePlaceholder: actionToEdit?.actionTO.actionType,
+    selectDataPlaceholder: actionToEdit?.dataTO.name === "" ? "Select Data..." : actionToEdit?.dataTO.name,
   };
 };

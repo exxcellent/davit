@@ -9,6 +9,7 @@ import { DataRelationCTO } from "../../../../../../../dataAccess/access/cto/Data
 import { SequenceCTO } from "../../../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { GroupTO } from "../../../../../../../dataAccess/access/to/GroupTO";
+import { ActionType } from "../../../../../../../dataAccess/access/types/ActionType";
 import { selectComponents, selectGroups } from "../../../../../../../slices/ComponentSlice";
 import { selectDatas, selectRelations } from "../../../../../../../slices/DataSlice";
 import { currentActions, currentSequence, selectSequences } from "../../../../../../../slices/SequenceSlice";
@@ -94,6 +95,14 @@ const actionToOption = (action: ActionCTO): DropdownItemProps => {
   };
 };
 
+const actionTypeToOption = (actionType: ActionType): DropdownItemProps => {
+  return {
+    key: actionType,
+    value: actionType,
+    text: actionType,
+  };
+};
+
 // ----- On Select Methods -----
 
 const selectComponent = (componentId: number, components: ComponentCTO[]): ComponentCTO | undefined => {
@@ -153,6 +162,17 @@ const selectAction = (actionId: number, actions: ActionCTO[]): ActionCTO | undef
   return undefined;
 };
 
+const selectActionType = (actionType: ActionType): ActionType | undefined => {
+  switch (actionType) {
+    case ActionType.ADD:
+      return ActionType.ADD;
+    case ActionType.CHECK:
+      return ActionType.CHECK;
+    case ActionType.DELETE:
+      return ActionType.DELETE;
+  }
+};
+
 // ------ Dropdowns ------
 
 export const useGetActionDropDown = (onSelect: (action: ActionCTO | undefined) => void, icon: string) => {
@@ -162,7 +182,6 @@ export const useGetActionDropDown = (onSelect: (action: ActionCTO | undefined) =
       options={actions.map(actionToOption).sort((a, b) => {
         return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
       })}
-      selection
       selectOnBlur={false}
       onChange={(event, data) => onSelect(selectAction(Number(data.value), actions))}
       scrolling
@@ -170,6 +189,26 @@ export const useGetActionDropDown = (onSelect: (action: ActionCTO | undefined) =
       compact
       className="button icon"
       icon={icon}
+      trigger={<React.Fragment />}
+    />
+  );
+};
+
+export const actionTypeDropDownLabel = (
+  onSelect: (actionType: ActionType | undefined) => void,
+  placeholder: string
+) => {
+  const actions: ActionType[] = [ActionType.ADD, ActionType.CHECK, ActionType.DELETE];
+  return (
+    <Dropdown
+      options={actions.map(actionTypeToOption).sort((a, b) => {
+        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
+      })}
+      selection
+      selectOnBlur={false}
+      onChange={(event, data) => onSelect(selectActionType(data.value as ActionType))}
+      scrolling
+      placeholder={placeholder}
     />
   );
 };
@@ -323,6 +362,22 @@ export const useGetDataDropdown = (onSelect: (data: DataCTO | undefined) => void
       selectOnBlur={false}
       trigger={<React.Fragment />}
       scrolling
+    />
+  );
+};
+
+export const useGetDataDropdownLabel = (onSelect: (data: DataCTO | undefined) => void, placeholder?: string) => {
+  const datas: DataCTO[] = useSelector(selectDatas);
+  return (
+    <Dropdown
+      options={datas.map(dataToOption).sort((a, b) => {
+        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
+      })}
+      placeholder={placeholder}
+      onChange={(event, data) => onSelect(selectData(Number(data.value), datas))}
+      selectOnBlur={false}
+      scrolling
+      selection
     />
   );
 };
