@@ -16,7 +16,7 @@ import {
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
+import { Carv2SubmitCancelNoCheckBox } from "../common/fragments/Carv2SubmitCancel";
 import { ActionTypeDropDown } from "../common/fragments/dropdowns/ActionTypeDropDown";
 import { ComponentDropDown } from "../common/fragments/dropdowns/ComponentDropDown";
 import { DataDropDown } from "../common/fragments/dropdowns/DataDropDown";
@@ -35,6 +35,8 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
     selectComponentPlaceholder,
     selectActionTypePlaceholder,
     selectDataPlaceholder,
+    showDelete,
+    deleteAction,
   } = useControllPanelEditActionViewModel();
 
   return (
@@ -54,11 +56,14 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
           <DataDropDown onSelect={setData} placeholder={selectDataPlaceholder} />
         </OptionField>
       </div>
-      <div className="columnDivider" style={{ display: "flex" }}>
-        <Carv2SubmitCancel onSubmit={saveAction} onCancel={cancel} onChange={() => {}} />
-        <div className="controllPanelEditChild" style={{ display: "flex", alignItems: "center", height: "100%" }}>
-          <Carv2DeleteButton onClick={() => {}} />
-        </div>
+      <div className="columnDivider controllPanelEditChild">
+        <Carv2SubmitCancelNoCheckBox
+          onSubmit={saveAction}
+          onCancel={cancel}
+          onChange={() => {}}
+          toggleLabel="Edit next"
+        />
+        {showDelete && <Carv2DeleteButton onClick={deleteAction} />}
       </div>
     </ControllPanelEditSub>
   );
@@ -69,7 +74,6 @@ const useControllPanelEditActionViewModel = () => {
   console.info("action to edit: ", actionToEdit);
   const stepToEdit: SequenceStepCTO | null = useSelector(currentStep);
   const dispatch = useDispatch();
-  //   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
 
   useEffect(() => {
     // check if component to edit is really set or gos back to edit mode
@@ -85,6 +89,16 @@ const useControllPanelEditActionViewModel = () => {
       const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
       copyStepToEdit.actions.push(actionToEdit);
       dispatch(SequenceActions.updateCurrentSequenceStep(copyStepToEdit));
+      dispatch(GlobalActions.setModeToEditStep(stepToEdit.squenceStepTO.index));
+    }
+  };
+
+  const deleteAction = () => {
+    if (!isNullOrUndefined(actionToEdit) && !isNullOrUndefined(stepToEdit)) {
+      const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
+      copyStepToEdit.actions.filter((action) => action.actionTO.id !== actionToEdit.actionTO.id);
+      dispatch(SequenceActions.updateCurrentSequenceStep(copyStepToEdit));
+      dispatch(SequenceActions.deleteAction(actionToEdit));
       dispatch(GlobalActions.setModeToEditStep(stepToEdit.squenceStepTO.index));
     }
   };
@@ -127,5 +141,7 @@ const useControllPanelEditActionViewModel = () => {
       actionToEdit?.componentTO.name === "" ? "Select Component..." : actionToEdit?.componentTO.name,
     selectActionTypePlaceholder: actionToEdit?.actionTO.actionType,
     selectDataPlaceholder: actionToEdit?.dataTO.name === "" ? "Select Data..." : actionToEdit?.dataTO.name,
+    showDelete: actionToEdit?.actionTO.id !== -1 ? true : false,
+    deleteAction,
   };
 };

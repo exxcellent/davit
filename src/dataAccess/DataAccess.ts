@@ -1,3 +1,4 @@
+import { ActionCTO } from "./access/cto/ActionCTO";
 import { ComponentCTO } from "./access/cto/ComponentCTO";
 import { DataCTO } from "./access/cto/DataCTO";
 import { DataRelationCTO } from "./access/cto/DataRelationCTO";
@@ -109,6 +110,10 @@ export const DataAccess = {
 
   deleteGroupTO(group: GroupTO): DataAccessResponse<GroupTO> {
     return makeTransactional(() => ComponentDataAccessService.deleteGroup(group));
+  },
+
+  deleteActionCTO(action: ActionCTO): DataAccessResponse<ActionCTO> {
+    return makeTransactional(() => SequenceDataAccessService.deleteAction(action));
   },
 };
 

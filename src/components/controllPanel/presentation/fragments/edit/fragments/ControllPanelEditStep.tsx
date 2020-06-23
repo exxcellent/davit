@@ -204,7 +204,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
     cancel: () => dispatch(GlobalActions.setModeToEditCurrentSequence()),
     toggleIsCreateAnother: () => setIsEditNext(!isEditNext),
     textInput,
-    showDelete: sequenceStepToEdit ? true : false,
+    showDelete: sequenceStepToEdit?.squenceStepTO.id !== -1 ? true : false,
     indexToOptions,
     selectSourcePlaceholder:
       sequenceStepToEdit?.componentCTOSource.component.name === ""

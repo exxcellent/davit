@@ -78,6 +78,12 @@ export const SequenceDataAccessService = {
     seqSteps.forEach(SequenceStepRepository.save);
     return sequenceStep;
   },
+
+  deleteAction(action: ActionCTO): ActionCTO {
+    CheckHelper.nullCheck(action, "action");
+    ActionRepository.delete(action.actionTO.id);
+    return action;
+  },
 };
 
 const createSequenceCTO = (sequence: SequenceTO | undefined): SequenceCTO => {

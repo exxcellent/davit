@@ -304,6 +304,14 @@ const deleteSequenceStepThunk = (step: SequenceStepCTO): AppThunk => async (disp
   dispatch(loadSequencesFromBackend());
 };
 
+const deleteActionThunk = (action: ActionCTO): AppThunk => async (dispatch) => {
+  const response: DataAccessResponse<ActionCTO> = await DataAccess.deleteActionCTO(action);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(loadSequencesFromBackend());
+};
+
 export const SequenceActions = {
   updateCurrentSequenceStep: SequenceSlice.actions.updateCurrentSequenceStep,
   setSequenceToEdit: SequenceSlice.actions.setCurrentSequence,
@@ -314,4 +322,5 @@ export const SequenceActions = {
   deleteSequenceStep: deleteSequenceStepThunk,
   setCurrentComponentDatas: SequenceSlice.actions.setCurrentComponentDatas,
   setActionToEdit: SequenceSlice.actions.setCurrentActionToEdit,
+  deleteAction: deleteActionThunk,
 };
