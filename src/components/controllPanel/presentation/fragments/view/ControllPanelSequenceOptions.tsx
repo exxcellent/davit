@@ -70,33 +70,5 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
         <OptionField></OptionField>
       </div>
     </div>
-    // <div className="controllPanelView">
-    //   <div className="controllPanelViewChild">
-    //     {useGetSequenceLabelDropdown((sequence) => selectSequence(sequence), "Select Sequence ...")}
-    //   </div>
-    //   <div className="controllPanelViewChild">
-    //     <Button.Group inverted color="orange">
-    //       <Button
-    //         inverted
-    //         color="orange"
-    //         icon="left arrow"
-    //         content="BACK"
-    //         labelPosition="left"
-    //         disabled={isNullOrUndefined(sequence)}
-    //         onClick={() => dispatch(SequenceSlice.actions.setPreviousStepToCurrentStep())}
-    //       />
-    //       <Button inverted color="orange" content={step?.squenceStepTO.index || 0} disabled={true} />
-    //       <Button
-    //         inverted
-    //         color="orange"
-    //         icon="right arrow"
-    //         content="NEXT"
-    //         labelPosition="right"
-    //         disabled={isNullOrUndefined(sequence)}
-    //         onClick={() => dispatch(SequenceSlice.actions.setNextStepToCurrentStep())}
-    //       />
-    //     </Button.Group>
-    //   </div>
-    // </div>
   );
 };

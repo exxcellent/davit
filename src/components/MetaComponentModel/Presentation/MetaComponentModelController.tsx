@@ -49,7 +49,8 @@ const useViewModel = () => {
 
   const getComponentDatas = (): (ComponentDataCTO | ActionCTO)[] => {
     if (!isNullOrUndefined(selectedStep))
-      if (mode === Mode.EDIT_SEQUENCE_STEP) {
+      if (mode === Mode.EDIT_SEQUENCE_STEP || mode === Mode.VIEW) {
+        // TODO: seperate this cases when SequenceActionReducer exists!
         return selectedStep.actions;
       }
     if (mode === Mode.EDIT_SEQUENCE_STEP_ACTION && !isNullOrUndefined(action)) {
