@@ -14,6 +14,10 @@ export const DataDataAccessService = {
     return DataRepository.find(id);
   },
 
+  findDataCTO(id: number): DataCTO {
+    return createDataCTO(DataRepository.find(id));
+  },
+
   findAllDatas(): DataCTO[] {
     return DataRepository.findAll().map((data) => createDataCTO(data));
   },
