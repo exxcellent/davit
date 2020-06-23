@@ -45,7 +45,7 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
         <ComponentDropDown onSelect={() => {}} placeholder="Select Component..." />
       </div>
       <div className="columnDivider" style={{ display: "flex" }}>
-        // TODO: if comp select show multiselct dropdown.
+        <MultiselectDataDropDown onSelect={() => {}} selected={[]} />
       </div>
       <div className="controllPanelEditChild columnDivider">
         <Carv2SubmitCancelNoCheckBox

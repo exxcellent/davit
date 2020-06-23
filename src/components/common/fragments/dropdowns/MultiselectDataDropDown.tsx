@@ -6,24 +6,40 @@ import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { selectDatas } from "../../../../slices/DataSlice";
 
 interface MultiselectDataDropDownProps extends DropdownProps {
-  onSelect: (data: DataCTO | undefined) => void;
+  onSelect: (data: DataCTO[] | undefined) => void;
+  selected: number[];
 }
 
 export const MultiselectDataDropDown: FunctionComponent<MultiselectDataDropDownProps> = (props) => {
-  const { onSelect } = props;
-  const { datas, selectData, dataToOption } = useDataDropDownViewModel();
+  const { onSelect, selected } = props;
+  const { datas, selectDataOptions, dataToOption } = useMultiSelectDataDropDownViewModel();
 
-  return <Dropdown placeholder="Select Data..." fluid multiple selection options={datas.map(dataToOption)} />;
+  return (
+    <Dropdown
+      placeholder="Select Data"
+      fluid
+      multiple
+      search
+      selection
+      options={datas.map(dataToOption)}
+      onChange={(event, data) => {
+        onSelect(selectDataOptions((data.value as number[]) || undefined, datas));
+      }}
+      value={selected}
+      scrolling
+    />
+  );
 };
 
-const useDataDropDownViewModel = () => {
+const useMultiSelectDataDropDownViewModel = () => {
   const datas: DataCTO[] = useSelector(selectDatas);
 
-  const selectData = (dataId: number, datas: DataCTO[]): DataCTO | undefined => {
-    if (!isNullOrUndefined(dataId) && !isNullOrUndefined(datas)) {
-      return datas.find((data) => data.data.id === dataId);
+  const selectDataOptions = (dataIds: number[] | undefined, datas: DataCTO[]): DataCTO[] => {
+    let dataToReturn: DataCTO[] = [];
+    if (dataIds !== undefined && !isNullOrUndefined(datas)) {
+      dataIds.map((id) => dataToReturn.push(datas.find((data) => data.data.id === id)!));
     }
-    return undefined;
+    return dataToReturn;
   };
 
   const dataToOption = (data: DataCTO): DropdownItemProps => {
@@ -34,5 +50,5 @@ const useDataDropDownViewModel = () => {
     };
   };
 
-  return { datas, selectData, dataToOption };
+  return { datas, selectDataOptions, dataToOption };
 };
