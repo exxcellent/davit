@@ -14,10 +14,13 @@ import { handleError } from "./GlobalSlice";
 interface SequenceState {
   currentSequence: SequenceCTO | null;
   currentStepIndex: number | null;
+  //TODO change from CTO to TO.
   sequences: SequenceCTO[];
+  // TODO: change from CTO to TO.
   dataSetups: DataSetupCTO[];
   currentComponentDatas: ComponentDataCTO[];
   currentActionToEdit: ActionCTO | null;
+  currentDataSetupToEdit: DataSetupCTO | null;
 }
 const getInitialState: SequenceState = {
   currentSequence: null,
@@ -26,6 +29,7 @@ const getInitialState: SequenceState = {
   dataSetups: [],
   currentComponentDatas: [],
   currentActionToEdit: null,
+  currentDataSetupToEdit: null,
 };
 
 export const SequenceSlice = createSlice({
@@ -132,6 +136,9 @@ export const SequenceSlice = createSlice({
     setDataSetups: (state, action: PayloadAction<DataSetupCTO[]>) => {
       state.dataSetups = action.payload;
     },
+    setCurrentDataSetup: (state, action: PayloadAction<DataSetupCTO | null>) => {
+      state.currentDataSetupToEdit = action.payload;
+    },
   },
 });
 
@@ -205,6 +212,8 @@ export const SequenceReducer = SequenceSlice.reducer;
 export const selectSequences = (state: RootState): SequenceCTO[] => state.sequenceModel.sequences;
 export const selectDataSetups = (state: RootState): DataSetupCTO[] => state.sequenceModel.dataSetups;
 export const currentActionToEdit = (state: RootState): ActionCTO | null => state.sequenceModel.currentActionToEdit;
+export const currentDataSetupToEdit = (state: RootState): DataSetupCTO | null =>
+  state.sequenceModel.currentDataSetupToEdit;
 export const currentSequence = (state: RootState): SequenceCTO | null => state.sequenceModel.currentSequence;
 export const currentStepIndex = (state: RootState): number | null => state.sequenceModel.currentStepIndex;
 export const currentComponentDatas = (state: RootState): ComponentDataCTO[] =>
@@ -262,6 +271,16 @@ const saveSequenceThunk = (sequence: SequenceCTO): AppThunk => (dispatch) => {
   dispatch(loadSequencesFromBackend());
 };
 
+const saveDataSetupThunk = (dataSetup: DataSetupCTO): AppThunk => (dispatch) => {
+  let copyDataSetup: DataSetupCTO = Carv2Util.deepCopy(dataSetup);
+  const response: DataAccessResponse<DataSetupCTO> = DataAccess.saveDataSetup(copyDataSetup);
+  console.log(response);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(loadDataSetupsFromBackend());
+};
+
 const deleteSequenceThunk = (sequence: SequenceCTO): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<SequenceCTO> = await DataAccess.deleteSequenceCTO(sequence);
   console.log(response);
@@ -269,6 +288,15 @@ const deleteSequenceThunk = (sequence: SequenceCTO): AppThunk => async (dispatch
     dispatch(handleError(response.message));
   }
   dispatch(loadSequencesFromBackend());
+};
+
+const deleteDataSetupThunk = (dataSetup: DataSetupCTO): AppThunk => async (dispatch) => {
+  const response: DataAccessResponse<DataSetupCTO> = await DataAccess.deleteDataSetup(dataSetup);
+  console.log(response);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(loadDataSetupsFromBackend());
 };
 
 const deleteSequenceStepThunk = (step: SequenceStepCTO): AppThunk => async (dispatch) => {
@@ -292,10 +320,14 @@ export const SequenceActions = {
   setSequenceToEdit: SequenceSlice.actions.setCurrentSequence,
   setSequenceStepToEdit: SequenceSlice.actions.setCurrentStepIndex,
   loadSequencesFromBackend,
+  loadDataSetupsFromBackend,
   saveSequence: saveSequenceThunk,
   deleteSequence: deleteSequenceThunk,
   deleteSequenceStep: deleteSequenceStepThunk,
   setCurrentComponentDatas: SequenceSlice.actions.setCurrentComponentDatas,
   setActionToEdit: SequenceSlice.actions.setCurrentActionToEdit,
   deleteAction: deleteActionThunk,
+  setDataSetupToEdit: SequenceSlice.actions.setCurrentDataSetup,
+  saveDataSetup: saveDataSetupThunk,
+  deleteDataSetup: deleteDataSetupThunk,
 };

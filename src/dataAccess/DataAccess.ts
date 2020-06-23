@@ -85,6 +85,14 @@ export const DataAccess = {
     return makeTransactional(DataDataAccessService.findAllDatas);
   },
 
+  saveDataSetup(dataSetup: DataSetupCTO): DataAccessResponse<DataSetupCTO> {
+    return makeTransactional(() => SequenceDataAccessService.saveDataSetup(dataSetup));
+  },
+
+  deleteDataSetup(dataSetup: DataSetupCTO): DataAccessResponse<DataSetupCTO> {
+    return makeTransactional(() => SequenceDataAccessService.deleteDataSetup(dataSetup));
+  },
+
   saveDataCTO(dataCTO: DataCTO): DataAccessResponse<DataCTO> {
     return makeTransactional(() => DataDataAccessService.saveDataCTO(dataCTO));
   },

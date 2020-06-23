@@ -4,6 +4,7 @@ import { ActionCTO } from "../dataAccess/access/cto/ActionCTO";
 import { ComponentCTO } from "../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../dataAccess/access/cto/DataRelationCTO";
+import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { GroupTO } from "../dataAccess/access/to/GroupTO";
 import { DataAccess } from "../dataAccess/DataAccess";
@@ -22,6 +23,7 @@ export enum Mode {
   EDIT_GROUP = "EDIT_GROUP",
   EDIT_DATA = "EDIT_DATA",
   EDIT_DATA_RELATION = "EDIT_DATA_RELATION",
+  EDIT_DATA_SETUP = "EDIT_DATA_SETUP",
   EDIT_SEQUENCE = "EDIT_SEQUENCE",
   EDIT_SEQUENCE_STEP = "EDIT_SEQUENCE_STEP",
   EDIT_SEQUENCE_STEP_ACTION = "EDIT_SEQUENCE_STEP_ACTION",
@@ -146,6 +148,11 @@ const setModeToEditGroup = (group?: GroupTO): AppThunk => async (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_GROUP));
 };
 
+const setModeToEditDataSetup = (dataSetup?: DataSetupCTO): AppThunk => async (dispatch) => {
+  dispatch(SequenceActions.setDataSetupToEdit(dataSetup || new DataSetupCTO()));
+  dispatch(setModeWithStorage(Mode.EDIT_DATA_SETUP));
+};
+
 export const GlobalActions = {
   setModeToView,
   setModeToEdit,
@@ -159,6 +166,7 @@ export const GlobalActions = {
   downloadData,
   setModeToEditGroup,
   setModeToEditAction,
+  setModeToEditDataSetup,
 };
 
 export const { handleError } = globalSlice.actions;

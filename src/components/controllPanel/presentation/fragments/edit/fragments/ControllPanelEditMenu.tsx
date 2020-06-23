@@ -3,6 +3,7 @@ import { Button } from "semantic-ui-react";
 import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../../../../dataAccess/access/cto/DataRelationCTO";
+import { DataSetupCTO } from "../../../../../../dataAccess/access/cto/DataSetupCTO";
 import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
 import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
 import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
@@ -19,10 +20,18 @@ export interface ControllPanelEditMenuProps {
   editOrAddRelation: (relation?: DataRelationCTO) => void;
   editOrAddSequence: (sequence?: SequenceCTO) => void;
   editOrAddGroup: (group?: GroupTO) => void;
+  editOrAddDataSetup: (dataSetup?: DataSetupCTO) => void;
 }
 
 export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps> = (props) => {
-  const { editOrAddComponent, editOrAddData, editOrAddRelation, editOrAddSequence, editOrAddGroup } = props;
+  const {
+    editOrAddComponent,
+    editOrAddData,
+    editOrAddRelation,
+    editOrAddSequence,
+    editOrAddGroup,
+    editOrAddDataSetup,
+  } = props;
 
   return (
     <div className="controllPanelEdit">
@@ -65,11 +74,11 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
       <div className="optionFieldSpacer columnDivider">
         <OptionField label="Data - Setup">
           <Button.Group>
-            <Button icon="add" inverted color="orange" onClick={() => editOrAddData()} />
+            <Button icon="add" inverted color="orange" onClick={() => editOrAddDataSetup()} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
-              Inital Data
+              Data Setup
             </Button>
-            <DataSetupDropDown onSelect={() => {}} icon={"wrench"} />
+            <DataSetupDropDown onSelect={editOrAddDataSetup} icon={"wrench"} />
           </Button.Group>
         </OptionField>
       </div>

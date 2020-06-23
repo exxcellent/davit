@@ -8,7 +8,7 @@ export const Carv2Util = {
   isValidName(name: string): boolean {
     let valid: boolean = false;
     if (!isNullOrUndefined(name)) {
-      valid = name.length < 13;
+      valid = name.length < 13 && name.length > 0;
     }
     return valid;
   },

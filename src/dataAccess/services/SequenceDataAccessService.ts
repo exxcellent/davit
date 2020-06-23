@@ -95,6 +95,19 @@ export const SequenceDataAccessService = {
   findAllDataSetup(): DataSetupCTO[] {
     return DataSetupRepository.findAll().map((dataSetupTO) => createDataSetupCTO(dataSetupTO));
   },
+
+  saveDataSetup(dataSetup: DataSetupCTO): DataSetupCTO {
+    const dataSetupTO: DataSetupTO = DataSetupRepository.save(dataSetup.dataSetup);
+    dataSetup.initDatas.forEach((initData) => InitDataRepository.save(initData.initData));
+    return createDataSetupCTO(dataSetupTO);
+  },
+
+  deleteDataSetup(dataSetup: DataSetupCTO): DataSetupCTO {
+    CheckHelper.nullCheck(dataSetup, "dataSetup");
+    dataSetup.initDatas.forEach((initData) => InitDataRepository.delete(initData.initData));
+    DataSetupRepository.delete(dataSetup.dataSetup);
+    return dataSetup;
+  },
 };
 
 const createSequenceCTO = (sequence: SequenceTO | undefined): SequenceCTO => {
