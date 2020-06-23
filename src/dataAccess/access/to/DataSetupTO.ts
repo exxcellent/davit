@@ -1,8 +1,8 @@
 import { AbstractTO } from "./AbstractTO";
-import { InitData } from "./InitDataTO";
+import { InitDataTO } from "./InitDataTO";
 
 export class DataSetupTO extends AbstractTO {
-  constructor(public name = "", public initDatas: InitData[] = []) {
+  constructor(public name = "", public initDatas: InitDataTO[] = []) {
     super();
   }
 }
