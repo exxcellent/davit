@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { isNullOrUndefined } from "util";
 import { Mode, selectMode } from "../../../slices/GlobalSlice";
 import { ControllPanelEditController } from "./fragments/edit/ControllPanelEditController";
+import { ControllPanelFileController } from "./fragments/file/ControllPanelFileController";
 import { ControllPanelSequenceOptions } from "./fragments/view/ControllPanelSequenceOptions";
 
 export interface ControllPanelProps {}
@@ -17,6 +18,9 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (p
       }
       if (mode.includes("VIEW")) {
         return <ControllPanelSequenceOptions />;
+      }
+      if (mode.includes("FILE")) {
+        return <ControllPanelFileController />;
       }
     }
   };

@@ -15,8 +15,9 @@ import { SequenceActions, SequenceSlice } from "./SequenceSlice";
 const MODE_LOCAL_STORAGE = "MODE";
 
 export enum Mode {
-  EDIT = "EDIT",
+  FILE = "FILE",
   VIEW = "VIEW",
+  EDIT = "EDIT",
   EDIT_COMPONENT = "EDIT_COMPONENT",
   EDIT_GROUP = "EDIT_GROUP",
   EDIT_DATA = "EDIT_DATA",

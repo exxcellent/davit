@@ -7,10 +7,10 @@ import { ComponentActions, currentGroup } from "../../../../../../slices/Compone
 import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
+import { ColorDropDown } from "../../../../../common/fragments/dropdowns/ColorDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { Carv2SubmitCancel, Carv2SubmitCancelNoCheckBox } from "../common/fragments/Carv2SubmitCancel";
-import { ColorDropDown } from "../common/fragments/dropdowns/ColorDropDown";
 
 export interface ControllPanelEditGroupProps {}
 

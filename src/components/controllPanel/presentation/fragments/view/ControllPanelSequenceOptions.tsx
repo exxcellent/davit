@@ -5,7 +5,7 @@ import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { currentSequence, currentStep, SequenceActions, SequenceSlice } from "../../../../../slices/SequenceSlice";
-import { SequenceDropDown } from "../edit/common/fragments/dropdowns/SequenceDropDown";
+import { SequenceDropDown } from "../../../../common/fragments/dropdowns/SequenceDropDown";
 import { OptionField } from "../edit/common/OptionField";
 
 export interface ControllPanelSequenceOptionsProps {}

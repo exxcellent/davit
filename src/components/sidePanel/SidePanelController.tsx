@@ -17,11 +17,16 @@ export const SidePanelController: FunctionComponent<SidePanelProps> = (props) =>
     dispatch(SidePanelActions.setMode(Mode.VIEW));
   };
 
+  const setModeToFile = () => {
+    dispatch(SidePanelActions.setMode(Mode.FILE));
+  };
+
   return (
     <div className="leftPanel">
       <Button.Group basic vertical size="big" inverted color="orange">
         <Button inverted color="orange" icon="write" onClick={setModeToEdit} />
         <Button inverted color="orange" icon="eye" onClick={setModeToView} />
+        <Button inverted color="orange" icon="file" onClick={setModeToFile} />
       </Button.Group>
     </div>
   );

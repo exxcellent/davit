@@ -2,8 +2,8 @@ import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
-import { GroupTO } from "../../../../../../../../dataAccess/access/to/GroupTO";
-import { selectGroups } from "../../../../../../../../slices/ComponentSlice";
+import { GroupTO } from "../../../../dataAccess/access/to/GroupTO";
+import { selectGroups } from "../../../../slices/ComponentSlice";
 
 interface GroupDropDownProps extends DropdownProps {
   onSelect: (group: GroupTO | undefined) => void;

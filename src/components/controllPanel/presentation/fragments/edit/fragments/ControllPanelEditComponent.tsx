@@ -8,10 +8,10 @@ import { ComponentActions, currentComponent } from "../../../../../../slices/Com
 import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
+import { GroupDropDown } from "../../../../../common/fragments/dropdowns/GroupDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
-import { GroupDropDown } from "../common/fragments/dropdowns/GroupDropDown";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditComponentProps {}

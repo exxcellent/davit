@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { ActionType } from "../../../../../../../../dataAccess/access/types/ActionType";
+import { ActionType } from "../../../../dataAccess/access/types/ActionType";
 
 interface ActionTypeDropDownnProps extends DropdownProps {
   onSelect: (actionType: ActionType | undefined) => void;

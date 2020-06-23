@@ -2,8 +2,8 @@ import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
-import { DataRelationCTO } from "../../../../../../../../dataAccess/access/cto/DataRelationCTO";
-import { selectRelations } from "../../../../../../../../slices/DataSlice";
+import { DataRelationCTO } from "../../../../dataAccess/access/cto/DataRelationCTO";
+import { selectRelations } from "../../../../slices/DataSlice";
 
 interface RelationDropDownProps extends DropdownProps {
   onSelect: (relation: DataRelationCTO | undefined) => void;

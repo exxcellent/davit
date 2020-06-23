@@ -15,11 +15,11 @@ import {
 } from "../../../../../../slices/SequenceSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
+import { ActionTypeDropDown } from "../../../../../common/fragments/dropdowns/ActionTypeDropDown";
+import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
+import { DataDropDown } from "../../../../../common/fragments/dropdowns/DataDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2SubmitCancelNoCheckBox } from "../common/fragments/Carv2SubmitCancel";
-import { ActionTypeDropDown } from "../common/fragments/dropdowns/ActionTypeDropDown";
-import { ComponentDropDown } from "../common/fragments/dropdowns/ComponentDropDown";
-import { DataDropDown } from "../common/fragments/dropdowns/DataDropDown";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditActionProps {}

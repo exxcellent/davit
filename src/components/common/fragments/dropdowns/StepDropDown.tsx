@@ -2,9 +2,9 @@ import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
-import { SequenceCTO } from "../../../../../../../../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../../../../../../../../dataAccess/access/cto/SequenceStepCTO";
-import { currentSequence } from "../../../../../../../../slices/SequenceSlice";
+import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
+import { currentSequence } from "../../../../slices/SequenceSlice";
 
 interface StepDropDownProps extends DropdownProps {
   onSelect: (step: SequenceStepCTO | undefined) => void;

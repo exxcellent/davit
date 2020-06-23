@@ -2,8 +2,8 @@ import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
-import { DataCTO } from "../../../../../../../../dataAccess/access/cto/DataCTO";
-import { selectDatas } from "../../../../../../../../slices/DataSlice";
+import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
+import { selectDatas } from "../../../../slices/DataSlice";
 
 interface DataDropDownProps extends DropdownProps {
   onSelect: (data: DataCTO | undefined) => void;

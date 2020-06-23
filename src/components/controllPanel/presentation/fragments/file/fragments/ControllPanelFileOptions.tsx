@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch } from "react-redux";
 import { ButtonGroup } from "semantic-ui-react";
-import { GlobalActions } from "../../../../../slices/GlobalSlice";
-import { Carv2Button } from "../../../../common/fragments/buttons/Carv2Button";
-import { Carv2FileInput } from "../../../../common/fragments/buttons/Carv2FileInput";
+import { GlobalActions } from "../../../../../../slices/GlobalSlice";
+import { Carv2Button } from "../../../../../common/fragments/buttons/Carv2Button";
+import { Carv2FileInput } from "../../../../../common/fragments/buttons/Carv2FileInput";
 
 export interface ControllPanelFileOptionsProps {}
 

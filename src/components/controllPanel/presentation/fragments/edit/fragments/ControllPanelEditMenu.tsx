@@ -5,13 +5,12 @@ import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../../../../dataAccess/access/cto/DataRelationCTO";
 import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
 import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
-import { ComponentDropDown } from "../common/fragments/dropdowns/ComponentDropDown";
-import { DataDropDown } from "../common/fragments/dropdowns/DataDropDown";
-import { GroupDropDown } from "../common/fragments/dropdowns/GroupDropDown";
-import { RelationDropDown } from "../common/fragments/dropdowns/RelationDropDown";
-import { SequenceDropDown } from "../common/fragments/dropdowns/SequenceDropDown";
+import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
+import { DataDropDown } from "../../../../../common/fragments/dropdowns/DataDropDown";
+import { GroupDropDown } from "../../../../../common/fragments/dropdowns/GroupDropDown";
+import { RelationDropDown } from "../../../../../common/fragments/dropdowns/RelationDropDown";
+import { SequenceDropDown } from "../../../../../common/fragments/dropdowns/SequenceDropDown";
 import { OptionField } from "../common/OptionField";
-import { ControllPanelFileOptions } from "../ControllPanelFileOptions";
 
 export interface ControllPanelEditMenuProps {
   editOrAddComponent: (component?: ComponentCTO) => void;
@@ -27,9 +26,6 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
   return (
     <div className="controllPanelEdit">
       <div className="optionFieldSpacer">
-        <ControllPanelFileOptions />
-      </div>
-      <div className="optionFieldSpacer columnDivider">
         <OptionField label="component">
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddComponent()} />
@@ -62,6 +58,17 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
               Relation
             </Button>
             <RelationDropDown onSelect={editOrAddRelation} icon={"wrench"} />
+          </Button.Group>
+        </OptionField>
+      </div>
+      <div className="optionFieldSpacer columnDivider">
+        <OptionField label="Data - Setup">
+          <Button.Group>
+            <Button icon="add" inverted color="orange" onClick={() => editOrAddData()} />
+            <Button id="buttonGroupLabel" disabled inverted color="orange">
+              Inital Data
+            </Button>
+            <DataDropDown onSelect={editOrAddData} icon={"wrench"} />
           </Button.Group>
         </OptionField>
       </div>
