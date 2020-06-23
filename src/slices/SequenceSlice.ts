@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../app/store";
 import { ActionCTO } from "../dataAccess/access/cto/ActionCTO";
 import { ComponentDataCTO } from "../dataAccess/access/cto/ComponentDataCTO";
+import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { ComponentDataState } from "../dataAccess/access/types/ComponentDataState";
@@ -14,6 +15,7 @@ interface SequenceState {
   currentSequence: SequenceCTO | null;
   currentStepIndex: number | null;
   sequences: SequenceCTO[];
+  dataSetups: DataSetupCTO[];
   currentComponentDatas: ComponentDataCTO[];
   currentActionToEdit: ActionCTO | null;
 }
@@ -21,6 +23,7 @@ const getInitialState: SequenceState = {
   currentSequence: null,
   currentStepIndex: null,
   sequences: [],
+  dataSetups: [],
   currentComponentDatas: [],
   currentActionToEdit: null,
 };
@@ -126,35 +129,11 @@ export const SequenceSlice = createSlice({
         }
       }
     },
+    setDataSetups: (state, action: PayloadAction<DataSetupCTO[]>) => {
+      state.dataSetups = action.payload;
+    },
   },
 });
-
-// const updateComponentDataStates = (sequence: SequenceCTO): SequenceCTO => {
-//   const copySequence: SequenceCTO = Carv2Util.deepCopy(sequence);
-//   updateNextStep(
-//     [],
-//     sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.index === 1),
-//     copySequence
-//   );
-//   return copySequence;
-// };
-
-// const updateNextStep = (
-//   prevCompData: ComponentDataCTO[],
-//   stepToEdit: SequenceStepCTO | undefined,
-//   sequence: SequenceCTO
-// ) => {
-//   if (stepToEdit) {
-//     const copyPrevCompData: ComponentDataCTO[] = Carv2Util.deepCopy(prevCompData);
-//     stepToEdit.componentDataCTOs = determineComponentDatas(copyPrevCompData, stepToEdit.componentDataCTOs);
-//     sequence.sequenceStepCTOs[stepToEdit.squenceStepTO.index - 1] = stepToEdit;
-//     updateNextStep(
-//       stepToEdit.componentDataCTOs,
-//       sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.index === stepToEdit.squenceStepTO.index + 1),
-//       sequence
-//     );
-//   }
-// };
 
 const determineComponentDatas = (prevComponentDatas: ComponentDataCTO[], curComponentDatas: ComponentDataCTO[]) => {
   const curComponentDatasNotDeleted = curComponentDatas.filter(
@@ -222,22 +201,9 @@ const findStepInSequence = (id: number, sequenceCTO: SequenceCTO): number => {
   return sequenceCTO.sequenceStepCTOs.findIndex((step) => step.squenceStepTO.id === id);
 };
 
-// const getDefaultComponentDatas = (prevStep: SequenceStepCTO | null): ComponentDataCTO[] => {
-//   const copyPrevStepComponentDatas: ComponentDataCTO[] = prevStep ? Carv2Util.deepCopy(prevStep.actions) : [];
-//   return copyPrevStepComponentDatas
-//     .filter((compData) => compData.componentDataTO.componentDataState !== ComponentDataState.DELETED)
-//     .map((compData) => {
-//       let newcompData: ComponentDataCTO = Carv2Util.deepCopy(compData);
-//       newcompData.componentDataTO.id = -1;
-//       if (newcompData.componentDataTO.componentDataState === ComponentDataState.NEW) {
-//         newcompData.componentDataTO.componentDataState = ComponentDataState.PERSISTENT;
-//       }
-//       return newcompData;
-//     });
-// };
-
 export const SequenceReducer = SequenceSlice.reducer;
 export const selectSequences = (state: RootState): SequenceCTO[] => state.sequenceModel.sequences;
+export const selectDataSetups = (state: RootState): DataSetupCTO[] => state.sequenceModel.dataSetups;
 export const currentActionToEdit = (state: RootState): ActionCTO | null => state.sequenceModel.currentActionToEdit;
 export const currentSequence = (state: RootState): SequenceCTO | null => state.sequenceModel.currentSequence;
 export const currentStepIndex = (state: RootState): number | null => state.sequenceModel.currentStepIndex;
@@ -271,6 +237,15 @@ const loadSequencesFromBackend = (): AppThunk => (dispatch) => {
   const response: DataAccessResponse<SequenceCTO[]> = DataAccess.findAllSequences();
   if (response.code === 200) {
     dispatch(SequenceSlice.actions.setSequences(response.object));
+  } else {
+    dispatch(handleError(response.message));
+  }
+};
+
+const loadDataSetupsFromBackend = (): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<DataSetupCTO[]> = DataAccess.findAllDataSetups();
+  if (response.code === 200) {
+    dispatch(SequenceSlice.actions.setDataSetups(response.object));
   } else {
     dispatch(handleError(response.message));
   }

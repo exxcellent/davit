@@ -7,6 +7,7 @@ import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO
 import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
 import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
 import { DataDropDown } from "../../../../../common/fragments/dropdowns/DataDropDown";
+import { DataSetupDropDown } from "../../../../../common/fragments/dropdowns/DataSetupDropDown";
 import { GroupDropDown } from "../../../../../common/fragments/dropdowns/GroupDropDown";
 import { RelationDropDown } from "../../../../../common/fragments/dropdowns/RelationDropDown";
 import { SequenceDropDown } from "../../../../../common/fragments/dropdowns/SequenceDropDown";
@@ -68,7 +69,7 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Inital Data
             </Button>
-            <DataDropDown onSelect={editOrAddData} icon={"wrench"} />
+            <DataSetupDropDown onSelect={() => {}} icon={"wrench"} />
           </Button.Group>
         </OptionField>
       </div>
