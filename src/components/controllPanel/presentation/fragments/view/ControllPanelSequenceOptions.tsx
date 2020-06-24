@@ -4,6 +4,7 @@ import { Button } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
+import { DataSetupTO } from "../../../../../dataAccess/access/to/DataSetupTO";
 import { currentSequence, currentStep, SequenceActions, SequenceSlice } from "../../../../../slices/SequenceSlice";
 import { DataSetupDropDown } from "../../../../common/fragments/dropdowns/DataSetupDropDown";
 import { SequenceDropDown } from "../../../../common/fragments/dropdowns/SequenceDropDown";
@@ -12,13 +13,20 @@ import { OptionField } from "../edit/common/OptionField";
 export interface ControllPanelSequenceOptionsProps {}
 
 export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequenceOptionsProps> = (props) => {
-  const { sequence, step, selectSequence, stepBack, stepNext } = useControllPanelSequenceOptionsViewModel();
+  const {
+    sequence,
+    step,
+    selectSequence,
+    stepBack,
+    stepNext,
+    selectDataSetup,
+  } = useControllPanelSequenceOptionsViewModel();
 
   return (
     <div className="controllPanelEdit">
       <div className="optionFieldSpacer">
         <OptionField label="Data - Setup">
-          <DataSetupDropDown onSelect={() => {}} placeholder="Select Data Setup ..." />
+          <DataSetupDropDown onSelect={selectDataSetup} placeholder="Select Data Setup ..." />
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
@@ -79,11 +87,20 @@ const useControllPanelSequenceOptionsViewModel = () => {
     }
   };
 
+  const selectDataSetup = (dataSetup: DataSetupTO | undefined): void => {
+    if (isNullOrUndefined(dataSetup)) {
+      dispatch(SequenceActions.clearCurrentDataSetupToEdit);
+    } else {
+      dispatch(SequenceActions.setDataSetupToEdit(dataSetup));
+    }
+  };
+
   return {
     sequence,
     step,
     selectSequence,
     stepNext: () => dispatch(SequenceSlice.actions.setNextStepToCurrentStep()),
     stepBack: () => dispatch(SequenceSlice.actions.setPreviousStepToCurrentStep()),
+    selectDataSetup,
   };
 };
