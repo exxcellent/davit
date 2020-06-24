@@ -2,11 +2,11 @@ import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
-import { DataSetupCTO } from "../../../../dataAccess/access/cto/DataSetupCTO";
+import { DataSetupTO } from "../../../../dataAccess/access/to/DataSetupTO";
 import { selectDataSetups } from "../../../../slices/SequenceSlice";
 
 interface DataSetupDropDownProps extends DropdownProps {
-  onSelect: (dataSetup: DataSetupCTO | undefined) => void;
+  onSelect: (dataSetup: DataSetupTO | undefined) => void;
   placeholder?: string;
   icon?: string;
 }
@@ -47,19 +47,19 @@ export const DataSetupDropDown: FunctionComponent<DataSetupDropDownProps> = (pro
 };
 
 const useDataSetupDropDownViewModel = () => {
-  const dataSetups: DataSetupCTO[] = useSelector(selectDataSetups);
+  const dataSetups: DataSetupTO[] = useSelector(selectDataSetups);
 
-  const dataSetupToOption = (dataSetup: DataSetupCTO): DropdownItemProps => {
+  const dataSetupToOption = (dataSetup: DataSetupTO): DropdownItemProps => {
     return {
-      key: dataSetup.dataSetup.id,
-      value: dataSetup.dataSetup.id,
-      text: dataSetup.dataSetup.name,
+      key: dataSetup.id,
+      value: dataSetup.id,
+      text: dataSetup.name,
     };
   };
 
-  const selectDataSetup = (dataSetupId: number, dataSetups: DataSetupCTO[]): DataSetupCTO | undefined => {
+  const selectDataSetup = (dataSetupId: number, dataSetups: DataSetupTO[]): DataSetupTO | undefined => {
     if (!isNullOrUndefined(dataSetups) && !isNullOrUndefined(dataSetupId)) {
-      return dataSetups.find((dataSetup) => dataSetup.dataSetup.id === dataSetupId);
+      return dataSetups.find((dataSetup) => dataSetup.id === dataSetupId);
     }
     return undefined;
   };

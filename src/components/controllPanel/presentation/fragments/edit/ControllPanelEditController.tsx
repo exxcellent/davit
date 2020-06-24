@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { ComponentCTO } from "../../../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../../../dataAccess/access/cto/DataRelationCTO";
-import { DataSetupCTO } from "../../../../../dataAccess/access/cto/DataSetupCTO";
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
+import { DataSetupTO } from "../../../../../dataAccess/access/to/DataSetupTO";
 import { GroupTO } from "../../../../../dataAccess/access/to/GroupTO";
 import { GlobalActions, Mode, selectMode } from "../../../../../slices/GlobalSlice";
 import { ControllPanelEditAction } from "./fragments/ControllPanelEditAction";
@@ -76,6 +76,6 @@ const useControllPanelEditViewModel = () => {
     editOrAddRelation: (relation?: DataRelationCTO) => dispatch(GlobalActions.setModeToEditRelation(relation)),
     editOrAddSequence: (sequence?: SequenceCTO) => dispatch(GlobalActions.setModeToEditSequence(sequence)),
     editOrAddGroup: (group?: GroupTO) => dispatch(GlobalActions.setModeToEditGroup(group)),
-    editOrAddDataSetup: (dataSetup?: DataSetupCTO) => dispatch(GlobalActions.setModeToEditDataSetup(dataSetup)),
+    editOrAddDataSetup: (dataSetup?: DataSetupTO) => dispatch(GlobalActions.setModeToEditDataSetup(dataSetup)),
   };
 };

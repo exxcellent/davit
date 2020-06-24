@@ -1,16 +1,13 @@
 import { Carv2Util } from "../../utils/Carv2Util";
 import { ActionCTO } from "../access/cto/ActionCTO";
 import { ComponentCTO } from "../access/cto/ComponentCTO";
-import { DataCTO } from "../access/cto/DataCTO";
 import { DataSetupCTO } from "../access/cto/DataSetupCTO";
-import { InitDataCTO } from "../access/cto/InitDataCTO";
 import { SequenceCTO } from "../access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../access/cto/SequenceStepCTO";
 import { ActionTO } from "../access/to/ActionTO";
 import { ComponentTO } from "../access/to/ComponentTO";
 import { DataSetupTO } from "../access/to/DataSetupTO";
 import { DataTO } from "../access/to/DataTO";
-import { InitDataTO } from "../access/to/InitDataTO";
 import { SequenceStepTO } from "../access/to/SequenceStepTO";
 import { SequenceTO } from "../access/to/SequenceTO";
 import { ActionRepository } from "../repositories/ActionRepository";
@@ -92,19 +89,18 @@ export const SequenceDataAccessService = {
     return action;
   },
 
-  findAllDataSetup(): DataSetupCTO[] {
-    return DataSetupRepository.findAll().map((dataSetupTO) => createDataSetupCTO(dataSetupTO));
+  findAllDataSetup(): DataSetupTO[] {
+    return DataSetupRepository.findAll();
   },
 
-  saveDataSetup(dataSetup: DataSetupCTO): DataSetupCTO {
-    const dataSetupTO: DataSetupTO = DataSetupRepository.save(dataSetup.dataSetup);
-    dataSetup.initDatas.forEach((initData) => InitDataRepository.save(initData.initData));
-    return createDataSetupCTO(dataSetupTO);
+  saveDataSetup(dataSetup: DataSetupTO): DataSetupTO {
+    const dataSetupTO: DataSetupTO = DataSetupRepository.save(dataSetup);
+    return dataSetupTO;
   },
 
   deleteDataSetup(dataSetup: DataSetupCTO): DataSetupCTO {
     CheckHelper.nullCheck(dataSetup, "dataSetup");
-    dataSetup.initDatas.forEach((initData) => InitDataRepository.delete(initData.initData));
+    dataSetup.initDatas.forEach((initData) => InitDataRepository.delete(initData));
     DataSetupRepository.delete(dataSetup.dataSetup);
     return dataSetup;
   },
@@ -146,27 +142,5 @@ const createActionCTO = (actionTO: ActionTO): ActionCTO => {
     actionTO: actionTO,
     componentTO: component!,
     dataTO: data!,
-  };
-};
-
-const createInitDataCTO = (initDataTO: InitDataTO): InitDataCTO => {
-  CheckHelper.nullCheck(initDataTO, "initDataTO");
-  const componentCTO: ComponentCTO = ComponentDataAccessService.findCTO(initDataTO.componentFk);
-  const dataCTO: DataCTO = DataDataAccessService.findDataCTO(initDataTO.dataFk);
-  return {
-    initData: initDataTO,
-    component: componentCTO,
-    data: dataCTO,
-  };
-};
-
-const createDataSetupCTO = (dataSetupTO: DataSetupTO): DataSetupCTO => {
-  CheckHelper.nullCheck(dataSetupTO, "dataSetupTO");
-  const initDataCTOs: InitDataCTO[] = InitDataRepository.findAllForSetup(dataSetupTO.id).map((initData) =>
-    createInitDataCTO(initData)
-  );
-  return {
-    dataSetup: dataSetupTO,
-    initDatas: initDataCTOs,
   };
 };

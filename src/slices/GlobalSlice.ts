@@ -4,8 +4,8 @@ import { ActionCTO } from "../dataAccess/access/cto/ActionCTO";
 import { ComponentCTO } from "../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../dataAccess/access/cto/DataRelationCTO";
-import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
+import { DataSetupTO } from "../dataAccess/access/to/DataSetupTO";
 import { GroupTO } from "../dataAccess/access/to/GroupTO";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
@@ -148,8 +148,8 @@ const setModeToEditGroup = (group?: GroupTO): AppThunk => async (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_GROUP));
 };
 
-const setModeToEditDataSetup = (dataSetup?: DataSetupCTO): AppThunk => async (dispatch) => {
-  dispatch(SequenceActions.setDataSetupToEdit(dataSetup || new DataSetupCTO()));
+const setModeToEditDataSetup = (dataSetup?: DataSetupTO): AppThunk => async (dispatch) => {
+  dispatch(SequenceActions.setDataSetupToEdit(dataSetup || new DataSetupTO()));
   dispatch(setModeWithStorage(Mode.EDIT_DATA_SETUP));
 };
 

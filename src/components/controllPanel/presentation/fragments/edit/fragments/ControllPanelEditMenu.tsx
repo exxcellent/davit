@@ -3,8 +3,8 @@ import { Button } from "semantic-ui-react";
 import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../../../../../../dataAccess/access/cto/DataRelationCTO";
-import { DataSetupCTO } from "../../../../../../dataAccess/access/cto/DataSetupCTO";
 import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
+import { DataSetupTO } from "../../../../../../dataAccess/access/to/DataSetupTO";
 import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
 import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
 import { DataDropDown } from "../../../../../common/fragments/dropdowns/DataDropDown";
@@ -20,7 +20,7 @@ export interface ControllPanelEditMenuProps {
   editOrAddRelation: (relation?: DataRelationCTO) => void;
   editOrAddSequence: (sequence?: SequenceCTO) => void;
   editOrAddGroup: (group?: GroupTO) => void;
-  editOrAddDataSetup: (dataSetup?: DataSetupCTO) => void;
+  editOrAddDataSetup: (dataSetup?: DataSetupTO) => void;
 }
 
 export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps> = (props) => {
