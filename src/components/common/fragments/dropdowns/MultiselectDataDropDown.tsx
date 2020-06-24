@@ -16,10 +16,9 @@ export const MultiselectDataDropDown: FunctionComponent<MultiselectDataDropDownP
 
   return (
     <Dropdown
-      placeholder="Select Data"
+      placeholder="Select Datas ..."
       fluid
       multiple
-      search
       selection
       options={datas.map(dataToOption)}
       onChange={(event, data) => {

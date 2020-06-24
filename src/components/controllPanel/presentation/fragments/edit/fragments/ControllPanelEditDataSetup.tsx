@@ -3,12 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { DataSetupCTO } from "../../../../../../dataAccess/access/cto/DataSetupCTO";
+import { InitDataCTO } from "../../../../../../dataAccess/access/cto/InitDataCTO";
 import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice";
 import { currentDataSetupToEdit, SequenceActions } from "../../../../../../slices/SequenceSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2Button } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
+import { MultiselectDataDropDown } from "../../../../../common/fragments/dropdowns/MultiselectDataDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { Carv2SubmitCancelNoCheckBox } from "../common/fragments/Carv2SubmitCancel";
@@ -27,6 +29,8 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
     saveDataSetup,
     deleteDataSetup,
     copyDataSetup,
+    setComponentId,
+    getComponentDatas,
   } = useControllPanelEditDataSetupViewModel();
 
   return (
@@ -42,10 +46,10 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
         />
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <ComponentDropDown onSelect={() => {}} placeholder="Select Component..." />
+        <ComponentDropDown onSelect={(comp) => setComponentId(comp?.component.id)} placeholder="Select Component..." />
       </div>
       <div className="columnDivider" style={{ display: "flex" }}>
-        <MultiselectDataDropDown onSelect={() => {}} selected={[]} />
+        <MultiselectDataDropDown onSelect={() => {}} selected={getComponentDatas()} />
       </div>
       <div className="controllPanelEditChild columnDivider">
         <Carv2SubmitCancelNoCheckBox
@@ -65,6 +69,7 @@ const useControllPanelEditDataSetupViewModel = () => {
   const dataSetupToEdit: DataSetupCTO | null = useSelector(currentDataSetupToEdit);
   const dispatch = useDispatch();
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
+  const [componentIdToEdit, setComponentIdToEdit] = useState<number | null>(null);
   const textInput = useRef<Input>(null);
 
   useEffect(() => {
@@ -124,6 +129,29 @@ const useControllPanelEditDataSetupViewModel = () => {
     dispatch(GlobalActions.setModeToEditDataSetup(copyDataSetup));
   };
 
+  const getInitDatas = (componentId: number): InitDataCTO[] | undefined => {
+    return dataSetupToEdit?.initDatas.filter((initData) => initData.component.component.id === componentId);
+  };
+
+  const setComponentId = (compId: number | undefined): void => {
+    if (compId === undefined) {
+      setComponentIdToEdit(null);
+    } else {
+      setComponentIdToEdit(compId);
+    }
+  };
+
+  const getComponentDatas = (): number[] | [] => {
+    let dataKeys: number[] = [];
+    if (!isNullOrUndefined(componentIdToEdit)) {
+      const initDatas: InitDataCTO[] | undefined = getInitDatas(componentIdToEdit);
+      if (initDatas !== undefined) {
+        initDatas.forEach((initData) => dataKeys.push(initData.data.data.id));
+      }
+    }
+    return dataKeys;
+  };
+
   return {
     label: dataSetupToEdit?.dataSetup.id === -1 ? "ADD DATA SETUP" : "EDIT DATA SETUP",
     name: dataSetupToEdit?.dataSetup.name,
@@ -135,5 +163,7 @@ const useControllPanelEditDataSetupViewModel = () => {
     showExistingOptions: dataSetupToEdit?.dataSetup.id !== -1,
     validateInput,
     copyDataSetup,
+    setComponentId,
+    getComponentDatas,
   };
 };
