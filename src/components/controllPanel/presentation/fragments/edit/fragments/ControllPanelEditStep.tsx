@@ -36,7 +36,6 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
     indexToOptions,
     selectSourcePlaceholder,
     selectTargetPlaceholder,
-    editComponentData,
     validStep,
     editOrAddAction,
   } = useControllPanelEditSequenceStepViewModel();
@@ -214,7 +213,6 @@ const useControllPanelEditSequenceStepViewModel = () => {
       sequenceStepToEdit?.componentCTOTarget.component.name === ""
         ? "Select Target"
         : sequenceStepToEdit?.componentCTOTarget.component.name,
-    editComponentData: editOrAddAction,
     validStep,
     editOrAddAction,
   };

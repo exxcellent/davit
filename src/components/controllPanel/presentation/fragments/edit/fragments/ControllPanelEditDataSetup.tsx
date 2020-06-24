@@ -74,7 +74,6 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
 const useControllPanelEditDataSetupViewModel = () => {
   const dataSetupToEdit: DataSetupCTO | null = useSelector(currentDataSetupToEdit);
   const dispatch = useDispatch();
-  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
   const [componentToEdit, setComponentToEdit] = useState<ComponentCTO | null>(null);
   const textInput = useRef<Input>(null);
 
@@ -83,9 +82,6 @@ const useControllPanelEditDataSetupViewModel = () => {
     if (isNullOrUndefined(dataSetupToEdit)) {
       GlobalActions.setModeToEdit();
       handleError("Tried to go to edit dataSetup without dataSetupToedit specified");
-    }
-    if (dataSetupToEdit?.dataSetup.id !== -1) {
-      setIsCreateAnother(false);
     }
     // used to focus the textfield on create another
     textInput.current!.focus();

@@ -7,7 +7,6 @@ import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { DataSetupTO } from "../dataAccess/access/to/DataSetupTO";
 import { InitDataTO } from "../dataAccess/access/to/InitDataTO";
-import { ComponentDataState } from "../dataAccess/access/types/ComponentDataState";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
 import { Carv2Util } from "../utils/Carv2Util";
@@ -148,53 +147,53 @@ export const SequenceSlice = createSlice({
   },
 });
 
-const determineComponentDatas = (prevComponentDatas: ComponentDataCTO[], curComponentDatas: ComponentDataCTO[]) => {
-  const curComponentDatasNotDeleted = curComponentDatas.filter(
-    (componentData) => componentData.componentDataTO.componentDataState !== ComponentDataState.DELETED
-  );
+// const determineComponentDatas = (prevComponentDatas: ComponentDataCTO[], curComponentDatas: ComponentDataCTO[]) => {
+//   const curComponentDatasNotDeleted = curComponentDatas.filter(
+//     (componentData) => componentData.componentDataTO.componentDataState !== ComponentDataState.DELETED
+//   );
 
-  const prevComponentDatasNotDeleted = prevComponentDatas.filter(
-    (pcd) => pcd.componentDataTO.componentDataState !== ComponentDataState.DELETED
-  );
+//   const prevComponentDatasNotDeleted = prevComponentDatas.filter(
+//     (pcd) => pcd.componentDataTO.componentDataState !== ComponentDataState.DELETED
+//   );
 
-  // const deletedComponentDatas: ComponentDataCTO[] = prevComponentDatas
-  const deletedComponentDatas: ComponentDataCTO[] = prevComponentDatasNotDeleted
-    .filter(
-      (prevCompData) =>
-        !curComponentDatasNotDeleted.some((curCompData) => compareComponentDatas(prevCompData, curCompData))
-    )
-    .map((deletedCompData) => {
-      let newCompData: ComponentDataCTO = Carv2Util.deepCopy(deletedCompData);
-      newCompData.componentDataTO.id = -1;
-      newCompData.componentDataTO.componentDataState = ComponentDataState.DELETED;
-      return newCompData;
-    });
+//   // const deletedComponentDatas: ComponentDataCTO[] = prevComponentDatas
+//   const deletedComponentDatas: ComponentDataCTO[] = prevComponentDatasNotDeleted
+//     .filter(
+//       (prevCompData) =>
+//         !curComponentDatasNotDeleted.some((curCompData) => compareComponentDatas(prevCompData, curCompData))
+//     )
+//     .map((deletedCompData) => {
+//       let newCompData: ComponentDataCTO = Carv2Util.deepCopy(deletedCompData);
+//       newCompData.componentDataTO.id = -1;
+//       newCompData.componentDataTO.componentDataState = ComponentDataState.DELETED;
+//       return newCompData;
+//     });
 
-  const updatedCurComponentDatas = curComponentDatasNotDeleted.map((componentData) => {
-    let updatedCompData: ComponentDataCTO = Carv2Util.deepCopy(componentData);
-    if (
-      prevComponentDatas.some(
-        (prevCompData) =>
-          compareComponentDatas(prevCompData, componentData) &&
-          prevCompData.componentDataTO.componentDataState !== ComponentDataState.DELETED
-      )
-    ) {
-      updatedCompData.componentDataTO.componentDataState = ComponentDataState.PERSISTENT;
-    } else {
-      updatedCompData.componentDataTO.componentDataState = ComponentDataState.NEW;
-    }
-    return updatedCompData;
-  });
+//   const updatedCurComponentDatas = curComponentDatasNotDeleted.map((componentData) => {
+//     let updatedCompData: ComponentDataCTO = Carv2Util.deepCopy(componentData);
+//     if (
+//       prevComponentDatas.some(
+//         (prevCompData) =>
+//           compareComponentDatas(prevCompData, componentData) &&
+//           prevCompData.componentDataTO.componentDataState !== ComponentDataState.DELETED
+//       )
+//     ) {
+//       updatedCompData.componentDataTO.componentDataState = ComponentDataState.PERSISTENT;
+//     } else {
+//       updatedCompData.componentDataTO.componentDataState = ComponentDataState.NEW;
+//     }
+//     return updatedCompData;
+//   });
 
-  return updatedCurComponentDatas.concat(deletedComponentDatas);
-};
+//   return updatedCurComponentDatas.concat(deletedComponentDatas);
+// };
 
-const compareComponentDatas = (componentData1: ComponentDataCTO, componentData2: ComponentDataCTO): boolean => {
-  return (
-    componentData1.componentTO.id === componentData2.componentTO.id &&
-    componentData1.dataTO.id === componentData2.dataTO.id
-  );
-};
+// const compareComponentDatas = (componentData1: ComponentDataCTO, componentData2: ComponentDataCTO): boolean => {
+//   return (
+//     componentData1.componentTO.id === componentData2.componentTO.id &&
+//     componentData1.dataTO.id === componentData2.dataTO.id
+//   );
+// };
 
 const udpateIndices = (sequence: SequenceCTO): void => {
   sequence.sequenceStepCTOs.forEach((stepCTO, index) => (stepCTO.squenceStepTO.index = index + 1));
