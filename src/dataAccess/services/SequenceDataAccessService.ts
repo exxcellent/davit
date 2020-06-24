@@ -112,6 +112,11 @@ export const SequenceDataAccessService = {
     CheckHelper.nullCheck(dataSetupCTO, "dataSetupCTO");
     const copyDataSetupCTO: DataSetupCTO = Carv2Util.deepCopy(dataSetupCTO);
     const savedDataSetupTO: DataSetupTO = DataSetupRepository.save(dataSetupCTO.dataSetup);
+    // remove old init data.
+    InitDataRepository.findAllForSetup(dataSetupCTO.dataSetup.id).forEach((initData) =>
+      InitDataRepository.delete(initData)
+    );
+    // update and save new init data.
     copyDataSetupCTO.initDatas.forEach((initData) => {
       initData.dataSetupFk = savedDataSetupTO.id;
       InitDataRepository.save(initData);
