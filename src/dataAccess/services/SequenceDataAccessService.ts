@@ -8,6 +8,7 @@ import { ActionTO } from "../access/to/ActionTO";
 import { ComponentTO } from "../access/to/ComponentTO";
 import { DataSetupTO } from "../access/to/DataSetupTO";
 import { DataTO } from "../access/to/DataTO";
+import { InitDataTO } from "../access/to/InitDataTO";
 import { SequenceStepTO } from "../access/to/SequenceStepTO";
 import { SequenceTO } from "../access/to/SequenceTO";
 import { ActionRepository } from "../repositories/ActionRepository";
@@ -93,9 +94,25 @@ export const SequenceDataAccessService = {
     return DataSetupRepository.findAll();
   },
 
+  findDatSetupCTO(dataSetupTO: DataSetupTO): DataSetupCTO {
+    return createDataSetupCTO(dataSetupTO);
+  },
+
+  findAllInitDatas(): InitDataTO[] {
+    return InitDataRepository.findAll();
+  },
+
   saveDataSetup(dataSetup: DataSetupTO): DataSetupTO {
+    CheckHelper.nullCheck(dataSetup, "dataSetup");
     const dataSetupTO: DataSetupTO = DataSetupRepository.save(dataSetup);
     return dataSetupTO;
+  },
+
+  saveDataSetupCTO(dataSetupCTO: DataSetupCTO): DataSetupCTO {
+    CheckHelper.nullCheck(dataSetupCTO, "dataSetupCTO");
+    DataSetupRepository.save(dataSetupCTO.dataSetup);
+    dataSetupCTO.initDatas.forEach((initData) => InitDataRepository.save(initData));
+    return dataSetupCTO;
   },
 
   deleteDataSetup(dataSetup: DataSetupCTO): DataSetupCTO {
@@ -142,5 +159,14 @@ const createActionCTO = (actionTO: ActionTO): ActionCTO => {
     actionTO: actionTO,
     componentTO: component!,
     dataTO: data!,
+  };
+};
+
+const createDataSetupCTO = (dataSetupTO: DataSetupTO): DataSetupCTO => {
+  CheckHelper.nullCheck(dataSetupTO, "dataSetupTO");
+  const initDatas: InitDataTO[] = InitDataRepository.findAllForSetup(dataSetupTO.id);
+  return {
+    dataSetup: dataSetupTO,
+    initDatas: initDatas,
   };
 };

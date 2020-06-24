@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
-import { DataSetupTO } from "../../../../../../dataAccess/access/to/DataSetupTO";
+import { DataSetupCTO } from "../../../../../../dataAccess/access/cto/DataSetupCTO";
 import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice";
 import { currentDataSetupToEdit, SequenceActions } from "../../../../../../slices/SequenceSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
@@ -26,11 +26,10 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
     showExistingOptions,
     cancel,
     validateInput,
-    // saveDataSetup,
-    // deleteDataSetup,
-    // copyDataSetup,
+    copyDataSetup,
     setComponentId,
-    // getComponentDatas,
+    saveDataSetup,
+    deleteDataSetup,
   } = useControllPanelEditDataSetupViewModel();
 
   return (
@@ -53,20 +52,20 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
       </div>
       <div className="controllPanelEditChild columnDivider">
         <Carv2SubmitCancelNoCheckBox
-          onSubmit={() => {}}
+          onSubmit={saveDataSetup}
           onChange={() => {}}
           onCancel={cancel}
           submitCondition={validateInput()}
         />
-        {showExistingOptions && <Carv2Button icon="copy" onClick={() => {}} />}
-        {showExistingOptions && <Carv2DeleteButton onClick={() => {}} />}
+        {showExistingOptions && <Carv2Button icon="copy" onClick={copyDataSetup} />}
+        {showExistingOptions && <Carv2DeleteButton onClick={deleteDataSetup} />}
       </div>
     </ControllPanelEditSub>
   );
 };
 
 const useControllPanelEditDataSetupViewModel = () => {
-  const dataSetupToEdit: DataSetupTO | null = useSelector(currentDataSetupToEdit);
+  const dataSetupToEdit: DataSetupCTO | null = useSelector(currentDataSetupToEdit);
   const dispatch = useDispatch();
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
   const [componentToEdit, setComponentToEdit] = useState<ComponentCTO | null>(null);
@@ -78,7 +77,7 @@ const useControllPanelEditDataSetupViewModel = () => {
       GlobalActions.setModeToEdit();
       handleError("Tried to go to edit dataSetup without dataSetupToedit specified");
     }
-    if (dataSetupToEdit?.id !== -1) {
+    if (dataSetupToEdit?.dataSetup.id !== -1) {
       setIsCreateAnother(false);
     }
     // used to focus the textfield on create another
@@ -87,47 +86,47 @@ const useControllPanelEditDataSetupViewModel = () => {
 
   const changeName = (name: string) => {
     if (!isNullOrUndefined(dataSetupToEdit)) {
-      let copyDataSetupToEdit: DataSetupTO = Carv2Util.deepCopy(dataSetupToEdit);
-      copyDataSetupToEdit.name = name;
-      dispatch(SequenceActions.setDataSetupToEdit(copyDataSetupToEdit));
+      let copyDataSetupToEdit: DataSetupCTO = Carv2Util.deepCopy(dataSetupToEdit);
+      copyDataSetupToEdit.dataSetup.name = name;
+      dispatch(SequenceActions.updateCurrentDataSetupToEdit(copyDataSetupToEdit));
     }
   };
 
-  // const saveDataSetup = () => {
-  //   dispatch(SequenceActions.saveDataSetup(dataSetupToEdit!));
-  //   dispatch(SequenceActions.setDataSetupToEdit(null));
-  //   dispatch(GlobalActions.setModeToEdit());
-  // };
+  const saveDataSetup = () => {
+    dispatch(SequenceActions.saveDataSetup(dataSetupToEdit!));
+    dispatch(SequenceActions.clearCurrentDataSetupToEdit);
+    dispatch(GlobalActions.setModeToEdit());
+  };
 
-  // const deleteDataSetup = () => {
-  //   dispatch(SequenceActions.deleteDataSetup(dataSetupToEdit!));
-  //   dispatch(SequenceActions.setDataSetupToEdit(null));
-  //   dispatch(GlobalActions.setModeToEdit());
-  // };
+  const deleteDataSetup = () => {
+    dispatch(SequenceActions.deleteDataSetup(dataSetupToEdit!));
+    dispatch(SequenceActions.clearCurrentDataSetupToEdit);
+    dispatch(GlobalActions.setModeToEdit());
+  };
 
   const cancel = () => {
-    dispatch(SequenceActions.setDataSetupToEdit(null));
+    dispatch(SequenceActions.clearCurrentDataSetupToEdit);
     dispatch(GlobalActions.setModeToEdit());
   };
 
   const validateInput = (): boolean => {
     if (!isNullOrUndefined(dataSetupToEdit)) {
-      return Carv2Util.isValidName(dataSetupToEdit.name);
+      return Carv2Util.isValidName(dataSetupToEdit.dataSetup.name);
     } else {
       return false;
     }
   };
 
-  // const copyDataSetup = () => {
-  //   let copyDataSetup: DataSetupCTO = Carv2Util.deepCopy(dataSetupToEdit);
-  //   copyDataSetup.dataSetup.name = dataSetupToEdit?.dataSetup.name + "-copy";
-  //   copyDataSetup.dataSetup.id = -1;
-  //   copyDataSetup.initDatas.forEach((initData) => {
-  //     initData.initData.id = -1;
-  //     initData.initData.dataSetupFk = -1;
-  //   });
-  //   dispatch(GlobalActions.setModeToEditDataSetup(copyDataSetup));
-  // };
+  const copyDataSetup = () => {
+    let copyDataSetup: DataSetupCTO = Carv2Util.deepCopy(dataSetupToEdit);
+    copyDataSetup.dataSetup.name = dataSetupToEdit?.dataSetup.name + "-copy";
+    copyDataSetup.dataSetup.id = -1;
+    copyDataSetup.initDatas.forEach((initData) => {
+      initData.id = -1;
+      initData.dataSetupFk = -1;
+    });
+    dispatch(SequenceActions.updateCurrentDataSetupToEdit(copyDataSetup));
+  };
 
   // const getInitDatas = (componentId: number): InitDataCTO[] | undefined => {
   //   if (!isNullOrUndefined(dataSetupToEdit)) {
@@ -178,14 +177,16 @@ const useControllPanelEditDataSetupViewModel = () => {
   // };
 
   return {
-    label: dataSetupToEdit?.id === -1 ? "ADD DATA SETUP" : "EDIT DATA SETUP",
-    name: dataSetupToEdit?.name,
+    label: dataSetupToEdit?.dataSetup.id === -1 ? "ADD DATA SETUP" : "EDIT DATA SETUP",
+    name: dataSetupToEdit?.dataSetup.name,
     changeName,
     cancel,
+    saveDataSetup,
+    deleteDataSetup,
     textInput,
-    showExistingOptions: dataSetupToEdit?.id !== -1,
+    showExistingOptions: dataSetupToEdit?.dataSetup.id !== -1,
     validateInput,
-    // copyDataSetup,
+    copyDataSetup,
     setComponentId,
     // getComponentDatas,
   };

@@ -6,6 +6,7 @@ import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { DataSetupTO } from "../dataAccess/access/to/DataSetupTO";
+import { InitDataTO } from "../dataAccess/access/to/InitDataTO";
 import { ComponentDataState } from "../dataAccess/access/types/ComponentDataState";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
@@ -18,15 +19,17 @@ interface SequenceState {
   //TODO change from CTO to TO.
   sequences: SequenceCTO[];
   dataSetups: DataSetupTO[];
+  initDatas: InitDataTO[];
   currentComponentDatas: ComponentDataCTO[];
   currentActionToEdit: ActionCTO | null;
-  currentDataSetupToEdit: DataSetupTO | null;
+  currentDataSetupToEdit: DataSetupCTO | null;
 }
 const getInitialState: SequenceState = {
   currentSequence: null,
   currentStepIndex: null,
   sequences: [],
   dataSetups: [],
+  initDatas: [],
   currentComponentDatas: [],
   currentActionToEdit: null,
   currentDataSetupToEdit: null,
@@ -136,8 +139,11 @@ export const SequenceSlice = createSlice({
     setDataSetups: (state, action: PayloadAction<DataSetupTO[]>) => {
       state.dataSetups = action.payload;
     },
-    setCurrentDataSetup: (state, action: PayloadAction<DataSetupTO | null>) => {
+    setCurrentDataSetup: (state, action: PayloadAction<DataSetupCTO | null>) => {
       state.currentDataSetupToEdit = action.payload;
+    },
+    setInitDatas: (state, action: PayloadAction<InitDataTO[]>) => {
+      state.initDatas = action.payload;
     },
   },
 });
@@ -211,8 +217,9 @@ const findStepInSequence = (id: number, sequenceCTO: SequenceCTO): number => {
 export const SequenceReducer = SequenceSlice.reducer;
 export const selectSequences = (state: RootState): SequenceCTO[] => state.sequenceModel.sequences;
 export const selectDataSetups = (state: RootState): DataSetupTO[] => state.sequenceModel.dataSetups;
+export const selectInitDatas = (state: RootState): InitDataTO[] => state.sequenceModel.initDatas;
 export const currentActionToEdit = (state: RootState): ActionCTO | null => state.sequenceModel.currentActionToEdit;
-export const currentDataSetupToEdit = (state: RootState): DataSetupTO | null =>
+export const currentDataSetupToEdit = (state: RootState): DataSetupCTO | null =>
   state.sequenceModel.currentDataSetupToEdit;
 export const currentSequence = (state: RootState): SequenceCTO | null => state.sequenceModel.currentSequence;
 export const currentStepIndex = (state: RootState): number | null => state.sequenceModel.currentStepIndex;
@@ -260,11 +267,19 @@ const loadDataSetupsFromBackend = (): AppThunk => (dispatch) => {
   }
 };
 
+const loadInitDataFromBackend = (): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<InitDataTO[]> = DataAccess.findAllInitDatas();
+  if (response.code === 200) {
+    dispatch(SequenceSlice.actions.setInitDatas(response.object));
+  } else {
+    dispatch(handleError(response.message));
+  }
+};
+
 const saveSequenceThunk = (sequence: SequenceCTO): AppThunk => (dispatch) => {
   let copySequence: SequenceCTO = Carv2Util.deepCopy(sequence);
   copySequence.sequenceStepCTOs.sort((step1, step2) => step1.squenceStepTO.index - step2.squenceStepTO.index);
   const response: DataAccessResponse<SequenceCTO> = DataAccess.saveSequenceCTO(copySequence);
-  console.log(response);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
@@ -272,9 +287,7 @@ const saveSequenceThunk = (sequence: SequenceCTO): AppThunk => (dispatch) => {
 };
 
 const saveDataSetupThunk = (dataSetup: DataSetupCTO): AppThunk => (dispatch) => {
-  let copyDataSetup: DataSetupTO = Carv2Util.deepCopy(dataSetup);
-  const response: DataAccessResponse<DataSetupTO> = DataAccess.saveDataSetup(copyDataSetup);
-  console.log(response);
+  const response: DataAccessResponse<DataSetupCTO> = DataAccess.saveDataSetupCTO(dataSetup);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
@@ -292,7 +305,6 @@ const deleteSequenceThunk = (sequence: SequenceCTO): AppThunk => async (dispatch
 
 const deleteDataSetupThunk = (dataSetup: DataSetupCTO): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<DataSetupCTO> = await DataAccess.deleteDataSetup(dataSetup);
-  console.log(response);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
@@ -315,6 +327,16 @@ const deleteActionThunk = (action: ActionCTO): AppThunk => async (dispatch) => {
   dispatch(loadSequencesFromBackend());
 };
 
+const setDataSetupToEdit = (dataSetupTO: DataSetupTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<DataSetupCTO> = DataAccess.findDataSetupCTO(dataSetupTO);
+  if (response.code === 200) {
+    dispatch(SequenceSlice.actions.setCurrentDataSetup(response.object));
+    dispatch(loadDataSetupsFromBackend());
+  } else {
+    dispatch(handleError(response.message));
+  }
+};
+
 export const SequenceActions = {
   updateCurrentSequenceStep: SequenceSlice.actions.updateCurrentSequenceStep,
   setSequenceToEdit: SequenceSlice.actions.setCurrentSequence,
@@ -327,7 +349,10 @@ export const SequenceActions = {
   setCurrentComponentDatas: SequenceSlice.actions.setCurrentComponentDatas,
   setActionToEdit: SequenceSlice.actions.setCurrentActionToEdit,
   deleteAction: deleteActionThunk,
-  setDataSetupToEdit: SequenceSlice.actions.setCurrentDataSetup,
+  setDataSetupToEdit,
   saveDataSetup: saveDataSetupThunk,
   deleteDataSetup: deleteDataSetupThunk,
+  loadInitDataFromBackend,
+  updateCurrentDataSetupToEdit: SequenceSlice.actions.setCurrentDataSetup,
+  clearCurrentDataSetupToEdit: SequenceSlice.actions.setCurrentDataSetup(null),
 };
