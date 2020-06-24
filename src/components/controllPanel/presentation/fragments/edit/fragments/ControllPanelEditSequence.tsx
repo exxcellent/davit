@@ -110,13 +110,13 @@ const useControllPanelEditSequenceViewModel = () => {
     if (!isNullOrUndefined(sequenceToEdit)) {
       let copySequenceToEdit: SequenceCTO = Carv2Util.deepCopy(sequenceToEdit);
       copySequenceToEdit.sequenceTO.name = name;
-      dispatch(SequenceActions.setSequenceToEdit(copySequenceToEdit));
+      dispatch(SequenceActions.updateCurrentSequnceToEdit(copySequenceToEdit));
     }
   };
 
   const saveSequence = () => {
     dispatch(SequenceActions.saveSequence(sequenceToEdit!));
-    dispatch(SequenceActions.setSequenceToEdit(null));
+    dispatch(SequenceActions.clearCurrentSequenceToEdit);
     if (isCreateAnother) {
       dispatch(GlobalActions.setModeToEditSequence());
     } else {
@@ -126,12 +126,12 @@ const useControllPanelEditSequenceViewModel = () => {
 
   const deleteSequence = () => {
     dispatch(SequenceActions.deleteSequence(sequenceToEdit!));
-    dispatch(SequenceActions.setSequenceToEdit(null));
+    dispatch(SequenceActions.clearCurrentSequenceToEdit);
     dispatch(GlobalActions.setModeToEdit());
   };
 
   const cancelEditSequence = () => {
-    dispatch(SequenceActions.setSequenceToEdit(null));
+    dispatch(SequenceActions.clearCurrentSequenceToEdit);
     dispatch(GlobalActions.setModeToEdit());
   };
 
@@ -155,7 +155,7 @@ const useControllPanelEditSequenceViewModel = () => {
       step.squenceStepTO.id = -1;
       step.squenceStepTO.sequenceFk = -1;
     });
-    dispatch(GlobalActions.setModeToEditSequence(copySequence));
+    dispatch(SequenceActions.updateCurrentSequnceToEdit(copySequence));
   };
 
   return {

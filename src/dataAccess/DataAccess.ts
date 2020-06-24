@@ -8,6 +8,7 @@ import { SequenceStepCTO } from "./access/cto/SequenceStepCTO";
 import { DataSetupTO } from "./access/to/DataSetupTO";
 import { GroupTO } from "./access/to/GroupTO";
 import { InitDataTO } from "./access/to/InitDataTO";
+import { SequenceTO } from "./access/to/SequenceTO";
 import { DataAccessResponse } from "./DataAccessResponse";
 import dataStore from "./DataStore";
 import { ComponentDataAccessService } from "./services/ComponentDataAccessService";
@@ -59,7 +60,7 @@ export const DataAccess = {
     return makeTransactional(() => SequenceDataAccessService.delete(sequence));
   },
 
-  findAllSequences(): DataAccessResponse<SequenceCTO[]> {
+  findAllSequences(): DataAccessResponse<SequenceTO[]> {
     return makeTransactional(SequenceDataAccessService.findAll);
   },
 

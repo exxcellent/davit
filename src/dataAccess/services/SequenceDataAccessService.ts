@@ -25,8 +25,8 @@ export const SequenceDataAccessService = {
     return createSequenceCTO(SequenceRepository.find(sequenceId));
   },
 
-  findAll(): SequenceCTO[] {
-    return SequenceRepository.findAll().map((sequenceTO) => createSequenceCTO(sequenceTO));
+  findAll(): SequenceTO[] {
+    return SequenceRepository.findAll();
   },
 
   save(sequence: SequenceCTO): SequenceCTO {

@@ -2,11 +2,11 @@ import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
-import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
+import { SequenceTO } from "../../../../dataAccess/access/to/SequenceTO";
 import { selectSequences } from "../../../../slices/SequenceSlice";
 
 interface SequenceDropDownProps extends DropdownProps {
-  onSelect: (sequence: SequenceCTO | undefined) => void;
+  onSelect: (sequence: SequenceTO | undefined) => void;
   placeholder?: string;
   icon?: string;
 }
@@ -47,20 +47,20 @@ export const SequenceDropDown: FunctionComponent<SequenceDropDownProps> = (props
 };
 
 const useSequenceDropDownViewModel = () => {
-  const sequences: SequenceCTO[] = useSelector(selectSequences);
+  const sequences: SequenceTO[] = useSelector(selectSequences);
 
-  const selectSequence = (sequenceId: number, sequences: SequenceCTO[]): SequenceCTO | undefined => {
+  const selectSequence = (sequenceId: number, sequences: SequenceTO[]): SequenceTO | undefined => {
     if (!isNullOrUndefined(sequenceId) && !isNullOrUndefined(sequences)) {
-      return sequences.find((sequence) => sequence.sequenceTO.id === sequenceId);
+      return sequences.find((sequence) => sequence.id === sequenceId);
     }
     return undefined;
   };
 
-  const sequenceToOption = (sequence: SequenceCTO): DropdownItemProps => {
+  const sequenceToOption = (sequence: SequenceTO): DropdownItemProps => {
     return {
-      key: sequence.sequenceTO.id,
-      value: sequence.sequenceTO.id,
-      text: sequence.sequenceTO.name,
+      key: sequence.id,
+      value: sequence.id,
+      text: sequence.name,
     };
   };
 

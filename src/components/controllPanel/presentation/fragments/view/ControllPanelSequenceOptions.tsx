@@ -5,6 +5,7 @@ import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { DataSetupTO } from "../../../../../dataAccess/access/to/DataSetupTO";
+import { SequenceTO } from "../../../../../dataAccess/access/to/SequenceTO";
 import { currentSequence, currentStep, SequenceActions, SequenceSlice } from "../../../../../slices/SequenceSlice";
 import { DataSetupDropDown } from "../../../../common/fragments/dropdowns/DataSetupDropDown";
 import { SequenceDropDown } from "../../../../common/fragments/dropdowns/SequenceDropDown";
@@ -76,10 +77,10 @@ const useControllPanelSequenceOptionsViewModel = () => {
     dispatch(SequenceActions.loadSequencesFromBackend());
   }, [dispatch]);
 
-  const selectSequence = (sequence: SequenceCTO | undefined) => {
+  const selectSequence = (sequence: SequenceTO | undefined) => {
     if (!isNullOrUndefined(sequence)) {
       dispatch(SequenceSlice.actions.resetCurrentStepIndex());
-      dispatch(SequenceActions.setSequenceToEdit(sequence));
+      dispatch(SequenceActions.setSequence(sequence));
     }
     if (sequence === undefined) {
       dispatch(SequenceSlice.actions.resetCurrentStepIndex());

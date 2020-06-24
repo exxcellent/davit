@@ -167,7 +167,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
   const deleteSequenceStep = () => {
     if (!isNullOrUndefined(sequenceToEdit) && !isNullOrUndefined(sequenceStepToEdit)) {
       dispatch(SequenceActions.deleteSequenceStep(sequenceStepToEdit));
-      dispatch(GlobalActions.setModeToEditSequence(sequenceToEdit));
+      dispatch(SequenceActions.updateCurrentSequnceToEdit(sequenceToEdit));
     }
   };
 
