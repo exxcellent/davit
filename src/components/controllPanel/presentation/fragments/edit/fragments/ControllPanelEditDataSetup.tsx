@@ -3,7 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
+import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { DataSetupCTO } from "../../../../../../dataAccess/access/cto/DataSetupCTO";
+import { InitDataTO } from "../../../../../../dataAccess/access/to/InitDataTO";
 import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice";
 import { currentDataSetupToEdit, SequenceActions } from "../../../../../../slices/SequenceSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
@@ -27,9 +29,11 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
     cancel,
     validateInput,
     copyDataSetup,
-    setComponentId,
     saveDataSetup,
     deleteDataSetup,
+    setComponentToEdit,
+    setInitDatas,
+    getDatas,
   } = useControllPanelEditDataSetupViewModel();
 
   return (
@@ -45,10 +49,13 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
         />
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <ComponentDropDown onSelect={setComponentId} placeholder="Select Component..." />
+        <ComponentDropDown
+          onSelect={(comp) => (comp ? setComponentToEdit(comp) : setComponentToEdit(null))}
+          placeholder="Select Component..."
+        />
       </div>
-      <div className="columnDivider" style={{ display: "flex" }}>
-        <MultiselectDataDropDown onSelect={() => {}} selected={[]} />
+      <div className="columnDivider controllPanelEditChild" style={{ paddingLeft: "10px", paddingRight: "10px" }}>
+        <MultiselectDataDropDown onSelect={setInitDatas} selected={getDatas()} />
       </div>
       <div className="controllPanelEditChild columnDivider">
         <Carv2SubmitCancelNoCheckBox
@@ -128,53 +135,36 @@ const useControllPanelEditDataSetupViewModel = () => {
     dispatch(SequenceActions.updateCurrentDataSetupToEdit(copyDataSetup));
   };
 
-  // const getInitDatas = (componentId: number): InitDataCTO[] | undefined => {
-  //   if (!isNullOrUndefined(dataSetupToEdit)) {
-  //     return dataSetupToEdit.initDatas.filter((initData) => initData.component.component.id === componentId);
-  //   }
-  // };
-
-  const setComponentId = (component: ComponentCTO | undefined): void => {
-    if (component === undefined) {
-      setComponentToEdit(null);
-    } else {
-      setComponentToEdit(component);
+  const setInitDatas = (dataCTOs: DataCTO[] | undefined): void => {
+    if (!isNullOrUndefined(dataSetupToEdit) && !isNullOrUndefined(componentToEdit) && dataCTOs !== undefined) {
+      let copyDataSetupToEdit: DataSetupCTO = Carv2Util.deepCopy(dataSetupToEdit);
+      // remove old init data.
+      const clearInitDatas: InitDataTO[] = Carv2Util.deepCopy(
+        dataSetupToEdit.initDatas.filter((initData) => initData.componentFk !== componentToEdit.component.id)
+      );
+      // add new init data.
+      dataCTOs.forEach((data) =>
+        clearInitDatas.push({
+          id: -1,
+          componentFk: componentToEdit.component.id,
+          dataFk: data.data.id,
+          dataSetupFk: dataSetupToEdit.dataSetup.id,
+        })
+      );
+      copyDataSetupToEdit.initDatas = clearInitDatas;
+      dispatch(SequenceActions.updateCurrentDataSetupToEdit(copyDataSetupToEdit));
     }
   };
 
-  // const getComponentDatas = (): number[] | [] => {
-  //   let dataKeys: number[] = [];
-  //   if (!isNullOrUndefined(componentToEdit)) {
-  //     const initDatas: InitDataCTO[] | undefined = getInitDatas(componentToEdit.component.id);
-  //     if (initDatas !== undefined) {
-  //       initDatas.forEach((initData) => dataKeys.push(initData.data.data.id));
-  //     }
-  //   }
-  //   return dataKeys;
-  // };
-
-  // const setInitDatasToDataSetup = (datas: DataCTO[]): void => {
-  //   if (!isNullOrUndefined(dataSetupToEdit) && !isNullOrUndefined(componentToEdit)) {
-  //     const copyInitDatas: InitDataCTO[] = Carv2Util.deepCopy(dataSetupToEdit.initDatas);
-  //     const dataToKeep: InitDataCTO[] = copyInitDatas.filter(
-  //       (initData) => initData.component.component.id !== componentToEdit.component.id
-  //     );
-  //     let neweInitdatas: InitDataCTO[] = [];
-  //     // set new initDatas
-  //     datas.forEach((newData) =>
-  //       neweInitdatas.push(
-  //         new InitDataCTO({
-  //           id: -1,
-  //           initData: new InitDataTO({
-  //             id: -1,
-  //           }),
-  //           component: componentToEdit,
-  //           data: newData,
-  //         })
-  //       )
-  //     );
-  //   }
-  // };
+  const getDatas = (): number[] => {
+    let dataIds: number[] = [];
+    if (!isNullOrUndefined(dataSetupToEdit) && !isNullOrUndefined(componentToEdit)) {
+      dataSetupToEdit.initDatas
+        .filter((initData) => initData.componentFk === componentToEdit.component.id)
+        .forEach((initData) => dataIds.push(initData.dataFk));
+    }
+    return dataIds;
+  };
 
   return {
     label: dataSetupToEdit?.dataSetup.id === -1 ? "ADD DATA SETUP" : "EDIT DATA SETUP",
@@ -187,7 +177,8 @@ const useControllPanelEditDataSetupViewModel = () => {
     showExistingOptions: dataSetupToEdit?.dataSetup.id !== -1,
     validateInput,
     copyDataSetup,
-    setComponentId,
-    // getComponentDatas,
+    setComponentToEdit,
+    setInitDatas,
+    getDatas,
   };
 };

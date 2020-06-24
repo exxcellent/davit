@@ -110,8 +110,12 @@ export const SequenceDataAccessService = {
 
   saveDataSetupCTO(dataSetupCTO: DataSetupCTO): DataSetupCTO {
     CheckHelper.nullCheck(dataSetupCTO, "dataSetupCTO");
-    DataSetupRepository.save(dataSetupCTO.dataSetup);
-    dataSetupCTO.initDatas.forEach((initData) => InitDataRepository.save(initData));
+    const copyDataSetupCTO: DataSetupCTO = Carv2Util.deepCopy(dataSetupCTO);
+    const savedDataSetupTO: DataSetupTO = DataSetupRepository.save(dataSetupCTO.dataSetup);
+    copyDataSetupCTO.initDatas.forEach((initData) => {
+      initData.dataSetupFk = savedDataSetupTO.id;
+      InitDataRepository.save(initData);
+    });
     return dataSetupCTO;
   },
 

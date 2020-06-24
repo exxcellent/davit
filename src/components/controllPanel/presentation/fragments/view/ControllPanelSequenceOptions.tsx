@@ -5,6 +5,7 @@ import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { currentSequence, currentStep, SequenceActions, SequenceSlice } from "../../../../../slices/SequenceSlice";
+import { DataSetupDropDown } from "../../../../common/fragments/dropdowns/DataSetupDropDown";
 import { SequenceDropDown } from "../../../../common/fragments/dropdowns/SequenceDropDown";
 import { OptionField } from "../edit/common/OptionField";
 
@@ -34,7 +35,9 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
   return (
     <div className="controllPanelEdit">
       <div className="optionFieldSpacer">
-        <OptionField></OptionField>
+        <OptionField label="Data - Setup">
+          <DataSetupDropDown onSelect={() => {}} placeholder="Select Data Setup ..." />
+        </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
         <OptionField label="SEQUENCE">
