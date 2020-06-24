@@ -4,6 +4,7 @@ import { ActionCTO } from "../dataAccess/access/cto/ActionCTO";
 import { ComponentCTO } from "../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../dataAccess/access/cto/DataRelationCTO";
+import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { DataSetupTO } from "../dataAccess/access/to/DataSetupTO";
 import { GroupTO } from "../dataAccess/access/to/GroupTO";
 import { SequenceTO } from "../dataAccess/access/to/SequenceTO";
@@ -126,10 +127,13 @@ const setModeToEditSequence = (sequence?: SequenceTO): AppThunk => async (dispat
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE));
 };
 
-const setModeToEditCurrentSequence = (): AppThunk => async (dispatch) => {
+const setModeToEditCurrentSequence = (currentSequence: SequenceCTO): AppThunk => async (dispatch) => {
   dispatch(reset());
   dispatch(SequenceSlice.actions.resetCurrentStepIndex());
   dispatch(SequenceActions.loadSequencesFromBackend());
+  if (currentSequence !== null) {
+    dispatch(SequenceActions.setSequence(currentSequence.sequenceTO));
+  }
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE));
 };
 

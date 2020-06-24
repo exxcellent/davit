@@ -159,7 +159,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
           dispatch(GlobalActions.setModeToEditStep());
         }
       } else {
-        dispatch(GlobalActions.setModeToEditCurrentSequence());
+        dispatch(GlobalActions.setModeToEditCurrentSequence(sequenceToEdit));
       }
     }
   };
@@ -191,6 +191,12 @@ const useControllPanelEditSequenceStepViewModel = () => {
     return valid;
   };
 
+  const cancel = (): void => {
+    if (!isNullOrUndefined(sequenceToEdit)) {
+      dispatch(GlobalActions.setModeToEditCurrentSequence(sequenceToEdit));
+    }
+  };
+
   return {
     label: sequenceStepToEdit ? "EDIT SEQUENCE STEP" : "ADD SEQUENCE STEP",
     name: sequenceStepToEdit ? sequenceStepToEdit!.squenceStepTO.name : "",
@@ -200,7 +206,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
     saveSequenceStep,
     deleteSequenceStep,
     setComponent,
-    cancel: () => dispatch(GlobalActions.setModeToEditCurrentSequence()),
+    cancel,
     toggleIsCreateAnother: () => setIsEditNext(!isEditNext),
     textInput,
     showDelete: sequenceStepToEdit?.squenceStepTO.id !== -1 ? true : false,

@@ -78,11 +78,6 @@ export const SequenceSlice = createSlice({
     },
     setSequences: (state, action: PayloadAction<SequenceTO[]>) => {
       state.sequences = action.payload;
-      if (state.currentSequence !== null) {
-        setSequenceThunk(state.currentSequence.sequenceTO);
-        // state.currentSequence =
-        //   action.payload.find((sequence) => sequence.id === state.currentSequence!.sequenceTO.id) || null;
-      }
     },
     updateCurrentSequenceStep: (state, action: PayloadAction<SequenceStepCTO>) => {
       if (state.currentStepIndex !== null && state.currentSequence !== null) {
