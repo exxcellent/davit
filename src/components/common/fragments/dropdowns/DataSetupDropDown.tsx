@@ -27,6 +27,7 @@ export const DataSetupDropDown: FunctionComponent<DataSetupDropDownProps> = (pro
           placeholder={placeholder}
           onChange={(event, data) => onSelect(selectDataSetup(Number(data.value), dataSetups))}
           scrolling
+          clearable={true}
         />
       )}
       {icon && (

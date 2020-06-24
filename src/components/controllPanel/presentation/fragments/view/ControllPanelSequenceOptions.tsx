@@ -12,25 +12,7 @@ import { OptionField } from "../edit/common/OptionField";
 export interface ControllPanelSequenceOptionsProps {}
 
 export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequenceOptionsProps> = (props) => {
-  const sequence: SequenceCTO | null = useSelector(currentSequence);
-  const step: SequenceStepCTO | null = useSelector(currentStep);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(SequenceActions.loadSequencesFromBackend());
-  }, [dispatch]);
-
-  const selectSequence = (sequence: SequenceCTO | undefined) => {
-    if (!isNullOrUndefined(sequence)) {
-      dispatch(SequenceSlice.actions.resetCurrentStepIndex());
-      dispatch(SequenceActions.setSequenceToEdit(sequence));
-    }
-    if (sequence === undefined) {
-      dispatch(SequenceSlice.actions.resetCurrentStepIndex());
-      dispatch(SequenceSlice.actions.resetCurrentSequence());
-    }
-  };
+  const { sequence, step, selectSequence, stepBack, stepNext } = useControllPanelSequenceOptionsViewModel();
 
   return (
     <div className="controllPanelEdit">
@@ -54,7 +36,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
               content="BACK"
               labelPosition="left"
               disabled={isNullOrUndefined(sequence)}
-              onClick={() => dispatch(SequenceSlice.actions.setPreviousStepToCurrentStep())}
+              onClick={stepBack}
             />
             <Button inverted color="orange" content={step?.squenceStepTO.index || 0} disabled={true} />
             <Button
@@ -64,7 +46,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
               content="NEXT"
               labelPosition="right"
               disabled={isNullOrUndefined(sequence)}
-              onClick={() => dispatch(SequenceSlice.actions.setNextStepToCurrentStep())}
+              onClick={stepNext}
             />
           </Button.Group>
         </OptionField>
@@ -74,4 +56,34 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
       </div>
     </div>
   );
+};
+
+const useControllPanelSequenceOptionsViewModel = () => {
+  const sequence: SequenceCTO | null = useSelector(currentSequence);
+  const step: SequenceStepCTO | null = useSelector(currentStep);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(SequenceActions.loadSequencesFromBackend());
+  }, [dispatch]);
+
+  const selectSequence = (sequence: SequenceCTO | undefined) => {
+    if (!isNullOrUndefined(sequence)) {
+      dispatch(SequenceSlice.actions.resetCurrentStepIndex());
+      dispatch(SequenceActions.setSequenceToEdit(sequence));
+    }
+    if (sequence === undefined) {
+      dispatch(SequenceSlice.actions.resetCurrentStepIndex());
+      dispatch(SequenceSlice.actions.resetCurrentSequence());
+    }
+  };
+
+  return {
+    sequence,
+    step,
+    selectSequence,
+    stepNext: () => dispatch(SequenceSlice.actions.setNextStepToCurrentStep()),
+    stepBack: () => dispatch(SequenceSlice.actions.setPreviousStepToCurrentStep()),
+  };
 };
