@@ -114,7 +114,7 @@ const useControllPanelEditDataSetupViewModel = () => {
 
   const validateInput = (): boolean => {
     if (!isNullOrUndefined(dataSetupToEdit)) {
-      return Carv2Util.isValidName(dataSetupToEdit.dataSetup.name);
+      return dataSetupToEdit.dataSetup.name.length > 0;
     } else {
       return false;
     }
