@@ -35,10 +35,10 @@ export const DataSetupSlice = createSlice({
 });
 
 export const DataSetupReducer = DataSetupSlice.reducer;
-export const selectDataSetups = (state: RootState): DataSetupTO[] => state.sequenceModel.dataSetups;
-export const selectInitDatas = (state: RootState): InitDataTO[] => state.sequenceModel.initDatas;
+export const selectDataSetups = (state: RootState): DataSetupTO[] => state.dataSetupModel.dataSetups;
+export const selectInitDatas = (state: RootState): InitDataTO[] => state.dataSetupModel.initDatas;
 export const currentDataSetupToEdit = (state: RootState): DataSetupCTO | null =>
-  state.sequenceModel.currentDataSetupToEdit;
+  state.dataSetupModel.currentDataSetupToEdit;
 
 const loadDataSetupsFromBackend = (): AppThunk => (dispatch) => {
   const response: DataAccessResponse<DataSetupTO[]> = DataAccess.findAllDataSetups();
@@ -84,7 +84,7 @@ const setDataSetupToEdit = (dataSetupTO: DataSetupTO): AppThunk => (dispatch) =>
   }
 };
 
-export const SequenceActions = {
+export const DataSetupActions = {
   loadDataSetupsFromBackend,
   setDataSetupToEdit,
   saveDataSetup: saveDataSetupThunk,

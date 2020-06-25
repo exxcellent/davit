@@ -11,6 +11,7 @@ import { SequenceTO } from "../dataAccess/access/to/SequenceTO";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
 import { ComponentActions, ComponentInternalActions } from "./ComponentSlice";
+import { DataSetupActions } from "./DataSetupSlice";
 import { DataActions, DataInternalActions } from "./DataSlice";
 import { SequenceActions, SequenceSlice } from "./SequenceSlice";
 
@@ -153,7 +154,7 @@ const setModeToEditGroup = (group?: GroupTO): AppThunk => async (dispatch) => {
 };
 
 const setModeToEditDataSetup = (dataSetup?: DataSetupTO): AppThunk => async (dispatch) => {
-  dispatch(SequenceActions.setDataSetupToEdit(dataSetup || new DataSetupTO()));
+  dispatch(DataSetupActions.setDataSetupToEdit(dataSetup || new DataSetupTO()));
   dispatch(setModeWithStorage(Mode.EDIT_DATA_SETUP));
 };
 

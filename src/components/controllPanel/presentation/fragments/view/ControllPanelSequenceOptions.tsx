@@ -6,6 +6,7 @@ import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { DataSetupTO } from "../../../../../dataAccess/access/to/DataSetupTO";
 import { SequenceTO } from "../../../../../dataAccess/access/to/SequenceTO";
+import { DataSetupActions } from "../../../../../slices/DataSetupSlice";
 import { currentSequence, currentStep, SequenceActions, SequenceSlice } from "../../../../../slices/SequenceSlice";
 import { DataSetupDropDown } from "../../../../common/fragments/dropdowns/DataSetupDropDown";
 import { SequenceDropDown } from "../../../../common/fragments/dropdowns/SequenceDropDown";
@@ -90,9 +91,9 @@ const useControllPanelSequenceOptionsViewModel = () => {
 
   const selectDataSetup = (dataSetup: DataSetupTO | undefined): void => {
     if (isNullOrUndefined(dataSetup)) {
-      dispatch(SequenceActions.clearCurrentDataSetupToEdit);
+      dispatch(DataSetupActions.clearCurrentDataSetupToEdit);
     } else {
-      dispatch(SequenceActions.setDataSetupToEdit(dataSetup));
+      dispatch(DataSetupActions.setDataSetupToEdit(dataSetup));
     }
   };
 

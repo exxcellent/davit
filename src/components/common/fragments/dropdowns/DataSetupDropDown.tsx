@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { DataSetupTO } from "../../../../dataAccess/access/to/DataSetupTO";
-import { selectDataSetups } from "../../../../slices/SequenceSlice";
+import { selectDataSetups } from "../../../../slices/DataSetupSlice";
 
 interface DataSetupDropDownProps extends DropdownProps {
   onSelect: (dataSetup: DataSetupTO | undefined) => void;

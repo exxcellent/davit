@@ -6,8 +6,8 @@ import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentC
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { DataSetupCTO } from "../../../../../../dataAccess/access/cto/DataSetupCTO";
 import { InitDataTO } from "../../../../../../dataAccess/access/to/InitDataTO";
+import { currentDataSetupToEdit, DataSetupActions } from "../../../../../../slices/DataSetupSlice";
 import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice";
-import { currentDataSetupToEdit, SequenceActions } from "../../../../../../slices/SequenceSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2Button } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
@@ -91,24 +91,24 @@ const useControllPanelEditDataSetupViewModel = () => {
     if (!isNullOrUndefined(dataSetupToEdit)) {
       let copyDataSetupToEdit: DataSetupCTO = Carv2Util.deepCopy(dataSetupToEdit);
       copyDataSetupToEdit.dataSetup.name = name;
-      dispatch(SequenceActions.updateCurrentDataSetupToEdit(copyDataSetupToEdit));
+      dispatch(DataSetupActions.updateCurrentDataSetupToEdit(copyDataSetupToEdit));
     }
   };
 
   const saveDataSetup = () => {
-    dispatch(SequenceActions.saveDataSetup(dataSetupToEdit!));
-    dispatch(SequenceActions.clearCurrentDataSetupToEdit);
+    dispatch(DataSetupActions.saveDataSetup(dataSetupToEdit!));
+    dispatch(DataSetupActions.clearCurrentDataSetupToEdit);
     dispatch(GlobalActions.setModeToEdit());
   };
 
   const deleteDataSetup = () => {
-    dispatch(SequenceActions.deleteDataSetup(dataSetupToEdit!));
-    dispatch(SequenceActions.clearCurrentDataSetupToEdit);
+    dispatch(DataSetupActions.deleteDataSetup(dataSetupToEdit!));
+    dispatch(DataSetupActions.clearCurrentDataSetupToEdit);
     dispatch(GlobalActions.setModeToEdit());
   };
 
   const cancel = () => {
-    dispatch(SequenceActions.clearCurrentDataSetupToEdit);
+    dispatch(DataSetupActions.clearCurrentDataSetupToEdit);
     dispatch(GlobalActions.setModeToEdit());
   };
 
@@ -128,7 +128,7 @@ const useControllPanelEditDataSetupViewModel = () => {
       initData.id = -1;
       initData.dataSetupFk = -1;
     });
-    dispatch(SequenceActions.updateCurrentDataSetupToEdit(copyDataSetup));
+    dispatch(DataSetupActions.updateCurrentDataSetupToEdit(copyDataSetup));
   };
 
   const setInitDatas = (dataCTOs: DataCTO[] | undefined): void => {
@@ -148,7 +148,7 @@ const useControllPanelEditDataSetupViewModel = () => {
         })
       );
       copyDataSetupToEdit.initDatas = clearInitDatas;
-      dispatch(SequenceActions.updateCurrentDataSetupToEdit(copyDataSetupToEdit));
+      dispatch(DataSetupActions.updateCurrentDataSetupToEdit(copyDataSetupToEdit));
     }
   };
 

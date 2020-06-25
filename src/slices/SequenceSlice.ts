@@ -2,11 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../app/store";
 import { ActionCTO } from "../dataAccess/access/cto/ActionCTO";
 import { ComponentDataCTO } from "../dataAccess/access/cto/ComponentDataCTO";
-import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
-import { DataSetupTO } from "../dataAccess/access/to/DataSetupTO";
-import { InitDataTO } from "../dataAccess/access/to/InitDataTO";
 import { SequenceTO } from "../dataAccess/access/to/SequenceTO";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
@@ -17,21 +14,15 @@ interface SequenceState {
   currentSequence: SequenceCTO | null;
   currentStepIndex: number | null;
   sequences: SequenceTO[];
-  dataSetups: DataSetupTO[];
-  initDatas: InitDataTO[];
   currentComponentDatas: ComponentDataCTO[];
   currentActionToEdit: ActionCTO | null;
-  currentDataSetupToEdit: DataSetupCTO | null;
 }
 const getInitialState: SequenceState = {
   currentSequence: null,
   currentStepIndex: null,
   sequences: [],
-  dataSetups: [],
-  initDatas: [],
   currentComponentDatas: [],
   currentActionToEdit: null,
-  currentDataSetupToEdit: null,
 };
 
 export const SequenceSlice = createSlice({
@@ -131,15 +122,6 @@ export const SequenceSlice = createSlice({
         }
       }
     },
-    setDataSetups: (state, action: PayloadAction<DataSetupTO[]>) => {
-      state.dataSetups = action.payload;
-    },
-    setCurrentDataSetup: (state, action: PayloadAction<DataSetupCTO | null>) => {
-      state.currentDataSetupToEdit = action.payload;
-    },
-    setInitDatas: (state, action: PayloadAction<InitDataTO[]>) => {
-      state.initDatas = action.payload;
-    },
   },
 });
 
@@ -211,11 +193,7 @@ const findStepInSequence = (id: number, sequenceCTO: SequenceCTO): number => {
 
 export const SequenceReducer = SequenceSlice.reducer;
 export const selectSequences = (state: RootState): SequenceTO[] => state.sequenceModel.sequences;
-export const selectDataSetups = (state: RootState): DataSetupTO[] => state.sequenceModel.dataSetups;
-export const selectInitDatas = (state: RootState): InitDataTO[] => state.sequenceModel.initDatas;
 export const currentActionToEdit = (state: RootState): ActionCTO | null => state.sequenceModel.currentActionToEdit;
-export const currentDataSetupToEdit = (state: RootState): DataSetupCTO | null =>
-  state.sequenceModel.currentDataSetupToEdit;
 export const currentSequence = (state: RootState): SequenceCTO | null => state.sequenceModel.currentSequence;
 export const currentStepIndex = (state: RootState): number | null => state.sequenceModel.currentStepIndex;
 export const currentComponentDatas = (state: RootState): ComponentDataCTO[] =>
@@ -253,24 +231,6 @@ const loadSequencesFromBackend = (): AppThunk => (dispatch) => {
   }
 };
 
-const loadDataSetupsFromBackend = (): AppThunk => (dispatch) => {
-  const response: DataAccessResponse<DataSetupTO[]> = DataAccess.findAllDataSetups();
-  if (response.code === 200) {
-    dispatch(SequenceSlice.actions.setDataSetups(response.object));
-  } else {
-    dispatch(handleError(response.message));
-  }
-};
-
-const loadInitDataFromBackend = (): AppThunk => (dispatch) => {
-  const response: DataAccessResponse<InitDataTO[]> = DataAccess.findAllInitDatas();
-  if (response.code === 200) {
-    dispatch(SequenceSlice.actions.setInitDatas(response.object));
-  } else {
-    dispatch(handleError(response.message));
-  }
-};
-
 const saveSequenceThunk = (sequence: SequenceCTO): AppThunk => (dispatch) => {
   let copySequence: SequenceCTO = Carv2Util.deepCopy(sequence);
   copySequence.sequenceStepCTOs.sort((step1, step2) => step1.squenceStepTO.index - step2.squenceStepTO.index);
@@ -281,14 +241,6 @@ const saveSequenceThunk = (sequence: SequenceCTO): AppThunk => (dispatch) => {
   dispatch(loadSequencesFromBackend());
 };
 
-const saveDataSetupThunk = (dataSetup: DataSetupCTO): AppThunk => (dispatch) => {
-  const response: DataAccessResponse<DataSetupCTO> = DataAccess.saveDataSetupCTO(dataSetup);
-  if (response.code !== 200) {
-    dispatch(handleError(response.message));
-  }
-  dispatch(loadDataSetupsFromBackend());
-};
-
 const deleteSequenceThunk = (sequence: SequenceCTO): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<SequenceCTO> = await DataAccess.deleteSequenceCTO(sequence);
   console.log(response);
@@ -296,14 +248,6 @@ const deleteSequenceThunk = (sequence: SequenceCTO): AppThunk => async (dispatch
     dispatch(handleError(response.message));
   }
   dispatch(loadSequencesFromBackend());
-};
-
-const deleteDataSetupThunk = (dataSetup: DataSetupCTO): AppThunk => async (dispatch) => {
-  const response: DataAccessResponse<DataSetupCTO> = await DataAccess.deleteDataSetup(dataSetup);
-  if (response.code !== 200) {
-    dispatch(handleError(response.message));
-  }
-  dispatch(loadDataSetupsFromBackend());
 };
 
 const deleteSequenceStepThunk = (step: SequenceStepCTO): AppThunk => async (dispatch) => {
@@ -331,33 +275,16 @@ const setSequenceThunk = (sequenceTO: SequenceTO): AppThunk => (dispatch) => {
   }
 };
 
-const setDataSetupToEdit = (dataSetupTO: DataSetupTO): AppThunk => (dispatch) => {
-  const response: DataAccessResponse<DataSetupCTO> = DataAccess.findDataSetupCTO(dataSetupTO);
-  if (response.code === 200) {
-    dispatch(SequenceSlice.actions.setCurrentDataSetup(response.object));
-    dispatch(loadDataSetupsFromBackend());
-  } else {
-    dispatch(handleError(response.message));
-  }
-};
-
 export const SequenceActions = {
   updateCurrentSequenceStep: SequenceSlice.actions.updateCurrentSequenceStep,
   setSequenceStepToEdit: SequenceSlice.actions.setCurrentStepIndex,
   loadSequencesFromBackend,
-  loadDataSetupsFromBackend,
   saveSequence: saveSequenceThunk,
   deleteSequence: deleteSequenceThunk,
   deleteSequenceStep: deleteSequenceStepThunk,
   setCurrentComponentDatas: SequenceSlice.actions.setCurrentComponentDatas,
   setActionToEdit: SequenceSlice.actions.setCurrentActionToEdit,
   deleteAction: deleteActionThunk,
-  setDataSetupToEdit,
-  saveDataSetup: saveDataSetupThunk,
-  deleteDataSetup: deleteDataSetupThunk,
-  loadInitDataFromBackend,
-  updateCurrentDataSetupToEdit: SequenceSlice.actions.setCurrentDataSetup,
-  clearCurrentDataSetupToEdit: SequenceSlice.actions.setCurrentDataSetup(null),
   setSequence: setSequenceThunk,
   updateCurrentSequnceToEdit: SequenceSlice.actions.setCurrentSequence,
   clearCurrentSequenceToEdit: SequenceSlice.actions.setCurrentSequence(null),

@@ -1,8 +1,7 @@
 import React, { FunctionComponent } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { isNullOrUndefined } from "util";
 import { Mode, selectMode } from "../../../slices/GlobalSlice";
-import { SequenceActions } from "../../../slices/SequenceSlice";
 import { ControllPanelEditController } from "./fragments/edit/ControllPanelEditController";
 import { ControllPanelFileController } from "./fragments/file/ControllPanelFileController";
 import { ControllPanelSequenceOptions } from "./fragments/view/ControllPanelSequenceOptions";
@@ -35,8 +34,5 @@ interface ControllPanelViewModel {
 
 const useControllPanelViewModel = (): ControllPanelViewModel => {
   const mode: Mode = useSelector(selectMode);
-  const dispatch = useDispatch();
-  // TODO inital laden des backends!
-  dispatch(SequenceActions.loadDataSetupsFromBackend());
   return { mode };
 };
