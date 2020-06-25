@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { ErrorNotification } from "../components/common/fragments/ErrorNotification";
 import { ControllPanelController } from "../components/controllPanel/presentation/ControllPanelController";
 import { MetaComponentModelController } from "../components/metaComponentModel/presentation/MetaComponentModelController";
@@ -6,9 +7,21 @@ import { MetaDataModelController } from "../components/metaDataModel/presentatio
 import { SequenceModelController } from "../components/sequenceModel/SequenceModelController";
 import { SequenceTableModelController } from "../components/sequenceTableModel/presentation/SequenceTableModelController";
 import { SidePanelController } from "../components/sidePanel/SidePanelController";
+import { ComponentActions } from "../slices/ComponentSlice";
+import { DataSetupActions } from "../slices/DataSetupSlice";
+import { DataActions } from "../slices/DataSlice";
+import { SequenceActions } from "../slices/SequenceSlice";
 import "./Carv2.css";
 
 export function Carv2() {
+  const dispatch = useDispatch();
+  dispatch(DataSetupActions.loadDataSetupsFromBackend());
+  dispatch(ComponentActions.loadComponentsFromBackend());
+  dispatch(ComponentActions.loadGroupsFromBackend());
+  dispatch(DataActions.loadDatasFromBackend());
+  dispatch(DataActions.loadRelationsFromBackend());
+  dispatch(SequenceActions.loadSequencesFromBackend());
+
   return (
     <div className="Carv2">
       <div className="carvGridContainer">
