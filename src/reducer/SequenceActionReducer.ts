@@ -5,7 +5,7 @@ import { ActionType } from "../dataAccess/access/types/ActionType";
 import { ComponentDataState } from "../dataAccess/access/types/ComponentDataState";
 import { Carv2Util } from "../utils/Carv2Util";
 
-interface SequenceActionResult {
+export interface SequenceActionResult {
   componenDatas: ComponentDataCTO[];
   errors: ActionCTO[];
 }
