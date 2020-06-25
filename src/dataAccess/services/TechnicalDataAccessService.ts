@@ -52,7 +52,6 @@ export const TechnicalDataAccessService = {
     const isDeletedGeoData = GeometricalDataRepository.delete(geometricalDataCTO.geometricalData);
     const isdeletedPosition = PositionRepository.delete(geometricalDataCTO.position);
     if (!(isdeletedPosition && isDeletedGeoData)) {
-      // TODO: use intl id
       throw new Error("Couldn't delete");
     }
     return geometricalDataCTO;
@@ -61,7 +60,6 @@ export const TechnicalDataAccessService = {
   deleteDesign(design: DesignTO): DesignTO {
     const isDeleted = DesignRepository.delete(design);
     if (!isDeleted) {
-      // TODO: use intl id
       throw new Error("Couldn't delete");
     }
     return design;
