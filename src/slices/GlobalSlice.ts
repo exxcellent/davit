@@ -76,8 +76,7 @@ const storefileData = (fileData: string): AppThunk => async (dispatch) => {
 
 const downloadData = (): AppThunk => (dispatch) => {
   const response: DataAccessResponse<void> = DataAccess.downloadData();
-  if (response.code === 200) {
-  } else {
+  if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
 };
