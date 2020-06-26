@@ -94,8 +94,8 @@ export const SequenceDataAccessService = {
     return DataSetupRepository.findAll();
   },
 
-  findDatSetupCTO(dataSetupTO: DataSetupTO): DataSetupCTO {
-    return createDataSetupCTO(dataSetupTO);
+  findDatSetupCTO(dataId: number): DataSetupCTO {
+    return createDataSetupCTO(DataSetupRepository.find(dataId));
   },
 
   findAllInitDatas(): InitDataTO[] {
@@ -171,11 +171,11 @@ const createActionCTO = (actionTO: ActionTO): ActionCTO => {
   };
 };
 
-const createDataSetupCTO = (dataSetupTO: DataSetupTO): DataSetupCTO => {
+const createDataSetupCTO = (dataSetupTO: DataSetupTO | undefined): DataSetupCTO => {
   CheckHelper.nullCheck(dataSetupTO, "dataSetupTO");
-  const initDatas: InitDataTO[] = InitDataRepository.findAllForSetup(dataSetupTO.id);
+  const initDatas: InitDataTO[] = InitDataRepository.findAllForSetup(dataSetupTO!.id);
   return {
-    dataSetup: dataSetupTO,
+    dataSetup: dataSetupTO!,
     initDatas: initDatas,
   };
 };

@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../app/store";
 import { DataCTO } from "../dataAccess/access/cto/DataCTO";
 import { DataRelationCTO } from "../dataAccess/access/cto/DataRelationCTO";
+import { DataRelationTO } from "../dataAccess/access/to/DataRelationTO";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
 import { handleError } from "./GlobalSlice";
@@ -10,7 +11,7 @@ interface DataState {
   datas: DataCTO[];
   relations: DataRelationCTO[];
   currentData: DataCTO | null;
-  currentRelation: DataRelationCTO | null;
+  currentRelation: DataRelationTO | null;
 }
 const getInitialState: DataState = {
   datas: [],
@@ -26,7 +27,7 @@ const DataSlice = createSlice({
     setCurrentData: (state, action: PayloadAction<DataCTO | null>) => {
       state.currentData = action.payload;
     },
-    setCurrentRelation: (state, action: PayloadAction<DataRelationCTO | null>) => {
+    setCurrentRelation: (state, action: PayloadAction<DataRelationTO | null>) => {
       state.currentRelation = action.payload;
     },
     resetCurrentData: (state) => {
@@ -38,7 +39,7 @@ const DataSlice = createSlice({
     setDatas: (state, action: PayloadAction<DataCTO[]>) => {
       state.datas = action.payload;
     },
-    setRelations: (state, action: PayloadAction<DataRelationCTO[]>) => {
+    setRelations: (state, action: PayloadAction<DataRelationTO[]>) => {
       state.relations = action.payload;
       // if (state.currentRelation !== null) {
       //   state.currentRelation =
@@ -66,7 +67,7 @@ const loadDatasFromBackend = (): AppThunk => async (dispatch) => {
 };
 
 const loadRelationsFromBackend = (): AppThunk => async (dispatch) => {
-  const response: DataAccessResponse<DataRelationCTO[]> = await DataAccess.findAllDataRelations();
+  const response: DataAccessResponse<DataRelationTO[]> = await DataAccess.findAllDataRelations();
   if (response.code === 200) {
     dispatch(DataSlice.actions.setRelations(response.object));
   } else {

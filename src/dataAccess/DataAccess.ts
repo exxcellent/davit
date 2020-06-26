@@ -5,6 +5,7 @@ import { DataRelationCTO } from "./access/cto/DataRelationCTO";
 import { DataSetupCTO } from "./access/cto/DataSetupCTO";
 import { SequenceCTO } from "./access/cto/SequenceCTO";
 import { SequenceStepCTO } from "./access/cto/SequenceStepCTO";
+import { DataRelationTO } from "./access/to/DataRelationTO";
 import { DataSetupTO } from "./access/to/DataSetupTO";
 import { GroupTO } from "./access/to/GroupTO";
 import { InitDataTO } from "./access/to/InitDataTO";
@@ -84,8 +85,8 @@ export const DataAccess = {
     return makeTransactional(SequenceDataAccessService.findAllDataSetup);
   },
 
-  findDataSetupCTO(dataSetupTO: DataSetupTO): DataAccessResponse<DataSetupCTO> {
-    return makeTransactional(() => SequenceDataAccessService.findDatSetupCTO(dataSetupTO));
+  findDataSetupCTO(dataSetupId: number): DataAccessResponse<DataSetupCTO> {
+    return makeTransactional(() => SequenceDataAccessService.findDatSetupCTO(dataSetupId));
   },
 
   findAllInitDatas(): DataAccessResponse<InitDataTO[]> {
@@ -120,8 +121,8 @@ export const DataAccess = {
     return makeTransactional(() => DataDataAccessService.deleteDataRelationCTO(dataRelationCTO));
   },
 
-  findAllDataRelations(): DataAccessResponse<DataRelationCTO[]> {
-    return makeTransactional(DataDataAccessService.findAllDataRelationCTOs);
+  findAllDataRelations(): DataAccessResponse<DataRelationTO[]> {
+    return makeTransactional(DataDataAccessService.findAllDataRelationTOs);
   },
 
   saveDataRelationCTO(dataRelation: DataRelationCTO): DataAccessResponse<DataRelationCTO> {
