@@ -8,41 +8,50 @@ import { selectSequences } from "../../../../slices/SequenceSlice";
 interface SequenceDropDownProps extends DropdownProps {
   onSelect: (sequence: SequenceTO | undefined) => void;
   placeholder?: string;
+}
+
+interface SequenceDropDownPropsButton extends DropdownProps {
+  onSelect: (sequence: SequenceTO | undefined) => void;
   icon?: string;
 }
 
 export const SequenceDropDown: FunctionComponent<SequenceDropDownProps> = (props) => {
-  const { onSelect, placeholder, icon } = props;
+  const { onSelect, placeholder } = props;
   const { sequences, selectSequence, sequenceToOption } = useSequenceDropDownViewModel();
 
   return (
-    <>
-      {placeholder && (
-        <Dropdown
-          options={sequences.map(sequenceToOption)}
-          selection
-          clearable
-          selectOnBlur={false}
-          placeholder={placeholder}
-          onChange={(event, data) => onSelect(selectSequence(Number(data.value), sequences))}
-          scrolling
-        />
-      )}
-      {icon && (
-        <Dropdown
-          options={sequences.map(sequenceToOption)}
-          icon={icon}
-          onChange={(event, sequence) => onSelect(selectSequence(Number(sequence.value), sequences))}
-          className="button icon"
-          inverted="true"
-          color="orange"
-          floating
-          selectOnBlur={false}
-          trigger={<React.Fragment />}
-          scrolling
-        />
-      )}
-    </>
+    <Dropdown
+      options={sequences.map(sequenceToOption)}
+      placeholder={placeholder}
+      onChange={(event, sequence) => onSelect(selectSequence(Number(sequence.value), sequences))}
+      className="button icon"
+      inverted="true"
+      color="orange"
+      floating
+      selectOnBlur={false}
+      trigger={<React.Fragment />}
+      scrolling
+    />
+  );
+};
+
+export const SequenceDropDownButton: FunctionComponent<SequenceDropDownPropsButton> = (props) => {
+  const { onSelect, icon } = props;
+  const { sequences, selectSequence, sequenceToOption } = useSequenceDropDownViewModel();
+
+  return (
+    <Dropdown
+      options={sequences.map(sequenceToOption)}
+      icon={icon}
+      onChange={(event, sequence) => onSelect(selectSequence(Number(sequence.value), sequences))}
+      className="button icon"
+      inverted="true"
+      color="orange"
+      floating
+      selectOnBlur={false}
+      trigger={<React.Fragment />}
+      scrolling
+    />
   );
 };
 

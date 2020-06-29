@@ -6,12 +6,12 @@ import { DataRelationTO } from "../../../../../../dataAccess/access/to/DataRelat
 import { DataSetupTO } from "../../../../../../dataAccess/access/to/DataSetupTO";
 import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
 import { SequenceTO } from "../../../../../../dataAccess/access/to/SequenceTO";
-import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
-import { DataDropDown } from "../../../../../common/fragments/dropdowns/DataDropDown";
-import { DataSetupDropDown } from "../../../../../common/fragments/dropdowns/DataSetupDropDown";
-import { GroupDropDown } from "../../../../../common/fragments/dropdowns/GroupDropDown";
-import { RelationDropDown } from "../../../../../common/fragments/dropdowns/RelationDropDown";
-import { SequenceDropDown } from "../../../../../common/fragments/dropdowns/SequenceDropDown";
+import { ComponentDropDownButton } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
+import { DataDropDownButton } from "../../../../../common/fragments/dropdowns/DataDropDown";
+import { DataSetupDropDownButton } from "../../../../../common/fragments/dropdowns/DataSetupDropDown";
+import { GroupDropDownButton } from "../../../../../common/fragments/dropdowns/GroupDropDown";
+import { RelationDropDownButton } from "../../../../../common/fragments/dropdowns/RelationDropDown";
+import { SequenceDropDownButton } from "../../../../../common/fragments/dropdowns/SequenceDropDown";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditMenuProps {
@@ -42,14 +42,14 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Component
             </Button>
-            <ComponentDropDown onSelect={editOrAddComponent} icon="wrench" />
+            <ComponentDropDownButton onSelect={editOrAddComponent} icon="wrench" />
           </Button.Group>
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddGroup()} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Group
             </Button>
-            <GroupDropDown onSelect={editOrAddGroup} icon="wrench" />
+            <GroupDropDownButton onSelect={editOrAddGroup} icon="wrench" />
           </Button.Group>
         </OptionField>
       </div>
@@ -60,14 +60,14 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Data
             </Button>
-            <DataDropDown onSelect={editOrAddData} icon={"wrench"} />
+            <DataDropDownButton onSelect={editOrAddData} icon={"wrench"} />
           </Button.Group>
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddRelation()} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Relation
             </Button>
-            <RelationDropDown onSelect={editOrAddRelation} icon={"wrench"} />
+            <RelationDropDownButton onSelect={editOrAddRelation} icon={"wrench"} />
           </Button.Group>
         </OptionField>
       </div>
@@ -78,7 +78,7 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Data Setup
             </Button>
-            <DataSetupDropDown onSelect={editOrAddDataSetup} icon={"wrench"} />
+            <DataSetupDropDownButton onSelect={editOrAddDataSetup} icon={"wrench"} />
           </Button.Group>
         </OptionField>
       </div>
@@ -89,7 +89,7 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Sequence
             </Button>
-            <SequenceDropDown onSelect={editOrAddSequence} icon="wrench" />
+            <SequenceDropDownButton onSelect={editOrAddSequence} icon="wrench" />
           </Button.Group>
         </OptionField>
       </div>

@@ -35,12 +35,10 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
 
   const createConnections = () => {
     return dataRelations.map((dataRelation) => {
-      if (!(dataRelationToEdit && dataRelationToEdit.id === dataRelation.id)) {
-        const geoData1: GeometricalDataCTO | null = getGeometriaclDataByDataId(dataRelation.data1Fk);
-        const geoData2: GeometricalDataCTO | null = getGeometriaclDataByDataId(dataRelation.data2Fk);
-        if (geoData1 && geoData2) {
-          return createCornerConnection(geoData1, geoData2, dataRelation, dataRelation.id);
-        }
+      const geoData1: GeometricalDataCTO | null = getGeometriaclDataByDataId(dataRelation.data1Fk);
+      const geoData2: GeometricalDataCTO | null = getGeometriaclDataByDataId(dataRelation.data2Fk);
+      if (!(dataRelationToEdit && dataRelationToEdit.id === dataRelation.id) && geoData1 && geoData2) {
+        return createCornerConnection(geoData1, geoData2, dataRelation, dataRelation.id);
       } else {
         return <></>;
       }

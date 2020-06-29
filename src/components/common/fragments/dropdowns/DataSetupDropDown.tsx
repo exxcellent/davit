@@ -8,42 +8,48 @@ import { selectDataSetups } from "../../../../slices/DataSetupSlice";
 interface DataSetupDropDownProps extends DropdownProps {
   onSelect: (dataSetup: DataSetupTO | undefined) => void;
   placeholder?: string;
+}
+
+interface DataSetupDropDownPropsButton extends DropdownProps {
+  onSelect: (dataSetup: DataSetupTO | undefined) => void;
   icon?: string;
 }
 
 export const DataSetupDropDown: FunctionComponent<DataSetupDropDownProps> = (props) => {
-  const { onSelect, placeholder, icon } = props;
+  const { onSelect, placeholder } = props;
   const { dataSetups, selectDataSetup, dataSetupToOption } = useDataSetupDropDownViewModel();
 
   return (
-    <>
-      {placeholder && (
-        <Dropdown
-          options={dataSetups.map(dataSetupToOption).sort((a, b) => {
-            return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
-          })}
-          selection
-          selectOnBlur={false}
-          placeholder={placeholder}
-          onChange={(event, data) => onSelect(selectDataSetup(Number(data.value), dataSetups))}
-          scrolling
-          clearable={true}
-        />
-      )}
-      {icon && (
-        <Dropdown
-          options={dataSetups.map(dataSetupToOption).sort((a, b) => {
-            return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
-          })}
-          icon={icon}
-          selectOnBlur={false}
-          onChange={(event, data) => onSelect(selectDataSetup(Number(data.value), dataSetups))}
-          className="button icon"
-          trigger={<React.Fragment />}
-          scrolling
-        />
-      )}
-    </>
+    <Dropdown
+      options={dataSetups.map(dataSetupToOption).sort((a, b) => {
+        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
+      })}
+      selection
+      selectOnBlur={false}
+      placeholder={placeholder}
+      onChange={(event, data) => onSelect(selectDataSetup(Number(data.value), dataSetups))}
+      scrolling
+      clearable={true}
+    />
+  );
+};
+
+export const DataSetupDropDownButton: FunctionComponent<DataSetupDropDownPropsButton> = (props) => {
+  const { onSelect, icon } = props;
+  const { dataSetups, selectDataSetup, dataSetupToOption } = useDataSetupDropDownViewModel();
+
+  return (
+    <Dropdown
+      options={dataSetups.map(dataSetupToOption).sort((a, b) => {
+        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
+      })}
+      icon={icon}
+      selectOnBlur={false}
+      onChange={(event, data) => onSelect(selectDataSetup(Number(data.value), dataSetups))}
+      className="button icon"
+      trigger={<React.Fragment />}
+      scrolling
+    />
   );
 };
 

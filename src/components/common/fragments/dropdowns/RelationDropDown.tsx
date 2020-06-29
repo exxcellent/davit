@@ -10,40 +10,46 @@ import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 interface RelationDropDownProps extends DropdownProps {
   onSelect: (relation: DataRelationTO | undefined) => void;
   placeholder?: string;
+}
+
+interface RelationDropDownPropsButton extends DropdownProps {
+  onSelect: (relation: DataRelationTO | undefined) => void;
   icon?: string;
 }
 
 export const RelationDropDown: FunctionComponent<RelationDropDownProps> = (props) => {
-  const { onSelect, placeholder, icon } = props;
+  const { onSelect, placeholder } = props;
   const { relations, selectDataRelation, relationToOption } = useRelationDropDownViewModel();
 
   return (
-    <>
-      {placeholder && (
-        <Dropdown
-          options={relations.map(relationToOption)}
-          placeholder={placeholder}
-          onChange={(event, data) => onSelect(selectDataRelation(Number(data.value), relations))}
-          selectOnBlur={false}
-          scrolling
-          selection
-        />
-      )}
-      {icon && (
-        <Dropdown
-          options={relations.map(relationToOption)}
-          icon={icon}
-          onChange={(event, data) => onSelect(selectDataRelation(Number(data.value), relations))}
-          className="button icon"
-          inverted="true"
-          color="orange"
-          floating
-          selectOnBlur={false}
-          trigger={<React.Fragment />}
-          scrolling
-        />
-      )}
-    </>
+    <Dropdown
+      options={relations.map(relationToOption)}
+      placeholder={placeholder}
+      onChange={(event, data) => onSelect(selectDataRelation(Number(data.value), relations))}
+      selectOnBlur={false}
+      scrolling
+      selection
+    />
+  );
+};
+
+export const RelationDropDownButton: FunctionComponent<RelationDropDownPropsButton> = (props) => {
+  const { onSelect, icon } = props;
+  const { relations, selectDataRelation, relationToOption } = useRelationDropDownViewModel();
+
+  return (
+    <Dropdown
+      options={relations.map(relationToOption)}
+      icon={icon}
+      onChange={(event, data) => onSelect(selectDataRelation(Number(data.value), relations))}
+      className="button icon"
+      inverted="true"
+      color="orange"
+      floating
+      selectOnBlur={false}
+      trigger={<React.Fragment />}
+      scrolling
+    />
   );
 };
 
