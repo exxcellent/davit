@@ -75,7 +75,7 @@ const deleteDataSetupThunk = (dataSetup: DataSetupCTO): AppThunk => async (dispa
 };
 
 const setDataSetupToEdit = (dataSetupTO: DataSetupTO): AppThunk => (dispatch) => {
-  const response: DataAccessResponse<DataSetupCTO> = DataAccess.findDataSetupCTO(dataSetupTO);
+  const response: DataAccessResponse<DataSetupCTO> = DataAccess.findDataSetupCTO(dataSetupTO.id);
   if (response.code === 200) {
     dispatch(DataSetupSlice.actions.setCurrentDataSetup(response.object));
     dispatch(loadDataSetupsFromBackend());

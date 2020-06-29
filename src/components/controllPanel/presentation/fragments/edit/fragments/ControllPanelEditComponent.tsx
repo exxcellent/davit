@@ -11,7 +11,7 @@ import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2
 import { GroupDropDown } from "../../../../../common/fragments/dropdowns/GroupDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
-import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
+import { Carv2SubmitCancelCheckBox } from "../common/fragments/Carv2SubmitCancel";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditComponentProps {}
@@ -50,7 +50,7 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
         />
       </div>
       <div className="columnDivider" style={{ display: "flex" }}>
-        <Carv2SubmitCancel
+        <Carv2SubmitCancelCheckBox
           onSubmit={saveComponent}
           onCancel={cancel}
           onChange={toggleIsCreateAnother}

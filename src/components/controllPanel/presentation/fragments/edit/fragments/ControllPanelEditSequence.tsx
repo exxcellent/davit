@@ -12,7 +12,7 @@ import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2
 import { StepDropDown } from "../../../../../common/fragments/dropdowns/StepDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
-import { Carv2SubmitCancel, Carv2SubmitCancelNoCheckBox } from "../common/fragments/Carv2SubmitCancel";
+import { Carv2SubmitCancelCheckBox } from "../common/fragments/Carv2SubmitCancel";
 
 export interface ControllPanelEditSequenceProps {}
 
@@ -56,22 +56,12 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
         )}
       </div>
       <div className="columnDivider" style={{ display: "flex" }}>
-        {!showExistingOptions && (
-          <Carv2SubmitCancel
-            onSubmit={saveSequence}
-            onCancel={cancel}
-            onChange={toggleIsCreateAnother}
-            submitCondition={validateInput()}
-          />
-        )}
-        {showExistingOptions && (
-          <Carv2SubmitCancelNoCheckBox
-            onSubmit={saveSequence}
-            onCancel={cancel}
-            onChange={toggleIsCreateAnother}
-            submitCondition={validateInput()}
-          />
-        )}
+        <Carv2SubmitCancelCheckBox
+          onSubmit={saveSequence}
+          onCancel={cancel}
+          onChange={toggleIsCreateAnother}
+          submitCondition={validateInput()}
+        />
       </div>
       {showExistingOptions && (
         <div className="controllPanelEditChild columnDivider">

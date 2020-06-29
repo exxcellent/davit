@@ -16,8 +16,8 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
       <tr key={step.squenceStepTO.id} className={trClass}>
         <td className="carv2Td">{step.squenceStepTO.index}</td>
         <td className="carv2Td">{step.squenceStepTO.name}</td>
-        <td className="carv2Td">{step.componentCTOSource.component.name}</td>
-        <td className="carv2Td">{step.componentCTOTarget.component.name}</td>
+        {/* <td className="carv2Td">{step. componentCTOSource.component.name}</td> */}
+        {/* <td className="carv2Td">{step.componentCTOTarget.component.name}</td> */}
       </tr>
     );
   };

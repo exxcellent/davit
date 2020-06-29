@@ -1,14 +1,12 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { isNullOrUndefined } from "util";
-import { ActionCTO } from "../../../dataAccess/access/cto/ActionCTO";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
-import { ComponentDataCTO } from "../../../dataAccess/access/cto/ComponentDataCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
 import { GroupTO } from "../../../dataAccess/access/to/GroupTO";
-import { ComponentActions, currentComponent, selectComponents, selectGroups } from "../../../slices/ComponentSlice";
-import { Mode, selectMode } from "../../../slices/GlobalSlice";
-import { currentActionToEdit, currentComponentDatas, currentStep } from "../../../slices/SequenceSlice";
+import { ComponentActions } from "../../../slices/ComponentSlice";
+import { editSelectors } from "../../../slices/EditSlice";
+import { masterDataSelectors } from "../../../slices/MasterDataSlice";
+import { sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
 import { MetaComponentDnDBox } from "./fragments/MetaComponentDnDBox";
 
 interface MetaComponentModelControllerProps {}
@@ -23,19 +21,16 @@ export const MetaComponentModelController: FunctionComponent<MetaComponentModelC
       step={selectedStep}
       componentCTOToEdit={componentCTOToEdit}
       groups={groups}
-      componentDatas={getComponentDatas()}
+      componentDatas={getComponentDatas}
     />
   );
 };
 
 const useViewModel = () => {
-  const components: ComponentCTO[] = useSelector(selectComponents);
-  const groups: GroupTO[] = useSelector(selectGroups);
-  const componentCTOToEdit: ComponentCTO | null = useSelector(currentComponent);
-  const selectedStep: SequenceStepCTO | null = useSelector(currentStep);
-  const mode: Mode = useSelector(selectMode);
-  const componentDatas: ComponentDataCTO[] = useSelector(currentComponentDatas);
-  const action: ActionCTO | null = useSelector(currentActionToEdit);
+  const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
+  const groups: GroupTO[] = useSelector(masterDataSelectors.groups);
+  const componentCTOToEdit: ComponentCTO | null = useSelector(editSelectors.componentToEdit);
+  const selectedStep: SequenceStepCTO | null = useSelector(sequenceModelSelectors.selectCurrentStep);
   const dispatch = useDispatch();
 
   React.useEffect(() => {
@@ -47,24 +42,12 @@ const useViewModel = () => {
     dispatch(ComponentActions.saveComponent(componentCTO));
   };
 
-  const getComponentDatas = (): (ComponentDataCTO | ActionCTO)[] => {
-    if (!isNullOrUndefined(selectedStep))
-      if (mode === Mode.EDIT_SEQUENCE_STEP || mode === Mode.VIEW) {
-        // TODO: seperate this cases when SequenceActionReducer exists!
-        return selectedStep.actions;
-      }
-    if (mode === Mode.EDIT_SEQUENCE_STEP_ACTION && !isNullOrUndefined(action)) {
-      return [action];
-    }
-    return componentDatas;
-  };
-
   return {
     components,
     componentCTOToEdit,
     selectedStep,
     saveComp,
     groups,
-    getComponentDatas,
+    getComponentDatas: [],
   };
 };

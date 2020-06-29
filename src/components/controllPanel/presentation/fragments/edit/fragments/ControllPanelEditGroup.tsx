@@ -10,7 +10,7 @@ import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2
 import { ColorDropDown } from "../../../../../common/fragments/dropdowns/ColorDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
-import { Carv2SubmitCancel, Carv2SubmitCancelNoCheckBox } from "../common/fragments/Carv2SubmitCancel";
+import { Carv2SubmitCancel, Carv2SubmitCancelCheckBox } from "../common/fragments/Carv2SubmitCancel";
 
 export interface ControllPanelEditGroupProps {}
 
@@ -47,7 +47,7 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
       </div>
       <div className="columnDivider" style={{ display: "flex" }}>
         {!showExistingOptions && (
-          <Carv2SubmitCancel
+          <Carv2SubmitCancelCheckBox
             onSubmit={saveGroup}
             onCancel={cancelEditGroup}
             onChange={toggleIsCreateAnother}
@@ -55,12 +55,7 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
           />
         )}
         {showExistingOptions && (
-          <Carv2SubmitCancelNoCheckBox
-            onSubmit={saveGroup}
-            onCancel={cancelEditGroup}
-            onChange={toggleIsCreateAnother}
-            submitCondition={validateInput()}
-          />
+          <Carv2SubmitCancel onSubmit={saveGroup} onCancel={cancelEditGroup} submitCondition={validateInput()} />
         )}
       </div>
       {showExistingOptions && (

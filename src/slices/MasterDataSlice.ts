@@ -120,12 +120,16 @@ const loadAll = (): AppThunk => (dispatch) => {
 // =============================================== SELECTORS ===============================================
 
 export const MasterDataReducer = MasterDataSlice.reducer;
-export const selectComponents = (state: RootState): ComponentCTO[] => state.masterData.components;
-export const selectGroups = (state: RootState): GroupTO[] => state.masterData.groups;
-export const selectDatas = (state: RootState): DataCTO[] => state.masterData.datas;
-export const selectRelations = (state: RootState): DataRelationTO[] => state.masterData.relations;
-export const selectSequences = (state: RootState): SequenceTO[] => state.masterData.sequences;
-export const selectDataSetup = (state: RootState): DataSetupTO[] => state.masterData.dataSetups;
+export const masterDataSelectors = {
+  components: (state: RootState): ComponentCTO[] => state.masterData.components,
+  componentById: (id: number) => (state: RootState): ComponentCTO | undefined =>
+    state.masterData.components.find((component) => component.component.id === id),
+  groups: (state: RootState): GroupTO[] => state.masterData.groups,
+  datas: (state: RootState): DataCTO[] => state.masterData.datas,
+  relations: (state: RootState): DataRelationTO[] => state.masterData.relations,
+  sequences: (state: RootState): SequenceTO[] => state.masterData.sequences,
+  dataSetup: (state: RootState): DataSetupTO[] => state.masterData.dataSetups,
+};
 
 // =============================================== ACTIONS ===============================================
 

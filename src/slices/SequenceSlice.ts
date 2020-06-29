@@ -1,21 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../app/store";
-import { ActionCTO } from "../dataAccess/access/cto/ActionCTO";
-import { ComponentDataCTO } from "../dataAccess/access/cto/ComponentDataCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
+import { ActionTO } from "../dataAccess/access/to/ActionTO";
 import { SequenceTO } from "../dataAccess/access/to/SequenceTO";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
 import { Carv2Util } from "../utils/Carv2Util";
+import { ComponentData } from "../viewDataTypes/ComponentData";
 import { handleError } from "./GlobalSlice";
 
 interface SequenceState {
   currentSequence: SequenceCTO | null;
   currentStepIndex: number | null;
   sequences: SequenceTO[];
-  currentComponentDatas: ComponentDataCTO[];
-  currentActionToEdit: ActionCTO | null;
+  currentComponentDatas: ComponentData[];
+  currentActionToEdit: ActionTO | null;
 }
 const getInitialState: SequenceState = {
   currentSequence: null,
@@ -37,11 +37,11 @@ export const SequenceSlice = createSlice({
       state.currentSequence = copyPayload;
       // if sequence is new save in backend, to get a id.
     },
-    setCurrentActionToEdit: (state, action: PayloadAction<ActionCTO | null>) => {
+    setCurrentActionToEdit: (state, action: PayloadAction<ActionTO | null>) => {
       console.info("setCurrentActionToEdit: ", action.payload);
       state.currentActionToEdit = action.payload;
     },
-    setCurrentComponentDatas: (state, action: PayloadAction<ComponentDataCTO[]>) => {
+    setCurrentComponentDatas: (state, action: PayloadAction<ComponentData[]>) => {
       state.currentComponentDatas = action.payload;
     },
     setCurrentStepIndex: (state, action: PayloadAction<number | null>) => {
@@ -192,23 +192,22 @@ const findStepInSequence = (id: number, sequenceCTO: SequenceCTO): number => {
 };
 
 export const SequenceReducer = SequenceSlice.reducer;
-export const selectSequences = (state: RootState): SequenceTO[] => state.sequenceModel.sequences;
-export const currentActionToEdit = (state: RootState): ActionCTO | null => state.sequenceModel.currentActionToEdit;
-export const currentSequence = (state: RootState): SequenceCTO | null => state.sequenceModel.currentSequence;
-export const currentStepIndex = (state: RootState): number | null => state.sequenceModel.currentStepIndex;
-export const currentComponentDatas = (state: RootState): ComponentDataCTO[] =>
-  state.sequenceModel.currentComponentDatas;
+export const selectSequences = (state: RootState): SequenceTO[] => state.sequence.sequences;
+export const currentActionToEdit = (state: RootState): ActionTO | null => state.sequence.currentActionToEdit;
+export const currentSequence = (state: RootState): SequenceCTO | null => state.sequence.currentSequence;
+export const currentStepIndex = (state: RootState): number | null => state.sequence.currentStepIndex;
+export const currentComponentDatas = (state: RootState): ComponentData[] => state.sequence.currentComponentDatas;
 export const currentStep = (state: RootState): SequenceStepCTO | null => {
   return (
-    state.sequenceModel.currentSequence?.sequenceStepCTOs.find(
-      (step) => step.squenceStepTO.index === state.sequenceModel.currentStepIndex
+    state.sequence.currentSequence?.sequenceStepCTOs.find(
+      (step) => step.squenceStepTO.index === state.sequence.currentStepIndex
     ) || null
   );
 };
-export const currentActions = (state: RootState): ActionCTO[] => {
+export const currentActions = (state: RootState): ActionTO[] => {
   return (
-    state.sequenceModel.currentSequence?.sequenceStepCTOs.find(
-      (step) => step.squenceStepTO.index === state.sequenceModel.currentStepIndex
+    state.sequence.currentSequence?.sequenceStepCTOs.find(
+      (step) => step.squenceStepTO.index === state.sequence.currentStepIndex
     )?.actions || []
   );
 };
@@ -219,7 +218,7 @@ const getPreviousStep = (indexStep: number | null, sequence: SequenceCTO | null)
 };
 
 export const previousStep = (state: RootState): SequenceStepCTO | null => {
-  return getPreviousStep(state.sequenceModel.currentStepIndex, state.sequenceModel.currentSequence);
+  return getPreviousStep(state.sequence.currentStepIndex, state.sequence.currentSequence);
 };
 
 const loadSequencesFromBackend = (): AppThunk => (dispatch) => {
@@ -258,8 +257,8 @@ const deleteSequenceStepThunk = (step: SequenceStepCTO): AppThunk => async (disp
   dispatch(loadSequencesFromBackend());
 };
 
-const deleteActionThunk = (action: ActionCTO): AppThunk => async (dispatch) => {
-  const response: DataAccessResponse<ActionCTO> = await DataAccess.deleteActionCTO(action);
+const deleteActionThunk = (action: ActionTO): AppThunk => async (dispatch) => {
+  const response: DataAccessResponse<ActionTO> = await DataAccess.deleteActionCTO(action);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }

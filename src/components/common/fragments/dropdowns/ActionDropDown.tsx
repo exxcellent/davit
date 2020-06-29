@@ -2,11 +2,14 @@ import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
-import { ActionCTO } from "../../../../dataAccess/access/cto/ActionCTO";
+import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
+import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
+import { ActionTO } from "../../../../dataAccess/access/to/ActionTO";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 import { currentActions } from "../../../../slices/SequenceSlice";
 
 interface ActionDropDownProps extends DropdownProps {
-  onSelect: (action: ActionCTO | undefined) => void;
+  onSelect: (action: ActionTO | undefined) => void;
   icon?: string;
 }
 
@@ -31,21 +34,35 @@ export const ActionDropDown: FunctionComponent<ActionDropDownProps> = (props) =>
   );
 };
 
-const useActionDropDownViewModel = () => {
-  const actions: ActionCTO[] = useSelector(currentActions);
+// TODO: in den master data slice verschieben!
+const getComponentName = (compId: number, components: ComponentCTO[]): string => {
+  return components.find((comp) => comp.component.id === compId)?.component.name || "";
+};
 
-  const actionToOption = (action: ActionCTO): DropdownItemProps => {
-    const text: string = `${action.componentTO.name} - ${action.actionTO.actionType} - ${action.dataTO.name}`;
+const getDataName = (dataId: number, datas: DataCTO[]): string => {
+  return datas.find((data) => data.data.id === dataId)?.data.name || "";
+};
+
+const useActionDropDownViewModel = () => {
+  const actions: ActionTO[] = useSelector(currentActions);
+  const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
+  const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
+
+  const actionToOption = (action: ActionTO): DropdownItemProps => {
+    const text: string = `${getComponentName(action.componentFk, components)} - ${action.actionType} - ${getDataName(
+      action.dataFk,
+      datas
+    )}`;
     return {
-      key: action.actionTO.id,
-      value: action.actionTO.id,
+      key: action.id,
+      value: action.id,
       text: text,
     };
   };
 
-  const selectAction = (actionId: number, actions: ActionCTO[]): ActionCTO | undefined => {
+  const selectAction = (actionId: number, actions: ActionTO[]): ActionTO | undefined => {
     if (!isNullOrUndefined(actionId) && !isNullOrUndefined(actions)) {
-      return actions.find((action) => action.actionTO.id === actionId);
+      return actions.find((action) => action.id === actionId);
     }
     return undefined;
   };

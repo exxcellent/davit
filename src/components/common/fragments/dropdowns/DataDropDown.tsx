@@ -8,44 +8,52 @@ import { selectDatas } from "../../../../slices/DataSlice";
 interface DataDropDownProps extends DropdownProps {
   onSelect: (data: DataCTO | undefined) => void;
   placeholder?: string;
+  value?: number;
+}
+
+interface DataDropDownButtonProps extends DropdownProps {
+  onSelect: (data: DataCTO | undefined) => void;
   icon?: string;
 }
 
 export const DataDropDown: FunctionComponent<DataDropDownProps> = (props) => {
-  const { onSelect, placeholder, icon } = props;
+  const { onSelect, placeholder, value } = props;
   const { datas, selectData, dataToOption } = useDataDropDownViewModel();
 
   return (
-    <>
-      {placeholder && (
-        <Dropdown
-          options={datas.map(dataToOption).sort((a, b) => {
-            return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
-          })}
-          placeholder={placeholder}
-          onChange={(event, data) => onSelect(selectData(Number(data.value), datas))}
-          selectOnBlur={false}
-          scrolling
-          selection
-        />
-      )}
-      {icon && (
-        <Dropdown
-          options={datas.map(dataToOption).sort((a, b) => {
-            return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
-          })}
-          icon={icon}
-          onChange={(event, data) => onSelect(selectData(Number(data.value), datas))}
-          className="button icon"
-          inverted="true"
-          color="orange"
-          floating
-          selectOnBlur={false}
-          trigger={<React.Fragment />}
-          scrolling
-        />
-      )}
-    </>
+    <Dropdown
+      options={datas.map(dataToOption).sort((a, b) => {
+        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
+      })}
+      placeholder={placeholder}
+      onChange={(event, data) => onSelect(selectData(Number(data.value), datas))}
+      selectOnBlur={false}
+      scrolling
+      selection
+      value={value}
+    />
+  );
+};
+
+export const DataDropDownButton: FunctionComponent<DataDropDownButtonProps> = (props) => {
+  const { onSelect, icon } = props;
+  const { datas, selectData, dataToOption } = useDataDropDownViewModel();
+
+  return (
+    <Dropdown
+      options={datas.map(dataToOption).sort((a, b) => {
+        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
+      })}
+      icon={icon}
+      onChange={(event, data) => onSelect(selectData(Number(data.value), datas))}
+      className="button icon"
+      inverted="true"
+      color="orange"
+      floating
+      selectOnBlur={false}
+      trigger={<React.Fragment />}
+      scrolling
+    />
   );
 };
 

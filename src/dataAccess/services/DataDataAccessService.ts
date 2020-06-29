@@ -1,6 +1,5 @@
 import { Carv2Util } from "../../utils/Carv2Util";
 import { DataCTO } from "../access/cto/DataCTO";
-import { DataRelationCTO } from "../access/cto/DataRelationCTO";
 import { GeometricalDataCTO } from "../access/cto/GeometraicalDataCTO";
 import { DataRelationTO } from "../access/to/DataRelationTO";
 import { DataTO } from "../access/to/DataTO";
@@ -38,27 +37,22 @@ export const DataDataAccessService = {
     return DataConnectionRepository.findAll();
   },
 
-  findAllDataRelationCTOs(): DataRelationCTO[] {
+  findAllDataRelationCTOs(): DataRelationTO[] {
     return DataDataAccessService.findAllDataRelationTOs().map(createDataRelationCTO);
   },
 
-  saveDataRelation(dataRelation: DataRelationCTO): DataRelationCTO {
+  saveDataRelation(dataRelation: DataRelationTO): DataRelationTO {
     CheckHelper.nullCheck(dataRelation, "dataRelation");
-    const saveDataConnection = DataConnectionRepository.save(dataRelation.dataRelationTO);
-    return {
-      dataCTO1: dataRelation.dataCTO1,
-      dataCTO2: dataRelation.dataCTO2,
-      dataRelationTO: saveDataConnection,
-    };
+    const saveDataConnection = DataConnectionRepository.save(dataRelation);
+    return saveDataConnection;
   },
 
   deleteDataCTO(dataCTO: DataCTO): DataCTO {
     CheckHelper.nullCheck(dataCTO.geometricalData, "GeometricalDataCTO");
     CheckHelper.nullCheck(dataCTO.data, "DataTO");
-    let relations: DataRelationCTO[] = this.findAllDataRelationCTOs();
-    const relationsToDelete: DataRelationCTO[] | undefined = relations.filter(
-      (relation) =>
-        relation.dataRelationTO.data1Fk === dataCTO.data.id || relation.dataRelationTO.data2Fk === dataCTO.data.id
+    let relations: DataRelationTO[] = this.findAllDataRelationCTOs();
+    const relationsToDelete: DataRelationTO[] | undefined = relations.filter(
+      (relation) => relation.data1Fk === dataCTO.data.id || relation.data2Fk === dataCTO.data.id
     );
     relationsToDelete.map((relation) => this.deleteDataRelationCTO(relation));
     DataRepository.delete(dataCTO.data);
@@ -66,24 +60,20 @@ export const DataDataAccessService = {
     return dataCTO;
   },
 
-  deleteDataRelationCTO(dataRelationCTO: DataRelationCTO): DataRelationCTO {
-    CheckHelper.nullCheck(dataRelationCTO, "dataRelationCTO");
-    DataConnectionRepository.delete(dataRelationCTO.dataRelationTO);
-    return dataRelationCTO;
+  deleteDataRelationCTO(dataRelationTO: DataRelationTO): DataRelationTO {
+    CheckHelper.nullCheck(dataRelationTO, "dataRelationCTO");
+    DataConnectionRepository.delete(dataRelationTO);
+    return dataRelationTO;
   },
 };
 
-const createDataRelationCTO = (dataRelationTO: DataRelationTO): DataRelationCTO => {
+const createDataRelationCTO = (dataRelationTO: DataRelationTO): DataRelationTO => {
   CheckHelper.nullCheck(dataRelationTO, "DataRelationTO");
   const dataCTO1: DataCTO | undefined = createDataCTO(DataDataAccessService.findData(dataRelationTO.data1Fk));
   CheckHelper.nullCheck(dataCTO1, "dataTO1");
   const dataCTO2: DataCTO | undefined = createDataCTO(DataDataAccessService.findData(dataRelationTO.data2Fk));
   CheckHelper.nullCheck(dataCTO2, "dataTO2");
-  return {
-    dataCTO1: dataCTO1!,
-    dataCTO2: dataCTO2!,
-    dataRelationTO: dataRelationTO,
-  };
+  return dataRelationTO;
 };
 
 const createDataCTO = (data: DataTO | undefined): DataCTO => {

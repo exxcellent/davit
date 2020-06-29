@@ -19,22 +19,7 @@ export interface Carv2PathProps {
 }
 
 const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
-  const {
-    xSource,
-    ySource,
-    xTarget,
-    yTarget,
-    direction1,
-    direction2,
-    // label1,
-    // label2,
-    // type1,
-    // type2,
-    id,
-    stroked,
-  } = props;
-
-  // const iId = "#" + id.toString();
+  const { xSource, ySource, xTarget, yTarget, direction1, direction2, id, stroked } = props;
 
   const TOP: Point = { x: 80, y: 0 };
   const BOTTOM: Point = { x: 80, y: 50 };
@@ -105,35 +90,7 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
 
   const pathRef = useRef<SVGPathElement>(null);
 
-  // const [pLength, setPLength] = useState<number>(0);
-
-  // useEffect(() => {
-  //   setPLength((getPathLength() / 100) * 90);
-  // }, [pathRef]);
-
-  // const getPathLength = () => {
-  //   let pathLength = 0;
-  //   if (pathRef !== null && pathRef.current !== null) {
-  //     pathLength = pathRef.current?.getTotalLength();
-  //   }
-  //   return pathLength;
-  // };
-
   return createCornerLine();
-
-  // return (
-  //   <motion.svg className="dataSVGArea">
-  //     {createCornerLine()}
-  //     <g fill="black" stroke="none">
-  //       <text fontFamily="Arial" fontSize="14">
-  //         <textPath xlinkHref={iId}>{label1}</textPath>
-  //       </text>
-  //       <text x={pLength} fontFamily="Arial" fontSize="14">
-  //         <textPath xlinkHref={iId}>{label2}</textPath>
-  //       </text>
-  //     </g>
-  //   </motion.svg>
-  // );
 };
 
 export const createCornerConnection = (

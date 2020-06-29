@@ -1,10 +1,9 @@
-import { ActionCTO } from "./access/cto/ActionCTO";
 import { ComponentCTO } from "./access/cto/ComponentCTO";
 import { DataCTO } from "./access/cto/DataCTO";
-import { DataRelationCTO } from "./access/cto/DataRelationCTO";
 import { DataSetupCTO } from "./access/cto/DataSetupCTO";
 import { SequenceCTO } from "./access/cto/SequenceCTO";
 import { SequenceStepCTO } from "./access/cto/SequenceStepCTO";
+import { ActionTO } from "./access/to/ActionTO";
 import { DataRelationTO } from "./access/to/DataRelationTO";
 import { DataSetupTO } from "./access/to/DataSetupTO";
 import { GroupTO } from "./access/to/GroupTO";
@@ -117,7 +116,7 @@ export const DataAccess = {
     return makeTransactional(() => DataDataAccessService.deleteDataCTO(dataCTO));
   },
 
-  deleteDataRelation(dataRelationCTO: DataRelationCTO): DataAccessResponse<DataRelationCTO> {
+  deleteDataRelation(dataRelationCTO: DataRelationTO): DataAccessResponse<DataRelationTO> {
     return makeTransactional(() => DataDataAccessService.deleteDataRelationCTO(dataRelationCTO));
   },
 
@@ -125,7 +124,7 @@ export const DataAccess = {
     return makeTransactional(DataDataAccessService.findAllDataRelationTOs);
   },
 
-  saveDataRelationCTO(dataRelation: DataRelationCTO): DataAccessResponse<DataRelationCTO> {
+  saveDataRelationCTO(dataRelation: DataRelationTO): DataAccessResponse<DataRelationTO> {
     return makeTransactional(() => DataDataAccessService.saveDataRelation(dataRelation));
   },
 
@@ -141,7 +140,7 @@ export const DataAccess = {
     return makeTransactional(() => ComponentDataAccessService.deleteGroup(group));
   },
 
-  deleteActionCTO(action: ActionCTO): DataAccessResponse<ActionCTO> {
+  deleteActionCTO(action: ActionTO): DataAccessResponse<ActionTO> {
     return makeTransactional(() => SequenceDataAccessService.deleteAction(action));
   },
 };

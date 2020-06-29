@@ -14,7 +14,7 @@ import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
 import { Carv2Util } from "../utils/Carv2Util";
 import { handleError, Mode } from "./GlobalSlice";
-import { MasterDataActions } from "./MasterSlice";
+import { MasterDataActions } from "./MasterDataSlice";
 
 const MODE_LOCAL_STORAGE = "MODE";
 

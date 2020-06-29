@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../app/store";
-import { ActionCTO } from "../dataAccess/access/cto/ActionCTO";
 import { ComponentCTO } from "../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../dataAccess/access/cto/DataCTO";
-import { DataRelationCTO } from "../dataAccess/access/cto/DataRelationCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
+import { ActionTO } from "../dataAccess/access/to/ActionTO";
+import { DataRelationTO } from "../dataAccess/access/to/DataRelationTO";
 import { DataSetupTO } from "../dataAccess/access/to/DataSetupTO";
 import { GroupTO } from "../dataAccess/access/to/GroupTO";
 import { SequenceTO } from "../dataAccess/access/to/SequenceTO";
@@ -113,9 +113,9 @@ const setModeToEditData = (data?: DataCTO): AppThunk => async (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_DATA));
 };
 
-const setModeToEditRelation = (relation?: DataRelationCTO): AppThunk => async (dispatch) => {
+const setModeToEditRelation = (relation?: DataRelationTO): AppThunk => async (dispatch) => {
   dispatch(reset());
-  dispatch(DataActions.setRelationToEdit(relation || new DataRelationCTO()));
+  dispatch(DataActions.setRelationToEdit(relation || new DataRelationTO()));
   dispatch(setModeWithStorage(Mode.EDIT_DATA_RELATION));
 };
 
@@ -141,8 +141,8 @@ const setModeToEditStep = (stepIndex?: number): AppThunk => async (dispatch) => 
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_STEP));
 };
 
-const setModeToEditAction = (action?: ActionCTO): AppThunk => async (dispatch) => {
-  dispatch(SequenceActions.setActionToEdit(action || new ActionCTO()));
+const setModeToEditAction = (action?: ActionTO): AppThunk => async (dispatch) => {
+  dispatch(SequenceActions.setActionToEdit(action || new ActionTO()));
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_STEP_ACTION));
 };
 

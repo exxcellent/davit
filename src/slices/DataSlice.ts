@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../app/store";
 import { DataCTO } from "../dataAccess/access/cto/DataCTO";
-import { DataRelationCTO } from "../dataAccess/access/cto/DataRelationCTO";
 import { DataRelationTO } from "../dataAccess/access/to/DataRelationTO";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
@@ -9,7 +8,7 @@ import { handleError } from "./GlobalSlice";
 
 interface DataState {
   datas: DataCTO[];
-  relations: DataRelationCTO[];
+  relations: DataRelationTO[];
   currentData: DataCTO | null;
   currentRelation: DataRelationTO | null;
 }
@@ -53,9 +52,9 @@ const DataSlice = createSlice({
 export const DataReducer = DataSlice.reducer;
 
 export const selectCurrentData = (state: RootState): DataCTO | null => state.dataModel.currentData;
-export const selectCurrentRelation = (state: RootState): DataRelationCTO | null => state.dataModel.currentRelation;
+export const selectCurrentRelation = (state: RootState): DataRelationTO | null => state.dataModel.currentRelation;
 export const selectDatas = (state: RootState): DataCTO[] => state.dataModel.datas;
-export const selectRelations = (state: RootState): DataRelationCTO[] => state.dataModel.relations;
+export const selectRelations = (state: RootState): DataRelationTO[] => state.dataModel.relations;
 
 const loadDatasFromBackend = (): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<DataCTO[]> = await DataAccess.findAllDatas();
@@ -84,8 +83,8 @@ const saveDataThunk = (data: DataCTO): AppThunk => async (dispatch) => {
   dispatch(loadDatasFromBackend());
 };
 
-const saveRelationThunk = (relation: DataRelationCTO): AppThunk => async (dispatch) => {
-  const response: DataAccessResponse<DataRelationCTO> = await DataAccess.saveDataRelationCTO(relation);
+const saveRelationThunk = (relation: DataRelationTO): AppThunk => async (dispatch) => {
+  const response: DataAccessResponse<DataRelationTO> = await DataAccess.saveDataRelationCTO(relation);
   console.log(response);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
@@ -103,8 +102,8 @@ const deleteDataThunk = (data: DataCTO): AppThunk => async (dispatch) => {
   dispatch(loadRelationsFromBackend());
 };
 
-const deleteRelationThunk = (relation: DataRelationCTO): AppThunk => async (dispatch) => {
-  const response: DataAccessResponse<DataRelationCTO> = await DataAccess.deleteDataRelation(relation);
+const deleteRelationThunk = (relation: DataRelationTO): AppThunk => async (dispatch) => {
+  const response: DataAccessResponse<DataRelationTO> = await DataAccess.deleteDataRelation(relation);
   console.log(response);
   if (response.code !== 200) {
     dispatch(handleError(response.message));

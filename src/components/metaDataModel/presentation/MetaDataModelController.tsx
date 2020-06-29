@@ -1,20 +1,10 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { isNullOrUndefined } from "util";
-import { ActionCTO } from "../../../dataAccess/access/cto/ActionCTO";
-import { ComponentDataCTO } from "../../../dataAccess/access/cto/ComponentDataCTO";
 import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
-import { DataRelationCTO } from "../../../dataAccess/access/cto/DataRelationCTO";
-import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
-import {
-  DataActions,
-  selectCurrentData,
-  selectCurrentRelation,
-  selectDatas,
-  selectRelations,
-} from "../../../slices/DataSlice";
-import { Mode, selectMode } from "../../../slices/GlobalSlice";
-import { currentActionToEdit, currentComponentDatas, currentStep } from "../../../slices/SequenceSlice";
+import { DataRelationTO } from "../../../dataAccess/access/to/DataRelationTO";
+import { DataActions } from "../../../slices/DataSlice";
+import { editSelectors } from "../../../slices/EditSlice";
+import { masterDataSelectors } from "../../../slices/MasterDataSlice";
 import { MetaDataDnDBox } from "./fragments/MetaDataDnDBox";
 
 interface MetaDataModelControllerProps {}
@@ -37,7 +27,7 @@ export const MetaDataModelController: FunctionComponent<MetaDataModelControllerP
         dataRelations={dataRelations}
         dataCTOToEdit={dataCTOToEdit}
         dataRelationToEdit={dataRelationToEdit}
-        componentDatas={getComponentDatas()}
+        componentDatas={getComponentDatas}
       />
     );
   };
@@ -46,14 +36,11 @@ export const MetaDataModelController: FunctionComponent<MetaDataModelControllerP
 };
 
 const useMetaDataModelViewModel = () => {
-  const datas: DataCTO[] = useSelector(selectDatas);
-  const dataCTOToEdit: DataCTO | null = useSelector(selectCurrentData);
-  const dataRelationToEdit: DataRelationCTO | null = useSelector(selectCurrentRelation);
-  const dataRelations: DataRelationCTO[] = useSelector(selectRelations);
-  const componentDatas: ComponentDataCTO[] = useSelector(currentComponentDatas);
-  const selectedStep: SequenceStepCTO | null = useSelector(currentStep);
-  const action: ActionCTO | null = useSelector(currentActionToEdit);
-  const mode: Mode = useSelector(selectMode);
+  const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
+  const dataCTOToEdit: DataCTO | null = useSelector(editSelectors.dataToEdit);
+  const dataRelationToEdit: DataRelationTO | null = useSelector(editSelectors.relationToEdit);
+  const dataRelations: DataRelationTO[] = useSelector(masterDataSelectors.relations);
+
   const dispatch = useDispatch();
 
   React.useEffect(() => {
@@ -64,34 +51,20 @@ const useMetaDataModelViewModel = () => {
   const saveData = (dataCTO: DataCTO) => {
     dispatch(DataActions.saveData(dataCTO));
     dispatch(DataActions.loadRelationsFromBackend());
-    if (dataCTO.data.id === dataRelationToEdit?.dataCTO1.data.id) {
+    if (dataCTO.data.id === dataRelationToEdit?.data1Fk) {
       dispatch(
         DataActions.setRelationToEdit({
           ...dataRelationToEdit,
-          dataCTO1: dataCTO,
         })
       );
     }
-    if (dataCTO.data.id === dataRelationToEdit?.dataCTO2.data.id) {
+    if (dataCTO.data.id === dataRelationToEdit?.data2Fk) {
       dispatch(
         DataActions.setRelationToEdit({
           ...dataRelationToEdit,
-          dataCTO2: dataCTO,
         })
       );
     }
-  };
-
-  const getComponentDatas = (): (ComponentDataCTO | ActionCTO)[] => {
-    if (!isNullOrUndefined(selectedStep))
-      if (mode === Mode.EDIT_SEQUENCE_STEP || mode === Mode.VIEW) {
-        // TODO: seperate this cases when SequenceActionReducer exists!
-        return selectedStep.actions;
-      }
-    if (mode === Mode.EDIT_SEQUENCE_STEP_ACTION && !isNullOrUndefined(action)) {
-      return [action];
-    }
-    return componentDatas;
   };
 
   return {
@@ -100,6 +73,6 @@ const useMetaDataModelViewModel = () => {
     dataRelationToEdit,
     dataCTOToEdit,
     saveData,
-    getComponentDatas,
+    getComponentDatas: [],
   };
 };

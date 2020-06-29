@@ -2,10 +2,11 @@ import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Dropdown, DropdownItemProps, Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
-import { ActionCTO } from "../../../../../../dataAccess/access/cto/ActionCTO";
 import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
+import { ActionTO } from "../../../../../../dataAccess/access/to/ActionTO";
+import { EditActions } from "../../../../../../slices/EditSlice";
 import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice";
 import { currentSequence, currentStep, SequenceActions } from "../../../../../../slices/SequenceSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
@@ -14,7 +15,7 @@ import { ActionDropDown } from "../../../../../common/fragments/dropdowns/Action
 import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
-import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
+import { Carv2SubmitCancelCheckBox } from "../common/fragments/Carv2SubmitCancel";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditStepProps {}
@@ -34,10 +35,10 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
     toggleIsCreateAnother,
     setComponent,
     indexToOptions,
-    selectSourcePlaceholder,
-    selectTargetPlaceholder,
     validStep,
     editOrAddAction,
+    sourceCompId,
+    targetCompId,
   } = useControllPanelEditSequenceStepViewModel();
 
   return (
@@ -63,8 +64,8 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
       </div>
       <div className="optionFieldSpacer columnDivider">
         <OptionField>
-          <ComponentDropDown onSelect={(comp) => setComponent(comp, true)} placeholder={selectSourcePlaceholder} />
-          <ComponentDropDown onSelect={(comp) => setComponent(comp, false)} placeholder={selectTargetPlaceholder} />
+          <ComponentDropDown onSelect={(comp) => setComponent(comp, true)} value={sourceCompId} />
+          <ComponentDropDown onSelect={(comp) => setComponent(comp, false)} value={targetCompId} />
         </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
@@ -77,7 +78,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
         </Button.Group>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <Carv2SubmitCancel
+        <Carv2SubmitCancelCheckBox
           onSubmit={saveSequenceStep}
           onCancel={cancel}
           onChange={toggleIsCreateAnother}
@@ -139,10 +140,8 @@ const useControllPanelEditSequenceStepViewModel = () => {
     if (component !== undefined && !isNullOrUndefined(sequenceStepToEdit)) {
       const copySequenceStep: SequenceStepCTO = Carv2Util.deepCopy(sequenceStepToEdit);
       if (isSource) {
-        copySequenceStep.componentCTOSource = component;
         copySequenceStep.squenceStepTO.sourceComponentFk = component.component.id;
       } else {
-        copySequenceStep.componentCTOTarget = component;
         copySequenceStep.squenceStepTO.targetComponentFk = component.component.id;
       }
       dispatch(SequenceActions.updateCurrentSequenceStep(copySequenceStep));
@@ -171,9 +170,9 @@ const useControllPanelEditSequenceStepViewModel = () => {
     }
   };
 
-  const editOrAddAction = (action?: ActionCTO) => {
+  const editOrAddAction = (action?: ActionTO) => {
     if (!isNullOrUndefined(sequenceToEdit) && !isNullOrUndefined(sequenceStepToEdit)) {
-      dispatch(GlobalActions.setModeToEditAction(action));
+      dispatch(EditActions.setMode.editAction(action));
     }
   };
 
@@ -211,15 +210,9 @@ const useControllPanelEditSequenceStepViewModel = () => {
     textInput,
     showDelete: sequenceStepToEdit?.squenceStepTO.id !== -1 ? true : false,
     indexToOptions,
-    selectSourcePlaceholder:
-      sequenceStepToEdit?.componentCTOSource.component.name === ""
-        ? "Select Source"
-        : sequenceStepToEdit?.componentCTOSource.component.name,
-    selectTargetPlaceholder:
-      sequenceStepToEdit?.componentCTOTarget.component.name === ""
-        ? "Select Target"
-        : sequenceStepToEdit?.componentCTOTarget.component.name,
     validStep,
     editOrAddAction,
+    sourceCompId: sequenceStepToEdit?.squenceStepTO.sourceComponentFk,
+    targetCompId: sequenceStepToEdit?.squenceStepTO.targetComponentFk,
   };
 };

@@ -1,11 +1,10 @@
 import { motion } from "framer-motion";
 import React, { FunctionComponent, useRef } from "react";
-import { ActionCTO } from "../../../../dataAccess/access/cto/ActionCTO";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
-import { ComponentDataCTO } from "../../../../dataAccess/access/cto/ComponentDataCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
 import { GroupTO } from "../../../../dataAccess/access/to/GroupTO";
 import { Carv2Util } from "../../../../utils/Carv2Util";
+import { ComponentDataFragmentProps } from "../../../common/fragments/ComponentDataFragment";
 import { createDnDItem } from "../../../common/fragments/DnDWrapper";
 import { createCurveArrow } from "../../../common/fragments/svg/Arrow";
 import { createMetaComponentFragment } from "./MetaComponentFragment";
@@ -15,7 +14,7 @@ interface MetaComponentDnDBox {
   groups: GroupTO[];
   componentCTOToEdit: ComponentCTO | null;
   step: SequenceStepCTO | null;
-  componentDatas: (ComponentDataCTO | ActionCTO)[];
+  componentDatas: ComponentDataFragmentProps[];
   onSaveCallBack: (componentCTO: ComponentCTO) => void;
 }
 
@@ -55,9 +54,9 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (prop
       {componentCTOToEdit && createDnDMetaComponent(componentCTOToEdit)}
       {step &&
         createCurveArrow(
-          componentCTOs.find((componentCTO) => componentCTO.component.id === step.componentCTOSource.component.id)
+          componentCTOs.find((componentCTO) => componentCTO.component.id === step.squenceStepTO.sourceComponentFk)
             ?.geometricalData,
-          componentCTOs.find((componentCTO) => componentCTO.component.id === step.componentCTOTarget.component.id)
+          componentCTOs.find((componentCTO) => componentCTO.component.id === step.squenceStepTO.targetComponentFk)
             ?.geometricalData
         )}
     </motion.div>

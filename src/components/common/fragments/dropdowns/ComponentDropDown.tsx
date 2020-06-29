@@ -8,41 +8,49 @@ import { selectComponents } from "../../../../slices/ComponentSlice";
 interface ComponentDropDownProps extends DropdownProps {
   onSelect: (component: ComponentCTO | undefined) => void;
   placeholder?: string;
+  value?: number;
+}
+
+interface ComponentDropDownButtonProps extends DropdownProps {
+  onSelect: (component: ComponentCTO | undefined) => void;
   icon?: string;
 }
 
 export const ComponentDropDown: FunctionComponent<ComponentDropDownProps> = (props) => {
-  const { onSelect, placeholder, icon } = props;
+  const { onSelect, placeholder, value } = props;
   const { components, componentToOption, selectComponent } = useComponentDropDownViewModel();
 
   return (
-    <>
-      {placeholder && (
-        <Dropdown
-          options={components.map(componentToOption).sort((a, b) => {
-            return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
-          })}
-          selection
-          selectOnBlur={false}
-          placeholder={placeholder}
-          onChange={(event, data) => onSelect(selectComponent(Number(data.value), components))}
-          scrolling
-        />
-      )}
-      {icon && (
-        <Dropdown
-          options={components.map(componentToOption).sort((a, b) => {
-            return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
-          })}
-          icon={icon}
-          selectOnBlur={false}
-          onChange={(event, data) => onSelect(selectComponent(Number(data.value), components))}
-          className="button icon"
-          trigger={<React.Fragment />}
-          scrolling
-        />
-      )}
-    </>
+    <Dropdown
+      options={components.map(componentToOption).sort((a, b) => {
+        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
+      })}
+      selection
+      selectOnBlur={false}
+      placeholder={placeholder || "Select Component ..."}
+      onChange={(event, data) => onSelect(selectComponent(Number(data.value), components))}
+      scrolling
+      value={value}
+    />
+  );
+};
+
+export const ComponentDropDownButton: FunctionComponent<ComponentDropDownButtonProps> = (props) => {
+  const { onSelect, icon } = props;
+  const { components, componentToOption, selectComponent } = useComponentDropDownViewModel();
+
+  return (
+    <Dropdown
+      options={components.map(componentToOption).sort((a, b) => {
+        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
+      })}
+      icon={icon}
+      selectOnBlur={false}
+      onChange={(event, data) => onSelect(selectComponent(Number(data.value), components))}
+      className="button icon"
+      trigger={<React.Fragment />}
+      scrolling
+    />
   );
 };
 

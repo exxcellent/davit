@@ -2,11 +2,13 @@ import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
-import { DataRelationCTO } from "../../../../dataAccess/access/cto/DataRelationCTO";
+import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
+import { DataRelationTO } from "../../../../dataAccess/access/to/DataRelationTO";
 import { selectRelations } from "../../../../slices/DataSlice";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 
 interface RelationDropDownProps extends DropdownProps {
-  onSelect: (relation: DataRelationCTO | undefined) => void;
+  onSelect: (relation: DataRelationTO | undefined) => void;
   placeholder?: string;
   icon?: string;
 }
@@ -46,20 +48,25 @@ export const RelationDropDown: FunctionComponent<RelationDropDownProps> = (props
 };
 
 const useRelationDropDownViewModel = () => {
-  const relations: DataRelationCTO[] = useSelector(selectRelations);
+  const relations: DataRelationTO[] = useSelector(selectRelations);
+  const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
 
-  const selectDataRelation = (relationId: number, relations: DataRelationCTO[]): DataRelationCTO | undefined => {
+  const getDataName = (dataId: number, datas: DataCTO[]): string => {
+    return datas.find((data) => data.data.id === dataId)?.data.name || "";
+  };
+
+  const selectDataRelation = (relationId: number, relations: DataRelationTO[]): DataRelationTO | undefined => {
     if (!isNullOrUndefined(relationId) && !isNullOrUndefined(relations)) {
-      return relations.find((relation) => relation.dataRelationTO.id === relationId);
+      return relations.find((relation) => relation.id === relationId);
     }
     return undefined;
   };
 
-  const relationToOption = (relation: DataRelationCTO): DropdownItemProps => {
-    const text: string = relation.dataCTO1.data.name + " - " + relation.dataCTO2.data.name;
+  const relationToOption = (relation: DataRelationTO): DropdownItemProps => {
+    const text: string = getDataName(relation.data1Fk, datas) + " - " + getDataName(relation.data2Fk, datas);
     return {
-      key: relation.dataRelationTO.id,
-      value: relation.dataRelationTO.id,
+      key: relation.id,
+      value: relation.id,
       text: text,
     };
   };

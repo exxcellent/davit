@@ -15,7 +15,7 @@ import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/Com
 import { MultiselectDataDropDown } from "../../../../../common/fragments/dropdowns/MultiselectDataDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
-import { Carv2SubmitCancelNoCheckBox } from "../common/fragments/Carv2SubmitCancel";
+import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
 
 export interface ControllPanelEditDataSetupProps {}
 
@@ -58,12 +58,7 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
         <MultiselectDataDropDown onSelect={setInitDatas} selected={getDatas()} />
       </div>
       <div className="controllPanelEditChild columnDivider">
-        <Carv2SubmitCancelNoCheckBox
-          onSubmit={saveDataSetup}
-          onChange={() => {}}
-          onCancel={cancel}
-          submitCondition={validateInput()}
-        />
+        <Carv2SubmitCancel onSubmit={saveDataSetup} onCancel={cancel} submitCondition={validateInput()} />
         {showExistingOptions && <Carv2Button icon="copy" onClick={copyDataSetup} />}
         {showExistingOptions && <Carv2DeleteButton onClick={deleteDataSetup} />}
       </div>

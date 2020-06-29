@@ -1,0 +1,9 @@
+export enum ComponentDataState {
+  NEW = "NEW",
+  PERSISTENT = "PERSISTENT",
+  DELETED = "DELETED",
+  CHECKED = "CHECKED",
+  ERROR_ADD = "ERROR_ADD",
+  ERROR_CHECK = "ERROR_CHECK",
+  ERROR_DELETE = "ERROR_DELETE",
+}

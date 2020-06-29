@@ -1,10 +1,10 @@
 import React, { FunctionComponent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { isNullOrUndefined } from "util";
-import { ActionCTO } from "../../../../../../dataAccess/access/cto/ActionCTO";
 import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
+import { ActionTO } from "../../../../../../dataAccess/access/to/ActionTO";
 import { ActionType } from "../../../../../../dataAccess/access/types/ActionType";
 import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice";
 import {
@@ -19,7 +19,7 @@ import { ActionTypeDropDown } from "../../../../../common/fragments/dropdowns/Ac
 import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
 import { DataDropDown } from "../../../../../common/fragments/dropdowns/DataDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { Carv2SubmitCancelNoCheckBox } from "../common/fragments/Carv2SubmitCancel";
+import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditActionProps {}
@@ -32,37 +32,32 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
     setAction,
     setData,
     saveAction,
-    selectComponentPlaceholder,
-    selectActionTypePlaceholder,
-    selectDataPlaceholder,
     showDelete,
     deleteAction,
+    componentId,
+    dataId,
+    actionType,
   } = useControllPanelEditActionViewModel();
 
   return (
     <ControllPanelEditSub label={label}>
       <div className="optionFieldSpacer">
         <OptionField>
-          <ComponentDropDown onSelect={setComponent} placeholder={selectComponentPlaceholder} />
+          <ComponentDropDown onSelect={setComponent} value={componentId} />
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
         <OptionField>
-          <ActionTypeDropDown onSelect={setAction} placeholder={selectActionTypePlaceholder as string} />
+          <ActionTypeDropDown onSelect={setAction} value={actionType} />
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
         <OptionField>
-          <DataDropDown onSelect={setData} placeholder={selectDataPlaceholder} />
+          <DataDropDown onSelect={setData} value={dataId} />
         </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <Carv2SubmitCancelNoCheckBox
-          onSubmit={saveAction}
-          onCancel={cancel}
-          onChange={() => {}}
-          toggleLabel="Edit next"
-        />
+        <Carv2SubmitCancel onSubmit={saveAction} onCancel={cancel} />
         {showDelete && <Carv2DeleteButton onClick={deleteAction} />}
       </div>
     </ControllPanelEditSub>
@@ -70,8 +65,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
 };
 
 const useControllPanelEditActionViewModel = () => {
-  const actionToEdit: ActionCTO | null = useSelector(currentActionToEdit);
-  console.info("action to edit: ", actionToEdit);
+  const actionToEdit: ActionTO | null = useSelector(currentActionToEdit);
   const stepToEdit: SequenceStepCTO | null = useSelector(currentStep);
   const dispatch = useDispatch();
 
@@ -96,7 +90,7 @@ const useControllPanelEditActionViewModel = () => {
   const deleteAction = () => {
     if (!isNullOrUndefined(actionToEdit) && !isNullOrUndefined(stepToEdit)) {
       const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
-      copyStepToEdit.actions.filter((action) => action.actionTO.id !== actionToEdit.actionTO.id);
+      copyStepToEdit.actions.filter((action) => action.id !== actionToEdit.id);
       dispatch(SequenceActions.updateCurrentSequenceStep(copyStepToEdit));
       dispatch(SequenceActions.deleteAction(actionToEdit));
       dispatch(GlobalActions.setModeToEditStep(stepToEdit.squenceStepTO.index));
@@ -105,43 +99,38 @@ const useControllPanelEditActionViewModel = () => {
 
   const setComponent = (component: ComponentCTO | undefined): void => {
     if (!isNullOrUndefined(component) && !isNullOrUndefined(actionToEdit)) {
-      let copyActionToEdit: ActionCTO = Carv2Util.deepCopy(actionToEdit);
-      copyActionToEdit.componentTO = component.component;
-      copyActionToEdit.actionTO.componentFk = component.component.id;
+      let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
+      copyActionToEdit.componentFk = component.component.id;
       dispatch(SequenceSlice.actions.setCurrentActionToEdit(copyActionToEdit));
     }
   };
   const setAction = (actionType: ActionType | undefined): void => {
     if (!isNullOrUndefined(actionType) && !isNullOrUndefined(actionToEdit)) {
-      let copyActionToEdit: ActionCTO = Carv2Util.deepCopy(actionToEdit);
-      copyActionToEdit.actionTO.actionType = actionType;
+      let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
+      copyActionToEdit.actionType = actionType;
       dispatch(SequenceSlice.actions.setCurrentActionToEdit(copyActionToEdit));
     }
   };
   const setData = (data: DataCTO | undefined): void => {
     if (!isNullOrUndefined(data) && !isNullOrUndefined(actionToEdit)) {
-      let copyActionToEdit: ActionCTO = Carv2Util.deepCopy(actionToEdit);
-      copyActionToEdit.dataTO = data.data;
-      copyActionToEdit.actionTO.dataFk = data.data.id;
+      let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
+      copyActionToEdit.dataFk = data.data.id;
       dispatch(SequenceSlice.actions.setCurrentActionToEdit(copyActionToEdit));
     }
   };
 
   return {
-    label: actionToEdit?.actionTO.id === -1 ? "ADD ACTION" : "EDIT ACTION",
-    component: actionToEdit?.componentTO,
-    action: actionToEdit?.actionTO,
-    data: actionToEdit?.dataTO,
+    label: actionToEdit?.id === -1 ? "ADD ACTION" : "EDIT ACTION",
+    action: actionToEdit,
     cancel: () => dispatch(GlobalActions.setModeToEditStep(stepToEdit?.squenceStepTO.index)),
     setComponent,
     setAction,
     setData,
     saveAction,
-    selectComponentPlaceholder:
-      actionToEdit?.componentTO.name === "" ? "Select Component..." : actionToEdit?.componentTO.name,
-    selectActionTypePlaceholder: actionToEdit?.actionTO.actionType,
-    selectDataPlaceholder: actionToEdit?.dataTO.name === "" ? "Select Data..." : actionToEdit?.dataTO.name,
-    showDelete: actionToEdit?.actionTO.id !== -1 ? true : false,
+    componentId: actionToEdit?.componentFk === -1 ? undefined : actionToEdit?.componentFk,
+    dataId: actionToEdit?.dataFk === -1 ? undefined : actionToEdit?.dataFk,
+    actionType: actionToEdit?.actionType,
+    showDelete: actionToEdit?.id !== -1 ? true : false,
     deleteAction,
   };
 };

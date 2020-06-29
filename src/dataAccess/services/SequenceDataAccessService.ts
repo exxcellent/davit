@@ -1,13 +1,9 @@
 import { Carv2Util } from "../../utils/Carv2Util";
-import { ActionCTO } from "../access/cto/ActionCTO";
-import { ComponentCTO } from "../access/cto/ComponentCTO";
 import { DataSetupCTO } from "../access/cto/DataSetupCTO";
 import { SequenceCTO } from "../access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../access/cto/SequenceStepCTO";
 import { ActionTO } from "../access/to/ActionTO";
-import { ComponentTO } from "../access/to/ComponentTO";
 import { DataSetupTO } from "../access/to/DataSetupTO";
-import { DataTO } from "../access/to/DataTO";
 import { InitDataTO } from "../access/to/InitDataTO";
 import { SequenceStepTO } from "../access/to/SequenceStepTO";
 import { SequenceTO } from "../access/to/SequenceTO";
@@ -17,8 +13,6 @@ import { InitDataRepository } from "../repositories/InitDataRepository";
 import { SequenceRepository } from "../repositories/SequenceRepository";
 import { SequenceStepRepository } from "../repositories/SequenceStepRepository";
 import { CheckHelper } from "../util/CheckHelper";
-import { ComponentDataAccessService } from "./ComponentDataAccessService";
-import { DataDataAccessService } from "./DataDataAccessService";
 
 export const SequenceDataAccessService = {
   find(sequenceId: number): SequenceCTO {
@@ -48,15 +42,15 @@ export const SequenceDataAccessService = {
     }
     const persistedActions: ActionTO[] = ActionRepository.findAllForStep(sequenceStep.squenceStepTO.id);
     const actionsToDelete: ActionTO[] = persistedActions.filter(
-      (action) => !sequenceStep.actions.some((cDCTO) => cDCTO.actionTO.id === action.id)
+      (action) => !sequenceStep.actions.some((cDCTO) => cDCTO.id === action.id)
     );
     actionsToDelete.map((cptd) => cptd.id).forEach(ActionRepository.delete);
 
     const savedStep: SequenceStepTO = SequenceStepRepository.save(sequenceStep.squenceStepTO);
 
     sequenceStep.actions.forEach((action) => {
-      action.actionTO.sequenceStepFk = savedStep.id;
-      ActionRepository.save(action.actionTO);
+      action.sequenceStepFk = savedStep.id;
+      ActionRepository.save(action);
     });
     return createSequenceStepCTO(savedStep);
   },
@@ -73,7 +67,7 @@ export const SequenceDataAccessService = {
 
   deleteSequenceStep(sequenceStep: SequenceStepCTO): SequenceStepCTO {
     CheckHelper.nullCheck(sequenceStep, "step");
-    sequenceStep.actions.map((action) => ActionRepository.delete(action.actionTO.id));
+    sequenceStep.actions.map((action) => ActionRepository.delete(action.id));
     SequenceStepRepository.delete(sequenceStep.squenceStepTO);
     let seqSteps: SequenceStepTO[] = Carv2Util.deepCopy(
       SequenceStepRepository.findAllForSequence(sequenceStep.squenceStepTO.sequenceFk)
@@ -84,9 +78,9 @@ export const SequenceDataAccessService = {
     return sequenceStep;
   },
 
-  deleteAction(action: ActionCTO): ActionCTO {
+  deleteAction(action: ActionTO): ActionTO {
     CheckHelper.nullCheck(action, "action");
-    ActionRepository.delete(action.actionTO.id);
+    ActionRepository.delete(action.id);
     return action;
   },
 
@@ -143,31 +137,10 @@ const createSequenceCTO = (sequence: SequenceTO | undefined): SequenceCTO => {
 
 const createSequenceStepCTO = (sequenceStepTO: SequenceStepTO): SequenceStepCTO => {
   CheckHelper.nullCheck(sequenceStepTO, "sequenceStepTO");
-  const sourceComponentCTO: ComponentCTO = ComponentDataAccessService.findCTO(sequenceStepTO.sourceComponentFk);
-  const targetComponentCTO: ComponentCTO = ComponentDataAccessService.findCTO(sequenceStepTO.targetComponentFk);
-
   const actionTOs: ActionTO[] = ActionRepository.findAllForStep(sequenceStepTO.id);
-
-  const actionCTOs: ActionCTO[] = actionTOs.map(createActionCTO);
-
   return {
-    componentCTOSource: sourceComponentCTO,
-    componentCTOTarget: targetComponentCTO,
     squenceStepTO: sequenceStepTO,
-    actions: actionCTOs,
-  };
-};
-
-const createActionCTO = (actionTO: ActionTO): ActionCTO => {
-  CheckHelper.nullCheck(actionTO, "actionTO");
-  const component: ComponentTO | undefined = ComponentDataAccessService.find(actionTO.componentFk);
-  CheckHelper.nullCheck(component, "component");
-  const data: DataTO | undefined = DataDataAccessService.findData(actionTO.dataFk);
-  CheckHelper.nullCheck(data, "data");
-  return {
-    actionTO: actionTO,
-    componentTO: component!,
-    dataTO: data!,
+    actions: actionTOs,
   };
 };
 

@@ -9,7 +9,7 @@ import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
-import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
+import { Carv2SubmitCancelCheckBox } from "../common/fragments/Carv2SubmitCancel";
 
 export interface ControllPanelEditDataProps {}
 
@@ -39,7 +39,7 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
         ref={textInput}
       />
       <div className="columnDivider" style={{ display: "flex" }}>
-        <Carv2SubmitCancel
+        <Carv2SubmitCancelCheckBox
           onSubmit={saveData}
           onCancel={cancel}
           onChange={toggleIsCreateAnother}

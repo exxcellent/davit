@@ -1,9 +1,10 @@
 import React, { FunctionComponent } from "react";
 import { Card } from "semantic-ui-react";
-import { ActionCTO } from "../../../../dataAccess/access/cto/ActionCTO";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
-import { ComponentDataCTO } from "../../../../dataAccess/access/cto/ComponentDataCTO";
-import { createDataFragment, DataFragmentProps } from "./DataFragment";
+import {
+  ComponentDataFragmentProps,
+  createComponentDataFragment,
+} from "../../../common/fragments/ComponentDataFragment";
 
 export interface MetaComponentFragmentProps {
   id: number;
@@ -11,7 +12,7 @@ export interface MetaComponentFragmentProps {
   initalColor: string;
   initalWidth?: number;
   initalHeigth?: number;
-  dataFragments: DataFragmentProps[];
+  dataFragments: ComponentDataFragmentProps[];
 }
 
 export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps> = (props) => {
@@ -19,32 +20,14 @@ export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps
   return (
     <Card raised style={{ width: initalWidth, height: initalHeigth }}>
       <Card.Content header={initalName}></Card.Content>
-      {dataFragments.map(createDataFragment)}
+      {dataFragments.map(createComponentDataFragment)}
     </Card>
   );
 };
 
-const componentDataToDataFragmentProps = (
-  componentDatas: (ComponentDataCTO | ActionCTO)[],
-  component: ComponentCTO
-): DataFragmentProps[] => {
-  const filteredCompData: (ComponentDataCTO | ActionCTO)[] = componentDatas.filter(
-    (compData) => compData.componentTO.id === component.component.id
-  );
-  return filteredCompData.map((componentData: ComponentDataCTO | ActionCTO) => {
-    return {
-      name: componentData.dataTO.name,
-      state:
-        componentData instanceof ComponentDataCTO
-          ? componentData.componentDataTO.componentDataState
-          : componentData.actionTO.actionType,
-    };
-  });
-};
-
 export const createMetaComponentFragment = (
   componentCTO: ComponentCTO,
-  componentDatas: (ComponentDataCTO | ActionCTO)[]
+  componentDatas: ComponentDataFragmentProps[]
 ) => {
   return (
     <MetaComponentFragment
@@ -52,7 +35,7 @@ export const createMetaComponentFragment = (
       initalName={componentCTO.component.name}
       initalColor={componentCTO.design.color}
       initalWidth={componentCTO.geometricalData.geometricalData.width}
-      dataFragments={componentDataToDataFragmentProps(componentDatas, componentCTO)}
+      dataFragments={componentDatas}
     />
   );
 };

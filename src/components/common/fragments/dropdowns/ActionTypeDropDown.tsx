@@ -4,11 +4,12 @@ import { ActionType } from "../../../../dataAccess/access/types/ActionType";
 
 interface ActionTypeDropDownnProps extends DropdownProps {
   onSelect: (actionType: ActionType | undefined) => void;
-  placeholder: string;
+  placeholder?: string;
+  value?: ActionType;
 }
 
 export const ActionTypeDropDown: FunctionComponent<ActionTypeDropDownnProps> = (props) => {
-  const { onSelect, placeholder } = props;
+  const { onSelect, placeholder, value } = props;
   const actions: ActionType[] = Object.values(ActionType);
 
   const actionTypeToOption = (actionType: ActionType): DropdownItemProps => {
@@ -19,17 +20,6 @@ export const ActionTypeDropDown: FunctionComponent<ActionTypeDropDownnProps> = (
     };
   };
 
-  const selectActionType = (actionType: ActionType): ActionType | undefined => {
-    switch (actionType) {
-      case ActionType.ADD:
-        return ActionType.ADD;
-      case ActionType.CHECK:
-        return ActionType.CHECK;
-      case ActionType.DELETE:
-        return ActionType.DELETE;
-    }
-  };
-
   return (
     <Dropdown
       options={actions.map(actionTypeToOption).sort((a, b) => {
@@ -37,9 +27,10 @@ export const ActionTypeDropDown: FunctionComponent<ActionTypeDropDownnProps> = (
       })}
       selection
       selectOnBlur={false}
-      onChange={(event, data) => onSelect(selectActionType(data.value as ActionType))}
+      onChange={(event, data) => onSelect(data.value as ActionType)}
       scrolling
-      placeholder={placeholder}
+      placeholder={placeholder || "Select Action Type ..."}
+      value={value}
     />
   );
 };
