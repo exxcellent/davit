@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
-import { selectDatas } from "../../../../slices/DataSlice";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 
 interface DataDropDownProps extends DropdownProps {
   onSelect: (data: DataCTO | undefined) => void;
@@ -58,7 +58,7 @@ export const DataDropDownButton: FunctionComponent<DataDropDownButtonProps> = (p
 };
 
 const useDataDropDownViewModel = () => {
-  const datas: DataCTO[] = useSelector(selectDatas);
+  const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
 
   const selectData = (dataId: number, datas: DataCTO[]): DataCTO | undefined => {
     if (!isNullOrUndefined(dataId) && !isNullOrUndefined(datas)) {

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
-import { selectDatas } from "../../../../slices/DataSlice";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 
 interface MultiselectDataDropDownProps extends DropdownProps {
   onSelect: (data: DataCTO[] | undefined) => void;
@@ -31,7 +31,7 @@ export const MultiselectDataDropDown: FunctionComponent<MultiselectDataDropDownP
 };
 
 const useMultiSelectDataDropDownViewModel = () => {
-  const datas: DataCTO[] = useSelector(selectDatas);
+  const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
 
   const selectDataOptions = (dataIds: number[] | undefined, datas: DataCTO[]): DataCTO[] => {
     let dataToReturn: DataCTO[] = [];

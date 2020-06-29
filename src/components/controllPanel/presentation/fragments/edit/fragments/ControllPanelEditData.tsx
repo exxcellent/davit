@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
-import { DataActions, selectCurrentData } from "../../../../../../slices/DataSlice";
-import { EditActions } from "../../../../../../slices/EditSlice";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
@@ -59,7 +58,7 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
 };
 
 const useControllPanelEditDataViewModel = () => {
-  const dataToEdit: DataCTO | null = useSelector(selectCurrentData);
+  const dataToEdit: DataCTO | null = useSelector(editSelectors.dataToEdit);
   const dispatch = useDispatch();
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
   const textInput = useRef<Input>(null);
@@ -80,11 +79,11 @@ const useControllPanelEditDataViewModel = () => {
   const changeName = (name: string) => {
     let copyDataToEdit: DataCTO = Carv2Util.deepCopy(dataToEdit);
     copyDataToEdit.data.name = name;
-    dispatch(DataActions.setDataToEdit(copyDataToEdit));
+    dispatch(EditActions.setMode.editData(copyDataToEdit));
   };
 
   const saveData = () => {
-    dispatch(DataActions.saveData(dataToEdit!));
+    dispatch(EditActions.data.save(dataToEdit!));
     if (isCreateAnother) {
       dispatch(EditActions.setMode.editData());
     } else {
@@ -93,7 +92,7 @@ const useControllPanelEditDataViewModel = () => {
   };
 
   const deleteData = () => {
-    dispatch(DataActions.deleteData(dataToEdit!));
+    dispatch(EditActions.data.delete(dataToEdit!));
     dispatch(EditActions.setMode.edit());
   };
 

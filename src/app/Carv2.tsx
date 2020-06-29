@@ -8,7 +8,6 @@ import { SequenceModelController } from "../components/sequenceModel/SequenceMod
 import { SequenceTableModelController } from "../components/sequenceTableModel/presentation/SequenceTableModelController";
 import { SidePanelController } from "../components/sidePanel/SidePanelController";
 import { DataSetupActions } from "../slices/DataSetupSlice";
-import { DataActions } from "../slices/DataSlice";
 import { MasterDataActions } from "../slices/MasterDataSlice";
 import { SequenceActions } from "../slices/SequenceSlice";
 import "./Carv2.css";
@@ -18,8 +17,8 @@ export function Carv2() {
   dispatch(DataSetupActions.loadDataSetupsFromBackend());
   dispatch(MasterDataActions.loadComponentsFromBackend());
   dispatch(MasterDataActions.loadGroupsFromBackend());
-  dispatch(DataActions.loadDatasFromBackend());
-  dispatch(DataActions.loadRelationsFromBackend());
+  dispatch(MasterDataActions.loadDatasFromBackend());
+  dispatch(MasterDataActions.loadRelationsFromBackend());
   dispatch(SequenceActions.loadSequencesFromBackend());
 
   return (

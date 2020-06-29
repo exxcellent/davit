@@ -4,9 +4,9 @@ import { Dropdown, DropdownItemProps, Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationTO, Direction, RelationType } from "../../../../../../dataAccess/access/to/DataRelationTO";
-import { DataActions, selectDatas } from "../../../../../../slices/DataSlice";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
+import { masterDataSelectors } from "../../../../../../slices/MasterDataSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
@@ -167,7 +167,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
 };
 
 const useControllPanelEditRelationViewModel = () => {
-  const datas: DataCTO[] = useSelector(selectDatas);
+  const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
   const relationToEdit: DataRelationTO | null = useSelector(editSelectors.relationToEdit);
   const dispatch = useDispatch();
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
@@ -192,29 +192,29 @@ const useControllPanelEditRelationViewModel = () => {
   const setData = (dataId: number, isSnd?: boolean) => {
     const relationCopy: DataRelationTO = Carv2Util.deepCopy(relationToEdit);
     isSnd ? (relationCopy.data2Fk = dataId) : (relationCopy.data1Fk = dataId);
-    dispatch(DataActions.setRelationToEdit(relationCopy));
+    dispatch(EditActions.setMode.editRelation(relationCopy));
   };
 
   const setLabel = (label: string, isSnd?: boolean) => {
     const relationCopy: DataRelationTO = Carv2Util.deepCopy(relationToEdit);
     isSnd ? (relationCopy.label2 = label) : (relationCopy.label1 = label);
-    dispatch(DataActions.setRelationToEdit(relationCopy));
+    dispatch(EditActions.setMode.editRelation(relationCopy));
   };
 
   const setDirection = (direction: Direction, isSnd?: boolean) => {
     const relationCopy: DataRelationTO = Carv2Util.deepCopy(relationToEdit);
     isSnd ? (relationCopy.direction2 = direction) : (relationCopy.direction1 = direction);
-    dispatch(DataActions.setRelationToEdit(relationCopy));
+    dispatch(EditActions.setMode.editRelation(relationCopy));
   };
 
   const setType = (relationType: RelationType, isSnd?: boolean) => {
     const relationCopy: DataRelationTO = Carv2Util.deepCopy(relationToEdit);
     isSnd ? (relationCopy.type2 = relationType) : (relationCopy.type1 = relationType);
-    dispatch(DataActions.setRelationToEdit(relationCopy));
+    dispatch(EditActions.setMode.editRelation(relationCopy));
   };
 
   const saveRelation = () => {
-    dispatch(DataActions.saveRelation(relationToEdit!));
+    dispatch(EditActions.relation.save(relationToEdit!));
     if (isCreateAnother) {
       setKey(key + 1);
       dispatch(EditActions.setMode.editRelation());
@@ -224,7 +224,7 @@ const useControllPanelEditRelationViewModel = () => {
   };
 
   const deleteRelation = () => {
-    dispatch(DataActions.deleteRelation(relationToEdit!));
+    dispatch(EditActions.relation.delete(relationToEdit!));
     dispatch(EditActions.setMode.edit());
   };
 

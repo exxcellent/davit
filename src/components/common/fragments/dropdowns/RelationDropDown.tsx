@@ -4,7 +4,6 @@ import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationTO } from "../../../../dataAccess/access/to/DataRelationTO";
-import { selectRelations } from "../../../../slices/DataSlice";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 
 interface RelationDropDownProps extends DropdownProps {
@@ -54,7 +53,7 @@ export const RelationDropDownButton: FunctionComponent<RelationDropDownPropsButt
 };
 
 const useRelationDropDownViewModel = () => {
-  const relations: DataRelationTO[] = useSelector(selectRelations);
+  const relations: DataRelationTO[] = useSelector(masterDataSelectors.relations);
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
 
   const getDataName = (dataId: number, datas: DataCTO[]): string => {

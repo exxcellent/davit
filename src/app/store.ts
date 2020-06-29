@@ -1,6 +1,5 @@
 import { configureStore, ThunkAction } from "@reduxjs/toolkit";
 import { DataSetupReducer } from "../slices/DataSetupSlice";
-import { DataReducer } from "../slices/DataSlice";
 import { EditReducer } from "../slices/EditSlice";
 import { globalReducer } from "../slices/GlobalSlice";
 import { MasterDataReducer } from "../slices/MasterDataSlice";
@@ -11,7 +10,6 @@ export const store = configureStore({
   reducer: {
     global: globalReducer,
     sequence: SequenceReducer,
-    dataModel: DataReducer,
     dataSetupModel: DataSetupReducer,
     masterData: MasterDataReducer,
     edit: EditReducer,

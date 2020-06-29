@@ -2,9 +2,8 @@ import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
 import { DataRelationTO } from "../../../dataAccess/access/to/DataRelationTO";
-import { DataActions } from "../../../slices/DataSlice";
-import { editSelectors } from "../../../slices/EditSlice";
-import { masterDataSelectors } from "../../../slices/MasterDataSlice";
+import { EditActions, editSelectors } from "../../../slices/EditSlice";
+import { MasterDataActions, masterDataSelectors } from "../../../slices/MasterDataSlice";
 import { MetaDataDnDBox } from "./fragments/MetaDataDnDBox";
 
 interface MetaDataModelControllerProps {}
@@ -44,26 +43,18 @@ const useMetaDataModelViewModel = () => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    dispatch(DataActions.loadDatasFromBackend());
-    dispatch(DataActions.loadRelationsFromBackend());
+    dispatch(MasterDataActions.loadDatasFromBackend());
+    dispatch(MasterDataActions.loadRelationsFromBackend());
   }, [dispatch]);
 
   const saveData = (dataCTO: DataCTO) => {
-    dispatch(DataActions.saveData(dataCTO));
-    dispatch(DataActions.loadRelationsFromBackend());
+    dispatch(EditActions.data.save(dataCTO));
+    dispatch(MasterDataActions.loadRelationsFromBackend());
     if (dataCTO.data.id === dataRelationToEdit?.data1Fk) {
-      dispatch(
-        DataActions.setRelationToEdit({
-          ...dataRelationToEdit,
-        })
-      );
+      dispatch(EditActions.setMode.editRelation(dataRelationToEdit));
     }
     if (dataCTO.data.id === dataRelationToEdit?.data2Fk) {
-      dispatch(
-        DataActions.setRelationToEdit({
-          ...dataRelationToEdit,
-        })
-      );
+      dispatch(EditActions.setMode.editRelation(dataRelationToEdit));
     }
   };
 
