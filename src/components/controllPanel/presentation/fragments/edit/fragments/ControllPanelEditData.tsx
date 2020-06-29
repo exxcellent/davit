@@ -4,7 +4,8 @@ import { Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { DataActions, selectCurrentData } from "../../../../../../slices/DataSlice";
-import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice";
+import { EditActions } from "../../../../../../slices/EditSlice";
+import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
@@ -71,8 +72,8 @@ const useControllPanelEditDataViewModel = () => {
   useEffect(() => {
     // check if component to edit is really set or gso back to edit mode
     if (isNullOrUndefined(dataToEdit)) {
-      dispatch(GlobalActions.setModeToEdit());
       handleError("Tried to go to edit data without dataToedit specified");
+      dispatch(EditActions.setMode.edit());
     }
   });
 
@@ -85,15 +86,15 @@ const useControllPanelEditDataViewModel = () => {
   const saveData = () => {
     dispatch(DataActions.saveData(dataToEdit!));
     if (isCreateAnother) {
-      dispatch(GlobalActions.setModeToEditData());
+      dispatch(EditActions.setMode.editData());
     } else {
-      dispatch(GlobalActions.setModeToEdit());
+      dispatch(EditActions.setMode.edit());
     }
   };
 
   const deleteData = () => {
     dispatch(DataActions.deleteData(dataToEdit!));
-    dispatch(GlobalActions.setModeToEdit());
+    dispatch(EditActions.setMode.edit());
   };
 
   const validName = (): boolean => {
@@ -109,7 +110,7 @@ const useControllPanelEditDataViewModel = () => {
     changeName,
     saveData,
     deleteData,
-    cancel: () => dispatch(GlobalActions.setModeToEdit()),
+    cancel: () => dispatch(EditActions.setMode.edit()),
     toggleIsCreateAnother: () => setIsCreateAnother(!isCreateAnother),
     textInput,
     showDelete: dataToEdit?.data.id !== -1,

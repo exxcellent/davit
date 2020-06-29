@@ -7,7 +7,8 @@ import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { DataSetupCTO } from "../../../../../../dataAccess/access/cto/DataSetupCTO";
 import { InitDataTO } from "../../../../../../dataAccess/access/to/InitDataTO";
 import { currentDataSetupToEdit, DataSetupActions } from "../../../../../../slices/DataSetupSlice";
-import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice";
+import { EditActions } from "../../../../../../slices/EditSlice";
+import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2Button } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
@@ -75,12 +76,12 @@ const useControllPanelEditDataSetupViewModel = () => {
   useEffect(() => {
     // check if sequence to edit is really set or gos back to edit mode
     if (isNullOrUndefined(dataSetupToEdit)) {
-      GlobalActions.setModeToEdit();
       handleError("Tried to go to edit dataSetup without dataSetupToedit specified");
+      dispatch(EditActions.setMode.edit());
     }
     // used to focus the textfield on create another
     textInput.current!.focus();
-  }, [dataSetupToEdit]);
+  }, [dataSetupToEdit, dispatch]);
 
   const changeName = (name: string) => {
     if (!isNullOrUndefined(dataSetupToEdit)) {
@@ -93,18 +94,18 @@ const useControllPanelEditDataSetupViewModel = () => {
   const saveDataSetup = () => {
     dispatch(DataSetupActions.saveDataSetup(dataSetupToEdit!));
     dispatch(DataSetupActions.clearCurrentDataSetupToEdit);
-    dispatch(GlobalActions.setModeToEdit());
+    dispatch(EditActions.setMode.edit());
   };
 
   const deleteDataSetup = () => {
     dispatch(DataSetupActions.deleteDataSetup(dataSetupToEdit!));
     dispatch(DataSetupActions.clearCurrentDataSetupToEdit);
-    dispatch(GlobalActions.setModeToEdit());
+    dispatch(EditActions.setMode.edit());
   };
 
   const cancel = () => {
     dispatch(DataSetupActions.clearCurrentDataSetupToEdit);
-    dispatch(GlobalActions.setModeToEdit());
+    dispatch(EditActions.setMode.edit());
   };
 
   const validateInput = (): boolean => {

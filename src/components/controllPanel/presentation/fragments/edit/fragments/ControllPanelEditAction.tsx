@@ -6,13 +6,9 @@ import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../../../../../../dataAccess/access/to/ActionTO";
 import { ActionType } from "../../../../../../dataAccess/access/types/ActionType";
-import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice";
-import {
-  currentActionToEdit,
-  currentStep,
-  SequenceActions,
-  SequenceSlice,
-} from "../../../../../../slices/SequenceSlice";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
+import { handleError } from "../../../../../../slices/GlobalSlice";
+import { currentActionToEdit, SequenceActions, SequenceSlice } from "../../../../../../slices/SequenceSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ActionTypeDropDown } from "../../../../../common/fragments/dropdowns/ActionTypeDropDown";
@@ -66,14 +62,14 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
 
 const useControllPanelEditActionViewModel = () => {
   const actionToEdit: ActionTO | null = useSelector(currentActionToEdit);
-  const stepToEdit: SequenceStepCTO | null = useSelector(currentStep);
+  const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.stepToEdit);
   const dispatch = useDispatch();
 
   useEffect(() => {
     // check if component to edit is really set or gos back to edit mode
     if (isNullOrUndefined(actionToEdit)) {
-      GlobalActions.setModeToEdit();
       handleError("Tried to go to edit action without actionToEdit specified");
+      EditActions.setMode.edit();
     }
     // used to focus the textfield on create another
   }, [actionToEdit]);
@@ -83,7 +79,6 @@ const useControllPanelEditActionViewModel = () => {
       const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
       copyStepToEdit.actions.push(actionToEdit);
       dispatch(SequenceActions.updateCurrentSequenceStep(copyStepToEdit));
-      dispatch(GlobalActions.setModeToEditStep(stepToEdit.squenceStepTO.index));
     }
   };
 
@@ -93,7 +88,6 @@ const useControllPanelEditActionViewModel = () => {
       copyStepToEdit.actions.filter((action) => action.id !== actionToEdit.id);
       dispatch(SequenceActions.updateCurrentSequenceStep(copyStepToEdit));
       dispatch(SequenceActions.deleteAction(actionToEdit));
-      dispatch(GlobalActions.setModeToEditStep(stepToEdit.squenceStepTO.index));
     }
   };
 
@@ -119,10 +113,18 @@ const useControllPanelEditActionViewModel = () => {
     }
   };
 
+  const cancel = () => {
+    if (stepToEdit) {
+      dispatch(EditActions.setMode.editStep(stepToEdit));
+    } else {
+      dispatch(EditActions.setMode.edit());
+    }
+  };
+
   return {
     label: actionToEdit?.id === -1 ? "ADD ACTION" : "EDIT ACTION",
     action: actionToEdit,
-    cancel: () => dispatch(GlobalActions.setModeToEditStep(stepToEdit?.squenceStepTO.index)),
+    cancel,
     setComponent,
     setAction,
     setData,

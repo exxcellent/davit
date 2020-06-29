@@ -124,6 +124,11 @@ const setModeWithStorage = (mode: Mode): AppThunk => async (dispatch) => {
   dispatch(EditSlice.actions.setMode(mode));
 };
 
+const setModeToFile = (): AppThunk => async (dispatch) => {
+  dispatch(EditSlice.actions.clearObjectToEdit());
+  dispatch(setModeWithStorage(Mode.FILE));
+};
+
 const setModeToView = (): AppThunk => async (dispatch) => {
   dispatch(EditSlice.actions.clearObjectToEdit());
   dispatch(setModeWithStorage(Mode.VIEW));
@@ -395,6 +400,7 @@ export const EditActions = {
     editAction: setModeToEditAction,
     edit: setModeToEdit,
     view: setModeToView,
+    file: setModeToFile,
   },
   component: {
     save: saveComponentThunk,

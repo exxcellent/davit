@@ -6,7 +6,8 @@ import { DataRelationTO } from "../../../../../dataAccess/access/to/DataRelation
 import { DataSetupTO } from "../../../../../dataAccess/access/to/DataSetupTO";
 import { GroupTO } from "../../../../../dataAccess/access/to/GroupTO";
 import { SequenceTO } from "../../../../../dataAccess/access/to/SequenceTO";
-import { GlobalActions, Mode, selectMode } from "../../../../../slices/GlobalSlice";
+import { EditActions } from "../../../../../slices/EditSlice";
+import { Mode, selectMode } from "../../../../../slices/GlobalSlice";
 import { ControllPanelEditAction } from "./fragments/ControllPanelEditAction";
 import { ControllPanelEditComponent } from "./fragments/ControllPanelEditComponent";
 import { ControllPanelEditData } from "./fragments/ControllPanelEditData";
@@ -71,11 +72,11 @@ const useControllPanelEditViewModel = () => {
 
   return {
     mode,
-    editOrAddComponent: (component?: ComponentCTO) => dispatch(GlobalActions.setModeToEditComponent(component)),
-    editOrAddData: (data?: DataCTO) => dispatch(GlobalActions.setModeToEditData(data)),
-    editOrAddRelation: (relation?: DataRelationTO) => dispatch(GlobalActions.setModeToEditRelation(relation)),
-    editOrAddSequence: (sequence?: SequenceTO) => dispatch(GlobalActions.setModeToEditSequence(sequence)),
-    editOrAddGroup: (group?: GroupTO) => dispatch(GlobalActions.setModeToEditGroup(group)),
-    editOrAddDataSetup: (dataSetup?: DataSetupTO) => dispatch(GlobalActions.setModeToEditDataSetup(dataSetup)),
+    editOrAddComponent: (component?: ComponentCTO) => dispatch(EditActions.setMode.editComponent(component)),
+    editOrAddData: (data?: DataCTO) => dispatch(EditActions.setMode.editData(data)),
+    editOrAddRelation: (relation?: DataRelationTO) => dispatch(EditActions.setMode.editRelation(relation)),
+    editOrAddSequence: (sequence?: SequenceTO) => dispatch(EditActions.setMode.editSequence(sequence)),
+    editOrAddGroup: (group?: GroupTO) => dispatch(EditActions.setMode.editGroup(group)),
+    editOrAddDataSetup: (dataSetup?: DataSetupTO) => dispatch(EditActions.setMode.editDataSetup(dataSetup)),
   };
 };

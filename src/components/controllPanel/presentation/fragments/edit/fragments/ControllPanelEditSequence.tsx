@@ -4,7 +4,8 @@ import { Button, Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
-import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice";
+import { EditActions } from "../../../../../../slices/EditSlice";
+import { handleError } from "../../../../../../slices/GlobalSlice";
 import { currentSequence, SequenceActions } from "../../../../../../slices/SequenceSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2Button } from "../../../../../common/fragments/buttons/Carv2Button";
@@ -86,15 +87,15 @@ const useControllPanelEditSequenceViewModel = () => {
   useEffect(() => {
     // check if sequence to edit is really set or gos back to edit mode
     if (isNullOrUndefined(sequenceToEdit)) {
-      GlobalActions.setModeToEdit();
       handleError("Tried to go to edit sequence without sequenceToedit specified");
+      dispatch(EditActions.setMode.edit());
     }
     if (sequenceToEdit?.sequenceTO.id !== -1) {
       setIsCreateAnother(false);
     }
     // used to focus the textfield on create another
     textInput.current!.focus();
-  }, [sequenceToEdit]);
+  }, [sequenceToEdit, dispatch]);
 
   const changeName = (name: string) => {
     if (!isNullOrUndefined(sequenceToEdit)) {
@@ -108,21 +109,21 @@ const useControllPanelEditSequenceViewModel = () => {
     dispatch(SequenceActions.saveSequence(sequenceToEdit!));
     dispatch(SequenceActions.clearCurrentSequenceToEdit);
     if (isCreateAnother) {
-      dispatch(GlobalActions.setModeToEditSequence());
+      dispatch(EditActions.setMode.editSequence());
     } else {
-      dispatch(GlobalActions.setModeToEdit());
+      dispatch(EditActions.setMode.edit());
     }
   };
 
   const deleteSequence = () => {
     dispatch(SequenceActions.deleteSequence(sequenceToEdit!));
     dispatch(SequenceActions.clearCurrentSequenceToEdit);
-    dispatch(GlobalActions.setModeToEdit());
+    dispatch(EditActions.setMode.edit());
   };
 
   const cancelEditSequence = () => {
     dispatch(SequenceActions.clearCurrentSequenceToEdit);
-    dispatch(GlobalActions.setModeToEdit());
+    dispatch(EditActions.setMode.edit());
   };
 
   const validateInput = (): boolean => {
@@ -134,7 +135,7 @@ const useControllPanelEditSequenceViewModel = () => {
   };
 
   const editOrAddSequenceStep = (step?: SequenceStepCTO) => {
-    dispatch(GlobalActions.setModeToEditStep(step?.squenceStepTO.index));
+    dispatch(EditActions.setMode.editStep(step));
   };
 
   const copySequence = () => {

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
-import { selectComponents } from "../../../../slices/ComponentSlice";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 
 interface ComponentDropDownProps extends DropdownProps {
   onSelect: (component: ComponentCTO | undefined) => void;
@@ -55,7 +55,7 @@ export const ComponentDropDownButton: FunctionComponent<ComponentDropDownButtonP
 };
 
 const useComponentDropDownViewModel = () => {
-  const components: ComponentCTO[] = useSelector(selectComponents);
+  const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
 
   const componentToOption = (component: ComponentCTO): DropdownItemProps => {
     return {

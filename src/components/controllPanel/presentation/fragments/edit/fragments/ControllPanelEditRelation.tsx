@@ -5,8 +5,8 @@ import { isNullOrUndefined } from "util";
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationTO, Direction, RelationType } from "../../../../../../dataAccess/access/to/DataRelationTO";
 import { DataActions, selectDatas } from "../../../../../../slices/DataSlice";
-import { editSelectors } from "../../../../../../slices/EditSlice";
-import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
+import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
@@ -176,10 +176,10 @@ const useControllPanelEditRelationViewModel = () => {
   useEffect(() => {
     // check if component to edit is really set or go back to edit mode
     if (isNullOrUndefined(relationToEdit)) {
-      GlobalActions.setModeToEdit();
+      dispatch(EditActions.setMode.edit());
       handleError("Tried to go to edit relation without relationToedit specified");
     }
-  }, [relationToEdit]);
+  }, [relationToEdit, dispatch]);
 
   const dataToOption = (data: DataCTO): DropdownItemProps => {
     return {
@@ -217,15 +217,15 @@ const useControllPanelEditRelationViewModel = () => {
     dispatch(DataActions.saveRelation(relationToEdit!));
     if (isCreateAnother) {
       setKey(key + 1);
-      dispatch(GlobalActions.setModeToEditRelation());
+      dispatch(EditActions.setMode.editRelation());
     } else {
-      dispatch(GlobalActions.setModeToEdit());
+      dispatch(EditActions.setMode.edit());
     }
   };
 
   const deleteRelation = () => {
     dispatch(DataActions.deleteRelation(relationToEdit!));
-    dispatch(GlobalActions.setModeToEdit());
+    dispatch(EditActions.setMode.edit());
   };
 
   const directionOptions = Object.entries(Direction).map(([key, value]) => ({
@@ -264,7 +264,7 @@ const useControllPanelEditRelationViewModel = () => {
     setData,
     saveRelation,
     deleteRelation,
-    cancel: () => dispatch(GlobalActions.setModeToEdit()),
+    cancel: () => dispatch(EditActions.setMode.edit()),
     toggleIsCreateAnother: () => setIsCreateAnother(!isCreateAnother),
     showDelete: relationToEdit?.id !== -1,
     dataOptions: datas.map(dataToOption),

@@ -1,19 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../app/store";
-import { ComponentCTO } from "../dataAccess/access/cto/ComponentCTO";
-import { DataCTO } from "../dataAccess/access/cto/DataCTO";
-import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
-import { ActionTO } from "../dataAccess/access/to/ActionTO";
-import { DataRelationTO } from "../dataAccess/access/to/DataRelationTO";
-import { DataSetupTO } from "../dataAccess/access/to/DataSetupTO";
-import { GroupTO } from "../dataAccess/access/to/GroupTO";
-import { SequenceTO } from "../dataAccess/access/to/SequenceTO";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
-import { ComponentActions, ComponentInternalActions } from "./ComponentSlice";
-import { DataSetupActions } from "./DataSetupSlice";
-import { DataActions, DataInternalActions } from "./DataSlice";
-import { SequenceActions, SequenceSlice } from "./SequenceSlice";
 
 const MODE_LOCAL_STORAGE = "MODE";
 
@@ -80,96 +68,9 @@ const downloadData = (): AppThunk => (dispatch) => {
   }
 };
 
-export const setModeWithStorage = (mode: Mode): AppThunk => async (dispatch) => {
-  localStorage.setItem(MODE_LOCAL_STORAGE, mode);
-  dispatch(globalSlice.actions.setMode(mode));
-};
-
-const reset = (): AppThunk => async (dispatch) => {
-  dispatch(ComponentInternalActions.resetCurrentComponent());
-  dispatch(DataInternalActions.resetCurrentData());
-  dispatch(DataInternalActions.resetCurrentRelation());
-};
-
-const setModeToView = (): AppThunk => async (dispatch) => {
-  dispatch(reset());
-  dispatch(setModeWithStorage(Mode.VIEW));
-};
-
-const setModeToEdit = (): AppThunk => async (dispatch) => {
-  dispatch(reset());
-  dispatch(setModeWithStorage(Mode.EDIT));
-};
-
-const setModeToEditComponent = (component?: ComponentCTO): AppThunk => async (dispatch) => {
-  dispatch(reset());
-  dispatch(setModeWithStorage(Mode.EDIT_COMPONENT));
-  dispatch(ComponentActions.setCompoenentToEdit(component || new ComponentCTO()));
-};
-
-const setModeToEditData = (data?: DataCTO): AppThunk => async (dispatch) => {
-  dispatch(reset());
-  dispatch(DataActions.setDataToEdit(data || new DataCTO()));
-  dispatch(setModeWithStorage(Mode.EDIT_DATA));
-};
-
-const setModeToEditRelation = (relation?: DataRelationTO): AppThunk => async (dispatch) => {
-  dispatch(reset());
-  dispatch(DataActions.setRelationToEdit(relation || new DataRelationTO()));
-  dispatch(setModeWithStorage(Mode.EDIT_DATA_RELATION));
-};
-
-const setModeToEditSequence = (sequence?: SequenceTO): AppThunk => async (dispatch) => {
-  dispatch(reset());
-  dispatch(SequenceSlice.actions.resetCurrentStepIndex());
-  dispatch(SequenceActions.setSequence(sequence || new SequenceTO()));
-  dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE));
-};
-
-const setModeToEditCurrentSequence = (currentSequence: SequenceCTO): AppThunk => async (dispatch) => {
-  dispatch(reset());
-  dispatch(SequenceSlice.actions.resetCurrentStepIndex());
-  dispatch(SequenceActions.loadSequencesFromBackend());
-  if (currentSequence !== null) {
-    dispatch(SequenceActions.setSequence(currentSequence.sequenceTO));
-  }
-  dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE));
-};
-
-const setModeToEditStep = (stepIndex?: number): AppThunk => async (dispatch) => {
-  dispatch(SequenceActions.setSequenceStepToEdit(stepIndex || null));
-  dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_STEP));
-};
-
-const setModeToEditAction = (action?: ActionTO): AppThunk => async (dispatch) => {
-  dispatch(SequenceActions.setActionToEdit(action || new ActionTO()));
-  dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_STEP_ACTION));
-};
-
-const setModeToEditGroup = (group?: GroupTO): AppThunk => async (dispatch) => {
-  dispatch(ComponentActions.setGroupToEdit(group || new GroupTO()));
-  dispatch(setModeWithStorage(Mode.EDIT_GROUP));
-};
-
-const setModeToEditDataSetup = (dataSetup?: DataSetupTO): AppThunk => async (dispatch) => {
-  dispatch(DataSetupActions.setDataSetupToEdit(dataSetup || new DataSetupTO()));
-  dispatch(setModeWithStorage(Mode.EDIT_DATA_SETUP));
-};
-
 export const GlobalActions = {
-  setModeToView,
-  setModeToEdit,
-  setModeToEditComponent,
-  setModeToEditData,
-  setModeToEditRelation,
-  setModeToEditSequence,
-  setModeToEditCurrentSequence,
-  setModeToEditStep,
   storefileData,
   downloadData,
-  setModeToEditGroup,
-  setModeToEditAction,
-  setModeToEditDataSetup,
 };
 
 export const { handleError } = globalSlice.actions;

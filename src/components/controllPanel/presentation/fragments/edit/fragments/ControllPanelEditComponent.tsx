@@ -4,8 +4,8 @@ import { Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
 import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
-import { ComponentActions, currentComponent } from "../../../../../../slices/ComponentSlice";
-import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
+import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { GroupDropDown } from "../../../../../common/fragments/dropdowns/GroupDropDown";
@@ -69,7 +69,7 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
 };
 
 const useControllPanelEditComponentViewModel = () => {
-  const componentToEdit: ComponentCTO | null = useSelector(currentComponent);
+  const componentToEdit: ComponentCTO | null = useSelector(editSelectors.componentToEdit);
   const dispatch = useDispatch();
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
   const textInput = useRef<Input>(null);
@@ -77,8 +77,8 @@ const useControllPanelEditComponentViewModel = () => {
   useEffect(() => {
     // check if component to edit is really set or gos back to edit mode
     if (isNullOrUndefined(componentToEdit)) {
-      GlobalActions.setModeToEdit();
       handleError("Tried to go to edit component without componentToedit specified");
+      EditActions.setMode.edit();
     }
     // used to focus the textfield on create another
     textInput.current!.focus();
@@ -87,21 +87,21 @@ const useControllPanelEditComponentViewModel = () => {
   const changeName = (name: string) => {
     let copyComponentToEdit: ComponentCTO = Carv2Util.deepCopy(componentToEdit);
     copyComponentToEdit.component.name = name;
-    dispatch(ComponentActions.setCompoenentToEdit(copyComponentToEdit));
+    dispatch(EditActions.setMode.editComponent(copyComponentToEdit));
   };
 
   const saveComponent = () => {
-    dispatch(ComponentActions.saveComponent(componentToEdit!));
+    dispatch(EditActions.component.save(componentToEdit!));
     if (isCreateAnother) {
-      dispatch(GlobalActions.setModeToEditComponent());
+      dispatch(EditActions.setMode.editComponent());
     } else {
-      dispatch(GlobalActions.setModeToEdit());
+      dispatch(EditActions.setMode.edit());
     }
   };
 
   const deleteComponent = () => {
-    dispatch(ComponentActions.deleteComponent(componentToEdit!));
-    dispatch(GlobalActions.setModeToEdit());
+    dispatch(EditActions.component.delete(componentToEdit!));
+    dispatch(EditActions.setMode.edit());
   };
 
   const validName = (): boolean => {
@@ -119,7 +119,7 @@ const useControllPanelEditComponentViewModel = () => {
       } else {
         copyComponentToEdit.component.groupFks = -1;
       }
-      dispatch(ComponentActions.setCompoenentToEdit(copyComponentToEdit));
+      dispatch(EditActions.setMode.editComponent(copyComponentToEdit));
     }
   };
 
@@ -129,7 +129,7 @@ const useControllPanelEditComponentViewModel = () => {
     changeName,
     saveComponent,
     deleteComponent,
-    cancel: () => dispatch(GlobalActions.setModeToEdit()),
+    cancel: () => dispatch(EditActions.setMode.edit()),
     toggleIsCreateAnother: () => setIsCreateAnother(!isCreateAnother),
     textInput,
     showDelete: componentToEdit?.component.id !== -1,

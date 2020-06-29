@@ -7,7 +7,7 @@ import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO
 import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../../../../../../dataAccess/access/to/ActionTO";
 import { EditActions } from "../../../../../../slices/EditSlice";
-import { GlobalActions, handleError } from "../../../../../../slices/GlobalSlice";
+import { handleError } from "../../../../../../slices/GlobalSlice";
 import { currentSequence, currentStep, SequenceActions } from "../../../../../../slices/SequenceSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
@@ -100,12 +100,12 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
   useEffect(() => {
     if (isNullOrUndefined(sequenceStepToEdit)) {
-      GlobalActions.setModeToEdit();
       handleError("Tried to go to edit sequence step without sequenceStepToEdit specified");
+      dispatch(EditActions.setMode.edit());
     }
     // used to focus the textfield on create another
     textInput.current!.focus();
-  }, [sequenceStepToEdit]);
+  }, [sequenceStepToEdit, dispatch]);
 
   const indexToOptions = (): DropdownItemProps[] => {
     if (sequenceToEdit) {
@@ -153,12 +153,18 @@ const useControllPanelEditSequenceStepViewModel = () => {
       dispatch(SequenceActions.saveSequence(sequenceToEdit));
       if (isEditNext) {
         if (sequenceStepToEdit.squenceStepTO.index < sequenceToEdit.sequenceStepCTOs.length) {
-          dispatch(GlobalActions.setModeToEditStep(sequenceStepToEdit.squenceStepTO.index + 1));
+          dispatch(
+            EditActions.setMode.editStep(
+              sequenceToEdit.sequenceStepCTOs.find(
+                (step) => step.squenceStepTO.id === sequenceStepToEdit.squenceStepTO.index + 1
+              )
+            )
+          );
         } else {
-          dispatch(GlobalActions.setModeToEditStep());
+          dispatch(EditActions.setMode.editStep());
         }
       } else {
-        dispatch(GlobalActions.setModeToEditCurrentSequence(sequenceToEdit));
+        dispatch(EditActions.setMode.editSequence(sequenceToEdit.sequenceTO));
       }
     }
   };
@@ -192,7 +198,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
   const cancel = (): void => {
     if (!isNullOrUndefined(sequenceToEdit)) {
-      dispatch(GlobalActions.setModeToEditCurrentSequence(sequenceToEdit));
+      dispatch(EditActions.setMode.editSequence(sequenceToEdit.sequenceTO));
     }
   };
 

@@ -3,9 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
 import { GroupTO } from "../../../dataAccess/access/to/GroupTO";
-import { ComponentActions } from "../../../slices/ComponentSlice";
-import { editSelectors } from "../../../slices/EditSlice";
-import { masterDataSelectors } from "../../../slices/MasterDataSlice";
+import { EditActions, editSelectors } from "../../../slices/EditSlice";
+import { MasterDataActions, masterDataSelectors } from "../../../slices/MasterDataSlice";
 import { sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
 import { MetaComponentDnDBox } from "./fragments/MetaComponentDnDBox";
 
@@ -34,12 +33,12 @@ const useViewModel = () => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    dispatch(ComponentActions.loadComponentsFromBackend());
-    dispatch(ComponentActions.loadGroupsFromBackend());
+    dispatch(MasterDataActions.loadComponentsFromBackend());
+    dispatch(MasterDataActions.loadGroupsFromBackend());
   }, [dispatch]);
 
   const saveComp = (componentCTO: ComponentCTO) => {
-    dispatch(ComponentActions.saveComponent(componentCTO));
+    dispatch(EditActions.component.save(componentCTO));
   };
 
   return {

@@ -1,25 +1,12 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch } from "react-redux";
 import { Button } from "semantic-ui-react";
-import { Mode } from "../../slices/GlobalSlice";
-import { SidePanelActions } from "./viewModel/SidePanelActions";
+import { EditActions } from "../../slices/EditSlice";
 
 export interface SidePanelProps {}
 
 export const SidePanelController: FunctionComponent<SidePanelProps> = (props) => {
-  const dispatch = useDispatch();
-
-  const setModeToEdit = () => {
-    dispatch(SidePanelActions.setMode(Mode.EDIT));
-  };
-
-  const setModeToView = () => {
-    dispatch(SidePanelActions.setMode(Mode.VIEW));
-  };
-
-  const setModeToFile = () => {
-    dispatch(SidePanelActions.setMode(Mode.FILE));
-  };
+  const { setModeToEdit, setModeToFile, setModeToView } = useSidePanelViewModel();
 
   return (
     <div className="leftPanel">
@@ -30,4 +17,26 @@ export const SidePanelController: FunctionComponent<SidePanelProps> = (props) =>
       </Button.Group>
     </div>
   );
+};
+
+const useSidePanelViewModel = () => {
+  const dispatch = useDispatch();
+
+  const setModeToEdit = () => {
+    dispatch(EditActions.setMode.edit());
+  };
+
+  const setModeToView = () => {
+    dispatch(EditActions.setMode.view());
+  };
+
+  const setModeToFile = () => {
+    dispatch(EditActions.setMode.file());
+  };
+
+  return {
+    setModeToEdit,
+    setModeToView,
+    setModeToFile,
+  };
 };

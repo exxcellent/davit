@@ -7,17 +7,17 @@ import { MetaDataModelController } from "../components/metaDataModel/presentatio
 import { SequenceModelController } from "../components/sequenceModel/SequenceModelController";
 import { SequenceTableModelController } from "../components/sequenceTableModel/presentation/SequenceTableModelController";
 import { SidePanelController } from "../components/sidePanel/SidePanelController";
-import { ComponentActions } from "../slices/ComponentSlice";
 import { DataSetupActions } from "../slices/DataSetupSlice";
 import { DataActions } from "../slices/DataSlice";
+import { MasterDataActions } from "../slices/MasterDataSlice";
 import { SequenceActions } from "../slices/SequenceSlice";
 import "./Carv2.css";
 
 export function Carv2() {
   const dispatch = useDispatch();
   dispatch(DataSetupActions.loadDataSetupsFromBackend());
-  dispatch(ComponentActions.loadComponentsFromBackend());
-  dispatch(ComponentActions.loadGroupsFromBackend());
+  dispatch(MasterDataActions.loadComponentsFromBackend());
+  dispatch(MasterDataActions.loadGroupsFromBackend());
   dispatch(DataActions.loadDatasFromBackend());
   dispatch(DataActions.loadRelationsFromBackend());
   dispatch(SequenceActions.loadSequencesFromBackend());
