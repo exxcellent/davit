@@ -5,8 +5,8 @@ import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { ActionTO } from "../../../../dataAccess/access/to/ActionTO";
+import { editSelectors } from "../../../../slices/EditSlice";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
-import { currentActions } from "../../../../slices/SequenceSlice";
 
 interface ActionDropDownProps extends DropdownProps {
   onSelect: (action: ActionTO | undefined) => void;
@@ -44,7 +44,7 @@ const getDataName = (dataId: number, datas: DataCTO[]): string => {
 };
 
 const useActionDropDownViewModel = () => {
-  const actions: ActionTO[] = useSelector(currentActions);
+  const actions: ActionTO[] = useSelector(editSelectors.stepToEdit)?.actions || [];
   const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
 

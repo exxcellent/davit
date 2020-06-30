@@ -3,12 +3,10 @@ import { EditReducer } from "../slices/EditSlice";
 import { globalReducer } from "../slices/GlobalSlice";
 import { MasterDataReducer } from "../slices/MasterDataSlice";
 import { SequenceModelReducer } from "../slices/SequenceModelSlice";
-import { SequenceReducer } from "../slices/SequenceSlice";
 
 export const store = configureStore({
   reducer: {
     global: globalReducer,
-    sequence: SequenceReducer,
     masterData: MasterDataReducer,
     edit: EditReducer,
     sequenceModel: SequenceModelReducer,

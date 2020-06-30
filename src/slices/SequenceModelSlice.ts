@@ -30,7 +30,7 @@ const SequenceModelSlice = createSlice({
   name: "sequenceModel",
   initialState: getInitialState,
   reducers: {
-    setSelectedSequence: (state, action: PayloadAction<SequenceCTO>) => {
+    setSelectedSequence: (state, action: PayloadAction<SequenceCTO | null>) => {
       state.selectedSequence = action.payload;
       const result: {
         componentDatas: Map<number, ComponentData[]>;
@@ -97,6 +97,15 @@ const getDataSetupCTO = (dataSetupId: number): AppThunk => (dispatch) => {
     dispatch(handleError(response.message));
   }
 };
+
+const getSequenceCTO = (sequenceId: number): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<SequenceCTO> = DataAccess.findSequence(sequenceId);
+  if (response.code === 200) {
+    dispatch(SequenceModelSlice.actions.setSelectedSequence(response.object));
+  } else {
+    dispatch(handleError(response.message));
+  }
+};
 // =============================================== SELECTORS ===============================================
 
 export const SequenceModelReducer = SequenceModelSlice.reducer;
@@ -121,9 +130,10 @@ export const sequenceModelSelectors = {
 // =============================================== ACTIONS ===============================================
 
 export const SequenceModelActions = {
-  selectSequence: SequenceModelSlice.actions.setSelectedSequence,
+  setCurrentSequence: getSequenceCTO,
   setCurrentDataSetup: getDataSetupCTO,
   resetCurrentDataSetup: SequenceModelSlice.actions.setSelectedDataSetup(null),
   resetCurrentStepIndex: SequenceModelSlice.actions.setCurrentStepIndex(-1),
+  resetCurrentSequence: SequenceModelSlice.actions.setSelectedSequence(null),
   setCurrentStepIndex: SequenceModelSlice.actions.setCurrentStepIndex,
 };

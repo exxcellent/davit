@@ -8,7 +8,6 @@ import { ActionTO } from "../../../../../../dataAccess/access/to/ActionTO";
 import { ActionType } from "../../../../../../dataAccess/access/types/ActionType";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
-import { currentActionToEdit, SequenceActions, SequenceSlice } from "../../../../../../slices/SequenceSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ActionTypeDropDown } from "../../../../../common/fragments/dropdowns/ActionTypeDropDown";
@@ -61,7 +60,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
 };
 
 const useControllPanelEditActionViewModel = () => {
-  const actionToEdit: ActionTO | null = useSelector(currentActionToEdit);
+  const actionToEdit: ActionTO | null = useSelector(editSelectors.actionToEdit);
   const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.stepToEdit);
   const dispatch = useDispatch();
 
@@ -78,7 +77,7 @@ const useControllPanelEditActionViewModel = () => {
     if (!isNullOrUndefined(actionToEdit) && !isNullOrUndefined(stepToEdit)) {
       const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
       copyStepToEdit.actions.push(actionToEdit);
-      dispatch(SequenceActions.updateCurrentSequenceStep(copyStepToEdit));
+      dispatch(EditActions.setMode.editStep(copyStepToEdit));
     }
   };
 
@@ -86,8 +85,8 @@ const useControllPanelEditActionViewModel = () => {
     if (!isNullOrUndefined(actionToEdit) && !isNullOrUndefined(stepToEdit)) {
       const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
       copyStepToEdit.actions.filter((action) => action.id !== actionToEdit.id);
-      dispatch(SequenceActions.updateCurrentSequenceStep(copyStepToEdit));
-      dispatch(SequenceActions.deleteAction(actionToEdit));
+      dispatch(EditActions.action.delete(actionToEdit));
+      dispatch(EditActions.setMode.editStep(copyStepToEdit));
     }
   };
 
@@ -95,21 +94,21 @@ const useControllPanelEditActionViewModel = () => {
     if (!isNullOrUndefined(component) && !isNullOrUndefined(actionToEdit)) {
       let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
       copyActionToEdit.componentFk = component.component.id;
-      dispatch(SequenceSlice.actions.setCurrentActionToEdit(copyActionToEdit));
+      dispatch(EditActions.setMode.editAction(copyActionToEdit));
     }
   };
   const setAction = (actionType: ActionType | undefined): void => {
     if (!isNullOrUndefined(actionType) && !isNullOrUndefined(actionToEdit)) {
       let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
       copyActionToEdit.actionType = actionType;
-      dispatch(SequenceSlice.actions.setCurrentActionToEdit(copyActionToEdit));
+      dispatch(EditActions.setMode.editAction(copyActionToEdit));
     }
   };
   const setData = (data: DataCTO | undefined): void => {
     if (!isNullOrUndefined(data) && !isNullOrUndefined(actionToEdit)) {
       let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
       copyActionToEdit.dataFk = data.data.id;
-      dispatch(SequenceSlice.actions.setCurrentActionToEdit(copyActionToEdit));
+      dispatch(EditActions.setMode.editAction(copyActionToEdit));
     }
   };
 

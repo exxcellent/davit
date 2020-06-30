@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { SequenceTO } from "../../../../dataAccess/access/to/SequenceTO";
-import { selectSequences } from "../../../../slices/SequenceSlice";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 
 interface SequenceDropDownProps extends DropdownProps {
   onSelect: (sequence: SequenceTO | undefined) => void;
@@ -56,7 +56,7 @@ export const SequenceDropDownButton: FunctionComponent<SequenceDropDownPropsButt
 };
 
 const useSequenceDropDownViewModel = () => {
-  const sequences: SequenceTO[] = useSelector(selectSequences);
+  const sequences: SequenceTO[] = useSelector(masterDataSelectors.sequences);
 
   const selectSequence = (sequenceId: number, sequences: SequenceTO[]): SequenceTO | undefined => {
     if (!isNullOrUndefined(sequenceId) && !isNullOrUndefined(sequences)) {

@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { SequenceActions } from "../../slices/SequenceSlice";
+import { MasterDataActions } from "../../slices/MasterDataSlice";
 
 interface SequenceModelControllerProps {}
 
@@ -8,7 +8,7 @@ export const SequenceModelController: FunctionComponent<SequenceModelControllerP
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(SequenceActions.loadSequencesFromBackend());
+    dispatch(MasterDataActions.loadSequencesFromBackend());
   }, [dispatch]);
 
   return <div className="sequencModel"></div>;

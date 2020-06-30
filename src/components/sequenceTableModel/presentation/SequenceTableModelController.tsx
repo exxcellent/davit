@@ -2,13 +2,14 @@ import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
-import { currentSequence, currentStep } from "../../../slices/SequenceSlice";
+import { sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
 
 interface SequenceTableModelControllerProps {}
 
 export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (props) => {
-  const sequence: SequenceCTO | null = useSelector(currentSequence);
-  const selectedStep: SequenceStepCTO | null = useSelector(currentStep);
+  const sequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
+  const selectedStep: SequenceStepCTO | null = useSelector(sequenceModelSelectors.selectCurrentStep);
+  // TODO: add case edit sequence and step.
 
   const createStepColumn = (step: SequenceStepCTO) => {
     const trClass: string = selectedStep?.squenceStepTO.id === step.squenceStepTO.id ? "carv2TrMarked" : "carv2Tr";

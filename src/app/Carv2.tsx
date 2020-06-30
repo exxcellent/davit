@@ -8,7 +8,6 @@ import { SequenceModelController } from "../components/sequenceModel/SequenceMod
 import { SequenceTableModelController } from "../components/sequenceTableModel/presentation/SequenceTableModelController";
 import { SidePanelController } from "../components/sidePanel/SidePanelController";
 import { MasterDataActions } from "../slices/MasterDataSlice";
-import { SequenceActions } from "../slices/SequenceSlice";
 import "./Carv2.css";
 
 export function Carv2() {
@@ -18,7 +17,7 @@ export function Carv2() {
   dispatch(MasterDataActions.loadGroupsFromBackend());
   dispatch(MasterDataActions.loadDatasFromBackend());
   dispatch(MasterDataActions.loadRelationsFromBackend());
-  dispatch(SequenceActions.loadSequencesFromBackend());
+  dispatch(MasterDataActions.loadSequencesFromBackend());
 
   return (
     <div className="Carv2">

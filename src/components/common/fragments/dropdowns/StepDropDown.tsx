@@ -4,7 +4,7 @@ import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
-import { currentSequence } from "../../../../slices/SequenceSlice";
+import { editSelectors } from "../../../../slices/EditSlice";
 
 interface StepDropDownProps extends DropdownProps {
   onSelect: (step: SequenceStepCTO | undefined) => void;
@@ -30,7 +30,7 @@ export const StepDropDown: FunctionComponent<StepDropDownProps> = (props) => {
 };
 
 const useStepDropDownViewModel = () => {
-  const sequence: SequenceCTO | null = useSelector(currentSequence);
+  const sequenceToEdit: SequenceCTO | null = useSelector(editSelectors.sequenceToEdit);
 
   const stepToOption = (step: SequenceStepCTO): DropdownItemProps => {
     return {
@@ -54,5 +54,5 @@ const useStepDropDownViewModel = () => {
     return undefined;
   };
 
-  return { sequence, stepOptions, selectSequenceStep };
+  return { sequence: sequenceToEdit, stepOptions, selectSequenceStep };
 };

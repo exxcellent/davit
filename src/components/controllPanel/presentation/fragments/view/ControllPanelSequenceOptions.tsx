@@ -6,8 +6,8 @@ import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { DataSetupTO } from "../../../../../dataAccess/access/to/DataSetupTO";
 import { SequenceTO } from "../../../../../dataAccess/access/to/SequenceTO";
-import { SequenceModelActions } from "../../../../../slices/SequenceModelSlice";
-import { currentSequence, currentStep, SequenceActions, SequenceSlice } from "../../../../../slices/SequenceSlice";
+import { MasterDataActions } from "../../../../../slices/MasterDataSlice";
+import { SequenceModelActions, sequenceModelSelectors } from "../../../../../slices/SequenceModelSlice";
 import { DataSetupDropDown } from "../../../../common/fragments/dropdowns/DataSetupDropDown";
 import { SequenceDropDown } from "../../../../common/fragments/dropdowns/SequenceDropDown";
 import { OptionField } from "../edit/common/OptionField";
@@ -69,22 +69,21 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
 };
 
 const useControllPanelSequenceOptionsViewModel = () => {
-  const sequence: SequenceCTO | null = useSelector(currentSequence);
-  const step: SequenceStepCTO | null = useSelector(currentStep);
+  const sequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
+  const step: SequenceStepCTO | null = useSelector(sequenceModelSelectors.selectCurrentStep);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(SequenceActions.loadSequencesFromBackend());
+    dispatch(MasterDataActions.loadSequencesFromBackend());
   }, [dispatch]);
 
   const selectSequence = (sequence: SequenceTO | undefined) => {
     if (!isNullOrUndefined(sequence)) {
-      dispatch(SequenceSlice.actions.resetCurrentStepIndex());
-      dispatch(SequenceActions.setSequence(sequence));
+      dispatch(SequenceModelActions.setCurrentSequence(sequence.id));
     }
     if (sequence === undefined) {
-      dispatch(SequenceSlice.actions.resetCurrentStepIndex());
-      dispatch(SequenceSlice.actions.resetCurrentSequence());
+      dispatch(SequenceModelActions.resetCurrentStepIndex);
+      dispatch(SequenceModelActions.resetCurrentSequence);
     }
   };
 
@@ -96,12 +95,16 @@ const useControllPanelSequenceOptionsViewModel = () => {
     }
   };
 
+  // TODO: add in sequenceModelSlice.
+  const stepNext = () => {};
+  const stepBack = () => {};
+
   return {
     sequence,
     step,
     selectSequence,
-    stepNext: () => dispatch(SequenceSlice.actions.setNextStepToCurrentStep()),
-    stepBack: () => dispatch(SequenceSlice.actions.setPreviousStepToCurrentStep()),
+    stepNext,
+    stepBack,
     selectDataSetup,
   };
 };

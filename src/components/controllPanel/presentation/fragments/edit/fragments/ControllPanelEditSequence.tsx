@@ -4,9 +4,8 @@ import { Button, Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
-import { EditActions } from "../../../../../../slices/EditSlice";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
-import { currentSequence, SequenceActions } from "../../../../../../slices/SequenceSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2Button } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
@@ -79,7 +78,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
 };
 
 const useControllPanelEditSequenceViewModel = () => {
-  const sequenceToEdit: SequenceCTO | null = useSelector(currentSequence);
+  const sequenceToEdit: SequenceCTO | null = useSelector(editSelectors.sequenceToEdit);
   const dispatch = useDispatch();
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
   const textInput = useRef<Input>(null);
@@ -101,13 +100,12 @@ const useControllPanelEditSequenceViewModel = () => {
     if (!isNullOrUndefined(sequenceToEdit)) {
       let copySequenceToEdit: SequenceCTO = Carv2Util.deepCopy(sequenceToEdit);
       copySequenceToEdit.sequenceTO.name = name;
-      dispatch(SequenceActions.updateCurrentSequnceToEdit(copySequenceToEdit));
+      dispatch(EditActions.setMode.editSequence(copySequenceToEdit.sequenceTO));
     }
   };
 
   const saveSequence = () => {
-    dispatch(SequenceActions.saveSequence(sequenceToEdit!));
-    dispatch(SequenceActions.clearCurrentSequenceToEdit);
+    dispatch(EditActions.sequence.save(sequenceToEdit!));
     if (isCreateAnother) {
       dispatch(EditActions.setMode.editSequence());
     } else {
@@ -116,13 +114,11 @@ const useControllPanelEditSequenceViewModel = () => {
   };
 
   const deleteSequence = () => {
-    dispatch(SequenceActions.deleteSequence(sequenceToEdit!));
-    dispatch(SequenceActions.clearCurrentSequenceToEdit);
+    dispatch(EditActions.sequence.delete(sequenceToEdit!));
     dispatch(EditActions.setMode.edit());
   };
 
   const cancelEditSequence = () => {
-    dispatch(SequenceActions.clearCurrentSequenceToEdit);
     dispatch(EditActions.setMode.edit());
   };
 
@@ -146,7 +142,7 @@ const useControllPanelEditSequenceViewModel = () => {
       step.squenceStepTO.id = -1;
       step.squenceStepTO.sequenceFk = -1;
     });
-    dispatch(SequenceActions.updateCurrentSequnceToEdit(copySequence));
+    dispatch(EditActions.setMode.editSequence(copySequence.sequenceTO));
   };
 
   return {
