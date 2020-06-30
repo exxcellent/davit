@@ -8,6 +8,7 @@ import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 interface DataSetupDropDownProps extends DropdownProps {
   onSelect: (dataSetup: DataSetupTO | undefined) => void;
   placeholder?: string;
+  value?: number;
 }
 
 interface DataSetupDropDownPropsButton extends DropdownProps {
@@ -16,7 +17,7 @@ interface DataSetupDropDownPropsButton extends DropdownProps {
 }
 
 export const DataSetupDropDown: FunctionComponent<DataSetupDropDownProps> = (props) => {
-  const { onSelect, placeholder } = props;
+  const { onSelect, placeholder, value } = props;
   const { dataSetups, selectDataSetup, dataSetupToOption } = useDataSetupDropDownViewModel();
 
   return (
@@ -26,10 +27,11 @@ export const DataSetupDropDown: FunctionComponent<DataSetupDropDownProps> = (pro
       })}
       selection
       selectOnBlur={false}
-      placeholder={placeholder}
+      placeholder={placeholder || "Select Data ..."}
       onChange={(event, data) => onSelect(selectDataSetup(Number(data.value), dataSetups))}
       scrolling
       clearable={true}
+      value={value}
     />
   );
 };

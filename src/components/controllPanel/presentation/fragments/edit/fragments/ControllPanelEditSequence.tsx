@@ -97,10 +97,11 @@ const useControllPanelEditSequenceViewModel = () => {
   }, [sequenceToEdit, dispatch]);
 
   const changeName = (name: string) => {
+    console.log("call changename: ", name);
     if (!isNullOrUndefined(sequenceToEdit)) {
       let copySequenceToEdit: SequenceCTO = Carv2Util.deepCopy(sequenceToEdit);
       copySequenceToEdit.sequenceTO.name = name;
-      dispatch(EditActions.setMode.editSequence(copySequenceToEdit.sequenceTO));
+      dispatch(EditActions.sequence.update(copySequenceToEdit));
     }
   };
 

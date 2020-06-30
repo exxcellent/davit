@@ -32,7 +32,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
       </div>
       <div className="optionFieldSpacer columnDivider">
         <OptionField label="SEQUENCE">
-          <SequenceDropDown onSelect={selectSequence} placeholder="Select Sequence" />
+          <SequenceDropDown onSelect={selectSequence} />
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">

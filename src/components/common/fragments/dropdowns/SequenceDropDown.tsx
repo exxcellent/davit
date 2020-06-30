@@ -8,6 +8,7 @@ import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 interface SequenceDropDownProps extends DropdownProps {
   onSelect: (sequence: SequenceTO | undefined) => void;
   placeholder?: string;
+  value?: number;
 }
 
 interface SequenceDropDownPropsButton extends DropdownProps {
@@ -16,21 +17,20 @@ interface SequenceDropDownPropsButton extends DropdownProps {
 }
 
 export const SequenceDropDown: FunctionComponent<SequenceDropDownProps> = (props) => {
-  const { onSelect, placeholder } = props;
+  const { onSelect, placeholder, value } = props;
   const { sequences, selectSequence, sequenceToOption } = useSequenceDropDownViewModel();
 
   return (
     <Dropdown
       options={sequences.map(sequenceToOption)}
-      placeholder={placeholder}
+      placeholder={placeholder || "Select Sequence ..."}
       onChange={(event, sequence) => onSelect(selectSequence(Number(sequence.value), sequences))}
-      className="button icon"
-      inverted="true"
-      color="orange"
       floating
       selectOnBlur={false}
-      trigger={<React.Fragment />}
       scrolling
+      clearable
+      selection
+      value={value}
     />
   );
 };

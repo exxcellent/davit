@@ -435,6 +435,7 @@ export const EditActions = {
   sequence: {
     save: saveSequenceThunk,
     delete: deleteSequenceThunk,
+    update: EditSlice.actions.setSequenceToEdit,
   },
   dataSetup: {
     save: saveDataSetupThunk,
