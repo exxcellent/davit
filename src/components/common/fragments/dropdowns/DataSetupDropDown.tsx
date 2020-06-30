@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { DataSetupTO } from "../../../../dataAccess/access/to/DataSetupTO";
-import { selectDataSetups } from "../../../../slices/DataSetupSlice";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 
 interface DataSetupDropDownProps extends DropdownProps {
   onSelect: (dataSetup: DataSetupTO | undefined) => void;
@@ -54,7 +54,7 @@ export const DataSetupDropDownButton: FunctionComponent<DataSetupDropDownPropsBu
 };
 
 const useDataSetupDropDownViewModel = () => {
-  const dataSetups: DataSetupTO[] = useSelector(selectDataSetups);
+  const dataSetups: DataSetupTO[] = useSelector(masterDataSelectors.dataSetup);
 
   const dataSetupToOption = (dataSetup: DataSetupTO): DropdownItemProps => {
     return {

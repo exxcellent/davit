@@ -6,8 +6,7 @@ import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentC
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { DataSetupCTO } from "../../../../../../dataAccess/access/cto/DataSetupCTO";
 import { InitDataTO } from "../../../../../../dataAccess/access/to/InitDataTO";
-import { currentDataSetupToEdit, DataSetupActions } from "../../../../../../slices/DataSetupSlice";
-import { EditActions } from "../../../../../../slices/EditSlice";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2Button } from "../../../../../common/fragments/buttons/Carv2Button";
@@ -68,7 +67,7 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
 };
 
 const useControllPanelEditDataSetupViewModel = () => {
-  const dataSetupToEdit: DataSetupCTO | null = useSelector(currentDataSetupToEdit);
+  const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.dataSetupToEdit);
   const dispatch = useDispatch();
   const [componentToEdit, setComponentToEdit] = useState<ComponentCTO | null>(null);
   const textInput = useRef<Input>(null);
@@ -87,24 +86,21 @@ const useControllPanelEditDataSetupViewModel = () => {
     if (!isNullOrUndefined(dataSetupToEdit)) {
       let copyDataSetupToEdit: DataSetupCTO = Carv2Util.deepCopy(dataSetupToEdit);
       copyDataSetupToEdit.dataSetup.name = name;
-      dispatch(DataSetupActions.updateCurrentDataSetupToEdit(copyDataSetupToEdit));
+      dispatch(EditActions.setMode.editDataSetup(copyDataSetupToEdit.dataSetup));
     }
   };
 
   const saveDataSetup = () => {
-    dispatch(DataSetupActions.saveDataSetup(dataSetupToEdit!));
-    dispatch(DataSetupActions.clearCurrentDataSetupToEdit);
+    dispatch(EditActions.dataSetup.save(dataSetupToEdit!));
     dispatch(EditActions.setMode.edit());
   };
 
   const deleteDataSetup = () => {
-    dispatch(DataSetupActions.deleteDataSetup(dataSetupToEdit!));
-    dispatch(DataSetupActions.clearCurrentDataSetupToEdit);
+    dispatch(EditActions.dataSetup.delete(dataSetupToEdit!));
     dispatch(EditActions.setMode.edit());
   };
 
   const cancel = () => {
-    dispatch(DataSetupActions.clearCurrentDataSetupToEdit);
     dispatch(EditActions.setMode.edit());
   };
 
@@ -124,7 +120,7 @@ const useControllPanelEditDataSetupViewModel = () => {
       initData.id = -1;
       initData.dataSetupFk = -1;
     });
-    dispatch(DataSetupActions.updateCurrentDataSetupToEdit(copyDataSetup));
+    dispatch(EditActions.setMode.editDataSetup(copyDataSetup.dataSetup));
   };
 
   const setInitDatas = (dataCTOs: DataCTO[] | undefined): void => {
@@ -144,7 +140,7 @@ const useControllPanelEditDataSetupViewModel = () => {
         })
       );
       copyDataSetupToEdit.initDatas = clearInitDatas;
-      dispatch(DataSetupActions.updateCurrentDataSetupToEdit(copyDataSetupToEdit));
+      dispatch(EditActions.setMode.editDataSetup(copyDataSetupToEdit.dataSetup));
     }
   };
 

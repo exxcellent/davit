@@ -1,12 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../app/store";
+import { AppThunk, RootState } from "../app/store";
 import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
+import { DataAccess } from "../dataAccess/DataAccess";
+import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
 import { SequenceActionReducer, SequenceActionResult } from "../reducer/SequenceActionReducer";
 import { ComponentData } from "../viewDataTypes/ComponentData";
-import { Mode } from "./GlobalSlice";
+import { handleError, Mode } from "./GlobalSlice";
 
 interface SequenceModelState {
   selectedSequence: SequenceCTO | null;
@@ -36,7 +38,7 @@ const SequenceModelSlice = createSlice({
       state.componentDataMap = result.componentDatas;
       state.errorMap = result.errors;
     },
-    setSelectedDataSetup: (state, action: PayloadAction<DataSetupCTO>) => {
+    setSelectedDataSetup: (state, action: PayloadAction<DataSetupCTO | null>) => {
       state.selectedDataSetup = action.payload;
       const result: {
         componentDatas: Map<number, ComponentData[]>;
@@ -85,6 +87,15 @@ const calculateStep = (step: SequenceStepCTO, componentDatas: ComponentData[]): 
 const getStep = (stepIndex: number, sequence: SequenceCTO): SequenceStepCTO | undefined => {
   return sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.index === stepIndex);
 };
+
+const getDataSetupCTO = (dataSetupId: number): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<DataSetupCTO> = DataAccess.findDataSetupCTO(dataSetupId);
+  if (response.code === 200) {
+    dispatch(SequenceModelSlice.actions.setSelectedDataSetup(response.object));
+  } else {
+    dispatch(handleError(response.message));
+  }
+};
 // =============================================== SELECTORS ===============================================
 
 export const SequenceModelReducer = SequenceModelSlice.reducer;
@@ -110,7 +121,8 @@ export const sequenceModelSelectors = {
 
 export const SequenceModelActions = {
   selectSequence: SequenceModelSlice.actions.setSelectedSequence,
-  selectDataSetup: SequenceModelSlice.actions.setSelectedDataSetup,
+  setCurrentDataSetup: getDataSetupCTO,
+  resetCurrentDataSetup: SequenceModelSlice.actions.setSelectedDataSetup(null),
   resetCurrentStepIndex: SequenceModelSlice.actions.setCurrentStepIndex(-1),
   setCurrentStepIndex: SequenceModelSlice.actions.setCurrentStepIndex,
 };
