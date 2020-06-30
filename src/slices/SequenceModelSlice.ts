@@ -110,11 +110,12 @@ const getSequenceCTO = (sequenceId: number): AppThunk => (dispatch) => {
 
 export const SequenceModelReducer = SequenceModelSlice.reducer;
 export const sequenceModelSelectors = {
-  selectSequence: (state: RootState): SequenceCTO | null => {
-    return state.edit.mode === Mode.VIEW && (state.sequenceModel.selectedSequence as SequenceCTO).sequenceTO
-      ? (state.sequenceModel.selectedSequence as SequenceCTO)
-      : null;
-  },
+  selectSequence: (state: RootState): SequenceCTO | null => state.sequenceModel.selectedSequence,
+  // {
+  // return state.edit.mode === Mode.VIEW && (state.sequenceModel.selectedSequence as SequenceCTO).sequenceTO
+  //   ? (state.sequenceModel.selectedSequence as SequenceCTO)
+  //   : null;
+  // },
   selectDataSetup: (state: RootState): DataSetupCTO | null => {
     return state.edit.mode === Mode.VIEW && (state.sequenceModel.selectedDataSetup as DataSetupCTO).dataSetup
       ? (state.sequenceModel.selectedDataSetup as DataSetupCTO)

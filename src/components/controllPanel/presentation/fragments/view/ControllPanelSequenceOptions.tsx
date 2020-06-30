@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from "react";
+import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
@@ -6,7 +6,6 @@ import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { DataSetupTO } from "../../../../../dataAccess/access/to/DataSetupTO";
 import { SequenceTO } from "../../../../../dataAccess/access/to/SequenceTO";
-import { MasterDataActions } from "../../../../../slices/MasterDataSlice";
 import { SequenceModelActions, sequenceModelSelectors } from "../../../../../slices/SequenceModelSlice";
 import { DataSetupDropDown } from "../../../../common/fragments/dropdowns/DataSetupDropDown";
 import { SequenceDropDown } from "../../../../common/fragments/dropdowns/SequenceDropDown";
@@ -73,9 +72,9 @@ const useControllPanelSequenceOptionsViewModel = () => {
   const step: SequenceStepCTO | null = useSelector(sequenceModelSelectors.selectCurrentStep);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(MasterDataActions.loadSequencesFromBackend());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(MasterDataActions.loadSequencesFromBackend());
+  // }, [dispatch]);
 
   const selectSequence = (sequence: SequenceTO | undefined) => {
     if (!isNullOrUndefined(sequence)) {

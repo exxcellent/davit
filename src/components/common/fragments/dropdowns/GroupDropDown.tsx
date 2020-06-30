@@ -8,6 +8,7 @@ import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 interface GroupDropDownProps extends DropdownProps {
   onSelect: (group: GroupTO | undefined) => void;
   placeholder?: string;
+  value?: number;
 }
 
 interface GroupDropDownPropsButton extends DropdownProps {
@@ -16,7 +17,7 @@ interface GroupDropDownPropsButton extends DropdownProps {
 }
 
 export const GroupDropDown: FunctionComponent<GroupDropDownProps> = (props) => {
-  const { onSelect, placeholder } = props;
+  const { onSelect, placeholder, value } = props;
   const { groups, groupToOption, selectGroup } = useGroupDropDownViewModel();
 
   return (
@@ -26,11 +27,11 @@ export const GroupDropDown: FunctionComponent<GroupDropDownProps> = (props) => {
       })}
       selection
       selectOnBlur={false}
-      placeholder={placeholder}
+      placeholder={placeholder || "Select Group ..."}
       onChange={(event, data) => onSelect(selectGroup(Number(data.value), groups))}
       scrolling
       clearable
-      value={placeholder}
+      value={value}
     />
   );
 };

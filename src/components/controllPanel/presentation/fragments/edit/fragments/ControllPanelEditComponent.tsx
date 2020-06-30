@@ -36,7 +36,7 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
     <ControllPanelEditSub label={label}>
       <div className="optionFieldSpacer">
         <OptionField>
-          <GroupDropDown onSelect={setGroup} placeholder="Select Group..." value={compGroup} />
+          <GroupDropDown onSelect={setGroup} value={compGroup} />
         </OptionField>
       </div>
       <div className="columnDivider" style={{ display: "flex" }}>
