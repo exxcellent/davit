@@ -6,8 +6,7 @@ import { DataRelationTO } from "../../../../../dataAccess/access/to/DataRelation
 import { DataSetupTO } from "../../../../../dataAccess/access/to/DataSetupTO";
 import { GroupTO } from "../../../../../dataAccess/access/to/GroupTO";
 import { SequenceTO } from "../../../../../dataAccess/access/to/SequenceTO";
-import { EditActions } from "../../../../../slices/EditSlice";
-import { Mode, selectMode } from "../../../../../slices/GlobalSlice";
+import { EditActions, editSelectors, Mode } from "../../../../../slices/EditSlice";
 import { ControllPanelEditAction } from "./fragments/ControllPanelEditAction";
 import { ControllPanelEditComponent } from "./fragments/ControllPanelEditComponent";
 import { ControllPanelEditData } from "./fragments/ControllPanelEditData";
@@ -68,7 +67,7 @@ export const ControllPanelEditController: FunctionComponent<ControllPanelEditCon
 
 const useControllPanelEditViewModel = () => {
   const dispatch = useDispatch();
-  const mode: Mode = useSelector(selectMode);
+  const mode: Mode = useSelector(editSelectors.mode);
 
   return {
     mode,

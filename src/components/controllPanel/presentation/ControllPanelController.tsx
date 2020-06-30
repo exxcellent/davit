@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { isNullOrUndefined } from "util";
-import { Mode, selectMode } from "../../../slices/GlobalSlice";
+import { editSelectors, Mode } from "../../../slices/EditSlice";
 import { ControllPanelEditController } from "./fragments/edit/ControllPanelEditController";
 import { ControllPanelFileController } from "./fragments/file/ControllPanelFileController";
 import { ControllPanelSequenceOptions } from "./fragments/view/ControllPanelSequenceOptions";
@@ -33,6 +33,6 @@ interface ControllPanelViewModel {
 }
 
 const useControllPanelViewModel = (): ControllPanelViewModel => {
-  const mode: Mode = useSelector(selectMode);
+  const mode: Mode = useSelector(editSelectors.mode);
   return { mode };
 };

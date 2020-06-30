@@ -13,8 +13,22 @@ import { SequenceTO } from "../dataAccess/access/to/SequenceTO";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
 import { Carv2Util } from "../utils/Carv2Util";
-import { handleError, Mode } from "./GlobalSlice";
+import { handleError } from "./GlobalSlice";
 import { MasterDataActions } from "./MasterDataSlice";
+
+export enum Mode {
+  FILE = "FILE",
+  VIEW = "VIEW",
+  EDIT = "EDIT",
+  EDIT_COMPONENT = "EDIT_COMPONENT",
+  EDIT_GROUP = "EDIT_GROUP",
+  EDIT_DATA = "EDIT_DATA",
+  EDIT_DATA_RELATION = "EDIT_DATA_RELATION",
+  EDIT_DATA_SETUP = "EDIT_DATA_SETUP",
+  EDIT_SEQUENCE = "EDIT_SEQUENCE",
+  EDIT_SEQUENCE_STEP = "EDIT_SEQUENCE_STEP",
+  EDIT_SEQUENCE_STEP_ACTION = "EDIT_SEQUENCE_STEP_ACTION",
+}
 
 const MODE_LOCAL_STORAGE = "MODE";
 

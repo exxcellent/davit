@@ -8,7 +8,8 @@ import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
 import { SequenceActionReducer, SequenceActionResult } from "../reducer/SequenceActionReducer";
 import { ComponentData } from "../viewDataTypes/ComponentData";
-import { handleError, Mode } from "./GlobalSlice";
+import { Mode } from "./EditSlice";
+import { handleError } from "./GlobalSlice";
 
 interface SequenceModelState {
   selectedSequence: SequenceCTO | null;
