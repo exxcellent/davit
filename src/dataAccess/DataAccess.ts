@@ -16,6 +16,8 @@ import { DataDataAccessService } from "./services/DataDataAccessService";
 import { SequenceDataAccessService } from "./services/SequenceDataAccessService";
 
 export const DataAccess = {
+  // ========================================= FILE =========================================
+
   storeFileData(fileData: string): DataAccessResponse<void> {
     let response: DataAccessResponse<void> = {
       object: undefined,
@@ -44,6 +46,8 @@ export const DataAccess = {
     }
   },
 
+  // ========================================= COMPONENT =========================================
+
   findAllComponents(): DataAccessResponse<ComponentCTO[]> {
     return makeTransactional(ComponentDataAccessService.findAll);
   },
@@ -56,21 +60,33 @@ export const DataAccess = {
     return makeTransactional(() => ComponentDataAccessService.delete(component));
   },
 
+  // ========================================= SEQUENCE =========================================
+
   deleteSequenceCTO(sequence: SequenceCTO): DataAccessResponse<SequenceCTO> {
-    return makeTransactional(() => SequenceDataAccessService.delete(sequence));
+    return makeTransactional(() => SequenceDataAccessService.deleteSequenceCTO(sequence));
+  },
+
+  deleteSequenceTO(sequenceTO: SequenceTO): DataAccessResponse<SequenceTO> {
+    return makeTransactional(() => SequenceDataAccessService.deleteSequenceTO(sequenceTO));
   },
 
   findAllSequences(): DataAccessResponse<SequenceTO[]> {
     return makeTransactional(SequenceDataAccessService.findAll);
   },
 
-  findSequence(sequenceId: number): DataAccessResponse<SequenceCTO> {
-    return makeTransactional(() => SequenceDataAccessService.find(sequenceId));
+  findSequenceCTO(sequenceId: number): DataAccessResponse<SequenceCTO> {
+    return makeTransactional(() => SequenceDataAccessService.findSequenceCTO(sequenceId));
   },
 
   saveSequenceCTO(sequence: SequenceCTO): DataAccessResponse<SequenceCTO> {
-    return makeTransactional(() => SequenceDataAccessService.save(sequence));
+    return makeTransactional(() => SequenceDataAccessService.saveSequenceCTO(sequence));
   },
+
+  saveSequenceTO(sequence: SequenceTO): DataAccessResponse<SequenceTO> {
+    return makeTransactional(() => SequenceDataAccessService.saveSequenceTO(sequence));
+  },
+
+  // ========================================= STEP =========================================
 
   saveSequenceStepCTO(sequenceStep: SequenceStepCTO): DataAccessResponse<SequenceStepCTO> {
     return makeTransactional(() => SequenceDataAccessService.saveSequenceStep(sequenceStep));
@@ -80,20 +96,14 @@ export const DataAccess = {
     return makeTransactional(() => SequenceDataAccessService.deleteSequenceStep(sequenceStep));
   },
 
+  // ========================================= DATA SETUP =========================================
+
   findAllDataSetups(): DataAccessResponse<DataSetupTO[]> {
     return makeTransactional(SequenceDataAccessService.findAllDataSetup);
   },
 
   findDataSetupCTO(dataSetupId: number): DataAccessResponse<DataSetupCTO> {
     return makeTransactional(() => SequenceDataAccessService.findDatSetupCTO(dataSetupId));
-  },
-
-  findAllInitDatas(): DataAccessResponse<InitDataTO[]> {
-    return makeTransactional(SequenceDataAccessService.findAllInitDatas);
-  },
-
-  findAllDatas(): DataAccessResponse<DataCTO[]> {
-    return makeTransactional(DataDataAccessService.findAllDatas);
   },
 
   saveDataSetup(dataSetup: DataSetupTO): DataAccessResponse<DataSetupTO> {
@@ -108,6 +118,18 @@ export const DataAccess = {
     return makeTransactional(() => SequenceDataAccessService.saveDataSetupCTO(dataSetup));
   },
 
+  // ========================================= INIT DATA =========================================
+
+  findAllInitDatas(): DataAccessResponse<InitDataTO[]> {
+    return makeTransactional(SequenceDataAccessService.findAllInitDatas);
+  },
+
+  // ========================================= DATA =========================================
+
+  findAllDatas(): DataAccessResponse<DataCTO[]> {
+    return makeTransactional(DataDataAccessService.findAllDatas);
+  },
+
   saveDataCTO(dataCTO: DataCTO): DataAccessResponse<DataCTO> {
     return makeTransactional(() => DataDataAccessService.saveDataCTO(dataCTO));
   },
@@ -115,6 +137,8 @@ export const DataAccess = {
   deleteDataCTO(dataCTO: DataCTO): DataAccessResponse<DataCTO> {
     return makeTransactional(() => DataDataAccessService.deleteDataCTO(dataCTO));
   },
+
+  // ========================================= RELATION =========================================
 
   deleteDataRelation(dataRelationCTO: DataRelationTO): DataAccessResponse<DataRelationTO> {
     return makeTransactional(() => DataDataAccessService.deleteDataRelationCTO(dataRelationCTO));
@@ -128,6 +152,8 @@ export const DataAccess = {
     return makeTransactional(() => DataDataAccessService.saveDataRelation(dataRelation));
   },
 
+  // ========================================= GROUP =========================================
+
   findAllGroups(): DataAccessResponse<GroupTO[]> {
     return makeTransactional(ComponentDataAccessService.findAllGroups);
   },
@@ -140,10 +166,14 @@ export const DataAccess = {
     return makeTransactional(() => ComponentDataAccessService.deleteGroup(group));
   },
 
+  // ========================================= ACTION =========================================
+
   deleteActionCTO(action: ActionTO): DataAccessResponse<ActionTO> {
     return makeTransactional(() => SequenceDataAccessService.deleteAction(action));
   },
 };
+
+// ========================================= PRIVATE =========================================
 
 function makeTransactional<T>(callback: () => T): DataAccessResponse<T> {
   let response: DataAccessResponse<T> = {

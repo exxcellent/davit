@@ -15,15 +15,20 @@ import { SequenceStepRepository } from "../repositories/SequenceStepRepository";
 import { CheckHelper } from "../util/CheckHelper";
 
 export const SequenceDataAccessService = {
-  find(sequenceId: number): SequenceCTO {
+  findSequenceCTO(sequenceId: number): SequenceCTO {
     return createSequenceCTO(SequenceRepository.find(sequenceId));
+  },
+
+  findSequenceTO(sequenceId: number): SequenceTO | undefined {
+    return SequenceRepository.find(sequenceId);
   },
 
   findAll(): SequenceTO[] {
     return SequenceRepository.findAll();
   },
 
-  save(sequence: SequenceCTO): SequenceCTO {
+  saveSequenceCTO(sequence: SequenceCTO): SequenceCTO {
+    CheckHelper.nullCheck(sequence, "sequenceCTO");
     const sequenceTO: SequenceTO = SequenceRepository.save(sequence.sequenceTO);
     sequence.sequenceStepCTOs.forEach((step) => {
       if (step.squenceStepTO.sequenceFk === -1) {
@@ -32,6 +37,12 @@ export const SequenceDataAccessService = {
       this.saveSequenceStep(step);
     });
     return createSequenceCTO(sequenceTO);
+  },
+
+  saveSequenceTO(sequenceTO: SequenceTO): SequenceTO {
+    CheckHelper.nullCheck(sequenceTO, "sequenceTO");
+    const savedSequenceTO: SequenceTO = SequenceRepository.save(sequenceTO);
+    return savedSequenceTO;
   },
 
   saveSequenceStep(sequenceStep: SequenceStepCTO): SequenceStepCTO {
@@ -55,14 +66,19 @@ export const SequenceDataAccessService = {
     return createSequenceStepCTO(savedStep);
   },
 
-  delete(sequence: SequenceCTO): SequenceCTO {
+  deleteSequenceCTO(sequence: SequenceCTO): SequenceCTO {
     CheckHelper.nullCheck(sequence.sequenceTO, "sequenceTO");
     sequence.sequenceStepCTOs.forEach(this.deleteSequenceStep);
     if (sequence.sequenceStepCTOs.length > 0) {
       throw new Error("can not delete sequence, at least one step is containing in this sequence.");
     }
-    SequenceRepository.delete(sequence.sequenceTO);
+    this.deleteSequenceTO(sequence.sequenceTO);
     return sequence;
+  },
+
+  deleteSequenceTO(sequenceTO: SequenceTO): SequenceTO {
+    CheckHelper.nullCheck(sequenceTO, "sequenceTO");
+    return SequenceRepository.delete(sequenceTO);
   },
 
   deleteSequenceStep(sequenceStep: SequenceStepCTO): SequenceStepCTO {

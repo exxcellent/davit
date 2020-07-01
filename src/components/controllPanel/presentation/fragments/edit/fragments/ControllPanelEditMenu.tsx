@@ -5,7 +5,6 @@ import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationTO } from "../../../../../../dataAccess/access/to/DataRelationTO";
 import { DataSetupTO } from "../../../../../../dataAccess/access/to/DataSetupTO";
 import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
-import { SequenceTO } from "../../../../../../dataAccess/access/to/SequenceTO";
 import { ComponentDropDownButton } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
 import { DataDropDownButton } from "../../../../../common/fragments/dropdowns/DataDropDown";
 import { DataSetupDropDownButton } from "../../../../../common/fragments/dropdowns/DataSetupDropDown";
@@ -18,7 +17,7 @@ export interface ControllPanelEditMenuProps {
   editOrAddComponent: (component?: ComponentCTO) => void;
   editOrAddData: (data?: DataCTO) => void;
   editOrAddRelation: (relation?: DataRelationTO) => void;
-  editOrAddSequence: (sequence?: SequenceTO) => void;
+  editOrAddSequence: (sequenceId?: number) => void;
   editOrAddGroup: (group?: GroupTO) => void;
   editOrAddDataSetup: (dataSetup?: DataSetupTO) => void;
 }
@@ -89,7 +88,7 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Sequence
             </Button>
-            <SequenceDropDownButton onSelect={editOrAddSequence} icon="wrench" />
+            <SequenceDropDownButton onSelect={(sequenceTO) => editOrAddSequence(sequenceTO?.id)} icon="wrench" />
           </Button.Group>
         </OptionField>
       </div>

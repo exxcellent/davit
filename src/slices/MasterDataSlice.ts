@@ -117,13 +117,13 @@ const loadAll = (): AppThunk => (dispatch) => {
   dispatch(loadDatasFromBackend());
 };
 
+// ----------------------------------------------- SEARCH --------------------------------------------------
+
 // =============================================== SELECTORS ===============================================
 
 export const MasterDataReducer = MasterDataSlice.reducer;
 export const masterDataSelectors = {
   components: (state: RootState): ComponentCTO[] => state.masterData.components,
-  componentById: (id: number) => (state: RootState): ComponentCTO | undefined =>
-    state.masterData.components.find((component) => component.component.id === id),
   groups: (state: RootState): GroupTO[] => state.masterData.groups,
   datas: (state: RootState): DataCTO[] => state.masterData.datas,
   relations: (state: RootState): DataRelationTO[] => state.masterData.relations,

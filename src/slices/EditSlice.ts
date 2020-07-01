@@ -15,6 +15,7 @@ import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
 import { Carv2Util } from "../utils/Carv2Util";
 import { handleError } from "./GlobalSlice";
 import { MasterDataActions } from "./MasterDataSlice";
+import { SequenceModelActions } from "./SequenceModelSlice";
 
 export enum Mode {
   FILE = "FILE",
@@ -43,7 +44,7 @@ interface EditState {
     | ComponentCTO
     | DataCTO
     | DataRelationTO
-    | SequenceCTO
+    | SequenceTO
     | SequenceStepCTO
     | StepAction
     | DataSetupCTO
@@ -80,7 +81,7 @@ const EditSlice = createSlice({
         handleError("Try to set relation to edit in mode: " + state.mode);
       }
     },
-    setSequenceToEdit: (state, action: PayloadAction<SequenceCTO>) => {
+    setSequenceToEdit: (state, action: PayloadAction<SequenceTO>) => {
       if (state.mode === Mode.EDIT_SEQUENCE) {
         state.objectToEdit = action.payload;
       } else {
@@ -149,6 +150,8 @@ const setModeToView = (): AppThunk => async (dispatch) => {
 };
 
 const setModeToEdit = (): AppThunk => async (dispatch) => {
+  // TODO: dosn't fells right to do this here!
+  dispatch(SequenceModelActions.resetCurrentSequence);
   dispatch(EditSlice.actions.clearObjectToEdit());
   dispatch(setModeWithStorage(Mode.EDIT));
 };
@@ -168,23 +171,28 @@ const setModeToEditRelation = (relation?: DataRelationTO): AppThunk => async (di
   dispatch(EditSlice.actions.setRelationToEdit(relation || new DataRelationTO()));
 };
 
-const setModeToEditSequence = (sequence?: SequenceTO): AppThunk => async (dispatch) => {
+const setModeToEditSequence = (sequenceId?: number): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE));
-  if (sequence) {
-    let response: DataAccessResponse<SequenceCTO> = DataAccess.findSequence(sequence.id);
+  if (sequenceId) {
+    // TODO: change CTO to TO.
+    let response: DataAccessResponse<SequenceCTO> = DataAccess.findSequenceCTO(sequenceId);
     if (response.code === 200) {
-      dispatch(EditSlice.actions.setSequenceToEdit(Carv2Util.deepCopy(response.object)));
+      dispatch(EditSlice.actions.setSequenceToEdit(Carv2Util.deepCopy(response.object.sequenceTO)));
+      console.log("call setCurrent Sequence: ", sequenceId);
+      dispatch(SequenceModelActions.setCurrentSequence(sequenceId));
     } else {
       handleError(response.message);
     }
   } else {
-    dispatch(EditSlice.actions.setSequenceToEdit(new SequenceCTO()));
+    dispatch(EditSlice.actions.setSequenceToEdit(new SequenceTO()));
   }
 };
 
 const setModeToEditStep = (stepCTO?: SequenceStepCTO): AppThunk => async (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_STEP));
-  dispatch(EditSlice.actions.setStepToEdit(Carv2Util.deepCopy(stepCTO) || new SequenceStepCTO()));
+  dispatch(
+    EditSlice.actions.setStepToEdit(Carv2Util.deepCopy(stepCTO) || new SequenceStepCTO().squenceStepTO.sequenceFk)
+  );
 };
 
 const setModeToEditAction = (action?: ActionTO): AppThunk => async (dispatch) => {
@@ -307,19 +315,17 @@ const deleteDataSetupThunk = (dataSetup: DataSetupCTO): AppThunk => async (dispa
 };
 
 // ----------------------------------------------- SEQUENCE -----------------------------------------------
-const saveSequenceThunk = (sequence: SequenceCTO): AppThunk => (dispatch) => {
-  let copySequence: SequenceCTO = Carv2Util.deepCopy(sequence);
-  copySequence.sequenceStepCTOs.sort((step1, step2) => step1.squenceStepTO.index - step2.squenceStepTO.index);
-  const response: DataAccessResponse<SequenceCTO> = DataAccess.saveSequenceCTO(copySequence);
+const saveSequenceThunk = (sequence: SequenceTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<SequenceTO> = DataAccess.saveSequenceTO(sequence);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
   dispatch(MasterDataActions.loadSequencesFromBackend());
+  dispatch(EditSlice.actions.setSequenceToEdit(response.object));
 };
 
-const deleteSequenceThunk = (sequence: SequenceCTO): AppThunk => async (dispatch) => {
-  const response: DataAccessResponse<SequenceCTO> = await DataAccess.deleteSequenceCTO(sequence);
-  console.log(response);
+const deleteSequenceThunk = (sequence: SequenceTO): AppThunk => async (dispatch) => {
+  const response: DataAccessResponse<SequenceTO> = await DataAccess.deleteSequenceTO(sequence);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
@@ -329,6 +335,14 @@ const deleteSequenceThunk = (sequence: SequenceCTO): AppThunk => async (dispatch
 // ----------------------------------------------- SEQUENCE STEP -----------------------------------------------
 const deleteSequenceStepThunk = (step: SequenceStepCTO): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<SequenceStepCTO> = await DataAccess.deleteSequenceStepCTO(step);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(MasterDataActions.loadSequencesFromBackend());
+};
+
+const saveSequenceStepThunk = (step: SequenceStepCTO): AppThunk => async (dispatch) => {
+  const response: DataAccessResponse<SequenceStepCTO> = await DataAccess.saveSequenceStepCTO(step);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
@@ -371,9 +385,9 @@ export const editSelectors = {
       ? (state.edit.objectToEdit as DataRelationTO)
       : null;
   },
-  sequenceToEdit: (state: RootState): SequenceCTO | null => {
-    return state.edit.mode === Mode.EDIT_SEQUENCE && (state.edit.objectToEdit as SequenceCTO).sequenceTO
-      ? (state.edit.objectToEdit as SequenceCTO)
+  sequenceToEdit: (state: RootState): SequenceTO | null => {
+    return state.edit.mode === Mode.EDIT_SEQUENCE && (state.edit.objectToEdit as SequenceTO)
+      ? (state.edit.objectToEdit as SequenceTO)
       : null;
   },
   dataSetupToEdit: (state: RootState): DataSetupCTO | null => {
@@ -442,6 +456,7 @@ export const EditActions = {
     delete: deleteDataSetupThunk,
   },
   step: {
+    save: saveSequenceStepThunk,
     delete: deleteSequenceStepThunk,
   },
   action: {

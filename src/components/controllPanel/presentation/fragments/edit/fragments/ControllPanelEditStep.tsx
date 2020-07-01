@@ -8,6 +8,7 @@ import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/Sequenc
 import { ActionTO } from "../../../../../../dataAccess/access/to/ActionTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
+import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ActionDropDown } from "../../../../../common/fragments/dropdowns/ActionDropDown";
@@ -91,7 +92,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
 };
 
 const useControllPanelEditSequenceStepViewModel = () => {
-  const sequenceToEdit: SequenceCTO | null = useSelector(editSelectors.sequenceToEdit);
+  const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
   const sequenceStepToEdit: SequenceStepCTO | null = useSelector(editSelectors.stepToEdit);
   const dispatch = useDispatch();
   const [isEditNext, setIsEditNext] = useState<boolean>(false);
@@ -106,9 +107,10 @@ const useControllPanelEditSequenceStepViewModel = () => {
     textInput.current!.focus();
   }, [sequenceStepToEdit, dispatch]);
 
+  // TODO: finde solution, we dont have the sequence any more in this state.
   const indexToOptions = (): DropdownItemProps[] => {
-    if (sequenceToEdit) {
-      return Array.from(Array(sequenceToEdit.sequenceStepCTOs.length).keys()).map((index) => {
+    if (selectedSequence) {
+      return Array.from(Array(selectedSequence.sequenceStepCTOs.length).keys()).map((index) => {
         return {
           key: index + 1,
           value: index + 1,
@@ -148,42 +150,41 @@ const useControllPanelEditSequenceStepViewModel = () => {
   };
 
   const saveSequenceStep = () => {
-    if (!isNullOrUndefined(sequenceToEdit) && !isNullOrUndefined(sequenceStepToEdit)) {
-      dispatch(EditActions.sequence.save(sequenceToEdit));
-      if (isEditNext) {
-        if (sequenceStepToEdit.squenceStepTO.index < sequenceToEdit.sequenceStepCTOs.length) {
-          dispatch(
-            EditActions.setMode.editStep(
-              sequenceToEdit.sequenceStepCTOs.find(
-                (step) => step.squenceStepTO.id === sequenceStepToEdit.squenceStepTO.index + 1
-              )
-            )
-          );
-        } else {
-          dispatch(EditActions.setMode.editStep());
-        }
-      } else {
-        dispatch(EditActions.setMode.editSequence(sequenceToEdit.sequenceTO));
-      }
+    if (!isNullOrUndefined(sequenceStepToEdit)) {
+      dispatch(EditActions.step.save(sequenceStepToEdit));
+      // if (isEditNext) {
+      //   if (sequenceStepToEdit.squenceStepTO.index < sequenceToEdit.sequenceStepCTOs.length) {
+      //     dispatch(
+      //       EditActions.setMode.editStep(
+      //         sequenceToEdit.sequenceStepCTOs.find(
+      //           (step) => step.squenceStepTO.id === sequenceStepToEdit.squenceStepTO.index + 1
+      //         )
+      //       )
+      //     );
+      //   } else {
+      //     dispatch(EditActions.setMode.editStep());
+      //   }
+    } else {
+      dispatch(EditActions.setMode.edit());
     }
   };
 
   const deleteSequenceStep = () => {
-    if (!isNullOrUndefined(sequenceToEdit) && !isNullOrUndefined(sequenceStepToEdit)) {
+    if (!isNullOrUndefined(sequenceStepToEdit)) {
       dispatch(EditActions.step.delete(sequenceStepToEdit));
-      dispatch(EditActions.setMode.editSequence(sequenceToEdit.sequenceTO));
+      dispatch(EditActions.setMode.edit());
     }
   };
 
   const editOrAddAction = (action?: ActionTO) => {
-    if (!isNullOrUndefined(sequenceToEdit) && !isNullOrUndefined(sequenceStepToEdit)) {
+    if (!isNullOrUndefined(sequenceStepToEdit)) {
       dispatch(EditActions.setMode.editAction(action));
     }
   };
 
   const validStep = (): boolean => {
     let valid: boolean = false;
-    if (!isNullOrUndefined(sequenceStepToEdit) && !isNullOrUndefined(sequenceToEdit)) {
+    if (!isNullOrUndefined(sequenceStepToEdit)) {
       if (
         sequenceStepToEdit.squenceStepTO.name !== "" &&
         sequenceStepToEdit.squenceStepTO.sourceComponentFk !== -1 &&
@@ -196,8 +197,8 @@ const useControllPanelEditSequenceStepViewModel = () => {
   };
 
   const cancel = (): void => {
-    if (!isNullOrUndefined(sequenceToEdit)) {
-      dispatch(EditActions.setMode.editSequence(sequenceToEdit.sequenceTO));
+    if (!isNullOrUndefined(sequenceStepToEdit)) {
+      dispatch(EditActions.setMode.editSequence(sequenceStepToEdit.squenceStepTO.sequenceFk));
     }
   };
 

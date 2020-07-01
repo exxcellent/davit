@@ -2,8 +2,8 @@ import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
-import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
+import { SequenceTO } from "../../../../../../dataAccess/access/to/SequenceTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
@@ -78,7 +78,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
 };
 
 const useControllPanelEditSequenceViewModel = () => {
-  const sequenceToEdit: SequenceCTO | null = useSelector(editSelectors.sequenceToEdit);
+  const sequenceToEdit: SequenceTO | null = useSelector(editSelectors.sequenceToEdit);
   const dispatch = useDispatch();
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
   const textInput = useRef<Input>(null);
@@ -89,7 +89,7 @@ const useControllPanelEditSequenceViewModel = () => {
       handleError("Tried to go to edit sequence without sequenceToedit specified");
       dispatch(EditActions.setMode.edit());
     }
-    if (sequenceToEdit?.sequenceTO.id !== -1) {
+    if (sequenceToEdit?.id !== -1) {
       setIsCreateAnother(false);
     }
     // used to focus the textfield on create another
@@ -97,10 +97,9 @@ const useControllPanelEditSequenceViewModel = () => {
   }, [sequenceToEdit, dispatch]);
 
   const changeName = (name: string) => {
-    console.log("call changename: ", name);
     if (!isNullOrUndefined(sequenceToEdit)) {
-      let copySequenceToEdit: SequenceCTO = Carv2Util.deepCopy(sequenceToEdit);
-      copySequenceToEdit.sequenceTO.name = name;
+      let copySequenceToEdit: SequenceTO = Carv2Util.deepCopy(sequenceToEdit);
+      copySequenceToEdit.name = name;
       dispatch(EditActions.sequence.update(copySequenceToEdit));
     }
   };
@@ -125,7 +124,7 @@ const useControllPanelEditSequenceViewModel = () => {
 
   const validateInput = (): boolean => {
     if (!isNullOrUndefined(sequenceToEdit)) {
-      return Carv2Util.isValidName(sequenceToEdit.sequenceTO.name);
+      return Carv2Util.isValidName(sequenceToEdit.name);
     } else {
       return false;
     }
@@ -136,26 +135,27 @@ const useControllPanelEditSequenceViewModel = () => {
   };
 
   const copySequence = () => {
-    let copySequence: SequenceCTO = Carv2Util.deepCopy(sequenceToEdit);
-    copySequence.sequenceTO.name = sequenceToEdit?.sequenceTO.name + "-copy";
-    copySequence.sequenceTO.id = -1;
-    copySequence.sequenceStepCTOs.forEach((step) => {
-      step.squenceStepTO.id = -1;
-      step.squenceStepTO.sequenceFk = -1;
-    });
-    dispatch(EditActions.setMode.editSequence(copySequence.sequenceTO));
+    let copySequence: SequenceTO = Carv2Util.deepCopy(sequenceToEdit);
+    copySequence.name = sequenceToEdit?.name + "-copy";
+    copySequence.id = -1;
+    // TODO: need a way to copy steps as well!
+    // copySequence.sequenceStepCTOs.forEach((step) => {
+    //   step.squenceStepTO.id = -1;
+    //   step.squenceStepTO.sequenceFk = -1;
+    // });
+    dispatch(EditActions.sequence.save(copySequence));
   };
 
   return {
-    label: sequenceToEdit?.sequenceTO.id === -1 ? "ADD SEQUENCE" : "EDIT SEQUENCE",
-    name: sequenceToEdit?.sequenceTO.name,
+    label: sequenceToEdit?.id === -1 ? "ADD SEQUENCE" : "EDIT SEQUENCE",
+    name: sequenceToEdit?.name,
     changeName,
     saveSequence,
     deleteSequence,
     cancel: cancelEditSequence,
     toggleIsCreateAnother: () => setIsCreateAnother(!isCreateAnother),
     textInput,
-    showExistingOptions: sequenceToEdit?.sequenceTO.id !== -1,
+    showExistingOptions: sequenceToEdit?.id !== -1,
     editOrAddSequenceStep,
     validateInput,
     // sequencesDropdown: useGetStepDropDown((step) => editOrAddSequenceStep(step?.squenceStepTO.index), "wrench"),

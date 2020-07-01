@@ -9,7 +9,6 @@ interface SequenceTableModelControllerProps {}
 export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (props) => {
   const sequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
   const selectedStep: SequenceStepCTO | null = useSelector(sequenceModelSelectors.selectCurrentStep);
-  // TODO: add case edit sequence and step.
 
   const createStepColumn = (step: SequenceStepCTO) => {
     const trClass: string = selectedStep?.squenceStepTO.id === step.squenceStepTO.id ? "carv2TrMarked" : "carv2Tr";
@@ -17,8 +16,9 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
       <tr key={step.squenceStepTO.id} className={trClass}>
         <td className="carv2Td">{step.squenceStepTO.index}</td>
         <td className="carv2Td">{step.squenceStepTO.name}</td>
-        {/* <td className="carv2Td">{step. componentCTOSource.component.name}</td> */}
-        {/* <td className="carv2Td">{step.componentCTOTarget.component.name}</td> */}
+        {/* TODO: get component name instat of fk. */}
+        <td className="carv2Td">{step.squenceStepTO.sourceComponentFk}</td>
+        <td className="carv2Td">{step.squenceStepTO.targetComponentFk}</td>
       </tr>
     );
   };

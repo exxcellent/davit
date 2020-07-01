@@ -66,7 +66,7 @@ const calculateSequence = (
     let componenentDatas: ComponentData[] = dataSetup.initDatas.map((initData) => {
       return { componentFk: initData.componentFk, dataFk: initData.dataFk };
     });
-    let step = getStep(index, sequence);
+    let step = getStepFromSequence(index, sequence);
     while (step) {
       const result: SequenceActionResult = calculateStep(step, componenentDatas);
       componentDataMap.set(step.squenceStepTO.index, result.componenDatas);
@@ -75,7 +75,7 @@ const calculateSequence = (
       }
       componenentDatas = result.componenDatas;
       index++;
-      step = getStep(index, sequence);
+      step = getStepFromSequence(index, sequence);
     }
   }
   return { componentDatas: componentDataMap, errors: errorMap };
@@ -85,11 +85,11 @@ const calculateStep = (step: SequenceStepCTO, componentDatas: ComponentData[]): 
   return SequenceActionReducer.executeActionsOnComponentDatas(step.actions, componentDatas);
 };
 
-const getStep = (stepIndex: number, sequence: SequenceCTO): SequenceStepCTO | undefined => {
+const getStepFromSequence = (stepIndex: number, sequence: SequenceCTO): SequenceStepCTO | undefined => {
   return sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.index === stepIndex);
 };
 
-const getDataSetupCTO = (dataSetupId: number): AppThunk => (dispatch) => {
+const getDataSetupCTOFromBackend = (dataSetupId: number): AppThunk => (dispatch) => {
   const response: DataAccessResponse<DataSetupCTO> = DataAccess.findDataSetupCTO(dataSetupId);
   if (response.code === 200) {
     dispatch(SequenceModelSlice.actions.setSelectedDataSetup(response.object));
@@ -98,9 +98,10 @@ const getDataSetupCTO = (dataSetupId: number): AppThunk => (dispatch) => {
   }
 };
 
-const getSequenceCTO = (sequenceId: number): AppThunk => (dispatch) => {
-  const response: DataAccessResponse<SequenceCTO> = DataAccess.findSequence(sequenceId);
+const getSequenceCTOFromBackend = (sequenceId: number): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<SequenceCTO> = DataAccess.findSequenceCTO(sequenceId);
   if (response.code === 200) {
+    console.log("found sequence: ", response.object);
     dispatch(SequenceModelSlice.actions.setSelectedSequence(response.object));
   } else {
     dispatch(handleError(response.message));
@@ -131,8 +132,8 @@ export const sequenceModelSelectors = {
 // =============================================== ACTIONS ===============================================
 
 export const SequenceModelActions = {
-  setCurrentSequence: getSequenceCTO,
-  setCurrentDataSetup: getDataSetupCTO,
+  setCurrentSequence: getSequenceCTOFromBackend,
+  setCurrentDataSetup: getDataSetupCTOFromBackend,
   resetCurrentDataSetup: SequenceModelSlice.actions.setSelectedDataSetup(null),
   resetCurrentStepIndex: SequenceModelSlice.actions.setCurrentStepIndex(-1),
   resetCurrentSequence: SequenceModelSlice.actions.setSelectedSequence(null),
