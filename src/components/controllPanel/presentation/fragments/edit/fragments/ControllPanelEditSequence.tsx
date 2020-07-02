@@ -143,7 +143,7 @@ const useControllPanelEditSequenceViewModel = () => {
     //   step.squenceStepTO.id = -1;
     //   step.squenceStepTO.sequenceFk = -1;
     // });
-    dispatch(EditActions.sequence.save(copySequence));
+    dispatch(EditActions.sequence.update(copySequence));
   };
 
   return {

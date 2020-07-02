@@ -58,14 +58,24 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
           <ComponentDropDown onSelect={(comp) => setComponent(comp, false)} value={targetCompId} />
         </OptionField>
       </div>
-      <div className="columnDivider controllPanelEditChild">
-        <Button.Group>
-          <Button icon="add" inverted color="orange" onClick={() => editOrAddAction()} />
-          <Button id="buttonGroupLabel" disabled inverted color="orange">
-            Action
-          </Button>
-          <ActionDropDown onSelect={editOrAddAction} icon={"wrench"} />
-        </Button.Group>
+      <div className="columnDivider optionFieldSpacer">
+        <OptionField>
+          <Button.Group>
+            <Button icon="add" inverted color="orange" onClick={() => editOrAddAction()} />
+            <Button id="buttonGroupLabel" disabled inverted color="orange">
+              Action
+            </Button>
+            <ActionDropDown onSelect={editOrAddAction} icon={"wrench"} />
+          </Button.Group>
+          <Button.Group>
+            <Button icon="add" inverted color="orange" onClick={() => {}} />
+            <Button id="buttonGroupLabel" disabled inverted color="orange">
+              Conditions
+            </Button>
+            <Button icon="wrench" inverted color="orange" onClick={() => {}} />
+            {/* TODO: condition dropdown. */}
+          </Button.Group>
+        </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
         <Carv2SubmitCancelCheckBox
