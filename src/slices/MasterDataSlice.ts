@@ -129,6 +129,9 @@ export const masterDataSelectors = {
   relations: (state: RootState): DataRelationTO[] => state.masterData.relations,
   sequences: (state: RootState): SequenceTO[] => state.masterData.sequences,
   dataSetup: (state: RootState): DataSetupTO[] => state.masterData.dataSetups,
+  getSequenceTO: (id: number) => (state: RootState): SequenceTO | undefined => {
+    return state.masterData.sequences.find((sequence) => sequence.id === id);
+  },
 };
 
 // =============================================== ACTIONS ===============================================

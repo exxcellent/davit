@@ -60,7 +60,7 @@ export const SequenceDataAccessService = {
     const savedStep: SequenceStepTO = SequenceStepRepository.save(sequenceStep.squenceStepTO);
 
     sequenceStep.actions.forEach((action) => {
-      action.sequenceStepFk = savedStep.id;
+      // action.sequenceStepFk = savedStep.id;
       ActionRepository.save(action);
     });
     return createSequenceStepCTO(savedStep);

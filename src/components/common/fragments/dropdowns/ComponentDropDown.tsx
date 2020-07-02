@@ -30,7 +30,7 @@ export const ComponentDropDown: FunctionComponent<ComponentDropDownProps> = (pro
       placeholder={placeholder || "Select Component ..."}
       onChange={(event, data) => onSelect(selectComponent(Number(data.value), components))}
       scrolling
-      value={value}
+      value={value === -1 ? undefined : value}
     />
   );
 };

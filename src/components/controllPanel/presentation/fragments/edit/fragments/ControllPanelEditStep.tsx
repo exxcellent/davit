@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Dropdown, DropdownItemProps, Input } from "semantic-ui-react";
+import { Button, Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
@@ -24,17 +24,14 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
   const {
     label,
     name,
-    index,
     cancel,
     changeName,
-    changeIndex,
     deleteSequenceStep,
     saveSequenceStep,
     showDelete,
     textInput,
     toggleIsCreateAnother,
     setComponent,
-    indexToOptions,
     validStep,
     editOrAddAction,
     sourceCompId,
@@ -52,13 +49,6 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
             value={name}
             autoFocus
             ref={textInput}
-          />
-          <Dropdown
-            options={indexToOptions()}
-            selection
-            compact
-            onChange={(event, data) => changeIndex(Number(data.value))}
-            value={index}
           />
         </OptionField>
       </div>
@@ -92,54 +82,40 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
 };
 
 const useControllPanelEditSequenceStepViewModel = () => {
+  const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.stepToEdit);
   const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
-  const sequenceStepToEdit: SequenceStepCTO | null = useSelector(editSelectors.stepToEdit);
   const dispatch = useDispatch();
   const [isEditNext, setIsEditNext] = useState<boolean>(false);
   const textInput = useRef<Input>(null);
 
   useEffect(() => {
-    if (isNullOrUndefined(sequenceStepToEdit)) {
+    if (isNullOrUndefined(stepToEdit)) {
       handleError("Tried to go to edit sequence step without sequenceStepToEdit specified");
       dispatch(EditActions.setMode.edit());
     }
+    // set inital index
+    if (stepToEdit !== null && selectedSequence !== null) {
+      const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
+      if (stepToEdit.squenceStepTO.sequenceFk === -1) {
+        copyStepToEdit.squenceStepTO.sequenceFk = selectedSequence.sequenceTO.id;
+      }
+      dispatch(EditActions.step.update(copyStepToEdit));
+    }
     // used to focus the textfield on create another
     textInput.current!.focus();
-  }, [sequenceStepToEdit, dispatch]);
-
-  // TODO: finde solution, we dont have the sequence any more in this state.
-  const indexToOptions = (): DropdownItemProps[] => {
-    if (selectedSequence) {
-      return Array.from(Array(selectedSequence.sequenceStepCTOs.length).keys()).map((index) => {
-        return {
-          key: index + 1,
-          value: index + 1,
-          text: index + 1,
-        };
-      });
-    }
-    return [];
-  };
+  }, [dispatch]);
 
   const changeName = (name: string) => {
-    if (!isNullOrUndefined(sequenceStepToEdit)) {
-      const copySequenceStep: SequenceStepCTO = Carv2Util.deepCopy(sequenceStepToEdit);
+    if (!isNullOrUndefined(stepToEdit)) {
+      const copySequenceStep: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
       copySequenceStep.squenceStepTO.name = name;
       dispatch(EditActions.setMode.editStep(copySequenceStep));
     }
   };
 
-  const changeIndex = (index: number) => {
-    if (!isNullOrUndefined(sequenceStepToEdit)) {
-      const copySequenceStep: SequenceStepCTO = Carv2Util.deepCopy(sequenceStepToEdit);
-      copySequenceStep.squenceStepTO.index = index;
-      dispatch(EditActions.setMode.editStep(copySequenceStep));
-    }
-  };
-
   const setComponent = (component: ComponentCTO | undefined, isSource?: boolean) => {
-    if (component !== undefined && !isNullOrUndefined(sequenceStepToEdit)) {
-      const copySequenceStep: SequenceStepCTO = Carv2Util.deepCopy(sequenceStepToEdit);
+    if (component !== undefined && !isNullOrUndefined(stepToEdit)) {
+      const copySequenceStep: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
       if (isSource) {
         copySequenceStep.squenceStepTO.sourceComponentFk = component.component.id;
       } else {
@@ -150,8 +126,9 @@ const useControllPanelEditSequenceStepViewModel = () => {
   };
 
   const saveSequenceStep = () => {
-    if (!isNullOrUndefined(sequenceStepToEdit)) {
-      dispatch(EditActions.step.save(sequenceStepToEdit));
+    if (!isNullOrUndefined(stepToEdit)) {
+      dispatch(EditActions.step.save(stepToEdit));
+      dispatch(EditActions.setMode.editSequence(stepToEdit.squenceStepTO.sequenceFk));
       // if (isEditNext) {
       //   if (sequenceStepToEdit.squenceStepTO.index < sequenceToEdit.sequenceStepCTOs.length) {
       //     dispatch(
@@ -170,25 +147,25 @@ const useControllPanelEditSequenceStepViewModel = () => {
   };
 
   const deleteSequenceStep = () => {
-    if (!isNullOrUndefined(sequenceStepToEdit)) {
-      dispatch(EditActions.step.delete(sequenceStepToEdit));
-      dispatch(EditActions.setMode.edit());
+    if (!isNullOrUndefined(stepToEdit)) {
+      dispatch(EditActions.step.delete(stepToEdit));
+      dispatch(EditActions.setMode.editSequence(stepToEdit.squenceStepTO.sequenceFk));
     }
   };
 
   const editOrAddAction = (action?: ActionTO) => {
-    if (!isNullOrUndefined(sequenceStepToEdit)) {
+    if (!isNullOrUndefined(stepToEdit)) {
       dispatch(EditActions.setMode.editAction(action));
     }
   };
 
   const validStep = (): boolean => {
     let valid: boolean = false;
-    if (!isNullOrUndefined(sequenceStepToEdit)) {
+    if (!isNullOrUndefined(stepToEdit)) {
       if (
-        sequenceStepToEdit.squenceStepTO.name !== "" &&
-        sequenceStepToEdit.squenceStepTO.sourceComponentFk !== -1 &&
-        sequenceStepToEdit.squenceStepTO.targetComponentFk !== -1
+        stepToEdit.squenceStepTO.name !== "" &&
+        stepToEdit.squenceStepTO.sourceComponentFk !== -1 &&
+        stepToEdit.squenceStepTO.targetComponentFk !== -1
       ) {
         valid = true;
       }
@@ -197,28 +174,25 @@ const useControllPanelEditSequenceStepViewModel = () => {
   };
 
   const cancel = (): void => {
-    if (!isNullOrUndefined(sequenceStepToEdit)) {
-      dispatch(EditActions.setMode.editSequence(sequenceStepToEdit.squenceStepTO.sequenceFk));
+    if (!isNullOrUndefined(stepToEdit)) {
+      dispatch(EditActions.setMode.editSequence(stepToEdit.squenceStepTO.sequenceFk));
     }
   };
 
   return {
-    label: sequenceStepToEdit ? "EDIT SEQUENCE STEP" : "ADD SEQUENCE STEP",
-    name: sequenceStepToEdit ? sequenceStepToEdit!.squenceStepTO.name : "",
-    index: sequenceStepToEdit ? sequenceStepToEdit!.squenceStepTO.index : "",
+    label: stepToEdit ? "EDIT SEQUENCE STEP" : "ADD SEQUENCE STEP",
+    name: stepToEdit ? stepToEdit!.squenceStepTO.name : "",
     changeName,
-    changeIndex,
     saveSequenceStep,
     deleteSequenceStep,
     setComponent,
     cancel,
     toggleIsCreateAnother: () => setIsEditNext(!isEditNext),
     textInput,
-    showDelete: sequenceStepToEdit?.squenceStepTO.id !== -1 ? true : false,
-    indexToOptions,
+    showDelete: stepToEdit?.squenceStepTO.id !== -1 ? true : false,
     validStep,
     editOrAddAction,
-    sourceCompId: sequenceStepToEdit?.squenceStepTO.sourceComponentFk,
-    targetCompId: sequenceStepToEdit?.squenceStepTO.targetComponentFk,
+    sourceCompId: stepToEdit?.squenceStepTO.sourceComponentFk,
+    targetCompId: stepToEdit?.squenceStepTO.targetComponentFk,
   };
 };

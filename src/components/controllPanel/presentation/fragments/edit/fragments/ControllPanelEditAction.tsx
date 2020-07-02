@@ -70,8 +70,16 @@ const useControllPanelEditActionViewModel = () => {
       handleError("Tried to go to edit action without actionToEdit specified");
       EditActions.setMode.edit();
     }
+    // set step fk
+    if (actionToEdit !== null && stepToEdit !== null) {
+      const copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
+      if (actionToEdit.sequenceStepFk === -1) {
+        copyActionToEdit.sequenceStepFk = stepToEdit.squenceStepTO.id;
+      }
+      dispatch(EditActions.action.update(copyActionToEdit));
+    }
     // used to focus the textfield on create another
-  }, [actionToEdit]);
+  }, [dispatch]);
 
   const saveAction = () => {
     if (!isNullOrUndefined(actionToEdit) && !isNullOrUndefined(stepToEdit)) {
