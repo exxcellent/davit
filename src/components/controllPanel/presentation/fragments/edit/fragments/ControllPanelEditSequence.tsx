@@ -7,11 +7,11 @@ import { SequenceTO } from "../../../../../../dataAccess/access/to/SequenceTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
+import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { StepDropDown } from "../../../../../common/fragments/dropdowns/StepDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
-import { Carv2SubmitCancelCheckBox } from "../common/fragments/Carv2SubmitCancel";
 
 export interface ControllPanelEditSequenceProps {}
 
@@ -20,15 +20,14 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
     label,
     name,
     textInput,
-    cancel,
     changeName,
     deleteSequence,
     saveSequence,
-    showExistingOptions,
-    toggleIsCreateAnother,
     editOrAddSequenceStep,
     validateInput,
     copySequence,
+    createAnother,
+    updateSequence,
   } = useControllPanelEditSequenceViewModel();
 
   return (
@@ -41,35 +40,27 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
           value={name}
           autoFocus
           ref={textInput}
+          onBlur={() => updateSequence()}
         />
       </div>
       <div className="columnDivider controllPanelEditChild">
-        {showExistingOptions && (
-          <Button.Group>
-            <Button icon="add" inverted color="orange" onClick={() => editOrAddSequenceStep()} />
-            <Button id="buttonGroupLabel" disabled inverted color="orange">
-              Step
-            </Button>
-            <StepDropDown onSelect={editOrAddSequenceStep} icon="wrench" />
-          </Button.Group>
-        )}
+        <Button.Group>
+          <Button icon="add" inverted color="orange" onClick={() => editOrAddSequenceStep()} />
+          <Button id="buttonGroupLabel" disabled inverted color="orange">
+            Step
+          </Button>
+          <StepDropDown onSelect={editOrAddSequenceStep} icon="wrench" />
+        </Button.Group>
       </div>
-      <div className="columnDivider" style={{ display: "flex" }}>
-        <Carv2SubmitCancelCheckBox
-          onSubmit={saveSequence}
-          onCancel={cancel}
-          onChange={toggleIsCreateAnother}
-          submitCondition={validateInput()}
-        />
+      <div className="columnDivider controllPanelEditChild">
+        <Carv2ButtonLabel onClick={createAnother} label="Create another" />
+        <Carv2ButtonLabel onClick={saveSequence} label="OK" />
       </div>
-      {showExistingOptions && (
-        <div className="controllPanelEditChild columnDivider">
-          <div>{/* <Carv2Button icon="copy" onClick={copySequence} /> */}</div>
-          <div>
-            <Carv2DeleteButton onClick={deleteSequence} />
-          </div>
+      <div className="controllPanelEditChild columnDivider">
+        <div>
+          <Carv2DeleteButton onClick={deleteSequence} />
         </div>
-      )}
+      </div>
     </ControllPanelEditSub>
   );
 };
@@ -115,10 +106,6 @@ const useControllPanelEditSequenceViewModel = () => {
     dispatch(EditActions.setMode.edit());
   };
 
-  const cancelEditSequence = () => {
-    dispatch(EditActions.setMode.edit());
-  };
-
   const validateInput = (): boolean => {
     if (!isNullOrUndefined(sequenceToEdit)) {
       return Carv2Util.isValidName(sequenceToEdit.name);
@@ -143,19 +130,27 @@ const useControllPanelEditSequenceViewModel = () => {
     dispatch(EditActions.sequence.update(copySequence));
   };
 
+  const createAnother = () => {
+    dispatch(EditActions.setMode.editSequence());
+  };
+
+  const updateSequence = () => {
+    let copySequence: SequenceTO = Carv2Util.deepCopy(sequenceToEdit);
+    dispatch(EditActions.sequence.save(copySequence));
+  };
+
   return {
-    label: sequenceToEdit?.id === -1 ? "ADD SEQUENCE" : "EDIT SEQUENCE",
+    label: "EDIT SEQUENCE",
     name: sequenceToEdit?.name,
     changeName,
     saveSequence,
     deleteSequence,
-    cancel: cancelEditSequence,
-    toggleIsCreateAnother: () => setIsCreateAnother(!isCreateAnother),
     textInput,
-    showExistingOptions: sequenceToEdit?.id !== -1,
     editOrAddSequenceStep,
     validateInput,
     // sequencesDropdown: useGetStepDropDown((step) => editOrAddSequenceStep(step?.squenceStepTO.index), "wrench"),
     copySequence,
+    createAnother,
+    updateSequence,
   };
 };

@@ -196,7 +196,7 @@ const setModeToEditSequence = (sequenceId?: number): AppThunk => (dispatch) => {
       handleError(response.message);
     }
   } else {
-    dispatch(EditSlice.actions.setSequenceToEdit(new SequenceTO()));
+    dispatch(EditActions.sequence.create());
   }
 };
 
@@ -369,7 +369,6 @@ const createDataSetupThunk = (): AppThunk => (dispatch) => {
     dispatch(handleError(response.message));
   }
   dispatch(MasterDataActions.loadDataSetupsFromBackend());
-  console.log("data setup: ", response.object);
   dispatch(EditActions.dataSetup.update(response.object));
 };
 
@@ -390,6 +389,17 @@ const deleteDataSetupThunk = (dataSetup: DataSetupCTO): AppThunk => async (dispa
 };
 
 // ----------------------------------------------- SEQUENCE -----------------------------------------------
+
+const createSequenceThunk = (): AppThunk => (dispatch) => {
+  let sequence: SequenceTO = new SequenceTO();
+  const response: DataAccessResponse<SequenceTO> = DataAccess.saveSequenceTO(sequence);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(MasterDataActions.loadSequencesFromBackend());
+  dispatch(EditActions.sequence.update(response.object));
+};
+
 const saveSequenceThunk = (sequence: SequenceTO): AppThunk => (dispatch) => {
   const response: DataAccessResponse<SequenceTO> = DataAccess.saveSequenceTO(sequence);
   if (response.code !== 200) {
@@ -542,6 +552,7 @@ export const EditActions = {
     delete: deleteSequenceThunk,
     update: EditSlice.actions.setSequenceToEdit,
     findCTO: getSequenceCTOById,
+    create: createSequenceThunk,
   },
   dataSetup: {
     save: saveDataSetupThunk,
