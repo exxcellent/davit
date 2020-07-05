@@ -8,9 +8,9 @@ import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { masterDataSelectors } from "../../../../../../slices/MasterDataSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
+import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { Carv2SubmitCancelCheckBox } from "../common/fragments/Carv2SubmitCancel";
 
 export interface ControllPanelEditRelationProps {}
 
@@ -32,14 +32,12 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
     saveRelation,
     deleteRelation,
     cancel,
-    toggleIsCreateAnother,
-    showDelete,
     dataOptions,
     directionOptions,
     typeOptions,
     validRelation,
+    createAnother,
     key,
-    isCreateAnother,
   } = useControllPanelEditRelationViewModel();
 
   return (
@@ -146,22 +144,15 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
           </div>
         </div>
       </div>
-      <div className="columnDivider" style={{ display: "flex" }}>
-        <Carv2SubmitCancelCheckBox
-          onSubmit={saveRelation}
-          onChange={toggleIsCreateAnother}
-          onCancel={cancel}
-          submitCondition={validRelation()}
-          checked={isCreateAnother}
-        />
+      <div className="columnDivider controllPanelEditChild">
+        <Carv2ButtonLabel onClick={createAnother} label="Create another" />
+        <Carv2ButtonLabel onClick={saveRelation} label="OK" />
       </div>
-      {showDelete && (
-        <div className="columnDivider">
-          <div className="controllPanelEditChild" style={{ display: "flex", alignItems: "center", height: "100%" }}>
-            <Carv2DeleteButton onClick={deleteRelation} />
-          </div>
+      <div className="columnDivider">
+        <div className="controllPanelEditChild" style={{ display: "flex", alignItems: "center", height: "100%" }}>
+          <Carv2DeleteButton onClick={deleteRelation} />
         </div>
-      )}
+      </div>
     </ControllPanelEditSub>
   );
 };
@@ -170,7 +161,6 @@ const useControllPanelEditRelationViewModel = () => {
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
   const relationToEdit: DataRelationTO | null = useSelector(editSelectors.relationToEdit);
   const dispatch = useDispatch();
-  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
   const [key, setKey] = useState<number>(0);
 
   useEffect(() => {
@@ -215,17 +205,17 @@ const useControllPanelEditRelationViewModel = () => {
 
   const saveRelation = () => {
     dispatch(EditActions.relation.save(relationToEdit!));
-    if (isCreateAnother) {
-      setKey(key + 1);
-      dispatch(EditActions.setMode.editRelation());
-    } else {
-      dispatch(EditActions.setMode.edit());
-    }
+    dispatch(EditActions.setMode.edit());
   };
 
   const deleteRelation = () => {
     dispatch(EditActions.relation.delete(relationToEdit!));
     dispatch(EditActions.setMode.edit());
+  };
+
+  const createAnother = () => {
+    setKey(key + 1);
+    dispatch(EditActions.setMode.editRelation());
   };
 
   const directionOptions = Object.entries(Direction).map(([key, value]) => ({
@@ -265,13 +255,11 @@ const useControllPanelEditRelationViewModel = () => {
     saveRelation,
     deleteRelation,
     cancel: () => dispatch(EditActions.setMode.edit()),
-    toggleIsCreateAnother: () => setIsCreateAnother(!isCreateAnother),
-    showDelete: relationToEdit?.id !== -1,
     dataOptions: datas.map(dataToOption),
     directionOptions,
     typeOptions,
     validRelation,
     key,
-    isCreateAnother,
+    createAnother,
   };
 };

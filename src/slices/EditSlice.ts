@@ -167,12 +167,20 @@ const setModeToEditComponent = (component?: ComponentCTO): AppThunk => async (di
 
 const setModeToEditData = (data?: DataCTO): AppThunk => async (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_DATA));
-  dispatch(EditSlice.actions.setDataToEdit(data || new DataCTO()));
+  if (data === undefined) {
+    dispatch(EditActions.data.create());
+  } else {
+    dispatch(EditSlice.actions.setDataToEdit(data));
+  }
 };
 
 const setModeToEditRelation = (relation?: DataRelationTO): AppThunk => async (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_DATA_RELATION));
-  dispatch(EditSlice.actions.setRelationToEdit(relation || new DataRelationTO()));
+  if (relation === undefined) {
+    dispatch(EditActions.relation.create());
+  } else {
+    dispatch(EditSlice.actions.setRelationToEdit(relation));
+  }
 };
 
 const setModeToEditSequence = (sequenceId?: number): AppThunk => (dispatch) => {
@@ -202,9 +210,13 @@ const setModeToEditAction = (action?: ActionTO): AppThunk => async (dispatch) =>
   dispatch(EditSlice.actions.setActionToEdit(action || new ActionTO()));
 };
 
-const setModeToEditGroup = (group?: GroupTO): AppThunk => async (dispatch) => {
+const setModeToEditGroup = (group?: GroupTO): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_GROUP));
-  dispatch(EditSlice.actions.setGroupToEdit(group || new GroupTO()));
+  if (group === undefined) {
+    dispatch(EditActions.group.create());
+  } else {
+    dispatch(EditSlice.actions.setGroupToEdit(group));
+  }
 };
 
 const setModeToEditDataSetup = (dataSetup?: DataSetupTO): AppThunk => async (dispatch) => {
@@ -254,6 +266,18 @@ const deleteComponentThunk = (component: ComponentCTO): AppThunk => async (dispa
 };
 
 // ----------------------------------------------- GROUP -----------------------------------------------
+
+const createGroupThunk = (): AppThunk => (dispatch) => {
+  let group: GroupTO = new GroupTO();
+  const response: DataAccessResponse<GroupTO> = DataAccess.saveGroup(group);
+  console.log(response);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(MasterDataActions.loadGroupsFromBackend());
+  dispatch(EditActions.group.update(response.object));
+};
+
 const saveGroupThunk = (group: GroupTO): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<GroupTO> = await DataAccess.saveGroup(group);
   console.log(response);
@@ -274,6 +298,18 @@ const deleteGroupThunk = (group: GroupTO): AppThunk => async (dispatch) => {
 };
 
 // ----------------------------------------------- DATA -----------------------------------------------
+
+const createDataThunk = (): AppThunk => (dispatch) => {
+  let data: DataCTO = new DataCTO();
+  const response: DataAccessResponse<DataCTO> = DataAccess.saveDataCTO(data);
+  console.log(response);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(MasterDataActions.loadDatasFromBackend());
+  dispatch(EditActions.data.update(response.object));
+};
+
 const saveDataThunk = (data: DataCTO): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<DataCTO> = await DataAccess.saveDataCTO(data);
   console.log(response);
@@ -294,6 +330,18 @@ const deleteDataThunk = (data: DataCTO): AppThunk => async (dispatch) => {
 };
 
 // ----------------------------------------------- RELATION -----------------------------------------------
+
+const createRelationThunk = (): AppThunk => (dispatch) => {
+  let relation: DataRelationTO = new DataRelationTO();
+  const response: DataAccessResponse<DataRelationTO> = DataAccess.saveDataRelationCTO(relation);
+  console.log(response);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(MasterDataActions.loadRelationsFromBackend());
+  dispatch(EditActions.relation.update(response.object));
+};
+
 const saveRelationThunk = (relation: DataRelationTO): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<DataRelationTO> = await DataAccess.saveDataRelationCTO(relation);
   console.log(response);
@@ -462,14 +510,20 @@ export const EditActions = {
   data: {
     save: saveDataThunk,
     delete: deleteDataThunk,
+    update: EditSlice.actions.setDataToEdit,
+    create: createDataThunk,
   },
   group: {
     save: saveGroupThunk,
     delete: deleteGroupThunk,
+    update: EditSlice.actions.setGroupToEdit,
+    create: createGroupThunk,
   },
   relation: {
     save: saveRelationThunk,
     delete: deleteRelationThunk,
+    create: createRelationThunk,
+    update: EditSlice.actions.setRelationToEdit,
   },
   sequence: {
     save: saveSequenceThunk,

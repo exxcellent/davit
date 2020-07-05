@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import React, { FunctionComponent, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
@@ -6,10 +6,10 @@ import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
+import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
-import { Carv2SubmitCancelCheckBox } from "../common/fragments/Carv2SubmitCancel";
 
 export interface ControllPanelEditDataProps {}
 
@@ -17,14 +17,12 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
   const {
     label,
     textInput,
-    cancel,
     changeName,
     deleteData,
     name,
     saveData,
-    showDelete,
-    toggleIsCreateAnother,
-    validName,
+    updateData,
+    createAnother,
   } = useControllPanelEditDataViewModel();
 
   return (
@@ -37,22 +35,17 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
         value={name}
         autoFocus
         ref={textInput}
+        onBlur={() => updateData()}
       />
-      <div className="columnDivider" style={{ display: "flex" }}>
-        <Carv2SubmitCancelCheckBox
-          onSubmit={saveData}
-          onCancel={cancel}
-          onChange={toggleIsCreateAnother}
-          submitCondition={validName()}
-        />
+      <div className="columnDivider controllPanelEditChild">
+        <Carv2ButtonLabel onClick={createAnother} label="Create another" />
+        <Carv2ButtonLabel onClick={saveData} label="OK" />
       </div>
-      {showDelete && (
-        <div className="columnDivider">
-          <div className="controllPanelEditChild" style={{ display: "felx", alignItems: "center", height: "100%" }}>
-            <Carv2DeleteButton onClick={deleteData} />
-          </div>
+      <div className="columnDivider">
+        <div className="controllPanelEditChild" style={{ display: "felx", alignItems: "center", height: "100%" }}>
+          <Carv2DeleteButton onClick={deleteData} />
         </div>
-      )}
+      </div>
     </ControllPanelEditSub>
   );
 };
@@ -60,7 +53,6 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
 const useControllPanelEditDataViewModel = () => {
   const dataToEdit: DataCTO | null = useSelector(editSelectors.dataToEdit);
   const dispatch = useDispatch();
-  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
   const textInput = useRef<Input>(null);
 
   useEffect(() => {
@@ -82,13 +74,14 @@ const useControllPanelEditDataViewModel = () => {
     dispatch(EditActions.setMode.editData(copyDataToEdit));
   };
 
+  const updateData = () => {
+    let copyDataToEdit: DataCTO = Carv2Util.deepCopy(dataToEdit);
+    dispatch(EditActions.data.save(copyDataToEdit));
+  };
+
   const saveData = () => {
     dispatch(EditActions.data.save(dataToEdit!));
-    if (isCreateAnother) {
-      dispatch(EditActions.setMode.editData());
-    } else {
-      dispatch(EditActions.setMode.edit());
-    }
+    dispatch(EditActions.setMode.edit());
   };
 
   const deleteData = () => {
@@ -96,11 +89,8 @@ const useControllPanelEditDataViewModel = () => {
     dispatch(EditActions.setMode.edit());
   };
 
-  const validName = (): boolean => {
-    if (!isNullOrUndefined(dataToEdit)) {
-      return Carv2Util.isValidName(dataToEdit.data.name);
-    }
-    return false;
+  const createAnother = () => {
+    dispatch(EditActions.setMode.editData());
   };
 
   return {
@@ -109,10 +99,8 @@ const useControllPanelEditDataViewModel = () => {
     changeName,
     saveData,
     deleteData,
-    cancel: () => dispatch(EditActions.setMode.edit()),
-    toggleIsCreateAnother: () => setIsCreateAnother(!isCreateAnother),
     textInput,
-    showDelete: dataToEdit?.data.id !== -1,
-    validName,
+    updateData,
+    createAnother,
   };
 };

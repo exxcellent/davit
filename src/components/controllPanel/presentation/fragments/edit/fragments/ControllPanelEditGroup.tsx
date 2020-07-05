@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import React, { FunctionComponent, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
@@ -6,11 +6,11 @@ import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
+import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ColorDropDown } from "../../../../../common/fragments/dropdowns/ColorDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
-import { Carv2SubmitCancel, Carv2SubmitCancelCheckBox } from "../common/fragments/Carv2SubmitCancel";
 
 export interface ControllPanelEditGroupProps {}
 
@@ -21,13 +21,11 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
     textInput,
     changeName,
     saveGroup,
-    cancelEditGroup,
     deleteGroup,
-    showExistingOptions,
-    toggleIsCreateAnother,
-    validateInput,
     getGroupColor,
     setGroupColor,
+    createAnother,
+    updateGroup,
   } = useControllPanelEditGroupViewModel();
 
   return (
@@ -43,35 +41,23 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
           value={name}
           autoFocus
           ref={textInput}
+          onBlur={() => updateGroup()}
         />
       </div>
-      <div className="columnDivider" style={{ display: "flex" }}>
-        {!showExistingOptions && (
-          <Carv2SubmitCancelCheckBox
-            onSubmit={saveGroup}
-            onCancel={cancelEditGroup}
-            onChange={toggleIsCreateAnother}
-            submitCondition={validateInput()}
-          />
-        )}
-        {showExistingOptions && (
-          <Carv2SubmitCancel onSubmit={saveGroup} onCancel={cancelEditGroup} submitCondition={validateInput()} />
-        )}
+      <div className="columnDivider controllPanelEditChild">
+        <Carv2ButtonLabel onClick={createAnother} label="Create another" />
+        <Carv2ButtonLabel onClick={saveGroup} label="OK" />
       </div>
-      {showExistingOptions && (
-        <div className="columnDivider controllPanelEditChild">
-          <Carv2DeleteButton onClick={deleteGroup} />
-        </div>
-      )}
+      <div className="columnDivider controllPanelEditChild">
+        <Carv2DeleteButton onClick={deleteGroup} />
+      </div>
     </ControllPanelEditSub>
   );
 };
 
 const useControllPanelEditGroupViewModel = () => {
-  //   const sequenceToEdit: SequenceCTO | null = useSelector(currentSequence);
   const groupToEdit: GroupTO | null = useSelector(editSelectors.groupToEdit);
   const dispatch = useDispatch();
-  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
   const textInput = useRef<Input>(null);
 
   useEffect(() => {
@@ -92,13 +78,14 @@ const useControllPanelEditGroupViewModel = () => {
     }
   };
 
+  const updateGroup = () => {
+    let copyGroup: GroupTO = Carv2Util.deepCopy(groupToEdit);
+    dispatch(EditActions.group.save(copyGroup));
+  };
+
   const saveGroup = () => {
     dispatch(EditActions.group.save(groupToEdit!));
-    if (isCreateAnother) {
-      dispatch(EditActions.setMode.editGroup());
-    } else {
-      dispatch(EditActions.setMode.edit());
-    }
+    dispatch(EditActions.setMode.edit());
   };
 
   const deleteGroup = () => {
@@ -106,16 +93,8 @@ const useControllPanelEditGroupViewModel = () => {
     dispatch(EditActions.setMode.edit());
   };
 
-  const cancelEditGroup = () => {
-    dispatch(EditActions.setMode.edit());
-  };
-
-  const validateInput = (): boolean => {
-    if (!isNullOrUndefined(groupToEdit)) {
-      return Carv2Util.isValidName(groupToEdit.name);
-    } else {
-      return false;
-    }
+  const createAnother = () => {
+    dispatch(EditActions.setMode.editGroup());
   };
 
   const getGroupColor = (): string => {
@@ -137,17 +116,15 @@ const useControllPanelEditGroupViewModel = () => {
   };
 
   return {
-    label: groupToEdit?.id === -1 ? "ADD GROUP" : "EDIT GROUP",
+    label: "EDIT GROUP",
     name: groupToEdit?.name,
     changeName,
     saveGroup,
     deleteGroup,
-    cancelEditGroup,
-    toggleIsCreateAnother: () => setIsCreateAnother(!isCreateAnother),
     textInput,
-    showExistingOptions: groupToEdit?.id !== -1,
-    validateInput,
     getGroupColor,
     setGroupColor,
+    createAnother,
+    updateGroup,
   };
 };
