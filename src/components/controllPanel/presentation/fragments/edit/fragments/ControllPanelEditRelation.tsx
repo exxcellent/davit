@@ -31,13 +31,13 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
     setData,
     saveRelation,
     deleteRelation,
-    cancel,
     dataOptions,
     directionOptions,
     typeOptions,
     validRelation,
     createAnother,
     key,
+    updateRelation,
   } = useControllPanelEditRelationViewModel();
 
   return (
@@ -66,6 +66,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
                 setData(Number(data.value));
               }}
               value={data1}
+              onBlur={() => updateRelation()}
             />
             <Dropdown
               placeholder="Select Type1"
@@ -73,6 +74,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
               options={typeOptions}
               onChange={(event: any) => setType(event.target.value)}
               value={type1}
+              onBlur={() => updateRelation()}
             />
           </div>
           <div
@@ -89,6 +91,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
               options={directionOptions}
               onChange={(event, data) => setDirection(Direction[data.value as Direction])}
               value={direction1}
+              onBlur={() => updateRelation()}
             />
           </div>
         </div>
@@ -117,6 +120,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
                 setData(Number(data.value), true);
               }}
               value={data2}
+              onBlur={() => updateRelation()}
             />
             <Dropdown
               placeholder="Select Type2"
@@ -124,6 +128,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
               options={typeOptions}
               onChange={(event: any) => setType(event.target.value, true)}
               value={type2}
+              onBlur={() => updateRelation()}
             />
           </div>
           <div
@@ -140,6 +145,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
               options={directionOptions}
               onChange={(event, data) => setDirection(Direction[data.value as Direction], true)}
               value={direction2}
+              onBlur={() => updateRelation()}
             />
           </div>
         </div>
@@ -213,6 +219,11 @@ const useControllPanelEditRelationViewModel = () => {
     dispatch(EditActions.setMode.edit());
   };
 
+  const updateRelation = () => {
+    let copyRelationToEdit: DataRelationTO = Carv2Util.deepCopy(relationToEdit);
+    dispatch(EditActions.relation.save(copyRelationToEdit));
+  };
+
   const createAnother = () => {
     setKey(key + 1);
     dispatch(EditActions.setMode.editRelation());
@@ -261,5 +272,6 @@ const useControllPanelEditRelationViewModel = () => {
     validRelation,
     key,
     createAnother,
+    updateRelation,
   };
 };

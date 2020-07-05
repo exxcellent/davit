@@ -9,12 +9,13 @@ import { InitDataTO } from "../../../../../../dataAccess/access/to/InitDataTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
+import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
 import { MultiselectDataDropDown } from "../../../../../common/fragments/dropdowns/MultiselectDataDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
-import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
+import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditDataSetupProps {}
 
@@ -24,15 +25,14 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
     name,
     changeName,
     textInput,
-    showExistingOptions,
-    cancel,
-    validateInput,
     copyDataSetup,
     saveDataSetup,
     deleteDataSetup,
     setComponentToEdit,
     setInitDatas,
     getDatas,
+    createAnother,
+    updateDataSetup,
   } = useControllPanelEditDataSetupViewModel();
 
   return (
@@ -45,22 +45,26 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
           value={name}
           autoFocus
           ref={textInput}
+          onBlur={() => updateDataSetup()}
         />
       </div>
       <div className="columnDivider controllPanelEditChild">
         <ComponentDropDown
           onSelect={(comp) => (comp ? setComponentToEdit(comp) : setComponentToEdit(null))}
           placeholder="Select Component..."
+          onBlur={() => updateDataSetup()}
         />
       </div>
       <div className="columnDivider controllPanelEditChild" style={{ paddingLeft: "10px", paddingRight: "10px" }}>
-        <MultiselectDataDropDown onSelect={setInitDatas} selected={getDatas()} />
+        <MultiselectDataDropDown onSelect={setInitDatas} selected={getDatas()} onBlur={() => updateDataSetup()} />
       </div>
-      <div className="controllPanelEditChild columnDivider">
-        <Carv2SubmitCancel onSubmit={saveDataSetup} onCancel={cancel} submitCondition={validateInput()} />
-        {/* TODO: create copy function for data setup. */}
-        {/* {showExistingOptions && <Carv2Button icon="copy" onClick={copyDataSetup} />} */}
-        {showExistingOptions && <Carv2DeleteButton onClick={deleteDataSetup} />}
+      <div className="columnDivider controllPanelEditChild">
+        <Carv2ButtonLabel onClick={createAnother} label="Create another" />
+        <Carv2ButtonLabel onClick={saveDataSetup} label="OK" />
+        {/* <Carv2ButtonIcon icon="copy" onClick={copyDataSetup} /> */}
+        <OptionField>
+          <Carv2DeleteButton onClick={deleteDataSetup} />
+        </OptionField>
       </div>
     </ControllPanelEditSub>
   );
@@ -100,8 +104,13 @@ const useControllPanelEditDataSetupViewModel = () => {
     dispatch(EditActions.setMode.edit());
   };
 
-  const cancel = () => {
-    dispatch(EditActions.setMode.edit());
+  const createAnother = () => {
+    dispatch(EditActions.setMode.editDataSetup());
+  };
+
+  const updateDataSetup = () => {
+    const copyDataSetup: DataSetupCTO = Carv2Util.deepCopy(dataSetupToEdit);
+    dispatch(EditActions.dataSetup.save(copyDataSetup));
   };
 
   const validateInput = (): boolean => {
@@ -155,18 +164,17 @@ const useControllPanelEditDataSetupViewModel = () => {
   };
 
   return {
-    label: dataSetupToEdit?.dataSetup.id === -1 ? "ADD DATA SETUP" : "EDIT DATA SETUP",
+    label: "EDIT DATA SETUP",
     name: dataSetupToEdit?.dataSetup.name,
     changeName,
-    cancel,
     saveDataSetup,
     deleteDataSetup,
     textInput,
-    showExistingOptions: dataSetupToEdit?.dataSetup.id !== -1,
-    validateInput,
     copyDataSetup,
     setComponentToEdit,
     setInitDatas,
     getDatas,
+    createAnother,
+    updateDataSetup,
   };
 };

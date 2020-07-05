@@ -219,7 +219,7 @@ const setModeToEditGroup = (group?: GroupTO): AppThunk => (dispatch) => {
   }
 };
 
-const setModeToEditDataSetup = (dataSetup?: DataSetupTO): AppThunk => async (dispatch) => {
+const setModeToEditDataSetup = (dataSetup?: DataSetupTO): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_DATA_SETUP));
   if (dataSetup) {
     let response: DataAccessResponse<DataSetupCTO> = DataAccess.findDataSetupCTO(dataSetup.id);
@@ -229,7 +229,7 @@ const setModeToEditDataSetup = (dataSetup?: DataSetupTO): AppThunk => async (dis
       handleError(response.message);
     }
   } else {
-    dispatch(EditSlice.actions.setDataSetupToEdit(new DataSetupCTO()));
+    dispatch(EditActions.dataSetup.create());
   }
 };
 
@@ -361,6 +361,18 @@ const deleteRelationThunk = (relation: DataRelationTO): AppThunk => async (dispa
 };
 
 // ----------------------------------------------- DATA SETUP -----------------------------------------------
+
+const createDataSetupThunk = (): AppThunk => (dispatch) => {
+  let dataSetup: DataSetupCTO = new DataSetupCTO();
+  const response: DataAccessResponse<DataSetupCTO> = DataAccess.saveDataSetupCTO(dataSetup);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(MasterDataActions.loadDataSetupsFromBackend());
+  console.log("data setup: ", response.object);
+  dispatch(EditActions.dataSetup.update(response.object));
+};
+
 const saveDataSetupThunk = (dataSetup: DataSetupCTO): AppThunk => (dispatch) => {
   const response: DataAccessResponse<DataSetupCTO> = DataAccess.saveDataSetupCTO(dataSetup);
   if (response.code !== 200) {
@@ -535,6 +547,7 @@ export const EditActions = {
     save: saveDataSetupThunk,
     delete: deleteDataSetupThunk,
     update: EditSlice.actions.setDataSetupToEdit,
+    create: createDataSetupThunk,
   },
   step: {
     save: saveSequenceStepThunk,

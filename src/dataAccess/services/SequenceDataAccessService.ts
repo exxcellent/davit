@@ -131,7 +131,8 @@ export const SequenceDataAccessService = {
       initData.dataSetupFk = savedDataSetupTO.id;
       InitDataRepository.save(initData);
     });
-    return dataSetupCTO;
+    const savedInitDatas: InitDataTO[] = InitDataRepository.findAllForSetup(savedDataSetupTO.id);
+    return { dataSetup: savedDataSetupTO, initDatas: savedInitDatas };
   },
 
   deleteDataSetup(dataSetup: DataSetupCTO): DataSetupCTO {
