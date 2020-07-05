@@ -9,7 +9,6 @@ import { InitDataTO } from "../../../../../../dataAccess/access/to/InitDataTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2Button } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
 import { MultiselectDataDropDown } from "../../../../../common/fragments/dropdowns/MultiselectDataDropDown";
@@ -59,7 +58,8 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
       </div>
       <div className="controllPanelEditChild columnDivider">
         <Carv2SubmitCancel onSubmit={saveDataSetup} onCancel={cancel} submitCondition={validateInput()} />
-        {showExistingOptions && <Carv2Button icon="copy" onClick={copyDataSetup} />}
+        {/* TODO: create copy function for data setup. */}
+        {/* {showExistingOptions && <Carv2Button icon="copy" onClick={copyDataSetup} />} */}
         {showExistingOptions && <Carv2DeleteButton onClick={deleteDataSetup} />}
       </div>
     </ControllPanelEditSub>
@@ -86,7 +86,7 @@ const useControllPanelEditDataSetupViewModel = () => {
     if (!isNullOrUndefined(dataSetupToEdit)) {
       let copyDataSetupToEdit: DataSetupCTO = Carv2Util.deepCopy(dataSetupToEdit);
       copyDataSetupToEdit.dataSetup.name = name;
-      dispatch(EditActions.setMode.editDataSetup(copyDataSetupToEdit.dataSetup));
+      dispatch(EditActions.dataSetup.update(copyDataSetupToEdit));
     }
   };
 
@@ -140,7 +140,7 @@ const useControllPanelEditDataSetupViewModel = () => {
         })
       );
       copyDataSetupToEdit.initDatas = clearInitDatas;
-      dispatch(EditActions.setMode.editDataSetup(copyDataSetupToEdit.dataSetup));
+      dispatch(EditActions.dataSetup.update(copyDataSetupToEdit));
     }
   };
 

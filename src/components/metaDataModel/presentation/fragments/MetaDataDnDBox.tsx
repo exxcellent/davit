@@ -4,7 +4,7 @@ import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { GeometricalDataCTO } from "../../../../dataAccess/access/cto/GeometraicalDataCTO";
 import { DataRelationTO } from "../../../../dataAccess/access/to/DataRelationTO";
 import { Carv2Util } from "../../../../utils/Carv2Util";
-import { ComponentDataFragmentProps } from "../../../common/fragments/ComponentDataFragment";
+import { ComponentDataFragmentProps } from "../../../../viewDataTypes/ComponentDataFragment";
 import { createDnDItem } from "../../../common/fragments/DnDWrapper";
 import { createCornerConnection } from "../../../common/fragments/svg/Carv2Path";
 import { createMetaDataFragment } from "./MetaDataFragment";

@@ -132,6 +132,11 @@ export const masterDataSelectors = {
   getSequenceTO: (id: number) => (state: RootState): SequenceTO | undefined => {
     return state.masterData.sequences.find((sequence) => sequence.id === id);
   },
+  getComponentById: (id: number) => {
+    return (state: RootState): ComponentCTO | null => {
+      return state.masterData.components.find((comp) => comp.component.id === id) || null;
+    };
+  },
 };
 
 // =============================================== ACTIONS ===============================================

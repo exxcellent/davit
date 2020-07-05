@@ -7,11 +7,11 @@ import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
+import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { GroupDropDown } from "../../../../../common/fragments/dropdowns/GroupDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
-import { Carv2SubmitCancelCheckBox } from "../common/fragments/Carv2SubmitCancel";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditComponentProps {}
@@ -26,10 +26,10 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
     cancel,
     toggleIsCreateAnother,
     textInput,
-    showDelete,
     validName,
     setGroup,
     compGroup,
+    updateComponent,
   } = useControllPanelEditComponentViewModel();
 
   return (
@@ -44,26 +44,26 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
           label="Name:"
           placeholder="Component Name"
           onChange={(event: any) => changeName(event.target.value)}
+          onBlur={() => updateComponent()}
           value={name}
           autoFocus
           ref={textInput}
         />
       </div>
-      <div className="columnDivider" style={{ display: "flex" }}>
-        <Carv2SubmitCancelCheckBox
+      <div className="columnDivider controllPanelEditChild">
+        <Carv2ButtonLabel onClick={saveComponent} label="OK" />
+        {/* <Carv2SubmitCancelCheckBox
           onSubmit={saveComponent}
           onCancel={cancel}
           onChange={toggleIsCreateAnother}
           submitCondition={validName()}
-        />
+        /> */}
       </div>
-      {showDelete && (
-        <div className="columnDivider">
-          <div className="controllPanelEditChild" style={{ display: "flex", alignItems: "center", height: "100%" }}>
-            <Carv2DeleteButton onClick={deleteComponent} />
-          </div>
+      <div className="columnDivider">
+        <div className="controllPanelEditChild" style={{ display: "flex", alignItems: "center", height: "100%" }}>
+          <Carv2DeleteButton onClick={deleteComponent} />
         </div>
-      )}
+      </div>
     </ControllPanelEditSub>
   );
 };
@@ -88,6 +88,11 @@ const useControllPanelEditComponentViewModel = () => {
     let copyComponentToEdit: ComponentCTO = Carv2Util.deepCopy(componentToEdit);
     copyComponentToEdit.component.name = name;
     dispatch(EditActions.setMode.editComponent(copyComponentToEdit));
+  };
+
+  const updateComponent = () => {
+    let copyComponentToEdit: ComponentCTO = Carv2Util.deepCopy(componentToEdit);
+    dispatch(EditActions.component.save(copyComponentToEdit));
   };
 
   const saveComponent = () => {
@@ -136,5 +141,6 @@ const useControllPanelEditComponentViewModel = () => {
     validName,
     setGroup,
     compGroup: componentToEdit?.component.groupFks !== -1 ? componentToEdit?.component.groupFks : undefined,
+    updateComponent,
   };
 };

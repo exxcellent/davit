@@ -36,7 +36,7 @@ const useStepDropDownViewModel = () => {
     return {
       key: step.squenceStepTO.id,
       value: step.squenceStepTO.id,
-      text: step.squenceStepTO.index,
+      text: step.squenceStepTO.name,
     };
   };
 

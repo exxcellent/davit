@@ -136,23 +136,23 @@ const useControllPanelEditSequenceStepViewModel = () => {
   };
 
   const saveSequenceStep = () => {
-    if (!isNullOrUndefined(stepToEdit)) {
+    if (!isNullOrUndefined(stepToEdit) && !isNullOrUndefined(selectedSequence)) {
       dispatch(EditActions.step.save(stepToEdit));
-      dispatch(EditActions.setMode.editSequence(stepToEdit.squenceStepTO.sequenceFk));
-      // if (isEditNext) {
-      //   if (sequenceStepToEdit.squenceStepTO.index < sequenceToEdit.sequenceStepCTOs.length) {
-      //     dispatch(
-      //       EditActions.setMode.editStep(
-      //         sequenceToEdit.sequenceStepCTOs.find(
-      //           (step) => step.squenceStepTO.id === sequenceStepToEdit.squenceStepTO.index + 1
-      //         )
-      //       )
-      //     );
-      //   } else {
-      //     dispatch(EditActions.setMode.editStep());
-      //   }
-    } else {
-      dispatch(EditActions.setMode.edit());
+      if (isEditNext) {
+        if (stepToEdit.squenceStepTO.index < selectedSequence.sequenceStepCTOs.length) {
+          dispatch(
+            EditActions.setMode.editStep(
+              selectedSequence.sequenceStepCTOs.find(
+                (step) => step.squenceStepTO.id === stepToEdit.squenceStepTO.index + 1
+              )
+            )
+          );
+        } else {
+          dispatch(EditActions.setMode.editStep());
+        }
+      } else {
+        dispatch(EditActions.setMode.editSequence(stepToEdit.squenceStepTO.sequenceFk));
+      }
     }
   };
 
@@ -173,9 +173,10 @@ const useControllPanelEditSequenceStepViewModel = () => {
     let valid: boolean = false;
     if (!isNullOrUndefined(stepToEdit)) {
       if (
-        stepToEdit.squenceStepTO.name !== "" &&
-        stepToEdit.squenceStepTO.sourceComponentFk !== -1 &&
-        stepToEdit.squenceStepTO.targetComponentFk !== -1
+        stepToEdit.squenceStepTO.name !== ""
+        // TODO: for condition development purpose.
+        // && stepToEdit.squenceStepTO.sourceComponentFk !== -1 &&
+        // stepToEdit.squenceStepTO.targetComponentFk !== -1
       ) {
         valid = true;
       }

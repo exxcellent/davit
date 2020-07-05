@@ -7,7 +7,6 @@ import { SequenceTO } from "../../../../../../dataAccess/access/to/SequenceTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2Button } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { StepDropDown } from "../../../../../common/fragments/dropdowns/StepDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
@@ -65,9 +64,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
       </div>
       {showExistingOptions && (
         <div className="controllPanelEditChild columnDivider">
-          <div>
-            <Carv2Button icon="copy" onClick={copySequence} />
-          </div>
+          <div>{/* <Carv2Button icon="copy" onClick={copySequence} /> */}</div>
           <div>
             <Carv2DeleteButton onClick={deleteSequence} />
           </div>

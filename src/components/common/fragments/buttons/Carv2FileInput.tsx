@@ -1,7 +1,7 @@
 import React, { createRef, FunctionComponent } from "react";
 import { useDispatch } from "react-redux";
 import { GlobalActions } from "../../../../slices/GlobalSlice";
-import { Carv2Button } from "./Carv2Button";
+import { Carv2ButtonIcon } from "./Carv2Button";
 
 export interface Carv2FileInputProps {}
 
@@ -27,7 +27,7 @@ export const Carv2FileInput: FunctionComponent<Carv2FileInputProps> = (props) =>
 
   return (
     <div>
-      <Carv2Button icon="cloud upload" onClick={openFileBrowser} />
+      <Carv2ButtonIcon icon="cloud upload" onClick={openFileBrowser} />
       <input
         hidden={true}
         ref={inputFileRef}

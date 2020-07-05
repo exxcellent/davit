@@ -4,7 +4,7 @@ import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
 import {
   ComponentDataFragmentProps,
   createComponentDataFragment,
-} from "../../../common/fragments/ComponentDataFragment";
+} from "../../../../viewDataTypes/ComponentDataFragment";
 
 export interface MetaComponentFragmentProps {
   id: number;

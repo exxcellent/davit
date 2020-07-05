@@ -218,12 +218,22 @@ const setModeToEditDataSetup = (dataSetup?: DataSetupTO): AppThunk => async (dis
 };
 
 // ----------------------------------------------- COMPONENT -----------------------------------------------
-const saveComponentThunk = (component: ComponentCTO): AppThunk => async (dispatch) => {
-  const response: DataAccessResponse<ComponentCTO> = await DataAccess.saveComponentCTO(component);
+const saveComponentThunk = (component: ComponentCTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<ComponentCTO> = DataAccess.saveComponentCTO(component);
   console.log(response);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
+  dispatch(MasterDataActions.loadComponentsFromBackend());
+};
+
+const saveNewComponentThunk = (component: ComponentCTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<ComponentCTO> = DataAccess.saveComponentCTO(component);
+  console.log(response);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(EditActions.component.update(response.object));
   dispatch(MasterDataActions.loadComponentsFromBackend());
 };
 
@@ -438,7 +448,9 @@ export const EditActions = {
   },
   component: {
     save: saveComponentThunk,
+    saveNew: saveNewComponentThunk,
     delete: deleteComponentThunk,
+    update: EditSlice.actions.setComponentToEdit,
   },
   data: {
     save: saveDataThunk,
@@ -461,6 +473,7 @@ export const EditActions = {
   dataSetup: {
     save: saveDataSetupThunk,
     delete: deleteDataSetupThunk,
+    update: EditSlice.actions.setDataSetupToEdit,
   },
   step: {
     save: saveSequenceStepThunk,

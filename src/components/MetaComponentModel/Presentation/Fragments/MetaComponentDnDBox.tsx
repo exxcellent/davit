@@ -4,7 +4,7 @@ import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
 import { GroupTO } from "../../../../dataAccess/access/to/GroupTO";
 import { Carv2Util } from "../../../../utils/Carv2Util";
-import { ComponentDataFragmentProps } from "../../../common/fragments/ComponentDataFragment";
+import { ComponentDataFragmentProps } from "../../../../viewDataTypes/ComponentDataFragment";
 import { createDnDItem } from "../../../common/fragments/DnDWrapper";
 import { createCurveArrow } from "../../../common/fragments/svg/Arrow";
 import { createMetaComponentFragment } from "./MetaComponentFragment";

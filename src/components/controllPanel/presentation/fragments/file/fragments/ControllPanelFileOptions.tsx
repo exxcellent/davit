@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { ButtonGroup } from "semantic-ui-react";
 import { EditActions } from "../../../../../../slices/EditSlice";
 import { GlobalActions } from "../../../../../../slices/GlobalSlice";
-import { Carv2Button } from "../../../../../common/fragments/buttons/Carv2Button";
+import { Carv2ButtonIcon } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2FileInput } from "../../../../../common/fragments/buttons/Carv2FileInput";
 
 export interface ControllPanelFileOptionsProps {}
@@ -16,8 +16,8 @@ export const ControllPanelFileOptions: FunctionComponent<ControllPanelFileOption
       <div className="optionField">
         <ButtonGroup>
           <Carv2FileInput />
-          <Carv2Button icon="download" onClick={downloadData} />
-          <Carv2Button icon="edit" onClick={deleteLocalStorage} />
+          <Carv2ButtonIcon icon="download" onClick={downloadData} />
+          <Carv2ButtonIcon icon="edit" onClick={deleteLocalStorage} />
         </ButtonGroup>
       </div>
       <div style={{ textAlign: "center", color: "white" }}>{"file".toUpperCase()}</div>
