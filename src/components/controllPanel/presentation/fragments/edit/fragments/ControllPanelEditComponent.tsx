@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import React, { FunctionComponent, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
@@ -23,13 +23,11 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
     changeName,
     saveComponent,
     deleteComponent,
-    cancel,
-    toggleIsCreateAnother,
     textInput,
-    validName,
     setGroup,
     compGroup,
     updateComponent,
+    createAnother,
   } = useControllPanelEditComponentViewModel();
 
   return (
@@ -51,13 +49,8 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
         />
       </div>
       <div className="columnDivider controllPanelEditChild">
+        <Carv2ButtonLabel onClick={createAnother} label="Create another" />
         <Carv2ButtonLabel onClick={saveComponent} label="OK" />
-        {/* <Carv2SubmitCancelCheckBox
-          onSubmit={saveComponent}
-          onCancel={cancel}
-          onChange={toggleIsCreateAnother}
-          submitCondition={validName()}
-        /> */}
       </div>
       <div className="columnDivider">
         <div className="controllPanelEditChild" style={{ display: "flex", alignItems: "center", height: "100%" }}>
@@ -71,7 +64,6 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
 const useControllPanelEditComponentViewModel = () => {
   const componentToEdit: ComponentCTO | null = useSelector(editSelectors.componentToEdit);
   const dispatch = useDispatch();
-  const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
   const textInput = useRef<Input>(null);
 
   useEffect(() => {
@@ -97,23 +89,16 @@ const useControllPanelEditComponentViewModel = () => {
 
   const saveComponent = () => {
     dispatch(EditActions.component.save(componentToEdit!));
-    if (isCreateAnother) {
-      dispatch(EditActions.setMode.editComponent());
-    } else {
-      dispatch(EditActions.setMode.edit());
-    }
+    dispatch(EditActions.setMode.edit());
+  };
+
+  const createAnother = () => {
+    dispatch(EditActions.setMode.editComponent());
   };
 
   const deleteComponent = () => {
     dispatch(EditActions.component.delete(componentToEdit!));
     dispatch(EditActions.setMode.edit());
-  };
-
-  const validName = (): boolean => {
-    if (!isNullOrUndefined(componentToEdit)) {
-      return Carv2Util.isValidName(componentToEdit.component.name);
-    }
-    return false;
   };
 
   const setGroup = (group: GroupTO | undefined) => {
@@ -134,13 +119,10 @@ const useControllPanelEditComponentViewModel = () => {
     changeName,
     saveComponent,
     deleteComponent,
-    cancel: () => dispatch(EditActions.setMode.edit()),
-    toggleIsCreateAnother: () => setIsCreateAnother(!isCreateAnother),
     textInput,
-    showDelete: componentToEdit?.component.id !== -1,
-    validName,
     setGroup,
     compGroup: componentToEdit?.component.groupFks !== -1 ? componentToEdit?.component.groupFks : undefined,
     updateComponent,
+    createAnother,
   };
 };
