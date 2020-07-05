@@ -158,7 +158,11 @@ const setModeToEdit = (): AppThunk => async (dispatch) => {
 
 const setModeToEditComponent = (component?: ComponentCTO): AppThunk => async (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_COMPONENT));
-  dispatch(EditSlice.actions.setComponentToEdit(component || new ComponentCTO()));
+  if (component === undefined) {
+    dispatch(EditActions.component.create());
+  } else {
+    dispatch(EditSlice.actions.setComponentToEdit(component));
+  }
 };
 
 const setModeToEditData = (data?: DataCTO): AppThunk => async (dispatch) => {
@@ -218,22 +222,25 @@ const setModeToEditDataSetup = (dataSetup?: DataSetupTO): AppThunk => async (dis
 };
 
 // ----------------------------------------------- COMPONENT -----------------------------------------------
-const saveComponentThunk = (component: ComponentCTO): AppThunk => (dispatch) => {
+
+const createComponentThunk = (): AppThunk => (dispatch) => {
+  let component: ComponentCTO = new ComponentCTO();
+  component.component.name = "neu";
   const response: DataAccessResponse<ComponentCTO> = DataAccess.saveComponentCTO(component);
   console.log(response);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
   dispatch(MasterDataActions.loadComponentsFromBackend());
+  dispatch(EditActions.component.update(response.object));
 };
 
-const saveNewComponentThunk = (component: ComponentCTO): AppThunk => (dispatch) => {
+const saveComponentThunk = (component: ComponentCTO): AppThunk => (dispatch) => {
   const response: DataAccessResponse<ComponentCTO> = DataAccess.saveComponentCTO(component);
   console.log(response);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
-  dispatch(EditActions.component.update(response.object));
   dispatch(MasterDataActions.loadComponentsFromBackend());
 };
 
@@ -448,9 +455,9 @@ export const EditActions = {
   },
   component: {
     save: saveComponentThunk,
-    saveNew: saveNewComponentThunk,
     delete: deleteComponentThunk,
     update: EditSlice.actions.setComponentToEdit,
+    create: createComponentThunk,
   },
   data: {
     save: saveDataThunk,
