@@ -115,7 +115,12 @@ const useControllPanelEditSequenceViewModel = () => {
   };
 
   const editOrAddSequenceStep = (step?: SequenceStepCTO) => {
-    dispatch(EditActions.setMode.editStep(step));
+    let stepToEdit: SequenceStepCTO | undefined = step;
+    if (stepToEdit === undefined) {
+      stepToEdit = new SequenceStepCTO();
+      stepToEdit.squenceStepTO.sequenceFk = sequenceToEdit?.id || -1;
+    }
+    dispatch(EditActions.setMode.editStep(stepToEdit));
   };
 
   const copySequence = () => {

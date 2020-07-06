@@ -9,12 +9,12 @@ import { ActionType } from "../../../../../../dataAccess/access/types/ActionType
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
+import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ActionTypeDropDown } from "../../../../../common/fragments/dropdowns/ActionTypeDropDown";
 import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
 import { DataDropDown } from "../../../../../common/fragments/dropdowns/DataDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { Carv2SubmitCancel } from "../common/fragments/Carv2SubmitCancel";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditActionProps {}
@@ -27,7 +27,6 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
     setAction,
     setData,
     saveAction,
-    showDelete,
     deleteAction,
     componentId,
     dataId,
@@ -52,8 +51,10 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
         </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <Carv2SubmitCancel onSubmit={saveAction} onCancel={cancel} />
-        {showDelete && <Carv2DeleteButton onClick={deleteAction} />}
+        <Carv2ButtonLabel onClick={saveAction} label="OK" />
+        <OptionField>
+          <Carv2DeleteButton onClick={deleteAction} />
+        </OptionField>
       </div>
     </ControllPanelEditSub>
   );
@@ -129,7 +130,7 @@ const useControllPanelEditActionViewModel = () => {
   };
 
   return {
-    label: actionToEdit?.id === -1 ? "ADD ACTION" : "EDIT ACTION",
+    label: "EDIT ACTION",
     action: actionToEdit,
     cancel,
     setComponent,
@@ -139,7 +140,6 @@ const useControllPanelEditActionViewModel = () => {
     componentId: actionToEdit?.componentFk === -1 ? undefined : actionToEdit?.componentFk,
     dataId: actionToEdit?.dataFk === -1 ? undefined : actionToEdit?.dataFk,
     actionType: actionToEdit?.actionType,
-    showDelete: actionToEdit?.id !== -1 ? true : false,
     deleteAction,
   };
 };

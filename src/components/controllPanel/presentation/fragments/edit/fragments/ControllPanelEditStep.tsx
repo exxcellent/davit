@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import React, { FunctionComponent, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
@@ -10,12 +10,12 @@ import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
+import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ActionDropDown } from "../../../../../common/fragments/dropdowns/ActionDropDown";
 import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
-import { Carv2SubmitCancelCheckBox } from "../common/fragments/Carv2SubmitCancel";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditStepProps {}
@@ -24,18 +24,17 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
   const {
     label,
     name,
-    cancel,
     changeName,
     deleteSequenceStep,
     saveSequenceStep,
-    showDelete,
     textInput,
-    toggleIsCreateAnother,
     setComponent,
     validStep,
     editOrAddAction,
     sourceCompId,
     targetCompId,
+    createAnother,
+    updateStep,
   } = useControllPanelEditSequenceStepViewModel();
 
   return (
@@ -49,43 +48,59 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
             value={name}
             autoFocus
             ref={textInput}
+            onBlur={() => updateStep()}
           />
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
         <OptionField>
-          <ComponentDropDown onSelect={(comp) => setComponent(comp, true)} value={sourceCompId} />
-          <ComponentDropDown onSelect={(comp) => setComponent(comp, false)} value={targetCompId} />
+          <ComponentDropDown
+            onSelect={(comp) => {
+              setComponent(comp, true);
+              updateStep();
+            }}
+            value={sourceCompId}
+          />
+          <ComponentDropDown
+            onSelect={(comp) => {
+              setComponent(comp, false);
+              updateStep();
+            }}
+            value={targetCompId}
+          />
         </OptionField>
       </div>
       <div className="columnDivider optionFieldSpacer">
         <OptionField>
           <Button.Group>
-            <Button icon="add" inverted color="orange" onClick={() => editOrAddAction()} />
+            <Button
+              icon="add"
+              inverted
+              color="orange"
+              onClick={() => {
+                editOrAddAction();
+                updateStep();
+              }}
+            />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Action
             </Button>
-            <ActionDropDown onSelect={editOrAddAction} icon={"wrench"} />
-          </Button.Group>
-          <Button.Group>
-            <Button icon="add" inverted color="orange" onClick={() => {}} />
-            <Button id="buttonGroupLabel" disabled inverted color="orange">
-              Conditions
-            </Button>
-            <Button icon="wrench" inverted color="orange" onClick={() => {}} />
-            {/* TODO: condition dropdown. */}
+            <ActionDropDown
+              onSelect={(action) => {
+                editOrAddAction(action);
+                updateStep();
+              }}
+              icon={"wrench"}
+            />
           </Button.Group>
         </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <Carv2SubmitCancelCheckBox
-          onSubmit={saveSequenceStep}
-          onCancel={cancel}
-          onChange={toggleIsCreateAnother}
-          toggleLabel="Edit next"
-          submitCondition={validStep()}
-        />
-        {showDelete && <Carv2DeleteButton onClick={deleteSequenceStep} />}
+        <Carv2ButtonLabel onClick={createAnother} label="Create another" />
+        <Carv2ButtonLabel onClick={saveSequenceStep} label="OK" />
+        <OptionField>
+          <Carv2DeleteButton onClick={deleteSequenceStep} />
+        </OptionField>
       </div>
     </ControllPanelEditSub>
   );
@@ -95,7 +110,6 @@ const useControllPanelEditSequenceStepViewModel = () => {
   const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.stepToEdit);
   const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
   const dispatch = useDispatch();
-  const [isEditNext, setIsEditNext] = useState<boolean>(false);
   const textInput = useRef<Input>(null);
 
   useEffect(() => {
@@ -138,21 +152,21 @@ const useControllPanelEditSequenceStepViewModel = () => {
   const saveSequenceStep = () => {
     if (!isNullOrUndefined(stepToEdit) && !isNullOrUndefined(selectedSequence)) {
       dispatch(EditActions.step.save(stepToEdit));
-      if (isEditNext) {
-        if (stepToEdit.squenceStepTO.index < selectedSequence.sequenceStepCTOs.length) {
-          dispatch(
-            EditActions.setMode.editStep(
-              selectedSequence.sequenceStepCTOs.find(
-                (step) => step.squenceStepTO.id === stepToEdit.squenceStepTO.index + 1
-              )
-            )
-          );
-        } else {
-          dispatch(EditActions.setMode.editStep());
-        }
-      } else {
-        dispatch(EditActions.setMode.editSequence(stepToEdit.squenceStepTO.sequenceFk));
-      }
+      // if (isEditNext) {
+      //   if (stepToEdit.squenceStepTO.index < selectedSequence.sequenceStepCTOs.length) {
+      //     dispatch(
+      //       EditActions.setMode.editStep(
+      //         selectedSequence.sequenceStepCTOs.find(
+      //           (step) => step.squenceStepTO.id === stepToEdit.squenceStepTO.index + 1
+      //         )
+      //       )
+      //     );
+      //   } else {
+      //     dispatch(EditActions.setMode.editStep());
+      //   }
+      // } else {
+      dispatch(EditActions.setMode.editSequence(stepToEdit.squenceStepTO.sequenceFk));
+      // }
     }
   };
 
@@ -161,6 +175,11 @@ const useControllPanelEditSequenceStepViewModel = () => {
       dispatch(EditActions.step.delete(stepToEdit));
       dispatch(EditActions.setMode.editSequence(stepToEdit.squenceStepTO.sequenceFk));
     }
+  };
+
+  const updateStep = () => {
+    const copySequenceStep: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
+    dispatch(EditActions.step.save(copySequenceStep));
   };
 
   const editOrAddAction = (action?: ActionTO) => {
@@ -184,26 +203,23 @@ const useControllPanelEditSequenceStepViewModel = () => {
     return valid;
   };
 
-  const cancel = (): void => {
-    if (!isNullOrUndefined(stepToEdit)) {
-      dispatch(EditActions.setMode.editSequence(stepToEdit.squenceStepTO.sequenceFk));
-    }
+  const createAnother = () => {
+    // TODO fill.
   };
 
   return {
-    label: stepToEdit ? "EDIT SEQUENCE STEP" : "ADD SEQUENCE STEP",
+    label: "EDIT SEQUENCE STEP",
     name: stepToEdit ? stepToEdit!.squenceStepTO.name : "",
     changeName,
     saveSequenceStep,
     deleteSequenceStep,
     setComponent,
-    cancel,
-    toggleIsCreateAnother: () => setIsEditNext(!isEditNext),
     textInput,
-    showDelete: stepToEdit?.squenceStepTO.id !== -1 ? true : false,
     validStep,
     editOrAddAction,
     sourceCompId: stepToEdit?.squenceStepTO.sourceComponentFk,
     targetCompId: stepToEdit?.squenceStepTO.targetComponentFk,
+    createAnother,
+    updateStep,
   };
 };

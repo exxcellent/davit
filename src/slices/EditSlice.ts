@@ -200,9 +200,9 @@ const setModeToEditSequence = (sequenceId?: number): AppThunk => (dispatch) => {
   }
 };
 
-const setModeToEditStep = (stepCTO?: SequenceStepCTO): AppThunk => (dispatch) => {
+const setModeToEditStep = (stepCTO: SequenceStepCTO): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_STEP));
-  dispatch(EditSlice.actions.setStepToEdit(Carv2Util.deepCopy(stepCTO) || new SequenceStepCTO()));
+  dispatch(EditActions.step.create(stepCTO));
 };
 
 const setModeToEditAction = (action?: ActionTO): AppThunk => async (dispatch) => {
@@ -426,6 +426,15 @@ const getSequenceCTOById = (sequenceId: number): SequenceCTO | null => {
 };
 
 // ----------------------------------------------- SEQUENCE STEP -----------------------------------------------
+const createSequenceStepThunk = (step: SequenceStepCTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<SequenceStepCTO> = DataAccess.saveSequenceStepCTO(step);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  } else {
+    dispatch(EditActions.step.update(response.object));
+  }
+};
+
 const deleteSequenceStepThunk = (step: SequenceStepCTO): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<SequenceStepCTO> = await DataAccess.deleteSequenceStepCTO(step);
   if (response.code !== 200) {
@@ -564,6 +573,7 @@ export const EditActions = {
     save: saveSequenceStepThunk,
     delete: deleteSequenceStepThunk,
     update: EditSlice.actions.setStepToEdit,
+    create: createSequenceStepThunk,
   },
   action: {
     delete: deleteActionThunk,

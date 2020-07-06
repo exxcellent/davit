@@ -25,12 +25,12 @@ export const DataDropDown: FunctionComponent<DataDropDownProps> = (props) => {
       options={datas.map(dataToOption).sort((a, b) => {
         return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
       })}
-      placeholder={placeholder}
+      placeholder={placeholder || "Select Data ..."}
       onChange={(event, data) => onSelect(selectData(Number(data.value), datas))}
       selectOnBlur={false}
       scrolling
       selection
-      value={value}
+      value={value === -1 ? undefined : value}
     />
   );
 };
