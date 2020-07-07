@@ -4,6 +4,7 @@ import { DataSetupCTO } from "./access/cto/DataSetupCTO";
 import { SequenceCTO } from "./access/cto/SequenceCTO";
 import { SequenceStepCTO } from "./access/cto/SequenceStepCTO";
 import { ActionTO } from "./access/to/ActionTO";
+import { ConditionTO } from "./access/to/ConditionTO";
 import { DataRelationTO } from "./access/to/DataRelationTO";
 import { DataSetupTO } from "./access/to/DataSetupTO";
 import { GroupTO } from "./access/to/GroupTO";
@@ -171,8 +172,17 @@ export const DataAccess = {
   deleteActionCTO(action: ActionTO): DataAccessResponse<ActionTO> {
     return makeTransactional(() => SequenceDataAccessService.deleteAction(action));
   },
-};
 
+  // ========================================= CONDITION =========================================
+
+  saveCondition(condition: ConditionTO): DataAccessResponse<ConditionTO> {
+    return makeTransactional(() => SequenceDataAccessService.saveCondition(condition));
+  },
+
+  deleteConditon(condition: ConditionTO): DataAccessResponse<ConditionTO> {
+    return makeTransactional(() => SequenceDataAccessService.deleteCondition(condition));
+  },
+};
 // ========================================= PRIVATE =========================================
 
 function makeTransactional<T>(callback: () => T): DataAccessResponse<T> {

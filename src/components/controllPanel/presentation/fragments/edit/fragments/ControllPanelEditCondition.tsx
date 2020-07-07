@@ -1,12 +1,11 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import React, { FunctionComponent, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../../../../../../dataAccess/access/to/ActionTO";
-import { GoTo, GoToTypes } from "../../../../../../dataAccess/access/types/GoToType";
+import { ConditionTO } from "../../../../../../dataAccess/access/to/ConditionTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
@@ -15,33 +14,26 @@ import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2B
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ActionDropDown } from "../../../../../common/fragments/dropdowns/ActionDropDown";
 import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
-import { GoToOptionDropDown } from "../../../../../common/fragments/dropdowns/GoToOptionDropDown";
-import { StepDropDown } from "../../../../../common/fragments/dropdowns/StepDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditStepProps {}
+export interface ControllPanelEditConditionProps {}
 
-export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps> = (props) => {
+export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditConditionProps> = (props) => {
   const {
     label,
     name,
     changeName,
-    deleteSequenceStep,
-    saveSequenceStep,
+    saveCondition,
     textInput,
     setComponent,
     validStep,
     editOrAddAction,
-    sourceCompId,
-    targetCompId,
-    createAnother,
-    updateStep,
-    handleType,
-    setGoToTypeStep,
-    goTo,
-  } = useControllPanelEditSequenceStepViewModel();
+    updateCondition,
+    deleteCondition,
+    compId,
+  } = useControllPanelEditConditionViewModel();
 
   const actionDropdown = (
     <OptionField>
@@ -52,7 +44,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
           color="orange"
           onClick={() => {
             editOrAddAction();
-            updateStep();
+            updateCondition();
           }}
         />
         <Button id="buttonGroupLabel" disabled inverted color="orange">
@@ -61,7 +53,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
         <ActionDropDown
           onSelect={(action) => {
             editOrAddAction(action);
-            updateStep();
+            updateCondition();
           }}
           icon={"wrench"}
         />
@@ -78,7 +70,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
         value={name}
         autoFocus
         ref={textInput}
-        onBlur={() => updateStep()}
+        onBlur={() => updateCondition()}
       />
     </OptionField>
   );
@@ -88,17 +80,10 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
       <OptionField>
         <ComponentDropDown
           onSelect={(comp) => {
-            setComponent(comp, true);
-            updateStep();
+            setComponent(comp);
+            updateCondition();
           }}
-          value={sourceCompId}
-        />
-        <ComponentDropDown
-          onSelect={(comp) => {
-            setComponent(comp, false);
-            updateStep();
-          }}
-          value={targetCompId}
+          value={compId}
         />
       </OptionField>
     </div>
@@ -106,10 +91,10 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
 
   const menuButtons = (
     <div className="columnDivider controllPanelEditChild">
-      <Carv2ButtonLabel onClick={createAnother} label="Create another" />
-      <Carv2ButtonLabel onClick={saveSequenceStep} label="OK" />
+      {/* <Carv2ButtonLabel onClick={createAnother} label="Create another" /> */}
+      <Carv2ButtonLabel onClick={saveCondition} label="OK" />
       <OptionField>
-        <Carv2DeleteButton onClick={deleteSequenceStep} />
+        <Carv2DeleteButton onClick={deleteCondition} />
       </OptionField>
     </div>
   );
@@ -122,7 +107,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
       </div>
       {sourceTargetDropDowns}
       <div className="optionFieldSpacer columnDivider">
-        <OptionField>
+        {/* <OptionField>
           <GoToOptionDropDown onSelect={handleType} value={goTo ? goTo.type : GoToTypes.ERROR} />
           {goTo!.type === GoToTypes.STEP && (
             <StepDropDown onSelect={setGoToTypeStep} value={goTo?.type === GoToTypes.STEP ? goTo.id : 1} />
@@ -130,55 +115,47 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
           {goTo!.type === GoToTypes.COND && (
             <StepDropDown onSelect={setGoToTypeStep} value={goTo?.type === GoToTypes.COND ? goTo.id : 1} />
           )}
-        </OptionField>
+        </OptionField> */}
       </div>
       {menuButtons}
     </ControllPanelEditSub>
   );
 };
 
-const useControllPanelEditSequenceStepViewModel = () => {
-  const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.stepToEdit);
+const useControllPanelEditConditionViewModel = () => {
+  const conditionToEdit: ConditionTO | null = useSelector(editSelectors.conditionToEdit);
   const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
   const dispatch = useDispatch();
   const textInput = useRef<Input>(null);
-  const [currentGoTo, setCurrentGoTo] = useState<GoTo>({ type: GoToTypes.STEP, id: -1 });
 
   useEffect(() => {
-    if (isNullOrUndefined(stepToEdit)) {
-      handleError("Tried to go to edit sequence step without sequenceStepToEdit specified");
+    if (isNullOrUndefined(conditionToEdit)) {
+      handleError("Tried to go to edit condition step without conditionToEdit specified");
       dispatch(EditActions.setMode.edit());
-    }
-    if (stepToEdit) {
-      setCurrentGoTo(stepToEdit.squenceStepTO.goto);
     }
     // used to focus the textfield on create another
     textInput.current!.focus();
-  }, [dispatch, stepToEdit]);
+  }, [dispatch, conditionToEdit]);
 
   const changeName = (name: string) => {
-    if (!isNullOrUndefined(stepToEdit)) {
-      const copySequenceStep: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
-      copySequenceStep.squenceStepTO.name = name;
-      dispatch(EditActions.setMode.editStep(copySequenceStep));
+    if (!isNullOrUndefined(conditionToEdit)) {
+      const copyConditionToEdit: ConditionTO = Carv2Util.deepCopy(conditionToEdit);
+      copyConditionToEdit.name = name;
+      dispatch(EditActions.setMode.editCondition(copyConditionToEdit));
     }
   };
 
-  const setComponent = (component: ComponentCTO | undefined, isSource?: boolean) => {
-    if (component !== undefined && !isNullOrUndefined(stepToEdit)) {
-      const copySequenceStep: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
-      if (isSource) {
-        copySequenceStep.squenceStepTO.sourceComponentFk = component.component.id;
-      } else {
-        copySequenceStep.squenceStepTO.targetComponentFk = component.component.id;
-      }
-      dispatch(EditActions.setMode.editStep(copySequenceStep));
+  const setComponent = (component: ComponentCTO | undefined) => {
+    if (component !== undefined && !isNullOrUndefined(conditionToEdit)) {
+      const copyConditionToEdit: ConditionTO = Carv2Util.deepCopy(conditionToEdit);
+      copyConditionToEdit.componentFk = component.component.id;
+      dispatch(EditActions.setMode.editCondition(copyConditionToEdit));
     }
   };
 
-  const saveSequenceStep = () => {
-    if (!isNullOrUndefined(stepToEdit) && !isNullOrUndefined(selectedSequence)) {
-      dispatch(EditActions.step.save(stepToEdit));
+  const saveCondition = () => {
+    if (!isNullOrUndefined(conditionToEdit) && !isNullOrUndefined(selectedSequence)) {
+      dispatch(EditActions.condition.save(conditionToEdit));
       // if (isEditNext) {
       //   if (stepToEdit.squenceStepTO.index < selectedSequence.sequenceStepCTOs.length) {
       //     dispatch(
@@ -192,34 +169,34 @@ const useControllPanelEditSequenceStepViewModel = () => {
       //     dispatch(EditActions.setMode.editStep());
       //   }
       // } else {
-      dispatch(EditActions.setMode.editSequence(stepToEdit.squenceStepTO.sequenceFk));
+      dispatch(EditActions.setMode.editSequence(conditionToEdit.sequenceFk));
       // }
     }
   };
 
-  const deleteSequenceStep = () => {
-    if (!isNullOrUndefined(stepToEdit)) {
-      dispatch(EditActions.step.delete(stepToEdit));
-      dispatch(EditActions.setMode.editSequence(stepToEdit.squenceStepTO.sequenceFk));
+  const deleteCondition = () => {
+    if (!isNullOrUndefined(conditionToEdit)) {
+      dispatch(EditActions.condition.delete(conditionToEdit));
+      dispatch(EditActions.setMode.editSequence(conditionToEdit.sequenceFk));
     }
   };
 
-  const updateStep = () => {
-    const copySequenceStep: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
-    dispatch(EditActions.step.save(copySequenceStep));
+  const updateCondition = () => {
+    const copyCondition: ConditionTO = Carv2Util.deepCopy(conditionToEdit);
+    dispatch(EditActions.condition.save(copyCondition));
   };
 
   const editOrAddAction = (action?: ActionTO) => {
-    if (!isNullOrUndefined(stepToEdit)) {
+    if (!isNullOrUndefined(conditionToEdit)) {
       dispatch(EditActions.setMode.editAction(action));
     }
   };
 
   const validStep = (): boolean => {
     let valid: boolean = false;
-    if (!isNullOrUndefined(stepToEdit)) {
+    if (!isNullOrUndefined(conditionToEdit)) {
       if (
-        stepToEdit.squenceStepTO.name !== ""
+        conditionToEdit.name !== ""
         // TODO: for condition development purpose.
         // && stepToEdit.squenceStepTO.sourceComponentFk !== -1 &&
         // stepToEdit.squenceStepTO.targetComponentFk !== -1
@@ -230,57 +207,17 @@ const useControllPanelEditSequenceStepViewModel = () => {
     return valid;
   };
 
-  const saveGoToType = (goTo: GoTo) => {
-    if (goTo !== undefined) {
-      const copySequenceStep: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
-      copySequenceStep.squenceStepTO.goto = goTo;
-      dispatch(EditActions.step.update(copySequenceStep));
-      dispatch(EditActions.step.save(copySequenceStep));
-    }
-  };
-
-  const handleType = (newGoToType?: string) => {
-    if (newGoToType !== undefined) {
-      const gType = { type: (GoToTypes as any)[newGoToType] };
-      setCurrentGoTo(gType);
-      switch (newGoToType) {
-        case GoToTypes.ERROR:
-          saveGoToType(gType);
-          break;
-        case GoToTypes.FIN:
-          saveGoToType(gType);
-          break;
-      }
-    }
-  };
-
-  const setGoToTypeStep = (step?: SequenceStepCTO) => {
-    if (step) {
-      let newGoTo: GoTo = { type: GoToTypes.STEP, id: step.squenceStepTO.id };
-      saveGoToType(newGoTo);
-    }
-  };
-
-  const createAnother = () => {
-    // TODO fill.
-  };
-
   return {
-    label: "EDIT SEQUENCE STEP",
-    name: stepToEdit ? stepToEdit!.squenceStepTO.name : "",
+    label: "EDIT CONDITION",
+    name: conditionToEdit?.name,
     changeName,
-    saveSequenceStep,
-    deleteSequenceStep,
+    saveCondition,
     setComponent,
     textInput,
     validStep,
     editOrAddAction,
-    sourceCompId: stepToEdit?.squenceStepTO.sourceComponentFk,
-    targetCompId: stepToEdit?.squenceStepTO.targetComponentFk,
-    createAnother,
-    updateStep,
-    handleType,
-    goTo: currentGoTo,
-    setGoToTypeStep,
+    compId: conditionToEdit?.componentFk,
+    updateCondition,
+    deleteCondition,
   };
 };

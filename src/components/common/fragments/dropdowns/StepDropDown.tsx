@@ -6,12 +6,18 @@ import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
 import { sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
 
-interface StepDropDownProps extends DropdownProps {
+interface StepDropDownButtonProps extends DropdownProps {
   onSelect: (step: SequenceStepCTO | undefined) => void;
   icon?: string;
 }
 
-export const StepDropDown: FunctionComponent<StepDropDownProps> = (props) => {
+interface StepDropDownProps extends DropdownProps {
+  onSelect: (step: SequenceStepCTO | undefined) => void;
+  placeholder?: string;
+  value?: number;
+}
+
+export const StepDropDownButton: FunctionComponent<StepDropDownButtonProps> = (props) => {
   const { onSelect, icon } = props;
   const { sequence, stepOptions, selectSequenceStep } = useStepDropDownViewModel();
 
@@ -25,6 +31,25 @@ export const StepDropDown: FunctionComponent<StepDropDownProps> = (props) => {
       selectOnBlur={false}
       trigger={<React.Fragment />}
       scrolling
+    />
+  );
+};
+
+export const StepDropDown: FunctionComponent<StepDropDownProps> = (props) => {
+  const { onSelect, placeholder, value } = props;
+  const { sequence, stepOptions, selectSequenceStep } = useStepDropDownViewModel();
+
+  console.info("value: ", value);
+
+  return (
+    <Dropdown
+      options={stepOptions(sequence)}
+      selection
+      selectOnBlur={false}
+      placeholder={placeholder || "Select step ..."}
+      onChange={(event, data) => onSelect(selectSequenceStep(Number(data.value), sequence))}
+      scrolling
+      value={value === -1 ? undefined : value}
     />
   );
 };

@@ -66,6 +66,7 @@ class DataStore {
       dataConnections: Array.from(this.data!.dataConnections.values()),
       initDatas: Array.from(this.data!.initDatas.values()),
       dataSetups: Array.from(this.data!.dataSetups.values()),
+      conditions: Array.from(this.data!.conditions.values()),
     };
   }
 

@@ -3,11 +3,13 @@ import { DataSetupCTO } from "../access/cto/DataSetupCTO";
 import { SequenceCTO } from "../access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../access/cto/SequenceStepCTO";
 import { ActionTO } from "../access/to/ActionTO";
+import { ConditionTO } from "../access/to/ConditionTO";
 import { DataSetupTO } from "../access/to/DataSetupTO";
 import { InitDataTO } from "../access/to/InitDataTO";
 import { SequenceStepTO } from "../access/to/SequenceStepTO";
 import { SequenceTO } from "../access/to/SequenceTO";
 import { ActionRepository } from "../repositories/ActionRepository";
+import { ConditionRepository } from "../repositories/ConditionRepository";
 import { DataSetupRepository } from "../repositories/DataSetupRepository";
 import { InitDataRepository } from "../repositories/InitDataRepository";
 import { SequenceRepository } from "../repositories/SequenceRepository";
@@ -81,6 +83,10 @@ export const SequenceDataAccessService = {
     return SequenceRepository.delete(sequenceTO);
   },
 
+  deleteCondition(condition: ConditionTO): ConditionTO {
+    return ConditionRepository.delete(condition);
+  },
+
   deleteSequenceStep(sequenceStep: SequenceStepCTO): SequenceStepCTO {
     CheckHelper.nullCheck(sequenceStep, "step");
     sequenceStep.actions.map((action) => ActionRepository.delete(action.id));
@@ -110,6 +116,10 @@ export const SequenceDataAccessService = {
 
   findAllInitDatas(): InitDataTO[] {
     return InitDataRepository.findAll();
+  },
+
+  saveCondition(condition: ConditionTO): ConditionTO {
+    return ConditionRepository.save(condition);
   },
 
   saveDataSetup(dataSetup: DataSetupTO): DataSetupTO {

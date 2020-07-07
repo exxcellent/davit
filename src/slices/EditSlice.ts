@@ -6,6 +6,7 @@ import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
+import { ConditionTO } from "../dataAccess/access/to/ConditionTO";
 import { DataRelationTO } from "../dataAccess/access/to/DataRelationTO";
 import { DataSetupTO } from "../dataAccess/access/to/DataSetupTO";
 import { GroupTO } from "../dataAccess/access/to/GroupTO";
@@ -27,6 +28,7 @@ export enum Mode {
   EDIT_DATA_RELATION = "EDIT_DATA_RELATION",
   EDIT_DATA_SETUP = "EDIT_DATA_SETUP",
   EDIT_SEQUENCE = "EDIT_SEQUENCE",
+  EDIT_SEQUENCE_CONDITION = "EDIT_SEQUENCE_CONDITION",
   EDIT_SEQUENCE_STEP = "EDIT_SEQUENCE_STEP",
   EDIT_SEQUENCE_STEP_ACTION = "EDIT_SEQUENCE_STEP_ACTION",
 }
@@ -49,6 +51,7 @@ interface EditState {
     | StepAction
     | DataSetupCTO
     | GroupTO
+    | ConditionTO
     | {};
 }
 const getInitialState: EditState = {
@@ -122,6 +125,13 @@ const EditSlice = createSlice({
         handleError("Try to set group to edit in mode: " + state.mode);
       }
     },
+    setConditionToEdit: (state, action: PayloadAction<ConditionTO>) => {
+      if (state.mode === Mode.EDIT_SEQUENCE_CONDITION) {
+        state.objectToEdit = action.payload;
+      } else {
+        handleError("Try to set condition to edit in mode: " + state.mode);
+      }
+    },
     clearObjectToEdit: (state) => {
       state.objectToEdit = {};
     },
@@ -190,7 +200,6 @@ const setModeToEditSequence = (sequenceId?: number): AppThunk => (dispatch) => {
     let response: DataAccessResponse<SequenceCTO> = DataAccess.findSequenceCTO(sequenceId);
     if (response.code === 200) {
       dispatch(EditSlice.actions.setSequenceToEdit(Carv2Util.deepCopy(response.object.sequenceTO)));
-      console.log("call setCurrent Sequence: ", sequenceId);
       dispatch(SequenceModelActions.setCurrentSequence(sequenceId));
     } else {
       handleError(response.message);
@@ -231,6 +240,11 @@ const setModeToEditDataSetup = (dataSetup?: DataSetupTO): AppThunk => (dispatch)
   } else {
     dispatch(EditActions.dataSetup.create());
   }
+};
+
+const setModeToEditCondition = (condition: ConditionTO): AppThunk => (dispatch) => {
+  dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_CONDITION));
+  dispatch(EditActions.condition.create(condition));
 };
 
 // ----------------------------------------------- COMPONENT -----------------------------------------------
@@ -448,7 +462,7 @@ const saveSequenceStepThunk = (step: SequenceStepCTO): AppThunk => async (dispat
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
-  dispatch(MasterDataActions.loadSequencesFromBackend());
+  // dispatch(MasterDataActions.loadSequencesFromBackend());
 };
 
 const deleteActionThunk = (action: ActionTO): AppThunk => async (dispatch) => {
@@ -457,6 +471,31 @@ const deleteActionThunk = (action: ActionTO): AppThunk => async (dispatch) => {
     dispatch(handleError(response.message));
   }
   dispatch(MasterDataActions.loadSequencesFromBackend());
+};
+
+// ----------------------------------------------- CONDITION -----------------------------------------------
+
+const createConditionThunk = (condition: ConditionTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<ConditionTO> = DataAccess.saveCondition(condition);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  } else {
+    dispatch(EditActions.condition.update(response.object));
+  }
+};
+
+const saveConditionThunk = (condition: ConditionTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<ConditionTO> = DataAccess.saveCondition(condition);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+};
+
+const deleteConditionThunk = (condition: ConditionTO): AppThunk => async (dispatch) => {
+  const response: DataAccessResponse<ConditionTO> = await DataAccess.deleteConditon(condition);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
 };
 
 // =============================================== SELECTORS ===============================================
@@ -514,6 +553,11 @@ export const editSelectors = {
       ? (state.edit.objectToEdit as StepAction).actionTO
       : null;
   },
+  conditionToEdit: (state: RootState): ConditionTO | null => {
+    return state.edit.mode === Mode.EDIT_SEQUENCE_CONDITION && (state.edit.objectToEdit as ConditionTO).has
+      ? (state.edit.objectToEdit as ConditionTO)
+      : null;
+  },
 };
 
 // =============================================== ACTIONS ===============================================
@@ -527,6 +571,7 @@ export const EditActions = {
     editSequence: setModeToEditSequence,
     editDataSetup: setModeToEditDataSetup,
     editStep: setModeToEditStep,
+    editCondition: setModeToEditCondition,
     editAction: setModeToEditAction,
     edit: setModeToEdit,
     view: setModeToView,
@@ -578,5 +623,11 @@ export const EditActions = {
   action: {
     delete: deleteActionThunk,
     update: EditSlice.actions.setActionToEdit,
+  },
+  condition: {
+    create: createConditionThunk,
+    update: EditSlice.actions.setConditionToEdit,
+    save: saveConditionThunk,
+    delete: deleteConditionThunk,
   },
 };

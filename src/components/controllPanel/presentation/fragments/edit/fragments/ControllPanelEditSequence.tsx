@@ -9,7 +9,7 @@ import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
-import { StepDropDown } from "../../../../../common/fragments/dropdowns/StepDropDown";
+import { StepDropDownButton } from "../../../../../common/fragments/dropdowns/StepDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 
@@ -49,7 +49,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
           <Button id="buttonGroupLabel" disabled inverted color="orange">
             Step
           </Button>
-          <StepDropDown onSelect={editOrAddSequenceStep} icon="wrench" />
+          <StepDropDownButton onSelect={editOrAddSequenceStep} icon="wrench" />
         </Button.Group>
       </div>
       <div className="columnDivider controllPanelEditChild">
