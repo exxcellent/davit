@@ -80,6 +80,9 @@ export const SequenceDataAccessService = {
 
   deleteSequenceTO(sequenceTO: SequenceTO): SequenceTO {
     CheckHelper.nullCheck(sequenceTO, "sequenceTO");
+    let tempCTO: SequenceCTO = createSequenceCTO(sequenceTO);
+    tempCTO.sequenceStepCTOs.forEach((step) => SequenceStepRepository.delete(step.squenceStepTO));
+    tempCTO.conditions.forEach((cond) => ConditionRepository.delete(cond));
     return SequenceRepository.delete(sequenceTO);
   },
 
@@ -159,7 +162,8 @@ const createSequenceCTO = (sequence: SequenceTO | undefined): SequenceCTO => {
     createSequenceStepCTO
   );
   sequenceStepCTOs.sort((step1, step2) => step1.squenceStepTO.index - step2.squenceStepTO.index);
-  return { sequenceTO: sequence!, sequenceStepCTOs: sequenceStepCTOs };
+  const conditions: ConditionTO[] = ConditionRepository.findAllForSequence(sequence!.id);
+  return { sequenceTO: sequence!, sequenceStepCTOs: sequenceStepCTOs, conditions: conditions };
 };
 
 const createSequenceStepCTO = (sequenceStepTO: SequenceStepTO): SequenceStepCTO => {

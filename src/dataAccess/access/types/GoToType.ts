@@ -7,5 +7,4 @@ export enum GoToTypes {
   ERROR = "ERROR",
   STEP = "STEP",
   COND = "COND",
-  NEXT = "NEXT",
 }

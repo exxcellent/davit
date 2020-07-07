@@ -22,7 +22,6 @@ export interface ControllPanelEditActionProps {}
 export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionProps> = (props) => {
   const {
     label,
-    cancel,
     setComponent,
     setAction,
     setData,
@@ -80,7 +79,7 @@ const useControllPanelEditActionViewModel = () => {
       dispatch(EditActions.action.update(copyActionToEdit));
     }
     // used to focus the textfield on create another
-  }, [dispatch]);
+  }, [dispatch, actionToEdit, stepToEdit]);
 
   const saveAction = () => {
     if (!isNullOrUndefined(actionToEdit) && !isNullOrUndefined(stepToEdit)) {

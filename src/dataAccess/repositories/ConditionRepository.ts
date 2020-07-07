@@ -12,6 +12,10 @@ export const ConditionRepository = {
     return Array.from(dataStore.getDataStore().conditions.values());
   },
 
+  findAllForSequence(id: number): ConditionTO[] {
+    return this.findAll().filter((cond) => cond.sequenceFk === id);
+  },
+
   save(condition: ConditionTO): ConditionTO {
     CheckHelper.nullCheck(condition, "condition");
     let conditionTO: ConditionTO;
@@ -24,7 +28,7 @@ export const ConditionRepository = {
       conditionTO = { ...condition };
     }
     dataStore.getDataStore().conditions.set(conditionTO.id, conditionTO);
-    return condition;
+    return conditionTO;
   },
 
   delete(condition: ConditionTO) {

@@ -3,15 +3,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
+import { ConditionTO } from "../../../../../../dataAccess/access/to/ConditionTO";
 import { SequenceTO } from "../../../../../../dataAccess/access/to/SequenceTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
+import { ConditionDropDownButton } from "../../../../../common/fragments/dropdowns/ConditionDropDown";
 import { StepDropDownButton } from "../../../../../common/fragments/dropdowns/StepDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
+import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditSequenceProps {}
 
@@ -24,11 +27,22 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
     deleteSequence,
     saveSequence,
     editOrAddSequenceStep,
-    validateInput,
-    copySequence,
+    // validateInput,
+    // copySequence,
     createAnother,
     updateSequence,
+    editOrAddCondition,
   } = useControllPanelEditSequenceViewModel();
+
+  const menuButtons = (
+    <div className="columnDivider controllPanelEditChild">
+      <Carv2ButtonLabel onClick={createAnother} label="Create another" />
+      <Carv2ButtonLabel onClick={saveSequence} label="OK" />
+      <OptionField>
+        <Carv2DeleteButton onClick={deleteSequence} />
+      </OptionField>
+    </div>
+  );
 
   return (
     <ControllPanelEditSub label={label}>
@@ -53,14 +67,15 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
         </Button.Group>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <Carv2ButtonLabel onClick={createAnother} label="Create another" />
-        <Carv2ButtonLabel onClick={saveSequence} label="OK" />
+        <Button.Group>
+          <Button icon="add" inverted color="orange" onClick={() => editOrAddCondition()} />
+          <Button id="buttonGroupLabel" disabled inverted color="orange">
+            Condition
+          </Button>
+          <ConditionDropDownButton onSelect={editOrAddCondition} icon="wrench" />
+        </Button.Group>
       </div>
-      <div className="controllPanelEditChild columnDivider">
-        <div>
-          <Carv2DeleteButton onClick={deleteSequence} />
-        </div>
-      </div>
+      {menuButtons}
     </ControllPanelEditSub>
   );
 };
@@ -123,6 +138,15 @@ const useControllPanelEditSequenceViewModel = () => {
     dispatch(EditActions.setMode.editStep(stepToEdit));
   };
 
+  const editOrAddCondition = (condition?: ConditionTO) => {
+    let conditionToEdit: ConditionTO | undefined = condition;
+    if (conditionToEdit === undefined) {
+      conditionToEdit = new ConditionTO();
+      conditionToEdit.sequenceFk = sequenceToEdit?.id || -1;
+    }
+    dispatch(EditActions.setMode.editCondition(conditionToEdit));
+  };
+
   const copySequence = () => {
     let copySequence: SequenceTO = Carv2Util.deepCopy(sequenceToEdit);
     copySequence.name = sequenceToEdit?.name + "-copy";
@@ -157,5 +181,6 @@ const useControllPanelEditSequenceViewModel = () => {
     copySequence,
     createAnother,
     updateSequence,
+    editOrAddCondition,
   };
 };

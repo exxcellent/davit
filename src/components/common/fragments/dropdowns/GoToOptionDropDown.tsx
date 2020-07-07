@@ -4,12 +4,11 @@ import { GoToTypes } from "../../../../dataAccess/access/types/GoToType";
 
 interface GoToOptionDropDownProps extends DropdownProps {
   onSelect: (gotoType: GoToTypes | undefined) => void;
-  placeholder?: string;
   value?: GoToTypes;
 }
 
 export const GoToOptionDropDown: FunctionComponent<GoToOptionDropDownProps> = (props) => {
-  const { onSelect, placeholder, value } = props;
+  const { onSelect, value } = props;
 
   const getOptions = (): DropdownItemProps[] => {
     return Object.values(GoToTypes).map(goToToOption);
@@ -32,7 +31,6 @@ export const GoToOptionDropDown: FunctionComponent<GoToOptionDropDownProps> = (p
       options={getOptions()}
       selection
       selectOnBlur={false}
-      //   placeholder={placeholder || "Select Go to Option ..."}
       onChange={(event, data) => onSelect(selectGotoType(data.value as string))}
       scrolling
       value={value ? value : GoToTypes.ERROR}

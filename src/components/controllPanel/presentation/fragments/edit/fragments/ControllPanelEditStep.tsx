@@ -6,15 +6,17 @@ import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentC
 import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../../../../../../dataAccess/access/to/ActionTO";
+import { ConditionTO } from "../../../../../../dataAccess/access/to/ConditionTO";
 import { GoTo, GoToTypes } from "../../../../../../dataAccess/access/types/GoToType";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
+import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ActionDropDown } from "../../../../../common/fragments/dropdowns/ActionDropDown";
 import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
+import { ConditionDropDown } from "../../../../../common/fragments/dropdowns/ConditionDropDown";
 import { GoToOptionDropDown } from "../../../../../common/fragments/dropdowns/GoToOptionDropDown";
 import { StepDropDown } from "../../../../../common/fragments/dropdowns/StepDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
@@ -32,15 +34,17 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
     saveSequenceStep,
     textInput,
     setComponent,
-    validStep,
+    // validStep,
     editOrAddAction,
     sourceCompId,
     targetCompId,
-    createAnother,
     updateStep,
     handleType,
     setGoToTypeStep,
     goTo,
+    setGoToTypeCondition,
+    createGoToStep,
+    createGoToCondition,
   } = useControllPanelEditSequenceStepViewModel();
 
   const actionDropdown = (
@@ -106,7 +110,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
 
   const menuButtons = (
     <div className="columnDivider controllPanelEditChild">
-      <Carv2ButtonLabel onClick={createAnother} label="Create another" />
+      {/* <Carv2ButtonLabel onClick={createAnother} label="Create another" /> */}
       <Carv2ButtonLabel onClick={saveSequenceStep} label="OK" />
       <OptionField>
         <Carv2DeleteButton onClick={deleteSequenceStep} />
@@ -125,10 +129,16 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
         <OptionField>
           <GoToOptionDropDown onSelect={handleType} value={goTo ? goTo.type : GoToTypes.ERROR} />
           {goTo!.type === GoToTypes.STEP && (
-            <StepDropDown onSelect={setGoToTypeStep} value={goTo?.type === GoToTypes.STEP ? goTo.id : 1} />
+            <>
+              <Carv2ButtonIcon icon="add" onClick={createGoToStep} />
+              <StepDropDown onSelect={setGoToTypeStep} value={goTo?.type === GoToTypes.STEP ? goTo.id : 1} />
+            </>
           )}
           {goTo!.type === GoToTypes.COND && (
-            <StepDropDown onSelect={setGoToTypeStep} value={goTo?.type === GoToTypes.COND ? goTo.id : 1} />
+            <>
+              <Carv2ButtonIcon icon="add" onClick={createGoToCondition} />
+              <ConditionDropDown onSelect={setGoToTypeCondition} value={goTo?.type === GoToTypes.COND ? goTo.id : 1} />
+            </>
           )}
         </OptionField>
       </div>
@@ -261,8 +271,29 @@ const useControllPanelEditSequenceStepViewModel = () => {
     }
   };
 
-  const createAnother = () => {
-    // TODO fill.
+  const setGoToTypeCondition = (condition?: ConditionTO) => {
+    if (condition) {
+      let newGoTo: GoTo = { type: GoToTypes.COND, id: condition.id };
+      saveGoToType(newGoTo);
+    }
+  };
+
+  const createGoToStep = () => {
+    if (!isNullOrUndefined(stepToEdit)) {
+      let goToStep: SequenceStepCTO = new SequenceStepCTO();
+      goToStep.squenceStepTO.sequenceFk = stepToEdit.squenceStepTO.sequenceFk;
+      const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
+      dispatch(EditActions.setMode.editStep(goToStep, copyStepToEdit));
+    }
+  };
+
+  const createGoToCondition = () => {
+    if (!isNullOrUndefined(stepToEdit)) {
+      let goToCondition: ConditionTO = new ConditionTO();
+      goToCondition.sequenceFk = stepToEdit.squenceStepTO.sequenceFk;
+      const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
+      dispatch(EditActions.setMode.editCondition(goToCondition, copyStepToEdit));
+    }
   };
 
   return {
@@ -275,12 +306,16 @@ const useControllPanelEditSequenceStepViewModel = () => {
     textInput,
     validStep,
     editOrAddAction,
-    sourceCompId: stepToEdit?.squenceStepTO.sourceComponentFk,
-    targetCompId: stepToEdit?.squenceStepTO.targetComponentFk,
-    createAnother,
+    sourceCompId:
+      stepToEdit?.squenceStepTO.sourceComponentFk !== -1 ? stepToEdit?.squenceStepTO.sourceComponentFk : undefined,
+    targetCompId:
+      stepToEdit?.squenceStepTO.targetComponentFk !== -1 ? stepToEdit?.squenceStepTO.targetComponentFk : undefined,
     updateStep,
     handleType,
     goTo: currentGoTo,
     setGoToTypeStep,
+    setGoToTypeCondition,
+    createGoToStep,
+    createGoToCondition,
   };
 };

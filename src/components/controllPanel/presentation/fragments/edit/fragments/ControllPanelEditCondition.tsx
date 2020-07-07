@@ -1,19 +1,24 @@
-import React, { FunctionComponent, useEffect, useRef } from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Input } from "semantic-ui-react";
+import { Dropdown, Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
+import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
-import { ActionTO } from "../../../../../../dataAccess/access/to/ActionTO";
+import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { ConditionTO } from "../../../../../../dataAccess/access/to/ConditionTO";
+import { GoTo, GoToTypes } from "../../../../../../dataAccess/access/types/GoToType";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
+import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
-import { ActionDropDown } from "../../../../../common/fragments/dropdowns/ActionDropDown";
 import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
+import { ConditionDropDown } from "../../../../../common/fragments/dropdowns/ConditionDropDown";
+import { GoToOptionDropDown } from "../../../../../common/fragments/dropdowns/GoToOptionDropDown";
+import { MultiselectDataDropDown } from "../../../../../common/fragments/dropdowns/MultiselectDataDropDown";
+import { StepDropDown } from "../../../../../common/fragments/dropdowns/StepDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
@@ -28,44 +33,26 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
     saveCondition,
     textInput,
     setComponent,
-    validStep,
-    editOrAddAction,
     updateCondition,
     deleteCondition,
     compId,
+    setData,
+    datas,
+    setHas,
+    handleType,
+    ifGoTo,
+    elseGoTo,
+    setGoToTypeStep,
+    setGoToTypeCondition,
+    createGoToStep,
+    createGoToCondition,
   } = useControllPanelEditConditionViewModel();
 
-  const actionDropdown = (
-    <OptionField>
-      <Button.Group>
-        <Button
-          icon="add"
-          inverted
-          color="orange"
-          onClick={() => {
-            editOrAddAction();
-            updateCondition();
-          }}
-        />
-        <Button id="buttonGroupLabel" disabled inverted color="orange">
-          Action
-        </Button>
-        <ActionDropDown
-          onSelect={(action) => {
-            editOrAddAction(action);
-            updateCondition();
-          }}
-          icon={"wrench"}
-        />
-      </Button.Group>
-    </OptionField>
-  );
-
-  const stepName = (
+  const conditionName = (
     <OptionField>
       <Carv2LabelTextfield
         label="Name:"
-        placeholder="Step Name"
+        placeholder="Condition Name ..."
         onChange={(event: any) => changeName(event.target.value)}
         value={name}
         autoFocus
@@ -75,7 +62,21 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
     </OptionField>
   );
 
-  const sourceTargetDropDowns = (
+  const hasDropDown = (
+    <Dropdown
+      options={[
+        { key: 1, value: true, text: "has" },
+        { key: 2, value: false, text: "not" },
+      ]}
+      compact
+      selection
+      selectOnBlur={false}
+      onChange={(event, data) => setHas(Boolean(data.value))}
+      // value={has}
+    />
+  );
+
+  const dropDowns = (
     <div className="optionFieldSpacer columnDivider">
       <OptionField>
         <ComponentDropDown
@@ -84,8 +85,16 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
             updateCondition();
           }}
           value={compId}
+          compact
         />
       </OptionField>
+      <MultiselectDataDropDown
+        onSelect={(data) => {
+          setData(data);
+          updateCondition();
+        }}
+        selected={datas}
+      />
     </div>
   );
 
@@ -102,20 +111,56 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
   return (
     <ControllPanelEditSub label={label}>
       <div className="controllPanelEditChild">
-        {stepName}
-        {actionDropdown}
+        {conditionName}
+        {hasDropDown}
       </div>
-      {sourceTargetDropDowns}
-      <div className="optionFieldSpacer columnDivider">
-        {/* <OptionField>
-          <GoToOptionDropDown onSelect={handleType} value={goTo ? goTo.type : GoToTypes.ERROR} />
-          {goTo!.type === GoToTypes.STEP && (
-            <StepDropDown onSelect={setGoToTypeStep} value={goTo?.type === GoToTypes.STEP ? goTo.id : 1} />
+      {dropDowns}
+      <div className="columnDivider controllPanelEditChild">
+        <OptionField>
+          <GoToOptionDropDown onSelect={(gt) => handleType(true, gt)} value={ifGoTo ? ifGoTo.type : GoToTypes.ERROR} />
+          {ifGoTo!.type === GoToTypes.STEP && (
+            <>
+              <Carv2ButtonIcon icon="add" onClick={() => createGoToStep(true)} />
+              <StepDropDown
+                onSelect={(step) => setGoToTypeStep(true, step)}
+                value={ifGoTo?.type === GoToTypes.STEP ? ifGoTo.id : 1}
+              />
+            </>
           )}
-          {goTo!.type === GoToTypes.COND && (
-            <StepDropDown onSelect={setGoToTypeStep} value={goTo?.type === GoToTypes.COND ? goTo.id : 1} />
+          {ifGoTo!.type === GoToTypes.COND && (
+            <>
+              <Carv2ButtonIcon icon="add" onClick={() => createGoToCondition(true)} />
+              <ConditionDropDown
+                onSelect={(cond) => setGoToTypeCondition(true, cond)}
+                value={ifGoTo?.type === GoToTypes.COND ? ifGoTo.id : 1}
+              />
+            </>
           )}
-        </OptionField> */}
+        </OptionField>
+        <OptionField>
+          <GoToOptionDropDown
+            onSelect={(gt) => handleType(false, gt)}
+            value={elseGoTo ? elseGoTo.type : GoToTypes.ERROR}
+          />
+          {elseGoTo!.type === GoToTypes.STEP && (
+            <>
+              <Carv2ButtonIcon icon="add" onClick={() => createGoToStep(false)} />
+              <StepDropDown
+                onSelect={(step) => setGoToTypeStep(false, step)}
+                value={elseGoTo?.type === GoToTypes.STEP ? elseGoTo.id : 1}
+              />
+            </>
+          )}
+          {elseGoTo!.type === GoToTypes.COND && (
+            <>
+              <Carv2ButtonIcon icon="add" onClick={() => createGoToCondition(false)} />
+              <ConditionDropDown
+                onSelect={(cond) => setGoToTypeCondition(false, cond)}
+                value={elseGoTo?.type === GoToTypes.COND ? elseGoTo.id : 1}
+              />
+            </>
+          )}
+        </OptionField>
       </div>
       {menuButtons}
     </ControllPanelEditSub>
@@ -127,11 +172,17 @@ const useControllPanelEditConditionViewModel = () => {
   const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
   const dispatch = useDispatch();
   const textInput = useRef<Input>(null);
+  const [currentIfGoTo, setCurrentIfGoTo] = useState<GoTo>({ type: GoToTypes.STEP, id: -1 });
+  const [currentElseGoTo, setCurrentElseGoTo] = useState<GoTo>({ type: GoToTypes.STEP, id: -1 });
 
   useEffect(() => {
     if (isNullOrUndefined(conditionToEdit)) {
       handleError("Tried to go to edit condition step without conditionToEdit specified");
       dispatch(EditActions.setMode.edit());
+    }
+    if (conditionToEdit) {
+      setCurrentIfGoTo(conditionToEdit.ifGoTo);
+      setCurrentElseGoTo(conditionToEdit.elseGoTo);
     }
     // used to focus the textfield on create another
     textInput.current!.focus();
@@ -149,6 +200,15 @@ const useControllPanelEditConditionViewModel = () => {
     if (component !== undefined && !isNullOrUndefined(conditionToEdit)) {
       const copyConditionToEdit: ConditionTO = Carv2Util.deepCopy(conditionToEdit);
       copyConditionToEdit.componentFk = component.component.id;
+      dispatch(EditActions.setMode.editCondition(copyConditionToEdit));
+    }
+  };
+
+  const setData = (datas: DataCTO[] | undefined) => {
+    if (datas !== undefined && !isNullOrUndefined(conditionToEdit)) {
+      const copyConditionToEdit: ConditionTO = Carv2Util.deepCopy(conditionToEdit);
+      copyConditionToEdit.dataFks = [];
+      datas.forEach((data) => copyConditionToEdit.dataFks.push(data.data.id));
       dispatch(EditActions.setMode.editCondition(copyConditionToEdit));
     }
   };
@@ -186,12 +246,6 @@ const useControllPanelEditConditionViewModel = () => {
     dispatch(EditActions.condition.save(copyCondition));
   };
 
-  const editOrAddAction = (action?: ActionTO) => {
-    if (!isNullOrUndefined(conditionToEdit)) {
-      dispatch(EditActions.setMode.editAction(action));
-    }
-  };
-
   const validStep = (): boolean => {
     let valid: boolean = false;
     if (!isNullOrUndefined(conditionToEdit)) {
@@ -207,6 +261,71 @@ const useControllPanelEditConditionViewModel = () => {
     return valid;
   };
 
+  const saveGoToType = (ifGoTo: Boolean, goTo: GoTo) => {
+    if (goTo !== undefined) {
+      const copyConditionToEdit: ConditionTO = Carv2Util.deepCopy(conditionToEdit);
+      ifGoTo ? (copyConditionToEdit.ifGoTo = goTo) : (copyConditionToEdit.elseGoTo = goTo);
+      dispatch(EditActions.condition.update(copyConditionToEdit));
+      dispatch(EditActions.condition.save(copyConditionToEdit));
+    }
+  };
+
+  const handleType = (ifGoTo: Boolean, newGoToType?: string) => {
+    if (newGoToType !== undefined) {
+      const gType = { type: (GoToTypes as any)[newGoToType] };
+      ifGoTo ? setCurrentIfGoTo(gType) : setCurrentElseGoTo(gType);
+      switch (newGoToType) {
+        case GoToTypes.ERROR:
+          saveGoToType(ifGoTo, gType);
+          break;
+        case GoToTypes.FIN:
+          saveGoToType(ifGoTo, gType);
+          break;
+      }
+    }
+  };
+
+  const setHas = (setHas: boolean | undefined) => {
+    console.info("has: ", setHas);
+    if (!isNullOrUndefined(conditionToEdit) && !isNullOrUndefined(setHas)) {
+      let copyConditionToEdit: ConditionTO = Carv2Util.deepCopy(conditionToEdit);
+      copyConditionToEdit.has = setHas;
+      dispatch(EditActions.setMode.editCondition(copyConditionToEdit));
+    }
+  };
+
+  const setGoToTypeStep = (ifGoTo: Boolean, step?: SequenceStepCTO) => {
+    if (step) {
+      let newGoTo: GoTo = { type: GoToTypes.STEP, id: step.squenceStepTO.id };
+      saveGoToType(ifGoTo, newGoTo);
+    }
+  };
+
+  const setGoToTypeCondition = (ifGoTo: Boolean, condition?: ConditionTO) => {
+    if (condition) {
+      let newGoTo: GoTo = { type: GoToTypes.COND, id: condition.id };
+      saveGoToType(ifGoTo, newGoTo);
+    }
+  };
+
+  const createGoToStep = (ifGoTo: Boolean) => {
+    if (!isNullOrUndefined(conditionToEdit)) {
+      let goToStep: SequenceStepCTO = new SequenceStepCTO();
+      goToStep.squenceStepTO.sequenceFk = conditionToEdit.sequenceFk;
+      const copyCondition: ConditionTO = Carv2Util.deepCopy(conditionToEdit);
+      dispatch(EditActions.setMode.editStep(goToStep, copyCondition, ifGoTo));
+    }
+  };
+
+  const createGoToCondition = (ifGoTo: Boolean) => {
+    if (!isNullOrUndefined(conditionToEdit)) {
+      let goToCondition: ConditionTO = new ConditionTO();
+      goToCondition.sequenceFk = conditionToEdit.sequenceFk;
+      const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(conditionToEdit);
+      dispatch(EditActions.setMode.editCondition(goToCondition, copyStepToEdit, ifGoTo));
+    }
+  };
+
   return {
     label: "EDIT CONDITION",
     name: conditionToEdit?.name,
@@ -215,9 +334,18 @@ const useControllPanelEditConditionViewModel = () => {
     setComponent,
     textInput,
     validStep,
-    editOrAddAction,
     compId: conditionToEdit?.componentFk,
     updateCondition,
     deleteCondition,
+    setData,
+    datas: conditionToEdit?.dataFks || [],
+    setHas,
+    handleType,
+    setGoToTypeStep,
+    setGoToTypeCondition,
+    ifGoTo: currentIfGoTo,
+    elseGoTo: currentElseGoTo,
+    createGoToStep,
+    createGoToCondition,
   };
 };

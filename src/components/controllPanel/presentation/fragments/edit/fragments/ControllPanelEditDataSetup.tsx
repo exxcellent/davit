@@ -25,7 +25,7 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
     name,
     changeName,
     textInput,
-    copyDataSetup,
+    // copyDataSetup,
     saveDataSetup,
     deleteDataSetup,
     setComponentToEdit,
@@ -113,13 +113,13 @@ const useControllPanelEditDataSetupViewModel = () => {
     dispatch(EditActions.dataSetup.save(copyDataSetup));
   };
 
-  const validateInput = (): boolean => {
-    if (!isNullOrUndefined(dataSetupToEdit)) {
-      return dataSetupToEdit.dataSetup.name.length > 0;
-    } else {
-      return false;
-    }
-  };
+  // const validateInput = (): boolean => {
+  //   if (!isNullOrUndefined(dataSetupToEdit)) {
+  //     return dataSetupToEdit.dataSetup.name.length > 0;
+  //   } else {
+  //     return false;
+  //   }
+  // };
 
   const copyDataSetup = () => {
     let copyDataSetup: DataSetupCTO = Carv2Util.deepCopy(dataSetupToEdit);

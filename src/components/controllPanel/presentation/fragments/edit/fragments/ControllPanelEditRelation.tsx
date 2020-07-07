@@ -34,7 +34,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
     dataOptions,
     directionOptions,
     typeOptions,
-    validRelation,
+    // validRelation,
     createAnother,
     key,
     updateRelation,

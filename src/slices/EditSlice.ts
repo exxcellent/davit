@@ -11,6 +11,7 @@ import { DataRelationTO } from "../dataAccess/access/to/DataRelationTO";
 import { DataSetupTO } from "../dataAccess/access/to/DataSetupTO";
 import { GroupTO } from "../dataAccess/access/to/GroupTO";
 import { SequenceTO } from "../dataAccess/access/to/SequenceTO";
+import { GoToTypes } from "../dataAccess/access/types/GoToType";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
 import { Carv2Util } from "../utils/Carv2Util";
@@ -144,29 +145,29 @@ const EditSlice = createSlice({
 // =============================================== THUNKS ===============================================
 
 // ----------------------------------------------- SET MODE -----------------------------------------------
-const setModeWithStorage = (mode: Mode): AppThunk => async (dispatch) => {
+const setModeWithStorage = (mode: Mode): AppThunk => (dispatch) => {
   localStorage.setItem(MODE_LOCAL_STORAGE, mode);
   dispatch(EditSlice.actions.setMode(mode));
 };
 
-const setModeToFile = (): AppThunk => async (dispatch) => {
+const setModeToFile = (): AppThunk => (dispatch) => {
   dispatch(EditSlice.actions.clearObjectToEdit());
   dispatch(setModeWithStorage(Mode.FILE));
 };
 
-const setModeToView = (): AppThunk => async (dispatch) => {
+const setModeToView = (): AppThunk => (dispatch) => {
   dispatch(EditSlice.actions.clearObjectToEdit());
   dispatch(setModeWithStorage(Mode.VIEW));
 };
 
-const setModeToEdit = (): AppThunk => async (dispatch) => {
+const setModeToEdit = (): AppThunk => (dispatch) => {
   // TODO: dosn't fells right to do this here!
   dispatch(SequenceModelActions.resetCurrentSequence);
   dispatch(EditSlice.actions.clearObjectToEdit());
   dispatch(setModeWithStorage(Mode.EDIT));
 };
 
-const setModeToEditComponent = (component?: ComponentCTO): AppThunk => async (dispatch) => {
+const setModeToEditComponent = (component?: ComponentCTO): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_COMPONENT));
   if (component === undefined) {
     dispatch(EditActions.component.create());
@@ -175,7 +176,7 @@ const setModeToEditComponent = (component?: ComponentCTO): AppThunk => async (di
   }
 };
 
-const setModeToEditData = (data?: DataCTO): AppThunk => async (dispatch) => {
+const setModeToEditData = (data?: DataCTO): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_DATA));
   if (data === undefined) {
     dispatch(EditActions.data.create());
@@ -184,7 +185,7 @@ const setModeToEditData = (data?: DataCTO): AppThunk => async (dispatch) => {
   }
 };
 
-const setModeToEditRelation = (relation?: DataRelationTO): AppThunk => async (dispatch) => {
+const setModeToEditRelation = (relation?: DataRelationTO): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_DATA_RELATION));
   if (relation === undefined) {
     dispatch(EditActions.relation.create());
@@ -209,9 +210,13 @@ const setModeToEditSequence = (sequenceId?: number): AppThunk => (dispatch) => {
   }
 };
 
-const setModeToEditStep = (stepCTO: SequenceStepCTO): AppThunk => (dispatch) => {
+const setModeToEditStep = (
+  stepCTO: SequenceStepCTO,
+  from?: SequenceStepCTO | ConditionTO,
+  ifGoTo?: Boolean
+): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_STEP));
-  dispatch(EditActions.step.create(stepCTO));
+  dispatch(EditActions.step.create(stepCTO, from, ifGoTo));
 };
 
 const setModeToEditAction = (action?: ActionTO): AppThunk => async (dispatch) => {
@@ -242,9 +247,13 @@ const setModeToEditDataSetup = (dataSetup?: DataSetupTO): AppThunk => (dispatch)
   }
 };
 
-const setModeToEditCondition = (condition: ConditionTO): AppThunk => (dispatch) => {
+const setModeToEditCondition = (
+  condition: ConditionTO,
+  from?: SequenceStepCTO | ConditionTO,
+  ifGoTo?: Boolean
+): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_CONDITION));
-  dispatch(EditActions.condition.create(condition));
+  dispatch(EditActions.condition.create(condition, from, ifGoTo));
 };
 
 // ----------------------------------------------- COMPONENT -----------------------------------------------
@@ -440,11 +449,29 @@ const getSequenceCTOById = (sequenceId: number): SequenceCTO | null => {
 };
 
 // ----------------------------------------------- SEQUENCE STEP -----------------------------------------------
-const createSequenceStepThunk = (step: SequenceStepCTO): AppThunk => (dispatch) => {
+const createSequenceStepThunk = (
+  step: SequenceStepCTO,
+  from?: SequenceStepCTO | ConditionTO,
+  ifGoTO?: Boolean
+): AppThunk => (dispatch) => {
   const response: DataAccessResponse<SequenceStepCTO> = DataAccess.saveSequenceStepCTO(step);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   } else {
+    if (from !== undefined) {
+      if ((from as SequenceStepCTO).squenceStepTO !== undefined) {
+        (from as SequenceStepCTO).squenceStepTO.goto = { type: GoToTypes.STEP, id: response.object.squenceStepTO.id };
+        dispatch(EditActions.step.save(from as SequenceStepCTO));
+      }
+      if ((from as ConditionTO).elseGoTo !== undefined) {
+        if (ifGoTO) {
+          (from as ConditionTO).ifGoTo = { type: GoToTypes.STEP, id: response.object.squenceStepTO.id };
+        } else {
+          (from as ConditionTO).elseGoTo = { type: GoToTypes.STEP, id: response.object.squenceStepTO.id };
+        }
+        dispatch(EditActions.condition.save(from as ConditionTO));
+      }
+    }
     dispatch(EditActions.step.update(response.object));
   }
 };
@@ -475,11 +502,29 @@ const deleteActionThunk = (action: ActionTO): AppThunk => async (dispatch) => {
 
 // ----------------------------------------------- CONDITION -----------------------------------------------
 
-const createConditionThunk = (condition: ConditionTO): AppThunk => (dispatch) => {
+const createConditionThunk = (
+  condition: ConditionTO,
+  from?: SequenceStepCTO | ConditionTO,
+  ifGoTo?: Boolean
+): AppThunk => (dispatch) => {
   const response: DataAccessResponse<ConditionTO> = DataAccess.saveCondition(condition);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   } else {
+    if (from !== undefined) {
+      if ((from as SequenceStepCTO).squenceStepTO !== undefined) {
+        (from as SequenceStepCTO).squenceStepTO.goto = { type: GoToTypes.COND, id: response.object.id };
+        dispatch(EditActions.step.save(from as SequenceStepCTO));
+      }
+      if ((from as ConditionTO).elseGoTo !== undefined) {
+        if (ifGoTo) {
+          (from as ConditionTO).ifGoTo = { type: GoToTypes.COND, id: response.object.id };
+        } else {
+          (from as ConditionTO).elseGoTo = { type: GoToTypes.COND, id: response.object.id };
+        }
+        dispatch(EditActions.condition.save(from as ConditionTO));
+      }
+    }
     dispatch(EditActions.condition.update(response.object));
   }
 };
