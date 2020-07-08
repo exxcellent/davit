@@ -581,18 +581,18 @@ const deleteConditionThunk = (condition: ConditionTO, sequenceCTO?: SequenceCTO)
     const copySequence: SequenceCTO = Carv2Util.deepCopy(sequenceCTO);
     // update steps
     copySequence.sequenceStepCTOs.forEach((step) => {
-      if (step.squenceStepTO.goto.type === GoToTypes.STEP && step.squenceStepTO.goto.id === condition.id) {
+      if (step.squenceStepTO.goto.type === GoToTypes.COND && step.squenceStepTO.goto.id === condition.id) {
         step.squenceStepTO.goto = { type: GoToTypes.ERROR };
         dispatch(EditActions.step.save(step));
       }
     });
     // update conditions
     copySequence.conditions.forEach((cond) => {
-      if (cond.ifGoTo.type === GoToTypes.STEP && cond.ifGoTo.id === condition.id) {
+      if (cond.ifGoTo.type === GoToTypes.COND && cond.ifGoTo.id === condition.id) {
         cond.ifGoTo = { type: GoToTypes.ERROR };
         dispatch(EditActions.condition.save(cond));
       }
-      if (cond.elseGoTo.type === GoToTypes.STEP && cond.elseGoTo.id === condition.id) {
+      if (cond.elseGoTo.type === GoToTypes.COND && cond.elseGoTo.id === condition.id) {
         cond.elseGoTo = { type: GoToTypes.ERROR };
         dispatch(EditActions.condition.save(cond));
       }
