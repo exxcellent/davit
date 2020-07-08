@@ -2,11 +2,13 @@ import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
+import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { ConditionTO } from "../../../../../../dataAccess/access/to/ConditionTO";
 import { SequenceTO } from "../../../../../../dataAccess/access/to/SequenceTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
+import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
@@ -82,6 +84,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
 
 const useControllPanelEditSequenceViewModel = () => {
   const sequenceToEdit: SequenceTO | null = useSelector(editSelectors.sequenceToEdit);
+  const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
   const dispatch = useDispatch();
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
   const textInput = useRef<Input>(null);
@@ -134,6 +137,7 @@ const useControllPanelEditSequenceViewModel = () => {
     if (stepToEdit === undefined) {
       stepToEdit = new SequenceStepCTO();
       stepToEdit.squenceStepTO.sequenceFk = sequenceToEdit?.id || -1;
+      stepToEdit.squenceStepTO.root = isFirst();
     }
     dispatch(EditActions.setMode.editStep(stepToEdit));
   };
@@ -143,8 +147,13 @@ const useControllPanelEditSequenceViewModel = () => {
     if (conditionToEdit === undefined) {
       conditionToEdit = new ConditionTO();
       conditionToEdit.sequenceFk = sequenceToEdit?.id || -1;
+      conditionToEdit.root = isFirst();
     }
     dispatch(EditActions.setMode.editCondition(conditionToEdit));
+  };
+
+  const isFirst = (): boolean => {
+    return selectedSequence?.sequenceStepCTOs.length === 0 && selectedSequence.conditions.length === 0 ? true : false;
   };
 
   const copySequence = () => {

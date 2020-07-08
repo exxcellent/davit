@@ -46,6 +46,9 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
     setGoToTypeCondition,
     createGoToStep,
     createGoToCondition,
+    setRoot,
+    isRoot,
+    getCondition,
   } = useControllPanelEditConditionViewModel();
 
   const conditionName = (
@@ -65,14 +68,14 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
   const hasDropDown = (
     <Dropdown
       options={[
-        { key: 1, value: true, text: "has" },
-        { key: 2, value: false, text: "not" },
+        { key: 1, value: 1, text: "has" },
+        { key: 2, value: 2, text: "not" },
       ]}
       compact
       selection
       selectOnBlur={false}
-      onChange={(event, data) => setHas(Boolean(data.value))}
-      // value={has}
+      onChange={(event, data) => setHas(data.value as number)}
+      value={getCondition()}
     />
   );
 
@@ -100,7 +103,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
 
   const menuButtons = (
     <div className="columnDivider controllPanelEditChild">
-      {/* <Carv2ButtonLabel onClick={createAnother} label="Create another" /> */}
+      <Carv2ButtonLabel onClick={setRoot} label={isRoot ? "Root" : "Set as Root"} disable={isRoot} />
       <Carv2ButtonLabel onClick={saveCondition} label="OK" />
       <OptionField>
         <Carv2DeleteButton onClick={deleteCondition} />
@@ -177,7 +180,8 @@ const useControllPanelEditConditionViewModel = () => {
 
   useEffect(() => {
     if (isNullOrUndefined(conditionToEdit)) {
-      handleError("Tried to go to edit condition step without conditionToEdit specified");
+      console.warn(conditionToEdit);
+      dispatch(handleError("Tried to go to edit condition step without conditionToEdit specified"));
       dispatch(EditActions.setMode.edit());
     }
     if (conditionToEdit) {
@@ -285,11 +289,11 @@ const useControllPanelEditConditionViewModel = () => {
     }
   };
 
-  const setHas = (setHas: boolean | undefined) => {
+  const setHas = (setHas: number | undefined) => {
     console.info("has: ", setHas);
     if (!isNullOrUndefined(conditionToEdit) && !isNullOrUndefined(setHas)) {
       let copyConditionToEdit: ConditionTO = Carv2Util.deepCopy(conditionToEdit);
-      copyConditionToEdit.has = setHas;
+      copyConditionToEdit.condition = setHas === 1 ? true : false;
       dispatch(EditActions.setMode.editCondition(copyConditionToEdit));
     }
   };
@@ -326,6 +330,29 @@ const useControllPanelEditConditionViewModel = () => {
     }
   };
 
+  const setRoot = () => {
+    if (!isNullOrUndefined(conditionToEdit)) {
+      let copySequence: SequenceCTO = Carv2Util.deepCopy(selectedSequence);
+      copySequence.sequenceStepCTOs.map((step) => (step.squenceStepTO.root = false));
+      copySequence.conditions.map((cond) => (cond.root = false));
+      copySequence.sequenceStepCTOs.forEach((step) => dispatch(EditActions.step.save(step)));
+      copySequence.conditions.forEach((cond) => dispatch(EditActions.condition.save(cond)));
+      let copyConditionToEdit: ConditionTO = Carv2Util.deepCopy(conditionToEdit);
+      copyConditionToEdit.root = true;
+      dispatch(EditActions.condition.save(copyConditionToEdit));
+      dispatch(EditActions.condition.update(copyConditionToEdit));
+    }
+  };
+
+  // This is workaround sins redux seams to have a problem to save boolean values.
+  const getCondition = (): number => {
+    let hasNumber: number = 2;
+    if (!isNullOrUndefined(conditionToEdit)) {
+      hasNumber = conditionToEdit.condition ? 1 : 2;
+    }
+    return hasNumber;
+  };
+
   return {
     label: "EDIT CONDITION",
     name: conditionToEdit?.name,
@@ -347,5 +374,8 @@ const useControllPanelEditConditionViewModel = () => {
     elseGoTo: currentElseGoTo,
     createGoToStep,
     createGoToCondition,
+    setRoot,
+    isRoot: conditionToEdit?.root ? conditionToEdit.root : false,
+    getCondition,
   };
 };

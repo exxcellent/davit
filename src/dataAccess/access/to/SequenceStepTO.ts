@@ -8,7 +8,8 @@ export class SequenceStepTO extends AbstractTO {
     public sequenceFk = -1,
     public sourceComponentFk = -1,
     public targetComponentFk = -1,
-    public goto: GoTo = { type: GoToTypes.ERROR }
+    public goto: GoTo = { type: GoToTypes.ERROR },
+    public root: boolean = false
   ) {
     super();
   }

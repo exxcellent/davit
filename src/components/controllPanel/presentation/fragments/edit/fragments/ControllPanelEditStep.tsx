@@ -45,6 +45,8 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
     setGoToTypeCondition,
     createGoToStep,
     createGoToCondition,
+    setRoot,
+    isRoot,
   } = useControllPanelEditSequenceStepViewModel();
 
   const actionDropdown = (
@@ -110,7 +112,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
 
   const menuButtons = (
     <div className="columnDivider controllPanelEditChild">
-      {/* <Carv2ButtonLabel onClick={createAnother} label="Create another" /> */}
+      <Carv2ButtonLabel onClick={setRoot} label={isRoot ? "Root" : "Set as Root"} disable={isRoot} />
       <Carv2ButtonLabel onClick={saveSequenceStep} label="OK" />
       <OptionField>
         <Carv2DeleteButton onClick={deleteSequenceStep} />
@@ -296,6 +298,20 @@ const useControllPanelEditSequenceStepViewModel = () => {
     }
   };
 
+  const setRoot = () => {
+    if (!isNullOrUndefined(stepToEdit)) {
+      let copySequence: SequenceCTO = Carv2Util.deepCopy(selectedSequence);
+      copySequence.sequenceStepCTOs.map((step) => (step.squenceStepTO.root = false));
+      copySequence.conditions.map((cond) => (cond.root = false));
+      copySequence.sequenceStepCTOs.forEach((step) => dispatch(EditActions.step.save(step)));
+      copySequence.conditions.forEach((cond) => dispatch(EditActions.condition.save(cond)));
+      let copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
+      copyStepToEdit.squenceStepTO.root = true;
+      dispatch(EditActions.step.save(copyStepToEdit));
+      dispatch(EditActions.step.update(copyStepToEdit));
+    }
+  };
+
   return {
     label: "EDIT SEQUENCE STEP",
     name: stepToEdit ? stepToEdit!.squenceStepTO.name : "",
@@ -317,5 +333,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
     setGoToTypeCondition,
     createGoToStep,
     createGoToCondition,
+    setRoot,
+    isRoot: stepToEdit?.squenceStepTO.root ? stepToEdit?.squenceStepTO.root : false,
   };
 };

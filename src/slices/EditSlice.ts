@@ -36,7 +36,7 @@ export enum Mode {
 
 const MODE_LOCAL_STORAGE = "MODE";
 
-interface StepAction {
+export interface StepAction {
   step: SequenceStepCTO;
   actionTO: ActionTO;
 }
@@ -511,7 +511,7 @@ const createConditionThunk = (
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   } else {
-    if (from !== undefined) {
+    if (from) {
       if ((from as SequenceStepCTO).squenceStepTO !== undefined) {
         (from as SequenceStepCTO).squenceStepTO.goto = { type: GoToTypes.COND, id: response.object.id };
         dispatch(EditActions.step.save(from as SequenceStepCTO));
@@ -593,13 +593,13 @@ export const editSelectors = {
         return null;
     }
   },
-  actionToEdit: (state: RootState): ActionTO | null => {
+  actionToEdit: (state: RootState): StepAction | null => {
     return state.edit.mode === Mode.EDIT_SEQUENCE_STEP_ACTION && (state.edit.objectToEdit as StepAction).actionTO
-      ? (state.edit.objectToEdit as StepAction).actionTO
+      ? (state.edit.objectToEdit as StepAction)
       : null;
   },
   conditionToEdit: (state: RootState): ConditionTO | null => {
-    return state.edit.mode === Mode.EDIT_SEQUENCE_CONDITION && (state.edit.objectToEdit as ConditionTO).has
+    return state.edit.mode === Mode.EDIT_SEQUENCE_CONDITION && (state.edit.objectToEdit as ConditionTO).elseGoTo
       ? (state.edit.objectToEdit as ConditionTO)
       : null;
   },

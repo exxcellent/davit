@@ -1,9 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
-import { ActionTO } from "../../../dataAccess/access/to/ActionTO";
 import { GroupTO } from "../../../dataAccess/access/to/GroupTO";
 import { EditActions, editSelectors, Mode } from "../../../slices/EditSlice";
 import { MasterDataActions, masterDataSelectors } from "../../../slices/MasterDataSlice";
@@ -34,7 +32,7 @@ const useViewModel = () => {
   const componentCTOToEdit: ComponentCTO | null = useSelector(editSelectors.componentToEdit);
   const selectedStep: SequenceStepCTO | null = useSelector(sequenceModelSelectors.selectCurrentStep);
   const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.stepToEdit);
-  const actionToEdit: ActionTO | null = useSelector(editSelectors.actionToEdit);
+  // const actionToEdit: ActionTO | null = useSelector(editSelectors.actionToEdit);
   const mode: Mode = useSelector(editSelectors.mode);
   const dispatch = useDispatch();
 
@@ -61,9 +59,9 @@ const useViewModel = () => {
   const getComponentDatas = (): ComponentDataFragmentProps[] => {
     let compDatas: ComponentDataFragmentProps[] = [];
     if (mode === Mode.EDIT_SEQUENCE_STEP_ACTION) {
-      if (!isNullOrUndefined(actionToEdit)) {
-        // TODO: map action to componentDataFragment.
-      }
+      // if (!isNullOrUndefined(actionToEdit)) {
+      //   // TODO: map action to componentDataFragment.
+      // }
     }
     return compDatas;
   };

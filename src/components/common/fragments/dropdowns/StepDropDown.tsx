@@ -39,8 +39,6 @@ export const StepDropDown: FunctionComponent<StepDropDownProps> = (props) => {
   const { onSelect, placeholder, value } = props;
   const { sequence, stepOptions, selectSequenceStep } = useStepDropDownViewModel();
 
-  console.info("value: ", value);
-
   return (
     <Dropdown
       options={stepOptions(sequence)}
