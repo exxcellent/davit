@@ -28,7 +28,7 @@ export const ActionRepository = {
       actionTO = { ...action };
     }
     dataStore.getDataStore().actions.set(actionTO.id, actionTO);
-    return action;
+    return actionTO;
   },
 
   delete(id: number) {

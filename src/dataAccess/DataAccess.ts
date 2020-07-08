@@ -97,6 +97,10 @@ export const DataAccess = {
     return makeTransactional(() => SequenceDataAccessService.deleteSequenceStep(sequenceStep));
   },
 
+  findSequenceStepCTO(id: number): DataAccessResponse<SequenceStepCTO> {
+    return makeTransactional(() => SequenceDataAccessService.findSequenceStepCTO(id));
+  },
+
   // ========================================= DATA SETUP =========================================
 
   findAllDataSetups(): DataAccessResponse<DataSetupTO[]> {
@@ -171,6 +175,10 @@ export const DataAccess = {
 
   deleteActionCTO(action: ActionTO): DataAccessResponse<ActionTO> {
     return makeTransactional(() => SequenceDataAccessService.deleteAction(action));
+  },
+
+  saveActionTO(action: ActionTO): DataAccessResponse<ActionTO> {
+    return makeTransactional(() => SequenceDataAccessService.saveActionTO(action));
   },
 
   // ========================================= CONDITION =========================================

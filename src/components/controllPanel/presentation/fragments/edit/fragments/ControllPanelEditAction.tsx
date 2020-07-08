@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
+import { ActionTO } from "../../../../../../dataAccess/access/to/ActionTO";
 import { ActionType } from "../../../../../../dataAccess/access/types/ActionType";
-import { EditActions, editSelectors, StepAction } from "../../../../../../slices/EditSlice";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
@@ -23,11 +24,11 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
     setComponent,
     setAction,
     setData,
-    saveAction,
     deleteAction,
     componentId,
     dataId,
     actionType,
+    backToStep,
   } = useControllPanelEditActionViewModel();
 
   return (
@@ -48,7 +49,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
         </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <Carv2ButtonLabel onClick={saveAction} label="OK" />
+        <Carv2ButtonLabel onClick={backToStep} label="OK" />
         <OptionField>
           <Carv2DeleteButton onClick={deleteAction} />
         </OptionField>
@@ -58,84 +59,70 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
 };
 
 const useControllPanelEditActionViewModel = () => {
-  const stepActionToEdit: StepAction | null = useSelector(editSelectors.actionToEdit);
+  const actionToEdit: ActionTO | null = useSelector(editSelectors.actionToEdit);
   const dispatch = useDispatch();
+
+  console.info("main ", actionToEdit);
 
   useEffect(() => {
     // check if component to edit is really set or gos back to edit mode
-    if (isNullOrUndefined(stepActionToEdit)) {
-      handleError("Tried to go to edit action without actionToEdit specified");
-      EditActions.setMode.edit();
-    }
-    // set step fk
-    if (stepActionToEdit !== null) {
-      const copyActionToEdit: StepAction = Carv2Util.deepCopy(stepActionToEdit);
-      if (stepActionToEdit.actionTO.id === -1) {
-        copyActionToEdit.actionTO.sequenceStepFk = stepActionToEdit.step.squenceStepTO.id;
-      }
-      dispatch(EditActions.action.update(copyActionToEdit.actionTO));
+    if (isNullOrUndefined(actionToEdit)) {
+      dispatch(handleError("Tried to go to edit action without actionToEdit specified"));
+      dispatch(EditActions.setMode.edit());
     }
     // used to focus the textfield on create another
-  }, [dispatch, stepActionToEdit]);
-
-  const saveAction = () => {
-    if (!isNullOrUndefined(stepActionToEdit)) {
-      const copyStepToEdit: StepAction = Carv2Util.deepCopy(stepActionToEdit);
-      copyStepToEdit.step.actions.push(stepActionToEdit.actionTO);
-      dispatch(EditActions.setMode.editStep(copyStepToEdit.step));
-    }
-  };
+  }, [dispatch, actionToEdit]);
 
   const deleteAction = () => {
-    if (!isNullOrUndefined(stepActionToEdit)) {
-      const copyStepActionToEdit: StepAction = Carv2Util.deepCopy(stepActionToEdit);
-      copyStepActionToEdit.step.actions.filter((action) => action.id !== stepActionToEdit.actionTO.id);
-      dispatch(EditActions.action.delete(stepActionToEdit.actionTO));
-      dispatch(EditActions.setMode.editStep(copyStepActionToEdit.step));
+    if (!isNullOrUndefined(actionToEdit)) {
+      dispatch(EditActions.action.delete(actionToEdit));
+      dispatch(EditActions.setMode.editStep(EditActions.step.find(actionToEdit.sequenceStepFk)));
     }
   };
 
   const setComponent = (component: ComponentCTO | undefined): void => {
     if (!isNullOrUndefined(component)) {
-      let copyStepActionToEdit: StepAction = Carv2Util.deepCopy(stepActionToEdit);
-      copyStepActionToEdit.actionTO.componentFk = component.component.id;
-      dispatch(EditActions.setMode.editAction(copyStepActionToEdit.actionTO));
-    }
-  };
-  const setAction = (actionType: ActionType | undefined): void => {
-    if (!isNullOrUndefined(actionType)) {
-      let copyStepActionToEdit: StepAction = Carv2Util.deepCopy(stepActionToEdit);
-      copyStepActionToEdit.actionTO.actionType = actionType;
-      dispatch(EditActions.setMode.editAction(copyStepActionToEdit.actionTO));
-    }
-  };
-  const setData = (data: DataCTO | undefined): void => {
-    if (!isNullOrUndefined(data)) {
-      let copyStepActionToEdit: StepAction = Carv2Util.deepCopy(stepActionToEdit);
-      copyStepActionToEdit.actionTO.dataFk = data.data.id;
-      dispatch(EditActions.setMode.editAction(copyStepActionToEdit.actionTO));
+      let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
+      copyActionToEdit.componentFk = component.component.id;
+      dispatch(EditActions.action.update(copyActionToEdit));
+      dispatch(EditActions.action.save(copyActionToEdit));
     }
   };
 
-  const cancel = () => {
-    if (stepActionToEdit) {
-      dispatch(EditActions.setMode.editStep(stepActionToEdit.step));
-    } else {
-      dispatch(EditActions.setMode.edit());
+  const setAction = (actionType: ActionType | undefined): void => {
+    if (!isNullOrUndefined(actionType)) {
+      let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
+      copyActionToEdit.actionType = actionType;
+      dispatch(EditActions.action.update(copyActionToEdit));
+      dispatch(EditActions.action.save(copyActionToEdit));
+    }
+  };
+
+  const setData = (data: DataCTO | undefined): void => {
+    if (!isNullOrUndefined(data)) {
+      let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
+      copyActionToEdit.dataFk = data.data.id;
+      dispatch(EditActions.action.update(copyActionToEdit));
+      dispatch(EditActions.action.save(copyActionToEdit));
+    }
+  };
+
+  const backToStep = () => {
+    if (!isNullOrUndefined(actionToEdit)) {
+      dispatch(EditActions.setMode.editStep(EditActions.step.find(actionToEdit.sequenceStepFk)));
     }
   };
 
   return {
     label: "EDIT ACTION",
-    action: stepActionToEdit?.actionTO,
-    cancel,
+    action: actionToEdit,
     setComponent,
     setAction,
     setData,
-    saveAction,
-    componentId: stepActionToEdit?.actionTO.componentFk === -1 ? undefined : stepActionToEdit?.actionTO.componentFk,
-    dataId: stepActionToEdit?.actionTO.dataFk === -1 ? undefined : stepActionToEdit?.actionTO.dataFk,
-    actionType: stepActionToEdit?.actionTO.actionType,
+    componentId: actionToEdit?.componentFk === -1 ? undefined : actionToEdit?.componentFk,
+    dataId: actionToEdit?.dataFk === -1 ? undefined : actionToEdit?.dataFk,
+    actionType: actionToEdit?.actionType,
     deleteAction,
+    backToStep,
   };
 };

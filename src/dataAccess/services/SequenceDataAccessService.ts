@@ -17,6 +17,8 @@ import { SequenceStepRepository } from "../repositories/SequenceStepRepository";
 import { CheckHelper } from "../util/CheckHelper";
 
 export const SequenceDataAccessService = {
+  // ---------------------------------------------------------- Sequence ----------------------------------------------------------
+
   findSequenceCTO(sequenceId: number): SequenceCTO {
     return createSequenceCTO(SequenceRepository.find(sequenceId));
   },
@@ -47,6 +49,26 @@ export const SequenceDataAccessService = {
     return savedSequenceTO;
   },
 
+  deleteSequenceTO(sequenceTO: SequenceTO): SequenceTO {
+    CheckHelper.nullCheck(sequenceTO, "sequenceTO");
+    let tempCTO: SequenceCTO = createSequenceCTO(sequenceTO);
+    tempCTO.sequenceStepCTOs.forEach((step) => SequenceStepRepository.delete(step.squenceStepTO));
+    tempCTO.conditions.forEach((cond) => ConditionRepository.delete(cond));
+    return SequenceRepository.delete(sequenceTO);
+  },
+
+  deleteSequenceCTO(sequence: SequenceCTO): SequenceCTO {
+    CheckHelper.nullCheck(sequence.sequenceTO, "sequenceTO");
+    sequence.sequenceStepCTOs.forEach(this.deleteSequenceStep);
+    if (sequence.sequenceStepCTOs.length > 0) {
+      throw new Error("can not delete sequence, at least one step is containing in this sequence.");
+    }
+    this.deleteSequenceTO(sequence.sequenceTO);
+    return sequence;
+  },
+
+  // ---------------------------------------------------------- Sequence step ----------------------------------------------------------
+
   saveSequenceStep(sequenceStep: SequenceStepCTO): SequenceStepCTO {
     CheckHelper.nullCheck(sequenceStep, "sequenceStep");
     // TODO: move this in a CheckSaveCondition class.
@@ -68,28 +90,6 @@ export const SequenceDataAccessService = {
     return createSequenceStepCTO(savedStep);
   },
 
-  deleteSequenceCTO(sequence: SequenceCTO): SequenceCTO {
-    CheckHelper.nullCheck(sequence.sequenceTO, "sequenceTO");
-    sequence.sequenceStepCTOs.forEach(this.deleteSequenceStep);
-    if (sequence.sequenceStepCTOs.length > 0) {
-      throw new Error("can not delete sequence, at least one step is containing in this sequence.");
-    }
-    this.deleteSequenceTO(sequence.sequenceTO);
-    return sequence;
-  },
-
-  deleteSequenceTO(sequenceTO: SequenceTO): SequenceTO {
-    CheckHelper.nullCheck(sequenceTO, "sequenceTO");
-    let tempCTO: SequenceCTO = createSequenceCTO(sequenceTO);
-    tempCTO.sequenceStepCTOs.forEach((step) => SequenceStepRepository.delete(step.squenceStepTO));
-    tempCTO.conditions.forEach((cond) => ConditionRepository.delete(cond));
-    return SequenceRepository.delete(sequenceTO);
-  },
-
-  deleteCondition(condition: ConditionTO): ConditionTO {
-    return ConditionRepository.delete(condition);
-  },
-
   deleteSequenceStep(sequenceStep: SequenceStepCTO): SequenceStepCTO {
     CheckHelper.nullCheck(sequenceStep, "step");
     sequenceStep.actions.map((action) => ActionRepository.delete(action.id));
@@ -103,11 +103,37 @@ export const SequenceDataAccessService = {
     return sequenceStep;
   },
 
+  findSequenceStepCTO(id: number): SequenceStepCTO {
+    const step: SequenceStepTO | undefined = SequenceStepRepository.find(id);
+    return createSequenceStepCTO(step);
+  },
+
+  // ---------------------------------------------------------- Condition ----------------------------------------------------------
+
+  saveCondition(condition: ConditionTO): ConditionTO {
+    return ConditionRepository.save(condition);
+  },
+
+  deleteCondition(condition: ConditionTO): ConditionTO {
+    return ConditionRepository.delete(condition);
+  },
+
+  // ---------------------------------------------------------- Action ----------------------------------------------------------
+
+  saveActionTO(action: ActionTO): ActionTO {
+    CheckHelper.nullCheck(action, "actionTO");
+    const copyAction: ActionTO = Carv2Util.deepCopy(action);
+    const savedActionTO: ActionTO = ActionRepository.save(copyAction);
+    return savedActionTO;
+  },
+
   deleteAction(action: ActionTO): ActionTO {
     CheckHelper.nullCheck(action, "action");
     ActionRepository.delete(action.id);
     return action;
   },
+
+  // ---------------------------------------------------------- Data Setup ----------------------------------------------------------
 
   findAllDataSetup(): DataSetupTO[] {
     return DataSetupRepository.findAll();
@@ -119,10 +145,6 @@ export const SequenceDataAccessService = {
 
   findAllInitDatas(): InitDataTO[] {
     return InitDataRepository.findAll();
-  },
-
-  saveCondition(condition: ConditionTO): ConditionTO {
-    return ConditionRepository.save(condition);
   },
 
   saveDataSetup(dataSetup: DataSetupTO): DataSetupTO {
@@ -156,6 +178,8 @@ export const SequenceDataAccessService = {
   },
 };
 
+// ======================================================== PRIVATE ========================================================
+
 const createSequenceCTO = (sequence: SequenceTO | undefined): SequenceCTO => {
   CheckHelper.nullCheck(sequence, "sequence");
   const sequenceStepCTOs: SequenceStepCTO[] = SequenceStepRepository.findAllForSequence(sequence!.id).map(
@@ -166,11 +190,11 @@ const createSequenceCTO = (sequence: SequenceTO | undefined): SequenceCTO => {
   return { sequenceTO: sequence!, sequenceStepCTOs: sequenceStepCTOs, conditions: conditions };
 };
 
-const createSequenceStepCTO = (sequenceStepTO: SequenceStepTO): SequenceStepCTO => {
+const createSequenceStepCTO = (sequenceStepTO: SequenceStepTO | undefined): SequenceStepCTO => {
   CheckHelper.nullCheck(sequenceStepTO, "sequenceStepTO");
-  const actionTOs: ActionTO[] = ActionRepository.findAllForStep(sequenceStepTO.id);
+  const actionTOs: ActionTO[] = ActionRepository.findAllForStep(sequenceStepTO!.id);
   return {
-    squenceStepTO: sequenceStepTO,
+    squenceStepTO: sequenceStepTO!,
     actions: actionTOs,
   };
 };

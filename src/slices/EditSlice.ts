@@ -101,13 +101,7 @@ const EditSlice = createSlice({
     },
     setActionToEdit: (state, action: PayloadAction<ActionTO>) => {
       if (state.mode === Mode.EDIT_SEQUENCE_STEP_ACTION) {
-        let sequenceStep: SequenceStepCTO;
-        if ((state.objectToEdit as SequenceStepCTO).squenceStepTO) {
-          sequenceStep = state.objectToEdit as SequenceStepCTO;
-        } else {
-          sequenceStep = (state.objectToEdit as StepAction).step;
-        }
-        state.objectToEdit = { step: sequenceStep, actionTO: action.payload };
+        state.objectToEdit = action.payload;
       } else {
         handleError("Try to set action to edit in mode: " + state.mode);
       }
@@ -219,9 +213,9 @@ const setModeToEditStep = (
   dispatch(EditActions.step.create(stepCTO, from, ifGoTo));
 };
 
-const setModeToEditAction = (action?: ActionTO): AppThunk => async (dispatch) => {
+const setModeToEditAction = (action: ActionTO): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_STEP_ACTION));
-  dispatch(EditSlice.actions.setActionToEdit(action || new ActionTO()));
+  dispatch(EditSlice.actions.setActionToEdit(action));
 };
 
 const setModeToEditGroup = (group?: GroupTO): AppThunk => (dispatch) => {
@@ -492,6 +486,28 @@ const saveSequenceStepThunk = (step: SequenceStepCTO): AppThunk => async (dispat
   // dispatch(MasterDataActions.loadSequencesFromBackend());
 };
 
+const findStepCTOThunk = (stepId: number): SequenceStepCTO => {
+  const response: DataAccessResponse<SequenceStepCTO> = DataAccess.findSequenceStepCTO(stepId);
+  return response.object;
+};
+
+// ----------------------------------------------- ACTION -----------------------------------------------
+
+const createActionThunk = (action: ActionTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<ActionTO> = DataAccess.saveActionTO(action);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(EditActions.setMode.editAction(response.object));
+};
+
+const saveActionThunk = (action: ActionTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<ActionTO> = DataAccess.saveActionTO(action);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+};
+
 const deleteActionThunk = (action: ActionTO): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<ActionTO> = await DataAccess.deleteActionCTO(action);
   if (response.code !== 200) {
@@ -593,9 +609,9 @@ export const editSelectors = {
         return null;
     }
   },
-  actionToEdit: (state: RootState): StepAction | null => {
-    return state.edit.mode === Mode.EDIT_SEQUENCE_STEP_ACTION && (state.edit.objectToEdit as StepAction).actionTO
-      ? (state.edit.objectToEdit as StepAction)
+  actionToEdit: (state: RootState): ActionTO | null => {
+    return state.edit.mode === Mode.EDIT_SEQUENCE_STEP_ACTION && (state.edit.objectToEdit as ActionTO).actionType
+      ? (state.edit.objectToEdit as ActionTO)
       : null;
   },
   conditionToEdit: (state: RootState): ConditionTO | null => {
@@ -664,10 +680,13 @@ export const EditActions = {
     delete: deleteSequenceStepThunk,
     update: EditSlice.actions.setStepToEdit,
     create: createSequenceStepThunk,
+    find: findStepCTOThunk,
   },
   action: {
     delete: deleteActionThunk,
     update: EditSlice.actions.setActionToEdit,
+    save: saveActionThunk,
+    create: createActionThunk,
   },
   condition: {
     create: createConditionThunk,

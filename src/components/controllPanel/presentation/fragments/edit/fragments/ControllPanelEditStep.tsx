@@ -223,7 +223,14 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
   const editOrAddAction = (action?: ActionTO) => {
     if (!isNullOrUndefined(stepToEdit)) {
-      dispatch(EditActions.setMode.editAction(action));
+      let copyAction: ActionTO | undefined = Carv2Util.deepCopy(action);
+      if (copyAction === undefined) {
+        copyAction = new ActionTO();
+        copyAction.sequenceStepFk = stepToEdit.squenceStepTO.id;
+        dispatch(EditActions.action.create(copyAction));
+      } else {
+        dispatch(EditActions.setMode.editAction(copyAction));
+      }
     }
   };
 
