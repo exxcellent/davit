@@ -239,8 +239,8 @@ const useControllPanelEditConditionViewModel = () => {
   };
 
   const deleteCondition = () => {
-    if (!isNullOrUndefined(conditionToEdit)) {
-      dispatch(EditActions.condition.delete(conditionToEdit));
+    if (!isNullOrUndefined(conditionToEdit) && !isNullOrUndefined(selectedSequence)) {
+      dispatch(EditActions.condition.delete(conditionToEdit, selectedSequence));
       dispatch(EditActions.setMode.editSequence(conditionToEdit.sequenceFk));
     }
   };

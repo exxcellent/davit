@@ -470,16 +470,39 @@ const createSequenceStepThunk = (
   }
 };
 
-const deleteSequenceStepThunk = (step: SequenceStepCTO): AppThunk => async (dispatch) => {
-  const response: DataAccessResponse<SequenceStepCTO> = await DataAccess.deleteSequenceStepCTO(step);
+const deleteSequenceStepThunk = (step: SequenceStepCTO, sequenceCTO?: SequenceCTO): AppThunk => (dispatch) => {
+  // update forent gotos.
+  if (sequenceCTO) {
+    const copySequence: SequenceCTO = Carv2Util.deepCopy(sequenceCTO);
+    // update steps
+    copySequence.sequenceStepCTOs.forEach((item) => {
+      if (item.squenceStepTO.goto.type === GoToTypes.STEP && item.squenceStepTO.goto.id === step.squenceStepTO.id) {
+        item.squenceStepTO.goto = { type: GoToTypes.ERROR };
+        dispatch(EditActions.step.save(item));
+      }
+    });
+    // update conditions
+    copySequence.conditions.forEach((cond) => {
+      if (cond.ifGoTo.type === GoToTypes.STEP && cond.ifGoTo.id === step.squenceStepTO.id) {
+        cond.ifGoTo = { type: GoToTypes.ERROR };
+        dispatch(EditActions.condition.save(cond));
+      }
+      if (cond.elseGoTo.type === GoToTypes.STEP && cond.elseGoTo.id === step.squenceStepTO.id) {
+        cond.elseGoTo = { type: GoToTypes.ERROR };
+        dispatch(EditActions.condition.save(cond));
+      }
+    });
+  }
+  // delete step.
+  const response: DataAccessResponse<SequenceStepCTO> = DataAccess.deleteSequenceStepCTO(step);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
   dispatch(MasterDataActions.loadSequencesFromBackend());
 };
 
-const saveSequenceStepThunk = (step: SequenceStepCTO): AppThunk => async (dispatch) => {
-  const response: DataAccessResponse<SequenceStepCTO> = await DataAccess.saveSequenceStepCTO(step);
+const saveSequenceStepThunk = (step: SequenceStepCTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<SequenceStepCTO> = DataAccess.saveSequenceStepCTO(step);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
@@ -552,11 +575,35 @@ const saveConditionThunk = (condition: ConditionTO): AppThunk => (dispatch) => {
   }
 };
 
-const deleteConditionThunk = (condition: ConditionTO): AppThunk => async (dispatch) => {
-  const response: DataAccessResponse<ConditionTO> = await DataAccess.deleteConditon(condition);
+const deleteConditionThunk = (condition: ConditionTO, sequenceCTO?: SequenceCTO): AppThunk => (dispatch) => {
+  // update forent gotos.
+  if (sequenceCTO) {
+    const copySequence: SequenceCTO = Carv2Util.deepCopy(sequenceCTO);
+    // update steps
+    copySequence.sequenceStepCTOs.forEach((step) => {
+      if (step.squenceStepTO.goto.type === GoToTypes.STEP && step.squenceStepTO.goto.id === condition.id) {
+        step.squenceStepTO.goto = { type: GoToTypes.ERROR };
+        dispatch(EditActions.step.save(step));
+      }
+    });
+    // update conditions
+    copySequence.conditions.forEach((cond) => {
+      if (cond.ifGoTo.type === GoToTypes.STEP && cond.ifGoTo.id === condition.id) {
+        cond.ifGoTo = { type: GoToTypes.ERROR };
+        dispatch(EditActions.condition.save(cond));
+      }
+      if (cond.elseGoTo.type === GoToTypes.STEP && cond.elseGoTo.id === condition.id) {
+        cond.elseGoTo = { type: GoToTypes.ERROR };
+        dispatch(EditActions.condition.save(cond));
+      }
+    });
+  }
+  // delete condition.
+  const response: DataAccessResponse<ConditionTO> = DataAccess.deleteConditon(condition);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
+  dispatch(MasterDataActions.loadSequencesFromBackend());
 };
 
 // =============================================== SELECTORS ===============================================
