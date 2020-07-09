@@ -1,4 +1,4 @@
-export enum ComponentDataState {
+export enum ViewFragmentState {
   NEW = "NEW",
   PERSISTENT = "PERSISTENT",
   DELETED = "DELETED",

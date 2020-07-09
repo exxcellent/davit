@@ -1,18 +1,18 @@
 import React from "react";
 import { Card } from "semantic-ui-react";
-import { ComponentDataState } from "./ComponentDataState";
+import { ViewFragmentState } from "./ViewFragmentState";
 
-export interface ComponentDataFragmentProps {
-  state: ComponentDataState;
+export interface ViewFragmentProps {
+  state: ViewFragmentState;
   name: string;
 }
 
-const getColorForComponentDataState = (state: ComponentDataState) => {
+const getColorForComponentDataState = (state: ViewFragmentState) => {
   // TODO: css classen anlegen.
   return "carv2ComponentData" + state;
 };
 
-export const createComponentDataFragment = (componentDataFragmentProps: ComponentDataFragmentProps, key: number) => {
+export const createViewFragment = (componentDataFragmentProps: ViewFragmentProps, key: number) => {
   return (
     <Card.Content
       extra
