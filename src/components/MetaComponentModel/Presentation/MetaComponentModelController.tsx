@@ -4,13 +4,12 @@ import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
 import { DataSetupCTO } from "../../../dataAccess/access/cto/DataSetupCTO";
-import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../../../dataAccess/access/to/ActionTO";
 import { ConditionTO } from "../../../dataAccess/access/to/ConditionTO";
 import { GroupTO } from "../../../dataAccess/access/to/GroupTO";
 import { ActionType } from "../../../dataAccess/access/types/ActionType";
-import { EditActions, editSelectors, Mode } from "../../../slices/EditSlice";
+import { EditActions, editSelectors } from "../../../slices/EditSlice";
 import { MasterDataActions, masterDataSelectors } from "../../../slices/MasterDataSlice";
 import { sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
 import { ViewFragmentProps } from "../../../viewDataTypes/ViewFragment";
@@ -34,13 +33,17 @@ export const MetaComponentModelController: FunctionComponent<MetaComponentModelC
   );
 };
 
+export interface Arrows {
+  sourceComponentId: number;
+  targetComponentId: number;
+}
+
 const useViewModel = () => {
+  // ====== SELECTORS =====
   const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
   const groups: GroupTO[] = useSelector(masterDataSelectors.groups);
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
-  const mode: Mode = useSelector(editSelectors.mode);
   const dispatch = useDispatch();
-  // ====== SELECTORS =====
   // ----- EDIT -----
   const componentCTOToEdit: ComponentCTO | null = useSelector(editSelectors.componentToEdit);
   const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.stepToEdit);
@@ -48,8 +51,9 @@ const useViewModel = () => {
   const conditionToEdit: ConditionTO | null = useSelector(editSelectors.conditionToEdit);
   const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.dataSetupToEdit);
   // ----- VIEW -----
-  const selectedStep: SequenceStepCTO | null = useSelector(sequenceModelSelectors.selectCurrentStep);
-  const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
+  const arrows: Arrows[] = useSelector(sequenceModelSelectors.selectCurrentArrows);
+  // const selectedStep: SequenceStepCTO | null = useSelector(sequenceModelSelectors.selectCurrentStep);
+  // const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
 
   React.useEffect(() => {
     dispatch(MasterDataActions.loadComponentsFromBackend());
@@ -60,66 +64,51 @@ const useViewModel = () => {
     dispatch(EditActions.component.save(componentCTO));
   };
 
-  const getArrows = (): { sourceCompId: number; targetCompId: number }[] => {
-    let arrows: { sourceCompId: number; targetCompId: number }[] = [];
-    if (mode.startsWith("EDIT") && !isNullOrUndefined(stepToEdit)) {
-      arrows.push({
-        sourceCompId: stepToEdit.squenceStepTO.sourceComponentFk,
-        targetCompId: stepToEdit.squenceStepTO.targetComponentFk,
+  const getArrows = (): Arrows[] => {
+    const allArrows: Arrows[] = [];
+    arrows.forEach((arrow) => allArrows.push(arrow));
+    if (stepToEdit) {
+      allArrows.push({
+        sourceComponentId: stepToEdit.squenceStepTO.sourceComponentFk,
+        targetComponentId: stepToEdit.squenceStepTO.targetComponentFk,
       });
     }
-    if (mode.startsWith("VIEW") && !isNullOrUndefined(selectedStep)) {
-      arrows.push({
-        sourceCompId: selectedStep.squenceStepTO.sourceComponentFk,
-        targetCompId: selectedStep.squenceStepTO.targetComponentFk,
-      });
-    }
-    return arrows;
+    return allArrows;
   };
 
   const getComponentDatas = (): ViewFragmentProps[] => {
     let compDatas: ViewFragmentProps[] = [];
-    switch (mode) {
-      case Mode.EDIT_SEQUENCE_STEP:
-        stepToEdit?.actions.forEach((action) =>
-          compDatas.push({
-            partenId: action.componentFk,
-            name: getDataNameById(action.dataFk),
-            state: mapActionTypeToViewFragmentState(action.actionType),
-          })
-        );
-        break;
-      case Mode.EDIT_SEQUENCE_STEP_ACTION:
-        if (!isNullOrUndefined(actionToEdit)) {
-          compDatas.push({
-            partenId: actionToEdit.componentFk,
-            name: getDataNameById(actionToEdit.dataFk),
-            state: mapActionTypeToViewFragmentState(actionToEdit.actionType),
-          });
-        }
-        break;
-      case Mode.EDIT_SEQUENCE_CONDITION:
-        if (!isNullOrUndefined(conditionToEdit)) {
-          conditionToEdit.dataFks.forEach((data) =>
-            compDatas.push({
-              partenId: conditionToEdit.componentFk,
-              name: getDataNameById(data),
-              state: conditionToEdit.condition ? ViewFragmentState.CHECKED : ViewFragmentState.DELETED,
-            })
-          );
-        }
-        break;
-      case Mode.EDIT_DATA_SETUP:
-        if (!isNullOrUndefined(dataSetupToEdit)) {
-          dataSetupToEdit.initDatas.forEach((initData) =>
-            compDatas.push({
-              partenId: initData.componentFk,
-              name: getDataNameById(initData.dataFk),
-              state: ViewFragmentState.NEW,
-            })
-          );
-        }
-        break;
+    stepToEdit?.actions.forEach((action) =>
+      compDatas.push({
+        partenId: action.componentFk,
+        name: getDataNameById(action.dataFk),
+        state: mapActionTypeToViewFragmentState(action.actionType),
+      })
+    );
+    if (!isNullOrUndefined(actionToEdit)) {
+      compDatas.push({
+        partenId: actionToEdit.componentFk,
+        name: getDataNameById(actionToEdit.dataFk),
+        state: mapActionTypeToViewFragmentState(actionToEdit.actionType),
+      });
+    }
+    if (!isNullOrUndefined(conditionToEdit)) {
+      conditionToEdit.dataFks.forEach((data) =>
+        compDatas.push({
+          partenId: conditionToEdit.componentFk,
+          name: getDataNameById(data),
+          state: conditionToEdit.condition ? ViewFragmentState.CHECKED : ViewFragmentState.DELETED,
+        })
+      );
+    }
+    if (!isNullOrUndefined(dataSetupToEdit)) {
+      dataSetupToEdit.initDatas.forEach((initData) =>
+        compDatas.push({
+          partenId: initData.componentFk,
+          name: getDataNameById(initData.dataFk),
+          state: ViewFragmentState.NEW,
+        })
+      );
     }
     return compDatas;
   };

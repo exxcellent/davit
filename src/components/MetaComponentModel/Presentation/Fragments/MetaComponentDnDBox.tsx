@@ -6,13 +6,14 @@ import { Carv2Util } from "../../../../utils/Carv2Util";
 import { ViewFragmentProps } from "../../../../viewDataTypes/ViewFragment";
 import { createDnDItem } from "../../../common/fragments/DnDWrapper";
 import { createCurveArrow } from "../../../common/fragments/svg/Arrow";
+import { Arrows } from "../MetaComponentModelController";
 import { createMetaComponentFragment } from "./MetaComponentFragment";
 
 interface MetaComponentDnDBox {
   componentCTOs: ComponentCTO[];
   groups: GroupTO[];
   componentCTOToEdit: ComponentCTO | null;
-  arrows: { sourceCompId: number; targetCompId: number }[];
+  arrows: Arrows[];
   componentDatas: ViewFragmentProps[];
   onSaveCallBack: (componentCTO: ComponentCTO) => void;
 }
@@ -59,8 +60,8 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (prop
       {componentCTOToEdit && createDnDMetaComponent(componentCTOToEdit)}
       {arrows.map((arrow) => {
         return createCurveArrow(
-          findComponentById(arrow.sourceCompId)?.geometricalData,
-          findComponentById(arrow.targetCompId)?.geometricalData
+          findComponentById(arrow.sourceComponentId)?.geometricalData,
+          findComponentById(arrow.targetComponentId)?.geometricalData
         );
       })}
     </motion.div>

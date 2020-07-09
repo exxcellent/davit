@@ -1,13 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../app/store";
+import { Arrows } from "../components/metaComponentModel/presentation/MetaComponentModelController";
 import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
+import { SequenceActionReducer, SequenceActionResult } from "../reducer/SequenceActionReducer";
 import { ComponentData } from "../viewDataTypes/ComponentData";
-import { Mode } from "./EditSlice";
 import { handleError } from "./GlobalSlice";
 
 interface SequenceModelState {
@@ -63,39 +64,39 @@ const SequenceModelSlice = createSlice({
 });
 
 // =============================================== THUNKS ===============================================
-// const calculateSequence = (
-//   sequence: SequenceCTO | null,
-//   dataSetup: DataSetupCTO | null
-// ): { componentDatas: Map<number, ComponentData[]>; errors: Map<number, ActionTO[]> } => {
-//   let componentDataMap = new Map();
-//   let errorMap = new Map<number, ActionTO[]>();
-//   let index = 1;
-//   if (sequence && dataSetup) {
-//     let componenentDatas: ComponentData[] = dataSetup.initDatas.map((initData) => {
-//       return { componentFk: initData.componentFk, dataFk: initData.dataFk };
-//     });
-//     let step = getStepFromSequence(index, sequence);
-//     while (step) {
-//       const result: SequenceActionResult = calculateStep(step, componenentDatas);
-//       componentDataMap.set(step.squenceStepTO.index, result.componenDatas);
-//       if (result.errors.length > 0) {
-//         errorMap.set(step.squenceStepTO.index, result.errors);
-//       }
-//       componenentDatas = result.componenDatas;
-//       index++;
-//       step = getStepFromSequence(index, sequence);
-//     }
-//   }
-//   return { componentDatas: componentDataMap, errors: errorMap };
-// };
+const calculateSequence = (
+  sequence: SequenceCTO | null,
+  dataSetup: DataSetupCTO | null
+): { stepFk: number; componentDatas: ComponentData[]; errors: ActionTO[] } => {
+  let componentDatas: ComponentData[] = [];
+  let errors: ActionTO[] = [];
+  let index = 1;
+  if (sequence && dataSetup) {
+    let componenentDatas: ComponentData[] = dataSetup.initDatas.map((initData) => {
+      return { componentFk: initData.componentFk, dataFk: initData.dataFk };
+    });
+    let step = getStepFromSequence(index, sequence);
+    // while (step) {
+    //   const result: SequenceActionResult = calculateStep(step, componenentDatas);
+    //   componentDatas.set(step.squenceStepTO.index, result.componenDatas);
+    //   if (result.errors.length > 0) {
+    //     errors.set(step.squenceStepTO.index, result.errors);
+    //   }
+    //   componenentDatas = result.componenDatas;
+    //   index++;
+    //   step = getStepFromSequence(index, sequence);
+    // }
+  }
+  return { stepFk: index, componentDatas: componentDatas, errors: errors };
+};
 
-// const calculateStep = (step: SequenceStepCTO, componentDatas: ComponentData[]): SequenceActionResult => {
-//   return SequenceActionReducer.executeActionsOnComponentDatas(step.actions, componentDatas);
-// };
+const calculateStep = (step: SequenceStepCTO, componentDatas: ComponentData[]): SequenceActionResult => {
+  return SequenceActionReducer.executeActionsOnComponentDatas(step.actions, componentDatas);
+};
 
-// const getStepFromSequence = (stepIndex: number, sequence: SequenceCTO): SequenceStepCTO | undefined => {
-//   return sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.index === stepIndex);
-// };
+const getStepFromSequence = (stepIndex: number, sequence: SequenceCTO): SequenceStepCTO | undefined => {
+  return sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.index === stepIndex);
+};
 
 const getDataSetupCTOFromBackend = (dataSetupId: number): AppThunk => (dispatch) => {
   const response: DataAccessResponse<DataSetupCTO> = DataAccess.findDataSetupCTO(dataSetupId);
@@ -124,16 +125,31 @@ export const sequenceModelSelectors = {
   //   ? (state.sequenceModel.selectedSequence as SequenceCTO)
   //   : null;
   // },
-  selectDataSetup: (state: RootState): DataSetupCTO | null => {
-    return state.edit.mode === Mode.VIEW && (state.sequenceModel.selectedDataSetup as DataSetupCTO).dataSetup
-      ? (state.sequenceModel.selectedDataSetup as DataSetupCTO)
-      : null;
-  },
+  selectDataSetup: (state: RootState): DataSetupCTO | null => state.sequenceModel.selectedDataSetup,
+  // {
+  //   return state.edit.mode === Mode.VIEW && (state.sequenceModel.selectedDataSetup as DataSetupCTO).dataSetup
+  //     ? (state.sequenceModel.selectedDataSetup as DataSetupCTO)
+  //     : null;
+  // },
   selectCurrentStepIndex: (state: RootState): number => state.sequenceModel.currentStepIndex,
   selectCurrentStep: (state: RootState): SequenceStepCTO | null =>
     state.sequenceModel.selectedSequence?.sequenceStepCTOs.find(
       (step) => step.squenceStepTO.index === state.sequenceModel.currentStepIndex
     ) || null,
+  selectCurrentArrows: (state: RootState): Arrows[] => {
+    const arrows: Arrows[] = [];
+    const step: SequenceStepCTO | null =
+      state.sequenceModel.selectedSequence?.sequenceStepCTOs.find(
+        (stp) => stp.squenceStepTO.index === state.sequenceModel.currentStepIndex
+      ) || null;
+    if (step !== null) {
+      arrows.push({
+        sourceComponentId: step.squenceStepTO.sourceComponentFk,
+        targetComponentId: step.squenceStepTO.targetComponentFk,
+      });
+    }
+    return arrows;
+  },
 };
 
 // =============================================== ACTIONS ===============================================
