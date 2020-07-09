@@ -3,8 +3,10 @@ import { AppThunk, RootState } from "../app/store";
 import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
+import { ActionTO } from "../dataAccess/access/to/ActionTO";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
+import { ComponentData } from "../viewDataTypes/ComponentData";
 import { Mode } from "./EditSlice";
 import { handleError } from "./GlobalSlice";
 
@@ -12,13 +14,17 @@ interface SequenceModelState {
   selectedSequence: SequenceCTO | null;
   selectedDataSetup: DataSetupCTO | null;
   currentStepIndex: number;
-  // errorMap: Map<number, ActionTO[]>;
+  errorActions: ActionTO[];
+  actions: ActionTO[];
+  componentDatas: ComponentData[];
 }
 const getInitialState: SequenceModelState = {
   selectedSequence: null,
   selectedDataSetup: null,
   currentStepIndex: -1,
-  // errorMap: new Map(),
+  errorActions: [],
+  actions: [],
+  componentDatas: [],
 };
 
 const SequenceModelSlice = createSlice({
@@ -43,6 +49,15 @@ const SequenceModelSlice = createSlice({
     },
     setCurrentStepIndex: (state, action: PayloadAction<number>) => {
       state.currentStepIndex = action.payload;
+    },
+    setErrorActions: (state, action: PayloadAction<ActionTO[]>) => {
+      state.errorActions = action.payload;
+    },
+    setActions: (state, action: PayloadAction<ActionTO[]>) => {
+      state.actions = action.payload;
+    },
+    setComponentDatas: (state, action: PayloadAction<ComponentData[]>) => {
+      state.componentDatas = action.payload;
     },
   },
 });

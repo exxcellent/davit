@@ -127,6 +127,7 @@ export const createCurveArrow = (source: GeometricalDataCTO | undefined, target:
         xTarget={target.position.x}
         yTarget={target.position.y}
         type={ArrowType.CURVE}
+        key={source.geometricalData.id + target.geometricalData.id}
       />
     );
   }

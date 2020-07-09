@@ -1,12 +1,19 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
+import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
+import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
+import { ActionTO } from "../../../dataAccess/access/to/ActionTO";
+import { ConditionTO } from "../../../dataAccess/access/to/ConditionTO";
 import { GroupTO } from "../../../dataAccess/access/to/GroupTO";
+import { ActionType } from "../../../dataAccess/access/types/ActionType";
 import { EditActions, editSelectors, Mode } from "../../../slices/EditSlice";
 import { MasterDataActions, masterDataSelectors } from "../../../slices/MasterDataSlice";
 import { sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
-import { ComponentDataFragmentProps } from "../../../viewDataTypes/ComponentDataFragment";
+import { ViewFragmentProps } from "../../../viewDataTypes/ViewFragment";
+import { ViewFragmentState } from "../../../viewDataTypes/ViewFragmentState";
 import { MetaComponentDnDBox } from "./fragments/MetaComponentDnDBox";
 
 interface MetaComponentModelControllerProps {}
@@ -18,7 +25,7 @@ export const MetaComponentModelController: FunctionComponent<MetaComponentModelC
     <MetaComponentDnDBox
       componentCTOs={components}
       onSaveCallBack={saveComp}
-      step={getStep()}
+      arrows={getStep()}
       componentCTOToEdit={componentCTOToEdit}
       groups={groups}
       componentDatas={getComponentDatas()}
@@ -29,12 +36,18 @@ export const MetaComponentModelController: FunctionComponent<MetaComponentModelC
 const useViewModel = () => {
   const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
   const groups: GroupTO[] = useSelector(masterDataSelectors.groups);
-  const componentCTOToEdit: ComponentCTO | null = useSelector(editSelectors.componentToEdit);
-  const selectedStep: SequenceStepCTO | null = useSelector(sequenceModelSelectors.selectCurrentStep);
-  const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.stepToEdit);
-  // const actionToEdit: ActionTO | null = useSelector(editSelectors.actionToEdit);
+  const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
   const mode: Mode = useSelector(editSelectors.mode);
   const dispatch = useDispatch();
+  // ====== SELECTORS =====
+  // ----- EDIT -----
+  const componentCTOToEdit: ComponentCTO | null = useSelector(editSelectors.componentToEdit);
+  const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.stepToEdit);
+  const actionToEdit: ActionTO | null = useSelector(editSelectors.actionToEdit);
+  const conditionToEdit: ConditionTO | null = useSelector(editSelectors.conditionToEdit);
+  // ----- VIEW -----
+  const selectedStep: SequenceStepCTO | null = useSelector(sequenceModelSelectors.selectCurrentStep);
+  const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
 
   React.useEffect(() => {
     dispatch(MasterDataActions.loadComponentsFromBackend());
@@ -45,31 +58,71 @@ const useViewModel = () => {
     dispatch(EditActions.component.save(componentCTO));
   };
 
-  const getStep = (): SequenceStepCTO | null => {
-    let step: SequenceStepCTO | null = null;
-    if (mode.startsWith("EDIT")) {
-      step = stepToEdit;
+  const getArrows = (): { sourceCompId: number; targetCompId: number }[] => {
+    let arrows: { sourceCompId: number; targetCompId: number }[] = [];
+    if (mode.startsWith("EDIT") && !isNullOrUndefined(stepToEdit)) {
+      arrows.push({
+        sourceCompId: stepToEdit.squenceStepTO.sourceComponentFk,
+        targetCompId: stepToEdit.squenceStepTO.targetComponentFk,
+      });
     }
-    if (mode.startsWith("VIEW")) {
-      step = selectedStep;
+    if (mode.startsWith("VIEW") && !isNullOrUndefined(selectedStep)) {
+      arrows.push({
+        sourceCompId: selectedStep.squenceStepTO.sourceComponentFk,
+        targetCompId: selectedStep.squenceStepTO.targetComponentFk,
+      });
     }
-    return step;
+    return arrows;
   };
 
-  const getComponentDatas = (): ComponentDataFragmentProps[] => {
-    let compDatas: ComponentDataFragmentProps[] = [];
-    if (mode === Mode.EDIT_SEQUENCE_STEP_ACTION) {
-      // if (!isNullOrUndefined(actionToEdit)) {
-      //   // TODO: map action to componentDataFragment.
-      // }
+  const getComponentDatas = (): ViewFragmentProps[] => {
+    let compDatas: ViewFragmentProps[] = [];
+    switch (mode) {
+      case Mode.EDIT_SEQUENCE_STEP:
+        stepToEdit?.actions.forEach((action) =>
+          compDatas.push({
+            partenId: action.componentFk,
+            name: getDataNameById(action.dataFk),
+            state: mapActionTypeToViewFragmentState(action.actionType),
+          })
+        );
+        break;
+      case Mode.EDIT_SEQUENCE_STEP_ACTION:
+        if (!isNullOrUndefined(actionToEdit)) {
+          compDatas.push({
+            partenId: actionToEdit.componentFk,
+            name: getDataNameById(actionToEdit.dataFk),
+            state: mapActionTypeToViewFragmentState(actionToEdit.actionType),
+          });
+        }
     }
     return compDatas;
+  };
+
+  const getDataNameById = (id: number): string => {
+    return datas.find((data) => data.data.id === id)?.data.name || "Could not find Data";
+  };
+
+  const mapActionTypeToViewFragmentState = (actionType: ActionType): ViewFragmentState => {
+    let cdState: ViewFragmentState;
+    switch (actionType) {
+      case ActionType.ADD:
+        cdState = ViewFragmentState.NEW;
+        break;
+      case ActionType.DELETE:
+        cdState = ViewFragmentState.DELETED;
+        break;
+      case ActionType.CHECK:
+        cdState = ViewFragmentState.CHECKED;
+        break;
+    }
+    return cdState;
   };
 
   return {
     components,
     componentCTOToEdit,
-    getStep,
+    getStep: getArrows,
     saveComp,
     groups,
     getComponentDatas,

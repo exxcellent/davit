@@ -4,7 +4,7 @@ import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { GeometricalDataCTO } from "../../../../dataAccess/access/cto/GeometraicalDataCTO";
 import { DataRelationTO } from "../../../../dataAccess/access/to/DataRelationTO";
 import { Carv2Util } from "../../../../utils/Carv2Util";
-import { ComponentDataFragmentProps } from "../../../../viewDataTypes/ComponentDataFragment";
+import { ViewFragmentProps } from "../../../../viewDataTypes/ViewFragment";
 import { createDnDItem } from "../../../common/fragments/DnDWrapper";
 import { createCornerConnection } from "../../../common/fragments/svg/Carv2Path";
 import { createMetaDataFragment } from "./MetaDataFragment";
@@ -14,7 +14,7 @@ interface MetaDataDnDBox {
   dataCTOToEdit: DataCTO | null;
   dataRelationToEdit: DataRelationTO | null;
   dataRelations: DataRelationTO[];
-  componentDatas: ComponentDataFragmentProps[];
+  componentDatas: ViewFragmentProps[];
   onSaveCallBack: (dataCTO: DataCTO) => void;
 }
 

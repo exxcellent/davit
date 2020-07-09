@@ -1,10 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { Card } from "semantic-ui-react";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
-import {
-  ComponentDataFragmentProps,
-  createComponentDataFragment,
-} from "../../../../viewDataTypes/ComponentDataFragment";
+import { createViewFragment, ViewFragmentProps } from "../../../../viewDataTypes/ViewFragment";
 
 export interface MetaComponentFragmentProps {
   id: number;
@@ -12,7 +9,7 @@ export interface MetaComponentFragmentProps {
   initalColor: string;
   initalWidth?: number;
   initalHeigth?: number;
-  dataFragments: ComponentDataFragmentProps[];
+  dataFragments: ViewFragmentProps[];
 }
 
 export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps> = (props) => {
@@ -20,15 +17,12 @@ export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps
   return (
     <Card raised style={{ width: initalWidth, height: initalHeigth }}>
       <Card.Content header={initalName}></Card.Content>
-      {dataFragments.map(createComponentDataFragment)}
+      {dataFragments.map(createViewFragment)}
     </Card>
   );
 };
 
-export const createMetaComponentFragment = (
-  componentCTO: ComponentCTO,
-  componentDatas: ComponentDataFragmentProps[]
-) => {
+export const createMetaComponentFragment = (componentCTO: ComponentCTO, componentDatas: ViewFragmentProps[]) => {
   return (
     <MetaComponentFragment
       id={componentCTO.component.id}
