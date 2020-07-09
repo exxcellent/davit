@@ -121,7 +121,7 @@ const useMetaDataModelViewModel = () => {
             compDatas.push({
               partenId: data,
               name: getComponentNameById(conditionToEdit.componentFk),
-              state: conditionToEdit.condition ? ViewFragmentState.CHECKED : ViewFragmentState.DELETED,
+              state: conditionToEdit.has ? ViewFragmentState.CHECKED : ViewFragmentState.DELETED,
             })
           );
         }

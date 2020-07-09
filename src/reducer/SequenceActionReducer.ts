@@ -1,6 +1,8 @@
 import { isNullOrUndefined } from "util";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
+import { ConditionTO } from "../dataAccess/access/to/ConditionTO";
 import { ActionType } from "../dataAccess/access/types/ActionType";
+import { GoTo } from "../dataAccess/access/types/GoToType";
 import { Carv2Util } from "../utils/Carv2Util";
 import { ComponentData } from "../viewDataTypes/ComponentData";
 
@@ -35,6 +37,19 @@ export const SequenceActionReducer = {
       }
     });
     return { componenDatas: newComponentDatas, errors };
+  },
+
+  executeConditionCheck(condition: ConditionTO, componenDatas: ComponentData[]): GoTo {
+    const filteredCompData: ComponentData[] = componenDatas.filter(
+      (compData) => compData.componentFk === condition.componentFk
+    );
+    condition.dataFks.forEach((dataFk) => {
+      let isIncluded: boolean = filteredCompData.some((cd) => cd.dataFk === dataFk);
+      if (condition.has !== isIncluded) {
+        return condition.elseGoTo;
+      }
+    });
+    return condition.ifGoTo;
   },
 };
 

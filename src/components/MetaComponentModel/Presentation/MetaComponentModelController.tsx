@@ -97,7 +97,7 @@ const useViewModel = () => {
         compDatas.push({
           partenId: conditionToEdit.componentFk,
           name: getDataNameById(data),
-          state: conditionToEdit.condition ? ViewFragmentState.CHECKED : ViewFragmentState.DELETED,
+          state: conditionToEdit.has ? ViewFragmentState.CHECKED : ViewFragmentState.DELETED,
         })
       );
     }

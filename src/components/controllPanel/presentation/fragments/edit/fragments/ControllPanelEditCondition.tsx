@@ -293,7 +293,7 @@ const useControllPanelEditConditionViewModel = () => {
     console.info("has: ", setHas);
     if (!isNullOrUndefined(conditionToEdit) && !isNullOrUndefined(setHas)) {
       let copyConditionToEdit: ConditionTO = Carv2Util.deepCopy(conditionToEdit);
-      copyConditionToEdit.condition = setHas === 1 ? true : false;
+      copyConditionToEdit.has = setHas === 1 ? true : false;
       dispatch(EditActions.setMode.editCondition(copyConditionToEdit));
     }
   };
@@ -348,7 +348,7 @@ const useControllPanelEditConditionViewModel = () => {
   const getCondition = (): number => {
     let hasNumber: number = 2;
     if (!isNullOrUndefined(conditionToEdit)) {
-      hasNumber = conditionToEdit.condition ? 1 : 2;
+      hasNumber = conditionToEdit.has ? 1 : 2;
     }
     return hasNumber;
   };
