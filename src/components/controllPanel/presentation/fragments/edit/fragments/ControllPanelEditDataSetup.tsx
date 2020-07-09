@@ -56,7 +56,8 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
         />
       </div>
       <div className="columnDivider controllPanelEditChild" style={{ paddingLeft: "10px", paddingRight: "10px" }}>
-        <MultiselectDataDropDown onSelect={setInitDatas} selected={getDatas()} onBlur={() => updateDataSetup()} />
+        <MultiselectDataDropDown onSelect={setInitDatas} selected={getDatas()} />
+        {/* <MultiselectDataDropDown onSelect={setInitDatas} selected={getDatas()} onBlur={() => updateDataSetup()} /> */}
       </div>
       <div className="columnDivider controllPanelEditChild">
         <Carv2ButtonLabel onClick={createAnother} label="Create another" />
@@ -149,6 +150,7 @@ const useControllPanelEditDataSetupViewModel = () => {
         })
       );
       copyDataSetupToEdit.initDatas = clearInitDatas;
+      dispatch(EditActions.dataSetup.save(copyDataSetupToEdit));
       dispatch(EditActions.dataSetup.update(copyDataSetupToEdit));
     }
   };

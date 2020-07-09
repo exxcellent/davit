@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
+import { DataSetupCTO } from "../../../dataAccess/access/cto/DataSetupCTO";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../../../dataAccess/access/to/ActionTO";
@@ -19,13 +20,13 @@ import { MetaComponentDnDBox } from "./fragments/MetaComponentDnDBox";
 interface MetaComponentModelControllerProps {}
 
 export const MetaComponentModelController: FunctionComponent<MetaComponentModelControllerProps> = (props) => {
-  const { components, getStep, saveComp, groups, getComponentDatas, componentCTOToEdit } = useViewModel();
+  const { components, getArrows, saveComp, groups, getComponentDatas, componentCTOToEdit } = useViewModel();
 
   return (
     <MetaComponentDnDBox
       componentCTOs={components}
       onSaveCallBack={saveComp}
-      arrows={getStep()}
+      arrows={getArrows()}
       componentCTOToEdit={componentCTOToEdit}
       groups={groups}
       componentDatas={getComponentDatas()}
@@ -45,6 +46,7 @@ const useViewModel = () => {
   const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.stepToEdit);
   const actionToEdit: ActionTO | null = useSelector(editSelectors.actionToEdit);
   const conditionToEdit: ConditionTO | null = useSelector(editSelectors.conditionToEdit);
+  const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.dataSetupToEdit);
   // ----- VIEW -----
   const selectedStep: SequenceStepCTO | null = useSelector(sequenceModelSelectors.selectCurrentStep);
   const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
@@ -95,6 +97,29 @@ const useViewModel = () => {
             state: mapActionTypeToViewFragmentState(actionToEdit.actionType),
           });
         }
+        break;
+      case Mode.EDIT_SEQUENCE_CONDITION:
+        if (!isNullOrUndefined(conditionToEdit)) {
+          conditionToEdit.dataFks.forEach((data) =>
+            compDatas.push({
+              partenId: conditionToEdit.componentFk,
+              name: getDataNameById(data),
+              state: conditionToEdit.condition ? ViewFragmentState.CHECKED : ViewFragmentState.DELETED,
+            })
+          );
+        }
+        break;
+      case Mode.EDIT_DATA_SETUP:
+        if (!isNullOrUndefined(dataSetupToEdit)) {
+          dataSetupToEdit.initDatas.forEach((initData) =>
+            compDatas.push({
+              partenId: initData.componentFk,
+              name: getDataNameById(initData.dataFk),
+              state: ViewFragmentState.NEW,
+            })
+          );
+        }
+        break;
     }
     return compDatas;
   };
@@ -122,7 +147,7 @@ const useViewModel = () => {
   return {
     components,
     componentCTOToEdit,
-    getStep: getArrows,
+    getArrows,
     saveComp,
     groups,
     getComponentDatas,
