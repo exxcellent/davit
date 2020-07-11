@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React, { FunctionComponent, useRef } from "react";
+import React, { useRef } from "react";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
 import { GroupTO } from "../../../../dataAccess/access/to/GroupTO";
 import { Carv2Util } from "../../../../utils/Carv2Util";
@@ -16,10 +16,11 @@ interface MetaComponentDnDBox {
   arrows: Arrows[];
   componentDatas: ViewFragmentProps[];
   onSaveCallBack: (componentCTO: ComponentCTO) => void;
+  onClick: (componentId: number) => void;
 }
 
-export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (props) => {
-  const { componentCTOs, onSaveCallBack, arrows, componentCTOToEdit, groups, componentDatas } = props;
+export const MetaComponentDnDBox: React.FunctionComponent<MetaComponentDnDBox> = (props) => {
+  const { componentCTOs, onSaveCallBack, arrows, componentCTOToEdit, groups, componentDatas, onClick } = props;
   const constraintsRef = useRef(null);
 
   const onPositionUpdate = (x: number, y: number, positionId: number) => {
@@ -41,7 +42,8 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (prop
   const createDnDMetaComponent = (componentCTO: ComponentCTO) => {
     let metaComponentFragment = createMetaComponentFragment(
       componentCTO,
-      componentDatas.filter((compdata) => compdata.partenId === componentCTO.component.id)
+      componentDatas.filter((compdata) => compdata.partenId === componentCTO.component.id),
+      onClick
     );
     let shadow: string = "";
     if (componentCTO.component.groupFks !== -1) {

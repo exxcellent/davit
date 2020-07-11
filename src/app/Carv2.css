@@ -150,10 +150,21 @@
 }
 .carv2Tr {
   background-color: var(--carv2-background-color-shadow);
+  height: 2.5em;
 }
 
 .carv2TrMarked {
   background-color: var(--carv2-color-secondary);
+  height: 2.5em;
+}
+
+.carv2TrTerminalError {
+  background-color: var(--carv2-data-delete-color);
+  height: 2.5em;
+}
+.carv2TrTerminalSuccess {
+  background-color: var(--carv2-data-add-color);
+  height: 2.5em;
 }
 
 .carv2Td {

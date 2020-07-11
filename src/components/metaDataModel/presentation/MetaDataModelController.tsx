@@ -11,11 +11,12 @@ import { DataRelationTO } from "../../../dataAccess/access/to/DataRelationTO";
 import { ActionType } from "../../../dataAccess/access/types/ActionType";
 import { EditActions, editSelectors, Mode } from "../../../slices/EditSlice";
 import { MasterDataActions, masterDataSelectors } from "../../../slices/MasterDataSlice";
+import { SequenceModelActions } from "../../../slices/SequenceModelSlice";
 import { ViewFragmentProps } from "../../../viewDataTypes/ViewFragment";
 import { ViewFragmentState } from "../../../viewDataTypes/ViewFragmentState";
 import { MetaDataDnDBox } from "./fragments/MetaDataDnDBox";
 
-interface MetaDataModelControllerProps {}
+interface MetaDataModelControllerProps { }
 
 export const MetaDataModelController: FunctionComponent<MetaDataModelControllerProps> = (props) => {
   const {
@@ -25,6 +26,7 @@ export const MetaDataModelController: FunctionComponent<MetaDataModelControllerP
     dataCTOToEdit,
     getComponentDatas,
     saveData,
+    handleDataClick,
   } = useMetaDataModelViewModel();
 
   const createMetaDataDnDBox = () => {
@@ -36,6 +38,7 @@ export const MetaDataModelController: FunctionComponent<MetaDataModelControllerP
         dataCTOToEdit={dataCTOToEdit}
         dataRelationToEdit={dataRelationToEdit}
         componentDatas={getComponentDatas()}
+        onClick={handleDataClick}
       />
     );
   };
@@ -148,5 +151,6 @@ const useMetaDataModelViewModel = () => {
     dataCTOToEdit,
     saveData,
     getComponentDatas,
+    handleDataClick: (dataId: number) => dispatch(SequenceModelActions.handleDataClickEvent(dataId)),
   };
 };

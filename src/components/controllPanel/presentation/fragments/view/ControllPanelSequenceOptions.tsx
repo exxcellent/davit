@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { DataSetupTO } from "../../../../../dataAccess/access/to/DataSetupTO";
 import { SequenceTO } from "../../../../../dataAccess/access/to/SequenceTO";
 import { SequenceModelActions, sequenceModelSelectors } from "../../../../../slices/SequenceModelSlice";
@@ -11,12 +10,12 @@ import { DataSetupDropDown } from "../../../../common/fragments/dropdowns/DataSe
 import { SequenceDropDown } from "../../../../common/fragments/dropdowns/SequenceDropDown";
 import { OptionField } from "../edit/common/OptionField";
 
-export interface ControllPanelSequenceOptionsProps {}
+export interface ControllPanelSequenceOptionsProps { }
 
 export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequenceOptionsProps> = (props) => {
   const {
     sequence,
-    step,
+    stepIndex,
     selectSequence,
     stepBack,
     stepNext,
@@ -47,7 +46,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
               disabled={isNullOrUndefined(sequence)}
               onClick={stepBack}
             />
-            <Button inverted color="orange" content={step?.squenceStepTO.index || 0} disabled={true} />
+            <Button inverted color="orange" content={stepIndex || 0} disabled={true} />
             <Button
               inverted
               color="orange"
@@ -69,7 +68,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
 
 const useControllPanelSequenceOptionsViewModel = () => {
   const sequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
-  const step: SequenceStepCTO | null = useSelector(sequenceModelSelectors.selectCurrentStep);
+  const stepIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentStepIndex);
   const dispatch = useDispatch();
 
   // useEffect(() => {
@@ -95,12 +94,12 @@ const useControllPanelSequenceOptionsViewModel = () => {
   };
 
   // TODO: add in sequenceModelSlice.
-  const stepNext = () => {};
-  const stepBack = () => {};
+  const stepNext = () => { dispatch(SequenceModelActions.incrementCurrentStepIndex()) };
+  const stepBack = () => { dispatch(SequenceModelActions.decrementCurrentStepIndex()) };
 
   return {
     sequence,
-    step,
+    stepIndex,
     selectSequence,
     stepNext,
     stepBack,

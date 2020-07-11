@@ -43,13 +43,14 @@ export const SequenceActionReducer = {
     const filteredCompData: ComponentData[] = componenDatas.filter(
       (compData) => compData.componentFk === condition.componentFk
     );
+    let goTo: GoTo | undefined;
     condition.dataFks.forEach((dataFk) => {
       let isIncluded: boolean = filteredCompData.some((cd) => cd.dataFk === dataFk);
       if (condition.has !== isIncluded) {
-        return condition.elseGoTo;
+        goTo = condition.elseGoTo;
       }
     });
-    return condition.ifGoTo;
+    return goTo || condition.ifGoTo;
   },
 };
 

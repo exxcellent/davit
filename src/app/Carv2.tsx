@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { ErrorNotification } from "../components/common/fragments/ErrorNotification";
 import { ControllPanelController } from "../components/controllPanel/presentation/ControllPanelController";
-import { MetaComponentModelController } from "../components/metaComponentModel/presentation/MetaComponentModelController";
+import { MetaComponentModelController } from "../components/MetaComponentModel/presentation/MetaComponentModelController";
 import { MetaDataModelController } from "../components/metaDataModel/presentation/MetaDataModelController";
 import { SequenceModelController } from "../components/sequenceModel/SequenceModelController";
 import { SequenceTableModelController } from "../components/sequenceTableModel/presentation/SequenceTableModelController";

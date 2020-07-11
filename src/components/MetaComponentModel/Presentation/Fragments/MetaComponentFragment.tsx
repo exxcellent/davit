@@ -10,19 +10,24 @@ export interface MetaComponentFragmentProps {
   initalWidth?: number;
   initalHeigth?: number;
   dataFragments: ViewFragmentProps[];
+  onClick?: (id: number) => void;
 }
 
 export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps> = (props) => {
   const { initalName, dataFragments, initalWidth, initalHeigth } = props;
   return (
-    <Card raised style={{ width: initalWidth, height: initalHeigth }}>
+    <Card
+      raised
+      style={{ width: initalWidth, height: initalHeigth }}
+      onClick={props.onClick ? () => props.onClick!(props.id) : undefined}
+    >
       <Card.Content header={initalName}></Card.Content>
       {dataFragments.map(createViewFragment)}
     </Card>
   );
 };
 
-export const createMetaComponentFragment = (componentCTO: ComponentCTO, componentDatas: ViewFragmentProps[]) => {
+export const createMetaComponentFragment = (componentCTO: ComponentCTO, componentDatas: ViewFragmentProps[], onClick?: (id: number) => void) => {
   return (
     <MetaComponentFragment
       id={componentCTO.component.id}
@@ -30,6 +35,7 @@ export const createMetaComponentFragment = (componentCTO: ComponentCTO, componen
       initalColor={componentCTO.design.color}
       initalWidth={componentCTO.geometricalData.geometricalData.width}
       dataFragments={componentDatas}
+      onClick={onClick}
     />
   );
 };

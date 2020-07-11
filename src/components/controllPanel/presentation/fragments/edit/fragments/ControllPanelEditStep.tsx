@@ -23,7 +23,7 @@ import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditStepProps {}
+export interface ControllPanelEditStepProps { }
 
 export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps> = (props) => {
   const {
@@ -305,11 +305,12 @@ const useControllPanelEditSequenceStepViewModel = () => {
     }
   };
 
+  //TODO: das hat hier nicht verloren. Das ist Aufgabe vom Slice. Außerdem können wir auf keinen Fall jeden Step und jede Condition einzeln ans Backend schicken. DAs muss in einer bzw zwie Calls passieren
   const setRoot = () => {
     if (!isNullOrUndefined(stepToEdit)) {
       let copySequence: SequenceCTO = Carv2Util.deepCopy(selectedSequence);
-      copySequence.sequenceStepCTOs.map((step) => (step.squenceStepTO.root = false));
-      copySequence.conditions.map((cond) => (cond.root = false));
+      copySequence.sequenceStepCTOs.forEach((step) => (step.squenceStepTO.root = false));
+      copySequence.conditions.forEach((cond) => (cond.root = false));
       copySequence.sequenceStepCTOs.forEach((step) => dispatch(EditActions.step.save(step)));
       copySequence.conditions.forEach((cond) => dispatch(EditActions.condition.save(cond)));
       let copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);

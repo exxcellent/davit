@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
 import { DataSetupCTO } from "../../../dataAccess/access/cto/DataSetupCTO";
@@ -8,18 +7,20 @@ import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO"
 import { ActionTO } from "../../../dataAccess/access/to/ActionTO";
 import { ConditionTO } from "../../../dataAccess/access/to/ConditionTO";
 import { GroupTO } from "../../../dataAccess/access/to/GroupTO";
+import { InitDataTO } from "../../../dataAccess/access/to/InitDataTO";
 import { ActionType } from "../../../dataAccess/access/types/ActionType";
 import { EditActions, editSelectors } from "../../../slices/EditSlice";
 import { MasterDataActions, masterDataSelectors } from "../../../slices/MasterDataSlice";
-import { sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
+import { SequenceModelActions, sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
+import { ComponentData } from "../../../viewDataTypes/ComponentData";
 import { ViewFragmentProps } from "../../../viewDataTypes/ViewFragment";
 import { ViewFragmentState } from "../../../viewDataTypes/ViewFragmentState";
 import { MetaComponentDnDBox } from "./fragments/MetaComponentDnDBox";
 
-interface MetaComponentModelControllerProps {}
+interface MetaComponentModelControllerProps { }
 
 export const MetaComponentModelController: FunctionComponent<MetaComponentModelControllerProps> = (props) => {
-  const { components, getArrows, saveComp, groups, getComponentDatas, componentCTOToEdit } = useViewModel();
+  const { components, getArrows, saveComp, groups, getCompDatas, componentCTOToEdit, handleComponentClickEvent } = useViewModel();
 
   return (
     <MetaComponentDnDBox
@@ -28,7 +29,8 @@ export const MetaComponentModelController: FunctionComponent<MetaComponentModelC
       arrows={getArrows()}
       componentCTOToEdit={componentCTOToEdit}
       groups={groups}
-      componentDatas={getComponentDatas()}
+      componentDatas={getCompDatas()}
+      onClick={handleComponentClickEvent}
     />
   );
 };
@@ -52,6 +54,9 @@ const useViewModel = () => {
   const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.dataSetupToEdit);
   // ----- VIEW -----
   const arrows: Arrows[] = useSelector(sequenceModelSelectors.selectCurrentArrows);
+  const currentComponentDatas: ComponentData[] = useSelector(sequenceModelSelectors.selectComponentData);
+  const errors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
+  const actions: ActionTO[] = useSelector(sequenceModelSelectors.selectActions);
   // const selectedStep: SequenceStepCTO | null = useSelector(sequenceModelSelectors.selectCurrentStep);
   // const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
 
@@ -76,41 +81,72 @@ const useViewModel = () => {
     return allArrows;
   };
 
-  const getComponentDatas = (): ViewFragmentProps[] => {
+  const getCompDatas = () => {
     let compDatas: ViewFragmentProps[] = [];
-    stepToEdit?.actions.forEach((action) =>
-      compDatas.push({
-        partenId: action.componentFk,
-        name: getDataNameById(action.dataFk),
-        state: mapActionTypeToViewFragmentState(action.actionType),
-      })
-    );
-    if (!isNullOrUndefined(actionToEdit)) {
-      compDatas.push({
-        partenId: actionToEdit.componentFk,
-        name: getDataNameById(actionToEdit.dataFk),
-        state: mapActionTypeToViewFragmentState(actionToEdit.actionType),
-      });
-    }
-    if (!isNullOrUndefined(conditionToEdit)) {
-      conditionToEdit.dataFks.forEach((data) =>
-        compDatas.push({
-          partenId: conditionToEdit.componentFk,
-          name: getDataNameById(data),
-          state: conditionToEdit.has ? ViewFragmentState.CHECKED : ViewFragmentState.DELETED,
-        })
-      );
-    }
-    if (!isNullOrUndefined(dataSetupToEdit)) {
-      dataSetupToEdit.initDatas.forEach((initData) =>
-        compDatas.push({
-          partenId: initData.componentFk,
-          name: getDataNameById(initData.dataFk),
-          state: ViewFragmentState.NEW,
-        })
-      );
+    compDatas.push(...getComponentDatasFromView())
+    compDatas.push(...getComponentDatasFromEdit())
+    return compDatas;
+  }
+
+  const getComponentDatasFromView = (): ViewFragmentProps[] => {
+    let compDatas: ViewFragmentProps[] = [];
+    const compDatasFromErros: ViewFragmentProps[] = errors.map(mapActionToComponentDatas);
+    const compDatasFromActions: ViewFragmentProps[] = actions.map(mapActionToComponentDatas);
+    const compDatasFromCompDatas: ViewFragmentProps[] = currentComponentDatas.map(mapComponentDataToCompoenntData);
+    compDatas.push(...compDatasFromErros);
+    compDatas.push(...(compDatasFromActions.filter(compDataFromAction => !compDatas.some(cp => compDataExists(cp, compDataFromAction)))));
+    compDatas.push(...(compDatasFromCompDatas.filter(compDataFromCompData => !compDatas.some(cp => compDataExists(cp, compDataFromCompData)))));
+    return compDatas;
+  }
+
+  const getComponentDatasFromEdit = (): ViewFragmentProps[] => {
+    let compDatas: ViewFragmentProps[] = [];
+    const compDatasFromStepToEdit: ViewFragmentProps[] = stepToEdit?.actions.map(mapActionToComponentDatas) || [];
+    const compDataFromActionToEdit: ViewFragmentProps | undefined = actionToEdit ? mapActionToComponentDatas(actionToEdit) : undefined;
+    const compDataFromCondittionToEdit: ViewFragmentProps[] = mapConditionToCompData(conditionToEdit);
+    const compDatasFromDataSetup: ViewFragmentProps[] = dataSetupToEdit ? dataSetupToEdit.initDatas.map(mapInitDataToCompData) : [];
+    compDatas.push(...compDatasFromStepToEdit);
+    compDatas.push(...compDataFromCondittionToEdit);
+    compDatas.push(...compDatasFromDataSetup);
+    if (compDataFromActionToEdit) {
+      compDatas.push(compDataFromActionToEdit);
     }
     return compDatas;
+  };
+
+  const compDataExists = (propOne: ViewFragmentProps, propTwo: ViewFragmentProps) => {
+    return propOne.partenId === propTwo.partenId && propOne.name === propTwo.name
+  }
+
+  function mapActionToComponentDatas(errorItem: ActionTO): ViewFragmentProps {
+    const state: ViewFragmentState = mapActionTypeToViewFragmentState(errorItem.actionType);
+    return { name: getDataNameById(errorItem.dataFk), state: state, partenId: errorItem.componentFk };
+  }
+
+  const mapComponentDataToCompoenntData = (compData: ComponentData): ViewFragmentProps => {
+    return { name: getDataNameById(compData.dataFk), partenId: compData.componentFk, state: ViewFragmentState.PERSISTENT };
+  }
+
+  const mapConditionToCompData = (condition: ConditionTO | null): ViewFragmentProps[] => {
+    let props: ViewFragmentProps[] = [];
+    if (condition) {
+      props = condition.dataFks.map((data) => {
+        return {
+          partenId: condition.componentFk,
+          name: getDataNameById(data),
+          state: condition.has ? ViewFragmentState.CHECKED : ViewFragmentState.DELETED,
+        }
+      })
+    }
+    return props;
+  }
+
+  const mapInitDataToCompData = (initData: InitDataTO): ViewFragmentProps => {
+    return {
+      partenId: initData.componentFk,
+      name: getDataNameById(initData.dataFk),
+      state: ViewFragmentState.NEW,
+    }
   };
 
   const getDataNameById = (id: number): string => {
@@ -139,6 +175,7 @@ const useViewModel = () => {
     getArrows,
     saveComp,
     groups,
-    getComponentDatas,
+    getCompDatas,
+    handleComponentClickEvent: (componentId: number) => dispatch(SequenceModelActions.handleComponentClickEvent(componentId)),
   };
 };

@@ -16,10 +16,11 @@ interface MetaDataDnDBox {
   dataRelations: DataRelationTO[];
   componentDatas: ViewFragmentProps[];
   onSaveCallBack: (dataCTO: DataCTO) => void;
+  onClick: (dataId: number) => void;
 }
 
 export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
-  const { dataCTOs, dataCTOToEdit, onSaveCallBack, dataRelations, dataRelationToEdit, componentDatas } = props;
+  const { dataCTOs, dataCTOToEdit, onSaveCallBack, dataRelations, dataRelationToEdit, componentDatas, onClick } = props;
 
   const constraintsRef = useRef(null);
 
@@ -54,7 +55,8 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
   const createDnDMetaDataFragment = (dataCTO: DataCTO) => {
     let metaDataFragment = createMetaDataFragment(
       dataCTO,
-      componentDatas.filter((comp) => comp.partenId === dataCTO.data.id)
+      componentDatas.filter((comp) => comp.partenId === dataCTO.data.id),
+      onClick
     );
     return createDnDItem(dataCTO.geometricalData, onPositionUpdate, constraintsRef, metaDataFragment);
   };

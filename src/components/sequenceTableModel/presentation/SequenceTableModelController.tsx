@@ -3,10 +3,11 @@ import { useSelector } from "react-redux";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
+import { GoToTypes, Terminal } from "../../../dataAccess/access/types/GoToType";
 import { masterDataSelectors } from "../../../slices/MasterDataSlice";
-import { sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
+import { CalculatedStep, sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
 
-interface SequenceTableModelControllerProps {}
+interface SequenceTableModelControllerProps { }
 
 export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (props) => {
   const { title, getTableBody } = useSequenceTableViewModel();
@@ -33,42 +34,59 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
   );
 };
 
-interface RowProps {
-  index: number;
-  name: string;
-  sender: string;
-  receiver: string;
-}
-
 const useSequenceTableViewModel = () => {
   const sequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
   const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
-  const selectedStep: SequenceStepCTO | null = useSelector(sequenceModelSelectors.selectCurrentStep);
+  const stepIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentStepIndex);
+  const calcSteps: CalculatedStep[] = useSelector(sequenceModelSelectors.selectCalcSteps);
+  const terminalStep: Terminal | null = useSelector(sequenceModelSelectors.selectTerminalStep);
+  const loopStepStartIndex: number | null = useSelector(sequenceModelSelectors.selectLoopStepStartIndex);
 
-  const createStepColumn = (step: SequenceStepCTO): JSX.Element => {
-    const trClass: string = selectedStep?.squenceStepTO.id === step.squenceStepTO.id ? "carv2TrMarked" : "carv2Tr";
+  const createStepColumn = (step: CalculatedStep, index: number): JSX.Element => {
+    let trClass: string = loopStepStartIndex && loopStepStartIndex <= index ? "carv2TrTerminalError" : "carv2Tr";
+    if (index === stepIndex) {
+      trClass = "carv2TrMarked";
+    }
+    const modelStep: SequenceStepCTO | undefined = sequence?.sequenceStepCTOs.find(item => item.squenceStepTO.id === step.stepFk);
+    const name = index === 0 && !modelStep ? "Initial" : modelStep?.squenceStepTO.name || "Step not found";
+    const source = index === 0 && !modelStep ? "" : modelStep ? getComponentNameById(modelStep.squenceStepTO.sourceComponentFk) : "Source not found";
+    const target = index === 0 && !modelStep ? "" : modelStep ? getComponentNameById(modelStep.squenceStepTO.targetComponentFk) : "Target not found";
     return (
-      <tr key={step.squenceStepTO.id} className={trClass}>
-        <td className="carv2Td">{step.squenceStepTO.index}</td>
-        <td className="carv2Td">{step.squenceStepTO.name}</td>
-        <td className="carv2Td">{getComponentNameById(step.squenceStepTO.sourceComponentFk)}</td>
-        <td className="carv2Td">{getComponentNameById(step.squenceStepTO.targetComponentFk)}</td>
+      <tr key={index} className={trClass}>
+        <td className="carv2Td">{index}</td>
+        <td className="carv2Td">{name}</td>
+        <td className="carv2Td">{source}</td>
+        <td className="carv2Td">{target}</td>
       </tr>
     );
   };
 
+  const createTerminalColumn = (terminal: Terminal): JSX.Element => {
+    const className = terminal.type === GoToTypes.ERROR ? "carv2TrTerminalError" : "carv2TrTerminalSuccess";
+    return (<tr key={"Terminal"} className={className}>
+      <td>{" "}</td><td>{terminal.type}</td><td>{" "}</td><td>{" "}</td>
+    </tr>)
+  }
+
   const getTableBody = () => {
     let list: JSX.Element[] = [];
-    if (sequence) {
-      sequence.sequenceStepCTOs.forEach((step) => {
-        list.push(createStepColumn(step));
-      });
+    list = calcSteps.map(createStepColumn);
+    if (terminalStep) {
+      list.push(createTerminalColumn(terminalStep))
     }
-    while (list.length > 10) {
-      list.push(<tr> </tr>);
+    let key: number = list.length;
+    while (list.length < 10) {
+      list.push(createEmptyRow(key.toString(), "carv2Tr"));
+      key++;
     }
     return list;
   };
+
+  const createEmptyRow = (key: string, className?: string): JSX.Element => {
+    return (<tr key={key} className={className}>
+      <td>{" "}</td><td>{" "}</td><td>{" "}</td><td>{" "}</td>
+    </tr>)
+  }
 
   const getComponentNameById = (id: number): string => {
     return components.find((comp) => comp.component.id === id)?.component.name || "Could not find Component!";
@@ -76,7 +94,6 @@ const useSequenceTableViewModel = () => {
 
   return {
     title: sequence ? sequence.sequenceTO.name : "Select Sequence ...",
-    // tableBody: sequence?.sequenceStepCTOs.map(createStepColumn),
     getTableBody,
   };
 };
