@@ -76,7 +76,14 @@ const SequenceModelSlice = createSlice({
       }
     },
     setCurrentStepIndex: (state, action: PayloadAction<number>) => {
-      state.currentStepIndex = action.payload;
+      let filteredSteps: CalculatedStep[] = [];
+      if (state.calcSequence) {
+        filteredSteps = filterSteps(state.calcSequence.steps, state.activeFilter, state.selectedSequenceModel?.sequenceStepCTOs || []);
+      }
+      const newStepIndex = action.payload;
+      if (state.calcSequence && newStepIndex > 0 && newStepIndex < filteredSteps.length) {
+        state.currentStepIndex = action.payload;
+      }
     },
     incrementCurrentStepIndex: (state) => {
       let filteredSteps: CalculatedStep[] = [];

@@ -94,8 +94,8 @@ const useControllPanelSequenceOptionsViewModel = () => {
   };
 
   // TODO: add in sequenceModelSlice.
-  const stepNext = () => { dispatch(SequenceModelActions.incrementCurrentStepIndex()) };
-  const stepBack = () => { dispatch(SequenceModelActions.decrementCurrentStepIndex()) };
+  const stepNext = () => { dispatch(SequenceModelActions.setCurrentStepIndex(stepIndex + 1)) };
+  const stepBack = () => { dispatch(SequenceModelActions.setCurrentStepIndex(stepIndex - 1)) };
 
   return {
     sequence,
