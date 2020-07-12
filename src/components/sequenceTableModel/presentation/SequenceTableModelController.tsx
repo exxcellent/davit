@@ -1,11 +1,11 @@
 import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
 import { GoToTypes, Terminal } from "../../../dataAccess/access/types/GoToType";
 import { masterDataSelectors } from "../../../slices/MasterDataSlice";
-import { CalculatedStep, sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
+import { CalculatedStep, SequenceModelActions, sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
 
 interface SequenceTableModelControllerProps { }
 
@@ -35,6 +35,9 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
 };
 
 const useSequenceTableViewModel = () => {
+
+  const dispatch = useDispatch();
+
   const sequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
   const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
   const stepIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentStepIndex);
@@ -52,7 +55,7 @@ const useSequenceTableViewModel = () => {
     const source = index === 0 && !modelStep ? "" : modelStep ? getComponentNameById(modelStep.squenceStepTO.sourceComponentFk) : "Source not found";
     const target = index === 0 && !modelStep ? "" : modelStep ? getComponentNameById(modelStep.squenceStepTO.targetComponentFk) : "Target not found";
     return (
-      <tr key={index} className={trClass}>
+      <tr key={index} className={trClass} onClick={() => handleTableClickEvent(index)}>
         <td className="carv2Td">{index}</td>
         <td className="carv2Td">{name}</td>
         <td className="carv2Td">{source}</td>
@@ -70,7 +73,7 @@ const useSequenceTableViewModel = () => {
 
   const getTableBody = () => {
     let list: JSX.Element[] = [];
-    list = calcSteps.map(createStepColumn);
+    list = calcSteps.map((step, index) => createStepColumn(step, index));
     if (terminalStep) {
       list.push(createTerminalColumn(terminalStep))
     }
@@ -91,6 +94,10 @@ const useSequenceTableViewModel = () => {
   const getComponentNameById = (id: number): string => {
     return components.find((comp) => comp.component.id === id)?.component.name || "Could not find Component!";
   };
+
+  const handleTableClickEvent = (index: number) => {
+    dispatch(SequenceModelActions.setCurrentStepIndex(index));
+  }
 
   return {
     title: sequence ? sequence.sequenceTO.name : "Select Sequence ...",
