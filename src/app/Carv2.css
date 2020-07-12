@@ -1,0 +1,428 @@
+.carvGridContainer {
+  display: grid;
+  grid-template-columns: 4em 1fr 1fr;
+  grid-template-rows: minmax(8em, 8em) 1fr 1fr;
+  grid-template-areas:
+    "leftBar header header"
+    "leftBar compModel seqModel"
+    "leftBar dataModel seqTabel";
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  background-color: var(--carv2-background-color);
+}
+.componentPage {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  background-color: var(--carv2-background-color);
+  grid-template-areas:
+  "compModel";
+}
+
+.notificationPanel {
+  grid-column-start: 2;
+  grid-column-end: 4;
+  grid-row-start: 4;
+  grid-row-end: 4;
+  justify-self: center;
+}
+
+.leftPanel {
+  grid-area: leftBar;
+  justify-self: center;
+
+  background-color: var(--carv2-background-color-lidebar);
+}
+
+.controllerHeader {
+  grid-area: header;
+  padding: 10px;
+  background-color: var(--carv2-background-color-header);
+
+  border-style: solid;
+  border-width: 0 0 5px 0;
+  border-image: linear-gradient(to bottom, var(--carv2-background-color-shadow), var(--carv2-background-color)) 1 1 100%;
+}
+
+.componentModel {
+  grid-area: compModel;
+  border-style: solid;
+  border-width: 0 2px 2px 0;
+  border-image: linear-gradient(
+      to bottom,
+      transparent,
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      transparent
+    )
+    0 100%;
+
+  /* height: 45vh; */
+}
+
+.dataModel {
+  grid-area: dataModel;
+  border-style: solid;
+  border-width: 2px 0 0 0;
+  border-image: linear-gradient(
+      to right,
+      transparent,
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      transparent
+    )
+    1 1 100%;
+}
+
+.sequencModel {
+  grid-area: seqModel;
+  border-style: solid;
+  border-width: 0 0 2px 0;
+  border-image: linear-gradient(
+      to right,
+      transparent,
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      transparent
+    )
+    1 1 100%;
+}
+
+.sequenceTable {
+  grid-area: seqTabel;
+  border-style: solid;
+  border-width: 0 0 0 2px;
+  border-image: linear-gradient(
+      to bottom,
+      transparent,
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      transparent
+    )
+    0 100%;
+  /* overflow-y: auto; */
+  padding: 10px;
+}
+
+.dataSVGArea {
+  grid-area: dataModel;
+  overflow: "visible";
+  stroke: "black";
+  position: "absolute";
+  width: 100%;
+  height: 100%;
+}
+
+.componentSVGArea {
+  grid-area: compModel;
+  overflow: "visible";
+  stroke: "black";
+  position: "absolute";
+  width: 100%;
+  height: 100%;
+}
+
+.controllPanelView {
+  display: flex;
+  justify-content: flex-start;
+}
+.controllPanelViewChild {
+  margin: 10px;
+}
+
+.carv2Table {
+  border: 1px solid var(--carv2-color-primary);
+  border-collapse: collapse;
+  /* border-top-left-radius: 5px; */
+  width: 100%;
+  max-width: 100%;
+  color: var(--carv2-text-color);
+  text-align: center;
+  background-color: var(--carv2-background-color-header);
+  font-size: 0.9em;
+  overflow-y: scroll;
+}
+
+.carv2Th {
+  padding: 0.5em;
+  border-bottom: 2px solid var(--carv2-color-primary);
+}
+.carv2Tr {
+  background-color: var(--carv2-background-color-shadow);
+  height: 2.5em;
+}
+
+.carv2TrMarked {
+  background-color: var(--carv2-color-secondary);
+  height: 2.5em;
+}
+
+.carv2TrTerminalError {
+  background-color: var(--carv2-data-delete-color);
+  height: 2.5em;
+}
+.carv2TrTerminalSuccess {
+  background-color: var(--carv2-data-add-color);
+  height: 2.5em;
+}
+
+.carv2Td {
+  /* border: 1px solid var(--carv2-color-primary); */
+  border-bottom: 1px solid var(--carv2-color-primary);
+  padding: 0.5em;
+}
+
+.carv2ComponentDataNEW {
+  background-color: var(--carv2-data-add-color) !important;
+  color: var(--carv2-data-text-color) !important;
+}
+.carv2ComponentDataPERSISTENT {
+  background-color: var(--carv2-data-persistent-color) !important;
+  color: var(--carv2-data-text-color) !important;
+}
+.carv2ComponentDataDELETED {
+  background-color: var(--carv2-data-delete-color) !important;
+  color: var(--carv2-data-text-color) !important;
+}
+
+.carv2ComponentDataADD {
+  background-color: var(--carv2-background-color-header) !important;
+  color: var(--carv2-text-color) !important;
+  box-shadow: 6px 6px 10px var(--carv2-data-add-color) inset !important;
+}
+.carv2ComponentDataCHECK {
+  background-color: var(--carv2-background-color-header) !important;
+  color: var(--carv2-text-color) !important;
+  box-shadow: 6px 6px 10px var(--carv2-data-persistent-color) inset !important;
+}
+.carv2ComponentDataDELETE {
+  background-color: var(--carv2-background-color-header) !important;
+  color: var(--carv2-text-color) !important;
+  box-shadow: 6px 6px 10px var(--carv2-data-delete-color) inset !important;
+}
+
+.ui.inverted.orange.button,
+.ui.inverted.orange.buttons .button {
+  background-color: transparent;
+  box-shadow: 0 0 0 2px var(--carv2-color-secondary) inset !important;
+  color: var(--carv2-color-secondary);
+}
+
+.ui.inverted.orange.button:focus,
+.ui.inverted.orange.buttons .button:focus,
+.ui.inverted.orange.orange.button:hover,
+.ui.inverted.orange.orange.buttons .button:hover {
+  background-color: var(--carv2-color-secondary);
+  color: transparent !important;
+}
+
+.ui.orange.label,
+.ui.orange.labels .label {
+  background-color: var(--carv2-color-secondary) !important;
+  border-color: var(--carv2-color-secondary) !important;
+  color: var(--carv2-text-color) !important;
+  text-align: center;
+  vertical-align: center !important;
+}
+
+#buttonGroupLabel {
+  opacity: 1 !important;
+  color: var(--carv2-text-color);
+}
+
+.ui.buttons .button,
+.ui.button {
+  background-color: transparent;
+  box-shadow: 0 0 0 2px var(--carv2-color-secondary) inset, 0 0 0 0 rgba(34, 36, 38, 0.15) inset !important;
+}
+
+.ui.button:hover {
+  background-color: var(--carv2-color-secondary);
+  color: var(--carv2-text-color);
+  box-shadow: 0 0 0 2px var(--carv2-color-secondary) inset, 0 0 0 0 rgba(34, 36, 38, 0.15) inset !important;
+}
+
+.carvPath {
+  stroke: var(--carv2-color-secondary);
+  stroke-width: 2px;
+  fill: transparent;
+}
+.carvStrokeDasharray {
+  stroke-dasharray: 0.5em;
+  stroke-width: 3px;
+}
+
+.carvArrowMarker {
+  fill: var(--carv2-color-secondary);
+}
+
+i.icon::before {
+  color: var(--carv2-color-primary);
+}
+
+i.icon.delete::before :hover {
+  color: red;
+}
+
+.ui.card > .content > .header,
+.ui.cards > .card > .content > .header {
+  color: white;
+}
+
+.ui.card,
+.ui.cards > .card {
+  background-color: var(--carv2-background-color-header);
+}
+
+.ui.table td.active,
+.ui.table tr.active {
+  background: var(--carv2-color-secondary) !important;
+  color: black !important;
+}
+
+.ui.toggle.checkbox input:focus:checked ~ .box::before,
+.ui.toggle.checkbox input:focus:checked ~ label::before {
+  background-color: var(--carv2-color-secondary) !important;
+}
+
+.ui.toggle.checkbox input:checked ~ .box::before,
+.ui.toggle.checkbox input:checked ~ label::before {
+  background-color: var(--carv2-color-secondary) !important;
+}
+
+.ui.checkbox input:checked ~ .box::after,
+.ui.checkbox input:checked ~ label::after {
+  color: var(--carv2-text-color) !important;
+}
+
+.ui.checkbox .box::before,
+.ui.checkbox label::before {
+  border: 2px solid var(--carv2-color-secondary) !important;
+}
+
+.ui.labeled.input > .label {
+  background-color: var(--carv2-color-secondary);
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.ui.input > input,
+.ui.input.focus > input {
+  background-color: transparent !important;
+  color: var(--carv2-text-color) !important;
+  border: 2px solid var(--carv2-color-secondary) !important;
+}
+
+input::selection,
+textarea::selection {
+  background-color: var(--carv2-color-secondary) !important;
+}
+
+.ui.input {
+  background-color: transparent !important;
+  color: var(--carv2-text-color);
+}
+
+.ui.input.focus > input::placeholder,
+.ui.input > input:focus::placeholder {
+  background-color: transparent !important;
+  color: var(--carv2-text-color);
+}
+
+.ui.default.dropdown:not(.button) > .text,
+.ui.dropdown:not(.button) > .default.text {
+  color: rgba(250, 250, 250, 0.6);
+}
+
+.ui.selection.dropdown {
+  background-color: transparent;
+  border: solid 2px var(--carv2-color-secondary);
+  color: var(--carv2-text-color);
+}
+.ui.selection.dropdown:hover {
+  background-color: var(--carv2-color-secondary);
+  color: var(--carv2-text-color);
+  border: solid 2px var(--carv2-color-secondary);
+}
+.ui.selection.dropdown:focus {
+  border: solid 2px var(--carv2-color-secondary);
+  color: var(--carv2-color-secondary);
+}
+
+.ui.dropdown .menu > .item:hover,
+.ui.dropdown .menu .selected.item > item:hover {
+  background-color: var(--carv2-color-secondary);
+  color: var(--carv2-text-color);
+}
+
+.ui.dropdown .menu .selected.item,
+.ui.dropdown.selected {
+  background-color: var(--carv2-color-secondary);
+  opacity: 0.5;
+}
+
+.ui.selection.active.dropdown:hover,
+.ui.selection.active.dropdown:focus {
+  background-color: var(--carv2-color-secondary);
+  color: var(--carv2-text-color);
+}
+
+.carv2label {
+  color: var(--carv2-text-color) !important;
+}
+
+.pLeft1 {
+  padding-left: 0.5em;
+}
+
+:root {
+  --carv2-background-color: rgb(134, 134, 134);
+  --carv2-background-color-header: rgba(0, 0, 0, 0.5);
+  /* --carv2-background-color-header: rgb(23, 47, 48); */
+  --carv2-background-color-shadow: black;
+  --carv2-color-primary: #e0e1e2;
+  /* --carv2-color-secondary: #3bc97b; */
+  --carv2-color-secondary: #00cdf1;
+  /* --carv2-color-secondary: #f17000; */
+  /* --carv2-color-secondary: #6d00c7; */
+  /* --carv2-color-primary: orange; */
+  --carv2-background-color-lidebar: rgba(0, 0, 0, 0.3);
+  --carv2-text-color: white;
+  --carv2-data-add-color: #6cbf8f;
+  --carv2-data-delete-color: #af0837;
+  --carv2-data-persistent-color: #c8c8c8;
+  --carv2-data-text-color: black;
+}
+
+.controllPanelEdit {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  height: 100%;
+}
+
+.controllPanelEditChild {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.columnDivider {
+  display: flex;
+  border-style: solid;
+  border-width: 0 0 0 2px;
+  border-image: linear-gradient(to bottom, transparent, #e0e1e2, #e0e1e2, #e0e1e2, #e0e1e2, transparent) 0 100%;
+  /* padding-right: 10px; size of gutter */
+  /* padding-right: 10px; size of gutter */
+}

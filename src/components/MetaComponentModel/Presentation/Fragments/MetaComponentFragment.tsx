@@ -1,41 +1,41 @@
 import React, { FunctionComponent } from "react";
-import styled from "styled-components";
-import { CarvButton } from "../../../common/styles/Button";
+import { Card } from "semantic-ui-react";
+import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
+import { createViewFragment, ViewFragmentProps } from "../../../../viewDataTypes/ViewFragment";
 
 export interface MetaComponentFragmentProps {
-  name: string;
   id: number;
-  editCallBack: () => void;
+  initalName: string;
+  initalColor: string;
+  initalWidth?: number;
+  initalHeigth?: number;
+  dataFragments: ViewFragmentProps[];
+  onClick?: (id: number) => void;
 }
 
-export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps> = (
-  props
-) => {
-  const { name, id, editCallBack } = props;
-
-  // Styling
-  const MetaComponent = styled.div`
-    padding: 10px;
-    width: 10em;
-    height: 10em;
-    background-color: ${(props) => props.theme.backgroundcolor};
-    border-radius: ${(props) => props.theme.borderRadius.popup};
-  `;
-
+export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps> = (props) => {
+  const { initalName, dataFragments, initalWidth, initalHeigth } = props;
   return (
-    <MetaComponent>
-      <CarvButton
-        name="Add button"
-        icon="plus-square"
-        onClickCallback={editCallBack}
-      />
-      <label>{name}</label>
-      <CarvButton
-        name="Edit Button"
-        icon="ellipsis-h"
-        onClickCallback={editCallBack}
-      />
-      <label>ID: {id}</label>
-    </MetaComponent>
+    <Card
+      raised
+      style={{ width: initalWidth, height: initalHeigth }}
+      onClick={props.onClick ? () => props.onClick!(props.id) : undefined}
+    >
+      <Card.Content header={initalName}></Card.Content>
+      {dataFragments.map(createViewFragment)}
+    </Card>
+  );
+};
+
+export const createMetaComponentFragment = (componentCTO: ComponentCTO, componentDatas: ViewFragmentProps[], onClick?: (id: number) => void) => {
+  return (
+    <MetaComponentFragment
+      id={componentCTO.component.id}
+      initalName={componentCTO.component.name}
+      initalColor={componentCTO.design.color}
+      initalWidth={componentCTO.geometricalData.geometricalData.width}
+      dataFragments={componentDatas}
+      onClick={onClick}
+    />
   );
 };
