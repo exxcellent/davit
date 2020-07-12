@@ -42,7 +42,7 @@ export const MetaComponentDnDBox: React.FunctionComponent<MetaComponentDnDBox> =
   const createDnDMetaComponent = (componentCTO: ComponentCTO) => {
     let metaComponentFragment = createMetaComponentFragment(
       componentCTO,
-      componentDatas.filter((compdata) => compdata.partenId === componentCTO.component.id),
+      componentDatas.filter((compdata) => compdata.parentId === componentCTO.component.id),
       onClick
     );
     let shadow: string = "";

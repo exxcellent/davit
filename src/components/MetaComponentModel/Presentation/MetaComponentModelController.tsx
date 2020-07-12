@@ -115,16 +115,16 @@ const useViewModel = () => {
   };
 
   const compDataExists = (propOne: ViewFragmentProps, propTwo: ViewFragmentProps) => {
-    return propOne.partenId === propTwo.partenId && propOne.name === propTwo.name
+    return propOne.parentId === propTwo.parentId && propOne.name === propTwo.name
   }
 
   function mapActionToComponentDatas(errorItem: ActionTO): ViewFragmentProps {
     const state: ViewFragmentState = mapActionTypeToViewFragmentState(errorItem.actionType);
-    return { name: getDataNameById(errorItem.dataFk), state: state, partenId: errorItem.componentFk };
+    return { name: getDataNameById(errorItem.dataFk), state: state, parentId: errorItem.componentFk };
   }
 
   const mapComponentDataToCompoenntData = (compData: ComponentData): ViewFragmentProps => {
-    return { name: getDataNameById(compData.dataFk), partenId: compData.componentFk, state: ViewFragmentState.PERSISTENT };
+    return { name: getDataNameById(compData.dataFk), parentId: compData.componentFk, state: ViewFragmentState.PERSISTENT };
   }
 
   const mapConditionToCompData = (condition: ConditionTO | null): ViewFragmentProps[] => {
@@ -132,7 +132,7 @@ const useViewModel = () => {
     if (condition) {
       props = condition.dataFks.map((data) => {
         return {
-          partenId: condition.componentFk,
+          parentId: condition.componentFk,
           name: getDataNameById(data),
           state: condition.has ? ViewFragmentState.CHECKED : ViewFragmentState.DELETED,
         }
@@ -143,7 +143,7 @@ const useViewModel = () => {
 
   const mapInitDataToCompData = (initData: InitDataTO): ViewFragmentProps => {
     return {
-      partenId: initData.componentFk,
+      parentId: initData.componentFk,
       name: getDataNameById(initData.dataFk),
       state: ViewFragmentState.NEW,
     }

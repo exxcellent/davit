@@ -3,7 +3,7 @@ import { Card } from "semantic-ui-react";
 import { ViewFragmentState } from "./ViewFragmentState";
 
 export interface ViewFragmentProps {
-  partenId: number;
+  parentId: number;
   state: ViewFragmentState;
   name: string;
 }

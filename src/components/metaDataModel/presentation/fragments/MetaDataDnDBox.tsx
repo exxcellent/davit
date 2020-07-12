@@ -55,7 +55,7 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
   const createDnDMetaDataFragment = (dataCTO: DataCTO) => {
     let metaDataFragment = createMetaDataFragment(
       dataCTO,
-      componentDatas.filter((comp) => comp.partenId === dataCTO.data.id),
+      componentDatas.filter((comp) => comp.parentId === dataCTO.data.id),
       onClick
     );
     return createDnDItem(dataCTO.geometricalData, onPositionUpdate, constraintsRef, metaDataFragment);
