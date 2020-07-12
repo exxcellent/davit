@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { Button } from "semantic-ui-react";
 import { EditActions } from "../../slices/EditSlice";
 
-export interface SidePanelProps {}
+export interface SidePanelProps { }
 
 export const SidePanelController: FunctionComponent<SidePanelProps> = (props) => {
   const { setModeToEdit, setModeToFile, setModeToView } = useSidePanelViewModel();

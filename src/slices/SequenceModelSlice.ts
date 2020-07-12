@@ -81,22 +81,8 @@ const SequenceModelSlice = createSlice({
         filteredSteps = filterSteps(state.calcSequence.steps, state.activeFilter, state.selectedSequenceModel?.sequenceStepCTOs || []);
       }
       const newStepIndex = action.payload;
-      if (state.calcSequence && newStepIndex > 0 && newStepIndex < filteredSteps.length) {
+      if (state.calcSequence && newStepIndex >= 0 && newStepIndex < filteredSteps.length) {
         state.currentStepIndex = action.payload;
-      }
-    },
-    incrementCurrentStepIndex: (state) => {
-      let filteredSteps: CalculatedStep[] = [];
-      if (state.calcSequence) {
-        filteredSteps = filterSteps(state.calcSequence.steps, state.activeFilter, state.selectedSequenceModel?.sequenceStepCTOs || []);
-      }
-      if (state.calcSequence && state.currentStepIndex < filteredSteps.length - 1) {
-        state.currentStepIndex = state.currentStepIndex + 1;
-      }
-    },
-    decrementCurrentStepIndex: (state) => {
-      if (state.calcSequence && state.currentStepIndex > 0) {
-        state.currentStepIndex = state.currentStepIndex - 1;
       }
     },
     setErrorActions: (state, action: PayloadAction<ActionTO[]>) => {
@@ -349,8 +335,6 @@ export const SequenceModelActions = {
   resetCurrentStepIndex: SequenceModelSlice.actions.setCurrentStepIndex(-1),
   resetCurrentSequence: SequenceModelSlice.actions.setSelectedSequence(null),
   setCurrentStepIndex: SequenceModelSlice.actions.setCurrentStepIndex,
-  incrementCurrentStepIndex: SequenceModelSlice.actions.incrementCurrentStepIndex,
-  decrementCurrentStepIndex: SequenceModelSlice.actions.decrementCurrentStepIndex,
   handleComponentClickEvent,
   handleDataClickEvent,
 };

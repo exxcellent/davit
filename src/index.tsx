@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { IntlProvider } from "react-intl";
 import { Provider } from "react-redux";
+import { BrowserRouter } from 'react-router-dom';
 import "semantic-ui-css/semantic.min.css";
 import { Carv2 } from "./app/Carv2";
 import { store } from "./app/store";
@@ -21,7 +22,9 @@ const localeData = languages[locale];
 ReactDOM.render(
   <Provider store={store}>
     <IntlProvider locale={locale} messages={localeData}>
-      <Carv2 />
+      <BrowserRouter>
+        <Carv2 />
+      </BrowserRouter>
     </IntlProvider>
   </Provider>,
   document.getElementById("root")

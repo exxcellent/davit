@@ -44,16 +44,16 @@ export interface StepAction {
 interface EditState {
   mode: Mode;
   objectToEdit:
-    | ComponentCTO
-    | DataCTO
-    | DataRelationTO
-    | SequenceTO
-    | SequenceStepCTO
-    | StepAction
-    | DataSetupCTO
-    | GroupTO
-    | ConditionTO
-    | {};
+  | ComponentCTO
+  | DataCTO
+  | DataRelationTO
+  | SequenceTO
+  | SequenceStepCTO
+  | StepAction
+  | DataSetupCTO
+  | GroupTO
+  | ConditionTO
+  | {};
 }
 const getInitialState: EditState = {
   objectToEdit: {},
