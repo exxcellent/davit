@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../app/store";
-import { Arrows as Arrow } from "../components/MetaComponentModel/presentation/MetaComponentModelController";
+import { Arrows as Arrow } from "../components/metaComponentModel/presentation/MetaComponentModelController";
 import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
@@ -27,7 +27,7 @@ export interface CalcSequence {
 
 export interface Filter {
   type: "COMPONENT" | "DATA";
-  id: number
+  id: number;
 }
 
 interface SequenceModelState {
@@ -78,7 +78,11 @@ const SequenceModelSlice = createSlice({
     setCurrentStepIndex: (state, action: PayloadAction<number>) => {
       let filteredSteps: CalculatedStep[] = [];
       if (state.calcSequence) {
-        filteredSteps = filterSteps(state.calcSequence.steps, state.activeFilter, state.selectedSequenceModel?.sequenceStepCTOs || []);
+        filteredSteps = filterSteps(
+          state.calcSequence.steps,
+          state.activeFilter,
+          state.selectedSequenceModel?.sequenceStepCTOs || []
+        );
       }
       const newStepIndex = action.payload;
       if (state.calcSequence && newStepIndex >= 0 && newStepIndex < filteredSteps.length) {
@@ -97,12 +101,12 @@ const SequenceModelSlice = createSlice({
     setFilter: (state, action: PayloadAction<Filter[]>) => {
       state.activeFilter = action.payload;
       state.currentStepIndex = 0;
-    }
+    },
   },
 });
 
 function calcSequenceAndSetState(sequenceModel: SequenceCTO, dataSetup: DataSetupCTO, state: SequenceModelState) {
-  const result: { sequence: CalcSequence; loopStartingStepIndex?: number; } = calculateSequence(
+  const result: { sequence: CalcSequence; loopStartingStepIndex?: number } = calculateSequence(
     sequenceModel,
     dataSetup
   );
@@ -250,70 +254,114 @@ const filterSteps = (steps: CalculatedStep[], filter: Filter[], modelSteps: Sequ
   if (filter.length === 0) {
     return steps;
   }
-  return steps.filter(step => filter.some(currentFilter => {
-    const actions: ActionTO[] = modelSteps.find(modelStep => modelStep.squenceStepTO.id === step.stepFk)?.actions || [];
-    switch (currentFilter.type) {
-      case "COMPONENT":
-        return actions.some(action => action.componentFk === currentFilter.id);
-      case "DATA":
-        return actions.some(action => action.dataFk === currentFilter.id);
-      default:
-        return false;
-    }
-  }))
+  return steps.filter((step) =>
+    filter.some((currentFilter) => {
+      const actions: ActionTO[] =
+        modelSteps.find((modelStep) => modelStep.squenceStepTO.id === step.stepFk)?.actions || [];
+      switch (currentFilter.type) {
+        case "COMPONENT":
+          return actions.some((action) => action.componentFk === currentFilter.id);
+        case "DATA":
+          return actions.some((action) => action.dataFk === currentFilter.id);
+        default:
+          return false;
+      }
+    })
+  );
 };
 
 const getArrowForStepFk = (stepFk: number, sequenceStepCTOs: SequenceStepCTO[]): Arrow | undefined => {
   let step: SequenceStepCTO | undefined;
   if (stepFk && sequenceStepCTOs) {
-    step = sequenceStepCTOs.find(
-      (stp) => stp.squenceStepTO.id === stepFk
-    );
+    step = sequenceStepCTOs.find((stp) => stp.squenceStepTO.id === stepFk);
   }
   if (step) {
     return mapStepToArrow(step);
   }
-}
+};
 // =============================================== SELECTORS ===============================================
 
 export const SequenceModelReducer = SequenceModelSlice.reducer;
 export const sequenceModelSelectors = {
   selectSequence: (state: RootState): SequenceCTO | null => state.sequenceModel.selectedSequenceModel,
   // selectCalcSequence: (state: RootState): CalcSequence | null => state.edit.mode === Mode.VIEW ? state.sequenceModel.calcSequence : null,
-  selectCalcSteps: (state: RootState): CalculatedStep[] => state.edit.mode === Mode.VIEW ? filterSteps(state.sequenceModel.calcSequence?.steps || [], state.sequenceModel.activeFilter, state.sequenceModel.selectedSequenceModel?.sequenceStepCTOs || []) : [],
-  selectTerminalStep: (state: RootState): Terminal | null => state.edit.mode === Mode.VIEW ? state.sequenceModel.calcSequence?.terminal || null : null,
+  selectCalcSteps: (state: RootState): CalculatedStep[] =>
+    state.edit.mode === Mode.VIEW
+      ? filterSteps(
+          state.sequenceModel.calcSequence?.steps || [],
+          state.sequenceModel.activeFilter,
+          state.sequenceModel.selectedSequenceModel?.sequenceStepCTOs || []
+        )
+      : [],
+  selectTerminalStep: (state: RootState): Terminal | null =>
+    state.edit.mode === Mode.VIEW ? state.sequenceModel.calcSequence?.terminal || null : null,
   selectDataSetup: (state: RootState): DataSetupCTO | null => state.sequenceModel.selectedDataSetup,
 
   selectComponentData: (state: RootState): ComponentData[] => {
-    const filteredSteps = state.edit.mode === Mode.VIEW ? filterSteps(state.sequenceModel.calcSequence?.steps || [], state.sequenceModel.activeFilter, state.sequenceModel.selectedSequenceModel?.sequenceStepCTOs || []) : []
+    const filteredSteps =
+      state.edit.mode === Mode.VIEW
+        ? filterSteps(
+            state.sequenceModel.calcSequence?.steps || [],
+            state.sequenceModel.activeFilter,
+            state.sequenceModel.selectedSequenceModel?.sequenceStepCTOs || []
+          )
+        : [];
     return filteredSteps[state.sequenceModel.currentStepIndex]?.componentDatas || [];
   },
   selectErrors: (state: RootState): ActionTO[] => {
-    const filteredSteps = state.edit.mode === Mode.VIEW ? filterSteps(state.sequenceModel.calcSequence?.steps || [], state.sequenceModel.activeFilter, state.sequenceModel.selectedSequenceModel?.sequenceStepCTOs || []) : []
+    const filteredSteps =
+      state.edit.mode === Mode.VIEW
+        ? filterSteps(
+            state.sequenceModel.calcSequence?.steps || [],
+            state.sequenceModel.activeFilter,
+            state.sequenceModel.selectedSequenceModel?.sequenceStepCTOs || []
+          )
+        : [];
     return filteredSteps[state.sequenceModel.currentStepIndex]?.errors || [];
   },
   selectActions: (state: RootState): ActionTO[] => {
-    const filteredSteps = state.edit.mode === Mode.VIEW ? filterSteps(state.sequenceModel.calcSequence?.steps || [], state.sequenceModel.activeFilter, state.sequenceModel.selectedSequenceModel?.sequenceStepCTOs || []) : []
+    const filteredSteps =
+      state.edit.mode === Mode.VIEW
+        ? filterSteps(
+            state.sequenceModel.calcSequence?.steps || [],
+            state.sequenceModel.activeFilter,
+            state.sequenceModel.selectedSequenceModel?.sequenceStepCTOs || []
+          )
+        : [];
     const stepId: number | undefined = filteredSteps[state.sequenceModel.currentStepIndex]?.stepFk;
-    return stepId ? state.sequenceModel.selectedSequenceModel?.sequenceStepCTOs.find(step => step.squenceStepTO.id === stepId)?.actions || [] : [];
+    return stepId
+      ? state.sequenceModel.selectedSequenceModel?.sequenceStepCTOs.find((step) => step.squenceStepTO.id === stepId)
+          ?.actions || []
+      : [];
   },
   selectCurrentStepIndex: (state: RootState): number => state.sequenceModel.currentStepIndex,
   selectCurrentArrows: (state: RootState): Arrow[] => {
     const arrows: Arrow[] = [];
-    const filteredSteps = state.edit.mode === Mode.VIEW ? filterSteps(state.sequenceModel.calcSequence?.steps || [], state.sequenceModel.activeFilter, state.sequenceModel.selectedSequenceModel?.sequenceStepCTOs || []) : []
+    const filteredSteps =
+      state.edit.mode === Mode.VIEW
+        ? filterSteps(
+            state.sequenceModel.calcSequence?.steps || [],
+            state.sequenceModel.activeFilter,
+            state.sequenceModel.selectedSequenceModel?.sequenceStepCTOs || []
+          )
+        : [];
     let stepFks: number[] = [];
-    if (arrows.length === -1000) /* TODO: reactivate state.sequenceModel.currentStepIndex === 0)*/ {
-      stepFks = filteredSteps.map(step => step.stepFk)
+    if (arrows.length === -1000) {
+      /* TODO: reactivate state.sequenceModel.currentStepIndex === 0)*/ stepFks = filteredSteps.map(
+        (step) => step.stepFk
+      );
     } else {
-      const stepFk: number | undefined = filteredSteps[state.sequenceModel.currentStepIndex]?.stepFk
+      const stepFk: number | undefined = filteredSteps[state.sequenceModel.currentStepIndex]?.stepFk;
       if (stepFk) {
         stepFks.push(stepFk);
       }
     }
-    const allArrows: (Arrow | undefined)[] = stepFks.map(stepFk => getArrowForStepFk(stepFk, state.sequenceModel.selectedSequenceModel?.sequenceStepCTOs || []))
-    allArrows.forEach(arrow => {
+    const allArrows: (Arrow | undefined)[] = stepFks.map((stepFk) =>
+      getArrowForStepFk(stepFk, state.sequenceModel.selectedSequenceModel?.sequenceStepCTOs || [])
+    );
+    allArrows.forEach((arrow) => {
       if (arrow) arrows.push(arrow);
-    })
+    });
     return arrows;
   },
   selectLoopStepStartIndex: (state: RootState): number | null => state.sequenceModel.loopStartingStepIndex,
@@ -322,8 +370,8 @@ export const sequenceModelSelectors = {
 const mapStepToArrow = (step: SequenceStepCTO) => {
   return {
     sourceComponentId: step.squenceStepTO.sourceComponentFk,
-    targetComponentId: step.squenceStepTO.targetComponentFk
-  }
+    targetComponentId: step.squenceStepTO.targetComponentFk,
+  };
 };
 
 // =============================================== ACTIONS ===============================================

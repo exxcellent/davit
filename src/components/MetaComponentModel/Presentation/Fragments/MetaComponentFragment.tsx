@@ -27,7 +27,11 @@ export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps
   );
 };
 
-export const createMetaComponentFragment = (componentCTO: ComponentCTO, componentDatas: ViewFragmentProps[], onClick?: (id: number) => void) => {
+export const createMetaComponentFragment = (
+  componentCTO: ComponentCTO,
+  componentDatas: ViewFragmentProps[],
+  onClick?: (id: number) => void
+) => {
   return (
     <MetaComponentFragment
       id={componentCTO.component.id}

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React, { useRef } from "react";
+import React, { FunctionComponent, useRef } from "react";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
 import { GroupTO } from "../../../../dataAccess/access/to/GroupTO";
 import { Carv2Util } from "../../../../utils/Carv2Util";
@@ -19,7 +19,7 @@ interface MetaComponentDnDBox {
   onClick: (componentId: number) => void;
 }
 
-export const MetaComponentDnDBox: React.FunctionComponent<MetaComponentDnDBox> = (props) => {
+export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (props) => {
   const { componentCTOs, onSaveCallBack, arrows, componentCTOToEdit, groups, componentDatas, onClick } = props;
   const constraintsRef = useRef(null);
 

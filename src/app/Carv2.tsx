@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import { ErrorNotification } from "../components/common/fragments/ErrorNotification";
 import { ControllPanelController } from "../components/controllPanel/presentation/ControllPanelController";
-import { MetaComponentModelController } from "../components/MetaComponentModel/presentation/MetaComponentModelController";
+import { MetaComponentModelController } from "../components/metaComponentModel/presentation/MetaComponentModelController";
 import { MetaDataModelController } from "../components/metaDataModel/presentation/MetaDataModelController";
 import { SequenceModelController } from "../components/sequenceModel/SequenceModelController";
 import { SequenceTableModelController } from "../components/sequenceTableModel/presentation/SequenceTableModelController";
@@ -16,7 +16,7 @@ export const ModuleRoutes = {
   component: "/component",
   data: "/data",
   table: "/table",
-}
+};
 
 export function Carv2() {
   const dispatch = useDispatch();
