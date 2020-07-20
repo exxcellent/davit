@@ -17,6 +17,19 @@ export const SidePanelController: FunctionComponent<SidePanelProps> = (props) =>
         <Button inverted color="orange" icon="file" onClick={setModeToFile} />
       </Button.Group>
       <div style={{ position: "absolute", bottom: "1em" }}>
+        <div
+          style={{
+            writingMode: "sideways-lr",
+            textOrientation: "upright",
+            fontSize: "3em",
+            paddingLeft: "15px",
+            marginBottom: "1em",
+            // color: "#666D71",
+            color: "#0060A9",
+          }}
+        >
+          D A V I T
+        </div>
         <img src={logo} alt="fireSpot" />
       </div>
     </div>
