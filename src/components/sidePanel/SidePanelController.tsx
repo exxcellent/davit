@@ -1,9 +1,10 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch } from "react-redux";
 import { Button } from "semantic-ui-react";
+import logo from "../../icons/logo200.png";
 import { EditActions } from "../../slices/EditSlice";
 
-export interface SidePanelProps { }
+export interface SidePanelProps {}
 
 export const SidePanelController: FunctionComponent<SidePanelProps> = (props) => {
   const { setModeToEdit, setModeToFile, setModeToView } = useSidePanelViewModel();
@@ -15,6 +16,9 @@ export const SidePanelController: FunctionComponent<SidePanelProps> = (props) =>
         <Button inverted color="orange" icon="eye" onClick={setModeToView} />
         <Button inverted color="orange" icon="file" onClick={setModeToFile} />
       </Button.Group>
+      <div style={{ position: "absolute", bottom: "1em" }}>
+        <img src={logo} alt="fireSpot" />
+      </div>
     </div>
   );
 };
