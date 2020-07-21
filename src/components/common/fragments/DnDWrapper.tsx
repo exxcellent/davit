@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
-import React, { FunctionComponent, useEffect, useState } from "react";
+import { motion, useInvertedScale, useMotionValue } from "framer-motion";
+import React, { FunctionComponent, useEffect } from "react";
 import { GeometricalDataCTO } from "../../../dataAccess/access/cto/GeometraicalDataCTO";
 
 export interface DnDWrapperProps {
@@ -13,15 +13,15 @@ export interface DnDWrapperProps {
 
 export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
   const { dragConstraintsRef, initalX, initalY, onPositionUpdate, positionId, shadow } = props;
-  const [shadowColor, setShadowColor] = useState<string>("");
+
+  const x = useMotionValue(initalX);
+  const y = useMotionValue(initalY);
+  const { scaleX, scaleY } = useInvertedScale();
 
   useEffect(() => {
-    if (shadow) {
-      setShadowColor("3px 3px 3px " + shadow);
-    } else {
-      setShadowColor("");
-    }
-  }, [shadow]);
+    x.set(initalX);
+    y.set(initalY);
+  }, [x, initalX, y, initalY]);
 
   return (
     <motion.div
@@ -29,11 +29,13 @@ export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
       dragConstraints={dragConstraintsRef}
       dragMomentum={false}
       dragElastic={0}
-      initial={{
-        x: initalX,
-        y: initalY,
-      }}
+      // initial={{
+      //   x: initalX,
+      //   y: initalY,
+      // }}
       onDragEnd={(event, info) => {
+        // x.set(Number(info.point.x.toFixed(0)));
+        // y.set(Number(info.point.y.toFixed(0)));
         onPositionUpdate(
           // keine Nachkommastellen.
           Number(info.point.x.toFixed(0)),
@@ -41,7 +43,16 @@ export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
           positionId
         );
       }}
-      style={{ position: "absolute", display: "inline-flex", zIndex: 1, boxShadow: shadowColor }}
+      style={{
+        position: "absolute",
+        display: "inline-flex",
+        zIndex: 1,
+        boxShadow: shadow ? "3px 3px 3px " + shadow : "",
+        x,
+        y,
+        scaleX,
+        scaleY,
+      }}
     >
       {props.children}
     </motion.div>
