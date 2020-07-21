@@ -68,11 +68,11 @@ const useViewModel = () => {
   // const selectedStep: SequenceStepCTO | null = useSelector(sequenceModelSelectors.selectCurrentStep);
   // const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
 
-  window.onstorage = (event: any) => {
-    if (event.key === "carv2") {
-      window.location.reload();
-    }
-  };
+  // window.onstorage = (event: any) => {
+  //   if (event.key === "carv2") {
+  //     window.location.reload();
+  //   }
+  // };
 
   React.useEffect(() => {
     dispatch(MasterDataActions.loadComponentsFromBackend());
