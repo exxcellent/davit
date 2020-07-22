@@ -19,9 +19,9 @@ export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
   const { scaleX, scaleY } = useInvertedScale();
 
   useEffect(() => {
-    x.set(initalX);
-    y.set(initalY);
-  }, [x, initalX, y, initalY]);
+    x.set(initalX * (dragConstraintsRef.current.offsetWidth / 100));
+    y.set(initalY * (dragConstraintsRef.current.offsetHeight / 100));
+  }, [x, initalX, y, initalY, dragConstraintsRef]);
 
   return (
     <motion.div
@@ -34,12 +34,15 @@ export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
       //   y: initalY,
       // }}
       onDragEnd={(event, info) => {
-        // x.set(Number(info.point.x.toFixed(0)));
-        // y.set(Number(info.point.y.toFixed(0)));
+        console.info("old X: ", Number(info.point.x.toFixed(0)));
+        console.log("factor: ", dragConstraintsRef.current.offsetWidth / 100);
+        console.info("old Y: ", Number(info.point.y.toFixed(0)));
+        console.warn("new X: ", Number(info.point.x.toFixed(0)) / (dragConstraintsRef.current.offsetWidth / 100));
+        console.warn("new Y: ", Number(info.point.y.toFixed(0)) / (dragConstraintsRef.current.offsetHeight / 100));
         onPositionUpdate(
           // keine Nachkommastellen.
-          Number(info.point.x.toFixed(0)),
-          Number(info.point.y.toFixed(0)),
+          Number(info.point.x.toFixed(0)) / (dragConstraintsRef.current.offsetWidth / 100),
+          Number(info.point.y.toFixed(0)) / (dragConstraintsRef.current.offsetHeight / 100),
           positionId
         );
       }}

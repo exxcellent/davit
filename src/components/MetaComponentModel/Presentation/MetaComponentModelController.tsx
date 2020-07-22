@@ -17,9 +17,13 @@ import { ViewFragmentProps } from "../../../viewDataTypes/ViewFragment";
 import { ViewFragmentState } from "../../../viewDataTypes/ViewFragmentState";
 import { MetaComponentDnDBox } from "./fragments/MetaComponentDnDBox";
 
-interface MetaComponentModelControllerProps {}
+interface MetaComponentModelControllerProps {
+  fullScreen?: boolean;
+}
 
 export const MetaComponentModelController: FunctionComponent<MetaComponentModelControllerProps> = (props) => {
+  const { fullScreen } = props;
+
   const {
     components,
     getArrows,
@@ -39,6 +43,7 @@ export const MetaComponentModelController: FunctionComponent<MetaComponentModelC
       groups={groups}
       componentDatas={getCompDatas()}
       onClick={handleComponentClickEvent}
+      fullScreen={fullScreen}
     />
   );
 };

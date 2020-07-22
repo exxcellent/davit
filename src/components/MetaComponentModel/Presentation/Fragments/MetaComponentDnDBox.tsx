@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import React, { FunctionComponent, useRef } from "react";
+import { useCurrentHeight, useCurrentWitdh } from "../../../../app/Carv2";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
 import { GroupTO } from "../../../../dataAccess/access/to/GroupTO";
 import { Carv2Util } from "../../../../utils/Carv2Util";
@@ -17,11 +18,28 @@ interface MetaComponentDnDBox {
   componentDatas: ViewFragmentProps[];
   onSaveCallBack: (componentCTO: ComponentCTO) => void;
   onClick: (componentId: number) => void;
+  fullScreen?: boolean;
 }
 
 export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (props) => {
-  const { componentCTOs, onSaveCallBack, arrows, componentCTOToEdit, groups, componentDatas, onClick } = props;
-  const constraintsRef = useRef(null);
+  const {
+    componentCTOs,
+    onSaveCallBack,
+    arrows,
+    componentCTOToEdit,
+    groups,
+    componentDatas,
+    onClick,
+    fullScreen,
+  } = props;
+  const constraintsRef = useRef<HTMLInputElement>(null);
+
+  // full size window
+  const w1: number = useCurrentWitdh();
+  const h1: number = useCurrentHeight();
+
+  const h2: number = (w1 / 100) * 56.25;
+  const w2: number = (h1 / 56.25) * 100;
 
   const onPositionUpdate = (x: number, y: number, positionId: number) => {
     const componentCTO = componentCTOs.find((componentCTO) => componentCTO.geometricalData.position.id === positionId);
@@ -57,13 +75,29 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (prop
   };
 
   return (
-    <motion.div id="dndBox" ref={constraintsRef} className="componentModel">
+    <motion.div
+      id="dndBox"
+      ref={constraintsRef}
+      style={
+        fullScreen
+          ? {
+              height: h2,
+              maxWidth: w2,
+              borderWidth: "3px",
+              borderStyle: "dashed",
+              backgroundColor: "var(--carv2-background-color)",
+            }
+          : {}
+      }
+      className={fullScreen ? "" : "componentModel"}
+    >
       {componentCTOs.map(createDnDMetaComponentFragmentIfNotInEdit)}
       {componentCTOToEdit && createDnDMetaComponent(componentCTOToEdit)}
       {arrows.map((arrow) => {
         return createCurveArrow(
           findComponentById(arrow.sourceComponentId)?.geometricalData,
-          findComponentById(arrow.targetComponentId)?.geometricalData
+          findComponentById(arrow.targetComponentId)?.geometricalData,
+          constraintsRef
         );
       })}
     </motion.div>

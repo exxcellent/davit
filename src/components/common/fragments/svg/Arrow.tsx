@@ -1,5 +1,5 @@
 import { motion, Point } from "framer-motion";
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { GeometricalDataCTO } from "../../../../dataAccess/access/cto/GeometraicalDataCTO";
 
 export interface ArrowProps {
@@ -8,6 +8,7 @@ export interface ArrowProps {
   xTarget: number;
   yTarget: number;
   type: ArrowType;
+  parentRef: any;
 }
 
 enum ArrowType {
@@ -16,7 +17,21 @@ enum ArrowType {
 }
 
 const Arrow: FunctionComponent<ArrowProps> = (props) => {
-  const { xSource, ySource, xTarget, yTarget, type } = props;
+  const { xSource, ySource, xTarget, yTarget, type, parentRef } = props;
+
+  const [initXSource, setInitXSource] = useState<number>(xSource * (parentRef.current.offsetWidth / 100));
+  const [initYSource, setInitYSource] = useState<number>(ySource * (parentRef.current.offsetHeight / 100));
+  const [initXTarget, setInitXTarget] = useState<number>(xTarget * (parentRef.current.offsetWidth / 100));
+  const [initYTarget, setInitYTarget] = useState<number>(yTarget * (parentRef.current.offsetHeight / 100));
+
+  useEffect(() => {
+    if (parentRef !== undefined && parentRef.current !== undefined) {
+      setInitXSource(xSource * (parentRef.current.offsetWidth / 100));
+      setInitYSource(ySource * (parentRef.current.offsetHeight / 100));
+      setInitXTarget(xTarget * (parentRef.current.offsetWidth / 100));
+      setInitYTarget(yTarget * (parentRef.current.offsetHeight / 100));
+    }
+  }, [ySource, xSource, yTarget, xTarget, parentRef]);
 
   const INTERFACE_INPUT: Point = { x: 0, y: 25 };
   const INTERFACE_OUTPUT: Point = { x: 150, y: 25 };
@@ -112,13 +127,17 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
           <path d="M0,0 L0,6 L9,3 z" className="carvArrowMarker" />
         </marker>
       </defs>
-      {type === ArrowType.CURVE && createCurve(xSource, ySource, xTarget, yTarget)}
-      {type === ArrowType.CORNER && createCornerLine(xSource, ySource, xTarget, yTarget)}
+      {type === ArrowType.CURVE && createCurve(initXSource, initYSource, initXTarget, initYTarget)}
+      {type === ArrowType.CORNER && createCornerLine(initXSource, initYSource, initXTarget, initYTarget)}
     </motion.svg>
   );
 };
 
-export const createCurveArrow = (source: GeometricalDataCTO | undefined, target: GeometricalDataCTO | undefined) => {
+export const createCurveArrow = (
+  source: GeometricalDataCTO | undefined,
+  target: GeometricalDataCTO | undefined,
+  parentRef: any
+) => {
   if (source && target) {
     return (
       <Arrow
@@ -128,6 +147,7 @@ export const createCurveArrow = (source: GeometricalDataCTO | undefined, target:
         yTarget={target.position.y}
         type={ArrowType.CURVE}
         key={source.geometricalData.id + target.geometricalData.id}
+        parentRef={parentRef}
       />
     );
   }
@@ -136,7 +156,8 @@ export const createCurveArrow = (source: GeometricalDataCTO | undefined, target:
 export const createCornerArrow = (
   source: GeometricalDataCTO | undefined,
   target: GeometricalDataCTO | undefined,
-  key: number
+  key: number,
+  parentRef: any
 ) => {
   if (source && target) {
     return (
@@ -147,6 +168,7 @@ export const createCornerArrow = (
         yTarget={target.position.y}
         type={ArrowType.CORNER}
         key={key}
+        parentRef={parentRef}
       />
     );
   }

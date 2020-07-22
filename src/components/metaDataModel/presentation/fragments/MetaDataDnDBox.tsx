@@ -39,7 +39,7 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
       const geoData1: GeometricalDataCTO | null = getGeometriaclDataByDataId(dataRelation.data1Fk);
       const geoData2: GeometricalDataCTO | null = getGeometriaclDataByDataId(dataRelation.data2Fk);
       if (!(dataRelationToEdit && dataRelationToEdit.id === dataRelation.id) && geoData1 && geoData2) {
-        return createCornerConnection(geoData1, geoData2, dataRelation, dataRelation.id);
+        return createCornerConnection(geoData1, geoData2, dataRelation, dataRelation.id, constraintsRef);
       } else {
         return <></>;
       }
@@ -72,7 +72,7 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
       geoData1 &&
       geoData2
     ) {
-      return createCornerConnection(geoData1, geoData2, dataRelation, dataRelation.id, true);
+      return createCornerConnection(geoData1, geoData2, dataRelation, dataRelation.id, constraintsRef, true);
     }
   };
 

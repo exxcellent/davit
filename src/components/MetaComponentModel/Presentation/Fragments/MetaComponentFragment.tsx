@@ -15,6 +15,7 @@ export interface MetaComponentFragmentProps {
 
 export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps> = (props) => {
   const { initalName, dataFragments, initalWidth, initalHeigth } = props;
+
   return (
     <Card
       raised
@@ -39,7 +40,7 @@ export const createMetaComponentFragment = (
       initalColor={componentCTO.design.color}
       initalWidth={componentCTO.geometricalData.geometricalData.width}
       dataFragments={componentDatas}
-      onClick={onClick}
+      // onClick={onClick}
     />
   );
 };
