@@ -10,6 +10,7 @@ import { ControllPanelEditAction } from "./fragments/ControllPanelEditAction";
 import { ControllPanelEditComponent } from "./fragments/ControllPanelEditComponent";
 import { ControllPanelEditCondition } from "./fragments/ControllPanelEditCondition";
 import { ControllPanelEditData } from "./fragments/ControllPanelEditData";
+import { ControllPanelEditDataInstance } from "./fragments/ControllPanelEditDataInstance";
 import { ControllPanelEditDataSetup } from "./fragments/ControllPanelEditDataSetup";
 import { ControllPanelEditGroup } from "./fragments/ControllPanelEditGroup";
 import { ControllPanelEditMenu } from "./fragments/ControllPanelEditMenu";
@@ -38,6 +39,8 @@ export const ControllPanelEditController: FunctionComponent<ControllPanelEditCon
         return <ControllPanelEditGroup />;
       case Mode.EDIT_DATA:
         return <ControllPanelEditData />;
+      case Mode.EDIT_DATA_INSTANCE:
+        return <ControllPanelEditDataInstance />;
       case Mode.EDIT_DATA_RELATION:
         return <ControllPanelEditRelation />;
       case Mode.EDIT_SEQUENCE:
