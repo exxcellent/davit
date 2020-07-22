@@ -62,7 +62,7 @@ export function Carv2() {
         <Route exact path={ModuleRoutes.table}>
           <div className="Carv2">
             <div className="componentPage">
-              <SequenceTableModelController />
+              <SequenceTableModelController fullScreen />
             </div>
           </div>
         </Route>

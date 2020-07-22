@@ -7,13 +7,16 @@ import { GoToTypes, Terminal } from "../../../dataAccess/access/types/GoToType";
 import { masterDataSelectors } from "../../../slices/MasterDataSlice";
 import { CalculatedStep, SequenceModelActions, sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
 
-interface SequenceTableModelControllerProps { }
+interface SequenceTableModelControllerProps {
+  fullScreen?: boolean;
+}
 
 export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (props) => {
+  const { fullScreen } = props;
   const { title, getTableBody } = useSequenceTableViewModel();
 
   return (
-    <div className="sequenceTable">
+    <div className={fullScreen ? "" : "sequenceTable"}>
       <div style={{ display: "flex", justifyContent: "center", width: "100%", color: "white" }}>
         <label>{title}</label>
       </div>
@@ -35,7 +38,6 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
 };
 
 const useSequenceTableViewModel = () => {
-
   const dispatch = useDispatch();
 
   const sequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
@@ -50,10 +52,22 @@ const useSequenceTableViewModel = () => {
     if (index === stepIndex) {
       trClass = "carv2TrMarked";
     }
-    const modelStep: SequenceStepCTO | undefined = sequence?.sequenceStepCTOs.find(item => item.squenceStepTO.id === step.stepFk);
+    const modelStep: SequenceStepCTO | undefined = sequence?.sequenceStepCTOs.find(
+      (item) => item.squenceStepTO.id === step.stepFk
+    );
     const name = index === 0 && !modelStep ? "Initial" : modelStep?.squenceStepTO.name || "Step not found";
-    const source = index === 0 && !modelStep ? "" : modelStep ? getComponentNameById(modelStep.squenceStepTO.sourceComponentFk) : "Source not found";
-    const target = index === 0 && !modelStep ? "" : modelStep ? getComponentNameById(modelStep.squenceStepTO.targetComponentFk) : "Target not found";
+    const source =
+      index === 0 && !modelStep
+        ? ""
+        : modelStep
+        ? getComponentNameById(modelStep.squenceStepTO.sourceComponentFk)
+        : "Source not found";
+    const target =
+      index === 0 && !modelStep
+        ? ""
+        : modelStep
+        ? getComponentNameById(modelStep.squenceStepTO.targetComponentFk)
+        : "Target not found";
     return (
       <tr key={index} className={trClass} onClick={() => handleTableClickEvent(index)}>
         <td className="carv2Td">{index}</td>
@@ -66,16 +80,21 @@ const useSequenceTableViewModel = () => {
 
   const createTerminalColumn = (terminal: Terminal): JSX.Element => {
     const className = terminal.type === GoToTypes.ERROR ? "carv2TrTerminalError" : "carv2TrTerminalSuccess";
-    return (<tr key={"Terminal"} className={className}>
-      <td>{" "}</td><td>{terminal.type}</td><td>{" "}</td><td>{" "}</td>
-    </tr>)
-  }
+    return (
+      <tr key={"Terminal"} className={className}>
+        <td> </td>
+        <td>{terminal.type}</td>
+        <td> </td>
+        <td> </td>
+      </tr>
+    );
+  };
 
   const getTableBody = () => {
     let list: JSX.Element[] = [];
     list = calcSteps.map((step, index) => createStepColumn(step, index));
     if (terminalStep) {
-      list.push(createTerminalColumn(terminalStep))
+      list.push(createTerminalColumn(terminalStep));
     }
     let key: number = list.length;
     while (list.length < 10) {
@@ -86,10 +105,15 @@ const useSequenceTableViewModel = () => {
   };
 
   const createEmptyRow = (key: string, className?: string): JSX.Element => {
-    return (<tr key={key} className={className}>
-      <td>{" "}</td><td>{" "}</td><td>{" "}</td><td>{" "}</td>
-    </tr>)
-  }
+    return (
+      <tr key={key} className={className}>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+      </tr>
+    );
+  };
 
   const getComponentNameById = (id: number): string => {
     return components.find((comp) => comp.component.id === id)?.component.name || "Could not find Component!";
@@ -97,7 +121,7 @@ const useSequenceTableViewModel = () => {
 
   const handleTableClickEvent = (index: number) => {
     dispatch(SequenceModelActions.setCurrentStepIndex(index));
-  }
+  };
 
   return {
     title: sequence ? sequence.sequenceTO.name : "Select Sequence ...",
