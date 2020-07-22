@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Icon } from "semantic-ui-react";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
@@ -29,6 +30,7 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
             <th className="carv2Th">NAME</th>
             <th className="carv2Th">SENDER</th>
             <th className="carv2Th">RECEIVER</th>
+            <th className="carv2Th">ERROR</th>
           </tr>
         </thead>
         <tbody className="carv2TBody">{getTableBody()}</tbody>
@@ -68,12 +70,14 @@ const useSequenceTableViewModel = () => {
         : modelStep
         ? getComponentNameById(modelStep.squenceStepTO.targetComponentFk)
         : "Target not found";
+    const hasError = step.errors.length > 0 ? true : false;
     return (
       <tr key={index} className={trClass} onClick={() => handleTableClickEvent(index)}>
         <td className="carv2Td">{index}</td>
         <td className="carv2Td">{name}</td>
         <td className="carv2Td">{source}</td>
         <td className="carv2Td">{target}</td>
+        <td className="carv2Td">{hasError && <Icon name="warning sign" color="red" />}</td>
       </tr>
     );
   };
@@ -84,6 +88,7 @@ const useSequenceTableViewModel = () => {
       <tr key={"Terminal"} className={className}>
         <td> </td>
         <td>{terminal.type}</td>
+        <td> </td>
         <td> </td>
         <td> </td>
       </tr>
@@ -107,6 +112,7 @@ const useSequenceTableViewModel = () => {
   const createEmptyRow = (key: string, className?: string): JSX.Element => {
     return (
       <tr key={key} className={className}>
+        <td> </td>
         <td> </td>
         <td> </td>
         <td> </td>
