@@ -40,7 +40,7 @@ export const createMetaComponentFragment = (
       initalColor={componentCTO.design.color}
       initalWidth={componentCTO.geometricalData.geometricalData.width}
       dataFragments={componentDatas}
-      // onClick={onClick}
+    // onClick={onClick}
     />
   );
 };

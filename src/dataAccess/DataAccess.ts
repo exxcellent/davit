@@ -7,6 +7,7 @@ import { ActionTO } from "./access/to/ActionTO";
 import { ConditionTO } from "./access/to/ConditionTO";
 import { DataRelationTO } from "./access/to/DataRelationTO";
 import { DataSetupTO } from "./access/to/DataSetupTO";
+import { DataInstanceTO } from "./access/to/DataTO";
 import { GroupTO } from "./access/to/GroupTO";
 import { InitDataTO } from "./access/to/InitDataTO";
 import { SequenceTO } from "./access/to/SequenceTO";
@@ -139,6 +140,10 @@ export const DataAccess = {
     return makeTransactional(() => DataDataAccessService.saveDataCTO(dataCTO));
   },
 
+  saveDataInstanceTO(dataInstanceTO: DataInstanceTO): DataAccessResponse<DataCTO> {
+    return makeTransactional(() => DataDataAccessService.saveDataInstanceTO(dataInstanceTO));
+  },
+
   deleteDataCTO(dataCTO: DataCTO): DataAccessResponse<DataCTO> {
     return makeTransactional(() => DataDataAccessService.deleteDataCTO(dataCTO));
   },
@@ -205,7 +210,7 @@ function makeTransactional<T>(callback: () => T): DataAccessResponse<T> {
       typeof object === "undefined"
         ? undefined
         : // : JSON.parse(JSON.stringify(callback()));
-          JSON.parse(JSON.stringify(object));
+        JSON.parse(JSON.stringify(object));
     response.code = 200;
     dataStore.commitChanges();
   } catch (error) {

@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { Card } from "semantic-ui-react";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
+import { DataInstanceTO } from "../../../../dataAccess/access/to/DataTO";
 import { createViewFragment, ViewFragmentProps } from "../../../../viewDataTypes/ViewFragment";
 
 export interface MetaDataFragmentProps {
@@ -8,7 +9,7 @@ export interface MetaDataFragmentProps {
   initalName: string;
   initalWidth?: number;
   initalHeigth?: number;
-  instances: string[];
+  instances: DataInstanceTO[];
   componentFragments: ViewFragmentProps[];
   onClick?: (dataId: number) => void;
 }
@@ -30,14 +31,12 @@ const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (props) => {
       <div>
         <Card style={{ marginBottom: "0" }} onClick={props.onClick ? () => props.onClick!(props.id) : undefined} fluid>
           <Card.Content header={initalName}></Card.Content>
-          {componentFragments.map(createViewFragment)}
         </Card>
         <div style={{ display: "flex" }}>
           {instances.map((instance, index) =>
             createInstances(
-              instance,
-              []
-              // componentFragments.filter((component) => component.instanceINdex === index)
+              instance.name,
+              componentFragments.filter((component) => (component.parentId as { dataId: number, instanceId: number }).instanceId === index)
             )
           )}
         </div>

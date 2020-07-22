@@ -11,7 +11,7 @@ import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 
-export interface ControllPanelEditDataInstanceProps {}
+export interface ControllPanelEditDataInstanceProps { }
 
 export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditDataInstanceProps> = (props) => {
   const {
@@ -36,12 +36,12 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
         onBlur={() => updateData()}
       />
       <div className="columnDivider controllPanelEditChild">
-        <Carv2ButtonLabel onClick={() => {}} label="Create another" />
+        <Carv2ButtonLabel onClick={() => { }} label="Create another" />
         <Carv2ButtonLabel onClick={saveDataInstace} label="OK" />
       </div>
       <div className="columnDivider">
         <div className="controllPanelEditChild" style={{ display: "felx", alignItems: "center", height: "100%" }}>
-          <Carv2DeleteButton onClick={() => {}} />
+          <Carv2DeleteButton onClick={() => { }} />
         </div>
       </div>
     </ControllPanelEditSub>
@@ -50,7 +50,7 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
 
 const useControllPanelEditDataInstanceViewModel = () => {
   const dataToEdit: DataCTO | null = useSelector(editSelectors.dataToEdit);
-  const instaceIndex: number | null = useSelector(editSelectors.instanceIndexToEdit);
+  const instanceId: number | null = useSelector(editSelectors.instanceIndexToEdit);
   const dispatch = useDispatch();
   const textInput = useRef<Input>(null);
 
@@ -68,10 +68,10 @@ const useControllPanelEditDataInstanceViewModel = () => {
   });
 
   const changeName = (name: string) => {
-    if (!isNullOrUndefined(instaceIndex)) {
+    if (!isNullOrUndefined(instanceId)) {
       let copyDataToEdit: DataCTO = Carv2Util.deepCopy(dataToEdit);
       // TODO: validate name so every instance name is unic.
-      copyDataToEdit.data.inst[instaceIndex] = name;
+      copyDataToEdit.data.inst.find(instance => instance.id === instanceId)!.name = name;
       dispatch(EditActions.data.update(copyDataToEdit));
     }
   };
@@ -92,8 +92,8 @@ const useControllPanelEditDataInstanceViewModel = () => {
 
   const getName = (): string => {
     let name: string = "";
-    if (!isNullOrUndefined(dataToEdit) && !isNullOrUndefined(instaceIndex)) {
-      name = dataToEdit.data.inst[instaceIndex];
+    if (!isNullOrUndefined(dataToEdit) && !isNullOrUndefined(instanceId)) {
+      name = dataToEdit.data.inst.find(instance => instance.id === instanceId)?.name || "";
     }
     return name;
   };

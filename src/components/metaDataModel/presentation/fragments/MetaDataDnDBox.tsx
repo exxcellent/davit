@@ -72,7 +72,7 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
   const createDnDMetaDataFragment = (dataCTO: DataCTO) => {
     let metaDataFragment = createMetaDataFragment(
       dataCTO,
-      componentDatas.filter((comp) => comp.parentId === dataCTO.data.id),
+      componentDatas.filter((comp) => comp.parentId === dataCTO.data.id || (comp.parentId as { dataId: number, instanceId: number }).dataId === dataCTO.data.id),
       onClick
     );
     return createDnDItem(dataCTO.geometricalData, onPositionUpdate, constraintsRef, metaDataFragment);
@@ -108,12 +108,12 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
       style={
         fullScreen
           ? {
-              height: h2,
-              maxWidth: w2,
-              borderWidth: "3px",
-              borderStyle: "dashed",
-              backgroundColor: "var(--carv2-background-color)",
-            }
+            height: h2,
+            maxWidth: w2,
+            borderWidth: "3px",
+            borderStyle: "dashed",
+            backgroundColor: "var(--carv2-background-color)",
+          }
           : {}
       }
       className={fullScreen ? "" : "dataModel"}

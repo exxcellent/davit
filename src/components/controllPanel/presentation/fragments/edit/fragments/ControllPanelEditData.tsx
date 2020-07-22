@@ -12,7 +12,7 @@ import { DataInstanceDropDownButton } from "../../../../../common/fragments/drop
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 
-export interface ControllPanelEditDataProps {}
+export interface ControllPanelEditDataProps { }
 
 export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps> = (props) => {
   const {
@@ -104,9 +104,9 @@ const useControllPanelEditDataViewModel = () => {
     dispatch(EditActions.setMode.editData());
   };
 
-  const editOrAddInstance = (index?: number) => {
+  const editOrAddInstance = (id?: number) => {
     if (!isNullOrUndefined(dataToEdit)) {
-      dispatch(EditActions.setMode.editDataInstance(index ? index : dataToEdit.data.inst.length));
+      dispatch(EditActions.setMode.editDataInstance(Carv2Util.deepCopy(dataToEdit), id));
     }
   };
 

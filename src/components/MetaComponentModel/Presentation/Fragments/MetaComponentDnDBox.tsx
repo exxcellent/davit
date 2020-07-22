@@ -80,12 +80,12 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (prop
       style={
         fullScreen
           ? {
-              height: h2,
-              maxWidth: w2,
-              borderWidth: "3px",
-              borderStyle: "dashed",
-              backgroundColor: "var(--carv2-background-color)",
-            }
+            height: h2,
+            maxWidth: w2,
+            borderWidth: "3px",
+            borderStyle: "dashed",
+            backgroundColor: "var(--carv2-background-color)",
+          }
           : {}
       }
       className={fullScreen ? "" : "componentModel"}

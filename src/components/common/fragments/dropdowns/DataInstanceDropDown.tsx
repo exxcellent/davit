@@ -1,17 +1,18 @@
 import React, { FunctionComponent } from "react";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
+import { DataInstanceTO } from "../../../../dataAccess/access/to/DataTO";
 
 interface DataInstanceDropDownProps extends DropdownProps {
   onSelect: (instanc: number | undefined) => void;
-  instances: string[];
+  instances: DataInstanceTO[];
   placeholder?: string;
   value?: number;
 }
 
 interface DataInstanceDropDownButtonProps extends DropdownProps {
   onSelect: (instancIndex: number | undefined) => void;
-  instances: string[];
+  instances: DataInstanceTO[];
   icon?: string;
 }
 
@@ -59,9 +60,9 @@ const useDataDropDownViewModel = () => {
     }
   };
 
-  const dataInstacesToOption = (instances: string[]): DropdownItemProps[] => {
+  const dataInstacesToOption = (instances: DataInstanceTO[]): DropdownItemProps[] => {
     const dropdownItemProps: DropdownItemProps[] = [];
-    instances.forEach((instanc, i) => dropdownItemProps.push({ key: i, value: i, text: instanc }));
+    instances.forEach((instanc, i) => dropdownItemProps.push({ key: i, value: instanc.id, text: instanc.name }));
     return dropdownItemProps;
   };
 

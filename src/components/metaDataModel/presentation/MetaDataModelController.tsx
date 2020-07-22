@@ -7,6 +7,7 @@ import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO"
 import { ActionTO } from "../../../dataAccess/access/to/ActionTO";
 import { ConditionTO } from "../../../dataAccess/access/to/ConditionTO";
 import { DataRelationTO } from "../../../dataAccess/access/to/DataRelationTO";
+import { DATA_INSTANCE_ID_FACTOR, getDataAndInstanceIds } from "../../../dataAccess/access/to/DataTO";
 import { InitDataTO } from "../../../dataAccess/access/to/InitDataTO";
 import { ActionType } from "../../../dataAccess/access/types/ActionType";
 import { EditActions, editSelectors } from "../../../slices/EditSlice";
@@ -135,15 +136,16 @@ const useMetaDataModelViewModel = () => {
     return compDatas;
   };
 
-  function mapActionToComponentDatas(errorItem: ActionTO): ViewFragmentProps {
-    const state: ViewFragmentState = mapActionTypeToViewFragmentState(errorItem.actionType);
-    return { name: getComponentNameById(errorItem.componentFk), state: state, parentId: errorItem.dataFk };
+  function mapActionToComponentDatas(actionItem: ActionTO): ViewFragmentProps {
+    const state: ViewFragmentState = mapActionTypeToViewFragmentState(actionItem.actionType);
+    const parentId = actionItem.dataFk > DATA_INSTANCE_ID_FACTOR ? getDataAndInstanceIds(actionItem.dataFk) : actionItem.dataFk
+    return { name: getComponentNameById(actionItem.componentFk), state: state, parentId: parentId };
   }
 
   const mapComponentDataToCompoenntData = (compData: ComponentData): ViewFragmentProps => {
     return {
       name: getComponentNameById(compData.componentFk),
-      parentId: compData.dataFk,
+      parentId: compData.dataFk > DATA_INSTANCE_ID_FACTOR ? getDataAndInstanceIds(compData.dataFk) : compData.dataFk,
       state: ViewFragmentState.PERSISTENT,
     };
   };
@@ -153,7 +155,7 @@ const useMetaDataModelViewModel = () => {
     if (condition) {
       props = condition.dataFks.map((data) => {
         return {
-          parentId: data,
+          parentId: data > DATA_INSTANCE_ID_FACTOR ? getDataAndInstanceIds(data) : data,
           name: getComponentNameById(condition.componentFk),
           state: condition.has ? ViewFragmentState.CHECKED : ViewFragmentState.DELETED,
         };

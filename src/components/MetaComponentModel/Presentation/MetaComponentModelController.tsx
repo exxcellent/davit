@@ -6,6 +6,7 @@ import { DataSetupCTO } from "../../../dataAccess/access/cto/DataSetupCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../../../dataAccess/access/to/ActionTO";
 import { ConditionTO } from "../../../dataAccess/access/to/ConditionTO";
+import { DataTO, DATA_INSTANCE_ID_FACTOR, getDataAndInstanceIds } from "../../../dataAccess/access/to/DataTO";
 import { GroupTO } from "../../../dataAccess/access/to/GroupTO";
 import { InitDataTO } from "../../../dataAccess/access/to/InitDataTO";
 import { ActionType } from "../../../dataAccess/access/types/ActionType";
@@ -177,7 +178,14 @@ const useViewModel = () => {
   };
 
   const getDataNameById = (id: number): string => {
-    return datas.find((data) => data.data.id === id)?.data.name || "Could not find Data";
+    if (id < DATA_INSTANCE_ID_FACTOR) {
+      return datas.find((data) => data.data.id === id)?.data.name || "Could not find Data";
+    } else {
+      const ids = getDataAndInstanceIds(id);
+      const data: DataTO | undefined = datas.find((data) => data.data.id === ids.dataId)?.data;
+      const instance = data?.inst.find(instance => instance.id === ids.instanceId);
+      return instance && data ? data.name + ": " + instance.name : "Could not find Data";
+    }
   };
 
   const mapActionTypeToViewFragmentState = (actionType: ActionType): ViewFragmentState => {
