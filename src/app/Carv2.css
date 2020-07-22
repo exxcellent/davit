@@ -18,7 +18,7 @@
   height: 100vh;
   max-height: 100vh;
   overflow: hidden;
-  /* background-color: var(--carv2-background-color); */
+  background-color: var(--carv2-background-color);
   grid-template-areas: "compModel";
 }
 
