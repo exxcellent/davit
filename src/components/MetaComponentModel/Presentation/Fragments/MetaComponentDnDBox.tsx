@@ -37,7 +37,6 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (prop
   // full size window
   const w1: number = useCurrentWitdh();
   const h1: number = useCurrentHeight();
-
   const h2: number = (w1 / 100) * 56.25;
   const w2: number = (h1 / 56.25) * 100;
 

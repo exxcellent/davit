@@ -55,7 +55,7 @@ export function Carv2() {
         <Route exact path={ModuleRoutes.data}>
           <div className="Carv2">
             <div className="componentPage">
-              <MetaDataModelController />
+              <MetaDataModelController fullScreen />
             </div>
           </div>
         </Route>

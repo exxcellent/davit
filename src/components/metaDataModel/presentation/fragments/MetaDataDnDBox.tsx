@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import React, { FunctionComponent, useRef } from "react";
+import { useCurrentHeight, useCurrentWitdh } from "../../../../app/Carv2";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { GeometricalDataCTO } from "../../../../dataAccess/access/cto/GeometraicalDataCTO";
 import { DataRelationTO } from "../../../../dataAccess/access/to/DataRelationTO";
@@ -17,12 +18,28 @@ interface MetaDataDnDBox {
   componentDatas: ViewFragmentProps[];
   onSaveCallBack: (dataCTO: DataCTO) => void;
   onClick: (dataId: number) => void;
+  fullScreen?: boolean;
 }
 
 export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
-  const { dataCTOs, dataCTOToEdit, onSaveCallBack, dataRelations, dataRelationToEdit, componentDatas, onClick } = props;
+  const {
+    dataCTOs,
+    dataCTOToEdit,
+    onSaveCallBack,
+    dataRelations,
+    dataRelationToEdit,
+    componentDatas,
+    onClick,
+    fullScreen,
+  } = props;
 
   const constraintsRef = useRef(null);
+
+  // full size window
+  const w1: number = useCurrentWitdh();
+  const h1: number = useCurrentHeight();
+  const h2: number = (w1 / 100) * 56.25;
+  const w2: number = (h1 / 56.25) * 100;
 
   const onPositionUpdate = (x: number, y: number, positionId: number) => {
     const dataCTO = dataCTOs.find((dataCTO) => dataCTO.geometricalData.position.id === positionId);
@@ -85,7 +102,22 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
   };
 
   return (
-    <motion.div id="datadndBox" ref={constraintsRef} className="dataModel">
+    <motion.div
+      id="datadndBox"
+      ref={constraintsRef}
+      style={
+        fullScreen
+          ? {
+              height: h2,
+              maxWidth: w2,
+              borderWidth: "3px",
+              borderStyle: "dashed",
+              backgroundColor: "var(--carv2-background-color)",
+            }
+          : {}
+      }
+      className={fullScreen ? "" : "dataModel"}
+    >
       {dataCTOs.map(createDnDMetaDataFragmentIfNotinEdit)}
       {dataCTOToEdit && createDnDMetaDataFragment(dataCTOToEdit)}
       <motion.svg className="dataSVGArea">

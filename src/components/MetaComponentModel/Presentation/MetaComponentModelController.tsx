@@ -70,14 +70,6 @@ const useViewModel = () => {
   const currentComponentDatas: ComponentData[] = useSelector(sequenceModelSelectors.selectComponentData);
   const errors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
   const actions: ActionTO[] = useSelector(sequenceModelSelectors.selectActions);
-  // const selectedStep: SequenceStepCTO | null = useSelector(sequenceModelSelectors.selectCurrentStep);
-  // const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
-
-  // window.onstorage = (event: any) => {
-  //   if (event.key === "carv2") {
-  //     window.location.reload();
-  //   }
-  // };
 
   React.useEffect(() => {
     dispatch(MasterDataActions.loadComponentsFromBackend());

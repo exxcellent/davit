@@ -17,9 +17,13 @@ import { ViewFragmentProps } from "../../../viewDataTypes/ViewFragment";
 import { ViewFragmentState } from "../../../viewDataTypes/ViewFragmentState";
 import { MetaDataDnDBox } from "./fragments/MetaDataDnDBox";
 
-interface MetaDataModelControllerProps { }
+interface MetaDataModelControllerProps {
+  fullScreen?: boolean;
+}
 
 export const MetaDataModelController: FunctionComponent<MetaDataModelControllerProps> = (props) => {
+  const { fullScreen } = props;
+
   const {
     datas,
     dataRelations,
@@ -40,6 +44,7 @@ export const MetaDataModelController: FunctionComponent<MetaDataModelControllerP
         dataRelationToEdit={dataRelationToEdit}
         componentDatas={getComponentDatas()}
         onClick={handleDataClick}
+        fullScreen={fullScreen}
       />
     );
   };
@@ -87,10 +92,10 @@ const useMetaDataModelViewModel = () => {
 
   const getCompDatas = () => {
     let compDatas: ViewFragmentProps[] = [];
-    compDatas.push(...getComponentDatasFromView())
-    compDatas.push(...getComponentDatasFromEdit())
+    compDatas.push(...getComponentDatasFromView());
+    compDatas.push(...getComponentDatasFromEdit());
     return compDatas;
-  }
+  };
 
   const getComponentDatasFromView = (): ViewFragmentProps[] => {
     let compDatas: ViewFragmentProps[] = [];
@@ -98,17 +103,29 @@ const useMetaDataModelViewModel = () => {
     const compDatasFromActions: ViewFragmentProps[] = actions.map(mapActionToComponentDatas);
     const compDatasFromCompDatas: ViewFragmentProps[] = currentComponentDatas.map(mapComponentDataToCompoenntData);
     compDatas.push(...compDatasFromErros);
-    compDatas.push(...(compDatasFromActions.filter(compDataFromAction => !compDatas.some(cp => compDataExists(cp, compDataFromAction)))));
-    compDatas.push(...(compDatasFromCompDatas.filter(compDataFromCompData => !compDatas.some(cp => compDataExists(cp, compDataFromCompData)))));
+    compDatas.push(
+      ...compDatasFromActions.filter(
+        (compDataFromAction) => !compDatas.some((cp) => compDataExists(cp, compDataFromAction))
+      )
+    );
+    compDatas.push(
+      ...compDatasFromCompDatas.filter(
+        (compDataFromCompData) => !compDatas.some((cp) => compDataExists(cp, compDataFromCompData))
+      )
+    );
     return compDatas;
-  }
+  };
 
   const getComponentDatasFromEdit = (): ViewFragmentProps[] => {
     let compDatas: ViewFragmentProps[] = [];
     const compDatasFromStepToEdit: ViewFragmentProps[] = stepToEdit?.actions.map(mapActionToComponentDatas) || [];
-    const compDataFromActionToEdit: ViewFragmentProps | undefined = actionToEdit ? mapActionToComponentDatas(actionToEdit) : undefined;
+    const compDataFromActionToEdit: ViewFragmentProps | undefined = actionToEdit
+      ? mapActionToComponentDatas(actionToEdit)
+      : undefined;
     const compDataFromCondittionToEdit: ViewFragmentProps[] = mapConditionToCompData(conditionToEdit);
-    const compDatasFromDataSetup: ViewFragmentProps[] = dataSetupToEdit ? dataSetupToEdit.initDatas.map(mapInitDataToCompData) : [];
+    const compDatasFromDataSetup: ViewFragmentProps[] = dataSetupToEdit
+      ? dataSetupToEdit.initDatas.map(mapInitDataToCompData)
+      : [];
     compDatas.push(...compDatasFromStepToEdit);
     compDatas.push(...compDataFromCondittionToEdit);
     compDatas.push(...compDatasFromDataSetup);
@@ -124,8 +141,12 @@ const useMetaDataModelViewModel = () => {
   }
 
   const mapComponentDataToCompoenntData = (compData: ComponentData): ViewFragmentProps => {
-    return { name: getComponentNameById(compData.componentFk), parentId: compData.dataFk, state: ViewFragmentState.PERSISTENT };
-  }
+    return {
+      name: getComponentNameById(compData.componentFk),
+      parentId: compData.dataFk,
+      state: ViewFragmentState.PERSISTENT,
+    };
+  };
 
   const mapConditionToCompData = (condition: ConditionTO | null): ViewFragmentProps[] => {
     let props: ViewFragmentProps[] = [];
@@ -135,23 +156,23 @@ const useMetaDataModelViewModel = () => {
           parentId: data,
           name: getComponentNameById(condition.componentFk),
           state: condition.has ? ViewFragmentState.CHECKED : ViewFragmentState.DELETED,
-        }
-      })
+        };
+      });
     }
     return props;
-  }
+  };
 
   const mapInitDataToCompData = (initData: InitDataTO): ViewFragmentProps => {
     return {
       parentId: initData.dataFk,
       name: getComponentNameById(initData.componentFk),
       state: ViewFragmentState.NEW,
-    }
+    };
   };
 
   const compDataExists = (propOne: ViewFragmentProps, propTwo: ViewFragmentProps) => {
-    return propOne.parentId === propTwo.parentId && propOne.name === propTwo.name
-  }
+    return propOne.parentId === propTwo.parentId && propOne.name === propTwo.name;
+  };
 
   const mapActionTypeToViewFragmentState = (actionType: ActionType): ViewFragmentState => {
     let cdState: ViewFragmentState;
