@@ -8,22 +8,53 @@ export interface MetaDataFragmentProps {
   initalName: string;
   initalWidth?: number;
   initalHeigth?: number;
+  instances: string[];
   componentFragments: ViewFragmentProps[];
   onClick?: (dataId: number) => void;
 }
 
 const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (props) => {
-  const { initalName, componentFragments, initalWidth, initalHeigth } = props;
+  const { initalName, componentFragments, initalWidth, initalHeigth, instances } = props;
 
-  return (
-    <Card
-      style={{ width: initalWidth, height: initalHeigth }}
-      onClick={props.onClick ? () => props.onClick!(props.id) : undefined}
-    >
-      <Card.Content header={initalName}></Card.Content>
-      {componentFragments.map(createViewFragment)}
-    </Card>
-  );
+  const createInstances = (instanceName: string, components: ViewFragmentProps[]) => {
+    return (
+      <Card style={{ width: "100px", margin: "0", backgroundColor: "rgba(0,0,0,0.3)", color: "white" }}>
+        <Card.Content>{instanceName}</Card.Content>
+        {components.map(createViewFragment)}
+      </Card>
+    );
+  };
+
+  if (instances.length > 0) {
+    return (
+      <div>
+        <Card style={{ marginBottom: "0" }} onClick={props.onClick ? () => props.onClick!(props.id) : undefined} fluid>
+          <Card.Content header={initalName}></Card.Content>
+          {componentFragments.map(createViewFragment)}
+        </Card>
+        <div style={{ display: "flex" }}>
+          {instances.map((instance, index) =>
+            createInstances(
+              instance,
+              []
+              // componentFragments.filter((component) => component.instanceINdex === index)
+            )
+          )}
+        </div>
+      </div>
+    );
+  } else {
+    return (
+      <Card
+        style={{ minWidth: initalWidth, minHeigth: initalHeigth, marginBottom: "0" }}
+        onClick={props.onClick ? () => props.onClick!(props.id) : undefined}
+        fluid
+      >
+        <Card.Content header={initalName}></Card.Content>
+        {componentFragments.map(createViewFragment)}
+      </Card>
+    );
+  }
 };
 
 export const createMetaDataFragment = (
@@ -38,6 +69,7 @@ export const createMetaDataFragment = (
       initalWidth={dataCTO.geometricalData.geometricalData.width}
       componentFragments={componentDatas}
       // onClick={onClick}
+      instances={dataCTO.data.inst ? dataCTO.data.inst : []}
     />
   );
 };
