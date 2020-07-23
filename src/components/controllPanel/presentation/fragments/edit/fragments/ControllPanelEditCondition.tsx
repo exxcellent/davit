@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Dropdown, Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
-import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { ConditionTO } from "../../../../../../dataAccess/access/to/ConditionTO";
@@ -208,11 +207,10 @@ const useControllPanelEditConditionViewModel = () => {
     }
   };
 
-  const setData = (datas: DataCTO[] | undefined) => {
-    if (datas !== undefined && !isNullOrUndefined(conditionToEdit)) {
+  const setData = (dataIds: number[] | undefined) => {
+    if (!isNullOrUndefined(conditionToEdit)) {
       const copyConditionToEdit: ConditionTO = Carv2Util.deepCopy(conditionToEdit);
-      copyConditionToEdit.dataFks = [];
-      datas.forEach((data) => copyConditionToEdit.dataFks.push(data.data.id));
+      copyConditionToEdit.dataFks = dataIds || [];
       dispatch(EditActions.setMode.editCondition(copyConditionToEdit));
     }
   };

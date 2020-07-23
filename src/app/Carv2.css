@@ -263,7 +263,8 @@
 
 /* -------------------------------------------- Colors -------------------------------------------- */
 :root {
-  --carv2-background-color: rgb(134, 134, 134);
+  /* --carv2-background-color: rgb(134, 134, 134); */
+  --carv2-background-color: rgb(184, 181, 181);
   --carv2-background-color-header: rgba(0, 0, 0, 0.5);
   /* --carv2-background-color-header: rgb(23, 47, 48); */
   --carv2-background-color-shadow: black;

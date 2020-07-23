@@ -5,6 +5,7 @@ import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { ActionTO } from "../../../../dataAccess/access/to/ActionTO";
+import { getDataAndInstanceIds } from "../../../../dataAccess/access/to/DataTO";
 import { editSelectors } from "../../../../slices/EditSlice";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 
@@ -40,7 +41,11 @@ const getComponentName = (compId: number, components: ComponentCTO[]): string =>
 };
 
 const getDataName = (dataId: number, datas: DataCTO[]): string => {
-  return datas.find((data) => data.data.id === dataId)?.data.name || "";
+  const ids = getDataAndInstanceIds(dataId);
+  const data: DataCTO | undefined = datas.find((data) => data.data.id === ids.dataId);
+  const instance = ids.instanceId ? data?.data.inst.find((instance) => instance.id === ids.instanceId) : undefined;
+  const name: string = data?.data.name + " " + (instance?.name || "");
+  return name;
 };
 
 const useActionDropDownViewModel = () => {

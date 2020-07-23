@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
-import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { DataSetupCTO } from "../../../../../../dataAccess/access/cto/DataSetupCTO";
 import { InitDataTO } from "../../../../../../dataAccess/access/to/InitDataTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
@@ -133,22 +132,24 @@ const useControllPanelEditDataSetupViewModel = () => {
     dispatch(EditActions.setMode.editDataSetup(copyDataSetup.dataSetup));
   };
 
-  const setInitDatas = (dataCTOs: DataCTO[] | undefined): void => {
-    if (!isNullOrUndefined(dataSetupToEdit) && !isNullOrUndefined(componentToEdit) && dataCTOs !== undefined) {
+  const setInitDatas = (dataIds: number[] | undefined): void => {
+    if (!isNullOrUndefined(dataSetupToEdit) && !isNullOrUndefined(componentToEdit)) {
       let copyDataSetupToEdit: DataSetupCTO = Carv2Util.deepCopy(dataSetupToEdit);
       // remove old init data.
       const clearInitDatas: InitDataTO[] = Carv2Util.deepCopy(
         dataSetupToEdit.initDatas.filter((initData) => initData.componentFk !== componentToEdit.component.id)
       );
       // add new init data.
-      dataCTOs.forEach((data) =>
-        clearInitDatas.push({
-          id: -1,
-          componentFk: componentToEdit.component.id,
-          dataFk: data.data.id,
-          dataSetupFk: dataSetupToEdit.dataSetup.id,
-        })
-      );
+      if (dataIds !== undefined) {
+        dataIds.forEach((dataId) =>
+          clearInitDatas.push({
+            id: -1,
+            componentFk: componentToEdit.component.id,
+            dataFk: dataId,
+            dataSetupFk: dataSetupToEdit.dataSetup.id,
+          })
+        );
+      }
       copyDataSetupToEdit.initDatas = clearInitDatas;
       dispatch(EditActions.dataSetup.save(copyDataSetupToEdit));
       dispatch(EditActions.dataSetup.update(copyDataSetupToEdit));

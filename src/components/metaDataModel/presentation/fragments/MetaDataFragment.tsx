@@ -32,11 +32,13 @@ const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (props) => {
         <Card style={{ marginBottom: "0" }} onClick={props.onClick ? () => props.onClick!(props.id) : undefined} fluid>
           <Card.Content header={initalName}></Card.Content>
         </Card>
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex", alignItems: "start" }}>
           {instances.map((instance, index) =>
             createInstances(
               instance.name,
-              componentFragments.filter((component) => (component.parentId as { dataId: number, instanceId: number }).instanceId === index)
+              componentFragments.filter(
+                (component) => (component.parentId as { dataId: number; instanceId: number }).instanceId === index
+              )
             )
           )}
         </div>

@@ -183,7 +183,7 @@ const useViewModel = () => {
     } else {
       const ids = getDataAndInstanceIds(id);
       const data: DataTO | undefined = datas.find((data) => data.data.id === ids.dataId)?.data;
-      const instance = data?.inst.find(instance => instance.id === ids.instanceId);
+      const instance = data?.inst.find((instance) => instance.id === ids.instanceId);
       return instance && data ? data.name + ": " + instance.name : "Could not find Data";
     }
   };
@@ -197,9 +197,9 @@ const useViewModel = () => {
       case ActionType.DELETE:
         cdState = ViewFragmentState.DELETED;
         break;
-      case ActionType.CHECK:
-        cdState = ViewFragmentState.CHECKED;
-        break;
+      // case ActionType.CHECK:
+      //   cdState = ViewFragmentState.CHECKED;
+      //   break;
     }
     return cdState;
   };

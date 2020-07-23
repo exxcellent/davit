@@ -11,7 +11,7 @@ import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 
-export interface ControllPanelEditDataInstanceProps { }
+export interface ControllPanelEditDataInstanceProps {}
 
 export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditDataInstanceProps> = (props) => {
   const {
@@ -21,6 +21,7 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
     name,
     saveDataInstace,
     updateData,
+    deleteDataInstance,
   } = useControllPanelEditDataInstanceViewModel();
 
   return (
@@ -36,12 +37,12 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
         onBlur={() => updateData()}
       />
       <div className="columnDivider controllPanelEditChild">
-        <Carv2ButtonLabel onClick={() => { }} label="Create another" />
+        {/* <Carv2ButtonLabel onClick={() => {}} label="Create another" /> */}
         <Carv2ButtonLabel onClick={saveDataInstace} label="OK" />
       </div>
       <div className="columnDivider">
         <div className="controllPanelEditChild" style={{ display: "felx", alignItems: "center", height: "100%" }}>
-          <Carv2DeleteButton onClick={() => { }} />
+          <Carv2DeleteButton onClick={deleteDataInstance} />
         </div>
       </div>
     </ControllPanelEditSub>
@@ -71,7 +72,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
     if (!isNullOrUndefined(instanceId)) {
       let copyDataToEdit: DataCTO = Carv2Util.deepCopy(dataToEdit);
       // TODO: validate name so every instance name is unic.
-      copyDataToEdit.data.inst.find(instance => instance.id === instanceId)!.name = name;
+      copyDataToEdit.data.inst.find((instance) => instance.id === instanceId)!.name = name;
       dispatch(EditActions.data.update(copyDataToEdit));
     }
   };
@@ -90,10 +91,19 @@ const useControllPanelEditDataInstanceViewModel = () => {
     }
   };
 
+  const deleteDataInstance = () => {
+    if (!isNullOrUndefined(dataToEdit) && !isNullOrUndefined(instanceId)) {
+      let copyDataToEdit: DataCTO = Carv2Util.deepCopy(dataToEdit);
+      copyDataToEdit.data.inst.splice(instanceId, 1);
+      dispatch(EditActions.data.save(copyDataToEdit));
+      dispatch(EditActions.setMode.editData(copyDataToEdit));
+    }
+  };
+
   const getName = (): string => {
     let name: string = "";
     if (!isNullOrUndefined(dataToEdit) && !isNullOrUndefined(instanceId)) {
-      name = dataToEdit.data.inst.find(instance => instance.id === instanceId)?.name || "";
+      name = dataToEdit.data.inst.find((instance) => instance.id === instanceId)?.name || "";
     }
     return name;
   };
@@ -105,6 +115,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
     saveDataInstace,
     textInput,
     updateData,
+    deleteDataInstance,
     instances: dataToEdit?.data.inst ? dataToEdit.data.inst : [],
   };
 };

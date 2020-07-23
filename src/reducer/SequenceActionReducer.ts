@@ -77,11 +77,11 @@ const executeActionOnComponentData = (
         errorItem = Carv2Util.deepCopy(action);
       }
       break;
-    case ActionType.CHECK:
-      if (componentData === undefined) {
-        errorItem = Carv2Util.deepCopy(action);
-      }
-      break;
+    // case ActionType.CHECK:
+    //   if (componentData === undefined) {
+    //     errorItem = Carv2Util.deepCopy(action);
+    //   }
+    //   break;
     case ActionType.DELETE:
       if (componentData !== undefined) {
         newCompData = undefined;

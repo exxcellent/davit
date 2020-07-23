@@ -1,5 +1,6 @@
 export enum ActionType {
   ADD = "ADD",
-  CHECK = "CHECK",
+  // TODO: can be removed?
+  // CHECK = "CHECK",
   DELETE = "DELETE",
 }

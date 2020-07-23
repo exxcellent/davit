@@ -138,7 +138,7 @@ const useMetaDataModelViewModel = () => {
 
   function mapActionToComponentDatas(actionItem: ActionTO): ViewFragmentProps {
     const state: ViewFragmentState = mapActionTypeToViewFragmentState(actionItem.actionType);
-    const parentId = actionItem.dataFk > DATA_INSTANCE_ID_FACTOR ? getDataAndInstanceIds(actionItem.dataFk) : actionItem.dataFk
+    const parentId = getDataAndInstanceIds(actionItem.dataFk);
     return { name: getComponentNameById(actionItem.componentFk), state: state, parentId: parentId };
   }
 
@@ -185,9 +185,9 @@ const useMetaDataModelViewModel = () => {
       case ActionType.DELETE:
         cdState = ViewFragmentState.DELETED;
         break;
-      case ActionType.CHECK:
-        cdState = ViewFragmentState.CHECKED;
-        break;
+      // case ActionType.CHECK:
+      //   cdState = ViewFragmentState.CHECKED;
+      //   break;
     }
     return cdState;
   };

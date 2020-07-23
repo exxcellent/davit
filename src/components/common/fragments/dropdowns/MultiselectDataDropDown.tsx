@@ -1,18 +1,18 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
+import { DATA_INSTANCE_ID_FACTOR } from "../../../../dataAccess/access/to/DataTO";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 
 interface MultiselectDataDropDownProps extends DropdownProps {
-  onSelect: (data: DataCTO[] | undefined) => void;
+  onSelect: (dataIds: number[] | undefined) => void;
   selected: number[];
 }
 
 export const MultiselectDataDropDown: FunctionComponent<MultiselectDataDropDownProps> = (props) => {
   const { onSelect, selected } = props;
-  const { datas, selectDataOptions, dataToOption } = useMultiSelectDataDropDownViewModel();
+  const { datas, dataToOption } = useMultiSelectDataDropDownViewModel();
 
   return (
     <Dropdown
@@ -20,9 +20,12 @@ export const MultiselectDataDropDown: FunctionComponent<MultiselectDataDropDownP
       fluid
       multiple
       selection
-      options={datas.map(dataToOption)}
+      // options={datas.map(dataToOption)}
+      options={([] as DropdownItemProps[]).concat.apply([], datas.map(dataToOption)).sort((a, b) => {
+        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
+      })}
       onChange={(event, data) => {
-        onSelect(selectDataOptions((data.value as number[]) || undefined, datas));
+        onSelect((data.value as number[]) || undefined);
       }}
       value={selected}
       scrolling
@@ -33,21 +36,26 @@ export const MultiselectDataDropDown: FunctionComponent<MultiselectDataDropDownP
 const useMultiSelectDataDropDownViewModel = () => {
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
 
-  const selectDataOptions = (dataIds: number[] | undefined, datas: DataCTO[]): DataCTO[] => {
-    let dataToReturn: DataCTO[] = [];
-    if (dataIds !== undefined && !isNullOrUndefined(datas)) {
-      dataIds.map((id) => dataToReturn.push(datas.find((data) => data.data.id === id)!));
+  const dataToOption = (data: DataCTO): DropdownItemProps[] => {
+    if (data.data.inst.length === 0) {
+      return [
+        {
+          key: data.data.id,
+          value: data.data.id,
+          text: data.data.name,
+        },
+      ];
+    } else {
+      return data.data.inst.map((instance) => {
+        const value = data.data.id * DATA_INSTANCE_ID_FACTOR + instance.id;
+        return {
+          key: value,
+          value: value,
+          text: `${data.data.name}: ${instance.name}`,
+        };
+      });
     }
-    return dataToReturn;
   };
 
-  const dataToOption = (data: DataCTO): DropdownItemProps => {
-    return {
-      key: data.data.id,
-      value: data.data.id,
-      text: data.data.name,
-    };
-  };
-
-  return { datas, selectDataOptions, dataToOption };
+  return { datas, dataToOption };
 };
