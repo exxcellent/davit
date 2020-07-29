@@ -49,7 +49,7 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
         />
       </div>
       {mode === table.sequence && (
-        <div className={fullScreen ? "" : "sequenceTable"}>
+        <div>
           <div style={{ display: "flex", justifyContent: "center", width: "100%", color: "white" }}>
             <label>{title}</label>
           </div>
@@ -70,9 +70,9 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
         </div>
       )}
       {mode === table.step && (
-        <div className={fullScreen ? "" : "sequenceTable"}>
+        <div>
           <div style={{ display: "flex", justifyContent: "center", width: "100%", color: "white" }}>
-            <label>{title}</label>
+            <label>STEPS</label>
           </div>
           <table className="carv2Table">
             <thead>
@@ -90,9 +90,9 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
         </div>
       )}
       {mode === table.condition && (
-        <div className={fullScreen ? "" : "sequenceTable"}>
+        <div>
           <div style={{ display: "flex", justifyContent: "center", width: "100%", color: "white" }}>
-            <label>{title}</label>
+            <label>CONDITIONS</label>
           </div>
           <table className="carv2Table">
             <thead>
@@ -102,8 +102,6 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
                 </th>
                 <th className="carv2Th">NAME</th>
                 <th className="carv2Th">RESULT</th>
-                <th className="carv2Th"></th>
-                <th className="carv2Th"></th>
               </tr>
             </thead>
             <tbody className="carv2TBody">{getConditionTableBody()}</tbody>
@@ -124,7 +122,7 @@ const useSequenceTableViewModel = () => {
   const terminalStep: Terminal | null = useSelector(sequenceModelSelectors.selectTerminalStep);
   const loopStepStartIndex: number | null = useSelector(sequenceModelSelectors.selectLoopStepStartIndex);
 
-  const createStepColumn = (step: CalculatedStep, index: number): JSX.Element => {
+  const createSequenceStepColumn = (step: CalculatedStep, index: number): JSX.Element => {
     let trClass: string = loopStepStartIndex && loopStepStartIndex <= index ? "carv2TrTerminalError" : "carv2Tr";
     if (index === stepIndex) {
       trClass = "carv2TrMarked";
@@ -209,7 +207,7 @@ const useSequenceTableViewModel = () => {
 
   const getTableBody = () => {
     let list: JSX.Element[] = [];
-    list = calcSteps.map((step, index) => createStepColumn(step, index));
+    list = calcSteps.map((step, index) => createSequenceStepColumn(step, index));
     if (terminalStep) {
       list.push(createTerminalColumn(terminalStep));
     }
@@ -229,7 +227,7 @@ const useSequenceTableViewModel = () => {
       key = list.length;
     }
     while (list.length < 10) {
-      list.push(createEmptyRow(key.toString(), "carv2Tr"));
+      list.push(createEmptyStepRow(key.toString(), "carv2Tr"));
       key++;
     }
     return list;
@@ -243,7 +241,7 @@ const useSequenceTableViewModel = () => {
     }
     let key: number = list.length;
     while (list.length < 10) {
-      list.push(createEmptyRow(key.toString(), "carv2Tr"));
+      list.push(createEmptyConditionRow(key.toString(), "carv2Tr"));
       key++;
     }
     return list;
@@ -254,6 +252,27 @@ const useSequenceTableViewModel = () => {
       <tr key={key} className={className}>
         <td> </td>
         <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+      </tr>
+    );
+  };
+
+  const createEmptyStepRow = (key: string, className?: string): JSX.Element => {
+    return (
+      <tr key={key} className={className}>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+      </tr>
+    );
+  };
+
+  const createEmptyConditionRow = (key: string, className?: string): JSX.Element => {
+    return (
+      <tr key={key} className={className}>
         <td> </td>
         <td> </td>
         <td> </td>

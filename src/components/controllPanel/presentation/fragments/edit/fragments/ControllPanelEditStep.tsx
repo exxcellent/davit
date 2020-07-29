@@ -23,7 +23,7 @@ import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditStepProps { }
+export interface ControllPanelEditStepProps {}
 
 export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps> = (props) => {
   const {
@@ -173,6 +173,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
       const copySequenceStep: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
       copySequenceStep.squenceStepTO.name = name;
       dispatch(EditActions.setMode.editStep(copySequenceStep));
+      dispatch(EditActions.step.save(copySequenceStep));
     }
   };
 
@@ -191,21 +192,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
   const saveSequenceStep = () => {
     if (!isNullOrUndefined(stepToEdit) && !isNullOrUndefined(selectedSequence)) {
       dispatch(EditActions.step.save(stepToEdit));
-      // if (isEditNext) {
-      //   if (stepToEdit.squenceStepTO.index < selectedSequence.sequenceStepCTOs.length) {
-      //     dispatch(
-      //       EditActions.setMode.editStep(
-      //         selectedSequence.sequenceStepCTOs.find(
-      //           (step) => step.squenceStepTO.id === stepToEdit.squenceStepTO.index + 1
-      //         )
-      //       )
-      //     );
-      //   } else {
-      //     dispatch(EditActions.setMode.editStep());
-      //   }
-      // } else {
       dispatch(EditActions.setMode.editSequence(stepToEdit.squenceStepTO.sequenceFk));
-      // }
     }
   };
 

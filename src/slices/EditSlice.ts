@@ -46,16 +46,16 @@ export interface StepAction {
 interface EditState {
   mode: Mode;
   objectToEdit:
-  | ComponentCTO
-  | DataCTO
-  | DataRelationTO
-  | SequenceTO
-  | SequenceStepCTO
-  | StepAction
-  | DataSetupCTO
-  | GroupTO
-  | ConditionTO
-  | {};
+    | ComponentCTO
+    | DataCTO
+    | DataRelationTO
+    | SequenceTO
+    | SequenceStepCTO
+    | StepAction
+    | DataSetupCTO
+    | GroupTO
+    | ConditionTO
+    | {};
   instanceIdToEdit: number | null;
 }
 const getInitialState: EditState = {
@@ -186,10 +186,10 @@ const setModeToEditData = (data?: DataCTO): AppThunk => (dispatch) => {
   }
 };
 
-const setModeToEditDataInstance = (data: DataCTO, id?: number,): AppThunk => (dispatch) => {
+const setModeToEditDataInstance = (data: DataCTO, id?: number): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_DATA_INSTANCE));
   if (!id) {
-    dispatch(EditActions.data.createInstance(data))
+    dispatch(EditActions.data.createInstance(data));
   } else {
     dispatch(EditSlice.actions.setInstanceIdToEdit(id));
   }
@@ -446,6 +446,7 @@ const createSequenceThunk = (): AppThunk => (dispatch) => {
   }
   dispatch(MasterDataActions.loadSequencesFromBackend());
   dispatch(EditActions.sequence.update(response.object));
+  dispatch(SequenceModelActions.setCurrentSequence(response.object.id));
 };
 
 const saveSequenceThunk = (sequence: SequenceTO): AppThunk => (dispatch) => {
@@ -455,6 +456,7 @@ const saveSequenceThunk = (sequence: SequenceTO): AppThunk => (dispatch) => {
   }
   dispatch(MasterDataActions.loadSequencesFromBackend());
   dispatch(EditSlice.actions.setSequenceToEdit(response.object));
+  dispatch(SequenceModelActions.setCurrentSequence(response.object.id));
 };
 
 const deleteSequenceThunk = (sequence: SequenceTO): AppThunk => async (dispatch) => {
@@ -537,7 +539,6 @@ const saveSequenceStepThunk = (step: SequenceStepCTO): AppThunk => (dispatch) =>
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
-  // dispatch(MasterDataActions.loadSequencesFromBackend());
 };
 
 const findStepCTOThunk = (stepId: number): SequenceStepCTO => {

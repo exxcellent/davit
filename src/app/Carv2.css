@@ -230,6 +230,12 @@
   text-align: center;
   background-color: var(--carv2-background-color-header);
   font-size: 0.9em;
+  /* overflow-y: scroll; */
+  display: table;
+}
+
+.carv2TBody {
+  /* display: block; */
   overflow-y: scroll;
 }
 
