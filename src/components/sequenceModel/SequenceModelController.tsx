@@ -55,6 +55,7 @@ interface Node {
   cond: ConditionTO | null;
   fin: boolean;
   error: boolean;
+  loopBack: boolean;
 }
 
 // TODO: could be done also as NodeModel[][]?
@@ -68,7 +69,7 @@ const useFlowChartViewModel = () => {
   const sequenceToEdit: SequenceTO | null = useSelector(editSelectors.sequenceToEdit);
 
   const getRoot = (sequence: SequenceCTO): Node => {
-    let root: Node = { step: null, cond: null, error: false, fin: false };
+    let root: Node = { step: null, cond: null, error: false, fin: false, loopBack: false };
     if (!isNullOrUndefined(sequence)) {
       const rootStep: SequenceStepCTO | undefined = sequence.sequenceStepCTOs.find(
         (step) => step.squenceStepTO.root === true
@@ -97,6 +98,7 @@ const useFlowChartViewModel = () => {
             cond: null,
             fin: false,
             error: false,
+            loopBack: false,
           };
           break;
         case GoToTypes.COND:
@@ -105,6 +107,7 @@ const useFlowChartViewModel = () => {
             cond: sequence.conditions.find((cond) => cond.id === goto.id) || null,
             fin: false,
             error: false,
+            loopBack: false,
           };
           break;
         case GoToTypes.ERROR:
@@ -113,6 +116,7 @@ const useFlowChartViewModel = () => {
             cond: null,
             fin: false,
             error: true,
+            loopBack: false,
           };
           break;
         case GoToTypes.FIN:
@@ -121,6 +125,7 @@ const useFlowChartViewModel = () => {
             cond: null,
             fin: true,
             error: false,
+            loopBack: false,
           };
           break;
       }
@@ -129,28 +134,41 @@ const useFlowChartViewModel = () => {
     return node;
   };
 
-  const setNextNodes = (nodes: Node[]): Node[] => {
+  const setNextNodes = (nodes: Node[], nodesBeen: Node[]): Node[] => {
     let newNodes: Node[] = [];
-
     nodes.forEach((node) => {
-      if (node.step !== null && node.cond === null) {
+      if (node.step !== null && node.cond === null && node.loopBack === false) {
         const newNode: Node | null = setGoToAsNode(node.step.squenceStepTO.goto);
         if (newNode) {
+          // check if we are been on node
+          if (nodesBeen.find((node) => node.step?.squenceStepTO.id === newNode?.step?.squenceStepTO.id)) {
+            // remove goto so we stop looping.
+            newNode.loopBack = true;
+          }
           newNodes.push(newNode);
         }
       }
-      if (node.cond !== null && node.step === null) {
+      if (node.cond !== null && node.step === null && node.loopBack === false) {
         const ifNode: Node | null = setGoToAsNode(node.cond.ifGoTo);
         if (ifNode) {
+          // check if we are been on node
+          if (nodesBeen.find((node) => node.step?.squenceStepTO.id === ifNode?.step?.squenceStepTO.id)) {
+            // remove goto so we stop looping.
+            ifNode.loopBack = true;
+          }
           newNodes.push(ifNode);
         }
         const elseNode: Node | null = setGoToAsNode(node.cond.elseGoTo);
         if (elseNode) {
+          // check if we are been on node
+          if (nodesBeen.find((node) => node.step?.squenceStepTO.id === elseNode?.step?.squenceStepTO.id)) {
+            // remove goto so we stop looping.
+            elseNode.loopBack = true;
+          }
           newNodes.push(elseNode);
         }
       }
     });
-
     return newNodes;
   };
 
@@ -177,16 +195,19 @@ const useFlowChartViewModel = () => {
 
   const parsSequenceToNodes = (sequence: SequenceCTO | null): nodeArray[] => {
     let nodeModels: nodeArray[] = [];
+    let nodesBeen: Node[] = [];
     if (sequence !== null) {
       // get root
       const root: Node = getRoot(sequence);
       let nodes: Node[] = [root];
       let hasNext = true;
       while (hasNext) {
-        // push nodes to array
+        // pars node to nodeModel and push nodes to array.
         nodeModels.push({ nodes: parsNodeArrayToNodeModelArray(nodes) });
+        // count were we've been.
+        nodes.forEach((node) => nodesBeen.push(node));
         // get next nodes
-        nodes = setNextNodes(nodes);
+        nodes = setNextNodes(nodes, nodesBeen);
         if (nodes.length <= 0) {
           hasNext = false;
         }
@@ -209,12 +230,7 @@ const useFlowChartViewModel = () => {
   };
 
   const buildChart = (node: NodeModel): JSX.Element => {
-    return (
-      <div className={getLeafClass(node.leafType)}>
-        {/* <div className={getLeafClass(node.leafType)} style={{ backgroundColor: getLeafColor(node.leafType) }}> */}
-        {node.name}
-      </div>
-    );
+    return <div className={getLeafClass(node.leafType)}>{node.name}</div>;
   };
 
   const buildRow = (nodes: NodeModel[]): JSX.Element => {
@@ -239,5 +255,8 @@ const useFlowChartViewModel = () => {
     return <div>{parsSequenceToNodes(getSequence()).map((nodes) => buildRow(nodes.nodes))}</div>;
   };
 
-  return { sequenceName: sequence?.sequenceTO.name ? sequence.sequenceTO.name : "Select sequence...", buildFlowChart };
+  return {
+    sequenceName: sequence?.sequenceTO.name ? sequence.sequenceTO.name : "Select sequence...",
+    buildFlowChart,
+  };
 };
