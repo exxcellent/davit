@@ -220,6 +220,47 @@
   border-image: linear-gradient(to bottom, transparent, #e0e1e2, #e0e1e2, #e0e1e2, #e0e1e2, transparent) 0 100%;
 }
 
+/* -------------------------------------------- Flussdiagram -------------------------------------------- */
+
+.legend {
+  display: flex;
+  justify-content: space-around;
+  background-color: var(--carv2-background-color-header);
+}
+
+.legendItem {
+  padding-left: 15px;
+  padding-right: 15px;
+  min-width: 10em;
+  text-align: center;
+}
+
+.node {
+  /* border: 1px solid var(--carv2-background-color-header); */
+  padding: 0.2em;
+  border-radius: 5px;
+  min-width: 5em;
+  text-align: center;
+  color: black;
+  box-shadow: 0 0 0 1px #d4d4d5, 0 2px 4px 0 rgba(34, 36, 38, 0.12), 0 2px 10px 0 rgba(34, 36, 38, 0.15);
+}
+
+.step {
+  background-color: var(--carv2-color-exxcellent-blue);
+}
+
+.cond {
+  background-color: var(--carv2-color-exxcellent-yellow);
+}
+
+.fin {
+  background-color: green;
+}
+
+.error {
+  background-color: red;
+}
+
 /* -------------------------------------------- Table -------------------------------------------- */
 .carv2Table {
   border: 1px solid var(--carv2-color-primary);
@@ -277,10 +318,12 @@
   --carv2-color-primary: #e0e1e2;
   /* --carv2-color-secondary: #3bc97b; */
   --carv2-color-secondary: #00cdf1;
-  /* --carv2-color-secondary: #0060a9; */
-  /* --carv2-color-secondary: #f17000; */
-  /* --carv2-color-secondary: #6d00c7; */
-  /* --carv2-color-primary: orange; */
+
+  --carv2-color-exxcellent-blue: #0060a9;
+  --carv2-color-exxcellent-yellow: #c5c800;
+  --carv2-color-exxcellent-gray: #666d71;
+  --carv2-color-exxcellent-purple: #a568a8;
+
   --carv2-background-color-lidebar: rgba(0, 0, 0, 0.3);
   --carv2-text-color: white;
   --carv2-data-add-color: #6cbf8f;

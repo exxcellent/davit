@@ -17,12 +17,20 @@ export const SequenceModelController: FunctionComponent<SequenceModelControllerP
 
   return (
     <div className="sequencModel">
-      <div style={{ display: "flex", justifyContent: "space-around", backgroundColor: "black" }}>
+      <div className="legend">
         <span style={{ color: "white", paddingLeft: "15px" }}>LEGEND:</span>
-        <span style={{ color: "blue", paddingLeft: "15px" }}>STEP</span>
-        <span style={{ color: "yellow", paddingLeft: "15px" }}>CONDITION</span>
-        <span style={{ color: "green", paddingLeft: "15px" }}>FIN</span>
-        <span style={{ color: "red", paddingLeft: "15px" }}>ERROR</span>
+        <span className="legendItem" style={{ backgroundColor: "blue" }}>
+          STEP
+        </span>
+        <span className="legendItem" style={{ backgroundColor: "yellow" }}>
+          CONDITION
+        </span>
+        <span className="legendItem" style={{ backgroundColor: "red" }}>
+          ERROR
+        </span>
+        <span className="legendItem" style={{ backgroundColor: "green" }}>
+          FIN
+        </span>
       </div>
       <div style={{ display: "flex", justifyContent: "center" }}>{sequenceName}</div>
       {buildFlowChart()}
@@ -187,30 +195,23 @@ const useFlowChartViewModel = () => {
     return nodeModels;
   };
 
-  const getLeafColor = (leafType: LeafTyps): string => {
+  const getLeafClass = (leafType: LeafTyps): string => {
     switch (leafType) {
       case LeafTyps.COND:
-        return "yellow";
+        return "node cond";
       case LeafTyps.STEP:
-        return "blue";
+        return "node step";
       case LeafTyps.ERROR:
-        return "red";
+        return "node error";
       case LeafTyps.FIN:
-        return "green";
+        return "node fin";
     }
   };
 
   const buildChart = (node: NodeModel): JSX.Element => {
     return (
-      <div
-        style={{
-          border: "1px solid black",
-          backgroundColor: getLeafColor(node.leafType),
-          padding: "0.2em",
-          borderRadius: "5px",
-          position: "absolute",
-        }}
-      >
+      <div className={getLeafClass(node.leafType)}>
+        {/* <div className={getLeafClass(node.leafType)} style={{ backgroundColor: getLeafColor(node.leafType) }}> */}
         {node.name}
       </div>
     );
