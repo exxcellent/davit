@@ -48,6 +48,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
     setRoot,
     isRoot,
     getCondition,
+    key,
   } = useControllPanelEditConditionViewModel();
 
   const conditionName = (
@@ -111,7 +112,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
   );
 
   return (
-    <ControllPanelEditSub label={label}>
+    <ControllPanelEditSub label={label} key={key}>
       <div className="controllPanelEditChild">
         {conditionName}
         {hasDropDown}
@@ -176,6 +177,7 @@ const useControllPanelEditConditionViewModel = () => {
   const textInput = useRef<Input>(null);
   const [currentIfGoTo, setCurrentIfGoTo] = useState<GoTo>({ type: GoToTypes.STEP, id: -1 });
   const [currentElseGoTo, setCurrentElseGoTo] = useState<GoTo>({ type: GoToTypes.STEP, id: -1 });
+  const [key, setKey] = useState<number>(0);
 
   useEffect(() => {
     if (isNullOrUndefined(conditionToEdit)) {
@@ -325,6 +327,7 @@ const useControllPanelEditConditionViewModel = () => {
       goToCondition.sequenceFk = conditionToEdit.sequenceFk;
       const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(conditionToEdit);
       dispatch(EditActions.setMode.editCondition(goToCondition, copyStepToEdit, ifGoTo));
+      setKey(key + 1);
     }
   };
 
@@ -375,5 +378,6 @@ const useControllPanelEditConditionViewModel = () => {
     setRoot,
     isRoot: conditionToEdit?.root ? conditionToEdit.root : false,
     getCondition,
+    key,
   };
 };

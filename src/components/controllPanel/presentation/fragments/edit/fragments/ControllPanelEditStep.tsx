@@ -47,6 +47,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
     createGoToCondition,
     setRoot,
     isRoot,
+    key,
   } = useControllPanelEditSequenceStepViewModel();
 
   const actionDropdown = (
@@ -121,7 +122,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
   );
 
   return (
-    <ControllPanelEditSub label={label}>
+    <ControllPanelEditSub label={label} key={key}>
       <div className="controllPanelEditChild">
         {stepName}
         {actionDropdown}
@@ -155,6 +156,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
   const dispatch = useDispatch();
   const textInput = useRef<Input>(null);
   const [currentGoTo, setCurrentGoTo] = useState<GoTo>({ type: GoToTypes.STEP, id: -1 });
+  const [key, setKey] = useState<number>(0);
 
   useEffect(() => {
     if (isNullOrUndefined(stepToEdit)) {
@@ -279,6 +281,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
       let goToStep: SequenceStepCTO = new SequenceStepCTO();
       goToStep.squenceStepTO.sequenceFk = stepToEdit.squenceStepTO.sequenceFk;
       const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
+      setKey(key + 1);
       dispatch(EditActions.setMode.editStep(goToStep, copyStepToEdit));
     }
   };
@@ -330,5 +333,6 @@ const useControllPanelEditSequenceStepViewModel = () => {
     createGoToCondition,
     setRoot,
     isRoot: stepToEdit?.squenceStepTO.root ? stepToEdit?.squenceStepTO.root : false,
+    key,
   };
 };

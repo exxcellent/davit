@@ -275,6 +275,18 @@
   display: table;
 }
 
+.tabs {
+  background-color: var(--carv2-background-color-shadow);
+}
+
+.carv2TableHeader {
+  background-color: var(--carv2-background-color-shadow);
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  color: var(--carv2-color-primary);
+}
+
 .carv2TBody {
   /* display: block; */
   overflow-y: scroll;

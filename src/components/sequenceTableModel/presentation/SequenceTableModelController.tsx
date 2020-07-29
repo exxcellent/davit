@@ -28,7 +28,7 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
 
   return (
     <div className={fullScreen ? "" : "sequenceTable"}>
-      <div>
+      <div className="tabs">
         <Carv2ButtonLabel
           label="Sequence"
           onClick={() => {
@@ -50,7 +50,7 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
       </div>
       {mode === table.sequence && (
         <div>
-          <div style={{ display: "flex", justifyContent: "center", width: "100%", color: "white" }}>
+          <div className="carv2TableHeader">
             <label>{title}</label>
           </div>
           <table className="carv2Table">
@@ -71,7 +71,7 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
       )}
       {mode === table.step && (
         <div>
-          <div style={{ display: "flex", justifyContent: "center", width: "100%", color: "white" }}>
+          <div className="carv2TableHeader">
             <label>STEPS</label>
           </div>
           <table className="carv2Table">
@@ -91,7 +91,7 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
       )}
       {mode === table.condition && (
         <div>
-          <div style={{ display: "flex", justifyContent: "center", width: "100%", color: "white" }}>
+          <div className="carv2TableHeader">
             <label>CONDITIONS</label>
           </div>
           <table className="carv2Table">
