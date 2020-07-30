@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React, { FunctionComponent, useRef } from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useCurrentHeight, useCurrentWitdh } from "../../../../app/Carv2";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { GeometricalDataCTO } from "../../../../dataAccess/access/cto/GeometraicalDataCTO";
@@ -34,6 +34,20 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
   } = props;
 
   const constraintsRef = useRef(null);
+
+  const [key, setKey] = useState<number>(0);
+
+  const handleResize = () => {
+    setKey(key + 1);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  });
 
   // full size window
   const w1: number = useCurrentWitdh();
@@ -114,13 +128,14 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
           ? {
               height: h2,
               maxWidth: w2,
-              borderWidth: "3px",
-              borderStyle: "dashed",
+              borderWidth: "1px",
+              borderStyle: "solid",
               backgroundColor: "var(--carv2-background-color)",
             }
           : {}
       }
       className={fullScreen ? "" : "dataModel"}
+      key={key}
     >
       {dataCTOs.map(createDnDMetaDataFragmentIfNotinEdit)}
       {dataCTOToEdit && createDnDMetaDataFragment(dataCTOToEdit)}

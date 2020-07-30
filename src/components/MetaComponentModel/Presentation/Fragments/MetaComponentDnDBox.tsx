@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React, { FunctionComponent, useRef } from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useCurrentHeight, useCurrentWitdh } from "../../../../app/Carv2";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
 import { GroupTO } from "../../../../dataAccess/access/to/GroupTO";
@@ -39,6 +39,20 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (prop
   const h1: number = useCurrentHeight();
   const h2: number = (w1 / 100) * 56.25;
   const w2: number = (h1 / 56.25) * 100;
+
+  const [key, setKey] = useState<number>(0);
+
+  const handleResize = () => {
+    setKey(key + 1);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  });
 
   const onPositionUpdate = (x: number, y: number, positionId: number) => {
     const componentCTO = componentCTOs.find((componentCTO) => componentCTO.geometricalData.position.id === positionId);
@@ -80,15 +94,16 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (prop
       style={
         fullScreen
           ? {
-            height: h2,
-            maxWidth: w2,
-            borderWidth: "3px",
-            borderStyle: "dashed",
-            backgroundColor: "var(--carv2-background-color)",
-          }
+              height: h2,
+              maxWidth: w2,
+              borderWidth: "3px",
+              borderStyle: "dashed",
+              backgroundColor: "var(--carv2-background-color)",
+            }
           : {}
       }
       className={fullScreen ? "" : "componentModel"}
+      key={key}
     >
       {componentCTOs.map(createDnDMetaComponentFragmentIfNotInEdit)}
       {componentCTOToEdit && createDnDMetaComponent(componentCTOToEdit)}
