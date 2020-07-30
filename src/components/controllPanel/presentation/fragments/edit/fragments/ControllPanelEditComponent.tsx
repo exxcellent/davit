@@ -32,12 +32,7 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
 
   return (
     <ControllPanelEditSub label={label}>
-      <div className="optionFieldSpacer">
-        <OptionField>
-          <GroupDropDown onSelect={setGroup} value={compGroup} />
-        </OptionField>
-      </div>
-      <div className="columnDivider" style={{ display: "flex" }}>
+      <div className="optionFieldSpacer" style={{ display: "flex" }}>
         <Carv2LabelTextfield
           label="Name:"
           placeholder="Component Name"
@@ -47,6 +42,11 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
           autoFocus
           ref={textInput}
         />
+      </div>
+      <div className="columnDivider">
+        <OptionField>
+          <GroupDropDown onSelect={setGroup} value={compGroup} />
+        </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
         <Carv2ButtonLabel onClick={createAnother} label="Create another" />
@@ -88,7 +88,11 @@ const useControllPanelEditComponentViewModel = () => {
   };
 
   const saveComponent = () => {
-    dispatch(EditActions.component.save(componentToEdit!));
+    if (componentToEdit?.component.name !== "") {
+      dispatch(EditActions.component.save(componentToEdit!));
+    } else {
+      deleteComponent();
+    }
     dispatch(EditActions.setMode.edit());
   };
 

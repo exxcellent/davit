@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "semantic-ui-react";
+import { Button, Label } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
 import { DataSetupTO } from "../../../../../dataAccess/access/to/DataSetupTO";
@@ -10,7 +10,7 @@ import { DataSetupDropDown } from "../../../../common/fragments/dropdowns/DataSe
 import { SequenceDropDown } from "../../../../common/fragments/dropdowns/SequenceDropDown";
 import { OptionField } from "../edit/common/OptionField";
 
-export interface ControllPanelSequenceOptionsProps { }
+export interface ControllPanelSequenceOptionsProps {}
 
 export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequenceOptionsProps> = (props) => {
   const {
@@ -20,6 +20,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
     stepBack,
     stepNext,
     selectDataSetup,
+    currentStepName,
   } = useControllPanelSequenceOptionsViewModel();
 
   return (
@@ -60,7 +61,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
-        <OptionField></OptionField>
+        <OptionField label="STEP-NAME">{currentStepName && <Label color="blue">{currentStepName}</Label>}</OptionField>
       </div>
     </div>
   );
@@ -94,8 +95,12 @@ const useControllPanelSequenceOptionsViewModel = () => {
   };
 
   // TODO: add in sequenceModelSlice.
-  const stepNext = () => { dispatch(SequenceModelActions.setCurrentStepIndex(stepIndex + 1)) };
-  const stepBack = () => { dispatch(SequenceModelActions.setCurrentStepIndex(stepIndex - 1)) };
+  const stepNext = () => {
+    dispatch(SequenceModelActions.setCurrentStepIndex(stepIndex + 1));
+  };
+  const stepBack = () => {
+    dispatch(SequenceModelActions.setCurrentStepIndex(stepIndex - 1));
+  };
 
   return {
     sequence,
@@ -104,5 +109,6 @@ const useControllPanelSequenceOptionsViewModel = () => {
     stepNext,
     stepBack,
     selectDataSetup,
+    currentStepName: sequence?.sequenceStepCTOs[stepIndex].squenceStepTO.name,
   };
 };

@@ -173,8 +173,21 @@
   box-shadow: 6px 6px 10px var(--carv2-data-delete-color) inset !important;
 }
 
+.optionField {
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.optionFieldSpacer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
 .carvPath {
-  stroke: var(--carv2-color-secondary);
+  /* stroke: var(--carv2-color-secondary); */
+  stroke: black;
   stroke-width: 2px;
   fill: transparent;
 }
@@ -184,7 +197,7 @@
 }
 
 .carvArrowMarker {
-  fill: var(--carv2-color-secondary);
+  fill: black;
 }
 
 #buttonGroupLabel {
