@@ -8852,10 +8852,10 @@ react-app-polyfill@^1.0.6:
     regenerator-runtime "^0.13.3"
     whatwg-fetch "^3.0.0"
 
-react-archer@^1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/react-archer/-/react-archer-1.5.0.tgz#c0d3427310178d748d72f0c3db0dd75b4b533f61"
-  integrity sha512-NOSMD7eZCQfzVegg0+6dA7/Y3k37V4NZUd1Ri0kMWZ4e57ezfP0uX1tAuVOiSxdIFQiM+v7A8HRCSyTBxJXn7A==
+react-archer@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-archer/-/react-archer-2.0.2.tgz#aa7f36769d12d1610707b52e287ed57aa93f2436"
+  integrity sha512-olKb+sdqsES0KO2MQ17ziMnk+KoYUXKzpLhtyMcEjbSiLxDzDZpNYPlkFGmogEyRxvxWdvwVxlrQyWf/XDs/Aw==
   dependencies:
     react-fast-compare "^2.0.4"
     resize-observer-polyfill "1.5.0"

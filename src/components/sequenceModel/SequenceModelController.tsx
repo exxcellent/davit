@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from "react";
+import { ArcherContainer, ArcherElement, Relation } from "react-archer";
 import { useDispatch, useSelector } from "react-redux";
 import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../dataAccess/access/cto/SequenceCTO";
@@ -10,13 +11,20 @@ import { EditActions, editSelectors } from "../../slices/EditSlice";
 import { handleError } from "../../slices/GlobalSlice";
 import { sequenceModelSelectors } from "../../slices/SequenceModelSlice";
 
-interface SequenceModelControllerProps {}
+interface SequenceModelControllerProps {
+  fullScreen?: boolean;
+}
 
 export const SequenceModelController: FunctionComponent<SequenceModelControllerProps> = (props) => {
+  const { fullScreen } = props;
   const { sequenceName, buildFlowChart } = useFlowChartViewModel();
 
+  // const rootStyle = { display: "flex", justifyContent: "space-around" };
+  // const rowStyle = { margin: "200px 0", display: "flex", justifyContent: "space-between" };
+  // const boxStyle = { padding: "10px", border: "1px solid black" };
+
   return (
-    <div className="sequencModel">
+    <div className={fullScreen ? "" : "sequencModel"}>
       <div className="legend">
         <span style={{ color: "white", paddingLeft: "15px" }}>LEGEND:</span>
         <span className="legendItem" style={{ backgroundColor: "blue" }}>
@@ -33,7 +41,72 @@ export const SequenceModelController: FunctionComponent<SequenceModelControllerP
         </span>
       </div>
       <div style={{ display: "flex", justifyContent: "center" }}>{sequenceName}</div>
+
       {buildFlowChart()}
+
+      {/* <ArcherContainer strokeColor="red">
+        <div style={rootStyle}>
+          <ArcherElement
+            id="root"
+            relations={[
+              {
+                targetId: "element2",
+                targetAnchor: "top",
+                sourceAnchor: "bottom",
+              },
+            ]}
+          >
+            <div style={boxStyle}>Root</div>
+          </ArcherElement>
+          <ArcherElement
+            id="root2"
+            relations={[
+              {
+                targetId: "element2",
+                targetAnchor: "top",
+                sourceAnchor: "bottom",
+              },
+            ]}
+          >
+            <div style={boxStyle}>Root</div>
+          </ArcherElement>
+        </div>
+
+        <div style={rowStyle}>
+          <ArcherElement
+            id="element2"
+            relations={[
+              {
+                targetId: "element3",
+                targetAnchor: "left",
+                sourceAnchor: "right",
+                style: { strokeColor: "blue", strokeWidth: 1 },
+                label: <div style={{ marginTop: "-20px" }}>Arrow 2</div>,
+              },
+            ]}
+          >
+            <div style={boxStyle}>Element 2</div>
+          </ArcherElement>
+
+          <ArcherElement id="element3">
+            <div style={boxStyle}>Element 3</div>
+          </ArcherElement>
+
+          <ArcherElement
+            id="element4"
+            relations={[
+              {
+                targetId: "root",
+                targetAnchor: "right",
+                sourceAnchor: "left",
+                label: "Arrow 3",
+              },
+            ]}
+          >
+            <div style={boxStyle}>Element 4</div>
+          </ArcherElement>
+        </div>
+      </ArcherContainer> */}
     </div>
   );
 };
@@ -48,6 +121,8 @@ enum LeafTyps {
 interface NodeModel {
   name: string;
   leafType: LeafTyps;
+  relationId1?: string;
+  relationId2?: string;
 }
 
 interface Node {
@@ -56,6 +131,8 @@ interface Node {
   fin: boolean;
   error: boolean;
   loopBack: boolean;
+  relationId1?: string;
+  relationId2?: string;
 }
 
 // TODO: could be done also as NodeModel[][]?
@@ -91,47 +168,50 @@ const useFlowChartViewModel = () => {
   const setGoToAsNode = (goto: GoTo): Node | null => {
     let node: Node | null = null;
     if (!isNullOrUndefined(sequence)) {
+      let step: SequenceStepCTO | null = null;
+      let cond: ConditionTO | null = null;
+      let fin: boolean = false;
+      let error: boolean = false;
+      let loopBack: boolean = false;
       switch (goto.type) {
         case GoToTypes.STEP:
-          node = {
-            step: sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.id === goto.id) || null,
-            cond: null,
-            fin: false,
-            error: false,
-            loopBack: false,
-          };
+          step = sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.id === goto.id) || null;
           break;
         case GoToTypes.COND:
-          node = {
-            step: null,
-            cond: sequence.conditions.find((cond) => cond.id === goto.id) || null,
-            fin: false,
-            error: false,
-            loopBack: false,
-          };
+          cond = sequence.conditions.find((cond) => cond.id === goto.id) || null;
           break;
         case GoToTypes.ERROR:
-          node = {
-            step: null,
-            cond: null,
-            fin: false,
-            error: true,
-            loopBack: false,
-          };
+          error = true;
           break;
         case GoToTypes.FIN:
-          node = {
-            step: null,
-            cond: null,
-            fin: true,
-            error: false,
-            loopBack: false,
-          };
+          fin = true;
           break;
       }
+      node = { step: step, cond: cond, fin: fin, error: error, loopBack: loopBack };
     }
 
     return node;
+  };
+
+  const getNodeName = (node: Node): string => {
+    let name: string = "";
+
+    if (node.step !== null && node.cond === null) {
+      name = node.step.squenceStepTO.name;
+    }
+    if (node.cond !== null && node.step === null) {
+      name = node.cond.name;
+    }
+
+    if (node.error) {
+      name = "ERROR";
+    }
+
+    if (node.fin) {
+      name = "FIN";
+    }
+
+    return name;
   };
 
   const hasBeenOnNode = (node: Node, nodesBeen: Node[]): boolean => {
@@ -188,11 +268,40 @@ const useFlowChartViewModel = () => {
 
     nodes.forEach((node) => {
       if (node.step !== null) {
-        nodeModes.push({ name: node.step.squenceStepTO.name, leafType: LeafTyps.STEP });
+        const relationNode: Node | null = setGoToAsNode(node.step.squenceStepTO.goto);
+        let relationId1: string = "";
+        if (relationNode) {
+          relationId1 = getNodeName(relationNode);
+        }
+
+        nodeModes.push({
+          name: node.step.squenceStepTO.name,
+          leafType: LeafTyps.STEP,
+          relationId1: relationId1,
+        });
       }
+
       if (node.cond !== null) {
-        nodeModes.push({ name: node.cond.name, leafType: LeafTyps.COND });
+        const relation1Node: Node | null = setGoToAsNode(node.cond.ifGoTo);
+        let relationId1: string = "";
+        if (relation1Node) {
+          relationId1 = getNodeName(relation1Node);
+        }
+
+        const relation2Node: Node | null = setGoToAsNode(node.cond.elseGoTo);
+        let relationId2: string = "";
+        if (relation2Node) {
+          relationId2 = getNodeName(relation2Node);
+        }
+
+        nodeModes.push({
+          name: node.cond.name,
+          leafType: LeafTyps.COND,
+          relationId1: relationId1,
+          relationId2: relationId2,
+        });
       }
+
       if (node.error === true) {
         nodeModes.push({ name: "ERROR", leafType: LeafTyps.ERROR });
       }
@@ -243,12 +352,26 @@ const useFlowChartViewModel = () => {
   };
 
   const buildChart = (node: NodeModel): JSX.Element => {
-    return <div className={getLeafClass(node.leafType)}>{node.name}</div>;
+    const rel: Relation[] = [];
+    if (node.relationId1) {
+      rel.push({ targetId: node.relationId1, targetAnchor: "top", sourceAnchor: "bottom" });
+    }
+    if (node.relationId2) {
+      rel.push({ targetId: node.relationId2, targetAnchor: "top", sourceAnchor: "bottom" });
+    }
+    return (
+      <ArcherElement id={node.name} relations={rel}>
+        <div className={getLeafClass(node.leafType)} style={{ padding: "10" }}>
+          {node.name}
+        </div>
+      </ArcherElement>
+    );
   };
 
   const buildRow = (nodes: NodeModel[]): JSX.Element => {
     return (
-      <div style={{ display: "flex", justifyContent: "space-around", paddingTop: "1em" }}>
+      // <div style={{ display: "flex", justifyContent: "space-around", margin: "10px 0" }}>
+      <div style={{ display: "flex", justifyContent: "space-around", margin: "50px 0" }}>
         {nodes.map((node) => buildChart(node))}
       </div>
     );
@@ -265,7 +388,11 @@ const useFlowChartViewModel = () => {
   };
 
   const buildFlowChart = (): JSX.Element => {
-    return <div>{parsSequenceToNodes(getSequence()).map((nodes) => buildRow(nodes.nodes))}</div>;
+    return (
+      <ArcherContainer noCurves={true} arrowLength={0}>
+        {parsSequenceToNodes(getSequence()).map((nodes) => buildRow(nodes.nodes))}
+      </ArcherContainer>
+    );
   };
 
   return {

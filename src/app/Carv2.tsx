@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Switch } from "react-router-dom";
@@ -17,6 +16,7 @@ export const ModuleRoutes = {
   component: "/component",
   data: "/data",
   table: "/table",
+  flowChart: "/flowChart",
 };
 
 export function Carv2() {
@@ -64,6 +64,13 @@ export function Carv2() {
           <div className="Carv2">
             <div className="componentPage">
               <SequenceTableModelController fullScreen />
+            </div>
+          </div>
+        </Route>
+        <Route exact path={ModuleRoutes.flowChart}>
+          <div className="Carv2">
+            <div className="componentPage">
+              <SequenceModelController fullScreen />
             </div>
           </div>
         </Route>
