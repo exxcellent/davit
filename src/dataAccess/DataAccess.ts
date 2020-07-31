@@ -130,6 +130,17 @@ export const DataAccess = {
     return makeTransactional(SequenceDataAccessService.findAllInitDatas);
   },
 
+  findInitData(id: number): DataAccessResponse<InitDataTO> {
+    return makeTransactional(() => SequenceDataAccessService.findInitData(id));
+  },
+
+  saveInitData(initData: InitDataTO): DataAccessResponse<InitDataTO> {
+    return makeTransactional(() => SequenceDataAccessService.saveInitData(initData));
+  },
+
+  deleteInitData(id: number): DataAccessResponse<InitDataTO> {
+    return makeTransactional(() => SequenceDataAccessService.deleteInitData(id));
+  },
   // ========================================= DATA =========================================
 
   findAllDatas(): DataAccessResponse<DataCTO[]> {

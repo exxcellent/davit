@@ -8,9 +8,9 @@ import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
 import { ConditionTO } from "../dataAccess/access/to/ConditionTO";
 import { DataRelationTO } from "../dataAccess/access/to/DataRelationTO";
-import { DataSetupTO } from "../dataAccess/access/to/DataSetupTO";
 import { DataInstanceTO } from "../dataAccess/access/to/DataTO";
 import { GroupTO } from "../dataAccess/access/to/GroupTO";
+import { InitDataTO } from "../dataAccess/access/to/InitDataTO";
 import { SequenceTO } from "../dataAccess/access/to/SequenceTO";
 import { GoToTypes } from "../dataAccess/access/types/GoToType";
 import { DataAccess } from "../dataAccess/DataAccess";
@@ -31,6 +31,7 @@ export enum Mode {
   EDIT_DATA_INSTANCE = "EDIT_DATA_INSTANCE",
   EDIT_DATA_RELATION = "EDIT_DATA_RELATION",
   EDIT_DATA_SETUP = "EDIT_DATA_SETUP",
+  EDIT_INIT_DATA = "EDIT_INIT_DATA",
   EDIT_SEQUENCE = "EDIT_SEQUENCE",
   EDIT_SEQUENCE_CONDITION = "EDIT_SEQUENCE_CONDITION",
   EDIT_SEQUENCE_STEP = "EDIT_SEQUENCE_STEP",
@@ -54,6 +55,7 @@ interface EditState {
     | SequenceStepCTO
     | StepAction
     | DataSetupCTO
+    | InitDataTO
     | GroupTO
     | ConditionTO
     | {};
@@ -119,6 +121,13 @@ const EditSlice = createSlice({
         state.objectToEdit = action.payload;
       } else {
         handleError("Try to set dataSetup to edit in mode: " + state.mode);
+      }
+    },
+    setInitDataToEdit: (state, action: PayloadAction<InitDataTO>) => {
+      if (state.mode === Mode.EDIT_INIT_DATA) {
+        state.objectToEdit = action.payload;
+      } else {
+        handleError("Try to set initData to edit in mode: " + state.mode);
       }
     },
     setGroupToEdit: (state, action: PayloadAction<GroupTO>) => {
@@ -249,10 +258,24 @@ const setModeToEditGroup = (group?: GroupTO): AppThunk => (dispatch) => {
   }
 };
 
-const setModeToEditDataSetup = (dataSetup?: DataSetupTO): AppThunk => (dispatch) => {
+const setModeToEditInitData = (initData: InitDataTO): AppThunk => (dispatch) => {
+  dispatch(setModeWithStorage(Mode.EDIT_INIT_DATA));
+  if (initData.id !== -1) {
+    let response: DataAccessResponse<InitDataTO> = DataAccess.findInitData(initData.id);
+    if (response.code === 200) {
+      dispatch(EditSlice.actions.setInitDataToEdit(Carv2Util.deepCopy(response.object)));
+    } else {
+      handleError(response.message);
+    }
+  } else {
+    dispatch(EditActions.initData.save(initData));
+  }
+};
+
+const setModeToEditDataSetup = (id?: number): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_DATA_SETUP));
-  if (dataSetup) {
-    let response: DataAccessResponse<DataSetupCTO> = DataAccess.findDataSetupCTO(dataSetup.id);
+  if (id) {
+    let response: DataAccessResponse<DataSetupCTO> = DataAccess.findDataSetupCTO(id);
     if (response.code === 200) {
       dispatch(EditSlice.actions.setDataSetupToEdit(Carv2Util.deepCopy(response.object)));
     } else {
@@ -434,8 +457,26 @@ const saveDataSetupThunk = (dataSetup: DataSetupCTO): AppThunk => (dispatch) => 
   dispatch(MasterDataActions.loadDataSetupsFromBackend());
 };
 
-const deleteDataSetupThunk = (dataSetup: DataSetupCTO): AppThunk => async (dispatch) => {
-  const response: DataAccessResponse<DataSetupCTO> = await DataAccess.deleteDataSetup(dataSetup);
+const deleteDataSetupThunk = (dataSetup: DataSetupCTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<DataSetupCTO> = DataAccess.deleteDataSetup(dataSetup);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(MasterDataActions.loadDataSetupsFromBackend());
+};
+
+// ----------------------------------------------- Init Data -----------------------------------------------
+
+const saveInitDataThunk = (initData: InitDataTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<InitDataTO> = DataAccess.saveInitData(initData);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(EditActions.setMode.editInitData(response.object));
+};
+
+const deleteInitDataThunk = (initDataId: number): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<InitDataTO> = DataAccess.deleteInitData(initDataId);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
@@ -682,6 +723,11 @@ export const editSelectors = {
       ? (state.edit.objectToEdit as DataSetupCTO)
       : null;
   },
+  initDataToEdit: (state: RootState): InitDataTO | null => {
+    return state.edit.mode === Mode.EDIT_INIT_DATA && (state.edit.objectToEdit as InitDataTO).dataSetupFk
+      ? (state.edit.objectToEdit as InitDataTO)
+      : null;
+  },
   stepToEdit: (state: RootState): SequenceStepCTO | null => {
     switch (state.edit.mode) {
       case Mode.EDIT_SEQUENCE_STEP:
@@ -720,6 +766,7 @@ export const EditActions = {
     editRelation: setModeToEditRelation,
     editSequence: setModeToEditSequence,
     editDataSetup: setModeToEditDataSetup,
+    editInitData: setModeToEditInitData,
     editStep: setModeToEditStep,
     editCondition: setModeToEditCondition,
     editAction: setModeToEditAction,
@@ -765,6 +812,11 @@ export const EditActions = {
     delete: deleteDataSetupThunk,
     update: EditSlice.actions.setDataSetupToEdit,
     create: createDataSetupThunk,
+  },
+  initData: {
+    save: saveInitDataThunk,
+    delete: deleteInitDataThunk,
+    update: EditSlice.actions.setInitDataToEdit,
   },
   step: {
     save: saveSequenceStepThunk,

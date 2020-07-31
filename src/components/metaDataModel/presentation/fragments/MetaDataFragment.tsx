@@ -17,11 +17,15 @@ export interface MetaDataFragmentProps {
 const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (props) => {
   const { initalName, componentFragments, initalWidth, initalHeigth, instances } = props;
 
-  const createInstances = (instanceName: string, components: ViewFragmentProps[]) => {
+  const createInstances = (instanceName: string, components: ViewFragmentProps[], key: number) => {
     return (
-      <Card style={{ width: "100px", margin: "0", backgroundColor: "rgba(0,0,0,0.3)", color: "white" }}>
+      <Card style={{ width: "100px", margin: "0", backgroundColor: "rgba(0,0,0,0.3)", color: "white" }} key={key}>
         <Card.Content>{instanceName}</Card.Content>
-        {components.map(createViewFragment)}
+        {components.map(
+          (comp): JSX.Element => {
+            return createViewFragment(comp, key);
+          }
+        )}
       </Card>
     );
   };
@@ -38,7 +42,8 @@ const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (props) => {
               instance.name,
               componentFragments.filter(
                 (component) => (component.parentId as { dataId: number; instanceId: number }).instanceId === index
-              )
+              ),
+              index
             )
           )}
         </div>

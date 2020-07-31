@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Input } from "semantic-ui-react";
+import { Button, Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
 import { DataSetupCTO } from "../../../../../../dataAccess/access/cto/DataSetupCTO";
@@ -10,8 +10,7 @@ import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
-import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
-import { MultiselectDataDropDown } from "../../../../../common/fragments/dropdowns/MultiselectDataDropDown";
+import { InitDataDropDownButton } from "../../../../../common/fragments/dropdowns/InitDataDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
@@ -27,37 +26,43 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
     // copyDataSetup,
     saveDataSetup,
     deleteDataSetup,
-    setComponentToEdit,
-    setInitDatas,
-    getDatas,
+    // setComponentToEdit,
+    // setInitDatas,
+    // getDatas,
+    getInitDatas,
     createAnother,
     updateDataSetup,
+    editInitData,
+    createInitData,
   } = useControllPanelEditDataSetupViewModel();
 
   return (
     <ControllPanelEditSub label={label}>
       <div className="controllPanelEditChild">
-        <Carv2LabelTextfield
-          label="Name:"
-          placeholder="Data Setup Name ..."
-          onChange={(event: any) => changeName(event.target.value)}
-          value={name}
-          autoFocus
-          ref={textInput}
-          onBlur={() => updateDataSetup()}
-        />
+        <OptionField label="Data - SETUP - NAME">
+          <Carv2LabelTextfield
+            label="Name:"
+            placeholder="Data Setup Name ..."
+            onChange={(event: any) => changeName(event.target.value)}
+            value={name}
+            autoFocus
+            ref={textInput}
+            onBlur={() => updateDataSetup()}
+          />
+        </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <ComponentDropDown
-          onSelect={(comp) => (comp ? setComponentToEdit(comp) : setComponentToEdit(null))}
-          placeholder="Select Component..."
-          onBlur={() => updateDataSetup()}
-        />
+        <OptionField label="SET - INITAL - DATA">
+          <Button.Group>
+            <Button icon="add" inverted color="orange" onClick={createInitData} />
+            <Button id="buttonGroupLabel" disabled inverted color="orange">
+              Inital Data
+            </Button>
+            <InitDataDropDownButton onSelect={editInitData} icon="wrench" initDatas={getInitDatas} />
+          </Button.Group>
+        </OptionField>
       </div>
-      <div className="columnDivider controllPanelEditChild" style={{ paddingLeft: "10px", paddingRight: "10px" }}>
-        <MultiselectDataDropDown onSelect={setInitDatas} selected={getDatas()} />
-        {/* <MultiselectDataDropDown onSelect={setInitDatas} selected={getDatas()} onBlur={() => updateDataSetup()} /> */}
-      </div>
+      <div className="columnDivider controllPanelEditChild"></div>
       <div className="columnDivider controllPanelEditChild">
         <Carv2ButtonLabel onClick={createAnother} label="Create another" />
         <Carv2ButtonLabel onClick={saveDataSetup} label="OK" />
@@ -95,7 +100,11 @@ const useControllPanelEditDataSetupViewModel = () => {
   };
 
   const saveDataSetup = () => {
-    dispatch(EditActions.dataSetup.save(dataSetupToEdit!));
+    if (dataSetupToEdit?.dataSetup.name !== "") {
+      dispatch(EditActions.dataSetup.save(dataSetupToEdit!));
+    } else {
+      deleteDataSetup();
+    }
     dispatch(EditActions.setMode.edit());
   };
 
@@ -113,14 +122,6 @@ const useControllPanelEditDataSetupViewModel = () => {
     dispatch(EditActions.dataSetup.save(copyDataSetup));
   };
 
-  // const validateInput = (): boolean => {
-  //   if (!isNullOrUndefined(dataSetupToEdit)) {
-  //     return dataSetupToEdit.dataSetup.name.length > 0;
-  //   } else {
-  //     return false;
-  //   }
-  // };
-
   const copyDataSetup = () => {
     let copyDataSetup: DataSetupCTO = Carv2Util.deepCopy(dataSetupToEdit);
     copyDataSetup.dataSetup.name = dataSetupToEdit?.dataSetup.name + "-copy";
@@ -129,7 +130,7 @@ const useControllPanelEditDataSetupViewModel = () => {
       initData.id = -1;
       initData.dataSetupFk = -1;
     });
-    dispatch(EditActions.setMode.editDataSetup(copyDataSetup.dataSetup));
+    dispatch(EditActions.setMode.editDataSetup(copyDataSetup.dataSetup.id));
   };
 
   const setInitDatas = (dataIds: number[] | undefined): void => {
@@ -166,6 +167,20 @@ const useControllPanelEditDataSetupViewModel = () => {
     return dataIds;
   };
 
+  const editInitData = (initData: InitDataTO | undefined) => {
+    if (initData) {
+      dispatch(EditActions.setMode.editInitData(initData));
+    }
+  };
+
+  const createInitData = () => {
+    if (!isNullOrUndefined(dataSetupToEdit)) {
+      const initData: InitDataTO = new InitDataTO();
+      initData.dataSetupFk = dataSetupToEdit.dataSetup.id;
+      editInitData(initData);
+    }
+  };
+
   return {
     label: "EDIT DATA SETUP",
     name: dataSetupToEdit?.dataSetup.name,
@@ -176,8 +191,11 @@ const useControllPanelEditDataSetupViewModel = () => {
     copyDataSetup,
     setComponentToEdit,
     setInitDatas,
+    getInitDatas: dataSetupToEdit?.initDatas ? dataSetupToEdit.initDatas : [],
     getDatas,
     createAnother,
     updateDataSetup,
+    editInitData,
+    createInitData,
   };
 };

@@ -23,8 +23,8 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
     saveComponent,
     deleteComponent,
     textInput,
-    setGroup,
-    compGroup,
+    // setGroup,
+    // compGroup,
     updateComponent,
     createAnother,
   } = useControllPanelEditComponentViewModel();

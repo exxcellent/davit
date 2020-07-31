@@ -46,8 +46,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
               disabled={isNullOrUndefined(sequence)}
               onClick={stepBack}
             />
-            {/* <Button inverted color="orange" content={stepIndex || 0} disabled={true} /> */}
-            <Button inverted color="orange" content={"lllllllllllllllllllllllllllllllang"} disabled={true} />
+            <Button inverted color="orange" content={stepIndex || 0} disabled={true} />
             <Button
               inverted
               color="orange"
@@ -60,9 +59,9 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
           </Button.Group>
         </OptionField>
       </div>
-      {/* <div className="optionFieldSpacer columnDivider">
+      <div className="optionFieldSpacer columnDivider">
         <OptionField></OptionField>
-      </div> */}
+      </div>
     </div>
   );
 };

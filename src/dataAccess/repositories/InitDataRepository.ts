@@ -33,11 +33,16 @@ export const InitDataRepository = {
     return initDataTO;
   },
 
-  delete(initDataTO: InitDataTO): InitDataTO {
-    let success = dataStore.getDataStore().initDatas.delete(initDataTO.id!);
-    if (!success) {
-      throw new Error("dataAccess.repository.error.notExists");
+  delete(id: number): InitDataTO {
+    const deletedInitData: InitDataTO | undefined = this.find(id);
+    if (!deletedInitData) {
+      throw new Error("Can't delete InitData. There is no Object with id: " + id);
+    } else {
+      let success = dataStore.getDataStore().initDatas.delete(id);
+      if (!success) {
+        throw new Error("dataAccess.repository.error.notExists");
+      }
+      return deletedInitData;
     }
-    return initDataTO;
   },
 };

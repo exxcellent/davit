@@ -13,6 +13,7 @@ import { ControllPanelEditData } from "./fragments/ControllPanelEditData";
 import { ControllPanelEditDataInstance } from "./fragments/ControllPanelEditDataInstance";
 import { ControllPanelEditDataSetup } from "./fragments/ControllPanelEditDataSetup";
 import { ControllPanelEditGroup } from "./fragments/ControllPanelEditGroup";
+import { ControllPanelEditInitData } from "./fragments/ControllPanelEditInitData";
 import { ControllPanelEditMenu } from "./fragments/ControllPanelEditMenu";
 import { ControllPanelEditRelation } from "./fragments/ControllPanelEditRelation";
 import { ControllPanelEditSequence } from "./fragments/ControllPanelEditSequence";
@@ -53,6 +54,8 @@ export const ControllPanelEditController: FunctionComponent<ControllPanelEditCon
         return <ControllPanelEditAction />;
       case Mode.EDIT_DATA_SETUP:
         return <ControllPanelEditDataSetup />;
+      case Mode.EDIT_INIT_DATA:
+        return <ControllPanelEditInitData />;
       default:
         return (
           <ControllPanelEditMenu
@@ -81,6 +84,7 @@ const useControllPanelEditViewModel = () => {
     editOrAddRelation: (relation?: DataRelationTO) => dispatch(EditActions.setMode.editRelation(relation)),
     editOrAddSequence: (sequenceId?: number) => dispatch(EditActions.setMode.editSequence(sequenceId)),
     editOrAddGroup: (group?: GroupTO) => dispatch(EditActions.setMode.editGroup(group)),
-    editOrAddDataSetup: (dataSetup?: DataSetupTO) => dispatch(EditActions.setMode.editDataSetup(dataSetup)),
+    editOrAddDataSetup: (dataSetup?: DataSetupTO) =>
+      dispatch(EditActions.setMode.editDataSetup(dataSetup ? dataSetup.id : undefined)),
   };
 };
