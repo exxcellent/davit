@@ -8,7 +8,6 @@ import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
 import { ComponentDropDownButton } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
 import { DataDropDownButton } from "../../../../../common/fragments/dropdowns/DataDropDown";
 import { DataSetupDropDownButton } from "../../../../../common/fragments/dropdowns/DataSetupDropDown";
-import { GroupDropDownButton } from "../../../../../common/fragments/dropdowns/GroupDropDown";
 import { RelationDropDownButton } from "../../../../../common/fragments/dropdowns/RelationDropDown";
 import { SequenceDropDownButton } from "../../../../../common/fragments/dropdowns/SequenceDropDown";
 import { OptionField } from "../common/OptionField";
@@ -28,7 +27,7 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
     editOrAddData,
     editOrAddRelation,
     editOrAddSequence,
-    editOrAddGroup,
+    // editOrAddGroup,
     editOrAddDataSetup,
   } = props;
 
@@ -43,13 +42,13 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
             </Button>
             <ComponentDropDownButton onSelect={editOrAddComponent} icon="wrench" />
           </Button.Group>
-          <Button.Group>
+          {/* <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddGroup()} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Group
             </Button>
             <GroupDropDownButton onSelect={editOrAddGroup} icon="wrench" />
-          </Button.Group>
+          </Button.Group> */}
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
