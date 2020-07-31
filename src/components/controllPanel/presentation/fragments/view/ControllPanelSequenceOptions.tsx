@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Label } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
 import { DataSetupTO } from "../../../../../dataAccess/access/to/DataSetupTO";
@@ -20,7 +20,6 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
     stepBack,
     stepNext,
     selectDataSetup,
-    currentStepName,
   } = useControllPanelSequenceOptionsViewModel();
 
   return (
@@ -47,7 +46,8 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
               disabled={isNullOrUndefined(sequence)}
               onClick={stepBack}
             />
-            <Button inverted color="orange" content={stepIndex || 0} disabled={true} />
+            {/* <Button inverted color="orange" content={stepIndex || 0} disabled={true} /> */}
+            <Button inverted color="orange" content={"lllllllllllllllllllllllllllllllang"} disabled={true} />
             <Button
               inverted
               color="orange"
@@ -60,9 +60,9 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
           </Button.Group>
         </OptionField>
       </div>
-      <div className="optionFieldSpacer columnDivider">
-        <OptionField label="STEP-NAME">{currentStepName && <Label color="blue">{currentStepName}</Label>}</OptionField>
-      </div>
+      {/* <div className="optionFieldSpacer columnDivider">
+        <OptionField></OptionField>
+      </div> */}
     </div>
   );
 };
@@ -71,10 +71,6 @@ const useControllPanelSequenceOptionsViewModel = () => {
   const sequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
   const stepIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentStepIndex);
   const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   dispatch(MasterDataActions.loadSequencesFromBackend());
-  // }, [dispatch]);
 
   const selectSequence = (sequence: SequenceTO | undefined) => {
     if (!isNullOrUndefined(sequence)) {
@@ -109,6 +105,5 @@ const useControllPanelSequenceOptionsViewModel = () => {
     stepNext,
     stepBack,
     selectDataSetup,
-    currentStepName: sequence?.sequenceStepCTOs[stepIndex].squenceStepTO.name,
   };
 };

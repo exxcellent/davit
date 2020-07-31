@@ -35,8 +35,8 @@ const storefileData = (fileData: string): AppThunk => async (dispatch) => {
   }
 };
 
-const downloadData = (): AppThunk => (dispatch) => {
-  const response: DataAccessResponse<void> = DataAccess.downloadData();
+const downloadData = (projectName: string): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<void> = DataAccess.downloadData(projectName);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }

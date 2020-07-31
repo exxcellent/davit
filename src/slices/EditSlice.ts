@@ -21,6 +21,7 @@ import { MasterDataActions } from "./MasterDataSlice";
 import { SequenceModelActions } from "./SequenceModelSlice";
 
 export enum Mode {
+  TAB = "TAB",
   FILE = "FILE",
   VIEW = "VIEW",
   EDIT = "EDIT",
@@ -156,6 +157,11 @@ const setModeToFile = (): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.FILE));
 };
 
+const setModeToTab = (): AppThunk => (dispatch) => {
+  dispatch(EditSlice.actions.clearObjectToEdit());
+  dispatch(setModeWithStorage(Mode.TAB));
+};
+
 const setModeToView = (): AppThunk => (dispatch) => {
   dispatch(EditSlice.actions.clearObjectToEdit());
   dispatch(setModeWithStorage(Mode.VIEW));
@@ -270,7 +276,7 @@ const setModeToEditCondition = (
 
 const createComponentThunk = (): AppThunk => (dispatch) => {
   let component: ComponentCTO = new ComponentCTO();
-  component.component.name = "neu";
+  // component.component.name = "neu";
   const response: DataAccessResponse<ComponentCTO> = DataAccess.saveComponentCTO(component);
   console.log(response);
   if (response.code !== 200) {
@@ -720,6 +726,7 @@ export const EditActions = {
     edit: setModeToEdit,
     view: setModeToView,
     file: setModeToFile,
+    tab: setModeToTab,
   },
   component: {
     save: saveComponentThunk,

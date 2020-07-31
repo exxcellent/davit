@@ -210,7 +210,11 @@ const useControllPanelEditRelationViewModel = () => {
   };
 
   const saveRelation = () => {
-    dispatch(EditActions.relation.save(relationToEdit!));
+    if (relationToEdit?.data1Fk !== -1 && relationToEdit?.data2Fk !== -1) {
+      dispatch(EditActions.relation.save(relationToEdit!));
+    } else {
+      deleteRelation();
+    }
     dispatch(EditActions.setMode.edit());
   };
 

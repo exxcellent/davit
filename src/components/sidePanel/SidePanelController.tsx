@@ -7,7 +7,7 @@ import { EditActions } from "../../slices/EditSlice";
 export interface SidePanelProps {}
 
 export const SidePanelController: FunctionComponent<SidePanelProps> = (props) => {
-  const { setModeToEdit, setModeToFile, setModeToView } = useSidePanelViewModel();
+  const { setModeToEdit, setModeToFile, setModeToView, setModeToTab } = useSidePanelViewModel();
 
   return (
     <div className="leftPanel">
@@ -15,6 +15,7 @@ export const SidePanelController: FunctionComponent<SidePanelProps> = (props) =>
         <Button inverted color="orange" icon="write" onClick={setModeToEdit} />
         <Button inverted color="orange" icon="eye" onClick={setModeToView} />
         <Button inverted color="orange" icon="file" onClick={setModeToFile} />
+        <Button inverted color="orange" icon="external alternate" onClick={setModeToTab} />
       </Button.Group>
       <div style={{ position: "absolute", bottom: "1em" }}>
         <img src={logo} alt="fireSpot" />
@@ -27,7 +28,6 @@ export const SidePanelController: FunctionComponent<SidePanelProps> = (props) =>
             paddingLeft: "15px",
             marginTop: "0.5em",
             marginBottom: "1em",
-            // color: "#666D71",
             color: "#0060A9",
           }}
         >
@@ -53,9 +53,14 @@ const useSidePanelViewModel = () => {
     dispatch(EditActions.setMode.file());
   };
 
+  const setModeToTab = () => {
+    dispatch(EditActions.setMode.tab());
+  };
+
   return {
     setModeToEdit,
     setModeToView,
     setModeToFile,
+    setModeToTab,
   };
 };

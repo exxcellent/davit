@@ -34,14 +34,14 @@ export const DataAccess = {
     }
   },
 
-  downloadData(): DataAccessResponse<void> {
+  downloadData(projectName: string): DataAccessResponse<void> {
     let response: DataAccessResponse<void> = {
       object: undefined,
       message: "",
       code: 500,
     };
     try {
-      dataStore.downloadData();
+      dataStore.downloadData(projectName);
       return { ...response, code: 200 };
     } catch (error) {
       return { ...response, message: error.message };
@@ -210,7 +210,7 @@ function makeTransactional<T>(callback: () => T): DataAccessResponse<T> {
       typeof object === "undefined"
         ? undefined
         : // : JSON.parse(JSON.stringify(callback()));
-        JSON.parse(JSON.stringify(object));
+          JSON.parse(JSON.stringify(object));
     response.code = 200;
     dataStore.commitChanges();
   } catch (error) {

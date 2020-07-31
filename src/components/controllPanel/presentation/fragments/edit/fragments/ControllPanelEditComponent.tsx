@@ -9,7 +9,6 @@ import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
-import { GroupDropDown } from "../../../../../common/fragments/dropdowns/GroupDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
@@ -44,9 +43,7 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
         />
       </div>
       <div className="columnDivider">
-        <OptionField>
-          <GroupDropDown onSelect={setGroup} value={compGroup} />
-        </OptionField>
+        <OptionField>{/* <GroupDropDown onSelect={setGroup} value={compGroup} /> */}</OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
         <Carv2ButtonLabel onClick={createAnother} label="Create another" />

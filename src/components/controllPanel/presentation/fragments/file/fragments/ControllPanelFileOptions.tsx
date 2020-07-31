@@ -6,17 +6,20 @@ import { GlobalActions } from "../../../../../../slices/GlobalSlice";
 import { Carv2ButtonIcon } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2FileInput } from "../../../../../common/fragments/buttons/Carv2FileInput";
 
-export interface ControllPanelFileOptionsProps {}
+export interface ControllPanelFileOptionsProps {
+  showDownloadFile: () => void;
+}
 
 export const ControllPanelFileOptions: FunctionComponent<ControllPanelFileOptionsProps> = (props) => {
-  const { downloadData, deleteLocalStorage } = useFileOptionModelView();
+  const { showDownloadFile } = props;
+  const { deleteLocalStorage } = useFileOptionModelView();
 
   return (
     <div>
       <div className="optionField">
         <ButtonGroup>
           <Carv2FileInput />
-          <Carv2ButtonIcon icon="download" onClick={downloadData} />
+          <Carv2ButtonIcon icon="download" onClick={showDownloadFile} />
           <Carv2ButtonIcon icon="edit" onClick={deleteLocalStorage} />
         </ButtonGroup>
       </div>
@@ -33,9 +36,7 @@ const useFileOptionModelView = () => {
     dispatch(GlobalActions.storefileData("{}"));
   };
 
-  const downloadData = () => {
-    dispatch(GlobalActions.downloadData());
+  return {
+    deleteLocalStorage,
   };
-
-  return { deleteLocalStorage, downloadData };
 };
