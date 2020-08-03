@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
+import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { InitDataTO } from "../../../../dataAccess/access/to/InitDataTO";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 
@@ -60,16 +61,21 @@ export const InitDataDropDownButton: FunctionComponent<InitDataDropDownPropsButt
 
 const useDataSetupDropDownViewModel = () => {
   const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
+  const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
 
   const getComponentName = (compId: number): string => {
     return components.find((comp) => comp.component.id === compId)?.component.name || "";
+  };
+
+  const getDataName = (id: number): string => {
+    return datas.find((data) => data.data.id === id)?.data.name || "";
   };
 
   const initDataToOption = (initData: InitDataTO): DropdownItemProps => {
     return {
       key: initData.id,
       value: initData.id,
-      text: getComponentName(initData.componentFk),
+      text: getComponentName(initData.componentFk) + " - " + getDataName(initData.dataFk),
     };
   };
 

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { isNullOrUndefined } from "util";
 import { InitDataTO } from "../../../../../../dataAccess/access/to/InitDataTO";
@@ -23,10 +23,12 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
     component,
     setComponentId,
     setDataId,
+    createAnother,
+    key,
   } = useControllPanelEditDataSetupViewModel();
 
   return (
-    <ControllPanelEditSub label={label}>
+    <ControllPanelEditSub label={label} key={key}>
       <div className="controllPanelEditChild"></div>
       <div className="columnDivider controllPanelEditChild">
         <ComponentDropDown
@@ -40,7 +42,7 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
         <DataDropDown onSelect={(data) => (data ? setDataId(data.data.id) : setDataId(-1))} value={data} />
       </div>
       <div className="columnDivider controllPanelEditChild">
-        {/* <Carv2ButtonLabel onClick={() => {}} label="Create another" /> */}
+        <Carv2ButtonLabel onClick={createAnother} label="Create another" />
         <Carv2ButtonLabel onClick={saveInitData} label="OK" />
         {/* <Carv2ButtonIcon icon="copy" onClick={copyDataSetup} /> */}
         <OptionField>
@@ -54,6 +56,7 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
 const useControllPanelEditDataSetupViewModel = () => {
   const initDataToEdit: InitDataTO | null = useSelector(editSelectors.initDataToEdit);
   const dispatch = useDispatch();
+  const [key, setKey] = useState<number>(0);
 
   useEffect(() => {
     // check if sequence to edit is really set or gos back to edit mode
@@ -82,8 +85,8 @@ const useControllPanelEditDataSetupViewModel = () => {
 
   const deleteInitData = () => {
     if (!isNullOrUndefined(initDataToEdit)) {
-      dispatch(EditActions.setMode.editDataSetup(initDataToEdit.dataSetupFk));
       dispatch(EditActions.initData.delete(initDataToEdit.id));
+      dispatch(EditActions.setMode.editDataSetup(initDataToEdit.dataSetupFk));
     }
   };
 
@@ -103,6 +106,20 @@ const useControllPanelEditDataSetupViewModel = () => {
     }
   };
 
+  const createAnother = () => {
+    saveInitData();
+    createInitData();
+    setKey(key + 1);
+  };
+
+  const createInitData = () => {
+    if (!isNullOrUndefined(initDataToEdit)) {
+      const initData: InitDataTO = new InitDataTO();
+      initData.dataSetupFk = initDataToEdit.dataSetupFk;
+      dispatch(EditActions.setMode.editInitData(initData));
+    }
+  };
+
   return {
     label: "EDIT INIT DATA",
     data: initDataToEdit?.dataFk,
@@ -111,5 +128,7 @@ const useControllPanelEditDataSetupViewModel = () => {
     saveInitData,
     setComponentId,
     setDataId,
+    createAnother,
+    key,
   };
 };

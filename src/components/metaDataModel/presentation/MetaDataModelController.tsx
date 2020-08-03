@@ -66,6 +66,7 @@ const useMetaDataModelViewModel = () => {
   const actionToEdit: ActionTO | null = useSelector(editSelectors.actionToEdit);
   const conditionToEdit: ConditionTO | null = useSelector(editSelectors.conditionToEdit);
   const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.dataSetupToEdit);
+  const initDataToEdit: InitDataTO | null = useSelector(editSelectors.initDataToEdit);
   // ----- VIEW -----
   const currentComponentDatas: ComponentData[] = useSelector(sequenceModelSelectors.selectComponentData);
   const errors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
@@ -123,6 +124,9 @@ const useMetaDataModelViewModel = () => {
     const compDataFromActionToEdit: ViewFragmentProps | undefined = actionToEdit
       ? mapActionToComponentDatas(actionToEdit)
       : undefined;
+    const compDataFromInitDataToEdit: ViewFragmentProps | undefined = initDataToEdit
+      ? mapInitDataToCompData(initDataToEdit)
+      : undefined;
     const compDataFromCondittionToEdit: ViewFragmentProps[] = mapConditionToCompData(conditionToEdit);
     const compDatasFromDataSetup: ViewFragmentProps[] = dataSetupToEdit
       ? dataSetupToEdit.initDatas.map(mapInitDataToCompData)
@@ -132,6 +136,9 @@ const useMetaDataModelViewModel = () => {
     compDatas.push(...compDatasFromDataSetup);
     if (compDataFromActionToEdit) {
       compDatas.push(compDataFromActionToEdit);
+    }
+    if (compDataFromInitDataToEdit) {
+      compDatas.push(compDataFromInitDataToEdit);
     }
     return compDatas;
   };

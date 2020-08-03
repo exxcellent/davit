@@ -66,6 +66,7 @@ const useViewModel = () => {
   const actionToEdit: ActionTO | null = useSelector(editSelectors.actionToEdit);
   const conditionToEdit: ConditionTO | null = useSelector(editSelectors.conditionToEdit);
   const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.dataSetupToEdit);
+  const initDataToEdit: InitDataTO | null = useSelector(editSelectors.initDataToEdit);
   // ----- VIEW -----
   const arrows: Arrows[] = useSelector(sequenceModelSelectors.selectCurrentArrows);
   const currentComponentDatas: ComponentData[] = useSelector(sequenceModelSelectors.selectComponentData);
@@ -129,11 +130,17 @@ const useViewModel = () => {
     const compDatasFromDataSetup: ViewFragmentProps[] = dataSetupToEdit
       ? dataSetupToEdit.initDatas.map(mapInitDataToCompData)
       : [];
+    const compDatasFromInitData: ViewFragmentProps | undefined = initDataToEdit
+      ? mapInitDataToCompData(initDataToEdit)
+      : undefined;
     compDatas.push(...compDatasFromStepToEdit);
     compDatas.push(...compDataFromCondittionToEdit);
     compDatas.push(...compDatasFromDataSetup);
     if (compDataFromActionToEdit) {
       compDatas.push(compDataFromActionToEdit);
+    }
+    if (compDatasFromInitData) {
+      compDatas.push(compDatasFromInitData);
     }
     return compDatas;
   };
@@ -142,10 +149,10 @@ const useViewModel = () => {
     return propOne.parentId === propTwo.parentId && propOne.name === propTwo.name;
   };
 
-  function mapActionToComponentDatas(errorItem: ActionTO): ViewFragmentProps {
+  const mapActionToComponentDatas = (errorItem: ActionTO): ViewFragmentProps => {
     const state: ViewFragmentState = mapActionTypeToViewFragmentState(errorItem.actionType);
     return { name: getDataNameById(errorItem.dataFk), state: state, parentId: errorItem.componentFk };
-  }
+  };
 
   const mapComponentDataToCompoenntData = (compData: ComponentData): ViewFragmentProps => {
     return {
