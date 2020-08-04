@@ -243,6 +243,17 @@
   border-image: linear-gradient(to bottom, transparent, #e0e1e2, #e0e1e2, #e0e1e2, #e0e1e2, transparent) 0 100%;
 }
 
+#innerCard {
+  width: 100px;
+  height: 30px;
+  margin: 0;
+  padding: 0.3em !important;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 /* -------------------------------------------- Flussdiagram -------------------------------------------- */
 
 .STEP {

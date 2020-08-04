@@ -19,8 +19,20 @@ const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (props) => {
 
   const createInstances = (instanceName: string, components: ViewFragmentProps[], key: number) => {
     return (
-      <Card style={{ width: "100px", margin: "0", backgroundColor: "rgba(0,0,0,0.3)", color: "white" }} key={key}>
-        <Card.Content>{instanceName}</Card.Content>
+      <Card
+        // style={{ minWidth: initalWidth, minHeigth: initalHeigth, marginBottom: "0", fontSize: "0.7em" }}
+        style={{
+          width: "100px",
+          height: "30px",
+          textOverflow: "ellipsis",
+          margin: "0",
+          paddingTop: "0px !important",
+          backgroundColor: "rgba(0,0,0,0.3)",
+          color: "white",
+        }}
+        key={key}
+      >
+        <Card.Content id="innerCard">{instanceName}</Card.Content>
         {components.map(
           (comp): JSX.Element => {
             return createViewFragment(comp, key);
@@ -33,7 +45,12 @@ const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (props) => {
   if (instances.length > 0) {
     return (
       <div>
-        <Card style={{ marginBottom: "0" }} onClick={props.onClick ? () => props.onClick!(props.id) : undefined} fluid>
+        <Card
+          style={{ minWidth: initalWidth, minHeigth: initalHeigth, marginBottom: "0", fontSize: "0.7em" }}
+          // style={{ marginBottom: "0" }}
+          onClick={props.onClick ? () => props.onClick!(props.id) : undefined}
+          fluid
+        >
           <Card.Content header={initalName}></Card.Content>
         </Card>
         <div style={{ display: "flex", alignItems: "start" }}>
@@ -52,7 +69,7 @@ const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (props) => {
   } else {
     return (
       <Card
-        style={{ minWidth: initalWidth, minHeigth: initalHeigth, marginBottom: "0" }}
+        style={{ minWidth: initalWidth, minHeigth: initalHeigth, marginBottom: "0", fontSize: "0.7em" }}
         onClick={props.onClick ? () => props.onClick!(props.id) : undefined}
         fluid
       >
@@ -73,6 +90,7 @@ export const createMetaDataFragment = (
       id={dataCTO.data.id}
       initalName={dataCTO.data.name}
       initalWidth={dataCTO.geometricalData.geometricalData.width}
+      initalHeigth={dataCTO.geometricalData.geometricalData.height}
       componentFragments={componentDatas}
       // onClick={onClick}
       instances={dataCTO.data.inst ? dataCTO.data.inst : []}
