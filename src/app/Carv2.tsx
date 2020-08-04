@@ -31,6 +31,7 @@ export function Carv2() {
   }, [dispatch]);
 
   useKeyListener();
+  useKeyPress();
 
   return (
     <div className="Carv2">
@@ -148,5 +149,22 @@ const useKeyListener = () => {
 
   useEffect(() => {
     document.addEventListener("wheel", handleKeyDown);
+  });
+};
+
+// Hook
+const useKeyPress = () => {
+  const checkZoom = (event: KeyboardEvent) => {
+    console.info("Keycode: ", event.keyCode);
+    if (event.ctrlKey === true) {
+      if (event.keyCode === 171 || event.keyCode === 173) {
+        console.warn("no zoom");
+        event.preventDefault();
+      }
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", checkZoom);
   });
 };
