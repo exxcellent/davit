@@ -1,6 +1,7 @@
-import React, { FunctionComponent, useState } from "react";
+/* eslint-disable react/display-name */
+import React, { createRef, FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Icon } from "semantic-ui-react";
+import { Icon, Tab } from "semantic-ui-react";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
@@ -8,11 +9,12 @@ import { ConditionTO } from "../../../dataAccess/access/to/ConditionTO";
 import { GoToTypes, Terminal } from "../../../dataAccess/access/types/GoToType";
 import { masterDataSelectors } from "../../../slices/MasterDataSlice";
 import { CalculatedStep, SequenceModelActions, sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
-import { Carv2ButtonLabel } from "../../common/fragments/buttons/Carv2Button";
 
 interface SequenceTableModelControllerProps {
   fullScreen?: boolean;
 }
+
+interface CarvTableRow {}
 
 export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (props) => {
   const { fullScreen } = props;
@@ -24,97 +26,84 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
     sequence = "sequence",
   }
 
-  const [mode, setMode] = useState<table>(table.sequence);
+  // const [mode, setMode] = useState<table>(table.sequence);
+
+  const panes = [
+    {
+      menuItem: "Sequence",
+      render: () => (
+        <Tab.Pane>
+          <div>
+            <label>{title}</label>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>INDEX</th>
+                <th>NAME</th>
+                <th>SENDER</th>
+                <th>RECEIVER</th>
+                <th>ACTION-ERROR</th>
+              </tr>
+            </thead>
+            <tbody>{getTableBody()}</tbody>
+          </table>
+        </Tab.Pane>
+      ),
+    },
+    {
+      menuItem: "Conditions",
+      render: () => (
+        <Tab.Pane>
+          <div>
+            <label>CONDITIONS</label>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>INDEX</th>
+                <th>NAME</th>
+                <th>RESULT</th>
+              </tr>
+            </thead>
+            <tbody>{getConditionTableBody()}</tbody>
+          </table>
+        </Tab.Pane>
+      ),
+    },
+    {
+      menuItem: "Steps",
+      render: () => (
+        <Tab.Pane>
+          <div>
+            <label>STEPS</label>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>INDEX</th>
+                <th>NAME</th>
+                <th>SENDER</th>
+                <th>RECEIVER</th>
+              </tr>
+            </thead>
+            <tbody>{getStepTableBody()}</tbody>
+          </table>
+        </Tab.Pane>
+      ),
+    },
+  ];
 
   return (
     <div className={fullScreen ? "" : "sequenceTable"}>
-      <div className="tabs">
-        <Carv2ButtonLabel
-          label="Sequence"
-          onClick={() => {
-            setMode(table.sequence);
-          }}
-        />
-        <Carv2ButtonLabel
-          label="Conditions"
-          onClick={() => {
-            setMode(table.condition);
-          }}
-        />
-        <Carv2ButtonLabel
-          label="Steps"
-          onClick={() => {
-            setMode(table.step);
-          }}
-        />
-      </div>
-      {mode === table.sequence && (
-        <div>
-          <div className="carv2TableHeader">
-            <label>{title}</label>
-          </div>
-          <table className="carv2Table">
-            <thead>
-              <tr>
-                <th className="carv2Th" style={{ width: "15px" }}>
-                  INDEX
-                </th>
-                <th className="carv2Th">NAME</th>
-                <th className="carv2Th">SENDER</th>
-                <th className="carv2Th">RECEIVER</th>
-                <th className="carv2Th">ACTION-ERROR</th>
-              </tr>
-            </thead>
-            <tbody className="carv2TBody">{getTableBody()}</tbody>
-          </table>
-        </div>
-      )}
-      {mode === table.step && (
-        <div>
-          <div className="carv2TableHeader">
-            <label>STEPS</label>
-          </div>
-          <table className="carv2Table">
-            <thead>
-              <tr>
-                <th className="carv2Th" style={{ width: "15px" }}>
-                  INDEX
-                </th>
-                <th className="carv2Th">NAME</th>
-                <th className="carv2Th">SENDER</th>
-                <th className="carv2Th">RECEIVER</th>
-              </tr>
-            </thead>
-            <tbody className="carv2TBody">{getStepTableBody()}</tbody>
-          </table>
-        </div>
-      )}
-      {mode === table.condition && (
-        <div>
-          <div className="carv2TableHeader">
-            <label>CONDITIONS</label>
-          </div>
-          <table className="carv2Table">
-            <thead>
-              <tr>
-                <th className="carv2Th" style={{ width: "15px" }}>
-                  INDEX
-                </th>
-                <th className="carv2Th">NAME</th>
-                <th className="carv2Th">RESULT</th>
-              </tr>
-            </thead>
-            <tbody className="carv2TBody">{getConditionTableBody()}</tbody>
-          </table>
-        </div>
-      )}
+      {/* <Tab panes={panes} menu={{ color: "white", inverted: true, attached: true, tabular: false }} /> */}
+      <Tab panes={panes} menu={{ inverted: true, attached: true, tabular: false }} />
     </div>
   );
 };
 
 const useSequenceTableViewModel = () => {
   const dispatch = useDispatch();
-
   const sequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
   const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
   const stepIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentStepIndex);
@@ -124,14 +113,17 @@ const useSequenceTableViewModel = () => {
 
   const createSequenceStepColumn = (step: CalculatedStep, index: number): JSX.Element => {
     let trClass: string = loopStepStartIndex && loopStepStartIndex <= index ? "carv2TrTerminalError" : "carv2Tr";
+
+    const myRef = createRef<HTMLTableRowElement>();
+    const scrollToRef = (ref: any) => window.scrollTo(0, ref.offsetTop);
+
     if (index === stepIndex) {
       trClass = "carv2TrMarked";
+      scrollToRef(myRef);
     }
     const modelStep: SequenceStepCTO | undefined = sequence?.sequenceStepCTOs.find(
       (item) => item.squenceStepTO.id === step.stepFk
     );
-
-    // const modelCondition: ConditionTO | undefined = sequence?.conditions.find((con) => con.id === step.stepFk);
 
     let name = index === 0 && !modelStep ? "Initial" : modelStep?.squenceStepTO.name || "Step not found";
 
@@ -148,8 +140,9 @@ const useSequenceTableViewModel = () => {
         ? getComponentNameById(modelStep.squenceStepTO.targetComponentFk)
         : "Target not found";
     const hasError = step.errors.length > 0 ? true : false;
+
     return (
-      <tr key={index} className={trClass} onClick={() => handleTableClickEvent(index)}>
+      <tr key={index} className={trClass} onClick={() => handleTableClickEvent(index)} ref={myRef}>
         <td className="carv2Td">{index}</td>
         <td className="carv2Td">{name}</td>
         <td className="carv2Td">{source}</td>
@@ -206,6 +199,7 @@ const useSequenceTableViewModel = () => {
   };
 
   const getTableBody = () => {
+    // let list: JSX.Element[] = [];
     let list: JSX.Element[] = [];
     list = calcSteps.map((step, index) => createSequenceStepColumn(step, index));
     if (terminalStep) {
@@ -289,7 +283,7 @@ const useSequenceTableViewModel = () => {
   };
 
   return {
-    title: sequence ? sequence.sequenceTO.name : "Select Sequence ...",
+    title: sequence ? sequence.sequenceTO.name : "Select data setup and sequence to calculate ...",
     getTableBody,
     getConditionTableBody,
     getStepTableBody,

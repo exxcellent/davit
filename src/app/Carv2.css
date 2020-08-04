@@ -118,7 +118,13 @@
       transparent
     )
     0 100%;
-  padding: 10px;
+  padding: 2px;
+  overflow: hidden;
+}
+
+.fullscreen {
+  max-height: 100vh;
+  max-width: 100%;
   overflow: auto;
 }
 
@@ -239,63 +245,99 @@
 
 /* -------------------------------------------- Flussdiagram -------------------------------------------- */
 
-.legend {
-  display: flex;
-  justify-content: space-around;
-  background-color: var(--carv2-background-color-header);
-}
-
-.legendItem {
-  padding-left: 15px;
-  padding-right: 15px;
-  min-width: 10em;
-  text-align: center;
-}
-
-.node {
-  /* border: 1px solid var(--carv2-background-color-header); */
-  /* padding: 0.2em;
-  border-radius: 5px;
-  min-width: 5em;
-  text-align: center;
-  color: black;
-  box-shadow: 0 0 0 1px #d4d4d5, 0 2px 4px 0 rgba(34, 36, 38, 0.12), 0 2px 10px 0 rgba(34, 36, 38, 0.15); */
-}
-
-.step {
+.STEP {
   background-color: var(--carv2-color-exxcellent-blue);
+  min-height: 2.4em;
+  min-width: 6em;
+  max-width: 15em;
+  border-radius: 0.3em;
+  padding: 6px;
+  text-align: center;
+  box-shadow: 0 0 0 1px #d4d4d5, 0 2px 4px 0 rgba(34, 36, 38, 0.12), 0 2px 10px 0 rgba(34, 36, 38, 0.15);
 }
 
-.cond {
-  /* background-color: var(--carv2-color-exxcellent-yellow); */
-  width: 0;
-  height: 0;
-  border: 15px solid transparent;
-  border-bottom-color: #037ca9;
-  position: relative;
-  top: -15px;
-}
-
-.cond::after {
-  content: "";
-  position: absolute;
-  left: -15px;
-  top: 15px;
-  width: 0;
-  height: 0;
-  border: 15px solid transparent;
-  border-top-color: #037ca9;
-}
-
-.fin {
+.COND {
+  width: 2.5em;
+  height: 2.5em;
   background-color: green;
+  transform: rotate(45deg);
+  box-shadow: 0 0 0 1px #d4d4d5, 0 2px 4px 0 rgba(34, 36, 38, 0.12), 0 2px 10px 0 rgba(34, 36, 38, 0.15);
 }
 
-.error {
+.condLabel {
+  z-index: 1;
+}
+
+.FIN {
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+  background-color: green;
+  border: 0.2em solid white;
+  box-shadow: 0 0 0 0.2em green;
+  margin: 0.2em;
+  padding: 0.2em;
+}
+
+.ERROR {
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
   background-color: red;
+  border: 0.2em solid white;
+  box-shadow: 0 0 0 0.2em red;
+  margin: 0.2em;
+  padding: 0.2em;
+}
+
+.ROOT {
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+  background-color: black;
+  margin: 0.2em;
+  padding: 0.2em;
 }
 
 /* -------------------------------------------- Table -------------------------------------------- */
+
+tr {
+  color: var(--carv2-text-color);
+}
+
+tbody {
+  display: block;
+  height: 30vh;
+  overflow: auto;
+}
+thead,
+tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed; /* even columns width , fix width of table too*/
+}
+thead {
+  width: calc(100% - 1.2em); /* scrollbar is average 1em/16px width, remove it from thead width */
+  background-color: var(--carv2-background-color-header);
+  color: var(--carv2-text-color);
+}
+table {
+  width: 100%;
+}
+
+.ui.attached:not(.message) + .ui.attached.segment:not(.top) {
+  background-color: var(--carv2-background-color-header);
+}
+
+.ui.attached.segment {
+  border: 1px solid black;
+}
+
+.ui.attached.inverted.menu {
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
 .carv2Table {
   border: 1px solid var(--carv2-color-primary);
   border-collapse: collapse;
@@ -305,7 +347,6 @@
   text-align: center;
   background-color: var(--carv2-background-color-header);
   font-size: 0.9em;
-  /* overflow-y: scroll; */
   display: table;
 }
 
@@ -323,7 +364,9 @@
 
 .carv2TBody {
   /* display: block; */
-  overflow-y: scroll;
+  /* width: 100%; */
+  /* min-height: 0; */
+  overflow: auto;
 }
 
 .carv2Th {
@@ -333,6 +376,7 @@
 .carv2Tr {
   background-color: var(--carv2-background-color-shadow);
   height: 2.5em;
+  border-bottom: 1px solid var(--carv2-color-primary);
 }
 
 .carv2TrMarked {
@@ -350,7 +394,7 @@
 }
 
 .carv2Td {
-  border-bottom: 1px solid var(--carv2-color-primary);
+  border-right: 1px solid var(--carv2-color-primary);
   padding: 0.5em;
 }
 
