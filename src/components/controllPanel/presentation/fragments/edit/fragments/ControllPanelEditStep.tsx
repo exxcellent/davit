@@ -208,6 +208,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
   const updateStep = () => {
     const copySequenceStep: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
     dispatch(EditActions.step.save(copySequenceStep));
+    // dispatch(SequenceModelActions.setCurrentSequence(copySequenceStep.squenceStepTO.sequenceFk));
   };
 
   const editOrAddAction = (action?: ActionTO) => {
