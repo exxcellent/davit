@@ -8,7 +8,7 @@ import { InitDataTO } from "../../../../../../dataAccess/access/to/InitDataTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
+import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { InitDataDropDownButton } from "../../../../../common/fragments/dropdowns/InitDataDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
@@ -39,7 +39,7 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
   return (
     <ControllPanelEditSub label={label}>
       <div className="controllPanelEditChild">
-        <OptionField label="Data - SETUP - NAME">
+        <OptionField label1="Data - SETUP NAME">
           <Carv2LabelTextfield
             label="Name:"
             placeholder="Data Setup Name ..."
@@ -52,22 +52,26 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
         </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <OptionField label="SET - INITAL - DATA">
+        <OptionField label1="Create / edit | Init - Data">
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={createInitData} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
-              Inital Data
+              Data
             </Button>
             <InitDataDropDownButton onSelect={editInitData} icon="wrench" initDatas={getInitDatas} />
           </Button.Group>
         </OptionField>
       </div>
-      <div className="columnDivider controllPanelEditChild"></div>
       <div className="columnDivider controllPanelEditChild">
-        <Carv2ButtonLabel onClick={createAnother} label="Create another" />
-        <Carv2ButtonLabel onClick={saveDataSetup} label="OK" />
-        {/* <Carv2ButtonIcon icon="copy" onClick={copyDataSetup} /> */}
-        <OptionField>
+        <div>
+          <OptionField label1="Navigation">
+            <Carv2ButtonLabel onClick={createAnother} label="Create another" />
+            <Carv2ButtonIcon onClick={saveDataSetup} icon="reply" />
+          </OptionField>
+        </div>
+      </div>
+      <div className="columnDivider controllPanelEditChild">
+        <OptionField label1="Data-setup options">
           <Carv2DeleteButton onClick={deleteDataSetup} />
         </OptionField>
       </div>

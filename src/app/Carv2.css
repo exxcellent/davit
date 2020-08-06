@@ -43,9 +43,6 @@
   border-style: solid;
   border-width: 0 0 5px 0;
   border-image: linear-gradient(to bottom, var(--carv2-background-color-shadow), var(--carv2-background-color)) 1 1 100%;
-  /* TODO: fix scroll problem */
-  /* overflow-x: auto;
-  overflow-y: visible; */
 }
 
 .componentModel {
@@ -62,11 +59,6 @@
       transparent
     )
     0 100%;
-  /* 9 / 16 * 100% */
-  /* padding-top: calc(9 / 16 * 100%);
-  height: 0;
-  background-color: red; */
-  /* width: 100%; */
 }
 
 .dataModel {
@@ -183,10 +175,19 @@
   box-shadow: 6px 6px 10px var(--carv2-data-delete-color) inset !important;
 }
 
+/* -------------------------------------------- Optionfield -------------------------------------------- */
+
 .optionField {
-  padding: 10px;
+  width: 100%;
   display: flex;
   justify-content: space-around;
+}
+
+.optionFieldLabel {
+  min-width: 10em;
+  text-align: center;
+  color: var(--carv2-text-color);
+  font-size: 0.8em;
 }
 
 .optionFieldSpacer {
@@ -194,6 +195,8 @@
   flex-direction: column;
   justify-content: space-around;
 }
+
+/* -------------------------------------------- PATH -------------------------------------------- */
 
 .carvPath {
   /* stroke: var(--carv2-color-secondary); */
@@ -222,6 +225,8 @@
 .pLeft1 {
   padding-left: 0.5em;
 }
+
+/* -------------------------------------------- Controllpanel -------------------------------------------- */
 
 .controllPanelEdit {
   display: grid;
@@ -363,9 +368,6 @@ table {
 }
 
 .carv2TBody {
-  /* display: block; */
-  /* width: 100%; */
-  /* min-height: 0; */
   overflow: auto;
 }
 
@@ -439,6 +441,7 @@ table {
 .ui.inverted.orange.orange.buttons .button:hover {
   background-color: var(--carv2-color-secondary);
   color: transparent !important;
+  box-shadow: 0 0 0 2px var(--carv2-color-secondary) inset, 0 0 0 0 rgba(34, 36, 38, 0.15) inset !important;
 }
 
 .ui.orange.label,
@@ -460,6 +463,10 @@ table {
   background-color: var(--carv2-color-secondary);
   color: var(--carv2-text-color);
   box-shadow: 0 0 0 2px var(--carv2-color-secondary) inset, 0 0 0 0 rgba(34, 36, 38, 0.15) inset !important;
+}
+
+.ui.inverted.orange.orange.button:hover {
+  color: var(--carv2-text-color) !important;
 }
 
 i.icon::before {

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
@@ -9,7 +9,7 @@ import { ActionType } from "../../../../../../dataAccess/access/types/ActionType
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
+import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ActionTypeDropDown } from "../../../../../common/fragments/dropdowns/ActionTypeDropDown";
 import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
@@ -17,7 +17,7 @@ import { DataAndInstanceDropDown } from "../../../../../common/fragments/dropdow
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditActionProps { }
+export interface ControllPanelEditActionProps {}
 
 export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionProps> = (props) => {
   const {
@@ -30,28 +30,36 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
     dataId,
     actionType,
     backToStep,
+    createAnother,
+    key,
   } = useControllPanelEditActionViewModel();
 
   return (
-    <ControllPanelEditSub label={label}>
+    <ControllPanelEditSub label={label} key={key}>
       <div className="optionFieldSpacer">
-        <OptionField>
+        <OptionField label1="Select Component on which the action will be called">
           <ComponentDropDown onSelect={setComponent} value={componentId} />
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
-        <OptionField>
+        <OptionField label1="Select action to execute">
           <ActionTypeDropDown onSelect={setAction} value={actionType} />
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
-        <OptionField>
+        <OptionField label1="Select a Data for the action">
           <DataAndInstanceDropDown onSelect={setData} value={dataId} />
         </OptionField>
       </div>
+
       <div className="columnDivider controllPanelEditChild">
-        <Carv2ButtonLabel onClick={backToStep} label="OK" />
-        <OptionField>
+        <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <OptionField label1="Navigation">
+            <Carv2ButtonLabel onClick={createAnother} label="Create another" />
+            <Carv2ButtonIcon onClick={backToStep} icon="reply" />
+          </OptionField>
+        </div>
+        <OptionField label1="Sequence - Options">
           <Carv2DeleteButton onClick={deleteAction} />
         </OptionField>
       </div>
@@ -63,7 +71,7 @@ const useControllPanelEditActionViewModel = () => {
   const actionToEdit: ActionTO | null = useSelector(editSelectors.actionToEdit);
   const dispatch = useDispatch();
 
-  console.info("main ", actionToEdit);
+  const [key, setKey] = useState<number>(0);
 
   useEffect(() => {
     // check if component to edit is really set or gos back to edit mode
@@ -99,7 +107,7 @@ const useControllPanelEditActionViewModel = () => {
     }
   };
 
-  const setData = (values: { data?: DataCTO, instance?: DataInstanceTO } | undefined): void => {
+  const setData = (values: { data?: DataCTO; instance?: DataInstanceTO } | undefined): void => {
     if (!isNullOrUndefined(values)) {
       if (!isNullOrUndefined(values.data)) {
         let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
@@ -120,8 +128,17 @@ const useControllPanelEditActionViewModel = () => {
     }
   };
 
+  const createAnother = () => {
+    if (actionToEdit) {
+      let newAction: ActionTO = new ActionTO();
+      newAction.sequenceStepFk = actionToEdit.sequenceStepFk;
+      dispatch(EditActions.action.create(newAction));
+      setKey(key + 1);
+    }
+  };
+
   return {
-    label: "EDIT ACTION",
+    label: "EDIT SEQUENCE - EDIT STEP - EDIT ACTION",
     action: actionToEdit,
     setComponent,
     setAction,
@@ -131,5 +148,7 @@ const useControllPanelEditActionViewModel = () => {
     actionType: actionToEdit?.actionType,
     deleteAction,
     backToStep,
+    createAnother,
+    key,
   };
 };

@@ -7,7 +7,7 @@ import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
+import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
@@ -32,26 +32,34 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
   return (
     <ControllPanelEditSub label={label}>
       <div className="optionFieldSpacer" style={{ display: "flex" }}>
-        <Carv2LabelTextfield
-          label="Name:"
-          placeholder="Component Name"
-          onChange={(event: any) => changeName(event.target.value)}
-          onBlur={() => updateComponent()}
-          value={name}
-          autoFocus
-          ref={textInput}
-        />
+        <OptionField label1="Component - Name">
+          <Carv2LabelTextfield
+            label="Name:"
+            placeholder="Component Name"
+            onChange={(event: any) => changeName(event.target.value)}
+            onBlur={() => updateComponent()}
+            value={name}
+            autoFocus
+            ref={textInput}
+          />
+        </OptionField>
       </div>
       <div className="columnDivider">
         <OptionField>{/* <GroupDropDown onSelect={setGroup} value={compGroup} /> */}</OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <Carv2ButtonLabel onClick={createAnother} label="Create another" />
-        <Carv2ButtonLabel onClick={saveComponent} label="OK" />
+        <div>
+          <OptionField label1="Navigation">
+            <Carv2ButtonLabel onClick={createAnother} label="Create another" />
+            <Carv2ButtonIcon onClick={saveComponent} icon="reply" />
+          </OptionField>
+        </div>
       </div>
       <div className="columnDivider">
         <div className="controllPanelEditChild" style={{ display: "flex", alignItems: "center", height: "100%" }}>
-          <Carv2DeleteButton onClick={deleteComponent} />
+          <OptionField label1="Component - Options">
+            <Carv2DeleteButton onClick={deleteComponent} />
+          </OptionField>
         </div>
       </div>
     </ControllPanelEditSub>

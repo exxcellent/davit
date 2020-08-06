@@ -74,7 +74,7 @@ export const SequenceModelController: FunctionComponent<SequenceModelControllerP
 
   return (
     <div className={fullScreen ? "fullscreen" : "sequencModel"}>
-      <div style={{ paddingLeft: "15px" }}>{sequenceName}</div>
+      <div style={{ paddingLeft: "15px", color: "var(--carv2-text-color)" }}>{sequenceName}</div>
       {buildFlowChart()}
     </div>
   );

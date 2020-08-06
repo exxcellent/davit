@@ -51,7 +51,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
   } = useControllPanelEditSequenceStepViewModel();
 
   const actionDropdown = (
-    <OptionField>
+    <OptionField label1="Create / Edit | Step - Action">
       <Button.Group>
         <Button
           icon="add"
@@ -77,10 +77,10 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
   );
 
   const stepName = (
-    <OptionField>
+    <OptionField label1="Step - name">
       <Carv2LabelTextfield
         label="Name:"
-        placeholder="Step Name"
+        placeholder="Step Name ..."
         onChange={(event: any) => changeName(event.target.value)}
         value={name}
         autoFocus
@@ -93,30 +93,40 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
   const sourceTargetDropDowns = (
     <div className="optionFieldSpacer columnDivider">
       <OptionField>
-        <ComponentDropDown
-          onSelect={(comp) => {
-            setComponent(comp, true);
-            updateStep();
-          }}
-          value={sourceCompId}
-        />
-        <ComponentDropDown
-          onSelect={(comp) => {
-            setComponent(comp, false);
-            updateStep();
-          }}
-          value={targetCompId}
-        />
+        <OptionField label1="Select sending Component">
+          <ComponentDropDown
+            onSelect={(comp) => {
+              setComponent(comp, true);
+              updateStep();
+            }}
+            value={sourceCompId}
+          />
+        </OptionField>
+        <OptionField label1="Select reciving component">
+          <ComponentDropDown
+            onSelect={(comp) => {
+              setComponent(comp, false);
+              updateStep();
+            }}
+            value={targetCompId}
+          />
+        </OptionField>
       </OptionField>
     </div>
   );
 
   const menuButtons = (
     <div className="columnDivider controllPanelEditChild">
-      <Carv2ButtonLabel onClick={setRoot} label={isRoot ? "Root" : "Set as Root"} disable={isRoot} />
-      <Carv2ButtonLabel onClick={saveSequenceStep} label="OK" />
-      <OptionField>
-        <Carv2DeleteButton onClick={deleteSequenceStep} />
+      <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <OptionField label1="Navigation">
+          <Carv2ButtonIcon onClick={saveSequenceStep} icon="reply" />
+        </OptionField>
+      </div>
+      <OptionField label1="Sequence - Options">
+        <Carv2ButtonLabel onClick={setRoot} label={isRoot ? "Root" : "Set as Root"} disable={isRoot} />
+        <div>
+          <Carv2DeleteButton onClick={deleteSequenceStep} />
+        </div>
       </OptionField>
     </div>
   );
@@ -124,26 +134,30 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
   return (
     <ControllPanelEditSub label={label} key={key}>
       <div className="controllPanelEditChild">
+        {/* <OptionField label1="Step - name" label2="Create / edit | Step - Action"> */}
         {stepName}
         {actionDropdown}
+        {/* </OptionField> */}
       </div>
       {sourceTargetDropDowns}
       <div className="optionFieldSpacer columnDivider">
-        <OptionField>
-          <GoToOptionDropDown onSelect={handleType} value={goTo ? goTo.type : GoToTypes.ERROR} />
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <OptionField label1="Select type of the next element">
+            <GoToOptionDropDown onSelect={handleType} value={goTo ? goTo.type : GoToTypes.ERROR} />
+          </OptionField>
           {goTo!.type === GoToTypes.STEP && (
-            <>
+            <OptionField label1="Create or Select next step">
               <Carv2ButtonIcon icon="add" onClick={createGoToStep} />
               <StepDropDown onSelect={setGoToTypeStep} value={goTo?.type === GoToTypes.STEP ? goTo.id : 1} />
-            </>
+            </OptionField>
           )}
           {goTo!.type === GoToTypes.COND && (
-            <>
+            <OptionField label1="Create or Select next condition">
               <Carv2ButtonIcon icon="add" onClick={createGoToCondition} />
               <ConditionDropDown onSelect={setGoToTypeCondition} value={goTo?.type === GoToTypes.COND ? goTo.id : 1} />
-            </>
+            </OptionField>
           )}
-        </OptionField>
+        </div>
       </div>
       {menuButtons}
     </ControllPanelEditSub>
@@ -311,7 +325,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
   };
 
   return {
-    label: "EDIT SEQUENCE STEP",
+    label: "EDIT SEQUENCE - EDIT STEP",
     name: stepToEdit ? stepToEdit!.squenceStepTO.name : "",
     changeName,
     saveSequenceStep,

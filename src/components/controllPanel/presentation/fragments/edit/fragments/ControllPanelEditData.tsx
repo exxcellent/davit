@@ -6,11 +6,12 @@ import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
+import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { DataInstanceDropDownButton } from "../../../../../common/fragments/dropdowns/DataInstanceDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
+import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditDataProps {}
 
@@ -30,31 +31,41 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
 
   return (
     <ControllPanelEditSub label={label}>
-      <Carv2LabelTextfield
-        label="Name:"
-        placeholder="Data Name"
-        onChange={(event: any) => changeName(event.target.value)}
-        value={name}
-        autoFocus
-        ref={textInput}
-        onBlur={() => updateData()}
-      />
+      <OptionField label1="Data - Name">
+        <Carv2LabelTextfield
+          label="Name:"
+          placeholder="Data Name"
+          onChange={(event: any) => changeName(event.target.value)}
+          value={name}
+          autoFocus
+          ref={textInput}
+          onBlur={() => updateData()}
+        />
+      </OptionField>
       <div className="columnDivider controllPanelEditChild">
-        <Button.Group>
-          <Button icon="add" inverted color="orange" onClick={() => editOrAddInstance()} />
-          <Button id="buttonGroupLabel" disabled inverted color="orange">
-            Data Instance
-          </Button>
-          <DataInstanceDropDownButton onSelect={editOrAddInstance} icon={"wrench"} instances={instances} />
-        </Button.Group>
+        <OptionField label1="create / edit | Data - Instance">
+          <Button.Group>
+            <Button icon="add" inverted color="orange" onClick={() => editOrAddInstance()} />
+            <Button id="buttonGroupLabel" disabled inverted color="orange">
+              Instance
+            </Button>
+            <DataInstanceDropDownButton onSelect={editOrAddInstance} icon={"wrench"} instances={instances} />
+          </Button.Group>
+        </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <Carv2ButtonLabel onClick={createAnother} label="Create another" />
-        <Carv2ButtonLabel onClick={saveData} label="OK" />
+        <div>
+          <OptionField label1="Navigation">
+            <Carv2ButtonLabel onClick={createAnother} label="Create another" />
+            <Carv2ButtonIcon onClick={saveData} icon="reply" />
+          </OptionField>
+        </div>
       </div>
       <div className="columnDivider">
         <div className="controllPanelEditChild" style={{ display: "felx", alignItems: "center", height: "100%" }}>
-          <Carv2DeleteButton onClick={deleteData} />
+          <OptionField label1="Data - Options">
+            <Carv2DeleteButton onClick={deleteData} />
+          </OptionField>
         </div>
       </div>
     </ControllPanelEditSub>

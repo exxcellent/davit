@@ -5,7 +5,7 @@ import { InitDataTO } from "../../../../../../dataAccess/access/to/InitDataTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
+import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
 import { DataDropDown } from "../../../../../common/fragments/dropdowns/DataDropDown";
@@ -29,23 +29,32 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
 
   return (
     <ControllPanelEditSub label={label} key={key}>
-      <div className="controllPanelEditChild"></div>
+      <div className="controllPanelEditChild">
+        <OptionField label1="Select Component to which data will be added">
+          <ComponentDropDown
+            onSelect={(comp) => (comp ? setComponentId(comp.component.id) : setComponentId(-1))}
+            placeholder="Select Component..."
+            onBlur={() => {}}
+            value={component}
+          />
+        </OptionField>
+      </div>
       <div className="columnDivider controllPanelEditChild">
-        <ComponentDropDown
-          onSelect={(comp) => (comp ? setComponentId(comp.component.id) : setComponentId(-1))}
-          placeholder="Select Component..."
-          onBlur={() => {}}
-          value={component}
-        />
+        <OptionField label1="Select Data which will be added">
+          <DataDropDown onSelect={(data) => (data ? setDataId(data.data.id) : setDataId(-1))} value={data} />
+        </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild" style={{ paddingLeft: "10px", paddingRight: "10px" }}>
-        <DataDropDown onSelect={(data) => (data ? setDataId(data.data.id) : setDataId(-1))} value={data} />
+        <div>
+          <OptionField label1="Navigation">
+            <Carv2ButtonLabel onClick={createAnother} label="Create another" />
+            <Carv2ButtonIcon onClick={saveInitData} icon="reply" />
+            {/* <Carv2ButtonIcon icon="copy" onClick={copyDataSetup} /> */}
+          </OptionField>
+        </div>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <Carv2ButtonLabel onClick={createAnother} label="Create another" />
-        <Carv2ButtonLabel onClick={saveInitData} label="OK" />
-        {/* <Carv2ButtonIcon icon="copy" onClick={copyDataSetup} /> */}
-        <OptionField>
+        <OptionField label1="Init - data Options">
           <Carv2DeleteButton onClick={deleteInitData} />
         </OptionField>
       </div>
@@ -121,7 +130,7 @@ const useControllPanelEditDataSetupViewModel = () => {
   };
 
   return {
-    label: "EDIT INIT DATA",
+    label: "EDIT DATA SETUP - EDIT INIT DATA",
     data: initDataToEdit?.dataFk,
     component: initDataToEdit?.componentFk,
     deleteInitData,

@@ -23,7 +23,7 @@ export const Carv2ButtonLabel: FunctionComponent<Carv2ButtonLabelProps> = (props
   const { onClick, label, disable } = props;
 
   return (
-    <Button onClick={onClick} className="carv2Button" inverted color="orange" disabled={disable}>
+    <Button onClick={onClick} inverted color="orange" disabled={disable}>
       {label}
     </Button>
   );

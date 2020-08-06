@@ -8,6 +8,7 @@ import { SequenceTO } from "../../../../../dataAccess/access/to/SequenceTO";
 import { SequenceModelActions, sequenceModelSelectors } from "../../../../../slices/SequenceModelSlice";
 import { DataSetupDropDown } from "../../../../common/fragments/dropdowns/DataSetupDropDown";
 import { SequenceDropDown } from "../../../../common/fragments/dropdowns/SequenceDropDown";
+import { ControllPanelEditSub } from "../edit/common/ControllPanelEditSub";
 import { OptionField } from "../edit/common/OptionField";
 
 export interface ControllPanelSequenceOptionsProps {}
@@ -23,19 +24,19 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
   } = useControllPanelSequenceOptionsViewModel();
 
   return (
-    <div className="controllPanelEdit">
+    <ControllPanelEditSub label="VIEW">
       <div className="optionFieldSpacer">
-        <OptionField label="Data - Setup">
+        <OptionField label1="Data - Setup">
           <DataSetupDropDown onSelect={selectDataSetup} placeholder="Select Data Setup ..." />
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
-        <OptionField label="SEQUENCE">
+        <OptionField label1="SEQUENCE">
           <SequenceDropDown onSelect={selectSequence} />
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
-        <OptionField label="STEP">
+        <OptionField label1="STEP">
           <Button.Group inverted color="orange">
             <Button
               inverted
@@ -62,7 +63,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
       <div className="optionFieldSpacer columnDivider">
         <OptionField></OptionField>
       </div>
-    </div>
+    </ControllPanelEditSub>
   );
 };
 

@@ -10,6 +10,7 @@ import { DataDropDownButton } from "../../../../../common/fragments/dropdowns/Da
 import { DataSetupDropDownButton } from "../../../../../common/fragments/dropdowns/DataSetupDropDown";
 import { RelationDropDownButton } from "../../../../../common/fragments/dropdowns/RelationDropDown";
 import { SequenceDropDownButton } from "../../../../../common/fragments/dropdowns/SequenceDropDown";
+import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditMenuProps {
@@ -32,9 +33,9 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
   } = props;
 
   return (
-    <div className="controllPanelEdit">
+    <ControllPanelEditSub label="EDIT">
       <div className="optionFieldSpacer">
-        <OptionField label="component">
+        <OptionField label1="component">
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddComponent()} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
@@ -52,7 +53,7 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
-        <OptionField label="Data">
+        <OptionField label1="Data">
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddData()} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
@@ -70,7 +71,7 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
-        <OptionField label="Data - Setup">
+        <OptionField label1="Data - Setup">
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddDataSetup()} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
@@ -81,7 +82,7 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
-        <OptionField label="sequence">
+        <OptionField label1="sequence">
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddSequence()} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
@@ -91,6 +92,6 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
           </Button.Group>
         </OptionField>
       </div>
-    </div>
+    </ControllPanelEditSub>
   );
 };
