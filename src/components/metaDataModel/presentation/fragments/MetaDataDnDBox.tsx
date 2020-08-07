@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { useCurrentHeight, useCurrentWitdh } from "../../../../app/Carv2";
+import { ASPECT_RATIO, WINDOW_FACTOR } from "../../../../app/Carv2Constanc";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { GeometricalDataCTO } from "../../../../dataAccess/access/cto/GeometraicalDataCTO";
 import { DataRelationTO } from "../../../../dataAccess/access/to/DataRelationTO";
 import { Carv2Util } from "../../../../utils/Carv2Util";
+import { useCurrentHeight, useCurrentWitdh } from "../../../../utils/WindowUtil";
 import { ViewFragmentProps } from "../../../../viewDataTypes/ViewFragment";
 import { createDnDItem } from "../../../common/fragments/DnDWrapper";
 import { createCornerConnection } from "../../../common/fragments/svg/Carv2Path";
@@ -50,10 +51,10 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
   });
 
   // full size window
-  const w1: number = useCurrentWitdh();
-  const h1: number = useCurrentHeight();
-  const h2: number = (w1 / 100) * 56.25;
-  const w2: number = (h1 / 56.25) * 100;
+  const currentWindowWitdh: number = useCurrentWitdh();
+  const currentWindowHeight: number = useCurrentHeight();
+  const newHeight: number = (currentWindowWitdh / WINDOW_FACTOR) * ASPECT_RATIO;
+  const newWidth: number = (currentWindowHeight / ASPECT_RATIO) * WINDOW_FACTOR;
 
   const onPositionUpdate = (x: number, y: number, positionId: number) => {
     const dataCTO = dataCTOs.find((dataCTO) => dataCTO.geometricalData.position.id === positionId);
@@ -123,18 +124,8 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
     <motion.div
       id="datadndBox"
       ref={constraintsRef}
-      style={
-        fullScreen
-          ? {
-              height: h2,
-              maxWidth: w2,
-              borderWidth: "1px",
-              borderStyle: "solid",
-              backgroundColor: "var(--carv2-background-color)",
-            }
-          : {}
-      }
-      className={fullScreen ? "" : "dataModel"}
+      style={fullScreen ? { height: newHeight, maxWidth: newWidth } : {}}
+      className={fullScreen ? "dataModelFullscreen" : "dataModel"}
       key={key}
     >
       {dataCTOs.map(createDnDMetaDataFragmentIfNotinEdit)}

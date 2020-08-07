@@ -17,7 +17,7 @@ import { DataAndInstanceDropDown } from "../../../../../common/fragments/dropdow
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditActionProps { }
+export interface ControllPanelEditActionProps {}
 
 export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionProps> = (props) => {
   const {
@@ -99,7 +99,7 @@ const useControllPanelEditActionViewModel = () => {
     }
   };
 
-  const setData = (values: { data?: DataCTO, instance?: DataInstanceTO } | undefined): void => {
+  const setData = (values: { data?: DataCTO; instance?: DataInstanceTO } | undefined): void => {
     if (!isNullOrUndefined(values)) {
       if (!isNullOrUndefined(values.data)) {
         let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);

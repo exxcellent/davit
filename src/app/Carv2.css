@@ -48,6 +48,16 @@
   overflow-y: visible; */
 }
 
+.componentModelFullscreen {
+  border: 1px solid black;
+  background-color: var(--carv2-background-color);
+}
+
+.dataModelFullscreen {
+  border: 1px solid black;
+  background-color: var(--carv2-background-color);
+}
+
 .componentModel {
   grid-area: compModel;
   border-style: solid;
@@ -67,6 +77,12 @@
   height: 0;
   background-color: red; */
   /* width: 100%; */
+}
+
+.dndWrapper {
+  position: absolute;
+  display: inline-flex;
+  z-index: 1;
 }
 
 .dataModel {

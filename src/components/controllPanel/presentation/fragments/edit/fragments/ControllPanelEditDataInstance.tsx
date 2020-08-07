@@ -37,7 +37,6 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
         onBlur={() => updateData()}
       />
       <div className="columnDivider controllPanelEditChild">
-        {/* <Carv2ButtonLabel onClick={() => {}} label="Create another" /> */}
         <Carv2ButtonLabel onClick={saveDataInstace} label="OK" />
       </div>
       <div className="columnDivider">
