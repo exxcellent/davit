@@ -9,7 +9,6 @@ import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
-import { GroupDropDown } from "../../../../../common/fragments/dropdowns/GroupDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
@@ -24,20 +23,13 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
     saveComponent,
     deleteComponent,
     textInput,
-    setGroup,
-    compGroup,
     updateComponent,
     createAnother,
   } = useControllPanelEditComponentViewModel();
 
   return (
     <ControllPanelEditSub label={label}>
-      <div className="optionFieldSpacer">
-        <OptionField>
-          <GroupDropDown onSelect={setGroup} value={compGroup} />
-        </OptionField>
-      </div>
-      <div className="columnDivider" style={{ display: "flex" }}>
+      <div className="optionFieldSpacer" style={{ display: "flex" }}>
         <Carv2LabelTextfield
           label="Name:"
           placeholder="Component Name"
@@ -47,6 +39,9 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
           autoFocus
           ref={textInput}
         />
+      </div>
+      <div className="columnDivider">
+        <OptionField></OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
         <Carv2ButtonLabel onClick={createAnother} label="Create another" />
@@ -88,8 +83,14 @@ const useControllPanelEditComponentViewModel = () => {
   };
 
   const saveComponent = () => {
-    dispatch(EditActions.component.save(componentToEdit!));
-    dispatch(EditActions.setMode.edit());
+    if (!isNullOrUndefined(componentToEdit)) {
+      if (componentToEdit?.component.name !== "") {
+        dispatch(EditActions.component.save(componentToEdit!));
+      } else {
+        deleteComponent();
+      }
+      dispatch(EditActions.setMode.edit());
+    }
   };
 
   const createAnother = () => {

@@ -1,5 +1,5 @@
 import { Point } from "framer-motion";
-import React, { FunctionComponent, useRef } from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { GeometricalDataCTO } from "../../../../dataAccess/access/cto/GeometraicalDataCTO";
 import { DataRelationTO, Direction, RelationType } from "../../../../dataAccess/access/to/DataRelationTO";
 
@@ -15,11 +15,26 @@ export interface Carv2PathProps {
   type1: RelationType;
   type2: RelationType;
   id: number;
+  parentRef: any;
   stroked?: boolean;
 }
 
 const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
-  const { xSource, ySource, xTarget, yTarget, direction1, direction2, id, stroked } = props;
+  const { xSource, ySource, xTarget, yTarget, direction1, direction2, id, stroked, parentRef } = props;
+
+  const [initXSource, setInitXSource] = useState<number>(xSource);
+  const [initYSource, setInitYSource] = useState<number>(ySource);
+  const [initXTarget, setInitXTarget] = useState<number>(xTarget);
+  const [initYTarget, setInitYTarget] = useState<number>(yTarget);
+
+  useEffect(() => {
+    if (parentRef !== undefined && parentRef.current !== undefined) {
+      setInitXSource(xSource * (parentRef.current.offsetWidth / 100));
+      setInitYSource(ySource * (parentRef.current.offsetHeight / 100));
+      setInitXTarget(xTarget * (parentRef.current.offsetWidth / 100));
+      setInitYTarget(yTarget * (parentRef.current.offsetHeight / 100));
+    }
+  }, [ySource, xSource, yTarget, xTarget, parentRef]);
 
   const TOP: Point = { x: 80, y: 0 };
   const BOTTOM: Point = { x: 80, y: 50 };
@@ -27,8 +42,8 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
   const RIGHT: Point = { x: 150, y: 25 };
 
   const createCornerLine = () => {
-    let startPoint: Point = { x: xSource, y: ySource };
-    let endPoint: Point = { x: xTarget, y: yTarget };
+    let startPoint: Point = { x: initXSource, y: initYSource };
+    let endPoint: Point = { x: initXTarget, y: initYTarget };
     // set interfaces
     const directionPoint1 = getDirectionPoint(direction1);
     const directionPoint2 = getDirectionPoint(direction2);
@@ -98,6 +113,7 @@ export const createCornerConnection = (
   target: GeometricalDataCTO | undefined,
   dataRelation: DataRelationTO,
   key: number,
+  parentRef: any,
   stroked?: boolean
 ) => {
   if (source && target) {
@@ -116,6 +132,7 @@ export const createCornerConnection = (
         type2={dataRelation.type2}
         id={dataRelation.id}
         stroked={stroked}
+        parentRef={parentRef}
       />
     );
   }

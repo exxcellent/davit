@@ -4,6 +4,7 @@ import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { ActionTO } from "../../../../../../dataAccess/access/to/ActionTO";
+import { DataInstanceTO, DATA_INSTANCE_ID_FACTOR } from "../../../../../../dataAccess/access/to/DataTO";
 import { ActionType } from "../../../../../../dataAccess/access/types/ActionType";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
@@ -12,7 +13,7 @@ import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2B
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ActionTypeDropDown } from "../../../../../common/fragments/dropdowns/ActionTypeDropDown";
 import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
-import { DataDropDown } from "../../../../../common/fragments/dropdowns/DataDropDown";
+import { DataAndInstanceDropDown } from "../../../../../common/fragments/dropdowns/DataAndInstanceDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { OptionField } from "../common/OptionField";
 
@@ -45,7 +46,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
       </div>
       <div className="optionFieldSpacer columnDivider">
         <OptionField>
-          <DataDropDown onSelect={setData} value={dataId} />
+          <DataAndInstanceDropDown onSelect={setData} value={dataId} />
         </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
@@ -98,10 +99,14 @@ const useControllPanelEditActionViewModel = () => {
     }
   };
 
-  const setData = (data: DataCTO | undefined): void => {
-    if (!isNullOrUndefined(data)) {
+  const setData = (values: { data?: DataCTO; instance?: DataInstanceTO } | undefined): void => {
+    if (!isNullOrUndefined(values?.data)) {
       let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
-      copyActionToEdit.dataFk = data.data.id;
+      if (values?.instance) {
+        copyActionToEdit.dataFk = values.data.data.id * DATA_INSTANCE_ID_FACTOR + values.instance.id;
+      } else {
+        copyActionToEdit.dataFk = values!.data.data.id;
+      }
       dispatch(EditActions.action.update(copyActionToEdit));
       dispatch(EditActions.action.save(copyActionToEdit));
     }

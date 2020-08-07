@@ -78,15 +78,12 @@ class DataStore {
     localStorage.setItem(STORE_ID, fileData);
   };
 
-  public downloadData = () => {
+  public downloadData = (projectName: string) => {
     let dataStr = JSON.stringify(this.getDataStoreObject());
     let dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
-
-    let exportFileDefaultName = "carv2.json";
-
     let linkElement = document.createElement("a");
     linkElement.setAttribute("href", dataUri);
-    linkElement.setAttribute("download", exportFileDefaultName);
+    linkElement.setAttribute("download", projectName + ".json");
     linkElement.click();
   };
 

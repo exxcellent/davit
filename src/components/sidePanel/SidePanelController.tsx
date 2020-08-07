@@ -1,12 +1,13 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch } from "react-redux";
 import { Button } from "semantic-ui-react";
+import logo from "../../icons/logo200.png";
 import { EditActions } from "../../slices/EditSlice";
 
-export interface SidePanelProps { }
+export interface SidePanelProps {}
 
 export const SidePanelController: FunctionComponent<SidePanelProps> = (props) => {
-  const { setModeToEdit, setModeToFile, setModeToView } = useSidePanelViewModel();
+  const { setModeToEdit, setModeToFile, setModeToView, setModeToTab } = useSidePanelViewModel();
 
   return (
     <div className="leftPanel">
@@ -14,7 +15,25 @@ export const SidePanelController: FunctionComponent<SidePanelProps> = (props) =>
         <Button inverted color="orange" icon="write" onClick={setModeToEdit} />
         <Button inverted color="orange" icon="eye" onClick={setModeToView} />
         <Button inverted color="orange" icon="file" onClick={setModeToFile} />
+        <Button inverted color="orange" icon="external alternate" onClick={setModeToTab} />
       </Button.Group>
+      <div style={{ position: "absolute", bottom: "1em" }}>
+        <img src={logo} alt="fireSpot" />
+        <div
+          style={{
+            writingMode: "sideways-lr",
+            textOrientation: "upright",
+            fontSize: "3em",
+            fontFamily: "Arial Rounded MT Bold",
+            paddingLeft: "15px",
+            marginTop: "0.5em",
+            marginBottom: "1em",
+            color: "#0060A9",
+          }}
+        >
+          D A V I T by
+        </div>
+      </div>
     </div>
   );
 };
@@ -34,9 +53,14 @@ const useSidePanelViewModel = () => {
     dispatch(EditActions.setMode.file());
   };
 
+  const setModeToTab = () => {
+    dispatch(EditActions.setMode.tab());
+  };
+
   return {
     setModeToEdit,
     setModeToView,
     setModeToFile,
+    setModeToTab,
   };
 };

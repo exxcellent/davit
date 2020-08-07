@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Dropdown, Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
-import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { ConditionTO } from "../../../../../../dataAccess/access/to/ConditionTO";
@@ -49,6 +48,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
     setRoot,
     isRoot,
     getCondition,
+    key,
   } = useControllPanelEditConditionViewModel();
 
   const conditionName = (
@@ -112,7 +112,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
   );
 
   return (
-    <ControllPanelEditSub label={label}>
+    <ControllPanelEditSub label={label} key={key}>
       <div className="controllPanelEditChild">
         {conditionName}
         {hasDropDown}
@@ -177,6 +177,7 @@ const useControllPanelEditConditionViewModel = () => {
   const textInput = useRef<Input>(null);
   const [currentIfGoTo, setCurrentIfGoTo] = useState<GoTo>({ type: GoToTypes.STEP, id: -1 });
   const [currentElseGoTo, setCurrentElseGoTo] = useState<GoTo>({ type: GoToTypes.STEP, id: -1 });
+  const [key, setKey] = useState<number>(0);
 
   useEffect(() => {
     if (isNullOrUndefined(conditionToEdit)) {
@@ -208,11 +209,10 @@ const useControllPanelEditConditionViewModel = () => {
     }
   };
 
-  const setData = (datas: DataCTO[] | undefined) => {
-    if (datas !== undefined && !isNullOrUndefined(conditionToEdit)) {
+  const setData = (dataIds: number[] | undefined) => {
+    if (!isNullOrUndefined(conditionToEdit)) {
       const copyConditionToEdit: ConditionTO = Carv2Util.deepCopy(conditionToEdit);
-      copyConditionToEdit.dataFks = [];
-      datas.forEach((data) => copyConditionToEdit.dataFks.push(data.data.id));
+      copyConditionToEdit.dataFks = dataIds || [];
       dispatch(EditActions.setMode.editCondition(copyConditionToEdit));
     }
   };
@@ -327,6 +327,7 @@ const useControllPanelEditConditionViewModel = () => {
       goToCondition.sequenceFk = conditionToEdit.sequenceFk;
       const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(conditionToEdit);
       dispatch(EditActions.setMode.editCondition(goToCondition, copyStepToEdit, ifGoTo));
+      setKey(key + 1);
     }
   };
 
@@ -377,5 +378,6 @@ const useControllPanelEditConditionViewModel = () => {
     setRoot,
     isRoot: conditionToEdit?.root ? conditionToEdit.root : false,
     getCondition,
+    key,
   };
 };

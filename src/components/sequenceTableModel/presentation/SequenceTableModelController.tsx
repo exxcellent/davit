@@ -1,43 +1,109 @@
-import React, { FunctionComponent } from "react";
+/* eslint-disable react/display-name */
+import React, { createRef, FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Icon, Tab } from "semantic-ui-react";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
+import { ConditionTO } from "../../../dataAccess/access/to/ConditionTO";
 import { GoToTypes, Terminal } from "../../../dataAccess/access/types/GoToType";
 import { masterDataSelectors } from "../../../slices/MasterDataSlice";
 import { CalculatedStep, SequenceModelActions, sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
 
-interface SequenceTableModelControllerProps { }
+interface SequenceTableModelControllerProps {
+  fullScreen?: boolean;
+}
+
+interface CarvTableRow {}
 
 export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (props) => {
-  const { title, getTableBody } = useSequenceTableViewModel();
+  const { fullScreen } = props;
+  const { title, getTableBody, getConditionTableBody, getStepTableBody } = useSequenceTableViewModel();
+
+  enum table {
+    step = "step",
+    condition = "condition",
+    sequence = "sequence",
+  }
+
+  // const [mode, setMode] = useState<table>(table.sequence);
+
+  const panes = [
+    {
+      menuItem: "Sequence",
+      render: () => (
+        <Tab.Pane>
+          <div>
+            <label>{title}</label>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>INDEX</th>
+                <th>NAME</th>
+                <th>SENDER</th>
+                <th>RECEIVER</th>
+                <th>ACTION-ERROR</th>
+              </tr>
+            </thead>
+            <tbody>{getTableBody()}</tbody>
+          </table>
+        </Tab.Pane>
+      ),
+    },
+    {
+      menuItem: "Conditions",
+      render: () => (
+        <Tab.Pane>
+          <div>
+            <label>CONDITIONS</label>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>INDEX</th>
+                <th>NAME</th>
+                <th>RESULT</th>
+              </tr>
+            </thead>
+            <tbody>{getConditionTableBody()}</tbody>
+          </table>
+        </Tab.Pane>
+      ),
+    },
+    {
+      menuItem: "Steps",
+      render: () => (
+        <Tab.Pane>
+          <div>
+            <label>STEPS</label>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>INDEX</th>
+                <th>NAME</th>
+                <th>SENDER</th>
+                <th>RECEIVER</th>
+              </tr>
+            </thead>
+            <tbody>{getStepTableBody()}</tbody>
+          </table>
+        </Tab.Pane>
+      ),
+    },
+  ];
 
   return (
-    <div className="sequenceTable">
-      <div style={{ display: "flex", justifyContent: "center", width: "100%", color: "white" }}>
-        <label>{title}</label>
-      </div>
-      <table className="carv2Table">
-        <thead>
-          <tr>
-            <th className="carv2Th" style={{ width: "15px" }}>
-              INDEX
-            </th>
-            <th className="carv2Th">NAME</th>
-            <th className="carv2Th">SENDER</th>
-            <th className="carv2Th">RECEIVER</th>
-          </tr>
-        </thead>
-        <tbody className="carv2TBody">{getTableBody()}</tbody>
-      </table>
+    <div className={fullScreen ? "" : "sequenceTable"}>
+      {/* <Tab panes={panes} menu={{ color: "white", inverted: true, attached: true, tabular: false }} /> */}
+      <Tab panes={panes} menu={{ inverted: true, attached: true, tabular: false }} />
     </div>
   );
 };
 
 const useSequenceTableViewModel = () => {
-
   const dispatch = useDispatch();
-
   const sequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
   const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
   const stepIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentStepIndex);
@@ -45,15 +111,56 @@ const useSequenceTableViewModel = () => {
   const terminalStep: Terminal | null = useSelector(sequenceModelSelectors.selectTerminalStep);
   const loopStepStartIndex: number | null = useSelector(sequenceModelSelectors.selectLoopStepStartIndex);
 
-  const createStepColumn = (step: CalculatedStep, index: number): JSX.Element => {
+  const createSequenceStepColumn = (step: CalculatedStep, index: number): JSX.Element => {
     let trClass: string = loopStepStartIndex && loopStepStartIndex <= index ? "carv2TrTerminalError" : "carv2Tr";
+
+    const myRef = createRef<HTMLTableRowElement>();
+    const scrollToRef = (ref: any) => window.scrollTo(0, ref.offsetTop);
+
+    if (index === stepIndex) {
+      trClass = "carv2TrMarked";
+      scrollToRef(myRef);
+    }
+    const modelStep: SequenceStepCTO | undefined = sequence?.sequenceStepCTOs.find(
+      (item) => item.squenceStepTO.id === step.stepFk
+    );
+
+    let name = index === 0 && !modelStep ? "Initial" : modelStep?.squenceStepTO.name || "Step not found";
+
+    const source =
+      index === 0 && !modelStep
+        ? ""
+        : modelStep
+        ? getComponentNameById(modelStep.squenceStepTO.sourceComponentFk)
+        : "Source not found";
+    const target =
+      index === 0 && !modelStep
+        ? ""
+        : modelStep
+        ? getComponentNameById(modelStep.squenceStepTO.targetComponentFk)
+        : "Target not found";
+    const hasError = step.errors.length > 0 ? true : false;
+
+    return (
+      <tr key={index} className={trClass} onClick={() => handleTableClickEvent(index)} ref={myRef}>
+        <td className="carv2Td">{index}</td>
+        <td className="carv2Td">{name}</td>
+        <td className="carv2Td">{source}</td>
+        <td className="carv2Td">{target}</td>
+        <td className="carv2Td">{hasError && <Icon name="warning sign" color="red" />}</td>
+      </tr>
+    );
+  };
+
+  const createModelStepColumn = (step: SequenceStepCTO, index: number): JSX.Element => {
+    const name = step.squenceStepTO.name;
+    const source = getComponentNameById(step.squenceStepTO.sourceComponentFk);
+    const target = getComponentNameById(step.squenceStepTO.targetComponentFk);
+
+    let trClass = "carv2Tr";
     if (index === stepIndex) {
       trClass = "carv2TrMarked";
     }
-    const modelStep: SequenceStepCTO | undefined = sequence?.sequenceStepCTOs.find(item => item.squenceStepTO.id === step.stepFk);
-    const name = index === 0 && !modelStep ? "Initial" : modelStep?.squenceStepTO.name || "Step not found";
-    const source = index === 0 && !modelStep ? "" : modelStep ? getComponentNameById(modelStep.squenceStepTO.sourceComponentFk) : "Source not found";
-    const target = index === 0 && !modelStep ? "" : modelStep ? getComponentNameById(modelStep.squenceStepTO.targetComponentFk) : "Target not found";
     return (
       <tr key={index} className={trClass} onClick={() => handleTableClickEvent(index)}>
         <td className="carv2Td">{index}</td>
@@ -64,18 +171,39 @@ const useSequenceTableViewModel = () => {
     );
   };
 
+  const createConditionColumn = (condition: ConditionTO, index: number): JSX.Element => {
+    const name = condition.name;
+    let trClass = "carv2Tr";
+    if (index === stepIndex) {
+      trClass = "carv2TrMarked";
+    }
+    return (
+      <tr key={index} className={trClass} onClick={() => handleTableClickEvent(index)}>
+        <td className="carv2Td">{index}</td>
+        <td className="carv2Td">{name}</td>
+      </tr>
+    );
+  };
+
   const createTerminalColumn = (terminal: Terminal): JSX.Element => {
     const className = terminal.type === GoToTypes.ERROR ? "carv2TrTerminalError" : "carv2TrTerminalSuccess";
-    return (<tr key={"Terminal"} className={className}>
-      <td>{" "}</td><td>{terminal.type}</td><td>{" "}</td><td>{" "}</td>
-    </tr>)
-  }
+    return (
+      <tr key={"Terminal"} className={className}>
+        <td> </td>
+        <td>{terminal.type}</td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+      </tr>
+    );
+  };
 
   const getTableBody = () => {
+    // let list: JSX.Element[] = [];
     let list: JSX.Element[] = [];
-    list = calcSteps.map((step, index) => createStepColumn(step, index));
+    list = calcSteps.map((step, index) => createSequenceStepColumn(step, index));
     if (terminalStep) {
-      list.push(createTerminalColumn(terminalStep))
+      list.push(createTerminalColumn(terminalStep));
     }
     let key: number = list.length;
     while (list.length < 10) {
@@ -85,11 +213,66 @@ const useSequenceTableViewModel = () => {
     return list;
   };
 
+  const getStepTableBody = () => {
+    let list: JSX.Element[] = [];
+    let key: number = 0;
+    if (sequence !== null) {
+      list = sequence?.sequenceStepCTOs.map((step, index) => createModelStepColumn(step, index));
+      key = list.length;
+    }
+    while (list.length < 10) {
+      list.push(createEmptyStepRow(key.toString(), "carv2Tr"));
+      key++;
+    }
+    return list;
+  };
+
+  const getConditionTableBody = () => {
+    let list: JSX.Element[] = [];
+    // list = calcSteps.map((step, index) => createStepColumn(step, index));
+    if (sequence !== null) {
+      list = sequence.conditions.map((cond, index) => createConditionColumn(cond, index));
+    }
+    let key: number = list.length;
+    while (list.length < 10) {
+      list.push(createEmptyConditionRow(key.toString(), "carv2Tr"));
+      key++;
+    }
+    return list;
+  };
+
   const createEmptyRow = (key: string, className?: string): JSX.Element => {
-    return (<tr key={key} className={className}>
-      <td>{" "}</td><td>{" "}</td><td>{" "}</td><td>{" "}</td>
-    </tr>)
-  }
+    return (
+      <tr key={key} className={className}>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+      </tr>
+    );
+  };
+
+  const createEmptyStepRow = (key: string, className?: string): JSX.Element => {
+    return (
+      <tr key={key} className={className}>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+      </tr>
+    );
+  };
+
+  const createEmptyConditionRow = (key: string, className?: string): JSX.Element => {
+    return (
+      <tr key={key} className={className}>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+      </tr>
+    );
+  };
 
   const getComponentNameById = (id: number): string => {
     return components.find((comp) => comp.component.id === id)?.component.name || "Could not find Component!";
@@ -97,10 +280,12 @@ const useSequenceTableViewModel = () => {
 
   const handleTableClickEvent = (index: number) => {
     dispatch(SequenceModelActions.setCurrentStepIndex(index));
-  }
+  };
 
   return {
-    title: sequence ? sequence.sequenceTO.name : "Select Sequence ...",
+    title: sequence ? sequence.sequenceTO.name : "Select data setup and sequence to calculate ...",
     getTableBody,
+    getConditionTableBody,
+    getStepTableBody,
   };
 };

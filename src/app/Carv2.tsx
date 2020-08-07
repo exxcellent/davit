@@ -3,12 +3,13 @@ import { useDispatch } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import { ErrorNotification } from "../components/common/fragments/ErrorNotification";
 import { ControllPanelController } from "../components/controllPanel/presentation/ControllPanelController";
-import { MetaComponentModelController } from "../components/MetaComponentModel/presentation/MetaComponentModelController";
+import { MetaComponentModelController } from "../components/metaComponentModel/presentation/MetaComponentModelController";
 import { MetaDataModelController } from "../components/metaDataModel/presentation/MetaDataModelController";
 import { SequenceModelController } from "../components/sequenceModel/SequenceModelController";
 import { SequenceTableModelController } from "../components/sequenceTableModel/presentation/SequenceTableModelController";
 import { SidePanelController } from "../components/sidePanel/SidePanelController";
 import { MasterDataActions } from "../slices/MasterDataSlice";
+import { useKeyListener } from "../utils/WindowUtil";
 import "./Carv2.css";
 
 export const ModuleRoutes = {
@@ -16,7 +17,8 @@ export const ModuleRoutes = {
   component: "/component",
   data: "/data",
   table: "/table",
-}
+  flowChart: "/flowChart",
+};
 
 export function Carv2() {
   const dispatch = useDispatch();
@@ -28,6 +30,8 @@ export function Carv2() {
     dispatch(MasterDataActions.loadRelationsFromBackend());
     dispatch(MasterDataActions.loadSequencesFromBackend());
   }, [dispatch]);
+
+  useKeyListener();
 
   return (
     <div className="Carv2">
@@ -46,21 +50,28 @@ export function Carv2() {
         <Route exact path={ModuleRoutes.component}>
           <div className="Carv2">
             <div className="componentPage">
-              <MetaComponentModelController />
+              <MetaComponentModelController fullScreen />
             </div>
           </div>
         </Route>
         <Route exact path={ModuleRoutes.data}>
           <div className="Carv2">
             <div className="componentPage">
-              <MetaDataModelController />
+              <MetaDataModelController fullScreen />
             </div>
           </div>
         </Route>
         <Route exact path={ModuleRoutes.table}>
           <div className="Carv2">
             <div className="componentPage">
-              <SequenceTableModelController />
+              <SequenceTableModelController fullScreen />
+            </div>
+          </div>
+        </Route>
+        <Route exact path={ModuleRoutes.flowChart}>
+          <div className="Carv2">
+            <div className="componentPage">
+              <SequenceModelController fullScreen />
             </div>
           </div>
         </Route>

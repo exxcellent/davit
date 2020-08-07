@@ -7,6 +7,7 @@ import { ActionTO } from "./access/to/ActionTO";
 import { ConditionTO } from "./access/to/ConditionTO";
 import { DataRelationTO } from "./access/to/DataRelationTO";
 import { DataSetupTO } from "./access/to/DataSetupTO";
+import { DataInstanceTO } from "./access/to/DataTO";
 import { GroupTO } from "./access/to/GroupTO";
 import { InitDataTO } from "./access/to/InitDataTO";
 import { SequenceTO } from "./access/to/SequenceTO";
@@ -33,14 +34,14 @@ export const DataAccess = {
     }
   },
 
-  downloadData(): DataAccessResponse<void> {
+  downloadData(projectName: string): DataAccessResponse<void> {
     let response: DataAccessResponse<void> = {
       object: undefined,
       message: "",
       code: 500,
     };
     try {
-      dataStore.downloadData();
+      dataStore.downloadData(projectName);
       return { ...response, code: 200 };
     } catch (error) {
       return { ...response, message: error.message };
@@ -129,6 +130,17 @@ export const DataAccess = {
     return makeTransactional(SequenceDataAccessService.findAllInitDatas);
   },
 
+  findInitData(id: number): DataAccessResponse<InitDataTO> {
+    return makeTransactional(() => SequenceDataAccessService.findInitData(id));
+  },
+
+  saveInitData(initData: InitDataTO): DataAccessResponse<InitDataTO> {
+    return makeTransactional(() => SequenceDataAccessService.saveInitData(initData));
+  },
+
+  deleteInitData(id: number): DataAccessResponse<InitDataTO> {
+    return makeTransactional(() => SequenceDataAccessService.deleteInitData(id));
+  },
   // ========================================= DATA =========================================
 
   findAllDatas(): DataAccessResponse<DataCTO[]> {
@@ -137,6 +149,10 @@ export const DataAccess = {
 
   saveDataCTO(dataCTO: DataCTO): DataAccessResponse<DataCTO> {
     return makeTransactional(() => DataDataAccessService.saveDataCTO(dataCTO));
+  },
+
+  saveDataInstanceTO(dataInstanceTO: DataInstanceTO): DataAccessResponse<DataCTO> {
+    return makeTransactional(() => DataDataAccessService.saveDataInstanceTO(dataInstanceTO));
   },
 
   deleteDataCTO(dataCTO: DataCTO): DataAccessResponse<DataCTO> {

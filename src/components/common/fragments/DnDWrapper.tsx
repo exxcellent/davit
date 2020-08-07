@@ -1,27 +1,28 @@
-import { motion } from "framer-motion";
-import React, { FunctionComponent, useEffect, useState } from "react";
+import { motion, useInvertedScale, useMotionValue } from "framer-motion";
+import React, { FunctionComponent, useEffect } from "react";
+import { WINDOW_FACTOR } from "../../../app/Carv2Constanc";
 import { GeometricalDataCTO } from "../../../dataAccess/access/cto/GeometraicalDataCTO";
 
 export interface DnDWrapperProps {
   dragConstraintsRef: any;
   positionId: number;
-  initalX: number;
-  initalY: number;
+  initX: number;
+  initY: number;
   onPositionUpdate: (x: number, y: number, positionId: number) => void;
   shadow?: string;
 }
 
 export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
-  const { dragConstraintsRef, initalX, initalY, onPositionUpdate, positionId, shadow } = props;
-  const [shadowColor, setShadowColor] = useState<string>("");
+  const { dragConstraintsRef, initX, initY, onPositionUpdate, positionId, shadow } = props;
+
+  const x = useMotionValue(initX);
+  const y = useMotionValue(initY);
+  const { scaleX, scaleY } = useInvertedScale();
 
   useEffect(() => {
-    if (shadow) {
-      setShadowColor("3px 3px 3px " + shadow);
-    } else {
-      setShadowColor("");
-    }
-  }, [shadow]);
+    x.set(initX * (dragConstraintsRef.current.offsetWidth / 100));
+    y.set(initY * (dragConstraintsRef.current.offsetHeight / 100));
+  }, [x, initX, y, initY, dragConstraintsRef]);
 
   return (
     <motion.div
@@ -29,19 +30,25 @@ export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
       dragConstraints={dragConstraintsRef}
       dragMomentum={false}
       dragElastic={0}
-      initial={{
-        x: initalX,
-        y: initalY,
-      }}
       onDragEnd={(event, info) => {
         onPositionUpdate(
-          // keine Nachkommastellen.
-          Number(info.point.x.toFixed(0)),
-          Number(info.point.y.toFixed(0)),
+          /* 
+          keine Nachkommastellen 
+          Positioniert das DnD Element entsprechend der Fenster größe.
+          */
+          Number(info.point.x.toFixed(0)) / (dragConstraintsRef.current.offsetWidth / WINDOW_FACTOR),
+          Number(info.point.y.toFixed(0)) / (dragConstraintsRef.current.offsetHeight / WINDOW_FACTOR),
           positionId
         );
       }}
-      style={{ position: "absolute", display: "inline-flex", zIndex: 1, boxShadow: shadowColor }}
+      className="dndWrapper"
+      style={{
+        boxShadow: shadow ? "3px 3px 3px " + shadow : "",
+        x,
+        y,
+        scaleX,
+        scaleY,
+      }}
     >
       {props.children}
     </motion.div>
@@ -60,8 +67,8 @@ export const createDnDItem = (
       key={geometricalDataCTO.position.id}
       onPositionUpdate={onPositionUpdateCallBack}
       positionId={geometricalDataCTO.position.id}
-      initalX={geometricalDataCTO.position.x}
-      initalY={geometricalDataCTO.position.y}
+      initX={geometricalDataCTO.position.x}
+      initY={geometricalDataCTO.position.y}
       dragConstraintsRef={dragConstraintsRef}
       shadow={shadow}
     >

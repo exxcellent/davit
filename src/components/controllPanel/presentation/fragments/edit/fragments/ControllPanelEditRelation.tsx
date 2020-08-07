@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Dropdown, DropdownItemProps, Input } from "semantic-ui-react";
+import { Dropdown, DropdownItemProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationTO, Direction, RelationType } from "../../../../../../dataAccess/access/to/DataRelationTO";
@@ -17,24 +17,16 @@ export interface ControllPanelEditRelationProps {}
 export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelationProps> = (props) => {
   const {
     label,
-    label1,
-    label2,
     data1,
     data2,
     direction1,
     direction2,
-    type1,
-    type2,
-    setLabel,
-    setType,
     setDirection,
     setData,
     saveRelation,
     deleteRelation,
     dataOptions,
     directionOptions,
-    typeOptions,
-    // validRelation,
     createAnother,
     key,
     updateRelation,
@@ -68,14 +60,6 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
               value={data1}
               onBlur={() => updateRelation()}
             />
-            <Dropdown
-              placeholder="Select Type1"
-              selection
-              options={typeOptions}
-              onChange={(event: any) => setType(event.target.value)}
-              value={type1}
-              onBlur={() => updateRelation()}
-            />
           </div>
           <div
             style={{
@@ -84,7 +68,6 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
               justifyContent: "center",
             }}
           >
-            <Input placeholder="Label1" onChange={(event: any) => setLabel(event.target.value)} value={label1} />
             <Dropdown
               placeholder="Select Direction1"
               selection
@@ -122,14 +105,6 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
               value={data2}
               onBlur={() => updateRelation()}
             />
-            <Dropdown
-              placeholder="Select Type2"
-              selection
-              options={typeOptions}
-              onChange={(event: any) => setType(event.target.value, true)}
-              value={type2}
-              onBlur={() => updateRelation()}
-            />
           </div>
           <div
             style={{
@@ -138,7 +113,6 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
               justifyContent: "center",
             }}
           >
-            <Input placeholder="Label2" onChange={(event: any) => setLabel(event.target.value, true)} value={label2} />
             <Dropdown
               placeholder="Select Direction2"
               selection
@@ -210,7 +184,11 @@ const useControllPanelEditRelationViewModel = () => {
   };
 
   const saveRelation = () => {
-    dispatch(EditActions.relation.save(relationToEdit!));
+    if (relationToEdit?.data1Fk !== -1 && relationToEdit?.data2Fk !== -1) {
+      dispatch(EditActions.relation.save(relationToEdit!));
+    } else {
+      deleteRelation();
+    }
     dispatch(EditActions.setMode.edit());
   };
 

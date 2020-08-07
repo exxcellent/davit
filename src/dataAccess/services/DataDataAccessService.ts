@@ -2,7 +2,7 @@ import { Carv2Util } from "../../utils/Carv2Util";
 import { DataCTO } from "../access/cto/DataCTO";
 import { GeometricalDataCTO } from "../access/cto/GeometraicalDataCTO";
 import { DataRelationTO } from "../access/to/DataRelationTO";
-import { DataTO } from "../access/to/DataTO";
+import { DataInstanceTO, DataTO } from "../access/to/DataTO";
 import { DataConnectionRepository } from "../repositories/DataConnectionRepository";
 import { DataRepository } from "../repositories/DataRepository";
 import { CheckHelper } from "../util/CheckHelper";
@@ -31,6 +31,15 @@ export const DataDataAccessService = {
       data: savedData,
       geometricalData: savedGeometricalData,
     };
+  },
+
+  saveDataInstanceTO(dataInstanceTO: DataInstanceTO): DataCTO {
+    CheckHelper.nullCheck(dataInstanceTO, "dataInstanceTO");
+    let data: DataCTO | undefined = this.findDataCTO(dataInstanceTO.dataFk);
+    CheckHelper.nullCheck(data, "data");
+    data?.data.inst.push(dataInstanceTO);
+    DataRepository.save(data!.data);
+    return data;
   },
 
   findAllDataRelationTOs(): DataRelationTO[] {

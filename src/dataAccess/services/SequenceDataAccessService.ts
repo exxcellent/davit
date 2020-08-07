@@ -143,10 +143,6 @@ export const SequenceDataAccessService = {
     return createDataSetupCTO(DataSetupRepository.find(dataId));
   },
 
-  findAllInitDatas(): InitDataTO[] {
-    return InitDataRepository.findAll();
-  },
-
   saveDataSetup(dataSetup: DataSetupTO): DataSetupTO {
     CheckHelper.nullCheck(dataSetup, "dataSetup");
     const dataSetupTO: DataSetupTO = DataSetupRepository.save(dataSetup);
@@ -159,7 +155,7 @@ export const SequenceDataAccessService = {
     const savedDataSetupTO: DataSetupTO = DataSetupRepository.save(dataSetupCTO.dataSetup);
     // remove old init data.
     InitDataRepository.findAllForSetup(dataSetupCTO.dataSetup.id).forEach((initData) =>
-      InitDataRepository.delete(initData)
+      InitDataRepository.delete(initData.id)
     );
     // update and save new init data.
     copyDataSetupCTO.initDatas.forEach((initData) => {
@@ -172,12 +168,35 @@ export const SequenceDataAccessService = {
 
   deleteDataSetup(dataSetup: DataSetupCTO): DataSetupCTO {
     CheckHelper.nullCheck(dataSetup, "dataSetup");
-    dataSetup.initDatas.forEach((initData) => InitDataRepository.delete(initData));
+    dataSetup.initDatas.forEach((initData) => InitDataRepository.delete(initData.id));
     DataSetupRepository.delete(dataSetup.dataSetup);
     return dataSetup;
   },
-};
 
+  // ---------------------------------------------------------- Init Data ----------------------------------------------------------
+  findAllInitDatas(): InitDataTO[] {
+    return InitDataRepository.findAll();
+  },
+
+  findInitData(id: number): InitDataTO {
+    const initData: InitDataTO | undefined = InitDataRepository.find(id);
+    if (!initData) {
+      throw new Error("Could not find Init Data with id: " + id);
+    } else {
+      return initData;
+    }
+  },
+
+  saveInitData(initData: InitDataTO): InitDataTO {
+    CheckHelper.nullCheck(initData, "initData");
+    const savedInitData: InitDataTO = InitDataRepository.save(initData);
+    return savedInitData;
+  },
+
+  deleteInitData(id: number): InitDataTO {
+    return InitDataRepository.delete(id);
+  },
+};
 // ======================================================== PRIVATE ========================================================
 
 const createSequenceCTO = (sequence: SequenceTO | undefined): SequenceCTO => {

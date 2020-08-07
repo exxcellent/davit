@@ -10,7 +10,7 @@ import { DataSetupDropDown } from "../../../../common/fragments/dropdowns/DataSe
 import { SequenceDropDown } from "../../../../common/fragments/dropdowns/SequenceDropDown";
 import { OptionField } from "../edit/common/OptionField";
 
-export interface ControllPanelSequenceOptionsProps { }
+export interface ControllPanelSequenceOptionsProps {}
 
 export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequenceOptionsProps> = (props) => {
   const {
@@ -71,10 +71,6 @@ const useControllPanelSequenceOptionsViewModel = () => {
   const stepIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentStepIndex);
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   dispatch(MasterDataActions.loadSequencesFromBackend());
-  // }, [dispatch]);
-
   const selectSequence = (sequence: SequenceTO | undefined) => {
     if (!isNullOrUndefined(sequence)) {
       dispatch(SequenceModelActions.setCurrentSequence(sequence.id));
@@ -94,8 +90,12 @@ const useControllPanelSequenceOptionsViewModel = () => {
   };
 
   // TODO: add in sequenceModelSlice.
-  const stepNext = () => { dispatch(SequenceModelActions.setCurrentStepIndex(stepIndex + 1)) };
-  const stepBack = () => { dispatch(SequenceModelActions.setCurrentStepIndex(stepIndex - 1)) };
+  const stepNext = () => {
+    dispatch(SequenceModelActions.setCurrentStepIndex(stepIndex + 1));
+  };
+  const stepBack = () => {
+    dispatch(SequenceModelActions.setCurrentStepIndex(stepIndex - 1));
+  };
 
   return {
     sequence,

@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
-import React, { FunctionComponent, useRef } from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import { ASPECT_RATIO, WINDOW_FACTOR } from "../../../../app/Carv2Constanc";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { GeometricalDataCTO } from "../../../../dataAccess/access/cto/GeometraicalDataCTO";
 import { DataRelationTO } from "../../../../dataAccess/access/to/DataRelationTO";
 import { Carv2Util } from "../../../../utils/Carv2Util";
+import { useCurrentHeight, useCurrentWitdh } from "../../../../utils/WindowUtil";
 import { ViewFragmentProps } from "../../../../viewDataTypes/ViewFragment";
 import { createDnDItem } from "../../../common/fragments/DnDWrapper";
 import { createCornerConnection } from "../../../common/fragments/svg/Carv2Path";
@@ -17,12 +19,42 @@ interface MetaDataDnDBox {
   componentDatas: ViewFragmentProps[];
   onSaveCallBack: (dataCTO: DataCTO) => void;
   onClick: (dataId: number) => void;
+  fullScreen?: boolean;
 }
 
 export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
-  const { dataCTOs, dataCTOToEdit, onSaveCallBack, dataRelations, dataRelationToEdit, componentDatas, onClick } = props;
+  const {
+    dataCTOs,
+    dataCTOToEdit,
+    onSaveCallBack,
+    dataRelations,
+    dataRelationToEdit,
+    componentDatas,
+    onClick,
+    fullScreen,
+  } = props;
 
   const constraintsRef = useRef(null);
+
+  const [key, setKey] = useState<number>(0);
+
+  const handleResize = () => {
+    setKey(key + 1);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  });
+
+  // full size window
+  const currentWindowWitdh: number = useCurrentWitdh();
+  const currentWindowHeight: number = useCurrentHeight();
+  const newHeight: number = (currentWindowWitdh / WINDOW_FACTOR) * ASPECT_RATIO;
+  const newWidth: number = (currentWindowHeight / ASPECT_RATIO) * WINDOW_FACTOR;
 
   const onPositionUpdate = (x: number, y: number, positionId: number) => {
     const dataCTO = dataCTOs.find((dataCTO) => dataCTO.geometricalData.position.id === positionId);
@@ -39,7 +71,7 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
       const geoData1: GeometricalDataCTO | null = getGeometriaclDataByDataId(dataRelation.data1Fk);
       const geoData2: GeometricalDataCTO | null = getGeometriaclDataByDataId(dataRelation.data2Fk);
       if (!(dataRelationToEdit && dataRelationToEdit.id === dataRelation.id) && geoData1 && geoData2) {
-        return createCornerConnection(geoData1, geoData2, dataRelation, dataRelation.id);
+        return createCornerConnection(geoData1, geoData2, dataRelation, dataRelation.id, constraintsRef);
       } else {
         return <></>;
       }
@@ -55,7 +87,11 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
   const createDnDMetaDataFragment = (dataCTO: DataCTO) => {
     let metaDataFragment = createMetaDataFragment(
       dataCTO,
-      componentDatas.filter((comp) => comp.parentId === dataCTO.data.id),
+      componentDatas.filter(
+        (comp) =>
+          comp.parentId === dataCTO.data.id ||
+          (comp.parentId as { dataId: number; instanceId: number }).dataId === dataCTO.data.id
+      ),
       onClick
     );
     return createDnDItem(dataCTO.geometricalData, onPositionUpdate, constraintsRef, metaDataFragment);
@@ -72,7 +108,7 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
       geoData1 &&
       geoData2
     ) {
-      return createCornerConnection(geoData1, geoData2, dataRelation, dataRelation.id, true);
+      return createCornerConnection(geoData1, geoData2, dataRelation, dataRelation.id, constraintsRef, true);
     }
   };
 
@@ -85,7 +121,13 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
   };
 
   return (
-    <motion.div id="datadndBox" ref={constraintsRef} className="dataModel">
+    <motion.div
+      id="datadndBox"
+      ref={constraintsRef}
+      style={fullScreen ? { height: newHeight, maxWidth: newWidth } : {}}
+      className={fullScreen ? "dataModelFullscreen" : "dataModel"}
+      key={key}
+    >
       {dataCTOs.map(createDnDMetaDataFragmentIfNotinEdit)}
       {dataCTOToEdit && createDnDMetaDataFragment(dataCTOToEdit)}
       <motion.svg className="dataSVGArea">

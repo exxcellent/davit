@@ -4,6 +4,7 @@ import { isNullOrUndefined } from "util";
 import { editSelectors, Mode } from "../../../slices/EditSlice";
 import { ControllPanelEditController } from "./fragments/edit/ControllPanelEditController";
 import { ControllPanelFileController } from "./fragments/file/ControllPanelFileController";
+import { ControllPanelTabController } from "./fragments/tabs/ControllPanelTabController";
 import { ControllPanelSequenceOptions } from "./fragments/view/ControllPanelSequenceOptions";
 
 export interface ControllPanelProps {}
@@ -21,6 +22,9 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (p
       }
       if (mode.includes("FILE")) {
         return <ControllPanelFileController />;
+      }
+      if (mode.includes("TAB")) {
+        return <ControllPanelTabController />;
       }
     }
   };
