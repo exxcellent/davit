@@ -9,7 +9,7 @@ import { SequenceModelController } from "../components/sequenceModel/SequenceMod
 import { SequenceTableModelController } from "../components/sequenceTableModel/presentation/SequenceTableModelController";
 import { SidePanelController } from "../components/sidePanel/SidePanelController";
 import { MasterDataActions } from "../slices/MasterDataSlice";
-import { useKeyListener } from "../utils/WindowUtil";
+import { useZoomDisable } from "../utils/WindowUtil";
 import "./Carv2.css";
 
 export const ModuleRoutes = {
@@ -30,25 +30,8 @@ export function Carv2() {
     dispatch(MasterDataActions.loadRelationsFromBackend());
     dispatch(MasterDataActions.loadSequencesFromBackend());
   }, [dispatch]);
-  
-  const useKeyPress = () => {
-  const checkZoom = (event: KeyboardEvent) => {
-    console.info("Keycode: ", event.keyCode);
-    if (event.ctrlKey === true) {
-      if (event.keyCode === 171 || event.keyCode === 173) {
-        console.warn("no zoom");
-        event.preventDefault();
-      }
-    }
-  };
 
-  useEffect(() => {
-    document.addEventListener("keydown", checkZoom);
-  });
-};
-
-  useKeyListener();
-  useKeyPress();
+  useZoomDisable();
 
   return (
     <div className="Carv2">

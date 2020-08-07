@@ -59,7 +59,7 @@ export const useCurrentHeight = () => {
   return height;
 };
 
-export const useKeyListener = () => {
+export const useZoomDisable = () => {
   const handleKeyDown = (event: WheelEvent) => {
     if (event.ctrlKey === true) {
       console.warn("no scroll");
@@ -67,7 +67,18 @@ export const useKeyListener = () => {
     }
   };
 
+  const checkZoom = (event: KeyboardEvent) => {
+    console.info("Keycode: ", event.keyCode);
+    if (event.ctrlKey === true) {
+      if (event.keyCode === 171 || event.keyCode === 173) {
+        console.warn("no zoom");
+        event.preventDefault();
+      }
+    }
+  };
+
   useEffect(() => {
     document.addEventListener("wheel", handleKeyDown);
+    document.addEventListener("keydown", checkZoom);
   });
 };
