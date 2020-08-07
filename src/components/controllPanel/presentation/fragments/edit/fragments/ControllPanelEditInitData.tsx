@@ -49,14 +49,11 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
           <OptionField label1="Navigation">
             <Carv2ButtonLabel onClick={createAnother} label="Create another" />
             <Carv2ButtonIcon onClick={saveInitData} icon="reply" />
-            {/* <Carv2ButtonIcon icon="copy" onClick={copyDataSetup} /> */}
           </OptionField>
         </div>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <Carv2ButtonLabel onClick={createAnother} label="Create another" />
-        <Carv2ButtonLabel onClick={saveInitData} label="OK" />
-        <OptionField>
+        <OptionField label1="options">
           <Carv2DeleteButton onClick={deleteInitData} />
         </OptionField>
       </div>

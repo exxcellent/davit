@@ -67,7 +67,7 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
         </div>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <OptionField label1="Data-setup options">
+        <OptionField label1="options">
           <Carv2DeleteButton onClick={deleteDataSetup} />
         </OptionField>
       </div>

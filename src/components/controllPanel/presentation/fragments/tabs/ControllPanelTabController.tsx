@@ -6,7 +6,7 @@ export interface ControllPanelTabControllerProps {}
 
 export const ControllPanelTabController: FunctionComponent<ControllPanelTabControllerProps> = (props) => {
   return (
-    <ControllPanelEditSub label="TABS">
+    <ControllPanelEditSub label="Windows">
       <div className="optionFieldSpacer">
         <ControllPanelViewOptions />
       </div>
