@@ -204,9 +204,6 @@ const useViewModel = () => {
       case ActionType.DELETE:
         cdState = ViewFragmentState.DELETED;
         break;
-      // case ActionType.CHECK:
-      //   cdState = ViewFragmentState.CHECKED;
-      //   break;
     }
     return cdState;
   };
