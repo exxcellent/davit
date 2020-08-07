@@ -18,24 +18,16 @@ export interface ControllPanelEditRelationProps {}
 export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelationProps> = (props) => {
   const {
     label,
-    // label1,
-    // label2,
     data1,
     data2,
     direction1,
     direction2,
-    // type1,
-    // type2,
-    // setLabel,
-    // setType,
     setDirection,
     setData,
     saveRelation,
     deleteRelation,
     dataOptions,
     directionOptions,
-    // typeOptions,
-    // validRelation,
     createAnother,
     key,
     updateRelation,
@@ -69,14 +61,6 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
               value={data1}
               onBlur={() => updateRelation()}
             />
-            {/* <Dropdown
-              placeholder="Select Type1"
-              selection
-              options={typeOptions}
-              onChange={(event: any) => setType(event.target.value)}
-              value={type1}
-              onBlur={() => updateRelation()}
-            /> */}
           </div>
           <div
             style={{
@@ -85,7 +69,6 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
               justifyContent: "center",
             }}
           >
-            {/* <Input placeholder="Label1" onChange={(event: any) => setLabel(event.target.value)} value={label1} /> */}
             <Dropdown
               placeholder="Select Direction1"
               selection
@@ -127,6 +110,10 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
               {/* <Dropdown
               placeholder="Select Type2"
               selection
+              selectOnBlur={false}
+              options={dataOptions}
+              onChange={(event, data) => {
+                setData(Number(data.value), true);
               options={typeOptions}
               onChange={(event: any) => setType(event.target.value, true)}
               value={type2}

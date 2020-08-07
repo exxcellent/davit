@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { useCurrentHeight, useCurrentWitdh } from "../../../../app/Carv2";
+import { ASPECT_RATIO, WINDOW_FACTOR } from "../../../../app/Carv2Constanc";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
 import { GroupTO } from "../../../../dataAccess/access/to/GroupTO";
 import { Carv2Util } from "../../../../utils/Carv2Util";
+import { useCurrentHeight, useCurrentWitdh } from "../../../../utils/WindowUtil";
 import { ViewFragmentProps } from "../../../../viewDataTypes/ViewFragment";
 import { createDnDItem } from "../../../common/fragments/DnDWrapper";
 import { createCurveArrow } from "../../../common/fragments/svg/Arrow";
@@ -32,27 +33,8 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (prop
     onClick,
     fullScreen,
   } = props;
-  const constraintsRef = useRef<HTMLInputElement>(null);
 
-  // full size window
-  const w1: number = useCurrentWitdh();
-  const h1: number = useCurrentHeight();
-  const h2: number = (w1 / 100) * 56.25;
-  const w2: number = (h1 / 56.25) * 100;
-
-  const [key, setKey] = useState<number>(0);
-
-  const handleResize = () => {
-    setKey(key + 1);
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  });
+  const { height, width, constraintsRef, key } = useMetaComponentDnDBoxViewModel();
 
   const onPositionUpdate = (x: number, y: number, positionId: number) => {
     const componentCTO = componentCTOs.find((componentCTO) => componentCTO.geometricalData.position.id === positionId);
@@ -91,18 +73,8 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (prop
     <motion.div
       id="dndBox"
       ref={constraintsRef}
-      style={
-        fullScreen
-          ? {
-              height: h2,
-              maxWidth: w2,
-              borderWidth: "3px",
-              borderStyle: "dashed",
-              backgroundColor: "var(--carv2-background-color)",
-            }
-          : {}
-      }
-      className={fullScreen ? "" : "componentModel"}
+      style={fullScreen ? { height: height, maxWidth: width } : {}}
+      className={fullScreen ? "componentModelFullscreen" : "componentModel"}
       key={key}
     >
       {componentCTOs.map(createDnDMetaComponentFragmentIfNotInEdit)}
@@ -116,4 +88,30 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (prop
       })}
     </motion.div>
   );
+};
+
+const useMetaComponentDnDBoxViewModel = () => {
+  const [key, setKey] = useState<number>(0);
+  const constraintsRef = useRef<HTMLInputElement>(null);
+
+  const currentWindowWitdh: number = useCurrentWitdh();
+  const currentWindowHeight: number = useCurrentHeight();
+  const newWindowHeight: number = (currentWindowWitdh / WINDOW_FACTOR) * ASPECT_RATIO;
+  const newWindowWitdh: number = (currentWindowHeight / ASPECT_RATIO) * WINDOW_FACTOR;
+
+  useEffect(() => {
+    const handleResize = () => setKey((prevState) => prevState + 1);
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  return {
+    constraintsRef,
+    height: newWindowHeight,
+    width: newWindowWitdh,
+    key,
+  };
 };

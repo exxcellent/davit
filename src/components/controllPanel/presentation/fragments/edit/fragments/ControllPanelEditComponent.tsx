@@ -23,8 +23,6 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
     saveComponent,
     deleteComponent,
     textInput,
-    // setGroup,
-    // compGroup,
     updateComponent,
     createAnother,
   } = useControllPanelEditComponentViewModel();
@@ -45,7 +43,7 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
         </OptionField>
       </div>
       <div className="columnDivider">
-        <OptionField>{/* <GroupDropDown onSelect={setGroup} value={compGroup} /> */}</OptionField>
+        <OptionField></OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
         <div>
@@ -93,12 +91,14 @@ const useControllPanelEditComponentViewModel = () => {
   };
 
   const saveComponent = () => {
-    if (componentToEdit?.component.name !== "") {
-      dispatch(EditActions.component.save(componentToEdit!));
-    } else {
-      deleteComponent();
+    if (!isNullOrUndefined(componentToEdit)) {
+      if (componentToEdit?.component.name !== "") {
+        dispatch(EditActions.component.save(componentToEdit!));
+      } else {
+        deleteComponent();
+      }
+      dispatch(EditActions.setMode.edit());
     }
-    dispatch(EditActions.setMode.edit());
   };
 
   const createAnother = () => {

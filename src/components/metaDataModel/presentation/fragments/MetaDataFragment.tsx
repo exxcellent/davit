@@ -74,7 +74,6 @@ export const createMetaDataFragment = (
       initalName={dataCTO.data.name}
       initalWidth={dataCTO.geometricalData.geometricalData.width}
       componentFragments={componentDatas}
-      // onClick={onClick}
       instances={dataCTO.data.inst ? dataCTO.data.inst : []}
     />
   );
