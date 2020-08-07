@@ -16,6 +16,7 @@ import { handleError } from "./GlobalSlice";
 
 export interface CalculatedStep {
   stepFk: number;
+  stepId: string;
   componentDatas: ComponentData[];
   errors: ActionTO[];
 }
@@ -40,6 +41,7 @@ interface SequenceModelState {
   actions: ActionTO[];
   componentDatas: ComponentData[];
   activeFilter: Filter[];
+  stepIds: string[];
 }
 const getInitialState: SequenceModelState = {
   selectedSequenceModel: null,
@@ -51,6 +53,7 @@ const getInitialState: SequenceModelState = {
   actions: [],
   componentDatas: [],
   activeFilter: [],
+  stepIds: [],
 };
 
 const SequenceModelSlice = createSlice({
@@ -64,6 +67,11 @@ const SequenceModelSlice = createSlice({
         calcSequenceAndSetState(action.payload, state.selectedDataSetup, state);
       } else {
         resetState(state);
+      }
+    },
+    setStepIds: (state, action: PayloadAction<string[] | null>) => {
+      if (action.payload !== null) {
+        state.stepIds = action.payload;
       }
     },
     setSelectedDataSetup: (state, action: PayloadAction<DataSetupCTO | null>) => {
@@ -106,10 +114,12 @@ const SequenceModelSlice = createSlice({
 });
 
 function calcSequenceAndSetState(sequenceModel: SequenceCTO, dataSetup: DataSetupCTO, state: SequenceModelState) {
-  const result: { sequence: CalcSequence; loopStartingStepIndex?: number } = calculateSequence(
+  const result: { sequence: CalcSequence; loopStartingStepIndex?: number; stepIds: string[] } = calculateSequence(
     sequenceModel,
     dataSetup
   );
+  console.warn("result: ", result.stepIds);
+  state.stepIds = result.stepIds;
   state.currentStepIndex = 0;
   state.errorActions = result.sequence.steps[state.currentStepIndex]?.errors || [];
   state.componentDatas = result.sequence.steps[state.currentStepIndex]?.componentDatas || [];
@@ -123,25 +133,31 @@ function resetState(state: SequenceModelState) {
   state.calcSequence = null;
   state.loopStartingStepIndex = null;
   state.activeFilter = [];
+  state.stepIds = [];
 }
 
 // =============================================== THUNKS ===============================================
 const calculateSequence = (
   sequence: SequenceCTO | null,
   dataSetup: DataSetupCTO | null
-): { sequence: CalcSequence; loopStartingStepIndex?: number } => {
+): { sequence: CalcSequence; stepIds: string[]; loopStartingStepIndex?: number } => {
   let calcSequence: CalcSequence = { steps: [], terminal: { type: GoToTypes.ERROR } };
+  let stepIds: string[] = [];
 
   if (sequence && dataSetup) {
     let componenentDatas: ComponentData[] = dataSetup.initDatas.map((initData) => {
       return { componentFk: initData.componentFk, dataFk: initData.dataFk };
     });
-    calcSequence.steps.push({ componentDatas: componenentDatas, stepFk: 0, errors: [] });
+    // init step.
+    calcSequence.steps.push({ stepId: "", componentDatas: componenentDatas, stepFk: 0, errors: [] });
 
     const root: SequenceStepCTO | ConditionTO | undefined = getRoot(sequence);
 
     if (root !== undefined) {
       let stepOrCondition: SequenceStepCTO | ConditionTO | Terminal = root;
+
+      let isRoot: boolean = true;
+      let stepId: string = "";
 
       while ((stepOrCondition as SequenceStepCTO).squenceStepTO || (stepOrCondition as ConditionTO).elseGoTo) {
         if ((stepOrCondition as SequenceStepCTO).squenceStepTO) {
@@ -159,14 +175,24 @@ const calculateSequence = (
               )
           );
 
+          // STEP ID
+          if (isRoot) {
+            stepId = "root";
+            isRoot = false;
+          } else {
+            stepId = stepId + "_STEP_" + step.squenceStepTO.id;
+            stepIds.push(stepId);
+          }
+
           calcSequence.steps.push({
+            stepId: stepId,
             componentDatas: result.componenDatas,
             errors: result.errors,
             stepFk: step.squenceStepTO.id,
           });
 
           if (loopStartingStep > -1) {
-            return { sequence: calcSequence, loopStartingStepIndex: loopStartingStep };
+            return { sequence: calcSequence, loopStartingStepIndex: loopStartingStep, stepIds: stepIds };
           }
           // set next object.
           stepOrCondition = getNext((stepOrCondition as SequenceStepCTO).squenceStepTO.goto, sequence);
@@ -177,14 +203,24 @@ const calculateSequence = (
           const condition: ConditionTO = stepOrCondition as ConditionTO;
           const goTo: GoTo = SequenceActionReducer.executeConditionCheck(condition, componenentDatas);
           stepOrCondition = getNext(goTo, sequence);
+
+          // STEP ID
+          if (isRoot) {
+            stepId = "root";
+            isRoot = false;
+          } else {
+            stepId = stepId + "_COND_" + condition.id;
+            stepIds.push(stepId);
+          }
         }
       }
       if ((stepOrCondition as Terminal).type === GoToTypes.FIN) {
         calcSequence.terminal = stepOrCondition as Terminal;
       }
+      stepIds.push(stepId + "_" + (stepOrCondition as Terminal).type);
     }
   }
-  return { sequence: calcSequence };
+  return { sequence: calcSequence, stepIds: stepIds };
 };
 
 const getNext = (goTo: GoTo, sequence: SequenceCTO): SequenceStepCTO | ConditionTO | Terminal => {
@@ -293,6 +329,7 @@ export const sequenceModelSelectors = {
           state.sequenceModel.selectedSequenceModel?.sequenceStepCTOs || []
         )
       : [],
+  selectCalcStepIds: (state: RootState): string[] => (state.edit.mode === Mode.VIEW ? state.sequenceModel.stepIds : []),
   selectTerminalStep: (state: RootState): Terminal | null =>
     state.edit.mode === Mode.VIEW ? state.sequenceModel.calcSequence?.terminal || null : null,
   selectDataSetup: (state: RootState): DataSetupCTO | null => state.sequenceModel.selectedDataSetup,

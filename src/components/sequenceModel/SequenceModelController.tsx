@@ -10,7 +10,8 @@ import { SequenceTO } from "../../dataAccess/access/to/SequenceTO";
 import { GoTo, GoToTypes, Terminal } from "../../dataAccess/access/types/GoToType";
 import { EditActions, editSelectors } from "../../slices/EditSlice";
 import { handleError } from "../../slices/GlobalSlice";
-import { sequenceModelSelectors } from "../../slices/SequenceModelSlice";
+import { CalculatedStep, sequenceModelSelectors } from "../../slices/SequenceModelSlice";
+import { Carv2Util } from "../../utils/Carv2Util";
 
 interface SequenceModelControllerProps {
   fullScreen?: boolean;
@@ -18,7 +19,9 @@ interface SequenceModelControllerProps {
 
 export const SequenceModelController: FunctionComponent<SequenceModelControllerProps> = (props) => {
   const { fullScreen } = props;
-  const { sequenceName, nodeModelTree } = useFlowChartViewModel();
+  const { sequenceName, nodeModelTree, currentStep, calcSteps, isSuccess } = useFlowChartViewModel();
+
+  console.info("calcsteps: ", calcSteps);
 
   const buildChart = (node: NodeModel): JSX.Element => {
     const rel: Relation[] = [];
@@ -28,7 +31,16 @@ export const SequenceModelController: FunctionComponent<SequenceModelControllerP
         targetId: node.parentId,
         targetAnchor: "bottom",
         sourceAnchor: "top",
-        style: { strokeColor: "black", strokeWidth: 1 },
+        style: {
+          strokeColor:
+            calcSteps.find((step) => step === node.parentId) && calcSteps.find((step) => step === node.id)
+              ? isSuccess
+                ? "green"
+                : "red"
+              : "black",
+          strokeWidth:
+            calcSteps.find((step) => step === node.parentId) && calcSteps.find((step) => step === node.id) ? 3 : 1,
+        },
       });
     }
 
@@ -41,11 +53,16 @@ export const SequenceModelController: FunctionComponent<SequenceModelControllerP
           flexDirection: "column",
           alignItems: "center",
           width: "100%",
-          // border: "1px solid black",
         }}
+        key={node.id}
       >
         <ArcherElement id={node.id} relations={rel}>
-          <div className={node.id === "root" ? "ROOT" : node.leafType}>
+          <div
+            className={node.id === "root" ? "ROOT" : node.leafType}
+            style={{
+              border: currentStep?.stepId === node.id ? "3px solid var(--carv2-color-secondary)" : "",
+            }}
+          >
             {node.id === "root" || node.leafType === GoToTypes.COND ? "" : node.label}
           </div>
         </ArcherElement>
@@ -98,6 +115,10 @@ const useFlowChartViewModel = () => {
   const dispatch = useDispatch();
   const sequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
   const sequenceToEdit: SequenceTO | null = useSelector(editSelectors.sequenceToEdit);
+  const stepIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentStepIndex);
+  const calcSteps: CalculatedStep[] = useSelector(sequenceModelSelectors.selectCalcSteps);
+  const terminalStep: Terminal | null = useSelector(sequenceModelSelectors.selectTerminalStep);
+  const stepIds: string[] = useSelector(sequenceModelSelectors.selectCalcStepIds);
 
   const getRoot = (sequence: SequenceCTO | null): Node => {
     let root: Node = {
@@ -142,7 +163,7 @@ const useFlowChartViewModel = () => {
             let prefix: string = "_STEP_" + step.squenceStepTO.id;
             nodeModel.id = parentId + prefix;
             nodeModel.label = step.squenceStepTO.name;
-            // nodeModel.label = step.squenceStepTO.id.toString();
+
             if (!parentId.includes(prefix)) {
               parentIds.push(nodeModel.id);
               nodeModel.childs.push(setGoToAsNode(step.squenceStepTO.goto, nodeModel.id, parentIds));
@@ -155,7 +176,6 @@ const useFlowChartViewModel = () => {
             let prefix: string = "_COND_" + cond.id;
             nodeModel.id = parentId + prefix;
             nodeModel.label = cond.name;
-            // nodeModel.label = cond.id.toString();
 
             if (!parentId.includes(prefix)) {
               parentIds.push(nodeModel.id);
@@ -181,19 +201,15 @@ const useFlowChartViewModel = () => {
     let nodeModel: NodeModel = { id: "root", label: "", leafType: node.type, childs: [] };
     switch (node.type) {
       case GoToTypes.STEP:
-        // nodeModel.id = "STEP_" + (node.value as SequenceStepCTO).squenceStepTO.id;
         parentIds.push(nodeModel.id);
         nodeModel.label = (node.value as SequenceStepCTO).squenceStepTO.name;
-        // nodeModel.label = (node.value as SequenceStepCTO).squenceStepTO.id.toString();
         nodeModel.childs.push(
           setGoToAsNode((node.value as SequenceStepCTO).squenceStepTO.goto, nodeModel.id, parentIds)
         );
         break;
       case GoToTypes.COND:
-        // nodeModel.id = "COND_" + (node.value as ConditionTO).id;
         parentIds.push(nodeModel.id);
         nodeModel.label = (node.value as ConditionTO).name;
-        // nodeModel.label = nodeModel.id;
         nodeModel.childs.push(setGoToAsNode((node.value as ConditionTO).ifGoTo, nodeModel.id, parentIds));
         nodeModel.childs.push(setGoToAsNode((node.value as ConditionTO).elseGoTo, nodeModel.id, parentIds));
         break;
@@ -211,8 +227,25 @@ const useFlowChartViewModel = () => {
     return null;
   };
 
+  const getSteps = (): string[] => {
+    let copyStepIds: string[] = Carv2Util.deepCopy(stepIds);
+    copyStepIds.push("root");
+    return copyStepIds;
+  };
+
+  const getCurrentStep = (): CalculatedStep | undefined => {
+    if (calcSteps.length > 0) {
+      return calcSteps.find((step) => step.stepFk === stepIndex);
+    } else {
+      return undefined;
+    }
+  };
+
   return {
     sequenceName: sequence?.sequenceTO.name ? sequence.sequenceTO.name : "Select sequence...",
     nodeModelTree: buildNodeModelTree(getRoot(getSequence())),
+    currentStep: getCurrentStep(),
+    calcSteps: getSteps(),
+    isSuccess: terminalStep?.type === GoToTypes.FIN ? true : false,
   };
 };
