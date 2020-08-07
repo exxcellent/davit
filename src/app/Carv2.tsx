@@ -9,7 +9,7 @@ import { SequenceModelController } from "../components/sequenceModel/SequenceMod
 import { SequenceTableModelController } from "../components/sequenceTableModel/presentation/SequenceTableModelController";
 import { SidePanelController } from "../components/sidePanel/SidePanelController";
 import { MasterDataActions } from "../slices/MasterDataSlice";
-import { useKeyListener } from "../utils/WindowUtil";
+import { useZoomDisable } from "../utils/WindowUtil";
 import "./Carv2.css";
 
 export const ModuleRoutes = {
@@ -31,7 +31,7 @@ export function Carv2() {
     dispatch(MasterDataActions.loadSequencesFromBackend());
   }, [dispatch]);
 
-  useKeyListener();
+  useZoomDisable();
 
   return (
     <div className="Carv2">
