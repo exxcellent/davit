@@ -21,18 +21,7 @@ enum ArrowType {
 }
 
 const Arrow: FunctionComponent<ArrowProps> = (props) => {
-  const {
-    xSource,
-    ySource,
-    xTarget,
-    yTarget,
-    type,
-    parentRef,
-    sourceHeight,
-    sourceWidth,
-    targetHeight,
-    targetWidth,
-  } = props;
+  const { xSource, ySource, xTarget, yTarget, type, parentRef, sourceHeight, sourceWidth, targetHeight } = props;
 
   const [initXSource, setInitXSource] = useState<number>(xSource * (parentRef.current.offsetWidth / 100));
   const [initYSource, setInitYSource] = useState<number>(ySource * (parentRef.current.offsetHeight / 100));

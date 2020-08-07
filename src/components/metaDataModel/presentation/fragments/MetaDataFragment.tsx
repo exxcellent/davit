@@ -47,7 +47,6 @@ const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (props) => {
       <div>
         <Card
           style={{ minWidth: initalWidth, minHeigth: initalHeigth, marginBottom: "0", fontSize: "0.7em" }}
-          // style={{ marginBottom: "0" }}
           onClick={props.onClick ? () => props.onClick!(props.id) : undefined}
           fluid
         >
@@ -69,7 +68,7 @@ const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (props) => {
   } else {
     return (
       <Card
-        style={{ minWidth: initalWidth, minHeigth: initalHeigth, marginBottom: "0", fontSize: "0.7em" }}
+        style={{ width: initalWidth, height: initalHeigth, marginBottom: "0", fontSize: "0.7em" }}
         onClick={props.onClick ? () => props.onClick!(props.id) : undefined}
         fluid
       >
