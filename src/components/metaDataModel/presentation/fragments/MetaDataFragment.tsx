@@ -6,32 +6,20 @@ import { createViewFragment, ViewFragmentProps } from "../../../../viewDataTypes
 
 export interface MetaDataFragmentProps {
   id: number;
-  initalName: string;
-  initalWidth?: number;
-  initalHeigth?: number;
+  initName: string;
+  initWidth?: number;
+  initHeigth?: number;
   instances: DataInstanceTO[];
   componentFragments: ViewFragmentProps[];
   onClick?: (dataId: number) => void;
 }
 
 const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (props) => {
-  const { initalName, componentFragments, initalWidth, initalHeigth, instances } = props;
+  const { initName, componentFragments, initWidth, initHeigth, instances } = props;
 
   const createInstances = (instanceName: string, components: ViewFragmentProps[], key: number) => {
     return (
-      <Card
-        // style={{ minWidth: initalWidth, minHeigth: initalHeigth, marginBottom: "0", fontSize: "0.7em" }}
-        style={{
-          width: "100px",
-          height: "30px",
-          textOverflow: "ellipsis",
-          margin: "0",
-          paddingTop: "0px !important",
-          backgroundColor: "rgba(0,0,0,0.3)",
-          color: "white",
-        }}
-        key={key}
-      >
+      <Card id="dataObject" key={key}>
         <Card.Content id="innerCard">{instanceName}</Card.Content>
         {components.map(
           (comp): JSX.Element => {
@@ -46,11 +34,11 @@ const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (props) => {
     return (
       <div>
         <Card
-          style={{ minWidth: initalWidth, minHeigth: initalHeigth, marginBottom: "0", fontSize: "0.7em" }}
+          style={{ minWidth: initWidth, minHeigth: initHeigth, marginBottom: "0", fontSize: "0.7em" }}
           onClick={props.onClick ? () => props.onClick!(props.id) : undefined}
           fluid
         >
-          <Card.Content header={initalName}></Card.Content>
+          <Card.Content header={initName}></Card.Content>
         </Card>
         <div style={{ display: "flex", alignItems: "start" }}>
           {instances.map((instance, index) =>
@@ -68,11 +56,11 @@ const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (props) => {
   } else {
     return (
       <Card
-        style={{ width: initalWidth, height: initalHeigth, marginBottom: "0", fontSize: "0.7em" }}
+        style={{ width: initWidth, height: initHeigth, marginBottom: "0", fontSize: "0.7em" }}
         onClick={props.onClick ? () => props.onClick!(props.id) : undefined}
         fluid
       >
-        <Card.Content header={initalName}></Card.Content>
+        <Card.Content header={initName}></Card.Content>
         {componentFragments.map(createViewFragment)}
       </Card>
     );
@@ -87,9 +75,9 @@ export const createMetaDataFragment = (
   return (
     <MetaDataFragment
       id={dataCTO.data.id}
-      initalName={dataCTO.data.name}
-      initalWidth={dataCTO.geometricalData.geometricalData.width}
-      initalHeigth={dataCTO.geometricalData.geometricalData.height}
+      initName={dataCTO.data.name}
+      initWidth={dataCTO.geometricalData.geometricalData.width}
+      initHeigth={dataCTO.geometricalData.geometricalData.height}
       componentFragments={componentDatas}
       instances={dataCTO.data.inst ? dataCTO.data.inst : []}
     />

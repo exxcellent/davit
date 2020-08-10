@@ -55,12 +55,14 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
   }, [ySource, xSource, yTarget, xTarget, parentRef]);
 
   const createCornerLine = () => {
-    let startPoint: Point = { x: initXSource, y: initYSource };
-    let endPoint: Point = { x: initXTarget, y: initYTarget };
+    let startPoint: Point = getDirectionPoint(
+      { x: initXSource, y: initYSource },
+      direction1,
+      sourceWidth,
+      sourceHeight
+    );
+    let endPoint: Point = getDirectionPoint({ x: initXTarget, y: initYTarget }, direction2, targetWidth, targetHeight);
     // set interfaces
-    startPoint = getDirectionPoint(startPoint, direction1, sourceWidth, sourceHeight);
-    endPoint = getDirectionPoint(endPoint, direction2, targetWidth, targetHeight);
-
     const offset1 = getDirectionOffset(direction1);
     const offset2 = getDirectionOffset(direction2);
 

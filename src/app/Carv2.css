@@ -170,17 +170,6 @@
   margin: 10px;
 }
 
-/* #innerCard {
-  width: 100px;
-  height: 30px;
-  margin: 0;
-  padding: 0.3em !important;
-  background-color: rgba(0, 0, 0, 0.3);
-  color: white;
-  text-overflow: ellipsis;
-  overflow: hidden;
-} */
-
 .carv2ComponentDataNEW {
   background-color: var(--carv2-data-add-color) !important;
   color: var(--carv2-data-text-color) !important;
@@ -279,6 +268,18 @@
   color: white;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+/* -------------------------------------------- Data -------------------------------------------- */
+
+#dataObject {
+  width: 100px;
+  height: 30px;
+  text-overflow: ellipsis;
+  margin: 0;
+  padding-top: 0px !important;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: var(--carv2-text-color);
 }
 
 /* -------------------------------------------- Flussdiagram -------------------------------------------- */
