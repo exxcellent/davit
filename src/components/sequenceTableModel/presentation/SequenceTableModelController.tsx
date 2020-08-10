@@ -26,8 +26,6 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
     sequence = "sequence",
   }
 
-  // const [mode, setMode] = useState<table>(table.sequence);
-
   const panes = [
     {
       menuItem: "Sequence",
@@ -96,7 +94,6 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
 
   return (
     <div className={fullScreen ? "" : "sequenceTable"}>
-      {/* <Tab panes={panes} menu={{ color: "white", inverted: true, attached: true, tabular: false }} /> */}
       <Tab panes={panes} menu={{ inverted: true, attached: true, tabular: false }} />
     </div>
   );
@@ -199,7 +196,6 @@ const useSequenceTableViewModel = () => {
   };
 
   const getTableBody = () => {
-    // let list: JSX.Element[] = [];
     let list: JSX.Element[] = [];
     list = calcSteps.map((step, index) => createSequenceStepColumn(step, index));
     if (terminalStep) {
@@ -229,7 +225,6 @@ const useSequenceTableViewModel = () => {
 
   const getConditionTableBody = () => {
     let list: JSX.Element[] = [];
-    // list = calcSteps.map((step, index) => createStepColumn(step, index));
     if (sequence !== null) {
       list = sequence.conditions.map((cond, index) => createConditionColumn(cond, index));
     }

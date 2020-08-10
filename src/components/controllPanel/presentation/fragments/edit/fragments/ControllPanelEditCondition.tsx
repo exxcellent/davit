@@ -9,7 +9,7 @@ import { ConditionTO } from "../../../../../../dataAccess/access/to/ConditionTO"
 import { GoTo, GoToTypes } from "../../../../../../dataAccess/access/types/GoToType";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
-import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
+import { SequenceModelActions, sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
@@ -222,6 +222,7 @@ const useControllPanelEditConditionViewModel = () => {
       const copyConditionToEdit: ConditionTO = Carv2Util.deepCopy(conditionToEdit);
       copyConditionToEdit.name = name;
       dispatch(EditActions.setMode.editCondition(copyConditionToEdit));
+      dispatch(SequenceModelActions.setCurrentSequence(copyConditionToEdit.sequenceFk));
     }
   };
 
@@ -295,6 +296,7 @@ const useControllPanelEditConditionViewModel = () => {
       ifGoTo ? (copyConditionToEdit.ifGoTo = goTo) : (copyConditionToEdit.elseGoTo = goTo);
       dispatch(EditActions.condition.update(copyConditionToEdit));
       dispatch(EditActions.condition.save(copyConditionToEdit));
+      dispatch(SequenceModelActions.setCurrentSequence(copyConditionToEdit.sequenceFk));
     }
   };
 

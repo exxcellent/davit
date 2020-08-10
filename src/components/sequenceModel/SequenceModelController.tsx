@@ -1,16 +1,15 @@
 /* eslint-disable no-case-declarations */
 import React, { FunctionComponent } from "react";
 import { ArcherContainer, ArcherElement, Relation } from "react-archer";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
 import { ConditionTO } from "../../dataAccess/access/to/ConditionTO";
-import { SequenceTO } from "../../dataAccess/access/to/SequenceTO";
 import { GoTo, GoToTypes, Terminal } from "../../dataAccess/access/types/GoToType";
-import { EditActions, editSelectors } from "../../slices/EditSlice";
 import { handleError } from "../../slices/GlobalSlice";
-import { sequenceModelSelectors } from "../../slices/SequenceModelSlice";
+import { CalculatedStep, sequenceModelSelectors } from "../../slices/SequenceModelSlice";
+import { Carv2Util } from "../../utils/Carv2Util";
 
 interface SequenceModelControllerProps {
   fullScreen?: boolean;
@@ -18,7 +17,7 @@ interface SequenceModelControllerProps {
 
 export const SequenceModelController: FunctionComponent<SequenceModelControllerProps> = (props) => {
   const { fullScreen } = props;
-  const { nodeModelTree } = useFlowChartViewModel();
+  const { nodeModelTree, calcSteps, isSuccess, currentStep } = useFlowChartViewModel();
 
   const buildChart = (node: NodeModel): JSX.Element => {
     const rel: Relation[] = [];
@@ -28,23 +27,26 @@ export const SequenceModelController: FunctionComponent<SequenceModelControllerP
         targetId: node.parentId,
         targetAnchor: "bottom",
         sourceAnchor: "top",
-        style: { strokeColor: "black", strokeWidth: 1 },
+        style: {
+          strokeColor:
+            calcSteps.find((step) => step === node.parentId) && calcSteps.find((step) => step === node.id)
+              ? isSuccess
+                ? "var(--carv2-data-add-color)"
+                : "var(--carv2-data-delete-color)"
+              : "var(--carv2-background-color-header)",
+          strokeWidth:
+            calcSteps.find((step) => step === node.parentId) && calcSteps.find((step) => step === node.id) ? 5 : 3,
+        },
       });
     }
 
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-          margin: node.id === "root" ? "" : "50px 0",
-          flexDirection: "column",
-          alignItems: "center",
-          width: "100%",
-        }}
-      >
+      <div className="flowChartFlex" style={{ margin: node.id === "root" ? "" : "50px 0" }} key={node.id}>
         <ArcherElement id={node.id} relations={rel}>
-          <div className={node.id === "root" ? "ROOT" : node.leafType}>
+          <div
+            className={node.id === "root" ? "ROOT" : node.leafType}
+            id={currentStep?.stepId === node.id ? "flowChartCurrentStep" : ""}
+          >
             {node.id === "root" || node.leafType === GoToTypes.COND ? "" : node.label}
           </div>
         </ArcherElement>
@@ -89,9 +91,11 @@ interface Node {
 }
 
 const useFlowChartViewModel = () => {
-  const dispatch = useDispatch();
   const sequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
-  const sequenceToEdit: SequenceTO | null = useSelector(editSelectors.sequenceToEdit);
+  const stepIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentStepIndex);
+  const calcSteps: CalculatedStep[] = useSelector(sequenceModelSelectors.selectCalcSteps);
+  const terminalStep: Terminal | null = useSelector(sequenceModelSelectors.selectTerminalStep);
+  const stepIds: string[] = useSelector(sequenceModelSelectors.selectCalcStepIds);
 
   const getRoot = (sequence: SequenceCTO | null): Node => {
     let root: Node = {
@@ -189,17 +193,25 @@ const useFlowChartViewModel = () => {
     return nodeModel;
   };
 
-  const getSequence = (): SequenceCTO | null => {
-    if (sequence !== null) {
-      return sequence;
+  const getSteps = (): string[] => {
+    let copyStepIds: string[] = Carv2Util.deepCopy(stepIds);
+    copyStepIds.push("root");
+    return copyStepIds;
+  };
+
+  const getCurrentStep = (): CalculatedStep | undefined => {
+    if (calcSteps.length > 0) {
+      return calcSteps.find((step) => step.stepFk === stepIndex);
+    } else {
+      return undefined;
     }
-    if (sequenceToEdit !== null) {
-      return dispatch(EditActions.sequence.findCTO(sequenceToEdit.id));
-    }
-    return null;
   };
 
   return {
-    nodeModelTree: buildNodeModelTree(getRoot(getSequence())),
+    sequenceName: sequence?.sequenceTO.name ? sequence.sequenceTO.name : "Select sequence...",
+    nodeModelTree: buildNodeModelTree(getRoot(sequence)),
+    currentStep: getCurrentStep(),
+    calcSteps: getSteps(),
+    isSuccess: terminalStep?.type === GoToTypes.FIN ? true : false,
   };
 };
