@@ -28,7 +28,7 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
 
   return (
     <ControllPanelEditSub label={label}>
-      <OptionField label1="Instance - Name">
+      <OptionField label="Instance - Name">
         <Carv2LabelTextfield
           label="Name:"
           placeholder="Data Instance Name"
@@ -41,14 +41,14 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
       </OptionField>
       <div className="columnDivider controllPanelEditChild"></div>
       <div className="columnDivider controllPanelEditChild">
-        <OptionField label1="Navigation">
+        <OptionField label="Navigation">
           <Carv2ButtonLabel onClick={createAnother} label="Create another" />
           <Carv2ButtonIcon onClick={saveDataInstace} icon="reply" />
         </OptionField>
       </div>
       <div className="columnDivider">
         <div className="controllPanelEditChild" style={{ display: "felx", alignItems: "center", height: "100%" }}>
-          <OptionField label1="Instance - Options">
+          <OptionField label="Instance - Options">
             <Carv2DeleteButton onClick={deleteDataInstance} />
           </OptionField>
         </div>

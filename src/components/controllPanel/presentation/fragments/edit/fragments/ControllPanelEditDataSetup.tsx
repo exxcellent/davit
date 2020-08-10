@@ -35,7 +35,7 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
   return (
     <ControllPanelEditSub label={label}>
       <div className="controllPanelEditChild">
-        <OptionField label1="Data - SETUP NAME">
+        <OptionField label="Data - SETUP NAME">
           <Carv2LabelTextfield
             label="Name:"
             placeholder="Data Setup Name ..."
@@ -48,7 +48,7 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
         </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <OptionField label1="Create / edit | Init - Data">
+        <OptionField label="Create / edit | Init - Data">
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={createInitData} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
@@ -60,14 +60,14 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
       </div>
       <div className="columnDivider controllPanelEditChild">
         <div>
-          <OptionField label1="Navigation">
+          <OptionField label="Navigation">
             <Carv2ButtonLabel onClick={createAnother} label="Create another" />
             <Carv2ButtonIcon onClick={saveDataSetup} icon="reply" />
           </OptionField>
         </div>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <OptionField label1="options">
+        <OptionField label="options">
           <Carv2DeleteButton onClick={deleteDataSetup} />
         </OptionField>
       </div>

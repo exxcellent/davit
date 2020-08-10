@@ -52,7 +52,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
   } = useControllPanelEditConditionViewModel();
 
   const conditionName = (
-    <OptionField label1="Condition - name">
+    <OptionField label="Condition - name">
       <Carv2LabelTextfield
         label="Name:"
         placeholder="Condition Name ..."
@@ -66,7 +66,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
   );
 
   const hasDropDown = (
-    <OptionField label1="Codition - true / false">
+    <OptionField label="Codition - true / false">
       <Dropdown
         options={[
           { key: 1, value: 1, text: "true" },
@@ -84,7 +84,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
   const dropDowns = (
     <div className="optionFieldSpacer columnDivider">
       <div style={{ display: "flex" }}>
-        <OptionField label1="Select a component">
+        <OptionField label="Select a component">
           <ComponentDropDown
             onSelect={(comp) => {
               setComponent(comp);
@@ -94,7 +94,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
             compact
           />
         </OptionField>
-        <OptionField label1="Select data for component">
+        <OptionField label="Select data for component">
           <MultiselectDataDropDown
             onSelect={(data) => {
               setData(data);
@@ -110,11 +110,11 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
   const menuButtons = (
     <div className="columnDivider controllPanelEditChild">
       <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <OptionField label1="Navigation">
+        <OptionField label="Navigation">
           <Carv2ButtonIcon onClick={saveCondition} icon="reply" />
         </OptionField>
       </div>
-      <OptionField label1="Sequence - Options">
+      <OptionField label="Sequence - Options">
         <Carv2ButtonLabel onClick={setRoot} label={isRoot ? "Root" : "Set as Root"} disable={isRoot} />
         <div>
           <Carv2DeleteButton onClick={deleteCondition} />
@@ -134,7 +134,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
       <div className="columnDivider optionFieldSpacer">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <OptionField>
-            <OptionField label1="Select type of the next element">
+            <OptionField label="Select type of the next element">
               <GoToOptionDropDown
                 onSelect={(gt) => handleType(true, gt)}
                 value={ifGoTo ? ifGoTo.type : GoToTypes.ERROR}
@@ -142,7 +142,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
             </OptionField>
 
             {ifGoTo!.type === GoToTypes.STEP && (
-              <OptionField label1="Create or Select next step">
+              <OptionField label="Create or Select next step">
                 <Carv2ButtonIcon icon="add" onClick={() => createGoToStep(true)} />
                 <StepDropDown
                   onSelect={(step) => setGoToTypeStep(true, step)}
@@ -151,7 +151,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
               </OptionField>
             )}
             {ifGoTo!.type === GoToTypes.COND && (
-              <OptionField label1="Create or Select next condition">
+              <OptionField label="Create or Select next condition">
                 <Carv2ButtonIcon icon="add" onClick={() => createGoToCondition(true)} />
                 <ConditionDropDown
                   onSelect={(cond) => setGoToTypeCondition(true, cond)}
@@ -162,14 +162,14 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
           </OptionField>
 
           <OptionField>
-            <OptionField label1="Select type of the next element">
+            <OptionField label="Select type of the next element">
               <GoToOptionDropDown
                 onSelect={(gt) => handleType(false, gt)}
                 value={elseGoTo ? elseGoTo.type : GoToTypes.ERROR}
               />
             </OptionField>
             {elseGoTo!.type === GoToTypes.STEP && (
-              <OptionField label1="Select type of the next element">
+              <OptionField label="Select type of the next element">
                 <Carv2ButtonIcon icon="add" onClick={() => createGoToStep(false)} />
                 <StepDropDown
                   onSelect={(step) => setGoToTypeStep(false, step)}
@@ -178,7 +178,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
               </OptionField>
             )}
             {elseGoTo!.type === GoToTypes.COND && (
-              <OptionField label1="Create or Select next condition">
+              <OptionField label="Create or Select next condition">
                 <Carv2ButtonIcon icon="add" onClick={() => createGoToCondition(false)} />
                 <ConditionDropDown
                   onSelect={(cond) => setGoToTypeCondition(false, cond)}

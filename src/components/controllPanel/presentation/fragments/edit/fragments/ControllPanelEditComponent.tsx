@@ -30,7 +30,7 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
   return (
     <ControllPanelEditSub label={label}>
       <div className="optionFieldSpacer" style={{ display: "flex" }}>
-        <OptionField label1="Component - Name">
+        <OptionField label="Component - Name">
           <Carv2LabelTextfield
             label="Name:"
             placeholder="Component Name"
@@ -47,7 +47,7 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
       </div>
       <div className="columnDivider controllPanelEditChild">
         <div>
-          <OptionField label1="Navigation">
+          <OptionField label="Navigation">
             <Carv2ButtonLabel onClick={createAnother} label="Create another" />
             <Carv2ButtonIcon onClick={saveComponent} icon="reply" />
           </OptionField>
@@ -55,7 +55,7 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
       </div>
       <div className="columnDivider">
         <div className="controllPanelEditChild" style={{ display: "flex", alignItems: "center", height: "100%" }}>
-          <OptionField label1="Component - Options">
+          <OptionField label="Component - Options">
             <Carv2DeleteButton onClick={deleteComponent} />
           </OptionField>
         </div>

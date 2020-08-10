@@ -35,21 +35,21 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
 
   return (
     <ControllPanelEditSub label={label} key={key}>
-      <OptionField label1="Select Data to start from" label2="Select Line ''out'' direction">
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          width: "100%",
+        }}
+      >
         <div
           style={{
             display: "flex",
-            justifyContent: "space-around",
-            width: "100%",
+            flexDirection: "column",
+            justifyContent: "center",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-            }}
-          >
+          <OptionField label="Select first relation data">
             <Dropdown
               placeholder="Select Data..."
               selection
@@ -61,14 +61,16 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
               value={data1}
               onBlur={() => updateRelation()}
             />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-            }}
-          >
+          </OptionField>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+          }}
+        >
+          <OptionField label="Select line ''out'' direction">
             <Dropdown
               placeholder="Select Direction1"
               selection
@@ -77,18 +79,18 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
               value={direction1}
               onBlur={() => updateRelation()}
             />
-          </div>
+          </OptionField>
         </div>
-      </OptionField>
+      </div>
       <div className="columnDivider" style={{ display: "flex", justifyContent: "center" }}>
-        <OptionField label1="Select Data to end" label2="Select Line ''in'' direction">
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-around",
-              width: "100%",
-            }}
-          >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-around",
+            width: "100%",
+          }}
+        >
+          <OptionField label="Select second relation data">
             <div
               style={{
                 display: "flex",
@@ -107,19 +109,9 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
                 value={data2}
                 onBlur={() => updateRelation()}
               />
-              {/* <Dropdown
-              placeholder="Select Type2"
-              selection
-              selectOnBlur={false}
-              options={dataOptions}
-              onChange={(event, data) => {
-                setData(Number(data.value), true);
-              options={typeOptions}
-              onChange={(event: any) => setType(event.target.value, true)}
-              value={type2}
-              onBlur={() => updateRelation()}
-            /> */}
             </div>
+          </OptionField>
+          <OptionField label="Selct line ''in'' direction">
             <div
               style={{
                 display: "flex",
@@ -127,7 +119,6 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
                 justifyContent: "center",
               }}
             >
-              {/* <Input placeholder="Label2" onChange={(event: any) => setLabel(event.target.value, true)} value={label2} /> */}
               <Dropdown
                 placeholder="Select Direction2"
                 selection
@@ -137,12 +128,12 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
                 onBlur={() => updateRelation()}
               />
             </div>
-          </div>
-        </OptionField>
+          </OptionField>
+        </div>
       </div>
       <div className="columnDivider controllPanelEditChild">
         <div>
-          <OptionField label1="Navigation">
+          <OptionField label="Navigation">
             <Carv2ButtonLabel onClick={createAnother} label="Create another" />
             <Carv2ButtonIcon onClick={saveRelation} icon="reply" />
           </OptionField>
@@ -150,7 +141,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
       </div>
       <div className="columnDivider">
         <div className="controllPanelEditChild" style={{ display: "flex", alignItems: "center", height: "100%" }}>
-          <OptionField label1="Relation options">
+          <OptionField label="Relation options">
             <Carv2DeleteButton onClick={deleteRelation} />
           </OptionField>
         </div>

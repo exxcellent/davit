@@ -30,7 +30,7 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
   return (
     <ControllPanelEditSub label={label} key={key}>
       <div className="controllPanelEditChild">
-        <OptionField label1="Select Component to which data will be added">
+        <OptionField label="Select Component to which data will be added">
           <ComponentDropDown
             onSelect={(comp) => (comp ? setComponentId(comp.component.id) : setComponentId(-1))}
             placeholder="Select Component..."
@@ -40,20 +40,20 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
         </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <OptionField label1="Select Data which will be added">
+        <OptionField label="Select Data which will be added">
           <DataDropDown onSelect={(data) => (data ? setDataId(data.data.id) : setDataId(-1))} value={data} />
         </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild" style={{ paddingLeft: "10px", paddingRight: "10px" }}>
         <div>
-          <OptionField label1="Navigation">
+          <OptionField label="Navigation">
             <Carv2ButtonLabel onClick={createAnother} label="Create another" />
             <Carv2ButtonIcon onClick={saveInitData} icon="reply" />
           </OptionField>
         </div>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <OptionField label1="options">
+        <OptionField label="options">
           <Carv2DeleteButton onClick={deleteInitData} />
         </OptionField>
       </div>

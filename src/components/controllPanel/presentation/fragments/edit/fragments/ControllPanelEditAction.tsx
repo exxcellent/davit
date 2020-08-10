@@ -37,29 +37,29 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
   return (
     <ControllPanelEditSub label={label} key={key}>
       <div className="optionFieldSpacer">
-        <OptionField label1="Select Component on which the action will be called">
+        <OptionField label="Select Component on which the action will be called">
           <ComponentDropDown onSelect={setComponent} value={componentId} />
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
-        <OptionField label1="Select action to execute">
+        <OptionField label="Select action to execute">
           <ActionTypeDropDown onSelect={setAction} value={actionType} />
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
-        <OptionField label1="Select a Data for the action">
+        <OptionField label="Select a Data for the action">
           <DataAndInstanceDropDown onSelect={setData} value={dataId} />
         </OptionField>
       </div>
 
       <div className="columnDivider controllPanelEditChild">
         <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <OptionField label1="Navigation">
+          <OptionField label="Navigation">
             <Carv2ButtonLabel onClick={createAnother} label="Create another" />
             <Carv2ButtonIcon onClick={backToStep} icon="reply" />
           </OptionField>
         </div>
-        <OptionField label1="Sequence - Options">
+        <OptionField label="Sequence - Options">
           <Carv2DeleteButton onClick={deleteAction} />
         </OptionField>
       </div>

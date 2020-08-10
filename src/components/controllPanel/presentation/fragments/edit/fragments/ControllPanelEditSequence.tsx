@@ -39,12 +39,12 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
   const menuButtons = (
     <div className="columnDivider controllPanelEditChild">
       <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <OptionField label1="Navigation">
+        <OptionField label="Navigation">
           <Carv2ButtonLabel onClick={createAnother} label="Create another" />
           <Carv2ButtonIcon onClick={saveSequence} icon="reply" />
         </OptionField>
       </div>
-      <OptionField label1="Sequence - Options">
+      <OptionField label="Sequence - Options">
         <Carv2DeleteButton onClick={deleteSequence} />
       </OptionField>
     </div>
@@ -53,7 +53,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
   return (
     <ControllPanelEditSub label={label}>
       <div className="controllPanelEditChild">
-        <OptionField label1="Sequence - name">
+        <OptionField label="Sequence - name">
           <Carv2LabelTextfield
             label="Name:"
             placeholder="Sequence Name..."
@@ -66,7 +66,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
         </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <OptionField label1="Create / Edit | Sequence - Step">
+        <OptionField label="Create / Edit | Sequence - Step">
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddSequenceStep()} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
@@ -77,7 +77,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
         </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <OptionField label1="Create / Edit | Sequence - Condition">
+        <OptionField label="Create / Edit | Sequence - Condition">
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddCondition()} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">

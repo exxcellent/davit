@@ -31,7 +31,7 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
 
   return (
     <ControllPanelEditSub label={label}>
-      <OptionField label1="Data - Name">
+      <OptionField label="Data - Name">
         <Carv2LabelTextfield
           label="Name:"
           placeholder="Data Name"
@@ -43,7 +43,7 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
         />
       </OptionField>
       <div className="columnDivider controllPanelEditChild">
-        <OptionField label1="create / edit | Data - Instance">
+        <OptionField label="create / edit | Data - Instance">
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddInstance()} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
@@ -55,7 +55,7 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
       </div>
       <div className="columnDivider controllPanelEditChild">
         <div>
-          <OptionField label1="Navigation">
+          <OptionField label="Navigation">
             <Carv2ButtonLabel onClick={createAnother} label="Create another" />
             <Carv2ButtonIcon onClick={saveData} icon="reply" />
           </OptionField>
@@ -63,7 +63,7 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
       </div>
       <div className="columnDivider">
         <div className="controllPanelEditChild" style={{ display: "felx", alignItems: "center", height: "100%" }}>
-          <OptionField label1="Data - Options">
+          <OptionField label="Data - Options">
             <Carv2DeleteButton onClick={deleteData} />
           </OptionField>
         </div>

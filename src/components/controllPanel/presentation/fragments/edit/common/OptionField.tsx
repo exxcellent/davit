@@ -1,12 +1,11 @@
 import React, { FunctionComponent } from "react";
 
 export interface OptionFieldProps {
-  label1?: string;
-  label2?: string;
+  label?: string;
 }
 
 export const OptionField: FunctionComponent<OptionFieldProps> = (props) => {
-  const { label1, label2, children } = props;
+  const { label, children } = props;
 
   return (
     <div
@@ -20,13 +19,7 @@ export const OptionField: FunctionComponent<OptionFieldProps> = (props) => {
       }}
     >
       <div className="optionField">{children}</div>
-      {label1 && label2 === undefined && <div className="optionFieldLabel">{label1.toUpperCase()}</div>}
-      {label1 && label2 && (
-        <div style={{ display: "flex", justifyContent: "space-around" }}>
-          <div className="optionFieldLabel">{label1.toUpperCase()}</div>
-          <div className="optionFieldLabel">{label2.toUpperCase()}</div>
-        </div>
-      )}
+      {label && <div className="optionFieldLabel">{label.toUpperCase()}</div>}
     </div>
   );
 };

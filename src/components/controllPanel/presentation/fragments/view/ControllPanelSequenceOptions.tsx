@@ -26,17 +26,17 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
   return (
     <ControllPanelEditSub label="VIEW">
       <div className="optionFieldSpacer">
-        <OptionField label1="Data - Setup">
+        <OptionField label="Data - Setup">
           <DataSetupDropDown onSelect={selectDataSetup} placeholder="Select Data Setup ..." />
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
-        <OptionField label1="SEQUENCE">
+        <OptionField label="SEQUENCE">
           <SequenceDropDown onSelect={selectSequence} />
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
-        <OptionField label1="STEP">
+        <OptionField label="STEP">
           <Button.Group inverted color="orange">
             <Button
               inverted
