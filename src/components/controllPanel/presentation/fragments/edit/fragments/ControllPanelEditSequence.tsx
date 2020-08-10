@@ -38,12 +38,10 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
 
   const menuButtons = (
     <div className="columnDivider controllPanelEditChild">
-      <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <OptionField label="Navigation">
-          <Carv2ButtonLabel onClick={createAnother} label="Create another" />
-          <Carv2ButtonIcon onClick={saveSequence} icon="reply" />
-        </OptionField>
-      </div>
+      <OptionField label="Navigation">
+        <Carv2ButtonLabel onClick={createAnother} label="Create another" />
+        <Carv2ButtonIcon onClick={saveSequence} icon="reply" />
+      </OptionField>
       <OptionField label="Sequence - Options">
         <Carv2DeleteButton onClick={deleteSequence} />
       </OptionField>

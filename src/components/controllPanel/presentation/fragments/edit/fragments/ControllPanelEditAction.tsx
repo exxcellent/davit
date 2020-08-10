@@ -47,13 +47,13 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
-        <OptionField label="Select a Data for the action">
+        <OptionField label="Select data affected by the action">
           <DataAndInstanceDropDown onSelect={setData} value={dataId} />
         </OptionField>
       </div>
 
       <div className="columnDivider controllPanelEditChild">
-        <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <div className="innerOptionFieldSpacer">
           <OptionField label="Navigation">
             <Carv2ButtonLabel onClick={createAnother} label="Create another" />
             <Carv2ButtonIcon onClick={backToStep} icon="reply" />

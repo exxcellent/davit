@@ -18,7 +18,7 @@ interface SequenceModelControllerProps {
 
 export const SequenceModelController: FunctionComponent<SequenceModelControllerProps> = (props) => {
   const { fullScreen } = props;
-  const { sequenceName, nodeModelTree } = useFlowChartViewModel();
+  const { nodeModelTree } = useFlowChartViewModel();
 
   const buildChart = (node: NodeModel): JSX.Element => {
     const rel: Relation[] = [];
@@ -41,7 +41,6 @@ export const SequenceModelController: FunctionComponent<SequenceModelControllerP
           flexDirection: "column",
           alignItems: "center",
           width: "100%",
-          // border: "1px solid black",
         }}
       >
         <ArcherElement id={node.id} relations={rel}>
@@ -72,12 +71,7 @@ export const SequenceModelController: FunctionComponent<SequenceModelControllerP
     );
   };
 
-  return (
-    <div className={fullScreen ? "fullscreen" : "sequencModel"}>
-      <div style={{ paddingLeft: "15px", color: "var(--carv2-text-color)" }}>{sequenceName}</div>
-      {buildFlowChart()}
-    </div>
-  );
+  return <div className={fullScreen ? "fullscreen" : "sequencModel"}>{buildFlowChart()}</div>;
 };
 
 interface NodeModel {
@@ -206,7 +200,6 @@ const useFlowChartViewModel = () => {
   };
 
   return {
-    sequenceName: sequence?.sequenceTO.name ? sequence.sequenceTO.name : "Select sequence...",
     nodeModelTree: buildNodeModelTree(getRoot(getSequence())),
   };
 };

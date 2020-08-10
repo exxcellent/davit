@@ -10,10 +10,5 @@ interface Carv2LabelTextfieldProps extends InputProps {
 
 export const Carv2LabelTextfield = React.forwardRef<Input, Carv2LabelTextfieldProps>((props, ref) => {
   const { label, onChangeCallBack, placeholder, value, ...other } = props;
-  return (
-    // <div className="controllPanelEditChild" style={{ height: "100%" }}>
-    // <div style={{ height: "100%" }}>
-    <Input label={label} placeholder={placeholder} value={value} inverted color="orange" ref={ref} {...other} />
-    // </div>
-  );
+  return <Input label={label} placeholder={placeholder} value={value} inverted color="orange" ref={ref} {...other} />;
 });

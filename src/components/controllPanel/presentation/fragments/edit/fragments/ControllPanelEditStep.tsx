@@ -134,10 +134,8 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
   return (
     <ControllPanelEditSub label={label} key={key}>
       <div className="controllPanelEditChild">
-        {/* <OptionField label1="Step - name" label2="Create / edit | Step - Action"> */}
         {stepName}
         {actionDropdown}
-        {/* </OptionField> */}
       </div>
       {sourceTargetDropDowns}
       <div className="optionFieldSpacer columnDivider">
