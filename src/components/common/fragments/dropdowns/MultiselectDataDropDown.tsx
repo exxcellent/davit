@@ -21,8 +21,8 @@ export const MultiselectDataDropDown: FunctionComponent<MultiselectDataDropDownP
       multiple
       selection
       // options={datas.map(dataToOption)}
-      options={([] as DropdownItemProps[]).concat.apply([], datas.map(dataToOption)).sort((a, b) => {
-        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
+      options={([] as DropdownItemProps[]).concat.apply([], datas.map(dataToOption)).sort(function (a, b) {
+        return ("" + a.attr).localeCompare(b.attr);
       })}
       onChange={(event, data) => {
         onSelect((data.value as number[]) || undefined);

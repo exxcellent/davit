@@ -5,16 +5,16 @@ import { createViewFragment, ViewFragmentProps } from "../../../../viewDataTypes
 
 export interface MetaComponentFragmentProps {
   id: number;
-  initalName: string;
-  initalColor: string;
-  initalWidth?: number;
-  initalHeigth?: number;
+  initName: string;
+  initColor: string;
+  initWidth?: number;
+  initHeigth?: number;
   dataFragments: ViewFragmentProps[];
   onClick?: (id: number) => void;
 }
 
 export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps> = (props) => {
-  const { initalName, dataFragments, initalWidth, initalHeigth } = props;
+  const { initName, dataFragments, initWidth, initHeigth } = props;
 
   return (
     <Card
@@ -22,7 +22,7 @@ export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps
       style={{ width: initalWidth, height: initalHeigth, fontSize: "0.7em" }}
       onClick={props.onClick ? () => props.onClick!(props.id) : undefined}
     >
-      <Card.Content header={initalName}></Card.Content>
+      <Card.Content header={initName}></Card.Content>
       {dataFragments.map(createViewFragment)}
     </Card>
   );

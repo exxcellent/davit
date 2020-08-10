@@ -142,7 +142,6 @@ const useFlowChartViewModel = () => {
             let prefix: string = "_STEP_" + step.squenceStepTO.id;
             nodeModel.id = parentId + prefix;
             nodeModel.label = step.squenceStepTO.name;
-            // nodeModel.label = step.squenceStepTO.id.toString();
             if (!parentId.includes(prefix)) {
               parentIds.push(nodeModel.id);
               nodeModel.childs.push(setGoToAsNode(step.squenceStepTO.goto, nodeModel.id, parentIds));
@@ -155,7 +154,6 @@ const useFlowChartViewModel = () => {
             let prefix: string = "_COND_" + cond.id;
             nodeModel.id = parentId + prefix;
             nodeModel.label = cond.name;
-            // nodeModel.label = cond.id.toString();
 
             if (!parentId.includes(prefix)) {
               parentIds.push(nodeModel.id);
@@ -181,19 +179,15 @@ const useFlowChartViewModel = () => {
     let nodeModel: NodeModel = { id: "root", label: "", leafType: node.type, childs: [] };
     switch (node.type) {
       case GoToTypes.STEP:
-        // nodeModel.id = "STEP_" + (node.value as SequenceStepCTO).squenceStepTO.id;
         parentIds.push(nodeModel.id);
         nodeModel.label = (node.value as SequenceStepCTO).squenceStepTO.name;
-        // nodeModel.label = (node.value as SequenceStepCTO).squenceStepTO.id.toString();
         nodeModel.childs.push(
           setGoToAsNode((node.value as SequenceStepCTO).squenceStepTO.goto, nodeModel.id, parentIds)
         );
         break;
       case GoToTypes.COND:
-        // nodeModel.id = "COND_" + (node.value as ConditionTO).id;
         parentIds.push(nodeModel.id);
         nodeModel.label = (node.value as ConditionTO).name;
-        // nodeModel.label = nodeModel.id;
         nodeModel.childs.push(setGoToAsNode((node.value as ConditionTO).ifGoTo, nodeModel.id, parentIds));
         nodeModel.childs.push(setGoToAsNode((node.value as ConditionTO).elseGoTo, nodeModel.id, parentIds));
         break;

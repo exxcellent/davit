@@ -17,7 +17,7 @@ import { DataAndInstanceDropDown } from "../../../../../common/fragments/dropdow
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditActionProps { }
+export interface ControllPanelEditActionProps {}
 
 export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionProps> = (props) => {
   const {
@@ -99,18 +99,16 @@ const useControllPanelEditActionViewModel = () => {
     }
   };
 
-  const setData = (values: { data?: DataCTO, instance?: DataInstanceTO } | undefined): void => {
-    if (!isNullOrUndefined(values)) {
-      if (!isNullOrUndefined(values.data)) {
-        let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
-        if (values.instance) {
-          copyActionToEdit.dataFk = values.data.data.id * DATA_INSTANCE_ID_FACTOR + values.instance.id;
-        } else {
-          copyActionToEdit.dataFk = values.data.data.id;
-        }
-        dispatch(EditActions.action.update(copyActionToEdit));
-        dispatch(EditActions.action.save(copyActionToEdit));
+  const setData = (values: { data?: DataCTO; instance?: DataInstanceTO } | undefined): void => {
+    if (!isNullOrUndefined(values?.data)) {
+      let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
+      if (values?.instance) {
+        copyActionToEdit.dataFk = values.data.data.id * DATA_INSTANCE_ID_FACTOR + values.instance.id;
+      } else {
+        copyActionToEdit.dataFk = values!.data.data.id;
       }
+      dispatch(EditActions.action.update(copyActionToEdit));
+      dispatch(EditActions.action.save(copyActionToEdit));
     }
   };
 

@@ -26,8 +26,8 @@ export const InitDataDropDown: FunctionComponent<InitDataDropDownDownProps> = (p
 
   return (
     <Dropdown
-      options={initDatas.map(initDataToOption).sort((a, b) => {
-        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
+      options={initDatas.map(initDataToOption).sort(function (a, b) {
+        return ("" + a.attr).localeCompare(b.attr);
       })}
       selection
       selectOnBlur={false}
@@ -46,8 +46,8 @@ export const InitDataDropDownButton: FunctionComponent<InitDataDropDownPropsButt
 
   return (
     <Dropdown
-      options={initDatas.map(initDataToOption).sort((a, b) => {
-        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
+      options={initDatas.map(initDataToOption).sort(function (a, b) {
+        return ("" + a.attr).localeCompare(b.attr);
       })}
       icon={icon}
       selectOnBlur={false}
