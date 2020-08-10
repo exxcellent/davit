@@ -84,7 +84,6 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
   };
 
   const getDirectionPoint = (point: Point, direction: Direction, width: number, height: number): Point => {
-    console.info("start point: ", point);
     switch (direction) {
       case Direction.TOP:
         point.x = point.x + width / 2;
@@ -98,10 +97,9 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
         break;
       case Direction.BOTTOM:
         point.x = point.x + width / 2;
-        point.y = point.y + height + 3; // (+3)varianz von inner div to dndwrapper.
+        point.y = point.y + height;
         break;
     }
-    console.info("end point: ", point);
     return point;
   };
 
