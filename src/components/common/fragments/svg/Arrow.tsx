@@ -5,8 +5,12 @@ import { GeometricalDataCTO } from "../../../../dataAccess/access/cto/Geometraic
 export interface ArrowProps {
   xSource: number;
   ySource: number;
+  sourceWidth: number;
+  sourceHeight: number;
   xTarget: number;
   yTarget: number;
+  targetWidth: number;
+  targetHeight: number;
   type: ArrowType;
   parentRef: any;
 }
@@ -17,7 +21,7 @@ enum ArrowType {
 }
 
 const Arrow: FunctionComponent<ArrowProps> = (props) => {
-  const { xSource, ySource, xTarget, yTarget, type, parentRef } = props;
+  const { xSource, ySource, xTarget, yTarget, type, parentRef, sourceHeight, sourceWidth, targetHeight } = props;
 
   const [initXSource, setInitXSource] = useState<number>(xSource * (parentRef.current.offsetWidth / 100));
   const [initYSource, setInitYSource] = useState<number>(ySource * (parentRef.current.offsetHeight / 100));
@@ -33,8 +37,8 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
     }
   }, [ySource, xSource, yTarget, xTarget, parentRef]);
 
-  const INTERFACE_INPUT: Point = { x: 0, y: 25 };
-  const INTERFACE_OUTPUT: Point = { x: 150, y: 25 };
+  const INTERFACE_INPUT: Point = { x: 0, y: targetHeight / 2 };
+  const INTERFACE_OUTPUT: Point = { x: sourceWidth, y: sourceHeight / 2 };
   const OFFSET: number = 10;
 
   const createCurve = (x1: number, y1: number, x2: number, y2: number) => {
@@ -143,8 +147,12 @@ export const createCurveArrow = (
       <Arrow
         xSource={source.position.x}
         ySource={source.position.y}
+        sourceWidth={source.geometricalData.width}
+        sourceHeight={source.geometricalData.height}
         xTarget={target.position.x}
         yTarget={target.position.y}
+        targetWidth={target.geometricalData.width}
+        targetHeight={target.geometricalData.height}
         type={ArrowType.CURVE}
         key={source.geometricalData.id + target.geometricalData.id}
         parentRef={parentRef}
@@ -164,8 +172,12 @@ export const createCornerArrow = (
       <Arrow
         xSource={source.position.x}
         ySource={source.position.y}
+        sourceHeight={source.geometricalData.height}
+        sourceWidth={source.geometricalData.width}
         xTarget={target.position.x}
         yTarget={target.position.y}
+        targetHeight={target.geometricalData.height}
+        targetWidth={target.geometricalData.width}
         type={ArrowType.CORNER}
         key={key}
         parentRef={parentRef}

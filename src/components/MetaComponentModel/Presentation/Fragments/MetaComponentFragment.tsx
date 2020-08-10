@@ -19,7 +19,7 @@ export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps
   return (
     <Card
       raised
-      style={{ width: initWidth, height: initHeigth }}
+      style={{ width: initWidth, height: initHeigth, fontSize: "0.7em" }}
       onClick={props.onClick ? () => props.onClick!(props.id) : undefined}
     >
       <Card.Content header={initName}></Card.Content>
@@ -39,6 +39,7 @@ export const createMetaComponentFragment = (
       initName={componentCTO.component.name}
       initColor={componentCTO.design.color}
       initWidth={componentCTO.geometricalData.geometricalData.width}
+      initHeigth={componentCTO.geometricalData.geometricalData.height}
       dataFragments={componentDatas}
     />
   );
