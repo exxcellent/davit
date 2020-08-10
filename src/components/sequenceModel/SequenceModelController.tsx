@@ -17,7 +17,7 @@ interface SequenceModelControllerProps {
 
 export const SequenceModelController: FunctionComponent<SequenceModelControllerProps> = (props) => {
   const { fullScreen } = props;
-  const { nodeModelTree } = useFlowChartViewModel();
+  const { nodeModelTree, calcSteps, isSuccess, currentStep } = useFlowChartViewModel();
 
   const buildChart = (node: NodeModel): JSX.Element => {
     const rel: Relation[] = [];
@@ -232,6 +232,11 @@ const useFlowChartViewModel = () => {
   };
 
   return {
-    nodeModelTree: buildNodeModelTree(getRoot(getSequence())),
+    sequenceName: sequence?.sequenceTO.name ? sequence.sequenceTO.name : "Select sequence...",
+    // nodeModelTree: buildNodeModelTree(getRoot(getSequence())),
+    nodeModelTree: buildNodeModelTree(getRoot(sequence)),
+    currentStep: getCurrentStep(),
+    calcSteps: getSteps(),
+    isSuccess: terminalStep?.type === GoToTypes.FIN ? true : false,
   };
 };
