@@ -8,6 +8,10 @@ export interface Carv2PathProps {
   ySource: number;
   xTarget: number;
   yTarget: number;
+  sourceHeight: number;
+  sourceWidth: number;
+  targetHeight: number;
+  targetWidth: number;
   direction1: Direction;
   direction2: Direction;
   label1: string;
@@ -20,7 +24,21 @@ export interface Carv2PathProps {
 }
 
 const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
-  const { xSource, ySource, xTarget, yTarget, direction1, direction2, id, stroked, parentRef } = props;
+  const {
+    xSource,
+    ySource,
+    xTarget,
+    yTarget,
+    direction1,
+    direction2,
+    id,
+    stroked,
+    parentRef,
+    sourceHeight,
+    sourceWidth,
+    targetHeight,
+    targetWidth,
+  } = props;
 
   const [initXSource, setInitXSource] = useState<number>(xSource);
   const [initYSource, setInitYSource] = useState<number>(ySource);
@@ -36,20 +54,15 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
     }
   }, [ySource, xSource, yTarget, xTarget, parentRef]);
 
-  const TOP: Point = { x: 80, y: 0 };
-  const BOTTOM: Point = { x: 80, y: 50 };
-  const LEFT: Point = { x: 0, y: 25 };
-  const RIGHT: Point = { x: 150, y: 25 };
-
   const createCornerLine = () => {
-    let startPoint: Point = { x: initXSource, y: initYSource };
-    let endPoint: Point = { x: initXTarget, y: initYTarget };
+    let startPoint: Point = getDirectionPoint(
+      { x: initXSource, y: initYSource },
+      direction1,
+      sourceWidth,
+      sourceHeight
+    );
+    let endPoint: Point = getDirectionPoint({ x: initXTarget, y: initYTarget }, direction2, targetWidth, targetHeight);
     // set interfaces
-    const directionPoint1 = getDirectionPoint(direction1);
-    const directionPoint2 = getDirectionPoint(direction2);
-    startPoint = plusPoint(startPoint, directionPoint1);
-    endPoint = plusPoint(endPoint, directionPoint2);
-
     const offset1 = getDirectionOffset(direction1);
     const offset2 = getDirectionOffset(direction2);
 
@@ -72,17 +85,24 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
     );
   };
 
-  const getDirectionPoint = (direction: Direction): Point => {
+  const getDirectionPoint = (point: Point, direction: Direction, width: number, height: number): Point => {
     switch (direction) {
       case Direction.TOP:
-        return TOP;
+        point.x = point.x + width / 2;
+        break;
       case Direction.LEFT:
-        return LEFT;
+        point.y = point.y + height / 2;
+        break;
       case Direction.RIGHT:
-        return RIGHT;
+        point.x = point.x + width;
+        point.y = point.y + height / 2;
+        break;
       case Direction.BOTTOM:
-        return BOTTOM;
+        point.x = point.x + width / 2;
+        point.y = point.y + height;
+        break;
     }
+    return point;
   };
 
   const getDirectionOffset = (direction: Direction): Point => {
@@ -123,6 +143,10 @@ export const createCornerConnection = (
         ySource={source.position.y}
         xTarget={target.position.x}
         yTarget={target.position.y}
+        sourceHeight={source.geometricalData.height}
+        sourceWidth={source.geometricalData.width}
+        targetHeight={target.geometricalData.height}
+        targetWidth={target.geometricalData.width}
         key={key}
         direction1={dataRelation.direction1}
         direction2={dataRelation.direction2}
