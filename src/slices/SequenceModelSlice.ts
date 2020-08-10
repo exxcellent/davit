@@ -118,7 +118,6 @@ function calcSequenceAndSetState(sequenceModel: SequenceCTO, dataSetup: DataSetu
     sequenceModel,
     dataSetup
   );
-  console.warn("result: ", result.stepIds);
   state.stepIds = result.stepIds;
   state.currentStepIndex = 0;
   state.errorActions = result.sequence.steps[state.currentStepIndex]?.errors || [];

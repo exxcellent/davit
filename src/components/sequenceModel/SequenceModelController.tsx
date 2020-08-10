@@ -31,33 +31,21 @@ export const SequenceModelController: FunctionComponent<SequenceModelControllerP
           strokeColor:
             calcSteps.find((step) => step === node.parentId) && calcSteps.find((step) => step === node.id)
               ? isSuccess
-                ? "green"
-                : "red"
-              : "black",
+                ? "var(--carv2-data-add-color)"
+                : "var(--carv2-data-delete-color)"
+              : "var(--carv2-background-color-header)",
           strokeWidth:
-            calcSteps.find((step) => step === node.parentId) && calcSteps.find((step) => step === node.id) ? 3 : 1,
+            calcSteps.find((step) => step === node.parentId) && calcSteps.find((step) => step === node.id) ? 5 : 3,
         },
       });
     }
 
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-          margin: node.id === "root" ? "" : "50px 0",
-          flexDirection: "column",
-          alignItems: "center",
-          width: "100%",
-        }}
-        key={node.id}
-      >
+      <div className="flowChartFlex" style={{ margin: node.id === "root" ? "" : "50px 0" }} key={node.id}>
         <ArcherElement id={node.id} relations={rel}>
           <div
             className={node.id === "root" ? "ROOT" : node.leafType}
-            style={{
-              border: currentStep?.stepId === node.id ? "3px solid var(--carv2-color-secondary)" : "",
-            }}
+            id={currentStep?.stepId === node.id ? "flowChartCurrentStep" : ""}
           >
             {node.id === "root" || node.leafType === GoToTypes.COND ? "" : node.label}
           </div>
@@ -103,9 +91,7 @@ interface Node {
 }
 
 const useFlowChartViewModel = () => {
-  // const dispatch = useDispatch();
   const sequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
-  // const sequenceToEdit: SequenceTO | null = useSelector(editSelectors.sequenceToEdit);
   const stepIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentStepIndex);
   const calcSteps: CalculatedStep[] = useSelector(sequenceModelSelectors.selectCalcSteps);
   const terminalStep: Terminal | null = useSelector(sequenceModelSelectors.selectTerminalStep);
@@ -207,16 +193,6 @@ const useFlowChartViewModel = () => {
     return nodeModel;
   };
 
-  // const getSequence = (): SequenceCTO | null => {
-  //   if (sequence !== null) {
-  //     return sequence;
-  //   }
-  //   if (sequenceToEdit !== null) {
-  //     return dispatch(EditActions.sequence.findCTO(sequenceToEdit.id));
-  //   }
-  //   return null;
-  // };
-
   const getSteps = (): string[] => {
     let copyStepIds: string[] = Carv2Util.deepCopy(stepIds);
     copyStepIds.push("root");
@@ -233,7 +209,6 @@ const useFlowChartViewModel = () => {
 
   return {
     sequenceName: sequence?.sequenceTO.name ? sequence.sequenceTO.name : "Select sequence...",
-    // nodeModelTree: buildNodeModelTree(getRoot(getSequence())),
     nodeModelTree: buildNodeModelTree(getRoot(sequence)),
     currentStep: getCurrentStep(),
     calcSteps: getSteps(),

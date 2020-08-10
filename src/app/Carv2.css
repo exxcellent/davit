@@ -319,9 +319,9 @@
 }
 
 .COND {
-  width: 2.5em;
-  height: 2.5em;
-  background-color: black;
+  width: 2em;
+  height: 2em;
+  background-color: var(--carv2-background-color-shadow);
   transform: rotate(45deg);
   box-shadow: 0 0 0 1px #d4d4d5, 0 2px 4px 0 rgba(34, 36, 38, 0.12), 0 2px 10px 0 rgba(34, 36, 38, 0.15);
 }
@@ -334,9 +334,9 @@
   border-radius: 50%;
   width: 2em;
   height: 2em;
-  background-color: green;
-  border: 0.2em solid white;
-  box-shadow: 0 0 0 0.2em green;
+  background-color: var(--carv2-data-add-color);
+  border: 0.2em solid var(--carv2-background-color);
+  box-shadow: 0 0 0 0.2em var(--carv2-data-add-color);
   margin: 0.2em;
   padding: 0.2em;
 }
@@ -345,9 +345,9 @@
   border-radius: 50%;
   width: 2em;
   height: 2em;
-  background-color: red;
-  border: 0.2em solid white;
-  box-shadow: 0 0 0 0.2em red;
+  background-color: var(--carv2-data-delete-color);
+  border: 0.2em solid var(--carv2-background-color);
+  box-shadow: 0 0 0 0.2em var(--carv2-data-delete-color);
   margin: 0.2em;
   padding: 0.2em;
 }
@@ -356,9 +356,21 @@
   border-radius: 50%;
   width: 2em;
   height: 2em;
-  background-color: black;
+  background-color: var(--carv2-background-color-shadow);
   margin: 0.2em;
   padding: 0.2em;
+}
+
+.flowChartFlex {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+#flowChartCurrentStep {
+  border: 3px solid var(--carv2-color-secondary);
 }
 
 /* -------------------------------------------- Table -------------------------------------------- */
