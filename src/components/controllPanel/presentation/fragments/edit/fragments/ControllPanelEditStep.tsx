@@ -10,7 +10,7 @@ import { ConditionTO } from "../../../../../../dataAccess/access/to/ConditionTO"
 import { GoTo, GoToTypes } from "../../../../../../dataAccess/access/types/GoToType";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
-import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
+import { SequenceModelActions, sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
@@ -34,7 +34,6 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
     saveSequenceStep,
     textInput,
     setComponent,
-    // validStep,
     editOrAddAction,
     sourceCompId,
     targetCompId,
@@ -176,6 +175,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
       copySequenceStep.squenceStepTO.name = name;
       dispatch(EditActions.setMode.editStep(copySequenceStep));
       dispatch(EditActions.step.save(copySequenceStep));
+      dispatch(SequenceModelActions.setCurrentSequence(copySequenceStep.squenceStepTO.sequenceFk));
     }
   };
 
@@ -244,6 +244,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
       copySequenceStep.squenceStepTO.goto = goTo;
       dispatch(EditActions.step.update(copySequenceStep));
       dispatch(EditActions.step.save(copySequenceStep));
+      dispatch(SequenceModelActions.setCurrentSequence(copySequenceStep.squenceStepTO.sequenceFk));
     }
   };
 
@@ -283,6 +284,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
       const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
       setKey(key + 1);
       dispatch(EditActions.setMode.editStep(goToStep, copyStepToEdit));
+      dispatch(SequenceModelActions.setCurrentSequence(goToStep.squenceStepTO.sequenceFk));
     }
   };
 

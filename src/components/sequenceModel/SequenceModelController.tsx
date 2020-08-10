@@ -1,14 +1,12 @@
 /* eslint-disable no-case-declarations */
 import React, { FunctionComponent } from "react";
 import { ArcherContainer, ArcherElement, Relation } from "react-archer";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
 import { ConditionTO } from "../../dataAccess/access/to/ConditionTO";
-import { SequenceTO } from "../../dataAccess/access/to/SequenceTO";
 import { GoTo, GoToTypes, Terminal } from "../../dataAccess/access/types/GoToType";
-import { EditActions, editSelectors } from "../../slices/EditSlice";
 import { handleError } from "../../slices/GlobalSlice";
 import { CalculatedStep, sequenceModelSelectors } from "../../slices/SequenceModelSlice";
 import { Carv2Util } from "../../utils/Carv2Util";
@@ -20,8 +18,6 @@ interface SequenceModelControllerProps {
 export const SequenceModelController: FunctionComponent<SequenceModelControllerProps> = (props) => {
   const { fullScreen } = props;
   const { sequenceName, nodeModelTree, currentStep, calcSteps, isSuccess } = useFlowChartViewModel();
-
-  console.info("calcsteps: ", calcSteps);
 
   const buildChart = (node: NodeModel): JSX.Element => {
     const rel: Relation[] = [];
@@ -112,9 +108,9 @@ interface Node {
 }
 
 const useFlowChartViewModel = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const sequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
-  const sequenceToEdit: SequenceTO | null = useSelector(editSelectors.sequenceToEdit);
+  // const sequenceToEdit: SequenceTO | null = useSelector(editSelectors.sequenceToEdit);
   const stepIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentStepIndex);
   const calcSteps: CalculatedStep[] = useSelector(sequenceModelSelectors.selectCalcSteps);
   const terminalStep: Terminal | null = useSelector(sequenceModelSelectors.selectTerminalStep);
@@ -217,15 +213,15 @@ const useFlowChartViewModel = () => {
     return nodeModel;
   };
 
-  const getSequence = (): SequenceCTO | null => {
-    if (sequence !== null) {
-      return sequence;
-    }
-    if (sequenceToEdit !== null) {
-      return dispatch(EditActions.sequence.findCTO(sequenceToEdit.id));
-    }
-    return null;
-  };
+  // const getSequence = (): SequenceCTO | null => {
+  //   if (sequence !== null) {
+  //     return sequence;
+  //   }
+  //   if (sequenceToEdit !== null) {
+  //     return dispatch(EditActions.sequence.findCTO(sequenceToEdit.id));
+  //   }
+  //   return null;
+  // };
 
   const getSteps = (): string[] => {
     let copyStepIds: string[] = Carv2Util.deepCopy(stepIds);
@@ -243,7 +239,8 @@ const useFlowChartViewModel = () => {
 
   return {
     sequenceName: sequence?.sequenceTO.name ? sequence.sequenceTO.name : "Select sequence...",
-    nodeModelTree: buildNodeModelTree(getRoot(getSequence())),
+    // nodeModelTree: buildNodeModelTree(getRoot(getSequence())),
+    nodeModelTree: buildNodeModelTree(getRoot(sequence)),
     currentStep: getCurrentStep(),
     calcSteps: getSteps(),
     isSuccess: terminalStep?.type === GoToTypes.FIN ? true : false,
