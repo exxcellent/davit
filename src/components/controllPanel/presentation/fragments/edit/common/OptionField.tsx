@@ -8,9 +8,9 @@ export const OptionField: FunctionComponent<OptionFieldProps> = (props) => {
   const { label, children } = props;
 
   return (
-    <div>
+    <div className="optionFieldAround">
       <div className="optionField">{children}</div>
-      <div style={{ textAlign: "center", color: "white" }}>{label && label.toUpperCase()}</div>
+      {label && <div className="optionFieldLabel">{label.toUpperCase()}</div>}
     </div>
   );
 };

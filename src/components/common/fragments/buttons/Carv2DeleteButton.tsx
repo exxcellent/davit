@@ -20,7 +20,6 @@ export const Carv2DeleteButton: FunctionComponent<Carv2DeleteButtonProps> = (pro
         display: "flex",
         width: "100%",
         justifyContent: "center",
-        paddingRight: "10px",
       }}
     >
       {!fluid && <Button icon="trash alternate" onClick={onButtonClick} className="carv2Button" inverted color="red" />}

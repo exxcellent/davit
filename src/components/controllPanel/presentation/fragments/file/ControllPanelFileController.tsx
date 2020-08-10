@@ -2,6 +2,7 @@ import React, { FunctionComponent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { GlobalActions } from "../../../../../slices/GlobalSlice";
 import { Carv2ButtonLabel } from "../../../../common/fragments/buttons/Carv2Button";
+import { ControllPanelEditSub } from "../edit/common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../edit/common/fragments/Carv2LabelTextfield";
 import { ControllPanelFileOptions } from "./fragments/ControllPanelFileOptions";
 
@@ -17,7 +18,7 @@ export const ControllPanelFileController: FunctionComponent<ControllPanelFileCon
   } = useControllPanelFileViewModel();
 
   return (
-    <div className="controllPanelEdit">
+    <ControllPanelEditSub label="FILE">
       <div className="optionFieldSpacer">
         <ControllPanelFileOptions showDownloadFile={toggleShowExportFile} />
       </div>
@@ -36,7 +37,7 @@ export const ControllPanelFileController: FunctionComponent<ControllPanelFileCon
         {showExportFile && <Carv2ButtonLabel label="Export File" onClick={downloadData}></Carv2ButtonLabel>}
       </div>
       <div className="columnDivider controllPanelEditChild"></div>
-    </div>
+    </ControllPanelEditSub>
   );
 };
 

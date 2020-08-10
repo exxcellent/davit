@@ -8,9 +8,10 @@ import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { masterDataSelectors } from "../../../../../../slices/MasterDataSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
+import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditRelationProps {}
 
@@ -34,103 +35,88 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
 
   return (
     <ControllPanelEditSub label={label} key={key}>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-around",
-            width: "100%",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
+      <div className="optionField">
+        <OptionField label="Select first relation data">
+          <Dropdown
+            placeholder="Select Data..."
+            selection
+            selectOnBlur={false}
+            options={dataOptions}
+            onChange={(event, data) => {
+              setData(Number(data.value));
             }}
-          >
-            <Dropdown
-              placeholder="Select Data1"
-              selection
-              selectOnBlur={false}
-              options={dataOptions}
-              onChange={(event, data) => {
-                setData(Number(data.value));
-              }}
-              value={data1}
-              onBlur={() => updateRelation()}
-            />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-            }}
-          >
-            <Dropdown
-              placeholder="Select Direction1"
-              selection
-              options={directionOptions}
-              onChange={(event, data) => setDirection(Direction[data.value as Direction])}
-              value={direction1}
-              onBlur={() => updateRelation()}
-            />
-          </div>
-        </div>
+            value={data1}
+            onBlur={() => updateRelation()}
+          />
+        </OptionField>
+
+        <OptionField label="Select line ''out'' direction">
+          <Dropdown
+            placeholder="Select Direction1"
+            selection
+            options={directionOptions}
+            onChange={(event, data) => setDirection(Direction[data.value as Direction])}
+            value={direction1}
+            onBlur={() => updateRelation()}
+          />
+        </OptionField>
       </div>
-      <div className="columnDivider" style={{ display: "flex", justifyContent: "center" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-around",
-            width: "100%",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-            }}
-          >
-            <Dropdown
-              placeholder="Select Data2"
-              selection
-              selectOnBlur={false}
-              options={dataOptions}
-              onChange={(event, data) => {
-                setData(Number(data.value), true);
+      <div className="columnDivider controllPanelEditChild">
+        <div className="optionField">
+          <OptionField label="Select second relation data">
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
               }}
-              value={data2}
-              onBlur={() => updateRelation()}
-            />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-            }}
-          >
-            <Dropdown
-              placeholder="Select Direction2"
-              selection
-              options={directionOptions}
-              onChange={(event, data) => setDirection(Direction[data.value as Direction], true)}
-              value={direction2}
-              onBlur={() => updateRelation()}
-            />
-          </div>
+            >
+              <Dropdown
+                placeholder="Select Data..."
+                selection
+                selectOnBlur={false}
+                options={dataOptions}
+                onChange={(event, data) => {
+                  setData(Number(data.value), true);
+                }}
+                value={data2}
+                onBlur={() => updateRelation()}
+              />
+            </div>
+          </OptionField>
+          <OptionField label="Selct line ''in'' direction">
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }}
+            >
+              <Dropdown
+                placeholder="Select Direction2"
+                selection
+                options={directionOptions}
+                onChange={(event, data) => setDirection(Direction[data.value as Direction], true)}
+                value={direction2}
+                onBlur={() => updateRelation()}
+              />
+            </div>
+          </OptionField>
         </div>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <Carv2ButtonLabel onClick={createAnother} label="Create another" />
-        <Carv2ButtonLabel onClick={saveRelation} label="OK" />
+        <div>
+          <OptionField label="Navigation">
+            <Carv2ButtonLabel onClick={createAnother} label="Create another" />
+            <Carv2ButtonIcon onClick={saveRelation} icon="reply" />
+          </OptionField>
+        </div>
       </div>
       <div className="columnDivider">
         <div className="controllPanelEditChild" style={{ display: "flex", alignItems: "center", height: "100%" }}>
-          <Carv2DeleteButton onClick={deleteRelation} />
+          <OptionField label="Relation options">
+            <Carv2DeleteButton onClick={deleteRelation} />
+          </OptionField>
         </div>
       </div>
     </ControllPanelEditSub>
