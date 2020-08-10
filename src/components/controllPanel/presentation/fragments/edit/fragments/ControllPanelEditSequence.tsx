@@ -10,7 +10,7 @@ import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
+import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ConditionDropDownButton } from "../../../../../common/fragments/dropdowns/ConditionDropDown";
 import { StepDropDownButton } from "../../../../../common/fragments/dropdowns/StepDropDown";
@@ -38,9 +38,11 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
 
   const menuButtons = (
     <div className="columnDivider controllPanelEditChild">
-      <Carv2ButtonLabel onClick={createAnother} label="Create another" />
-      <Carv2ButtonLabel onClick={saveSequence} label="OK" />
-      <OptionField>
+      <OptionField label="Navigation">
+        <Carv2ButtonLabel onClick={createAnother} label="Create another" />
+        <Carv2ButtonIcon onClick={saveSequence} icon="reply" />
+      </OptionField>
+      <OptionField label="Sequence - Options">
         <Carv2DeleteButton onClick={deleteSequence} />
       </OptionField>
     </div>
@@ -49,33 +51,39 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
   return (
     <ControllPanelEditSub label={label}>
       <div className="controllPanelEditChild">
-        <Carv2LabelTextfield
-          label="Name:"
-          placeholder="Sequence Name"
-          onChange={(event: any) => changeName(event.target.value)}
-          value={name}
-          autoFocus
-          ref={textInput}
-          onBlur={() => updateSequence()}
-        />
+        <OptionField label="Sequence - name">
+          <Carv2LabelTextfield
+            label="Name:"
+            placeholder="Sequence Name..."
+            onChange={(event: any) => changeName(event.target.value)}
+            value={name}
+            autoFocus
+            ref={textInput}
+            onBlur={() => updateSequence()}
+          />
+        </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <Button.Group>
-          <Button icon="add" inverted color="orange" onClick={() => editOrAddSequenceStep()} />
-          <Button id="buttonGroupLabel" disabled inverted color="orange">
-            Step
-          </Button>
-          <StepDropDownButton onSelect={editOrAddSequenceStep} icon="wrench" />
-        </Button.Group>
+        <OptionField label="Create / Edit | Sequence - Step">
+          <Button.Group>
+            <Button icon="add" inverted color="orange" onClick={() => editOrAddSequenceStep()} />
+            <Button id="buttonGroupLabel" disabled inverted color="orange">
+              Step
+            </Button>
+            <StepDropDownButton onSelect={editOrAddSequenceStep} icon="wrench" />
+          </Button.Group>
+        </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <Button.Group>
-          <Button icon="add" inverted color="orange" onClick={() => editOrAddCondition()} />
-          <Button id="buttonGroupLabel" disabled inverted color="orange">
-            Condition
-          </Button>
-          <ConditionDropDownButton onSelect={editOrAddCondition} icon="wrench" />
-        </Button.Group>
+        <OptionField label="Create / Edit | Sequence - Condition">
+          <Button.Group>
+            <Button icon="add" inverted color="orange" onClick={() => editOrAddCondition()} />
+            <Button id="buttonGroupLabel" disabled inverted color="orange">
+              Condition
+            </Button>
+            <ConditionDropDownButton onSelect={editOrAddCondition} icon="wrench" />
+          </Button.Group>
+        </OptionField>
       </div>
       {menuButtons}
     </ControllPanelEditSub>

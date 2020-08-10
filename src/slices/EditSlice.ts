@@ -203,7 +203,7 @@ const setModeToEditData = (data?: DataCTO): AppThunk => (dispatch) => {
 
 const setModeToEditDataInstance = (data: DataCTO, id?: number): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_DATA_INSTANCE));
-  if (!id) {
+  if (id === undefined) {
     dispatch(EditActions.data.createInstance(data));
   } else {
     dispatch(EditSlice.actions.setInstanceIdToEdit(id));

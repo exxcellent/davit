@@ -8,6 +8,7 @@ import { SequenceTO } from "../../../../../dataAccess/access/to/SequenceTO";
 import { SequenceModelActions, sequenceModelSelectors } from "../../../../../slices/SequenceModelSlice";
 import { DataSetupDropDown } from "../../../../common/fragments/dropdowns/DataSetupDropDown";
 import { SequenceDropDown } from "../../../../common/fragments/dropdowns/SequenceDropDown";
+import { ControllPanelEditSub } from "../edit/common/ControllPanelEditSub";
 import { OptionField } from "../edit/common/OptionField";
 
 export interface ControllPanelSequenceOptionsProps {}
@@ -23,7 +24,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
   } = useControllPanelSequenceOptionsViewModel();
 
   return (
-    <div className="controllPanelEdit">
+    <ControllPanelEditSub label="VIEW">
       <div className="optionFieldSpacer">
         <OptionField label="Data - Setup">
           <DataSetupDropDown onSelect={selectDataSetup} placeholder="Select Data Setup ..." />
@@ -62,7 +63,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
       <div className="optionFieldSpacer columnDivider">
         <OptionField></OptionField>
       </div>
-    </div>
+    </ControllPanelEditSub>
   );
 };
 

@@ -320,7 +320,6 @@ const getArrowForStepFk = (stepFk: number, sequenceStepCTOs: SequenceStepCTO[]):
 export const SequenceModelReducer = SequenceModelSlice.reducer;
 export const sequenceModelSelectors = {
   selectSequence: (state: RootState): SequenceCTO | null => state.sequenceModel.selectedSequenceModel,
-  // selectCalcSequence: (state: RootState): CalcSequence | null => state.edit.mode === Mode.VIEW ? state.sequenceModel.calcSequence : null,
   selectCalcSteps: (state: RootState): CalculatedStep[] =>
     state.edit.mode === Mode.VIEW
       ? filterSteps(

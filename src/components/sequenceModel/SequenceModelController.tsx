@@ -17,7 +17,7 @@ interface SequenceModelControllerProps {
 
 export const SequenceModelController: FunctionComponent<SequenceModelControllerProps> = (props) => {
   const { fullScreen } = props;
-  const { sequenceName, nodeModelTree, currentStep, calcSteps, isSuccess } = useFlowChartViewModel();
+  const { nodeModelTree } = useFlowChartViewModel();
 
   const buildChart = (node: NodeModel): JSX.Element => {
     const rel: Relation[] = [];
@@ -85,12 +85,7 @@ export const SequenceModelController: FunctionComponent<SequenceModelControllerP
     );
   };
 
-  return (
-    <div className={fullScreen ? "fullscreen" : "sequencModel"}>
-      <div style={{ paddingLeft: "15px" }}>{sequenceName}</div>
-      {buildFlowChart()}
-    </div>
-  );
+  return <div className={fullScreen ? "fullscreen" : "sequencModel"}>{buildFlowChart()}</div>;
 };
 
 interface NodeModel {
@@ -159,7 +154,6 @@ const useFlowChartViewModel = () => {
             let prefix: string = "_STEP_" + step.squenceStepTO.id;
             nodeModel.id = parentId + prefix;
             nodeModel.label = step.squenceStepTO.name;
-
             if (!parentId.includes(prefix)) {
               parentIds.push(nodeModel.id);
               nodeModel.childs.push(setGoToAsNode(step.squenceStepTO.goto, nodeModel.id, parentIds));
@@ -238,11 +232,6 @@ const useFlowChartViewModel = () => {
   };
 
   return {
-    sequenceName: sequence?.sequenceTO.name ? sequence.sequenceTO.name : "Select sequence...",
-    // nodeModelTree: buildNodeModelTree(getRoot(getSequence())),
-    nodeModelTree: buildNodeModelTree(getRoot(sequence)),
-    currentStep: getCurrentStep(),
-    calcSteps: getSteps(),
-    isSuccess: terminalStep?.type === GoToTypes.FIN ? true : false,
+    nodeModelTree: buildNodeModelTree(getRoot(getSequence())),
   };
 };

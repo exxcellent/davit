@@ -10,6 +10,7 @@ import { DataDropDownButton } from "../../../../../common/fragments/dropdowns/Da
 import { DataSetupDropDownButton } from "../../../../../common/fragments/dropdowns/DataSetupDropDown";
 import { RelationDropDownButton } from "../../../../../common/fragments/dropdowns/RelationDropDown";
 import { SequenceDropDownButton } from "../../../../../common/fragments/dropdowns/SequenceDropDown";
+import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditMenuProps {
@@ -32,7 +33,7 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
   } = props;
 
   return (
-    <div className="controllPanelEdit">
+    <ControllPanelEditSub label="EDIT">
       <div className="optionFieldSpacer">
         <OptionField label="component">
           <Button.Group>
@@ -91,6 +92,6 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
           </Button.Group>
         </OptionField>
       </div>
-    </div>
+    </ControllPanelEditSub>
   );
 };

@@ -6,10 +6,11 @@ import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
+import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
+import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditDataInstanceProps {}
 
@@ -22,27 +23,34 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
     saveDataInstace,
     updateData,
     deleteDataInstance,
+    createAnother,
   } = useControllPanelEditDataInstanceViewModel();
 
   return (
     <ControllPanelEditSub label={label}>
-      <div />
-      <Carv2LabelTextfield
-        label="Name:"
-        placeholder="Data Instance Name"
-        onChange={(event: any) => changeName(event.target.value)}
-        value={name}
-        autoFocus
-        ref={textInput}
-        onBlur={() => updateData()}
-      />
+      <OptionField label="Instance - Name">
+        <Carv2LabelTextfield
+          label="Name:"
+          placeholder="Data Instance Name"
+          onChange={(event: any) => changeName(event.target.value)}
+          value={name}
+          autoFocus
+          ref={textInput}
+          onBlur={() => updateData()}
+        />
+      </OptionField>
+      <div className="columnDivider controllPanelEditChild"></div>
       <div className="columnDivider controllPanelEditChild">
-        {/* <Carv2ButtonLabel onClick={() => {}} label="Create another" /> */}
-        <Carv2ButtonLabel onClick={saveDataInstace} label="OK" />
+        <OptionField label="Navigation">
+          <Carv2ButtonLabel onClick={createAnother} label="Create another" />
+          <Carv2ButtonIcon onClick={saveDataInstace} icon="reply" />
+        </OptionField>
       </div>
       <div className="columnDivider">
         <div className="controllPanelEditChild" style={{ display: "felx", alignItems: "center", height: "100%" }}>
-          <Carv2DeleteButton onClick={deleteDataInstance} />
+          <OptionField label="Instance - Options">
+            <Carv2DeleteButton onClick={deleteDataInstance} />
+          </OptionField>
         </div>
       </div>
     </ControllPanelEditSub>
@@ -108,14 +116,21 @@ const useControllPanelEditDataInstanceViewModel = () => {
     return name;
   };
 
+  const createAnother = () => {
+    if (!isNullOrUndefined(dataToEdit)) {
+      dispatch(EditActions.setMode.editDataInstance(Carv2Util.deepCopy(dataToEdit), undefined));
+    }
+  };
+
   return {
-    label: dataToEdit?.data.id === -1 ? "ADD DATA INSTANCE" : "EDIT DATA INSTANCE",
+    label: "EDIT DATA - EDIT INSTANCE",
     name: getName(),
     changeName,
     saveDataInstace,
     textInput,
     updateData,
     deleteDataInstance,
+    createAnother,
     instances: dataToEdit?.data.inst ? dataToEdit.data.inst : [],
   };
 };
