@@ -36,6 +36,7 @@ export const InitDataDropDown: FunctionComponent<InitDataDropDownDownProps> = (p
       scrolling
       clearable={true}
       value={value}
+      disabled={initDatas.length > 0 ? false : true}
     />
   );
 };
@@ -55,6 +56,7 @@ export const InitDataDropDownButton: FunctionComponent<InitDataDropDownPropsButt
       className="button icon"
       trigger={<React.Fragment />}
       scrolling
+      disabled={initDatas.length > 0 ? false : true}
     />
   );
 };

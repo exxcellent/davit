@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
@@ -18,7 +18,7 @@ interface RelationDropDownPropsButton extends DropdownProps {
 
 export const RelationDropDown: FunctionComponent<RelationDropDownProps> = (props) => {
   const { onSelect, placeholder } = props;
-  const { relations, selectDataRelation, relationToOption } = useRelationDropDownViewModel();
+  const { relations, selectDataRelation, relationToOption, isEmpty } = useRelationDropDownViewModel();
 
   return (
     <Dropdown
@@ -28,13 +28,14 @@ export const RelationDropDown: FunctionComponent<RelationDropDownProps> = (props
       selectOnBlur={false}
       scrolling
       selection
+      disabled={isEmpty}
     />
   );
 };
 
 export const RelationDropDownButton: FunctionComponent<RelationDropDownPropsButton> = (props) => {
   const { onSelect, icon } = props;
-  const { relations, selectDataRelation, relationToOption } = useRelationDropDownViewModel();
+  const { relations, selectDataRelation, relationToOption, isEmpty } = useRelationDropDownViewModel();
 
   return (
     <Dropdown
@@ -48,6 +49,7 @@ export const RelationDropDownButton: FunctionComponent<RelationDropDownPropsButt
       selectOnBlur={false}
       trigger={<React.Fragment />}
       scrolling
+      disabled={isEmpty}
     />
   );
 };
@@ -55,6 +57,12 @@ export const RelationDropDownButton: FunctionComponent<RelationDropDownPropsButt
 const useRelationDropDownViewModel = () => {
   const relations: DataRelationTO[] = useSelector(masterDataSelectors.relations);
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
+
+  const [isEmpty, setIsEmpty] = useState<boolean>(true);
+
+  useEffect(() => {
+    relations.length > 0 ? setIsEmpty(false) : setIsEmpty(true);
+  }, [relations]);
 
   const getDataName = (dataId: number, datas: DataCTO[]): string => {
     return datas.find((data) => data.data.id === dataId)?.data.name || "";
@@ -76,5 +84,5 @@ const useRelationDropDownViewModel = () => {
     };
   };
 
-  return { relations, selectDataRelation, relationToOption };
+  return { relations, selectDataRelation, relationToOption, isEmpty };
 };

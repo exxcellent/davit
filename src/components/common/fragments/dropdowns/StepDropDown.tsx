@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
@@ -19,7 +19,7 @@ interface StepDropDownProps extends DropdownProps {
 
 export const StepDropDownButton: FunctionComponent<StepDropDownButtonProps> = (props) => {
   const { onSelect, icon } = props;
-  const { sequence, stepOptions, selectSequenceStep } = useStepDropDownViewModel();
+  const { sequence, stepOptions, selectSequenceStep, isEmpty } = useStepDropDownViewModel();
 
   return (
     <Dropdown
@@ -31,13 +31,14 @@ export const StepDropDownButton: FunctionComponent<StepDropDownButtonProps> = (p
       selectOnBlur={false}
       trigger={<React.Fragment />}
       scrolling
+      disabled={isEmpty}
     />
   );
 };
 
 export const StepDropDown: FunctionComponent<StepDropDownProps> = (props) => {
   const { onSelect, placeholder, value } = props;
-  const { sequence, stepOptions, selectSequenceStep } = useStepDropDownViewModel();
+  const { sequence, stepOptions, selectSequenceStep, isEmpty } = useStepDropDownViewModel();
 
   return (
     <Dropdown
@@ -48,12 +49,20 @@ export const StepDropDown: FunctionComponent<StepDropDownProps> = (props) => {
       onChange={(event, data) => onSelect(selectSequenceStep(Number(data.value), sequence))}
       scrolling
       value={value === -1 ? undefined : value}
+      disabled={isEmpty}
     />
   );
 };
 
 const useStepDropDownViewModel = () => {
   const sequenceToEdit: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
+  const [isEmpty, setIsEmpty] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (!isNullOrUndefined(sequenceToEdit)) {
+      sequenceToEdit.sequenceStepCTOs.length > 0 ? setIsEmpty(false) : setIsEmpty(true);
+    }
+  }, [sequenceToEdit]);
 
   const stepToOption = (step: SequenceStepCTO): DropdownItemProps => {
     return {
@@ -77,5 +86,5 @@ const useStepDropDownViewModel = () => {
     return undefined;
   };
 
-  return { sequence: sequenceToEdit, stepOptions, selectSequenceStep };
+  return { sequence: sequenceToEdit, stepOptions, selectSequenceStep, isEmpty };
 };

@@ -29,6 +29,7 @@ export const DataInstanceDropDown: FunctionComponent<DataInstanceDropDownProps> 
       scrolling
       selection
       value={value === -1 ? undefined : value}
+      disabled={instances.length > 0 ? false : true}
     />
   );
 };
@@ -49,6 +50,7 @@ export const DataInstanceDropDownButton: FunctionComponent<DataInstanceDropDownB
       selectOnBlur={false}
       trigger={<React.Fragment />}
       scrolling
+      disabled={instances.length > 0 ? false : true}
     />
   );
 };

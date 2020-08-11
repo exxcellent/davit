@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
@@ -37,7 +37,7 @@ export const ComponentDropDown: FunctionComponent<ComponentDropDownProps> = (pro
 
 export const ComponentDropDownButton: FunctionComponent<ComponentDropDownButtonProps> = (props) => {
   const { onSelect, icon } = props;
-  const { components, componentToOption, selectComponent } = useComponentDropDownViewModel();
+  const { components, componentToOption, selectComponent, isEmpty } = useComponentDropDownViewModel();
 
   return (
     <Dropdown
@@ -50,12 +50,18 @@ export const ComponentDropDownButton: FunctionComponent<ComponentDropDownButtonP
       className="button icon"
       trigger={<React.Fragment />}
       scrolling
+      disabled={isEmpty}
     />
   );
 };
 
 const useComponentDropDownViewModel = () => {
   const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
+  const [isEmpty, setIsEmpty] = useState<boolean>(true);
+
+  useEffect(() => {
+    components.length > 0 ? setIsEmpty(false) : setIsEmpty(true);
+  }, [components]);
 
   const componentToOption = (component: ComponentCTO): DropdownItemProps => {
     return {
@@ -72,5 +78,5 @@ const useComponentDropDownViewModel = () => {
     return undefined;
   };
 
-  return { components, componentToOption, selectComponent };
+  return { components, componentToOption, selectComponent, isEmpty };
 };

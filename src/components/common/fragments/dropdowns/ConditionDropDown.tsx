@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
@@ -19,7 +19,7 @@ interface ConditionDropDownProps extends DropdownProps {
 
 export const ConditionDropDownButton: FunctionComponent<ConditionDropDownButtonProps> = (props) => {
   const { onSelect, icon } = props;
-  const { sequence, selectCondition, conditionOptions } = useConditionDropDownViewModel();
+  const { sequence, selectCondition, conditionOptions, isEmpty } = useConditionDropDownViewModel();
 
   return (
     <Dropdown
@@ -31,13 +31,14 @@ export const ConditionDropDownButton: FunctionComponent<ConditionDropDownButtonP
       selectOnBlur={false}
       trigger={<React.Fragment />}
       scrolling
+      disabled={isEmpty}
     />
   );
 };
 
 export const ConditionDropDown: FunctionComponent<ConditionDropDownProps> = (props) => {
   const { onSelect, placeholder, value } = props;
-  const { sequence, selectCondition, conditionOptions } = useConditionDropDownViewModel();
+  const { sequence, selectCondition, conditionOptions, isEmpty } = useConditionDropDownViewModel();
 
   console.info("value: ", value);
 
@@ -50,12 +51,20 @@ export const ConditionDropDown: FunctionComponent<ConditionDropDownProps> = (pro
       onChange={(event, data) => onSelect(selectCondition(Number(data.value), sequence))}
       scrolling
       value={value === -1 ? undefined : value}
+      disabled={isEmpty}
     />
   );
 };
 
 const useConditionDropDownViewModel = () => {
   const sequenceToEdit: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
+  const [isEmpty, setIsEmpty] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (!isNullOrUndefined(sequenceToEdit)) {
+      sequenceToEdit.conditions.length > 0 ? setIsEmpty(false) : setIsEmpty(true);
+    }
+  }, [sequenceToEdit]);
 
   const conditionToOption = (condition: ConditionTO): DropdownItemProps => {
     return {
@@ -79,5 +88,5 @@ const useConditionDropDownViewModel = () => {
     return undefined;
   };
 
-  return { sequence: sequenceToEdit, conditionOptions, selectCondition };
+  return { sequence: sequenceToEdit, conditionOptions, selectCondition, isEmpty };
 };
