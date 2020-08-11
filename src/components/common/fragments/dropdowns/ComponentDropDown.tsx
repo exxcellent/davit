@@ -18,7 +18,7 @@ interface ComponentDropDownButtonProps extends DropdownProps {
 
 export const ComponentDropDown: FunctionComponent<ComponentDropDownProps> = (props) => {
   const { onSelect, placeholder, value } = props;
-  const { components, componentToOption, selectComponent } = useComponentDropDownViewModel();
+  const { components, componentToOption, selectComponent, isEmpty } = useComponentDropDownViewModel();
 
   return (
     <Dropdown
@@ -31,6 +31,7 @@ export const ComponentDropDown: FunctionComponent<ComponentDropDownProps> = (pro
       onChange={(event, data) => onSelect(selectComponent(Number(data.value), components))}
       scrolling
       value={value === -1 ? undefined : value}
+      disabled={isEmpty}
     />
   );
 };
