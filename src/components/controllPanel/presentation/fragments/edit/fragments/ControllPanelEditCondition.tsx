@@ -109,11 +109,9 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
 
   const menuButtons = (
     <div className="columnDivider controllPanelEditChild">
-      <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <OptionField label="Navigation">
-          <Carv2ButtonIcon onClick={saveCondition} icon="reply" />
-        </OptionField>
-      </div>
+      <OptionField label="Navigation">
+        <Carv2ButtonIcon onClick={saveCondition} icon="reply" />
+      </OptionField>
       <OptionField label="Sequence - Options">
         <Carv2ButtonLabel onClick={setRoot} label={isRoot ? "Root" : "Set as Root"} disable={isRoot} />
         <div>
@@ -245,21 +243,7 @@ const useControllPanelEditConditionViewModel = () => {
   const saveCondition = () => {
     if (!isNullOrUndefined(conditionToEdit) && !isNullOrUndefined(selectedSequence)) {
       dispatch(EditActions.condition.save(conditionToEdit));
-      // if (isEditNext) {
-      //   if (stepToEdit.squenceStepTO.index < selectedSequence.sequenceStepCTOs.length) {
-      //     dispatch(
-      //       EditActions.setMode.editStep(
-      //         selectedSequence.sequenceStepCTOs.find(
-      //           (step) => step.squenceStepTO.id === stepToEdit.squenceStepTO.index + 1
-      //         )
-      //       )
-      //     );
-      //   } else {
-      //     dispatch(EditActions.setMode.editStep());
-      //   }
-      // } else {
       dispatch(EditActions.setMode.editSequence(conditionToEdit.sequenceFk));
-      // }
     }
   };
 
@@ -278,12 +262,7 @@ const useControllPanelEditConditionViewModel = () => {
   const validStep = (): boolean => {
     let valid: boolean = false;
     if (!isNullOrUndefined(conditionToEdit)) {
-      if (
-        conditionToEdit.name !== ""
-        // TODO: for condition development purpose.
-        // && stepToEdit.squenceStepTO.sourceComponentFk !== -1 &&
-        // stepToEdit.squenceStepTO.targetComponentFk !== -1
-      ) {
+      if (conditionToEdit.name !== "") {
         valid = true;
       }
     }
