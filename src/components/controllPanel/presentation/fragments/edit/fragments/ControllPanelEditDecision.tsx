@@ -267,15 +267,8 @@ const useControllPanelEditConditionViewModel = () => {
 
   const setRoot = () => {
     if (!isNullOrUndefined(decisionToEdit)) {
-      let copySequence: SequenceCTO = Carv2Util.deepCopy(selectedSequence);
-      copySequence.sequenceStepCTOs.map((step) => (step.squenceStepTO.root = false));
-      copySequence.decisions.map((cond) => (cond.root = false));
-      copySequence.sequenceStepCTOs.forEach((step) => dispatch(EditActions.step.save(step)));
-      copySequence.decisions.forEach((cond) => dispatch(EditActions.decision.save(cond)));
-      let copyDecisionToEdit: DecisionTO = Carv2Util.deepCopy(decisionToEdit);
-      copyDecisionToEdit.root = true;
-      dispatch(EditActions.decision.save(copyDecisionToEdit));
-      dispatch(EditActions.decision.update(copyDecisionToEdit));
+      dispatch(EditActions.sequence.setRoot(decisionToEdit.sequenceFk, decisionToEdit.id, true));
+      dispatch(EditActions.setMode.editDecision(EditActions.decision.find(decisionToEdit.id)));
     }
   };
 

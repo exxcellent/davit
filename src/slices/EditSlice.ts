@@ -12,6 +12,7 @@ import { DataInstanceTO } from "../dataAccess/access/to/DataTO";
 import { DecisionTO } from "../dataAccess/access/to/DecisionTO";
 import { GroupTO } from "../dataAccess/access/to/GroupTO";
 import { InitDataTO } from "../dataAccess/access/to/InitDataTO";
+import { SequenceStepTO } from "../dataAccess/access/to/SequenceStepTO";
 import { SequenceTO } from "../dataAccess/access/to/SequenceTO";
 import { GoToTypes } from "../dataAccess/access/types/GoToType";
 import { DataAccess } from "../dataAccess/DataAccess";
@@ -533,6 +534,14 @@ const getSequenceCTOById = (sequenceId: number): SequenceCTO | null => {
   return response.object;
 };
 
+const setRootThunk = (sequenceId: number, rootId: number, isDecision: boolean): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<SequenceStepTO | DecisionTO> = DataAccess.setRoot(sequenceId, rootId, isDecision);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(MasterDataActions.loadSequencesFromBackend());
+};
+
 // ----------------------------------------------- SEQUENCE STEP -----------------------------------------------
 const createSequenceStepThunk = (
   step: SequenceStepCTO,
@@ -694,6 +703,14 @@ const deleteDecisionThunk = (decision: DecisionTO, sequenceCTO?: SequenceCTO): A
   dispatch(MasterDataActions.loadSequencesFromBackend());
 };
 
+const findDecisionTOThunk = (decisionId: number): DecisionTO => {
+  const response: DataAccessResponse<DecisionTO> = DataAccess.findDecision(decisionId);
+  if (response.code !== 200) {
+    handleError(response.message);
+  }
+  return response.object;
+};
+
 // =============================================== SELECTORS ===============================================
 export const EditReducer = EditSlice.reducer;
 /**
@@ -817,6 +834,7 @@ export const EditActions = {
     update: EditSlice.actions.setSequenceToEdit,
     findCTO: getSequenceCTOById,
     create: createSequenceThunk,
+    setRoot: setRootThunk,
   },
   dataSetup: {
     save: saveDataSetupThunk,
@@ -847,5 +865,6 @@ export const EditActions = {
     update: EditSlice.actions.setDecisionToEdit,
     save: saveDecisionThunk,
     delete: deleteDecisionThunk,
+    find: findDecisionTOThunk,
   },
 };

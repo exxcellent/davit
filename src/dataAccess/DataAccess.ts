@@ -10,6 +10,7 @@ import { DataInstanceTO } from "./access/to/DataTO";
 import { DecisionTO } from "./access/to/DecisionTO";
 import { GroupTO } from "./access/to/GroupTO";
 import { InitDataTO } from "./access/to/InitDataTO";
+import { SequenceStepTO } from "./access/to/SequenceStepTO";
 import { SequenceTO } from "./access/to/SequenceTO";
 import { DataAccessResponse } from "./DataAccessResponse";
 import dataStore from "./DataStore";
@@ -86,6 +87,10 @@ export const DataAccess = {
 
   saveSequenceTO(sequence: SequenceTO): DataAccessResponse<SequenceTO> {
     return makeTransactional(() => SequenceDataAccessService.saveSequenceTO(sequence));
+  },
+
+  setRoot(sequenceId: number, id: number, isDecision: boolean): DataAccessResponse<SequenceStepTO | DecisionTO> {
+    return makeTransactional(() => SequenceDataAccessService.setRoot(sequenceId, id, isDecision));
   },
 
   // ========================================= STEP =========================================
@@ -205,6 +210,10 @@ export const DataAccess = {
 
   deleteDecision(decision: DecisionTO): DataAccessResponse<DecisionTO> {
     return makeTransactional(() => SequenceDataAccessService.deleteDecision(decision));
+  },
+
+  findDecision(id: number): DataAccessResponse<DecisionTO> {
+    return makeTransactional(() => SequenceDataAccessService.findDecision(id));
   },
 };
 // ========================================= PRIVATE =========================================

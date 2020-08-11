@@ -27,11 +27,11 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
   } = useControllPanelEditConditionViewModel();
 
   const hasDropDown = (
-    <OptionField label="Codition - true / false">
+    <OptionField label="Codition">
       <Dropdown
         options={[
-          { key: 1, value: 1, text: "true" },
-          { key: 2, value: 2, text: "false" },
+          { key: 1, value: 1, text: "has" },
+          { key: 2, value: 2, text: "has not" },
         ]}
         compact
         selection
@@ -121,7 +121,8 @@ const useControllPanelEditConditionViewModel = () => {
     if (!isNullOrUndefined(decisionToEdit) && !isNullOrUndefined(setHas)) {
       let copyDecisionToEdit: DecisionTO = Carv2Util.deepCopy(decisionToEdit);
       copyDecisionToEdit.has = setHas === 1 ? true : false;
-      dispatch(EditActions.setMode.editDecision(copyDecisionToEdit));
+      dispatch(EditActions.decision.save(copyDecisionToEdit));
+      dispatch(EditActions.decision.update(copyDecisionToEdit));
     }
   };
 

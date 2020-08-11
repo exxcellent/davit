@@ -306,21 +306,14 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
   //TODO: das hat hier nicht verloren. Das ist Aufgabe vom Slice. Außerdem können wir auf keinen Fall jeden Step und jede Decision einzeln ans Backend schicken. DAs muss in einer bzw zwie Calls passieren
   const setRoot = () => {
-    if (!isNullOrUndefined(stepToEdit)) {
-      let copySequence: SequenceCTO = Carv2Util.deepCopy(selectedSequence);
-      copySequence.sequenceStepCTOs.forEach((step) => (step.squenceStepTO.root = false));
-      copySequence.decisions.forEach((cond) => (cond.root = false));
-      copySequence.sequenceStepCTOs.forEach((step) => dispatch(EditActions.step.save(step)));
-      copySequence.decisions.forEach((cond) => dispatch(EditActions.decision.save(cond)));
-      let copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
-      copyStepToEdit.squenceStepTO.root = true;
-      dispatch(EditActions.step.save(copyStepToEdit));
-      dispatch(EditActions.step.update(copyStepToEdit));
+    if (!isNullOrUndefined(stepToEdit) && !isNullOrUndefined(selectedSequence)) {
+      dispatch(EditActions.sequence.setRoot(stepToEdit.squenceStepTO.sequenceFk, stepToEdit.squenceStepTO.id, false));
+      dispatch(EditActions.setMode.editStep(EditActions.step.find(stepToEdit.squenceStepTO.id)));
     }
   };
 
   return {
-    label: "EDIT SEQUENCE - EDIT STEP",
+    label: "EDIT SEQUENCE - STEP",
     name: stepToEdit ? stepToEdit!.squenceStepTO.name : "",
     changeName,
     saveSequenceStep,

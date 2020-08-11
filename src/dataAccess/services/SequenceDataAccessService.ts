@@ -67,6 +67,42 @@ export const SequenceDataAccessService = {
     return sequence;
   },
 
+  // ---------------------------------------------------------- ROOT ----------------------------------------------------------
+
+  setRoot(sequenceId: number, id: number, isDecision: boolean): SequenceStepTO | DecisionTO {
+    let root: SequenceStepTO | DecisionTO | null = null;
+    let copyDecisions: DecisionTO[] = DecisionRepository.findAllForSequence(sequenceId);
+    let copySteps: SequenceStepTO[] = SequenceStepRepository.findAllForSequence(sequenceId);
+    // set root
+    copyDecisions.forEach((decision) => {
+      decision.root = false;
+      if (isDecision) {
+        if (decision.id === id) {
+          decision.root = true;
+          root = decision;
+        }
+      }
+    });
+    copySteps.forEach((step) => {
+      step.root = false;
+      if (!isDecision) {
+        if (step.id === id) {
+          step.root = true;
+          root = step;
+        }
+      }
+    });
+    // save
+    copyDecisions.forEach((decision) => DecisionRepository.save(decision));
+    copySteps.forEach((step) => SequenceStepRepository.save(step));
+
+    if (root === null) {
+      throw Error("no root is set!");
+    } else {
+      return root;
+    }
+  },
+
   // ---------------------------------------------------------- Sequence step ----------------------------------------------------------
 
   saveSequenceStep(sequenceStep: SequenceStepCTO): SequenceStepCTO {
@@ -116,6 +152,14 @@ export const SequenceDataAccessService = {
 
   deleteDecision(decision: DecisionTO): DecisionTO {
     return DecisionRepository.delete(decision);
+  },
+
+  findDecision(id: number): DecisionTO {
+    const decision: DecisionTO | undefined = DecisionRepository.find(id);
+    if (decision === undefined) {
+      throw Error("Decision with id: " + id + " dos not exists!");
+    }
+    return decision;
   },
 
   // ---------------------------------------------------------- Action ----------------------------------------------------------
