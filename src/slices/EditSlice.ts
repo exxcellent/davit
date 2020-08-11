@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { isNullOrUndefined } from "util";
 import { AppThunk, RootState } from "../app/store";
 import { ComponentCTO } from "../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../dataAccess/access/cto/DataCTO";
@@ -139,7 +140,7 @@ const EditSlice = createSlice({
       }
     },
     setDecisionToEdit: (state, action: PayloadAction<DecisionTO>) => {
-      if (state.mode === Mode.EDIT_SEQUENCE_DECISION) {
+      if (state.mode === Mode.EDIT_SEQUENCE_DECISION || Mode.EDIT_SEQUENCE_DECISION_CONDITION) {
         state.objectToEdit = action.payload;
       } else {
         handleError("Try to set decision to edit in mode: " + state.mode);
@@ -294,6 +295,15 @@ const setModeToEditDecision = (
 ): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_DECISION));
   dispatch(EditActions.decision.create(decision, from, ifGoTo));
+};
+
+const setModeToEditCondition = (decision: DecisionTO): AppThunk => (dispatch) => {
+  if (!isNullOrUndefined(decision)) {
+    dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_DECISION_CONDITION));
+    // dispatch(EditSlice.actions.setDecisionToEdit(decision));
+  } else {
+    handleError("Edit Condition: 'Decision is null or undefined'.");
+  }
 };
 
 // ----------------------------------------------- COMPONENT -----------------------------------------------
@@ -745,7 +755,8 @@ export const editSelectors = {
       : null;
   },
   decisionToEdit: (state: RootState): DecisionTO | null => {
-    return state.edit.mode === Mode.EDIT_SEQUENCE_DECISION && (state.edit.objectToEdit as DecisionTO).elseGoTo
+    return (state.edit.mode === Mode.EDIT_SEQUENCE_DECISION || Mode.EDIT_SEQUENCE_DECISION_CONDITION) &&
+      (state.edit.objectToEdit as DecisionTO).elseGoTo
       ? (state.edit.objectToEdit as DecisionTO)
       : null;
   },
@@ -768,6 +779,7 @@ export const EditActions = {
     editInitData: setModeToEditInitData,
     editStep: setModeToEditStep,
     editDecision: setModeToEditDecision,
+    editCondition: setModeToEditCondition,
     editAction: setModeToEditAction,
     edit: setModeToEdit,
     view: setModeToView,
