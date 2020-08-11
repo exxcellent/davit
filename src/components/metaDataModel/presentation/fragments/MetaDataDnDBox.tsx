@@ -9,7 +9,7 @@ import { useCurrentHeight, useCurrentWitdh } from "../../../../utils/WindowUtil"
 import { ViewFragmentProps } from "../../../../viewDataTypes/ViewFragment";
 import { createDnDItem } from "../../../common/fragments/DnDWrapper";
 import { createCornerConnection } from "../../../common/fragments/svg/Carv2Path";
-import { createMetaDataFragment } from "./MetaDataFragment";
+import { Carv2Card } from "../../../metaComponentModel/presentation/fragments/Carv2Card";
 
 interface MetaDataDnDBox {
   dataCTOs: DataCTO[];
@@ -85,16 +85,22 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
   };
 
   const createDnDMetaDataFragment = (dataCTO: DataCTO) => {
-    let metaDataFragment = createMetaDataFragment(
-      dataCTO,
-      componentDatas.filter(
-        (comp) =>
-          comp.parentId === dataCTO.data.id ||
-          (comp.parentId as { dataId: number; instanceId: number }).dataId === dataCTO.data.id
-      ),
-      onClick
+    let metaDataFragment: JSX.Element = (
+      <Carv2Card
+        id={dataCTO.data.id}
+        initName={dataCTO.data.name}
+        initWidth={dataCTO.geometricalData.geometricalData.width}
+        initHeigth={dataCTO.geometricalData.geometricalData.height}
+        dataFragments={componentDatas.filter(
+          (comp) =>
+            comp.parentId === dataCTO.data.id ||
+            (comp.parentId as { dataId: number; instanceId: number }).dataId === dataCTO.data.id
+        )}
+        instances={dataCTO.data.inst}
+        zoomFactor={1}
+      />
     );
-    return createDnDItem(dataCTO.geometricalData, onPositionUpdate, constraintsRef, metaDataFragment);
+    return createDnDItem(dataCTO.geometricalData.position, onPositionUpdate, constraintsRef, metaDataFragment);
   };
 
   const createDataRelationToEdit = (dataRelation: DataRelationTO) => {

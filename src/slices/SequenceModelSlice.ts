@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../app/store";
 import { Arrows as Arrow } from "../components/metaComponentModel/presentation/MetaComponentModelController";
 import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
+import { GeometricalDataCTO } from "../dataAccess/access/cto/GeometraicalDataCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
@@ -305,13 +306,17 @@ const filterSteps = (steps: CalculatedStep[], filter: Filter[], modelSteps: Sequ
   );
 };
 
-const getArrowForStepFk = (stepFk: number, sequenceStepCTOs: SequenceStepCTO[]): Arrow | undefined => {
+const getArrowForStepFk = (
+  stepFk: number,
+  sequenceStepCTOs: SequenceStepCTO[],
+  rootState: RootState
+): Arrow | undefined => {
   let step: SequenceStepCTO | undefined;
   if (stepFk && sequenceStepCTOs) {
     step = sequenceStepCTOs.find((stp) => stp.squenceStepTO.id === stepFk);
   }
   if (step) {
-    return mapStepToArrow(step);
+    return mapStepToArrow(step, rootState);
   }
 };
 // =============================================== SELECTORS ===============================================
@@ -381,6 +386,7 @@ export const sequenceModelSelectors = {
           )
         : [];
     let stepFks: number[] = [];
+    // this hack is because we cannot show more than arrow at the moment. This would calc all arrows if step index === 0. The length hack is because javascript doesnt accept if (false)
     if (arrows.length === -1000) {
       /* TODO: reactivate state.sequenceModel.currentStepIndex === 0)*/ stepFks = filteredSteps.map(
         (step) => step.stepFk
@@ -392,7 +398,7 @@ export const sequenceModelSelectors = {
       }
     }
     const allArrows: (Arrow | undefined)[] = stepFks.map((stepFk) =>
-      getArrowForStepFk(stepFk, state.sequenceModel.selectedSequenceModel?.sequenceStepCTOs || [])
+      getArrowForStepFk(stepFk, state.sequenceModel.selectedSequenceModel?.sequenceStepCTOs || [], state)
     );
     allArrows.forEach((arrow) => {
       if (arrow) arrows.push(arrow);
@@ -402,11 +408,19 @@ export const sequenceModelSelectors = {
   selectLoopStepStartIndex: (state: RootState): number | null => state.sequenceModel.loopStartingStepIndex,
 };
 
-const mapStepToArrow = (step: SequenceStepCTO) => {
-  return {
-    sourceComponentId: step.squenceStepTO.sourceComponentFk,
-    targetComponentId: step.squenceStepTO.targetComponentFk,
-  };
+const mapStepToArrow = (step: SequenceStepCTO, state: RootState): Arrow | undefined => {
+  const sourceGeometricalData: GeometricalDataCTO | undefined = state.masterData.components.find(
+    (comp) => comp.component.id === step.squenceStepTO.sourceComponentFk
+  )?.geometricalData;
+  const targetGeometricalData: GeometricalDataCTO | undefined = state.masterData.components.find(
+    (comp) => comp.component.id === step.squenceStepTO.targetComponentFk
+  )?.geometricalData;
+  if (sourceGeometricalData && targetGeometricalData) {
+    return {
+      sourceGeometricalData,
+      targetGeometricalData,
+    };
+  }
 };
 
 // =============================================== ACTIONS ===============================================
