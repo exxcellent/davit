@@ -1,7 +1,7 @@
 import { motion, useInvertedScale, useMotionValue } from "framer-motion";
 import React, { FunctionComponent, useEffect } from "react";
 import { WINDOW_FACTOR } from "../../../app/Carv2Constanc";
-import { GeometricalDataCTO } from "../../../dataAccess/access/cto/GeometraicalDataCTO";
+import { PositionTO } from "../../../dataAccess/access/to/PositionTO";
 
 export interface DnDWrapperProps {
   dragConstraintsRef: any;
@@ -56,7 +56,7 @@ export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
 };
 
 export const createDnDItem = (
-  geometricalDataCTO: GeometricalDataCTO,
+  position: PositionTO,
   onPositionUpdateCallBack: (x: number, y: number, positionId: number) => void,
   dragConstraintsRef: any,
   children: React.ReactNode,
@@ -64,11 +64,11 @@ export const createDnDItem = (
 ) => {
   return (
     <DnDWrapper
-      key={geometricalDataCTO.position.id}
+      key={position.id}
       onPositionUpdate={onPositionUpdateCallBack}
-      positionId={geometricalDataCTO.position.id}
-      initX={geometricalDataCTO.position.x}
-      initY={geometricalDataCTO.position.y}
+      positionId={position.id}
+      initX={position.x}
+      initY={position.y}
       dragConstraintsRef={dragConstraintsRef}
       shadow={shadow}
     >

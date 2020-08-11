@@ -59,11 +59,15 @@ export const useCurrentHeight = () => {
   return height;
 };
 
-export const useZoomDisable = () => {
+export const useZoomDisable = (zoomCallBacks?: { zoomInCallBack: () => void; zoomOutCallBack: () => void }) => {
   const handleKeyDown = (event: WheelEvent) => {
     if (event.ctrlKey === true) {
-      console.warn("no scroll");
+      console.info("delta:", event.deltaY);
       event.preventDefault();
+      if (zoomCallBacks) {
+        event.deltaY < 0 && zoomCallBacks.zoomInCallBack();
+        event.deltaY > 0 && zoomCallBacks.zoomOutCallBack();
+      }
     }
   };
 
@@ -71,7 +75,6 @@ export const useZoomDisable = () => {
     console.info("Keycode: ", event.keyCode);
     if (event.ctrlKey === true) {
       if (event.keyCode === 171 || event.keyCode === 173) {
-        console.warn("no zoom");
         event.preventDefault();
       }
     }
@@ -80,5 +83,10 @@ export const useZoomDisable = () => {
   useEffect(() => {
     document.addEventListener("wheel", handleKeyDown);
     document.addEventListener("keydown", checkZoom);
+
+    return () => {
+      document.removeEventListener("wheel", handleKeyDown);
+      document.removeEventListener("keydown", checkZoom);
+    };
   });
 };

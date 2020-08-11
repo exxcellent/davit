@@ -33,7 +33,7 @@
 .leftPanel {
   grid-area: leftBar;
   justify-self: center;
-  background-color: var(--carv2-background-color-lidebar);
+  background-color: var(--carv2-background-color-slidebar);
 }
 
 .controllerHeader {
@@ -163,35 +163,6 @@
   margin: 10px;
 }
 
-.carv2ComponentDataNEW {
-  background-color: var(--carv2-data-add-color) !important;
-  color: var(--carv2-data-text-color) !important;
-}
-.carv2ComponentDataPERSISTENT {
-  background-color: var(--carv2-data-persistent-color) !important;
-  color: var(--carv2-data-text-color) !important;
-}
-.carv2ComponentDataDELETED {
-  background-color: var(--carv2-data-delete-color) !important;
-  color: var(--carv2-data-text-color) !important;
-}
-
-.carv2ComponentDataADD {
-  background-color: var(--carv2-background-color-header) !important;
-  color: var(--carv2-text-color) !important;
-  box-shadow: 6px 6px 10px var(--carv2-data-add-color) inset !important;
-}
-.carv2ComponentDataCHECK {
-  background-color: var(--carv2-background-color-header) !important;
-  color: var(--carv2-text-color) !important;
-  box-shadow: 6px 6px 10px var(--carv2-data-persistent-color) inset !important;
-}
-.carv2ComponentDataDELETE {
-  background-color: var(--carv2-background-color-header) !important;
-  color: var(--carv2-text-color) !important;
-  box-shadow: 6px 6px 10px var(--carv2-data-delete-color) inset !important;
-}
-
 /* -------------------------------------------- Optionfield -------------------------------------------- */
 
 .optionFieldAround {
@@ -232,7 +203,6 @@
 /* -------------------------------------------- PATH -------------------------------------------- */
 
 .carvPath {
-  /* stroke: var(--carv2-color-secondary); */
   stroke: black;
   stroke-width: 2px;
   fill: transparent;
@@ -319,15 +289,23 @@
 }
 
 .COND {
+  z-index: 2;
   width: 2em;
   height: 2em;
   background-color: var(--carv2-background-color-shadow);
-  transform: rotate(45deg);
+  transform: translateY(0.8em) rotate(45deg);
   box-shadow: 0 0 0 1px #d4d4d5, 0 2px 4px 0 rgba(34, 36, 38, 0.12), 0 2px 10px 0 rgba(34, 36, 38, 0.15);
 }
 
 .condLabel {
   z-index: 1;
+  color: black;
+  background-color: var(--carv2-background-color);
+  transform: translateY(0.8em);
+  padding-left: 3px;
+  padding-right: 3px;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px #d4d4d5, 0 2px 4px 0 rgba(34, 36, 38, 0.12), 0 2px 10px 0 rgba(34, 36, 38, 0.15);
 }
 
 .FIN {
@@ -337,8 +315,7 @@
   background-color: var(--carv2-data-add-color);
   border: 0.2em solid var(--carv2-background-color);
   box-shadow: 0 0 0 0.2em var(--carv2-data-add-color);
-  margin: 0.2em;
-  padding: 0.2em;
+  transform: translateY(0.2em);
 }
 
 .ERROR {
@@ -348,8 +325,7 @@
   background-color: var(--carv2-data-delete-color);
   border: 0.2em solid var(--carv2-background-color);
   box-shadow: 0 0 0 0.2em var(--carv2-data-delete-color);
-  margin: 0.2em;
-  padding: 0.2em;
+  transform: translateY(0.2em);
 }
 
 .ROOT {
@@ -371,6 +347,95 @@
 
 #flowChartCurrentStep {
   border: 3px solid var(--carv2-color-secondary);
+}
+
+/* -------------------------------------------- Component -------------------------------------------- */
+
+.metaComponent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--carv2-text-color);
+  border-radius: 0.28571429rem;
+  border: 1px solid var(--car);
+  box-shadow: 0 0 0 1px #d4d4d5, 0 2px 4px 0 rgba(34, 36, 38, 0.12), 0 2px 10px 0 rgba(34, 36, 38, 0.15);
+  background-color: var(--carv2-background-color-header);
+}
+
+.metaComponentHeader {
+  font-size: 0.8sem;
+  font-family: Lato, Helvetica Neue, Arial, Helvetica, sans-serif;
+  text-align: center;
+  padding: 0.5em;
+}
+
+.viewFragment {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  text-align: center;
+  border-top: 0.5px solid var(--carv2-text-color);
+}
+
+.carv2ComponentDataNEW {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--carv2-data-add-color) !important;
+  color: var(--carv2-data-text-color) !important;
+}
+.carv2ComponentDataPERSISTENT {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--carv2-data-persistent-color) !important;
+  color: var(--carv2-data-text-color) !important;
+}
+.carv2ComponentDataDELETED {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--carv2-data-delete-color) !important;
+  color: var(--carv2-data-text-color) !important;
+}
+
+.carv2ComponentDataADD {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--carv2-background-color-header) !important;
+  color: var(--carv2-text-color) !important;
+  box-shadow: 6px 6px 10px var(--carv2-data-add-color) inset !important;
+}
+.carv2ComponentDataCHECK {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--carv2-background-color-header) !important;
+  color: var(--carv2-text-color) !important;
+  box-shadow: 6px 6px 10px var(--carv2-data-persistent-color) inset !important;
+}
+.carv2ComponentDataDELETE {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--carv2-background-color-header) !important;
+  color: var(--carv2-text-color) !important;
+  box-shadow: 6px 6px 10px var(--carv2-data-delete-color) inset !important;
 }
 
 /* -------------------------------------------- Table -------------------------------------------- */
@@ -397,19 +462,6 @@ thead {
 }
 table {
   width: 100%;
-}
-
-.ui.attached:not(.message) + .ui.attached.segment:not(.top) {
-  background-color: var(--carv2-background-color-header);
-}
-
-.ui.attached.segment {
-  border: 1px solid black;
-}
-
-.ui.attached.inverted.menu {
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
 }
 
 .carv2Table {
@@ -471,8 +523,9 @@ table {
 
 /* -------------------------------------------- Colors -------------------------------------------- */
 :root {
-  /* --carv2-background-color: rgb(134, 134, 134); */
-  --carv2-background-color: rgb(184, 181, 181);
+  --carv2-background-color: rgb(134, 134, 134);
+  /* --carv2-background-color: rgb(230, 230, 230); */
+  /* --carv2-background-color: rgb(24, 24, 24); */
   --carv2-background-color-header: rgba(0, 0, 0, 0.5);
   /* --carv2-background-color-header: rgb(23, 47, 48); */
   --carv2-background-color-shadow: black;
@@ -485,7 +538,7 @@ table {
   --carv2-color-exxcellent-gray: #666d71;
   --carv2-color-exxcellent-purple: #a568a8;
 
-  --carv2-background-color-lidebar: rgba(0, 0, 0, 0.3);
+  --carv2-background-color-slidebar: rgba(0, 0, 0, 0.3);
   --carv2-text-color: white;
   --carv2-data-add-color: #6cbf8f;
   --carv2-data-delete-color: #af0837;
@@ -496,6 +549,19 @@ table {
 }
 
 /* -------------------------------------------- Over write -------------------------------------------- */
+
+.ui.attached:not(.message) + .ui.attached.segment:not(.top) {
+  background-color: var(--carv2-background-color-header);
+}
+
+.ui.attached.segment {
+  border: 1px solid black;
+}
+
+.ui.attached.inverted.menu {
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
 
 .ui.inverted.orange.button,
 .ui.inverted.orange.buttons .button {
@@ -549,6 +615,10 @@ i.icon.delete::before :hover {
 .ui.card > .content > .header,
 .ui.cards > .card > .content > .header {
   color: white;
+}
+
+.extra {
+  min-height: 3em !important;
 }
 
 .ui.card,
