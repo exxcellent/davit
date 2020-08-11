@@ -5,9 +5,9 @@ import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
 import { DataSetupCTO } from "../../../dataAccess/access/cto/DataSetupCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../../../dataAccess/access/to/ActionTO";
-import { ConditionTO } from "../../../dataAccess/access/to/ConditionTO";
 import { DataRelationTO } from "../../../dataAccess/access/to/DataRelationTO";
 import { DATA_INSTANCE_ID_FACTOR, getDataAndInstanceIds } from "../../../dataAccess/access/to/DataTO";
+import { DecisionTO } from "../../../dataAccess/access/to/DecisionTO";
 import { InitDataTO } from "../../../dataAccess/access/to/InitDataTO";
 import { ActionType } from "../../../dataAccess/access/types/ActionType";
 import { EditActions, editSelectors } from "../../../slices/EditSlice";
@@ -64,7 +64,7 @@ const useMetaDataModelViewModel = () => {
   const dataRelationToEdit: DataRelationTO | null = useSelector(editSelectors.relationToEdit);
   const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.stepToEdit);
   const actionToEdit: ActionTO | null = useSelector(editSelectors.actionToEdit);
-  const conditionToEdit: ConditionTO | null = useSelector(editSelectors.conditionToEdit);
+  const decisionToEdit: DecisionTO | null = useSelector(editSelectors.decisionToEdit);
   const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.dataSetupToEdit);
   const initDataToEdit: InitDataTO | null = useSelector(editSelectors.initDataToEdit);
   // ----- VIEW -----
@@ -127,12 +127,12 @@ const useMetaDataModelViewModel = () => {
     const compDataFromInitDataToEdit: ViewFragmentProps | undefined = initDataToEdit
       ? mapInitDataToCompData(initDataToEdit)
       : undefined;
-    const compDataFromCondittionToEdit: ViewFragmentProps[] = mapConditionToCompData(conditionToEdit);
+    const compDataFromDecisionToEdit: ViewFragmentProps[] = mapDecisionToCompData(decisionToEdit);
     const compDatasFromDataSetup: ViewFragmentProps[] = dataSetupToEdit
       ? dataSetupToEdit.initDatas.map(mapInitDataToCompData)
       : [];
     compDatas.push(...compDatasFromStepToEdit);
-    compDatas.push(...compDataFromCondittionToEdit);
+    compDatas.push(...compDataFromDecisionToEdit);
     compDatas.push(...compDatasFromDataSetup);
     if (compDataFromActionToEdit) {
       compDatas.push(compDataFromActionToEdit);
@@ -157,14 +157,14 @@ const useMetaDataModelViewModel = () => {
     };
   };
 
-  const mapConditionToCompData = (condition: ConditionTO | null): ViewFragmentProps[] => {
+  const mapDecisionToCompData = (decision: DecisionTO | null): ViewFragmentProps[] => {
     let props: ViewFragmentProps[] = [];
-    if (condition) {
-      props = condition.dataFks.map((data) => {
+    if (decision) {
+      props = decision.dataFks.map((data) => {
         return {
           parentId: data > DATA_INSTANCE_ID_FACTOR ? getDataAndInstanceIds(data) : data,
-          name: getComponentNameById(condition.componentFk),
-          state: condition.has ? ViewFragmentState.CHECKED : ViewFragmentState.DELETED,
+          name: getComponentNameById(decision.componentFk),
+          state: decision.has ? ViewFragmentState.CHECKED : ViewFragmentState.DELETED,
         };
       });
     }

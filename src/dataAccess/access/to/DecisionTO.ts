@@ -1,7 +1,7 @@
 import { GoTo, GoToTypes } from "../types/GoToType";
 import { AbstractTO } from "./AbstractTO";
 
-export class ConditionTO extends AbstractTO {
+export class DecisionTO extends AbstractTO {
   constructor(
     public name: string = "",
     public sequenceFk: number = -1,

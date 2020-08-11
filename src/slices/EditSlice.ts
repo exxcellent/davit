@@ -6,9 +6,9 @@ import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
-import { ConditionTO } from "../dataAccess/access/to/ConditionTO";
 import { DataRelationTO } from "../dataAccess/access/to/DataRelationTO";
 import { DataInstanceTO } from "../dataAccess/access/to/DataTO";
+import { DecisionTO } from "../dataAccess/access/to/DecisionTO";
 import { GroupTO } from "../dataAccess/access/to/GroupTO";
 import { InitDataTO } from "../dataAccess/access/to/InitDataTO";
 import { SequenceTO } from "../dataAccess/access/to/SequenceTO";
@@ -33,7 +33,8 @@ export enum Mode {
   EDIT_DATA_SETUP = "EDIT_DATA_SETUP",
   EDIT_INIT_DATA = "EDIT_INIT_DATA",
   EDIT_SEQUENCE = "EDIT_SEQUENCE",
-  EDIT_SEQUENCE_CONDITION = "EDIT_SEQUENCE_CONDITION",
+  EDIT_SEQUENCE_DECISION = "EDIT_SEQUENCE_DECISION",
+  EDIT_SEQUENCE_DECISION_CONDITION = "EDIT_SEQUENCE_DECISION_CONDITION",
   EDIT_SEQUENCE_STEP = "EDIT_SEQUENCE_STEP",
   EDIT_SEQUENCE_STEP_ACTION = "EDIT_SEQUENCE_STEP_ACTION",
 }
@@ -57,7 +58,7 @@ interface EditState {
     | DataSetupCTO
     | InitDataTO
     | GroupTO
-    | ConditionTO
+    | DecisionTO
     | {};
   instanceIdToEdit: number | null;
 }
@@ -137,11 +138,11 @@ const EditSlice = createSlice({
         handleError("Try to set group to edit in mode: " + state.mode);
       }
     },
-    setConditionToEdit: (state, action: PayloadAction<ConditionTO>) => {
-      if (state.mode === Mode.EDIT_SEQUENCE_CONDITION) {
+    setDecisionToEdit: (state, action: PayloadAction<DecisionTO>) => {
+      if (state.mode === Mode.EDIT_SEQUENCE_DECISION) {
         state.objectToEdit = action.payload;
       } else {
-        handleError("Try to set condition to edit in mode: " + state.mode);
+        handleError("Try to set decision to edit in mode: " + state.mode);
       }
     },
     clearObjectToEdit: (state) => {
@@ -237,7 +238,7 @@ const setModeToEditSequence = (sequenceId?: number): AppThunk => (dispatch) => {
 
 const setModeToEditStep = (
   stepCTO: SequenceStepCTO,
-  from?: SequenceStepCTO | ConditionTO,
+  from?: SequenceStepCTO | DecisionTO,
   ifGoTo?: Boolean
 ): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_STEP));
@@ -286,13 +287,13 @@ const setModeToEditDataSetup = (id?: number): AppThunk => (dispatch) => {
   }
 };
 
-const setModeToEditCondition = (
-  condition: ConditionTO,
-  from?: SequenceStepCTO | ConditionTO,
+const setModeToEditDecision = (
+  decision: DecisionTO,
+  from?: SequenceStepCTO | DecisionTO,
   ifGoTo?: Boolean
 ): AppThunk => (dispatch) => {
-  dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_CONDITION));
-  dispatch(EditActions.condition.create(condition, from, ifGoTo));
+  dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_DECISION));
+  dispatch(EditActions.decision.create(decision, from, ifGoTo));
 };
 
 // ----------------------------------------------- COMPONENT -----------------------------------------------
@@ -525,7 +526,7 @@ const getSequenceCTOById = (sequenceId: number): SequenceCTO | null => {
 // ----------------------------------------------- SEQUENCE STEP -----------------------------------------------
 const createSequenceStepThunk = (
   step: SequenceStepCTO,
-  from?: SequenceStepCTO | ConditionTO,
+  from?: SequenceStepCTO | DecisionTO,
   ifGoTO?: Boolean
 ): AppThunk => (dispatch) => {
   const response: DataAccessResponse<SequenceStepCTO> = DataAccess.saveSequenceStepCTO(step);
@@ -537,13 +538,13 @@ const createSequenceStepThunk = (
         (from as SequenceStepCTO).squenceStepTO.goto = { type: GoToTypes.STEP, id: response.object.squenceStepTO.id };
         dispatch(EditActions.step.save(from as SequenceStepCTO));
       }
-      if ((from as ConditionTO).elseGoTo !== undefined) {
+      if ((from as DecisionTO).elseGoTo !== undefined) {
         if (ifGoTO) {
-          (from as ConditionTO).ifGoTo = { type: GoToTypes.STEP, id: response.object.squenceStepTO.id };
+          (from as DecisionTO).ifGoTo = { type: GoToTypes.STEP, id: response.object.squenceStepTO.id };
         } else {
-          (from as ConditionTO).elseGoTo = { type: GoToTypes.STEP, id: response.object.squenceStepTO.id };
+          (from as DecisionTO).elseGoTo = { type: GoToTypes.STEP, id: response.object.squenceStepTO.id };
         }
-        dispatch(EditActions.condition.save(from as ConditionTO));
+        dispatch(EditActions.decision.save(from as DecisionTO));
       }
     }
     dispatch(EditActions.step.update(response.object));
@@ -561,15 +562,15 @@ const deleteSequenceStepThunk = (step: SequenceStepCTO, sequenceCTO?: SequenceCT
         dispatch(EditActions.step.save(item));
       }
     });
-    // update conditions
-    copySequence.conditions.forEach((cond) => {
+    // update decision
+    copySequence.decisions.forEach((cond) => {
       if (cond.ifGoTo.type === GoToTypes.STEP && cond.ifGoTo.id === step.squenceStepTO.id) {
         cond.ifGoTo = { type: GoToTypes.ERROR };
-        dispatch(EditActions.condition.save(cond));
+        dispatch(EditActions.decision.save(cond));
       }
       if (cond.elseGoTo.type === GoToTypes.STEP && cond.elseGoTo.id === step.squenceStepTO.id) {
         cond.elseGoTo = { type: GoToTypes.ERROR };
-        dispatch(EditActions.condition.save(cond));
+        dispatch(EditActions.decision.save(cond));
       }
     });
   }
@@ -618,14 +619,12 @@ const deleteActionThunk = (action: ActionTO): AppThunk => async (dispatch) => {
   dispatch(MasterDataActions.loadSequencesFromBackend());
 };
 
-// ----------------------------------------------- CONDITION -----------------------------------------------
+// ----------------------------------------------- DECISION -----------------------------------------------
 
-const createConditionThunk = (
-  condition: ConditionTO,
-  from?: SequenceStepCTO | ConditionTO,
-  ifGoTo?: Boolean
-): AppThunk => (dispatch) => {
-  const response: DataAccessResponse<ConditionTO> = DataAccess.saveCondition(condition);
+const createDecisionThunk = (decision: DecisionTO, from?: SequenceStepCTO | DecisionTO, ifGoTo?: Boolean): AppThunk => (
+  dispatch
+) => {
+  const response: DataAccessResponse<DecisionTO> = DataAccess.saveDecision(decision);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   } else {
@@ -634,51 +633,51 @@ const createConditionThunk = (
         (from as SequenceStepCTO).squenceStepTO.goto = { type: GoToTypes.COND, id: response.object.id };
         dispatch(EditActions.step.save(from as SequenceStepCTO));
       }
-      if ((from as ConditionTO).elseGoTo !== undefined) {
+      if ((from as DecisionTO).elseGoTo !== undefined) {
         if (ifGoTo) {
-          (from as ConditionTO).ifGoTo = { type: GoToTypes.COND, id: response.object.id };
+          (from as DecisionTO).ifGoTo = { type: GoToTypes.COND, id: response.object.id };
         } else {
-          (from as ConditionTO).elseGoTo = { type: GoToTypes.COND, id: response.object.id };
+          (from as DecisionTO).elseGoTo = { type: GoToTypes.COND, id: response.object.id };
         }
-        dispatch(EditActions.condition.save(from as ConditionTO));
+        dispatch(EditActions.decision.save(from as DecisionTO));
       }
     }
-    dispatch(EditActions.condition.update(response.object));
+    dispatch(EditActions.decision.update(response.object));
   }
 };
 
-const saveConditionThunk = (condition: ConditionTO): AppThunk => (dispatch) => {
-  const response: DataAccessResponse<ConditionTO> = DataAccess.saveCondition(condition);
+const saveDecisionThunk = (decision: DecisionTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<DecisionTO> = DataAccess.saveDecision(decision);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
 };
 
-const deleteConditionThunk = (condition: ConditionTO, sequenceCTO?: SequenceCTO): AppThunk => (dispatch) => {
+const deleteDecisionThunk = (decision: DecisionTO, sequenceCTO?: SequenceCTO): AppThunk => (dispatch) => {
   // update forent gotos.
   if (sequenceCTO) {
     const copySequence: SequenceCTO = Carv2Util.deepCopy(sequenceCTO);
     // update steps
     copySequence.sequenceStepCTOs.forEach((step) => {
-      if (step.squenceStepTO.goto.type === GoToTypes.COND && step.squenceStepTO.goto.id === condition.id) {
+      if (step.squenceStepTO.goto.type === GoToTypes.COND && step.squenceStepTO.goto.id === decision.id) {
         step.squenceStepTO.goto = { type: GoToTypes.ERROR };
         dispatch(EditActions.step.save(step));
       }
     });
-    // update conditions
-    copySequence.conditions.forEach((cond) => {
-      if (cond.ifGoTo.type === GoToTypes.COND && cond.ifGoTo.id === condition.id) {
+    // update decisions
+    copySequence.decisions.forEach((cond) => {
+      if (cond.ifGoTo.type === GoToTypes.COND && cond.ifGoTo.id === decision.id) {
         cond.ifGoTo = { type: GoToTypes.ERROR };
-        dispatch(EditActions.condition.save(cond));
+        dispatch(EditActions.decision.save(cond));
       }
-      if (cond.elseGoTo.type === GoToTypes.COND && cond.elseGoTo.id === condition.id) {
+      if (cond.elseGoTo.type === GoToTypes.COND && cond.elseGoTo.id === decision.id) {
         cond.elseGoTo = { type: GoToTypes.ERROR };
-        dispatch(EditActions.condition.save(cond));
+        dispatch(EditActions.decision.save(cond));
       }
     });
   }
-  // delete condition.
-  const response: DataAccessResponse<ConditionTO> = DataAccess.deleteConditon(condition);
+  // delete decision.
+  const response: DataAccessResponse<DecisionTO> = DataAccess.deleteDecision(decision);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
@@ -745,9 +744,9 @@ export const editSelectors = {
       ? (state.edit.objectToEdit as ActionTO)
       : null;
   },
-  conditionToEdit: (state: RootState): ConditionTO | null => {
-    return state.edit.mode === Mode.EDIT_SEQUENCE_CONDITION && (state.edit.objectToEdit as ConditionTO).elseGoTo
-      ? (state.edit.objectToEdit as ConditionTO)
+  decisionToEdit: (state: RootState): DecisionTO | null => {
+    return state.edit.mode === Mode.EDIT_SEQUENCE_DECISION && (state.edit.objectToEdit as DecisionTO).elseGoTo
+      ? (state.edit.objectToEdit as DecisionTO)
       : null;
   },
   instanceIndexToEdit: (state: RootState): number | null => {
@@ -768,7 +767,7 @@ export const EditActions = {
     editDataSetup: setModeToEditDataSetup,
     editInitData: setModeToEditInitData,
     editStep: setModeToEditStep,
-    editCondition: setModeToEditCondition,
+    editDecision: setModeToEditDecision,
     editAction: setModeToEditAction,
     edit: setModeToEdit,
     view: setModeToView,
@@ -831,10 +830,10 @@ export const EditActions = {
     save: saveActionThunk,
     create: createActionThunk,
   },
-  condition: {
-    create: createConditionThunk,
-    update: EditSlice.actions.setConditionToEdit,
-    save: saveConditionThunk,
-    delete: deleteConditionThunk,
+  decision: {
+    create: createDecisionThunk,
+    update: EditSlice.actions.setDecisionToEdit,
+    save: saveDecisionThunk,
+    delete: deleteDecisionThunk,
   },
 };
