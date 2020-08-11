@@ -304,7 +304,6 @@ const useControllPanelEditSequenceStepViewModel = () => {
     }
   };
 
-  //TODO: das hat hier nicht verloren. Das ist Aufgabe vom Slice. Außerdem können wir auf keinen Fall jeden Step und jede Decision einzeln ans Backend schicken. DAs muss in einer bzw zwie Calls passieren
   const setRoot = () => {
     if (!isNullOrUndefined(stepToEdit) && !isNullOrUndefined(selectedSequence)) {
       dispatch(EditActions.sequence.setRoot(stepToEdit.squenceStepTO.sequenceFk, stepToEdit.squenceStepTO.id, false));
