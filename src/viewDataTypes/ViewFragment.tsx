@@ -7,14 +7,14 @@ export interface ViewFragmentProps {
   name: string;
 }
 
-const getColorForComponentDataState = (state: ViewFragmentState) => {
+const getClassnameForViewFragmentState = (state: ViewFragmentState) => {
   return "carv2ComponentData" + state;
 };
 
 export const createViewFragment = (componentDataFragmentProps: ViewFragmentProps, key: number) => {
   return (
     <div className="viewFragment">
-      <div className={getColorForComponentDataState(componentDataFragmentProps.state)} key={key}>
+      <div className={getClassnameForViewFragmentState(componentDataFragmentProps.state)} key={key}>
         {componentDataFragmentProps.name}
       </div>
     </div>
