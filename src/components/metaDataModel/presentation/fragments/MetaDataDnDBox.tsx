@@ -30,7 +30,6 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
     dataRelations,
     dataRelationToEdit,
     componentDatas,
-    onClick,
     fullScreen,
   } = props;
 
