@@ -1,14 +1,11 @@
-import React, { FunctionComponent, useEffect } from "react";
+import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ComponentCTO } from "../../../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
-import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { DataRelationTO } from "../../../../../dataAccess/access/to/DataRelationTO";
 import { DataSetupTO } from "../../../../../dataAccess/access/to/DataSetupTO";
 import { GroupTO } from "../../../../../dataAccess/access/to/GroupTO";
 import { EditActions, editSelectors, Mode } from "../../../../../slices/EditSlice";
-import { sequenceModelSelectors } from "../../../../../slices/SequenceModelSlice";
 import { ControllPanelEditAction } from "./fragments/ControllPanelEditAction";
 import { ControllPanelEditComponent } from "./fragments/ControllPanelEditComponent";
 import { ControllPanelEditCondition } from "./fragments/ControllPanelEditCondition";
@@ -82,19 +79,6 @@ export const ControllPanelEditController: FunctionComponent<ControllPanelEditCon
 const useControllPanelEditViewModel = () => {
   const dispatch = useDispatch();
   const mode: Mode = useSelector(editSelectors.mode);
-  const currentStep: number | null = useSelector(sequenceModelSelectors.selectCurrentStepIndex);
-  const sequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
-
-  useEffect(() => {
-    if (currentStep && sequence) {
-      const stepToEdit: SequenceStepCTO | undefined = sequence.sequenceStepCTOs.find(
-        (step) => step.squenceStepTO.id === currentStep
-      );
-      if (stepToEdit) {
-        dispatch(EditActions.setMode.editStep(stepToEdit));
-      }
-    }
-  });
 
   return {
     mode,

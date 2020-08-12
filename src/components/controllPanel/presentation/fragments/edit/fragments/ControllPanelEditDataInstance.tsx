@@ -88,14 +88,21 @@ const useControllPanelEditDataInstanceViewModel = () => {
   const updateData = () => {
     if (!isNullOrUndefined(dataToEdit)) {
       let copyDataToEdit: DataCTO = Carv2Util.deepCopy(dataToEdit);
-      dispatch(EditActions.data.save(copyDataToEdit));
+      if (copyDataToEdit.data.inst.find((instance) => instance.id === instanceId)!.name !== "") {
+        dispatch(EditActions.data.save(copyDataToEdit));
+      }
     }
   };
 
   const saveDataInstace = () => {
     if (!isNullOrUndefined(dataToEdit)) {
-      dispatch(EditActions.data.save(dataToEdit!));
-      dispatch(EditActions.setMode.editData(dataToEdit!));
+      if (dataToEdit.data.inst.find((instance) => instance.id === instanceId)!.name !== "") {
+        dispatch(EditActions.data.save(dataToEdit!));
+        dispatch(EditActions.setMode.editData(dataToEdit!));
+      } else {
+        deleteDataInstance();
+        dispatch(EditActions.setMode.editData(dataToEdit!));
+      }
     }
   };
 
@@ -123,7 +130,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
   };
 
   return {
-    label: "EDIT DATA - EDIT INSTANCE",
+    label: "EDIT * DATA * INSTANCE",
     name: getName(),
     changeName,
     saveDataInstace,
