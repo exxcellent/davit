@@ -41,6 +41,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
     createGoToDecision,
     setGoToTypeDecision,
     editOrAddCondition,
+    decId,
   } = useControllPanelEditConditionViewModel();
 
   const decisionName = (
@@ -108,6 +109,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
               <DecisionDropDown
                 onSelect={(cond) => setGoToTypeDecision(true, cond)}
                 value={ifGoTo?.type === GoToTypes.COND ? ifGoTo.id : 1}
+                self={decId}
               />
             </OptionField>
           )}
@@ -136,6 +138,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
               <DecisionDropDown
                 onSelect={(cond) => setGoToTypeDecision(false, cond)}
                 value={elseGoTo?.type === GoToTypes.COND ? elseGoTo.id : 1}
+                self={decId}
               />
             </OptionField>
           )}
@@ -298,5 +301,6 @@ const useControllPanelEditConditionViewModel = () => {
     isRoot: decisionToEdit?.root ? decisionToEdit.root : false,
     key,
     editOrAddCondition,
+    decId: decisionToEdit?.id,
   };
 };

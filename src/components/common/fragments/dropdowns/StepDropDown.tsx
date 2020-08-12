@@ -5,6 +5,7 @@ import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
 import { sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
+import { Carv2Util } from "../../../../utils/Carv2Util";
 
 interface StepDropDownButtonProps extends DropdownProps {
   onSelect: (step: SequenceStepCTO | undefined) => void;
@@ -15,6 +16,7 @@ interface StepDropDownProps extends DropdownProps {
   onSelect: (step: SequenceStepCTO | undefined) => void;
   placeholder?: string;
   value?: number;
+  self?: number;
 }
 
 export const StepDropDownButton: FunctionComponent<StepDropDownButtonProps> = (props) => {
@@ -23,7 +25,7 @@ export const StepDropDownButton: FunctionComponent<StepDropDownButtonProps> = (p
 
   return (
     <Dropdown
-      options={stepOptions(sequence)}
+      options={stepOptions()}
       icon={isEmpty ? "" : icon}
       onChange={(event, data) => onSelect(selectSequenceStep(Number(data.value), sequence))}
       className="button icon"
@@ -37,12 +39,12 @@ export const StepDropDownButton: FunctionComponent<StepDropDownButtonProps> = (p
 };
 
 export const StepDropDown: FunctionComponent<StepDropDownProps> = (props) => {
-  const { onSelect, placeholder, value } = props;
-  const { sequence, stepOptions, selectSequenceStep, isEmpty } = useStepDropDownViewModel();
+  const { onSelect, placeholder, value, self } = props;
+  const { sequence, stepOptions, selectSequenceStep, isEmpty } = useStepDropDownViewModel(self);
 
   return (
     <Dropdown
-      options={stepOptions(sequence)}
+      options={stepOptions()}
       selection
       selectOnBlur={false}
       placeholder={placeholder || "Select step ..."}
@@ -54,7 +56,7 @@ export const StepDropDown: FunctionComponent<StepDropDownProps> = (props) => {
   );
 };
 
-const useStepDropDownViewModel = () => {
+const useStepDropDownViewModel = (self?: number) => {
   const sequenceToEdit: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
   const [isEmpty, setIsEmpty] = useState<boolean>(true);
 
@@ -72,9 +74,13 @@ const useStepDropDownViewModel = () => {
     };
   };
 
-  const stepOptions = (sequence: SequenceCTO | null): DropdownItemProps[] => {
-    if (!isNullOrUndefined(sequence)) {
-      return sequence.sequenceStepCTOs.map(stepToOption);
+  const stepOptions = (): DropdownItemProps[] => {
+    if (!isNullOrUndefined(sequenceToEdit)) {
+      let copySteps: SequenceStepCTO[] = Carv2Util.deepCopy(sequenceToEdit.sequenceStepCTOs);
+      if (self) {
+        copySteps = copySteps.filter((step) => step.squenceStepTO.id !== self);
+      }
+      return copySteps.map(stepToOption);
     }
     return [];
   };

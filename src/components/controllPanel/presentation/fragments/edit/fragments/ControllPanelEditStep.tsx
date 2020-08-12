@@ -47,6 +47,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
     setRoot,
     isRoot,
     key,
+    stepId,
   } = useControllPanelEditSequenceStepViewModel();
 
   const actionDropdown = (
@@ -145,7 +146,11 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
           {goTo!.type === GoToTypes.STEP && (
             <OptionField label="Create or Select next step">
               <Carv2ButtonIcon icon="add" onClick={createGoToStep} />
-              <StepDropDown onSelect={setGoToTypeStep} value={goTo?.type === GoToTypes.STEP ? goTo.id : 1} />
+              <StepDropDown
+                onSelect={setGoToTypeStep}
+                value={goTo?.type === GoToTypes.STEP ? goTo.id : 1}
+                self={stepId}
+              />
             </OptionField>
           )}
           {goTo!.type === GoToTypes.COND && (
@@ -335,5 +340,6 @@ const useControllPanelEditSequenceStepViewModel = () => {
     setRoot,
     isRoot: stepToEdit?.squenceStepTO.root ? stepToEdit?.squenceStepTO.root : false,
     key,
+    stepId: stepToEdit?.squenceStepTO.id,
   };
 };

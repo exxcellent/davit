@@ -5,6 +5,7 @@ import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
 import { DecisionTO } from "../../../../dataAccess/access/to/DecisionTO";
 import { sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
+import { Carv2Util } from "../../../../utils/Carv2Util";
 
 interface DecisionDropDownButtonProps extends DropdownProps {
   onSelect: (decision: DecisionTO | undefined) => void;
@@ -15,6 +16,7 @@ interface DecisionDropDownProps extends DropdownProps {
   onSelect: (decision: DecisionTO | undefined) => void;
   placeholder?: string;
   value?: number;
+  self?: number;
 }
 
 export const DecisionDropDownButton: FunctionComponent<DecisionDropDownButtonProps> = (props) => {
@@ -23,7 +25,7 @@ export const DecisionDropDownButton: FunctionComponent<DecisionDropDownButtonPro
 
   return (
     <Dropdown
-      options={decisionOptions(sequenceToEdit)}
+      options={decisionOptions()}
       icon={isEmpty ? "" : icon}
       onChange={(event, data) => onSelect(selectDecision(Number(data.value), sequenceToEdit))}
       className="button icon"
@@ -37,14 +39,12 @@ export const DecisionDropDownButton: FunctionComponent<DecisionDropDownButtonPro
 };
 
 export const DecisionDropDown: FunctionComponent<DecisionDropDownProps> = (props) => {
-  const { onSelect, placeholder, value } = props;
-  const { sequenceToEdit, decisionOptions, selectDecision, isEmpty } = useDecisionDropDownViewModel();
-
-  console.info("value: ", value);
+  const { onSelect, placeholder, value, self } = props;
+  const { sequenceToEdit, decisionOptions, selectDecision, isEmpty } = useDecisionDropDownViewModel(self);
 
   return (
     <Dropdown
-      options={decisionOptions(sequenceToEdit)}
+      options={decisionOptions()}
       selection
       selectOnBlur={false}
       placeholder={placeholder || "Select decision ..."}
@@ -56,7 +56,7 @@ export const DecisionDropDown: FunctionComponent<DecisionDropDownProps> = (props
   );
 };
 
-const useDecisionDropDownViewModel = () => {
+const useDecisionDropDownViewModel = (self?: number) => {
   const sequenceToEdit: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
   const [isEmpty, setIsEmpty] = useState<boolean>(true);
 
@@ -74,9 +74,13 @@ const useDecisionDropDownViewModel = () => {
     };
   };
 
-  const decisionOptions = (sequence: SequenceCTO | null): DropdownItemProps[] => {
-    if (!isNullOrUndefined(sequence)) {
-      return sequence.decisions.map(decisionToOption);
+  const decisionOptions = (): DropdownItemProps[] => {
+    if (!isNullOrUndefined(sequenceToEdit)) {
+      let copyDec: DecisionTO[] = Carv2Util.deepCopy(sequenceToEdit.decisions);
+      if (self) {
+        copyDec = copyDec.filter((dec) => dec.id !== self);
+      }
+      return copyDec.map(decisionToOption);
     }
     return [];
   };
