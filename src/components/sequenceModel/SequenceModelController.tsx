@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
-import { ConditionTO } from "../../dataAccess/access/to/ConditionTO";
+import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
 import { GoTo, GoToTypes, Terminal } from "../../dataAccess/access/types/GoToType";
 import { handleError } from "../../slices/GlobalSlice";
 import { CalculatedStep, sequenceModelSelectors } from "../../slices/SequenceModelSlice";
@@ -85,7 +85,7 @@ interface NodeModel {
 }
 
 interface Node {
-  value: SequenceStepCTO | ConditionTO | Terminal;
+  value: SequenceStepCTO | DecisionTO | Terminal;
   isLoop: boolean;
   type: GoToTypes;
 }
@@ -107,7 +107,7 @@ const useFlowChartViewModel = () => {
       const rootStep: SequenceStepCTO | undefined = sequence.sequenceStepCTOs.find(
         (step) => step.squenceStepTO.root === true
       );
-      const rootCond: ConditionTO | undefined = sequence.conditions.find((cond) => cond.root === true);
+      const rootCond: DecisionTO | undefined = sequence.decisions.find((cond) => cond.root === true);
       if (!rootStep && !rootCond) {
         handleError("No Root element found in Sequence!");
       }
@@ -147,7 +147,7 @@ const useFlowChartViewModel = () => {
           }
           break;
         case GoToTypes.COND:
-          let cond: ConditionTO | null = sequence.conditions.find((cond) => cond.id === goto.id) || null;
+          let cond: DecisionTO | null = sequence.decisions.find((cond) => cond.id === goto.id) || null;
           if (cond) {
             let prefix: string = "_COND_" + cond.id;
             nodeModel.id = parentId + prefix;
@@ -185,9 +185,9 @@ const useFlowChartViewModel = () => {
         break;
       case GoToTypes.COND:
         parentIds.push(nodeModel.id);
-        nodeModel.label = (node.value as ConditionTO).name;
-        nodeModel.childs.push(setGoToAsNode((node.value as ConditionTO).ifGoTo, nodeModel.id, parentIds));
-        nodeModel.childs.push(setGoToAsNode((node.value as ConditionTO).elseGoTo, nodeModel.id, parentIds));
+        nodeModel.label = (node.value as DecisionTO).name;
+        nodeModel.childs.push(setGoToAsNode((node.value as DecisionTO).ifGoTo, nodeModel.id, parentIds));
+        nodeModel.childs.push(setGoToAsNode((node.value as DecisionTO).elseGoTo, nodeModel.id, parentIds));
         break;
     }
     return nodeModel;

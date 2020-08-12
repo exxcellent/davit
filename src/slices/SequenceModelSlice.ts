@@ -6,7 +6,7 @@ import { GeometricalDataCTO } from "../dataAccess/access/cto/GeometraicalDataCTO
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
-import { ConditionTO } from "../dataAccess/access/to/ConditionTO";
+import { DecisionTO } from "../dataAccess/access/to/DecisionTO";
 import { GoTo, GoToTypes, Terminal } from "../dataAccess/access/types/GoToType";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
@@ -161,17 +161,17 @@ const calculateSequence = (
     // init step.
     calcSequence.steps.push({ stepId: "", componentDatas: componenentDatas, stepFk: 0, errors: [] });
 
-    const root: SequenceStepCTO | ConditionTO | undefined = getRoot(sequence);
+    const root: SequenceStepCTO | DecisionTO | undefined = getRoot(sequence);
 
     if (root !== undefined) {
-      let stepOrCondition: SequenceStepCTO | ConditionTO | Terminal = root;
+      let stepOrDecision: SequenceStepCTO | DecisionTO | Terminal = root;
 
       let isRoot: boolean = true;
       let stepId: string = "";
 
-      while ((stepOrCondition as SequenceStepCTO).squenceStepTO || (stepOrCondition as ConditionTO).elseGoTo) {
-        if ((stepOrCondition as SequenceStepCTO).squenceStepTO) {
-          const step: SequenceStepCTO = stepOrCondition as SequenceStepCTO;
+      while ((stepOrDecision as SequenceStepCTO).squenceStepTO || (stepOrDecision as DecisionTO).elseGoTo) {
+        if ((stepOrDecision as SequenceStepCTO).squenceStepTO) {
+          const step: SequenceStepCTO = stepOrDecision as SequenceStepCTO;
           const result: SequenceActionResult = calculateStep(step, componenentDatas);
 
           // loop detection
@@ -205,56 +205,56 @@ const calculateSequence = (
             return { sequence: calcSequence, loopStartingStepIndex: loopStartingStep, stepIds: stepIds };
           }
           // set next object.
-          stepOrCondition = getNext((stepOrCondition as SequenceStepCTO).squenceStepTO.goto, sequence);
+          stepOrDecision = getNext((stepOrDecision as SequenceStepCTO).squenceStepTO.goto, sequence);
           componenentDatas = result.componenDatas;
         }
 
-        if ((stepOrCondition as ConditionTO).elseGoTo) {
-          const condition: ConditionTO = stepOrCondition as ConditionTO;
-          const goTo: GoTo = SequenceActionReducer.executeConditionCheck(condition, componenentDatas);
-          stepOrCondition = getNext(goTo, sequence);
+        if ((stepOrDecision as DecisionTO).elseGoTo) {
+          const decision: DecisionTO = stepOrDecision as DecisionTO;
+          const goTo: GoTo = SequenceActionReducer.executeDecisionCheck(decision, componenentDatas);
+          stepOrDecision = getNext(goTo, sequence);
 
           // STEP ID
           if (isRoot) {
             stepId = "root";
             isRoot = false;
           } else {
-            stepId = stepId + "_COND_" + condition.id;
+            stepId = stepId + "_COND_" + decision.id;
             stepIds.push(stepId);
           }
         }
       }
-      if ((stepOrCondition as Terminal).type === GoToTypes.FIN) {
-        calcSequence.terminal = stepOrCondition as Terminal;
+      if ((stepOrDecision as Terminal).type === GoToTypes.FIN) {
+        calcSequence.terminal = stepOrDecision as Terminal;
       }
-      stepIds.push(stepId + "_" + (stepOrCondition as Terminal).type);
+      stepIds.push(stepId + "_" + (stepOrDecision as Terminal).type);
     }
   }
   return { sequence: calcSequence, stepIds: stepIds };
 };
 
-const getNext = (goTo: GoTo, sequence: SequenceCTO): SequenceStepCTO | ConditionTO | Terminal => {
-  let nextStepOrConditionOrTerminal: SequenceStepCTO | ConditionTO | Terminal = { type: GoToTypes.ERROR };
+const getNext = (goTo: GoTo, sequence: SequenceCTO): SequenceStepCTO | DecisionTO | Terminal => {
+  let nextStepOrDecisionOrTerminal: SequenceStepCTO | DecisionTO | Terminal = { type: GoToTypes.ERROR };
   switch (goTo.type) {
     case GoToTypes.STEP:
-      nextStepOrConditionOrTerminal = getStepFromSequence(goTo.id, sequence) || { type: GoToTypes.ERROR };
+      nextStepOrDecisionOrTerminal = getStepFromSequence(goTo.id, sequence) || { type: GoToTypes.ERROR };
       break;
     case GoToTypes.COND:
-      nextStepOrConditionOrTerminal = getConditionFromSequence(goTo.id, sequence) || { type: GoToTypes.ERROR };
+      nextStepOrDecisionOrTerminal = getDecisionFromSequence(goTo.id, sequence) || { type: GoToTypes.ERROR };
       break;
     case GoToTypes.FIN:
-      nextStepOrConditionOrTerminal = { type: GoToTypes.FIN };
+      nextStepOrDecisionOrTerminal = { type: GoToTypes.FIN };
   }
-  return nextStepOrConditionOrTerminal;
+  return nextStepOrDecisionOrTerminal;
 };
 
 const calculateStep = (step: SequenceStepCTO, componentDatas: ComponentData[]): SequenceActionResult => {
   return SequenceActionReducer.executeActionsOnComponentDatas(step.actions, componentDatas);
 };
 
-const getRoot = (sequence: SequenceCTO): SequenceStepCTO | ConditionTO | undefined => {
+const getRoot = (sequence: SequenceCTO): SequenceStepCTO | DecisionTO | undefined => {
   const step: SequenceStepCTO | undefined = sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.root);
-  const cond: ConditionTO | undefined = sequence.conditions.find((cond) => cond.root);
+  const cond: DecisionTO | undefined = sequence.decisions.find((cond) => cond.root);
   return step ? step : cond ? cond : undefined;
 };
 
@@ -262,8 +262,8 @@ const getStepFromSequence = (stepId: number, sequence: SequenceCTO): SequenceSte
   return sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.id === stepId);
 };
 
-const getConditionFromSequence = (conditionId: number, sequence: SequenceCTO): ConditionTO | undefined => {
-  return sequence.conditions.find((cond) => cond.id === conditionId);
+const getDecisionFromSequence = (id: number, sequence: SequenceCTO): DecisionTO | undefined => {
+  return sequence.decisions.find((cond) => cond.id === id);
 };
 
 const getDataSetupCTOFromBackend = (dataSetupId: number): AppThunk => (dispatch) => {
