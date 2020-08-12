@@ -29,7 +29,7 @@ export const ActionDropDown: FunctionComponent<ActionDropDownProps> = (props) =>
       floating
       compact
       className="button icon"
-      icon={icon}
+      icon={isEmpty ? "" : icon}
       trigger={<React.Fragment />}
       disabled={isEmpty}
     />

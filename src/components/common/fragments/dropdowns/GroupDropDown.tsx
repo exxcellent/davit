@@ -46,7 +46,7 @@ export const GroupDropDownButton: FunctionComponent<GroupDropDownPropsButton> = 
       options={groups.map(groupToOption).sort((a, b) => {
         return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
       })}
-      icon={icon}
+      icon={isEmpty ? "" : icon}
       selectOnBlur={false}
       onChange={(event, data) => onSelect(selectGroup(Number(data.value), groups))}
       className="button icon"

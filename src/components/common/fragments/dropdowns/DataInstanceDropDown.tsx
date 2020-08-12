@@ -41,7 +41,7 @@ export const DataInstanceDropDownButton: FunctionComponent<DataInstanceDropDownB
   return (
     <Dropdown
       options={dataInstacesToOption(instances)}
-      icon={icon}
+      icon={instances.length > 0 ? icon : ""}
       onChange={(event, data) => onSelect(selectDataInstance(Number(data.value)))}
       className="button icon"
       inverted="true"

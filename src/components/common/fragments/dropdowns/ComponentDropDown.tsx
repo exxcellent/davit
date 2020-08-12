@@ -45,7 +45,7 @@ export const ComponentDropDownButton: FunctionComponent<ComponentDropDownButtonP
       options={components.map(componentToOption).sort((a, b) => {
         return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
       })}
-      icon={icon}
+      icon={isEmpty ? "" : icon}
       selectOnBlur={false}
       onChange={(event, data) => onSelect(selectComponent(Number(data.value), components))}
       className="button icon"

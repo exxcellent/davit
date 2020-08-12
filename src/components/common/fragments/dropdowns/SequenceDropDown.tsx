@@ -43,7 +43,7 @@ export const SequenceDropDownButton: FunctionComponent<SequenceDropDownPropsButt
   return (
     <Dropdown
       options={sequences.map(sequenceToOption)}
-      icon={icon}
+      icon={isEmpty ? "" : icon}
       onChange={(event, sequence) => onSelect(selectSequence(Number(sequence.value), sequences))}
       className="button icon"
       inverted="true"

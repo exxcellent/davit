@@ -52,7 +52,7 @@ export const DataDropDownButton: FunctionComponent<DataAndInstanceDropDownButton
         .sort((a, b) => {
           return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
         })}
-      icon={icon}
+      icon={isEmpty ? "" : icon}
       onChange={(event, data) => onSelect(selectData(Number(data.value), datas))}
       className="button icon"
       inverted="true"

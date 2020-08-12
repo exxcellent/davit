@@ -46,7 +46,7 @@ export const DataSetupDropDownButton: FunctionComponent<DataSetupDropDownPropsBu
       options={dataSetups.map(dataSetupToOption).sort((a, b) => {
         return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
       })}
-      icon={icon}
+      icon={isEmpty ? "" : icon}
       selectOnBlur={false}
       onChange={(event, data) => onSelect(selectDataSetup(Number(data.value), dataSetups))}
       className="button icon"

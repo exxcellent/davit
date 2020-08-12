@@ -24,7 +24,7 @@ export const StepDropDownButton: FunctionComponent<StepDropDownButtonProps> = (p
   return (
     <Dropdown
       options={stepOptions(sequence)}
-      icon={icon}
+      icon={isEmpty ? "" : icon}
       onChange={(event, data) => onSelect(selectSequenceStep(Number(data.value), sequence))}
       className="button icon"
       floating

@@ -40,7 +40,7 @@ export const RelationDropDownButton: FunctionComponent<RelationDropDownPropsButt
   return (
     <Dropdown
       options={relations.map(relationToOption)}
-      icon={icon}
+      icon={isEmpty ? "" : icon}
       onChange={(event, data) => onSelect(selectDataRelation(Number(data.value), relations))}
       className="button icon"
       inverted="true"

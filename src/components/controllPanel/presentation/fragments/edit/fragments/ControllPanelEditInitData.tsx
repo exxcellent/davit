@@ -1,6 +1,8 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { isNullOrUndefined } from "util";
+import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
+import { DataInstanceTO, DATA_INSTANCE_ID_FACTOR } from "../../../../../../dataAccess/access/to/DataTO";
 import { InitDataTO } from "../../../../../../dataAccess/access/to/InitDataTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
@@ -8,7 +10,7 @@ import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
-import { DataDropDown } from "../../../../../common/fragments/dropdowns/DataDropDown";
+import { DataAndInstanceDropDown } from "../../../../../common/fragments/dropdowns/DataAndInstanceDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { OptionField } from "../common/OptionField";
 
@@ -22,7 +24,7 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
     data,
     component,
     setComponentId,
-    setDataId,
+    setData,
     createAnother,
     key,
   } = useControllPanelEditDataSetupViewModel();
@@ -41,7 +43,7 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
       </div>
       <div className="columnDivider controllPanelEditChild">
         <OptionField label="Select Data which will be added">
-          <DataDropDown onSelect={(data) => (data ? setDataId(data.data.id) : setDataId(-1))} value={data} />
+          <DataAndInstanceDropDown onSelect={setData} value={data} />
         </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild" style={{ paddingLeft: "10px", paddingRight: "10px" }}>
@@ -106,10 +108,14 @@ const useControllPanelEditDataSetupViewModel = () => {
     }
   };
 
-  const setDataId = (id: number) => {
-    if (!isNullOrUndefined(initDataToEdit)) {
+  const setData = (values: { data?: DataCTO; instance?: DataInstanceTO } | undefined): void => {
+    if (!isNullOrUndefined(values?.data)) {
       const copyInitDataToEdit: InitDataTO = Carv2Util.deepCopy(initDataToEdit);
-      copyInitDataToEdit.dataFk = id;
+      if (values?.instance) {
+        copyInitDataToEdit.dataFk = values.data.data.id * DATA_INSTANCE_ID_FACTOR + values.instance.id;
+      } else {
+        copyInitDataToEdit.dataFk = values!.data.data.id;
+      }
       dispatch(EditActions.initData.update(copyInitDataToEdit));
     }
   };
@@ -129,13 +135,13 @@ const useControllPanelEditDataSetupViewModel = () => {
   };
 
   return {
-    label: "EDIT DATA SETUP - INIT DATA",
+    label: "EDIT DATA SETUP * INIT DATA",
     data: initDataToEdit?.dataFk,
     component: initDataToEdit?.componentFk,
     deleteInitData,
     saveInitData,
     setComponentId,
-    setDataId,
+    setData,
     createAnother,
     key,
   };
