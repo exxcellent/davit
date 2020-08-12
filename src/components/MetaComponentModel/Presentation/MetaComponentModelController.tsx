@@ -221,9 +221,30 @@ const useViewModel = () => {
     };
   };
 
+  const getArrows = (): Arrows[] => {
+    let ar: Arrows[] = [];
+    if (stepToEdit) {
+      const sourceComp: ComponentCTO | undefined = components.find(
+        (comp) => comp.component.id === stepToEdit.squenceStepTO.sourceComponentFk
+      );
+      const targetComp: ComponentCTO | undefined = components.find(
+        (comp) => comp.component.id === stepToEdit.squenceStepTO.targetComponentFk
+      );
+      if (sourceComp && targetComp) {
+        ar.push({
+          sourceGeometricalData: sourceComp?.geometricalData,
+          targetGeometricalData: targetComp?.geometricalData,
+        });
+      }
+    } else {
+      ar = arrows;
+    }
+    return ar;
+  };
+
   return {
     onPositionUpdate,
-    arrows,
+    arrows: getArrows(),
     toDnDElements: toDnDElements(components),
   };
 };
