@@ -31,7 +31,7 @@ export const DataSetupDropDown: FunctionComponent<DataSetupDropDownProps> = (pro
       onChange={(event, data) => onSelect(selectDataSetup(Number(data.value), dataSetups))}
       scrolling
       clearable={true}
-      value={value}
+      value={value === -1 ? undefined : value}
     />
   );
 };

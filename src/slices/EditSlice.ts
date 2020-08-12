@@ -177,8 +177,6 @@ const setModeToView = (): AppThunk => (dispatch) => {
 };
 
 const setModeToEdit = (): AppThunk => (dispatch) => {
-  // TODO: dosn't fells right to do this here!
-  dispatch(SequenceModelActions.resetCurrentSequence);
   dispatch(EditSlice.actions.clearObjectToEdit());
   dispatch(setModeWithStorage(Mode.EDIT));
 };

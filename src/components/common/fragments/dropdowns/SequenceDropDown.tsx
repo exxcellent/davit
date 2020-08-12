@@ -30,7 +30,7 @@ export const SequenceDropDown: FunctionComponent<SequenceDropDownProps> = (props
       scrolling
       clearable
       selection
-      value={value}
+      value={value === -1 ? undefined : value}
     />
   );
 };
