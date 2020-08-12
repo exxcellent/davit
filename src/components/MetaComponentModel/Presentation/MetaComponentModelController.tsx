@@ -8,7 +8,6 @@ import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO"
 import { ActionTO } from "../../../dataAccess/access/to/ActionTO";
 import { DataTO, DATA_INSTANCE_ID_FACTOR, getDataAndInstanceIds } from "../../../dataAccess/access/to/DataTO";
 import { DecisionTO } from "../../../dataAccess/access/to/DecisionTO";
-import { GroupTO } from "../../../dataAccess/access/to/GroupTO";
 import { InitDataTO } from "../../../dataAccess/access/to/InitDataTO";
 import { PositionTO } from "../../../dataAccess/access/to/PositionTO";
 import { ActionType } from "../../../dataAccess/access/types/ActionType";
