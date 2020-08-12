@@ -1,25 +1,15 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import React, { FunctionComponent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Dropdown, Input } from "semantic-ui-react";
+import { Dropdown } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
-import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
-import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
-import { ConditionTO } from "../../../../../../dataAccess/access/to/ConditionTO";
-import { GoTo, GoToTypes } from "../../../../../../dataAccess/access/types/GoToType";
+import { DecisionTO } from "../../../../../../dataAccess/access/to/DecisionTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
-import { SequenceModelActions, sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
-import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
+import { Carv2ButtonIcon } from "../../../../../common/fragments/buttons/Carv2Button";
 import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
-import { ConditionDropDown } from "../../../../../common/fragments/dropdowns/ConditionDropDown";
-import { GoToOptionDropDown } from "../../../../../common/fragments/dropdowns/GoToOptionDropDown";
 import { MultiselectDataDropDown } from "../../../../../common/fragments/dropdowns/MultiselectDataDropDown";
-import { StepDropDown } from "../../../../../common/fragments/dropdowns/StepDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditConditionProps {}
@@ -27,383 +17,123 @@ export interface ControllPanelEditConditionProps {}
 export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditConditionProps> = (props) => {
   const {
     label,
-    name,
-    changeName,
-    saveCondition,
-    textInput,
-    setComponent,
-    updateCondition,
-    deleteCondition,
-    compId,
-    setData,
-    datas,
+    setModeEditDecision,
+    componentFk,
+    setComponentFk,
+    getDecision,
     setHas,
-    handleType,
-    ifGoTo,
-    elseGoTo,
-    setGoToTypeStep,
-    setGoToTypeCondition,
-    createGoToStep,
-    createGoToCondition,
-    setRoot,
-    isRoot,
-    getCondition,
-    key,
+    setData,
+    dataFks,
   } = useControllPanelEditConditionViewModel();
 
-  const conditionName = (
-    <OptionField label="Condition - name">
-      <Carv2LabelTextfield
-        label="Name:"
-        placeholder="Condition Name ..."
-        onChange={(event: any) => changeName(event.target.value)}
-        value={name}
-        autoFocus
-        ref={textInput}
-        onBlur={() => updateCondition()}
-      />
-    </OptionField>
-  );
-
   const hasDropDown = (
-    <OptionField label="Codition - true / false">
+    <OptionField label="Codition">
       <Dropdown
         options={[
-          { key: 1, value: 1, text: "true" },
-          { key: 2, value: 2, text: "false" },
+          { key: 1, value: 1, text: "has" },
+          { key: 2, value: 2, text: "has not" },
         ]}
         compact
         selection
         selectOnBlur={false}
         onChange={(event, data) => setHas(data.value as number)}
-        value={getCondition()}
+        value={getDecision()}
       />
     </OptionField>
   );
 
-  const dropDowns = (
-    <div className="optionFieldSpacer columnDivider">
-      <div style={{ display: "flex" }}>
-        <OptionField label="Select a component">
-          <ComponentDropDown
-            onSelect={(comp) => {
-              setComponent(comp);
-              updateCondition();
-            }}
-            value={compId}
-            compact
-          />
+  return (
+    <ControllPanelEditSub label={label}>
+      <div className="controllPanelEditChild">
+        <OptionField label="Select Component">
+          <ComponentDropDown value={componentFk} onSelect={(comp) => setComponentFk(comp?.component.id || -1)} />
         </OptionField>
+      </div>
+      <div className="columnDivider optionFieldSpacer">{hasDropDown}</div>
+      <div className="columnDivider optionFieldSpacer">
         <OptionField label="Select data for component">
           <MultiselectDataDropDown
             onSelect={(data) => {
               setData(data);
-              updateCondition();
             }}
-            selected={datas}
+            selected={dataFks || []}
           />
         </OptionField>
       </div>
-    </div>
-  );
-
-  const menuButtons = (
-    <div className="columnDivider controllPanelEditChild">
-      <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <div className="columnDivider optionFieldSpacer">
         <OptionField label="Navigation">
-          <Carv2ButtonIcon onClick={saveCondition} icon="reply" />
+          <Carv2ButtonIcon onClick={setModeEditDecision} icon="reply" />
         </OptionField>
       </div>
-      <OptionField label="Sequence - Options">
-        <Carv2ButtonLabel onClick={setRoot} label={isRoot ? "Root" : "Set as Root"} disable={isRoot} />
-        <div>
-          <Carv2DeleteButton onClick={deleteCondition} />
-        </div>
-      </OptionField>
-    </div>
-  );
-
-  return (
-    <ControllPanelEditSub label={label} key={key}>
-      <div className="controllPanelEditChild">
-        {conditionName}
-        {hasDropDown}
-      </div>
-      {dropDowns}
-
-      <div className="columnDivider optionFieldSpacer">
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <OptionField>
-            <OptionField label="Select type of the next element">
-              <GoToOptionDropDown
-                onSelect={(gt) => handleType(true, gt)}
-                value={ifGoTo ? ifGoTo.type : GoToTypes.ERROR}
-              />
-            </OptionField>
-
-            {ifGoTo!.type === GoToTypes.STEP && (
-              <OptionField label="Create or Select next step">
-                <Carv2ButtonIcon icon="add" onClick={() => createGoToStep(true)} />
-                <StepDropDown
-                  onSelect={(step) => setGoToTypeStep(true, step)}
-                  value={ifGoTo?.type === GoToTypes.STEP ? ifGoTo.id : 1}
-                />
-              </OptionField>
-            )}
-            {ifGoTo!.type === GoToTypes.COND && (
-              <OptionField label="Create or Select next condition">
-                <Carv2ButtonIcon icon="add" onClick={() => createGoToCondition(true)} />
-                <ConditionDropDown
-                  onSelect={(cond) => setGoToTypeCondition(true, cond)}
-                  value={ifGoTo?.type === GoToTypes.COND ? ifGoTo.id : 1}
-                />
-              </OptionField>
-            )}
-          </OptionField>
-
-          <OptionField>
-            <OptionField label="Select type of the next element">
-              <GoToOptionDropDown
-                onSelect={(gt) => handleType(false, gt)}
-                value={elseGoTo ? elseGoTo.type : GoToTypes.ERROR}
-              />
-            </OptionField>
-            {elseGoTo!.type === GoToTypes.STEP && (
-              <OptionField label="Select type of the next element">
-                <Carv2ButtonIcon icon="add" onClick={() => createGoToStep(false)} />
-                <StepDropDown
-                  onSelect={(step) => setGoToTypeStep(false, step)}
-                  value={elseGoTo?.type === GoToTypes.STEP ? elseGoTo.id : 1}
-                />
-              </OptionField>
-            )}
-            {elseGoTo!.type === GoToTypes.COND && (
-              <OptionField label="Create or Select next condition">
-                <Carv2ButtonIcon icon="add" onClick={() => createGoToCondition(false)} />
-                <ConditionDropDown
-                  onSelect={(cond) => setGoToTypeCondition(false, cond)}
-                  value={elseGoTo?.type === GoToTypes.COND ? elseGoTo.id : 1}
-                />
-              </OptionField>
-            )}
-          </OptionField>
-        </div>
-      </div>
-      {menuButtons}
     </ControllPanelEditSub>
   );
 };
 
 const useControllPanelEditConditionViewModel = () => {
-  const conditionToEdit: ConditionTO | null = useSelector(editSelectors.conditionToEdit);
-  const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
+  const decisionToEdit: DecisionTO | null = useSelector(editSelectors.decisionToEdit);
   const dispatch = useDispatch();
-  const textInput = useRef<Input>(null);
-  const [currentIfGoTo, setCurrentIfGoTo] = useState<GoTo>({ type: GoToTypes.STEP, id: -1 });
-  const [currentElseGoTo, setCurrentElseGoTo] = useState<GoTo>({ type: GoToTypes.STEP, id: -1 });
-  const [key, setKey] = useState<number>(0);
 
   useEffect(() => {
-    if (isNullOrUndefined(conditionToEdit)) {
-      console.warn(conditionToEdit);
-      dispatch(handleError("Tried to go to edit condition step without conditionToEdit specified"));
+    if (isNullOrUndefined(decisionToEdit)) {
+      dispatch(handleError("Tried to go to edit decision without decisionToEdit specified"));
       dispatch(EditActions.setMode.edit());
     }
-    if (conditionToEdit) {
-      setCurrentIfGoTo(conditionToEdit.ifGoTo);
-      setCurrentElseGoTo(conditionToEdit.elseGoTo);
-    }
-    // used to focus the textfield on create another
-    textInput.current!.focus();
-  }, [dispatch, conditionToEdit]);
-
-  const changeName = (name: string) => {
-    if (!isNullOrUndefined(conditionToEdit)) {
-      const copyConditionToEdit: ConditionTO = Carv2Util.deepCopy(conditionToEdit);
-      copyConditionToEdit.name = name;
-      dispatch(EditActions.setMode.editCondition(copyConditionToEdit));
-      dispatch(SequenceModelActions.setCurrentSequence(copyConditionToEdit.sequenceFk));
-    }
-  };
-
-  const setComponent = (component: ComponentCTO | undefined) => {
-    if (component !== undefined && !isNullOrUndefined(conditionToEdit)) {
-      const copyConditionToEdit: ConditionTO = Carv2Util.deepCopy(conditionToEdit);
-      copyConditionToEdit.componentFk = component.component.id;
-      dispatch(EditActions.setMode.editCondition(copyConditionToEdit));
-    }
-  };
+  }, [dispatch, decisionToEdit]);
 
   const setData = (dataIds: number[] | undefined) => {
-    if (!isNullOrUndefined(conditionToEdit)) {
-      const copyConditionToEdit: ConditionTO = Carv2Util.deepCopy(conditionToEdit);
-      copyConditionToEdit.dataFks = dataIds || [];
-      dispatch(EditActions.setMode.editCondition(copyConditionToEdit));
+    if (!isNullOrUndefined(decisionToEdit)) {
+      const copyDecisionToEdit: DecisionTO = Carv2Util.deepCopy(decisionToEdit);
+      copyDecisionToEdit.dataFks = dataIds || [];
+      dispatch(EditActions.decision.save(copyDecisionToEdit));
+      dispatch(EditActions.decision.update(copyDecisionToEdit));
     }
   };
 
-  const saveCondition = () => {
-    if (!isNullOrUndefined(conditionToEdit) && !isNullOrUndefined(selectedSequence)) {
-      dispatch(EditActions.condition.save(conditionToEdit));
-      // if (isEditNext) {
-      //   if (stepToEdit.squenceStepTO.index < selectedSequence.sequenceStepCTOs.length) {
-      //     dispatch(
-      //       EditActions.setMode.editStep(
-      //         selectedSequence.sequenceStepCTOs.find(
-      //           (step) => step.squenceStepTO.id === stepToEdit.squenceStepTO.index + 1
-      //         )
-      //       )
-      //     );
-      //   } else {
-      //     dispatch(EditActions.setMode.editStep());
-      //   }
-      // } else {
-      dispatch(EditActions.setMode.editSequence(conditionToEdit.sequenceFk));
-      // }
+  const setModeEditDecision = () => {
+    console.info("click set edit decision!");
+    if (!isNullOrUndefined(decisionToEdit)) {
+      console.info("decisionToEdit is not null!");
+      dispatch(EditActions.setMode.editDecision(decisionToEdit));
+    } else {
+      console.info("decisionToEdit is null!");
     }
   };
 
-  const deleteCondition = () => {
-    if (!isNullOrUndefined(conditionToEdit) && !isNullOrUndefined(selectedSequence)) {
-      dispatch(EditActions.condition.delete(conditionToEdit, selectedSequence));
-      dispatch(EditActions.setMode.editSequence(conditionToEdit.sequenceFk));
-    }
-  };
-
-  const updateCondition = () => {
-    const copyCondition: ConditionTO = Carv2Util.deepCopy(conditionToEdit);
-    dispatch(EditActions.condition.save(copyCondition));
-  };
-
-  const validStep = (): boolean => {
-    let valid: boolean = false;
-    if (!isNullOrUndefined(conditionToEdit)) {
-      if (
-        conditionToEdit.name !== ""
-        // TODO: for condition development purpose.
-        // && stepToEdit.squenceStepTO.sourceComponentFk !== -1 &&
-        // stepToEdit.squenceStepTO.targetComponentFk !== -1
-      ) {
-        valid = true;
-      }
-    }
-    return valid;
-  };
-
-  const saveGoToType = (ifGoTo: Boolean, goTo: GoTo) => {
-    if (goTo !== undefined) {
-      const copyConditionToEdit: ConditionTO = Carv2Util.deepCopy(conditionToEdit);
-      ifGoTo ? (copyConditionToEdit.ifGoTo = goTo) : (copyConditionToEdit.elseGoTo = goTo);
-      dispatch(EditActions.condition.update(copyConditionToEdit));
-      dispatch(EditActions.condition.save(copyConditionToEdit));
-      dispatch(SequenceModelActions.setCurrentSequence(copyConditionToEdit.sequenceFk));
-    }
-  };
-
-  const handleType = (ifGoTo: Boolean, newGoToType?: string) => {
-    if (newGoToType !== undefined) {
-      const gType = { type: (GoToTypes as any)[newGoToType] };
-      ifGoTo ? setCurrentIfGoTo(gType) : setCurrentElseGoTo(gType);
-      switch (newGoToType) {
-        case GoToTypes.ERROR:
-          saveGoToType(ifGoTo, gType);
-          break;
-        case GoToTypes.FIN:
-          saveGoToType(ifGoTo, gType);
-          break;
-      }
-    }
-  };
-
-  const setHas = (setHas: number | undefined) => {
-    console.info("has: ", setHas);
-    if (!isNullOrUndefined(conditionToEdit) && !isNullOrUndefined(setHas)) {
-      let copyConditionToEdit: ConditionTO = Carv2Util.deepCopy(conditionToEdit);
-      copyConditionToEdit.has = setHas === 1 ? true : false;
-      dispatch(EditActions.setMode.editCondition(copyConditionToEdit));
-    }
-  };
-
-  const setGoToTypeStep = (ifGoTo: Boolean, step?: SequenceStepCTO) => {
-    if (step) {
-      let newGoTo: GoTo = { type: GoToTypes.STEP, id: step.squenceStepTO.id };
-      saveGoToType(ifGoTo, newGoTo);
-    }
-  };
-
-  const setGoToTypeCondition = (ifGoTo: Boolean, condition?: ConditionTO) => {
-    if (condition) {
-      let newGoTo: GoTo = { type: GoToTypes.COND, id: condition.id };
-      saveGoToType(ifGoTo, newGoTo);
-    }
-  };
-
-  const createGoToStep = (ifGoTo: Boolean) => {
-    if (!isNullOrUndefined(conditionToEdit)) {
-      let goToStep: SequenceStepCTO = new SequenceStepCTO();
-      goToStep.squenceStepTO.sequenceFk = conditionToEdit.sequenceFk;
-      const copyCondition: ConditionTO = Carv2Util.deepCopy(conditionToEdit);
-      dispatch(EditActions.setMode.editStep(goToStep, copyCondition, ifGoTo));
-    }
-  };
-
-  const createGoToCondition = (ifGoTo: Boolean) => {
-    if (!isNullOrUndefined(conditionToEdit)) {
-      let goToCondition: ConditionTO = new ConditionTO();
-      goToCondition.sequenceFk = conditionToEdit.sequenceFk;
-      const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(conditionToEdit);
-      dispatch(EditActions.setMode.editCondition(goToCondition, copyStepToEdit, ifGoTo));
-      setKey(key + 1);
-    }
-  };
-
-  const setRoot = () => {
-    if (!isNullOrUndefined(conditionToEdit)) {
-      let copySequence: SequenceCTO = Carv2Util.deepCopy(selectedSequence);
-      copySequence.sequenceStepCTOs.map((step) => (step.squenceStepTO.root = false));
-      copySequence.conditions.map((cond) => (cond.root = false));
-      copySequence.sequenceStepCTOs.forEach((step) => dispatch(EditActions.step.save(step)));
-      copySequence.conditions.forEach((cond) => dispatch(EditActions.condition.save(cond)));
-      let copyConditionToEdit: ConditionTO = Carv2Util.deepCopy(conditionToEdit);
-      copyConditionToEdit.root = true;
-      dispatch(EditActions.condition.save(copyConditionToEdit));
-      dispatch(EditActions.condition.update(copyConditionToEdit));
+  const setComponentFk = (compId: number) => {
+    if (!isNullOrUndefined(decisionToEdit)) {
+      let copyDecisionToEdit: DecisionTO = Carv2Util.deepCopy(decisionToEdit);
+      copyDecisionToEdit.componentFk = compId;
+      dispatch(EditActions.decision.save(copyDecisionToEdit));
+      dispatch(EditActions.decision.update(copyDecisionToEdit));
     }
   };
 
   // This is workaround sins redux seams to have a problem to save boolean values.
-  const getCondition = (): number => {
+  const getDecision = (): number => {
     let hasNumber: number = 2;
-    if (!isNullOrUndefined(conditionToEdit)) {
-      hasNumber = conditionToEdit.has ? 1 : 2;
+    if (!isNullOrUndefined(decisionToEdit)) {
+      hasNumber = decisionToEdit.has ? 1 : 2;
     }
     return hasNumber;
   };
 
+  const setHas = (setHas: number | undefined) => {
+    if (!isNullOrUndefined(decisionToEdit) && !isNullOrUndefined(setHas)) {
+      let copyDecisionToEdit: DecisionTO = Carv2Util.deepCopy(decisionToEdit);
+      copyDecisionToEdit.has = setHas === 1 ? true : false;
+      dispatch(EditActions.decision.save(copyDecisionToEdit));
+      dispatch(EditActions.decision.update(copyDecisionToEdit));
+    }
+  };
+
   return {
-    label: "EDIT SEQUENCE - EDIT CONDITION",
-    name: conditionToEdit?.name,
-    changeName,
-    saveCondition,
-    setComponent,
-    textInput,
-    validStep,
-    compId: conditionToEdit?.componentFk,
-    updateCondition,
-    deleteCondition,
-    setData,
-    datas: conditionToEdit?.dataFks || [],
+    label: "EDIT SEQUENCE - DECISION - CONDITION",
+    setModeEditDecision,
+    componentFk: decisionToEdit?.componentFk,
+    setComponentFk,
+    getDecision,
     setHas,
-    handleType,
-    setGoToTypeStep,
-    setGoToTypeCondition,
-    ifGoTo: currentIfGoTo,
-    elseGoTo: currentElseGoTo,
-    createGoToStep,
-    createGoToCondition,
-    setRoot,
-    isRoot: conditionToEdit?.root ? conditionToEdit.root : false,
-    getCondition,
-    key,
+    setData,
+    dataFks: decisionToEdit?.dataFks,
   };
 };

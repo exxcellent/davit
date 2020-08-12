@@ -2,82 +2,76 @@ import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
-import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
-import { ConditionTO } from "../../../../dataAccess/access/to/ConditionTO";
-import { sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
+import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
+import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
+import { ActionTO } from "../../../../dataAccess/access/to/ActionTO";
+import { getDataAndInstanceIds } from "../../../../dataAccess/access/to/DataTO";
+import { editSelectors } from "../../../../slices/EditSlice";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 
-interface ConditionDropDownButtonProps extends DropdownProps {
-  onSelect: (condition: ConditionTO | undefined) => void;
+interface ConditionDropDownProps extends DropdownProps {
+  onSelect: (action: ActionTO | undefined) => void;
+
   icon?: string;
 }
 
-interface ConditionDropDownProps extends DropdownProps {
-  onSelect: (condition: ConditionTO | undefined) => void;
-  placeholder?: string;
-  value?: number;
-}
-
-export const ConditionDropDownButton: FunctionComponent<ConditionDropDownButtonProps> = (props) => {
+export const ConditionDropDown: FunctionComponent<ConditionDropDownProps> = (props) => {
   const { onSelect, icon } = props;
-  const { sequence, selectCondition, conditionOptions } = useConditionDropDownViewModel();
+  const { actions, actionToOption, selectAction } = useConditionDropDownViewModel();
 
   return (
     <Dropdown
-      options={conditionOptions(sequence)}
-      icon={icon}
-      onChange={(event, data) => onSelect(selectCondition(Number(data.value), sequence))}
-      className="button icon"
-      floating
+      options={actions.map(actionToOption).sort((a, b) => {
+        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
+      })}
       selectOnBlur={false}
-      trigger={<React.Fragment />}
+      onChange={(event, data) => onSelect(selectAction(Number(data.value), actions))}
       scrolling
+      floating
+      compact
+      className="button icon"
+      icon={icon}
+      trigger={<React.Fragment />}
     />
   );
 };
 
-export const ConditionDropDown: FunctionComponent<ConditionDropDownProps> = (props) => {
-  const { onSelect, placeholder, value } = props;
-  const { sequence, selectCondition, conditionOptions } = useConditionDropDownViewModel();
+// TODO: in den master data slice verschieben!
+const getComponentName = (compId: number, components: ComponentCTO[]): string => {
+  return components.find((comp) => comp.component.id === compId)?.component.name || "";
+};
 
-  console.info("value: ", value);
-
-  return (
-    <Dropdown
-      options={conditionOptions(sequence)}
-      selection
-      selectOnBlur={false}
-      placeholder={placeholder || "Select condition ..."}
-      onChange={(event, data) => onSelect(selectCondition(Number(data.value), sequence))}
-      scrolling
-      value={value === -1 ? undefined : value}
-    />
-  );
+const getDataName = (dataId: number, datas: DataCTO[]): string => {
+  const ids = getDataAndInstanceIds(dataId);
+  const data: DataCTO | undefined = datas.find((data) => data.data.id === ids.dataId);
+  const instance = ids.instanceId ? data?.data.inst.find((instance) => instance.id === ids.instanceId) : undefined;
+  const name: string = data?.data.name + " " + (instance?.name || "");
+  return name;
 };
 
 const useConditionDropDownViewModel = () => {
-  const sequenceToEdit: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
+  const actions: ActionTO[] = useSelector(editSelectors.stepToEdit)?.actions || [];
+  const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
+  const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
 
-  const conditionToOption = (condition: ConditionTO): DropdownItemProps => {
+  const actionToOption = (action: ActionTO): DropdownItemProps => {
+    const text: string = `${getComponentName(action.componentFk, components)} - ${action.actionType} - ${getDataName(
+      action.dataFk,
+      datas
+    )}`;
     return {
-      key: condition.id,
-      value: condition.id,
-      text: condition.name,
+      key: action.id,
+      value: action.id,
+      text: text,
     };
   };
 
-  const conditionOptions = (sequence: SequenceCTO | null): DropdownItemProps[] => {
-    if (!isNullOrUndefined(sequence)) {
-      return sequence.conditions.map(conditionToOption);
-    }
-    return [];
-  };
-
-  const selectCondition = (conditionId: number, sequence: SequenceCTO | null): ConditionTO | undefined => {
-    if (!isNullOrUndefined(sequence) && !isNullOrUndefined(conditionId)) {
-      return sequence.conditions.find((condition) => condition.id === conditionId);
+  const selectAction = (actionId: number, actions: ActionTO[]): ActionTO | undefined => {
+    if (!isNullOrUndefined(actionId) && !isNullOrUndefined(actions)) {
+      return actions.find((action) => action.id === actionId);
     }
     return undefined;
   };
 
-  return { sequence: sequenceToEdit, conditionOptions, selectCondition };
+  return { actions, actionToOption, selectAction };
 };

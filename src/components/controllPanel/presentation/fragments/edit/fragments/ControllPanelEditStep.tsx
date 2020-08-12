@@ -6,7 +6,7 @@ import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentC
 import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../../../../../../dataAccess/access/to/ActionTO";
-import { ConditionTO } from "../../../../../../dataAccess/access/to/ConditionTO";
+import { DecisionTO } from "../../../../../../dataAccess/access/to/DecisionTO";
 import { GoTo, GoToTypes } from "../../../../../../dataAccess/access/types/GoToType";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
@@ -16,7 +16,7 @@ import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragmen
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ActionDropDown } from "../../../../../common/fragments/dropdowns/ActionDropDown";
 import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
-import { ConditionDropDown } from "../../../../../common/fragments/dropdowns/ConditionDropDown";
+import { DecisionDropDown } from "../../../../../common/fragments/dropdowns/DecisionDropDown";
 import { GoToOptionDropDown } from "../../../../../common/fragments/dropdowns/GoToOptionDropDown";
 import { StepDropDown } from "../../../../../common/fragments/dropdowns/StepDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
@@ -41,9 +41,9 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
     handleType,
     setGoToTypeStep,
     goTo,
-    setGoToTypeCondition,
+    setGoToTypeDecision,
     createGoToStep,
-    createGoToCondition,
+    createGoToDecision,
     setRoot,
     isRoot,
     key,
@@ -149,9 +149,9 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
             </OptionField>
           )}
           {goTo!.type === GoToTypes.COND && (
-            <OptionField label="Create or Select next condition">
-              <Carv2ButtonIcon icon="add" onClick={createGoToCondition} />
-              <ConditionDropDown onSelect={setGoToTypeCondition} value={goTo?.type === GoToTypes.COND ? goTo.id : 1} />
+            <OptionField label="Create or Select next decision">
+              <Carv2ButtonIcon icon="add" onClick={createGoToDecision} />
+              <DecisionDropDown onSelect={setGoToTypeDecision} value={goTo?.type === GoToTypes.COND ? goTo.id : 1} />
             </OptionField>
           )}
         </div>
@@ -238,12 +238,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
   const validStep = (): boolean => {
     let valid: boolean = false;
     if (!isNullOrUndefined(stepToEdit)) {
-      if (
-        stepToEdit.squenceStepTO.name !== ""
-        // TODO: for condition development purpose.
-        // && stepToEdit.squenceStepTO.sourceComponentFk !== -1 &&
-        // stepToEdit.squenceStepTO.targetComponentFk !== -1
-      ) {
+      if (stepToEdit.squenceStepTO.name !== "") {
         valid = true;
       }
     }
@@ -282,9 +277,9 @@ const useControllPanelEditSequenceStepViewModel = () => {
     }
   };
 
-  const setGoToTypeCondition = (condition?: ConditionTO) => {
-    if (condition) {
-      let newGoTo: GoTo = { type: GoToTypes.COND, id: condition.id };
+  const setGoToTypeDecision = (decision?: DecisionTO) => {
+    if (decision) {
+      let newGoTo: GoTo = { type: GoToTypes.COND, id: decision.id };
       saveGoToType(newGoTo);
     }
   };
@@ -300,32 +295,24 @@ const useControllPanelEditSequenceStepViewModel = () => {
     }
   };
 
-  const createGoToCondition = () => {
+  const createGoToDecision = () => {
     if (!isNullOrUndefined(stepToEdit)) {
-      let goToCondition: ConditionTO = new ConditionTO();
-      goToCondition.sequenceFk = stepToEdit.squenceStepTO.sequenceFk;
+      let goToDecision: DecisionTO = new DecisionTO();
+      goToDecision.sequenceFk = stepToEdit.squenceStepTO.sequenceFk;
       const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
-      dispatch(EditActions.setMode.editCondition(goToCondition, copyStepToEdit));
+      dispatch(EditActions.setMode.editDecision(goToDecision, copyStepToEdit));
     }
   };
 
-  //TODO: das hat hier nicht verloren. Das ist Aufgabe vom Slice. Außerdem können wir auf keinen Fall jeden Step und jede Condition einzeln ans Backend schicken. DAs muss in einer bzw zwie Calls passieren
   const setRoot = () => {
-    if (!isNullOrUndefined(stepToEdit)) {
-      let copySequence: SequenceCTO = Carv2Util.deepCopy(selectedSequence);
-      copySequence.sequenceStepCTOs.forEach((step) => (step.squenceStepTO.root = false));
-      copySequence.conditions.forEach((cond) => (cond.root = false));
-      copySequence.sequenceStepCTOs.forEach((step) => dispatch(EditActions.step.save(step)));
-      copySequence.conditions.forEach((cond) => dispatch(EditActions.condition.save(cond)));
-      let copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
-      copyStepToEdit.squenceStepTO.root = true;
-      dispatch(EditActions.step.save(copyStepToEdit));
-      dispatch(EditActions.step.update(copyStepToEdit));
+    if (!isNullOrUndefined(stepToEdit) && !isNullOrUndefined(selectedSequence)) {
+      dispatch(EditActions.sequence.setRoot(stepToEdit.squenceStepTO.sequenceFk, stepToEdit.squenceStepTO.id, false));
+      dispatch(EditActions.setMode.editStep(EditActions.step.find(stepToEdit.squenceStepTO.id)));
     }
   };
 
   return {
-    label: "EDIT SEQUENCE - EDIT STEP",
+    label: "EDIT SEQUENCE - STEP",
     name: stepToEdit ? stepToEdit!.squenceStepTO.name : "",
     changeName,
     saveSequenceStep,
@@ -342,9 +329,9 @@ const useControllPanelEditSequenceStepViewModel = () => {
     handleType,
     goTo: currentGoTo,
     setGoToTypeStep,
-    setGoToTypeCondition,
+    setGoToTypeDecision,
     createGoToStep,
-    createGoToCondition,
+    createGoToDecision,
     setRoot,
     isRoot: stepToEdit?.squenceStepTO.root ? stepToEdit?.squenceStepTO.root : false,
     key,
