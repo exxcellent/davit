@@ -5,7 +5,7 @@ import { Icon, Tab } from "semantic-ui-react";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
-import { ConditionTO } from "../../../dataAccess/access/to/ConditionTO";
+import { DecisionTO } from "../../../dataAccess/access/to/DecisionTO";
 import { GoToTypes, Terminal } from "../../../dataAccess/access/types/GoToType";
 import { masterDataSelectors } from "../../../slices/MasterDataSlice";
 import { CalculatedStep, SequenceModelActions, sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
@@ -18,11 +18,11 @@ interface CarvTableRow {}
 
 export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (props) => {
   const { fullScreen } = props;
-  const { title, getTableBody, getConditionTableBody, getStepTableBody } = useSequenceTableViewModel();
+  const { title, getTableBody, getDecisionTableBody, getStepTableBody } = useSequenceTableViewModel();
 
   enum table {
     step = "step",
-    condition = "condition",
+    decision = "decision",
     sequence = "sequence",
   }
 
@@ -50,11 +50,11 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
       ),
     },
     {
-      menuItem: "Conditions",
+      menuItem: "Decision",
       render: () => (
         <Tab.Pane>
           <div>
-            <label>CONDITIONS</label>
+            <label>DECISIONS</label>
           </div>
           <table>
             <thead>
@@ -64,7 +64,7 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
                 <th>RESULT</th>
               </tr>
             </thead>
-            <tbody>{getConditionTableBody()}</tbody>
+            <tbody>{getDecisionTableBody()}</tbody>
           </table>
         </Tab.Pane>
       ),
@@ -168,8 +168,8 @@ const useSequenceTableViewModel = () => {
     );
   };
 
-  const createConditionColumn = (condition: ConditionTO, index: number): JSX.Element => {
-    const name = condition.name;
+  const createDecisionColumn = (decision: DecisionTO, index: number): JSX.Element => {
+    const name = decision.name;
     let trClass = "carv2Tr";
     if (index === stepIndex) {
       trClass = "carv2TrMarked";
@@ -223,14 +223,14 @@ const useSequenceTableViewModel = () => {
     return list;
   };
 
-  const getConditionTableBody = () => {
+  const getDecisionTableBody = () => {
     let list: JSX.Element[] = [];
     if (sequence !== null) {
-      list = sequence.conditions.map((cond, index) => createConditionColumn(cond, index));
+      list = sequence.decisions.map((cond, index) => createDecisionColumn(cond, index));
     }
     let key: number = list.length;
     while (list.length < 10) {
-      list.push(createEmptyConditionRow(key.toString(), "carv2Tr"));
+      list.push(createEmptyDecisionRow(key.toString(), "carv2Tr"));
       key++;
     }
     return list;
@@ -259,7 +259,7 @@ const useSequenceTableViewModel = () => {
     );
   };
 
-  const createEmptyConditionRow = (key: string, className?: string): JSX.Element => {
+  const createEmptyDecisionRow = (key: string, className?: string): JSX.Element => {
     return (
       <tr key={key} className={className}>
         <td> </td>
@@ -280,7 +280,7 @@ const useSequenceTableViewModel = () => {
   return {
     title: sequence ? sequence.sequenceTO.name : "Select data setup and sequence to calculate ...",
     getTableBody,
-    getConditionTableBody,
+    getDecisionTableBody,
     getStepTableBody,
   };
 };

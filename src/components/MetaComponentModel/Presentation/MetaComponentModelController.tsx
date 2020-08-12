@@ -6,8 +6,8 @@ import { DataSetupCTO } from "../../../dataAccess/access/cto/DataSetupCTO";
 import { GeometricalDataCTO } from "../../../dataAccess/access/cto/GeometraicalDataCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../../../dataAccess/access/to/ActionTO";
-import { ConditionTO } from "../../../dataAccess/access/to/ConditionTO";
 import { DataTO, DATA_INSTANCE_ID_FACTOR, getDataAndInstanceIds } from "../../../dataAccess/access/to/DataTO";
+import { DecisionTO } from "../../../dataAccess/access/to/DecisionTO";
 import { InitDataTO } from "../../../dataAccess/access/to/InitDataTO";
 import { PositionTO } from "../../../dataAccess/access/to/PositionTO";
 import { ActionType } from "../../../dataAccess/access/types/ActionType";
@@ -60,7 +60,7 @@ const useViewModel = () => {
   const componentCTOToEdit: ComponentCTO | null = useSelector(editSelectors.componentToEdit);
   const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.stepToEdit);
   const actionToEdit: ActionTO | null = useSelector(editSelectors.actionToEdit);
-  const conditionToEdit: ConditionTO | null = useSelector(editSelectors.conditionToEdit);
+  const decisionToEdit: DecisionTO | null = useSelector(editSelectors.decisionToEdit);
   const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.dataSetupToEdit);
   const initDataToEdit: InitDataTO | null = useSelector(editSelectors.initDataToEdit);
   // ----- VIEW -----
@@ -106,7 +106,7 @@ const useViewModel = () => {
     const compDataFromActionToEdit: ViewFragmentProps | undefined = actionToEdit
       ? mapActionToComponentDatas(actionToEdit)
       : undefined;
-    const compDataFromCondittionToEdit: ViewFragmentProps[] = mapConditionToCompData(conditionToEdit);
+    const compDataFromDecisionToEdit: ViewFragmentProps[] = mapDecisionToCompData(decisionToEdit);
     const compDatasFromDataSetup: ViewFragmentProps[] = dataSetupToEdit
       ? dataSetupToEdit.initDatas.map(mapInitDataToCompData)
       : [];
@@ -114,7 +114,7 @@ const useViewModel = () => {
       ? mapInitDataToCompData(initDataToEdit)
       : undefined;
     compDatas.push(...compDatasFromStepToEdit);
-    compDatas.push(...compDataFromCondittionToEdit);
+    compDatas.push(...compDataFromDecisionToEdit);
     compDatas.push(...compDatasFromDataSetup);
     if (compDataFromActionToEdit) {
       compDatas.push(compDataFromActionToEdit);
@@ -142,14 +142,14 @@ const useViewModel = () => {
     };
   };
 
-  const mapConditionToCompData = (condition: ConditionTO | null): ViewFragmentProps[] => {
+  const mapDecisionToCompData = (decision: DecisionTO | null): ViewFragmentProps[] => {
     let props: ViewFragmentProps[] = [];
-    if (condition) {
-      props = condition.dataFks.map((data) => {
+    if (decision) {
+      props = decision.dataFks.map((data) => {
         return {
-          parentId: condition.componentFk,
+          parentId: decision.componentFk,
           name: getDataNameById(data),
-          state: condition.has ? ViewFragmentState.CHECKED : ViewFragmentState.DELETED,
+          state: decision.has ? ViewFragmentState.CHECKED : ViewFragmentState.DELETED,
         };
       });
     }

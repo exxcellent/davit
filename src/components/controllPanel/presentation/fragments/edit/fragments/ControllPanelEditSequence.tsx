@@ -4,7 +4,7 @@ import { Button, Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
-import { ConditionTO } from "../../../../../../dataAccess/access/to/ConditionTO";
+import { DecisionTO } from "../../../../../../dataAccess/access/to/DecisionTO";
 import { SequenceTO } from "../../../../../../dataAccess/access/to/SequenceTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
@@ -12,7 +12,7 @@ import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSl
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
-import { ConditionDropDownButton } from "../../../../../common/fragments/dropdowns/ConditionDropDown";
+import { DecisionDropDownButton } from "../../../../../common/fragments/dropdowns/DecisionDropDown";
 import { StepDropDownButton } from "../../../../../common/fragments/dropdowns/StepDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
@@ -31,7 +31,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
     editOrAddSequenceStep,
     createAnother,
     updateSequence,
-    editOrAddCondition,
+    editOrAddDecision,
   } = useControllPanelEditSequenceViewModel();
 
   const menuButtons = (
@@ -73,13 +73,13 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
         </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <OptionField label="Create / Edit | Sequence - Condition">
+        <OptionField label="Create / Edit | Sequence - Decision">
           <Button.Group>
-            <Button icon="add" inverted color="orange" onClick={() => editOrAddCondition()} />
+            <Button icon="add" inverted color="orange" onClick={() => editOrAddDecision()} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
-              Condition
+              Decision
             </Button>
-            <ConditionDropDownButton onSelect={editOrAddCondition} icon="wrench" />
+            <DecisionDropDownButton onSelect={editOrAddDecision} icon="wrench" />
           </Button.Group>
         </OptionField>
       </div>
@@ -148,29 +148,24 @@ const useControllPanelEditSequenceViewModel = () => {
     dispatch(EditActions.setMode.editStep(stepToEdit));
   };
 
-  const editOrAddCondition = (condition?: ConditionTO) => {
-    let conditionToEdit: ConditionTO | undefined = condition;
-    if (conditionToEdit === undefined) {
-      conditionToEdit = new ConditionTO();
-      conditionToEdit.sequenceFk = sequenceToEdit?.id || -1;
-      conditionToEdit.root = isFirst();
+  const editOrAddDecision = (decision?: DecisionTO) => {
+    let decisionToEdit: DecisionTO | undefined = decision;
+    if (decisionToEdit === undefined) {
+      decisionToEdit = new DecisionTO();
+      decisionToEdit.sequenceFk = sequenceToEdit?.id || -1;
+      decisionToEdit.root = isFirst();
     }
-    dispatch(EditActions.setMode.editCondition(conditionToEdit));
+    dispatch(EditActions.setMode.editDecision(decisionToEdit));
   };
 
   const isFirst = (): boolean => {
-    return selectedSequence?.sequenceStepCTOs.length === 0 && selectedSequence.conditions.length === 0 ? true : false;
+    return selectedSequence?.sequenceStepCTOs.length === 0 && selectedSequence.decisions.length === 0 ? true : false;
   };
 
   const copySequence = () => {
     let copySequence: SequenceTO = Carv2Util.deepCopy(sequenceToEdit);
     copySequence.name = sequenceToEdit?.name + "-copy";
     copySequence.id = -1;
-    // TODO: need a way to copy steps as well!
-    // copySequence.sequenceStepCTOs.forEach((step) => {
-    //   step.squenceStepTO.id = -1;
-    //   step.squenceStepTO.sequenceFk = -1;
-    // });
     dispatch(EditActions.sequence.update(copySequence));
   };
 
@@ -195,6 +190,6 @@ const useControllPanelEditSequenceViewModel = () => {
     copySequence,
     createAnother,
     updateSequence,
-    editOrAddCondition,
+    editOrAddDecision,
   };
 };

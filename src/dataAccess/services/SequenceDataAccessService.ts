@@ -3,14 +3,14 @@ import { DataSetupCTO } from "../access/cto/DataSetupCTO";
 import { SequenceCTO } from "../access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../access/cto/SequenceStepCTO";
 import { ActionTO } from "../access/to/ActionTO";
-import { ConditionTO } from "../access/to/ConditionTO";
 import { DataSetupTO } from "../access/to/DataSetupTO";
+import { DecisionTO } from "../access/to/DecisionTO";
 import { InitDataTO } from "../access/to/InitDataTO";
 import { SequenceStepTO } from "../access/to/SequenceStepTO";
 import { SequenceTO } from "../access/to/SequenceTO";
 import { ActionRepository } from "../repositories/ActionRepository";
-import { ConditionRepository } from "../repositories/ConditionRepository";
 import { DataSetupRepository } from "../repositories/DataSetupRepository";
+import { DecisionRepository } from "../repositories/DecisionRepository";
 import { InitDataRepository } from "../repositories/InitDataRepository";
 import { SequenceRepository } from "../repositories/SequenceRepository";
 import { SequenceStepRepository } from "../repositories/SequenceStepRepository";
@@ -53,7 +53,7 @@ export const SequenceDataAccessService = {
     CheckHelper.nullCheck(sequenceTO, "sequenceTO");
     let tempCTO: SequenceCTO = createSequenceCTO(sequenceTO);
     tempCTO.sequenceStepCTOs.forEach((step) => SequenceStepRepository.delete(step.squenceStepTO));
-    tempCTO.conditions.forEach((cond) => ConditionRepository.delete(cond));
+    tempCTO.decisions.forEach((cond) => DecisionRepository.delete(cond));
     return SequenceRepository.delete(sequenceTO);
   },
 
@@ -67,11 +67,47 @@ export const SequenceDataAccessService = {
     return sequence;
   },
 
+  // ---------------------------------------------------------- ROOT ----------------------------------------------------------
+
+  setRoot(sequenceId: number, id: number, isDecision: boolean): SequenceStepTO | DecisionTO {
+    let root: SequenceStepTO | DecisionTO | null = null;
+    let copyDecisions: DecisionTO[] = DecisionRepository.findAllForSequence(sequenceId);
+    let copySteps: SequenceStepTO[] = SequenceStepRepository.findAllForSequence(sequenceId);
+    // set root
+    copyDecisions.forEach((decision) => {
+      decision.root = false;
+      if (isDecision) {
+        if (decision.id === id) {
+          decision.root = true;
+          root = decision;
+        }
+      }
+    });
+    copySteps.forEach((step) => {
+      step.root = false;
+      if (!isDecision) {
+        if (step.id === id) {
+          step.root = true;
+          root = step;
+        }
+      }
+    });
+    // save
+    copyDecisions.forEach((decision) => DecisionRepository.save(decision));
+    copySteps.forEach((step) => SequenceStepRepository.save(step));
+
+    if (root === null) {
+      throw Error("no root is set!");
+    } else {
+      return root;
+    }
+  },
+
   // ---------------------------------------------------------- Sequence step ----------------------------------------------------------
 
   saveSequenceStep(sequenceStep: SequenceStepCTO): SequenceStepCTO {
     CheckHelper.nullCheck(sequenceStep, "sequenceStep");
-    // TODO: move this in a CheckSaveCondition class.
+    // TODO: move this in a CheckSaveDecision class.
     if (sequenceStep.squenceStepTO.sequenceFk === -1) {
       throw new Error("Sequence step sequenceFk is '-1'!");
     }
@@ -108,14 +144,22 @@ export const SequenceDataAccessService = {
     return createSequenceStepCTO(step);
   },
 
-  // ---------------------------------------------------------- Condition ----------------------------------------------------------
+  // ---------------------------------------------------------- Decision ----------------------------------------------------------
 
-  saveCondition(condition: ConditionTO): ConditionTO {
-    return ConditionRepository.save(condition);
+  saveDecision(decision: DecisionTO): DecisionTO {
+    return DecisionRepository.save(decision);
   },
 
-  deleteCondition(condition: ConditionTO): ConditionTO {
-    return ConditionRepository.delete(condition);
+  deleteDecision(decision: DecisionTO): DecisionTO {
+    return DecisionRepository.delete(decision);
+  },
+
+  findDecision(id: number): DecisionTO {
+    const decision: DecisionTO | undefined = DecisionRepository.find(id);
+    if (decision === undefined) {
+      throw Error("Decision with id: " + id + " dos not exists!");
+    }
+    return decision;
   },
 
   // ---------------------------------------------------------- Action ----------------------------------------------------------
@@ -205,8 +249,8 @@ const createSequenceCTO = (sequence: SequenceTO | undefined): SequenceCTO => {
     createSequenceStepCTO
   );
   sequenceStepCTOs.sort((step1, step2) => step1.squenceStepTO.index - step2.squenceStepTO.index);
-  const conditions: ConditionTO[] = ConditionRepository.findAllForSequence(sequence!.id);
-  return { sequenceTO: sequence!, sequenceStepCTOs: sequenceStepCTOs, conditions: conditions };
+  const decisions: DecisionTO[] = DecisionRepository.findAllForSequence(sequence!.id);
+  return { sequenceTO: sequence!, sequenceStepCTOs: sequenceStepCTOs, decisions: decisions };
 };
 
 const createSequenceStepCTO = (sequenceStepTO: SequenceStepTO | undefined): SequenceStepCTO => {

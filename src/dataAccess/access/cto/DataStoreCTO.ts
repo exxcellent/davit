@@ -1,9 +1,9 @@
 import { ActionTO } from "../to/ActionTO";
 import { ComponentTO } from "../to/ComponentTO";
-import { ConditionTO } from "../to/ConditionTO";
 import { DataRelationTO } from "../to/DataRelationTO";
 import { DataSetupTO } from "../to/DataSetupTO";
 import { DataTO } from "../to/DataTO";
+import { DecisionTO } from "../to/DecisionTO";
 import { DesignTO } from "../to/DesignTO";
 import { GeometricalDataTO } from "../to/GeometricalDataTO";
 import { GroupTO } from "../to/GroupTO";
@@ -25,7 +25,7 @@ export class DataStoreCTO {
     public sequences = new Map<number, SequenceTO>(),
     public steps = new Map<number, SequenceStepTO>(),
     public actions = new Map<number, ActionTO>(),
-    public conditions = new Map<number, ConditionTO>(),
+    public decisions = new Map<number, DecisionTO>(),
     // Data
     public datas = new Map<number, DataTO>(),
     public dataConnections = new Map<number, DataRelationTO>(),

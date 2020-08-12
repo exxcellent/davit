@@ -4,12 +4,13 @@ import { DataSetupCTO } from "./access/cto/DataSetupCTO";
 import { SequenceCTO } from "./access/cto/SequenceCTO";
 import { SequenceStepCTO } from "./access/cto/SequenceStepCTO";
 import { ActionTO } from "./access/to/ActionTO";
-import { ConditionTO } from "./access/to/ConditionTO";
 import { DataRelationTO } from "./access/to/DataRelationTO";
 import { DataSetupTO } from "./access/to/DataSetupTO";
 import { DataInstanceTO } from "./access/to/DataTO";
+import { DecisionTO } from "./access/to/DecisionTO";
 import { GroupTO } from "./access/to/GroupTO";
 import { InitDataTO } from "./access/to/InitDataTO";
+import { SequenceStepTO } from "./access/to/SequenceStepTO";
 import { SequenceTO } from "./access/to/SequenceTO";
 import { DataAccessResponse } from "./DataAccessResponse";
 import dataStore from "./DataStore";
@@ -86,6 +87,10 @@ export const DataAccess = {
 
   saveSequenceTO(sequence: SequenceTO): DataAccessResponse<SequenceTO> {
     return makeTransactional(() => SequenceDataAccessService.saveSequenceTO(sequence));
+  },
+
+  setRoot(sequenceId: number, id: number, isDecision: boolean): DataAccessResponse<SequenceStepTO | DecisionTO> {
+    return makeTransactional(() => SequenceDataAccessService.setRoot(sequenceId, id, isDecision));
   },
 
   // ========================================= STEP =========================================
@@ -197,14 +202,18 @@ export const DataAccess = {
     return makeTransactional(() => SequenceDataAccessService.saveActionTO(action));
   },
 
-  // ========================================= CONDITION =========================================
+  // ========================================= DECISION =========================================
 
-  saveCondition(condition: ConditionTO): DataAccessResponse<ConditionTO> {
-    return makeTransactional(() => SequenceDataAccessService.saveCondition(condition));
+  saveDecision(decision: DecisionTO): DataAccessResponse<DecisionTO> {
+    return makeTransactional(() => SequenceDataAccessService.saveDecision(decision));
   },
 
-  deleteConditon(condition: ConditionTO): DataAccessResponse<ConditionTO> {
-    return makeTransactional(() => SequenceDataAccessService.deleteCondition(condition));
+  deleteDecision(decision: DecisionTO): DataAccessResponse<DecisionTO> {
+    return makeTransactional(() => SequenceDataAccessService.deleteDecision(decision));
+  },
+
+  findDecision(id: number): DataAccessResponse<DecisionTO> {
+    return makeTransactional(() => SequenceDataAccessService.findDecision(id));
   },
 };
 // ========================================= PRIVATE =========================================
