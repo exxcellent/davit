@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
@@ -19,25 +19,26 @@ interface DecisionDropDownProps extends DropdownProps {
 
 export const DecisionDropDownButton: FunctionComponent<DecisionDropDownButtonProps> = (props) => {
   const { onSelect, icon } = props;
-  const { sequenceToEdit, decisionOptions, selectDecision } = useDecisionDropDownViewModel();
+  const { sequenceToEdit, decisionOptions, selectDecision, isEmpty } = useDecisionDropDownViewModel();
 
   return (
     <Dropdown
       options={decisionOptions(sequenceToEdit)}
-      icon={icon}
+      icon={isEmpty ? "" : icon}
       onChange={(event, data) => onSelect(selectDecision(Number(data.value), sequenceToEdit))}
       className="button icon"
       floating
       selectOnBlur={false}
       trigger={<React.Fragment />}
       scrolling
+      disabled={isEmpty}
     />
   );
 };
 
 export const DecisionDropDown: FunctionComponent<DecisionDropDownProps> = (props) => {
   const { onSelect, placeholder, value } = props;
-  const { sequenceToEdit, decisionOptions, selectDecision } = useDecisionDropDownViewModel();
+  const { sequenceToEdit, decisionOptions, selectDecision, isEmpty } = useDecisionDropDownViewModel();
 
   console.info("value: ", value);
 
@@ -50,12 +51,20 @@ export const DecisionDropDown: FunctionComponent<DecisionDropDownProps> = (props
       onChange={(event, data) => onSelect(selectDecision(Number(data.value), sequenceToEdit))}
       scrolling
       value={value === -1 ? undefined : value}
+      disabled={isEmpty}
     />
   );
 };
 
 const useDecisionDropDownViewModel = () => {
   const sequenceToEdit: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
+  const [isEmpty, setIsEmpty] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (!isNullOrUndefined(sequenceToEdit)) {
+      sequenceToEdit?.decisions.length > 0 ? setIsEmpty(false) : setIsEmpty(true);
+    }
+  }, [sequenceToEdit]);
 
   const decisionToOption = (decision: DecisionTO): DropdownItemProps => {
     return {
@@ -79,5 +88,5 @@ const useDecisionDropDownViewModel = () => {
     return undefined;
   };
 
-  return { sequenceToEdit, decisionOptions, selectDecision };
+  return { sequenceToEdit, decisionOptions, selectDecision, isEmpty };
 };

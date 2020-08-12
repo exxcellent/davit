@@ -36,6 +36,7 @@ export const InitDataDropDown: FunctionComponent<InitDataDropDownDownProps> = (p
       scrolling
       clearable={true}
       value={value}
+      disabled={initDatas.length > 0 ? false : true}
     />
   );
 };
@@ -49,12 +50,13 @@ export const InitDataDropDownButton: FunctionComponent<InitDataDropDownPropsButt
       options={initDatas.map(initDataToOption).sort(function (a, b) {
         return ("" + a.attr).localeCompare(b.attr);
       })}
-      icon={icon}
+      icon={initDatas.length > 0 ? icon : ""}
       selectOnBlur={false}
       onChange={(event, data) => onSelect(selectInitData(Number(data.value), initDatas))}
       className="button icon"
       trigger={<React.Fragment />}
       scrolling
+      disabled={initDatas.length > 0 ? false : true}
     />
   );
 };

@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
@@ -12,7 +12,7 @@ interface MultiselectDataDropDownProps extends DropdownProps {
 
 export const MultiselectDataDropDown: FunctionComponent<MultiselectDataDropDownProps> = (props) => {
   const { onSelect, selected } = props;
-  const { datas, dataToOption } = useMultiSelectDataDropDownViewModel();
+  const { datas, dataToOption, isEmpty } = useMultiSelectDataDropDownViewModel();
 
   return (
     <Dropdown
@@ -20,7 +20,6 @@ export const MultiselectDataDropDown: FunctionComponent<MultiselectDataDropDownP
       fluid
       multiple
       selection
-      // options={datas.map(dataToOption)}
       options={([] as DropdownItemProps[]).concat.apply([], datas.map(dataToOption)).sort(function (a, b) {
         return ("" + a.attr).localeCompare(b.attr);
       })}
@@ -29,12 +28,18 @@ export const MultiselectDataDropDown: FunctionComponent<MultiselectDataDropDownP
       }}
       value={selected}
       scrolling
+      disabled={isEmpty}
     />
   );
 };
 
 const useMultiSelectDataDropDownViewModel = () => {
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
+  const [isEmpty, setIsEmpty] = useState<boolean>(true);
+
+  useEffect(() => {
+    datas.length > 0 ? setIsEmpty(false) : setIsEmpty(true);
+  }, [datas]);
 
   const dataToOption = (data: DataCTO): DropdownItemProps[] => {
     if (data.data.inst.length === 0) {
@@ -57,5 +62,5 @@ const useMultiSelectDataDropDownViewModel = () => {
     }
   };
 
-  return { datas, dataToOption };
+  return { datas, dataToOption, isEmpty };
 };

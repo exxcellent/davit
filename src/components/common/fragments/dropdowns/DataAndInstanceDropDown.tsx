@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
@@ -23,7 +23,7 @@ interface DataAndInstanceDropDownButtonProps extends DropdownProps {
 
 export const DataAndInstanceDropDown: FunctionComponent<DataAndInstanceDropDownProps> = (props) => {
   const { onSelect, placeholder, value } = props;
-  const { datas, selectData, dataToOption } = useDataDropDownViewModel();
+  const { datas, selectData, dataToOption, isEmpty } = useDataDropDownViewModel();
 
   return (
     <Dropdown
@@ -36,13 +36,14 @@ export const DataAndInstanceDropDown: FunctionComponent<DataAndInstanceDropDownP
       scrolling
       selection
       value={value === -1 ? undefined : value}
+      disabled={isEmpty}
     />
   );
 };
 
 export const DataDropDownButton: FunctionComponent<DataAndInstanceDropDownButtonProps> = (props) => {
   const { onSelect, icon } = props;
-  const { datas, selectData, dataToOption } = useDataDropDownViewModel();
+  const { datas, selectData, dataToOption, isEmpty } = useDataDropDownViewModel();
 
   return (
     <Dropdown
@@ -51,7 +52,7 @@ export const DataDropDownButton: FunctionComponent<DataAndInstanceDropDownButton
         .sort((a, b) => {
           return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
         })}
-      icon={icon}
+      icon={isEmpty ? "" : icon}
       onChange={(event, data) => onSelect(selectData(Number(data.value), datas))}
       className="button icon"
       inverted="true"
@@ -60,12 +61,18 @@ export const DataDropDownButton: FunctionComponent<DataAndInstanceDropDownButton
       selectOnBlur={false}
       trigger={<React.Fragment />}
       scrolling
+      disabled={isEmpty}
     />
   );
 };
 
 const useDataDropDownViewModel = () => {
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
+  const [isEmpty, setIsEmpty] = useState<boolean>(true);
+
+  useEffect(() => {
+    datas.length > 0 ? setIsEmpty(false) : setIsEmpty(true);
+  }, [datas]);
 
   const selectData = (dataId: number, datas: DataCTO[]): { data?: DataCTO; instance?: DataInstanceTO } | undefined => {
     if (!isNullOrUndefined(dataId) && !isNullOrUndefined(datas)) {
@@ -107,5 +114,5 @@ const useDataDropDownViewModel = () => {
     }
   };
 
-  return { datas, selectData, dataToOption };
+  return { datas, selectData, dataToOption, isEmpty };
 };
