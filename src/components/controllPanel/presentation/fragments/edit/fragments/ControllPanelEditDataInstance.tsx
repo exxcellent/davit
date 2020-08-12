@@ -123,7 +123,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
   };
 
   return {
-    label: "EDIT DATA - EDIT INSTANCE",
+    label: "EDIT * DATA * INSTANCE",
     name: getName(),
     changeName,
     saveDataInstace,

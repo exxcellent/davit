@@ -312,7 +312,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
   };
 
   return {
-    label: "EDIT SEQUENCE - STEP",
+    label: "EDIT * SEQUENCE * STEP",
     name: stepToEdit ? stepToEdit!.squenceStepTO.name : "",
     changeName,
     saveSequenceStep,

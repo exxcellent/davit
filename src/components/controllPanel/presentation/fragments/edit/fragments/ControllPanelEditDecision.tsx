@@ -279,7 +279,7 @@ const useControllPanelEditConditionViewModel = () => {
   };
 
   return {
-    label: "EDIT SEQUENCE - DECISION",
+    label: "EDIT * SEQUENCE * DECISION",
     name: decisionToEdit?.name,
     changeName,
     saveDecision,
