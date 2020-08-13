@@ -2,9 +2,11 @@ import React, { FunctionComponent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dropdown } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
+import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
 import { DecisionTO } from "../../../../../../dataAccess/access/to/DecisionTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
+import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2ButtonIcon } from "../../../../../common/fragments/buttons/Carv2Button";
 import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
@@ -71,6 +73,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
 
 const useControllPanelEditConditionViewModel = () => {
   const decisionToEdit: DecisionTO | null = useSelector(editSelectors.decisionToEdit);
+  const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -127,7 +130,7 @@ const useControllPanelEditConditionViewModel = () => {
   };
 
   return {
-    label: "EDIT * SEQUENCE * DECISION * CONDITION",
+    label: "EDIT * " + selectedSequence?.sequenceTO.name + " * " + decisionToEdit?.name + " * CONDITION",
     setModeEditDecision,
     componentFk: decisionToEdit?.componentFk,
     setComponentFk,

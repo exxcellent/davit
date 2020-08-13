@@ -214,7 +214,7 @@ const useControllPanelEditRelationViewModel = () => {
   };
 
   return {
-    label: relationToEdit?.id === -1 ? "ADD RELATION" : "EDIT * RELATION",
+    label: "EDIT * RELATION",
     label1: relationToEdit?.label1,
     label2: relationToEdit?.label2,
     data1: relationToEdit?.data1Fk === -1 ? undefined : relationToEdit?.data1Fk,

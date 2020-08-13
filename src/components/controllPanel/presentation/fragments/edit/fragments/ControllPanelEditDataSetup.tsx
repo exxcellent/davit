@@ -182,7 +182,7 @@ const useControllPanelEditDataSetupViewModel = () => {
   };
 
   return {
-    label: "EDIT * DATA SETUP",
+    label: "EDIT * " + dataSetupToEdit?.dataSetup.name,
     name: dataSetupToEdit?.dataSetup.name,
     changeName,
     saveDataSetup,

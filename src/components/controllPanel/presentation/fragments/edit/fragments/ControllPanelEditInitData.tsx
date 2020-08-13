@@ -2,10 +2,12 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { isNullOrUndefined } from "util";
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
+import { DataSetupTO } from "../../../../../../dataAccess/access/to/DataSetupTO";
 import { DataInstanceTO, DATA_INSTANCE_ID_FACTOR } from "../../../../../../dataAccess/access/to/DataTO";
 import { InitDataTO } from "../../../../../../dataAccess/access/to/InitDataTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
+import { masterDataSelectors } from "../../../../../../slices/MasterDataSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
@@ -65,6 +67,9 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
 
 const useControllPanelEditDataSetupViewModel = () => {
   const initDataToEdit: InitDataTO | null = useSelector(editSelectors.initDataToEdit);
+  const dataSetup: DataSetupTO | null = useSelector(
+    masterDataSelectors.getDataSetupToById(initDataToEdit?.dataSetupFk || -1)
+  );
   const dispatch = useDispatch();
   const [key, setKey] = useState<number>(0);
 
@@ -135,7 +140,7 @@ const useControllPanelEditDataSetupViewModel = () => {
   };
 
   return {
-    label: "EDIT * DATA SETUP * INIT DATA",
+    label: "EDIT * " + dataSetup?.name + " * INIT DATA",
     data: initDataToEdit?.dataFk,
     component: initDataToEdit?.componentFk,
     deleteInitData,
