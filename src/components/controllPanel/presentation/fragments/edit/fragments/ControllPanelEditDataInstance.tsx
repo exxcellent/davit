@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
+import { DataInstanceTO } from "../../../../../../dataAccess/access/to/DataTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
@@ -88,14 +89,29 @@ const useControllPanelEditDataInstanceViewModel = () => {
   const updateData = () => {
     if (!isNullOrUndefined(dataToEdit)) {
       let copyDataToEdit: DataCTO = Carv2Util.deepCopy(dataToEdit);
-      dispatch(EditActions.data.save(copyDataToEdit));
+      const instance: DataInstanceTO | undefined = copyDataToEdit.data.inst.find(
+        (instance) => instance.id === instanceId
+      );
+      if (instance) {
+        if (instance.name !== "") {
+          dispatch(EditActions.data.save(copyDataToEdit));
+        }
+      }
     }
   };
 
   const saveDataInstace = () => {
     if (!isNullOrUndefined(dataToEdit)) {
-      dispatch(EditActions.data.save(dataToEdit!));
-      dispatch(EditActions.setMode.editData(dataToEdit!));
+      const instance: DataInstanceTO | undefined = dataToEdit.data.inst.find((instance) => instance.id === instanceId);
+      if (instance) {
+        if (instance.name !== "") {
+          dispatch(EditActions.data.save(dataToEdit!));
+          dispatch(EditActions.setMode.editData(dataToEdit!));
+        } else {
+          deleteDataInstance();
+          dispatch(EditActions.setMode.editData(dataToEdit!));
+        }
+      }
     }
   };
 
@@ -123,7 +139,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
   };
 
   return {
-    label: "EDIT DATA - EDIT INSTANCE",
+    label: "EDIT * DATA * INSTANCE",
     name: getName(),
     changeName,
     saveDataInstace,

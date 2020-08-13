@@ -136,7 +136,7 @@ const useControllPanelEditActionViewModel = () => {
   };
 
   return {
-    label: "EDIT SEQUENCE - EDIT STEP - EDIT ACTION",
+    label: "EDIT * SEQUENCE * STEP * ACTION",
     action: actionToEdit,
     setComponent,
     setAction,
