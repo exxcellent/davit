@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, { createRef, FunctionComponent } from "react";
+import React, { createRef, FunctionComponent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Icon, Tab } from "semantic-ui-react";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
@@ -18,22 +18,21 @@ interface CarvTableRow {}
 
 export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (props) => {
   const { fullScreen } = props;
-  const { title, getTableBody, getDecisionTableBody, getStepTableBody } = useSequenceTableViewModel();
+  const { getTableBody, getDecisionTableBody, getStepTableBody } = useSequenceTableViewModel();
 
-  enum table {
+  enum TableBody {
     step = "step",
     decision = "decision",
     sequence = "sequence",
   }
+
+  const [body, setBody] = useState<TableBody>(TableBody.sequence);
 
   const panes = [
     {
       menuItem: "Sequence",
       render: () => (
         <Tab.Pane>
-          <div>
-            <label>{title}</label>
-          </div>
           <table>
             <thead>
               <tr>
@@ -53,9 +52,6 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
       menuItem: "Decision",
       render: () => (
         <Tab.Pane>
-          <div>
-            <label>DECISIONS</label>
-          </div>
           <table>
             <thead>
               <tr>
@@ -73,9 +69,6 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
       menuItem: "Steps",
       render: () => (
         <Tab.Pane>
-          <div>
-            <label>STEPS</label>
-          </div>
           <table>
             <thead>
               <tr>
@@ -94,7 +87,67 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
 
   return (
     <div className={fullScreen ? "" : "sequenceTable"}>
-      <Tab panes={panes} menu={{ inverted: true, attached: true, tabular: false }} />
+      <div className="tableBorder">
+        <div className="tabs">
+          <div
+            className={body === TableBody.sequence ? "tab active" : "tab"}
+            onClick={() => setBody(TableBody.sequence)}
+          >
+            Sequence
+          </div>
+          <div
+            className={body === TableBody.decision ? "tab active" : "tab"}
+            onClick={() => setBody(TableBody.decision)}
+          >
+            Decisions
+          </div>
+          <div className={body === TableBody.step ? "tab active" : "tab"} onClick={() => setBody(TableBody.step)}>
+            Steps
+          </div>
+        </div>
+
+        {body === TableBody.step && (
+          <table>
+            <thead>
+              <tr>
+                <th>INDEX</th>
+                <th>NAME</th>
+                <th>SENDER</th>
+                <th>RECEIVER</th>
+              </tr>
+            </thead>
+            <tbody>{getStepTableBody()}</tbody>
+          </table>
+        )}
+
+        {body === TableBody.decision && (
+          <table>
+            <thead>
+              <tr>
+                <th>INDEX</th>
+                <th>NAME</th>
+                <th>RESULT</th>
+              </tr>
+            </thead>
+            <tbody>{getDecisionTableBody()}</tbody>
+          </table>
+        )}
+
+        {body === TableBody.sequence && (
+          <table>
+            <thead>
+              <tr>
+                <th>INDEX</th>
+                <th>NAME</th>
+                <th>SENDER</th>
+                <th>RECEIVER</th>
+                <th>ACTION-ERROR</th>
+              </tr>
+            </thead>
+            <tbody>{getTableBody()}</tbody>
+          </table>
+        )}
+      </div>
     </div>
   );
 };
