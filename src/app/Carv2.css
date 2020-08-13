@@ -493,7 +493,7 @@ table {
   /* background-color: var(--carv2-background-color); */
   background-color: var(--carv2-background-color-header);
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   height: 3em;
   border-bottom: 1px solid black;
 }
