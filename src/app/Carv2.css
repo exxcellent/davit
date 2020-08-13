@@ -318,6 +318,16 @@
   transform: translateY(0.2em);
 }
 
+.IDLE {
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+  background-color: var(--carv2-color-exxcellent-blue);
+  border: 0.2em solid var(--carv2-background-color);
+  box-shadow: 0 0 0 0.2em var(--carv2-color-exxcellent-blue);
+  transform: translateY(0.2em);
+}
+
 .ERROR {
   border-radius: 50%;
   width: 2em;
