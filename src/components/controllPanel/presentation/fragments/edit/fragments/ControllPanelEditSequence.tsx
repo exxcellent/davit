@@ -179,7 +179,7 @@ const useControllPanelEditSequenceViewModel = () => {
   };
 
   return {
-    label: "EDIT * " + sequenceToEdit?.name,
+    label: "EDIT * " + (sequenceToEdit?.name || ""),
     name: sequenceToEdit?.name,
     changeName,
     saveSequence,
