@@ -62,6 +62,7 @@ const SequenceModelSlice = createSlice({
   initialState: getInitialState,
   reducers: {
     setSelectedSequence: (state, action: PayloadAction<SequenceCTO | null>) => {
+      console.warn("sequence: ", action.payload + " selected.");
       state.selectedSequenceModel = action.payload;
       // TODO: in extra method und nur ausführen wenn sequence und datasetup gestezt sind sonst reset.
       if (action.payload && state.selectedDataSetup) {
@@ -137,6 +138,15 @@ function resetState(state: SequenceModelState) {
 }
 
 // =============================================== THUNKS ===============================================
+
+const stepNext = (currentIndex: number): AppThunk => (dispatch) => {
+  dispatch(SequenceModelActions.setCurrentStepIndex(currentIndex + 1));
+};
+
+const stepBack = (currentIndex: number): AppThunk => (dispatch) => {
+  dispatch(SequenceModelActions.setCurrentStepIndex(currentIndex - 1));
+};
+
 const calculateSequence = (
   sequence: SequenceCTO | null,
   dataSetup: DataSetupCTO | null
@@ -319,6 +329,7 @@ const getArrowForStepFk = (
     return mapStepToArrow(step, rootState);
   }
 };
+
 // =============================================== SELECTORS ===============================================
 
 export const SequenceModelReducer = SequenceModelSlice.reducer;
@@ -434,4 +445,6 @@ export const SequenceModelActions = {
   setCurrentStepIndex: SequenceModelSlice.actions.setCurrentStepIndex,
   handleComponentClickEvent,
   handleDataClickEvent,
+  stepNext,
+  stepBack,
 };
