@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
@@ -18,7 +18,7 @@ interface SequenceDropDownPropsButton extends DropdownProps {
 
 export const SequenceDropDown: FunctionComponent<SequenceDropDownProps> = (props) => {
   const { onSelect, placeholder, value } = props;
-  const { sequences, selectSequence, sequenceToOption, isEmpty } = useSequenceDropDownViewModel();
+  const { sequences, selectSequence, sequenceToOption } = useSequenceDropDownViewModel();
 
   return (
     <Dropdown
@@ -31,19 +31,19 @@ export const SequenceDropDown: FunctionComponent<SequenceDropDownProps> = (props
       clearable
       selection
       value={value}
-      disabled={isEmpty}
+      disabled={sequences.length > 0 ? false : true}
     />
   );
 };
 
 export const SequenceDropDownButton: FunctionComponent<SequenceDropDownPropsButton> = (props) => {
   const { onSelect, icon } = props;
-  const { sequences, selectSequence, sequenceToOption, isEmpty } = useSequenceDropDownViewModel();
+  const { sequences, selectSequence, sequenceToOption } = useSequenceDropDownViewModel();
 
   return (
     <Dropdown
       options={sequences.map(sequenceToOption)}
-      icon={isEmpty ? "" : icon}
+      icon={sequences.length > 0 ? icon : ""}
       onChange={(event, sequence) => onSelect(selectSequence(Number(sequence.value), sequences))}
       className="button icon"
       inverted="true"
@@ -52,18 +52,13 @@ export const SequenceDropDownButton: FunctionComponent<SequenceDropDownPropsButt
       selectOnBlur={false}
       trigger={<React.Fragment />}
       scrolling
-      disabled={isEmpty}
+      disabled={sequences.length > 0 ? false : true}
     />
   );
 };
 
 const useSequenceDropDownViewModel = () => {
   const sequences: SequenceTO[] = useSelector(masterDataSelectors.sequences);
-  const [isEmpty, setIsEmpty] = useState<boolean>(true);
-
-  useEffect(() => {
-    sequences.length > 0 ? setIsEmpty(false) : setIsEmpty(true);
-  }, [sequences]);
 
   const selectSequence = (sequenceId: number, sequences: SequenceTO[]): SequenceTO | undefined => {
     if (!isNullOrUndefined(sequenceId) && !isNullOrUndefined(sequences)) {
@@ -80,5 +75,5 @@ const useSequenceDropDownViewModel = () => {
     };
   };
 
-  return { sequences, selectSequence, sequenceToOption, isEmpty };
+  return { sequences, selectSequence, sequenceToOption };
 };

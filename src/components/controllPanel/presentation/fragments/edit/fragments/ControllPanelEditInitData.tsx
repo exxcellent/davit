@@ -135,7 +135,7 @@ const useControllPanelEditDataSetupViewModel = () => {
   };
 
   return {
-    label: "EDIT DATA SETUP * INIT DATA",
+    label: "EDIT * DATA SETUP * INIT DATA",
     data: initDataToEdit?.dataFk,
     component: initDataToEdit?.componentFk,
     deleteInitData,

@@ -1,10 +1,11 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
 import { sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
+import { Carv2Util } from "../../../../utils/Carv2Util";
 
 interface StepDropDownButtonProps extends DropdownProps {
   onSelect: (step: SequenceStepCTO | undefined) => void;
@@ -15,54 +16,48 @@ interface StepDropDownProps extends DropdownProps {
   onSelect: (step: SequenceStepCTO | undefined) => void;
   placeholder?: string;
   value?: number;
+  exclude?: number;
 }
 
 export const StepDropDownButton: FunctionComponent<StepDropDownButtonProps> = (props) => {
   const { onSelect, icon } = props;
-  const { sequence, stepOptions, selectSequenceStep, isEmpty } = useStepDropDownViewModel();
+  const { sequence, stepOptions, selectSequenceStep } = useStepDropDownViewModel();
 
   return (
     <Dropdown
-      options={stepOptions(sequence)}
-      icon={isEmpty ? "" : icon}
+      options={stepOptions()}
+      icon={sequence ? (sequence?.sequenceStepCTOs.length > 0 ? "" : icon) : ""}
       onChange={(event, data) => onSelect(selectSequenceStep(Number(data.value), sequence))}
       className="button icon"
       floating
       selectOnBlur={false}
       trigger={<React.Fragment />}
       scrolling
-      disabled={isEmpty}
+      disabled={sequence ? (sequence?.sequenceStepCTOs.length > 0 ? false : true) : false}
     />
   );
 };
 
 export const StepDropDown: FunctionComponent<StepDropDownProps> = (props) => {
-  const { onSelect, placeholder, value } = props;
-  const { sequence, stepOptions, selectSequenceStep, isEmpty } = useStepDropDownViewModel();
+  const { onSelect, placeholder, value, exclude } = props;
+  const { sequence, stepOptions, selectSequenceStep } = useStepDropDownViewModel(exclude);
 
   return (
     <Dropdown
-      options={stepOptions(sequence)}
+      options={stepOptions()}
       selection
       selectOnBlur={false}
       placeholder={placeholder || "Select step ..."}
       onChange={(event, data) => onSelect(selectSequenceStep(Number(data.value), sequence))}
       scrolling
       value={value === -1 ? undefined : value}
-      disabled={isEmpty}
+      disabled={sequence ? (sequence?.sequenceStepCTOs.length > 0 ? false : true) : false}
     />
   );
 };
 
-const useStepDropDownViewModel = () => {
+const useStepDropDownViewModel = (exclude?: number) => {
   const sequenceToEdit: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
-  const [isEmpty, setIsEmpty] = useState<boolean>(true);
-
-  useEffect(() => {
-    if (!isNullOrUndefined(sequenceToEdit)) {
-      sequenceToEdit.sequenceStepCTOs.length > 0 ? setIsEmpty(false) : setIsEmpty(true);
-    }
-  }, [sequenceToEdit]);
 
   const stepToOption = (step: SequenceStepCTO): DropdownItemProps => {
     return {
@@ -72,9 +67,13 @@ const useStepDropDownViewModel = () => {
     };
   };
 
-  const stepOptions = (sequence: SequenceCTO | null): DropdownItemProps[] => {
-    if (!isNullOrUndefined(sequence)) {
-      return sequence.sequenceStepCTOs.map(stepToOption);
+  const stepOptions = (): DropdownItemProps[] => {
+    if (!isNullOrUndefined(sequenceToEdit)) {
+      let copySteps: SequenceStepCTO[] = Carv2Util.deepCopy(sequenceToEdit.sequenceStepCTOs);
+      if (exclude) {
+        copySteps = copySteps.filter((step) => step.squenceStepTO.id !== exclude);
+      }
+      return copySteps.map(stepToOption);
     }
     return [];
   };
@@ -86,5 +85,5 @@ const useStepDropDownViewModel = () => {
     return undefined;
   };
 
-  return { sequence: sequenceToEdit, stepOptions, selectSequenceStep, isEmpty };
+  return { sequence: sequenceToEdit, stepOptions, selectSequenceStep };
 };
