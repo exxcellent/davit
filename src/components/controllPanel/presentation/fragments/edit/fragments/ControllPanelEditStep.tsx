@@ -149,7 +149,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
               <StepDropDown
                 onSelect={setGoToTypeStep}
                 value={goTo?.type === GoToTypes.STEP ? goTo.id : 1}
-                self={stepId}
+                exclude={stepId}
               />
             </OptionField>
           )}

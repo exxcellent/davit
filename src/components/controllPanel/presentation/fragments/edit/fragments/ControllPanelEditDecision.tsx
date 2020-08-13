@@ -109,7 +109,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
               <DecisionDropDown
                 onSelect={(cond) => setGoToTypeDecision(true, cond)}
                 value={ifGoTo?.type === GoToTypes.COND ? ifGoTo.id : 1}
-                self={decId}
+                exclude={decId}
               />
             </OptionField>
           )}
@@ -138,7 +138,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
               <DecisionDropDown
                 onSelect={(cond) => setGoToTypeDecision(false, cond)}
                 value={elseGoTo?.type === GoToTypes.COND ? elseGoTo.id : 1}
-                self={decId}
+                exclude={decId}
               />
             </OptionField>
           )}

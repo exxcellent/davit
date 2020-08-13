@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
@@ -16,7 +16,7 @@ interface ActionDropDownProps extends DropdownProps {
 
 export const ActionDropDown: FunctionComponent<ActionDropDownProps> = (props) => {
   const { onSelect, icon } = props;
-  const { actions, actionToOption, selectAction, isEmpty } = useActionDropDownViewModel();
+  const { actions, actionToOption, selectAction } = useActionDropDownViewModel();
 
   return (
     <Dropdown
@@ -29,9 +29,9 @@ export const ActionDropDown: FunctionComponent<ActionDropDownProps> = (props) =>
       floating
       compact
       className="button icon"
-      icon={isEmpty ? "" : icon}
+      icon={actions.length > 0 ? icon : ""}
       trigger={<React.Fragment />}
-      disabled={isEmpty}
+      disabled={actions.length > 0 ? false : true}
     />
   );
 };
@@ -53,11 +53,6 @@ const useActionDropDownViewModel = () => {
   const actions: ActionTO[] = useSelector(editSelectors.stepToEdit)?.actions || [];
   const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
-  const [isEmpty, setIsEmpty] = useState<boolean>(true);
-
-  useEffect(() => {
-    actions.length > 0 ? setIsEmpty(false) : setIsEmpty(true);
-  }, [actions]);
 
   const actionToOption = (action: ActionTO): DropdownItemProps => {
     const text: string = `${getComponentName(action.componentFk, components)} - ${action.actionType} - ${getDataName(
@@ -78,5 +73,5 @@ const useActionDropDownViewModel = () => {
     return undefined;
   };
 
-  return { actions, actionToOption, selectAction, isEmpty };
+  return { actions, actionToOption, selectAction };
 };

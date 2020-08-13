@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
@@ -18,7 +18,7 @@ interface DataSetupDropDownPropsButton extends DropdownProps {
 
 export const DataSetupDropDown: FunctionComponent<DataSetupDropDownProps> = (props) => {
   const { onSelect, placeholder, value } = props;
-  const { dataSetups, selectDataSetup, dataSetupToOption, isEmpty } = useDataSetupDropDownViewModel();
+  const { dataSetups, selectDataSetup, dataSetupToOption } = useDataSetupDropDownViewModel();
 
   return (
     <Dropdown
@@ -32,38 +32,33 @@ export const DataSetupDropDown: FunctionComponent<DataSetupDropDownProps> = (pro
       scrolling
       clearable={true}
       value={value}
-      disabled={isEmpty}
+      disabled={dataSetups.length > 0 ? false : true}
     />
   );
 };
 
 export const DataSetupDropDownButton: FunctionComponent<DataSetupDropDownPropsButton> = (props) => {
   const { onSelect, icon } = props;
-  const { dataSetups, selectDataSetup, dataSetupToOption, isEmpty } = useDataSetupDropDownViewModel();
+  const { dataSetups, selectDataSetup, dataSetupToOption } = useDataSetupDropDownViewModel();
 
   return (
     <Dropdown
       options={dataSetups.map(dataSetupToOption).sort((a, b) => {
         return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
       })}
-      icon={isEmpty ? "" : icon}
+      icon={dataSetups.length > 0 ? icon : ""}
       selectOnBlur={false}
       onChange={(event, data) => onSelect(selectDataSetup(Number(data.value), dataSetups))}
       className="button icon"
       trigger={<React.Fragment />}
       scrolling
-      disabled={isEmpty}
+      disabled={dataSetups.length > 0 ? false : true}
     />
   );
 };
 
 const useDataSetupDropDownViewModel = () => {
   const dataSetups: DataSetupTO[] = useSelector(masterDataSelectors.dataSetup);
-  const [isEmpty, setIsEmpty] = useState<boolean>(true);
-
-  useEffect(() => {
-    dataSetups.length > 0 ? setIsEmpty(false) : setIsEmpty(true);
-  }, [dataSetups]);
 
   const dataSetupToOption = (dataSetup: DataSetupTO): DropdownItemProps => {
     return {
@@ -80,5 +75,5 @@ const useDataSetupDropDownViewModel = () => {
     return undefined;
   };
 
-  return { dataSetups, dataSetupToOption, selectDataSetup, isEmpty };
+  return { dataSetups, dataSetupToOption, selectDataSetup };
 };
