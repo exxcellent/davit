@@ -140,7 +140,7 @@ const useControllPanelEditDataSetupViewModel = () => {
   };
 
   return {
-    label: "EDIT * " + dataSetup?.name + " * INIT DATA",
+    label: "EDIT * " + (dataSetup?.name || "") + " * INIT DATA",
     data: initDataToEdit?.dataFk,
     component: initDataToEdit?.componentFk,
     deleteInitData,

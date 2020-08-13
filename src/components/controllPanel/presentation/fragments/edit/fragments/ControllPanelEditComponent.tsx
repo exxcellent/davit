@@ -123,7 +123,7 @@ const useControllPanelEditComponentViewModel = () => {
   };
 
   return {
-    label: "EDIT * " + componentToEdit?.component.name,
+    label: "EDIT * " + (componentToEdit?.component.name || ""),
     name: componentToEdit?.component.name,
     changeName,
     saveComponent,

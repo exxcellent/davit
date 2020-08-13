@@ -130,7 +130,8 @@ const useControllPanelEditConditionViewModel = () => {
   };
 
   return {
-    label: "EDIT * " + selectedSequence?.sequenceTO.name + " * " + decisionToEdit?.name + " * CONDITION",
+    label:
+      "EDIT * " + (selectedSequence?.sequenceTO.name || "") + " * " + (decisionToEdit?.name || "") + " * CONDITION",
     setModeEditDecision,
     componentFk: decisionToEdit?.componentFk,
     setComponentFk,
