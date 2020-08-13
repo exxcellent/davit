@@ -52,10 +52,10 @@ export interface Arrows {
 }
 
 const useViewModel = () => {
+  const dispatch = useDispatch();
   // ====== SELECTORS =====
   const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
-  const dispatch = useDispatch();
   // ----- EDIT -----
   const componentCTOToEdit: ComponentCTO | null = useSelector(editSelectors.componentToEdit);
   const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.stepToEdit);
@@ -68,6 +68,7 @@ const useViewModel = () => {
   const currentComponentDatas: ComponentData[] = useSelector(sequenceModelSelectors.selectComponentData);
   const errors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
   const actions: ActionTO[] = useSelector(sequenceModelSelectors.selectActions);
+  const dataSetup: DataSetupCTO | null = useSelector(sequenceModelSelectors.selectDataSetup);
 
   React.useEffect(() => {
     dispatch(MasterDataActions.loadComponentsFromBackend());
@@ -107,15 +108,21 @@ const useViewModel = () => {
       ? mapActionToComponentDatas(actionToEdit)
       : undefined;
     const compDataFromDecisionToEdit: ViewFragmentProps[] = mapDecisionToCompData(decisionToEdit);
-    const compDatasFromDataSetup: ViewFragmentProps[] = dataSetupToEdit
+    const compDatasFromDataSetupEdit: ViewFragmentProps[] = dataSetupToEdit
       ? dataSetupToEdit.initDatas.map(mapInitDataToCompData)
+      : [];
+    const compDatasFromDataSetupView: ViewFragmentProps[] = dataSetup
+      ? dataSetup.initDatas.map(mapInitDataToCompData)
       : [];
     const compDatasFromInitData: ViewFragmentProps | undefined = initDataToEdit
       ? mapInitDataToCompData(initDataToEdit)
       : undefined;
     compDatas.push(...compDatasFromStepToEdit);
     compDatas.push(...compDataFromDecisionToEdit);
-    compDatas.push(...compDatasFromDataSetup);
+    compDatas.push(...compDatasFromDataSetupEdit);
+    if (currentComponentDatas.length <= 0) {
+      compDatas.push(...compDatasFromDataSetupView);
+    }
     if (compDataFromActionToEdit) {
       compDatas.push(compDataFromActionToEdit);
     }
