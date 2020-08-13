@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { isNullOrUndefined } from "util";
 import { AppThunk, RootState } from "../app/store";
+import { Arrows } from "../components/metaComponentModel/presentation/MetaComponentModelController";
 import { ComponentCTO } from "../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../dataAccess/access/cto/DataCTO";
 import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
@@ -179,11 +180,25 @@ const setModeToView = (): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.VIEW));
 };
 
-const setModeToEdit = (): AppThunk => (dispatch) => {
-  // TODO: dosn't fells right to do this here!
-  dispatch(SequenceModelActions.resetCurrentSequence);
+const setModeToEdit = (): AppThunk => (dispatch, getState) => {
   dispatch(EditSlice.actions.clearObjectToEdit());
-  dispatch(setModeWithStorage(Mode.EDIT));
+  if (getState().edit.mode !== Mode.VIEW) {
+    dispatch(setModeWithStorage(Mode.EDIT));
+  } else {
+    const stepIndex: number | null = getState().sequenceModel.currentStepIndex;
+    if (stepIndex !== null && stepIndex > 0) {
+      const step: SequenceStepCTO | undefined = getState().sequenceModel.selectedSequenceModel?.sequenceStepCTOs.find(
+        (step) => step.squenceStepTO.id === stepIndex
+      );
+      if (step) {
+        dispatch(setModeToEditStep(step));
+      } else {
+        dispatch(setModeWithStorage(Mode.EDIT));
+      }
+    } else {
+      dispatch(setModeWithStorage(Mode.EDIT));
+    }
+  }
 };
 
 const setModeToEditComponent = (component?: ComponentCTO): AppThunk => (dispatch) => {
@@ -743,6 +758,23 @@ export const editSelectors = {
     return state.edit.mode === Mode.EDIT_SEQUENCE && (state.edit.objectToEdit as SequenceTO)
       ? (state.edit.objectToEdit as SequenceTO)
       : null;
+  },
+  editArrow: (state: RootState): Arrows | null => {
+    if (state.edit.mode === Mode.EDIT_SEQUENCE_STEP && (state.edit.objectToEdit as SequenceStepCTO).actions) {
+      const sourceComp: ComponentCTO | undefined = state.masterData.components.find(
+        (comp) => comp.component.id === (state.edit.objectToEdit as SequenceStepCTO).squenceStepTO.sourceComponentFk
+      );
+      const targetComp: ComponentCTO | undefined = state.masterData.components.find(
+        (comp) => comp.component.id === (state.edit.objectToEdit as SequenceStepCTO).squenceStepTO.targetComponentFk
+      );
+      if (sourceComp && targetComp) {
+        return { sourceGeometricalData: sourceComp.geometricalData, targetGeometricalData: targetComp.geometricalData };
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
   },
   dataSetupToEdit: (state: RootState): DataSetupCTO | null => {
     return state.edit.mode === Mode.EDIT_DATA_SETUP && (state.edit.objectToEdit as DataSetupCTO).dataSetup

@@ -2,6 +2,7 @@ import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
+import { DataSetupCTO } from "../../../../../dataAccess/access/cto/DataSetupCTO";
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
 import { DataSetupTO } from "../../../../../dataAccess/access/to/DataSetupTO";
 import { SequenceTO } from "../../../../../dataAccess/access/to/SequenceTO";
@@ -21,18 +22,20 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
     stepBack,
     stepNext,
     selectDataSetup,
+    currentDataSetup,
+    currentSequence,
   } = useControllPanelSequenceOptionsViewModel();
 
   return (
     <ControllPanelEditSub label="VIEW">
       <div className="optionFieldSpacer">
         <OptionField label="Data - Setup">
-          <DataSetupDropDown onSelect={selectDataSetup} placeholder="Select Data Setup ..." />
+          <DataSetupDropDown onSelect={selectDataSetup} placeholder="Select Data Setup ..." value={currentDataSetup} />
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
         <OptionField label="SEQUENCE">
-          <SequenceDropDown onSelect={selectSequence} />
+          <SequenceDropDown onSelect={selectSequence} value={currentSequence} />
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
@@ -70,6 +73,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
 const useControllPanelSequenceOptionsViewModel = () => {
   const sequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
   const stepIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentStepIndex);
+  const selectedDataSetup: DataSetupCTO | null = useSelector(sequenceModelSelectors.selectDataSetup);
   const dispatch = useDispatch();
 
   const selectSequence = (sequence: SequenceTO | undefined) => {
@@ -90,12 +94,16 @@ const useControllPanelSequenceOptionsViewModel = () => {
     }
   };
 
-  // TODO: add in sequenceModelSlice.
-  const stepNext = () => {
-    dispatch(SequenceModelActions.setCurrentStepIndex(stepIndex + 1));
-  };
   const stepBack = () => {
-    dispatch(SequenceModelActions.setCurrentStepIndex(stepIndex - 1));
+    if (!isNullOrUndefined(sequence)) {
+      dispatch(SequenceModelActions.stepBack(stepIndex));
+    }
+  };
+
+  const stepNext = () => {
+    if (!isNullOrUndefined(sequence)) {
+      dispatch(SequenceModelActions.stepNext(stepIndex));
+    }
   };
 
   return {
@@ -105,5 +113,7 @@ const useControllPanelSequenceOptionsViewModel = () => {
     stepNext,
     stepBack,
     selectDataSetup,
+    currentDataSetup: selectedDataSetup?.dataSetup.id || -1,
+    currentSequence: sequence?.sequenceTO.id || -1,
   };
 };

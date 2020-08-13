@@ -62,6 +62,7 @@ const SequenceModelSlice = createSlice({
   initialState: getInitialState,
   reducers: {
     setSelectedSequence: (state, action: PayloadAction<SequenceCTO | null>) => {
+      console.warn("sequence: ", action.payload + " selected.");
       state.selectedSequenceModel = action.payload;
       // TODO: in extra method und nur ausführen wenn sequence und datasetup gestezt sind sonst reset.
       if (action.payload && state.selectedDataSetup) {
@@ -137,6 +138,15 @@ function resetState(state: SequenceModelState) {
 }
 
 // =============================================== THUNKS ===============================================
+
+const stepNext = (currentIndex: number): AppThunk => (dispatch) => {
+  dispatch(SequenceModelActions.setCurrentStepIndex(currentIndex + 1));
+};
+
+const stepBack = (currentIndex: number): AppThunk => (dispatch) => {
+  dispatch(SequenceModelActions.setCurrentStepIndex(currentIndex - 1));
+};
+
 const calculateSequence = (
   sequence: SequenceCTO | null,
   dataSetup: DataSetupCTO | null
@@ -319,6 +329,7 @@ const getArrowForStepFk = (
     return mapStepToArrow(step, rootState);
   }
 };
+
 // =============================================== SELECTORS ===============================================
 
 export const SequenceModelReducer = SequenceModelSlice.reducer;
@@ -335,8 +346,13 @@ export const sequenceModelSelectors = {
   selectCalcStepIds: (state: RootState): string[] => (state.edit.mode === Mode.VIEW ? state.sequenceModel.stepIds : []),
   selectTerminalStep: (state: RootState): Terminal | null =>
     state.edit.mode === Mode.VIEW ? state.sequenceModel.calcSequence?.terminal || null : null,
-  selectDataSetup: (state: RootState): DataSetupCTO | null => state.sequenceModel.selectedDataSetup,
-
+  selectDataSetup: (state: RootState): DataSetupCTO | null => {
+    if (state.edit.mode === Mode.VIEW) {
+      return state.sequenceModel.selectedDataSetup;
+    } else {
+      return null;
+    }
+  },
   selectComponentData: (state: RootState): ComponentData[] => {
     const filteredSteps =
       state.edit.mode === Mode.VIEW
@@ -434,4 +450,6 @@ export const SequenceModelActions = {
   setCurrentStepIndex: SequenceModelSlice.actions.setCurrentStepIndex,
   handleComponentClickEvent,
   handleDataClickEvent,
+  stepNext,
+  stepBack,
 };

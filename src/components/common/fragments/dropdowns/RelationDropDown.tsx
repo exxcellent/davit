@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
@@ -18,7 +18,7 @@ interface RelationDropDownPropsButton extends DropdownProps {
 
 export const RelationDropDown: FunctionComponent<RelationDropDownProps> = (props) => {
   const { onSelect, placeholder } = props;
-  const { relations, selectDataRelation, relationToOption, isEmpty } = useRelationDropDownViewModel();
+  const { relations, selectDataRelation, relationToOption } = useRelationDropDownViewModel();
 
   return (
     <Dropdown
@@ -28,19 +28,19 @@ export const RelationDropDown: FunctionComponent<RelationDropDownProps> = (props
       selectOnBlur={false}
       scrolling
       selection
-      disabled={isEmpty}
+      disabled={relations.length > 0 ? false : true}
     />
   );
 };
 
 export const RelationDropDownButton: FunctionComponent<RelationDropDownPropsButton> = (props) => {
   const { onSelect, icon } = props;
-  const { relations, selectDataRelation, relationToOption, isEmpty } = useRelationDropDownViewModel();
+  const { relations, selectDataRelation, relationToOption } = useRelationDropDownViewModel();
 
   return (
     <Dropdown
       options={relations.map(relationToOption)}
-      icon={isEmpty ? "" : icon}
+      icon={relations.length > 0 ? icon : ""}
       onChange={(event, data) => onSelect(selectDataRelation(Number(data.value), relations))}
       className="button icon"
       inverted="true"
@@ -49,7 +49,7 @@ export const RelationDropDownButton: FunctionComponent<RelationDropDownPropsButt
       selectOnBlur={false}
       trigger={<React.Fragment />}
       scrolling
-      disabled={isEmpty}
+      disabled={relations.length > 0 ? false : true}
     />
   );
 };
@@ -57,12 +57,6 @@ export const RelationDropDownButton: FunctionComponent<RelationDropDownPropsButt
 const useRelationDropDownViewModel = () => {
   const relations: DataRelationTO[] = useSelector(masterDataSelectors.relations);
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
-
-  const [isEmpty, setIsEmpty] = useState<boolean>(true);
-
-  useEffect(() => {
-    relations.length > 0 ? setIsEmpty(false) : setIsEmpty(true);
-  }, [relations]);
 
   const getDataName = (dataId: number, datas: DataCTO[]): string => {
     return datas.find((data) => data.data.id === dataId)?.data.name || "";
@@ -84,5 +78,5 @@ const useRelationDropDownViewModel = () => {
     };
   };
 
-  return { relations, selectDataRelation, relationToOption, isEmpty };
+  return { relations, selectDataRelation, relationToOption };
 };
