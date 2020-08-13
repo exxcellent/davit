@@ -346,8 +346,13 @@ export const sequenceModelSelectors = {
   selectCalcStepIds: (state: RootState): string[] => (state.edit.mode === Mode.VIEW ? state.sequenceModel.stepIds : []),
   selectTerminalStep: (state: RootState): Terminal | null =>
     state.edit.mode === Mode.VIEW ? state.sequenceModel.calcSequence?.terminal || null : null,
-  selectDataSetup: (state: RootState): DataSetupCTO | null => state.sequenceModel.selectedDataSetup,
-
+  selectDataSetup: (state: RootState): DataSetupCTO | null => {
+    if (state.edit.mode === Mode.VIEW) {
+      return state.sequenceModel.selectedDataSetup;
+    } else {
+      return null;
+    }
+  },
   selectComponentData: (state: RootState): ComponentData[] => {
     const filteredSteps =
       state.edit.mode === Mode.VIEW
