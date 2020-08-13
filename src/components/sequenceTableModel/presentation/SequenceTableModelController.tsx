@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import React, { createRef, FunctionComponent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Icon, Tab } from "semantic-ui-react";
+import { Icon } from "semantic-ui-react";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
@@ -27,63 +27,6 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
   }
 
   const [body, setBody] = useState<TableBody>(TableBody.sequence);
-
-  const panes = [
-    {
-      menuItem: "Sequence",
-      render: () => (
-        <Tab.Pane>
-          <table>
-            <thead>
-              <tr>
-                <th>INDEX</th>
-                <th>NAME</th>
-                <th>SENDER</th>
-                <th>RECEIVER</th>
-                <th>ACTION-ERROR</th>
-              </tr>
-            </thead>
-            <tbody>{getTableBody()}</tbody>
-          </table>
-        </Tab.Pane>
-      ),
-    },
-    {
-      menuItem: "Decision",
-      render: () => (
-        <Tab.Pane>
-          <table>
-            <thead>
-              <tr>
-                <th>INDEX</th>
-                <th>NAME</th>
-                <th>RESULT</th>
-              </tr>
-            </thead>
-            <tbody>{getDecisionTableBody()}</tbody>
-          </table>
-        </Tab.Pane>
-      ),
-    },
-    {
-      menuItem: "Steps",
-      render: () => (
-        <Tab.Pane>
-          <table>
-            <thead>
-              <tr>
-                <th>INDEX</th>
-                <th>NAME</th>
-                <th>SENDER</th>
-                <th>RECEIVER</th>
-              </tr>
-            </thead>
-            <tbody>{getStepTableBody()}</tbody>
-          </table>
-        </Tab.Pane>
-      ),
-    },
-  ];
 
   return (
     <div className={fullScreen ? "" : "sequenceTable"}>

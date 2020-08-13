@@ -16,6 +16,7 @@ export interface ControllPanelSequenceOptionsProps {}
 
 export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequenceOptionsProps> = (props) => {
   const {
+    label,
     sequence,
     stepIndex,
     selectSequence,
@@ -27,7 +28,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
   } = useControllPanelSequenceOptionsViewModel();
 
   return (
-    <ControllPanelEditSub label="VIEW">
+    <ControllPanelEditSub label={label}>
       <div className="optionFieldSpacer">
         <OptionField label="Data - Setup">
           <DataSetupDropDown onSelect={selectDataSetup} placeholder="Select Data Setup ..." value={currentDataSetup} />
@@ -106,7 +107,32 @@ const useControllPanelSequenceOptionsViewModel = () => {
     }
   };
 
+  const getDataSetupName = (): string => {
+    if (selectedDataSetup) {
+      return " * " + selectDataSetup.name;
+    } else {
+      return "";
+    }
+  };
+
+  const getSequenceName = (): string => {
+    if (sequence) {
+      return " * " + sequence.sequenceTO.name;
+    } else {
+      return "";
+    }
+  };
+
+  const getStepName = (): string => {
+    if (stepIndex && sequence) {
+      return " * " + sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.id === stepIndex)?.squenceStepTO.name;
+    } else {
+      return "";
+    }
+  };
+
   return {
+    label: "VIEW" + getDataSetupName() + getSequenceName() + getStepName(),
     sequence,
     stepIndex,
     selectSequence,

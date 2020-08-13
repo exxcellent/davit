@@ -137,6 +137,11 @@ export const masterDataSelectors = {
       return state.masterData.components.find((comp) => comp.component.id === id) || null;
     };
   },
+  getDataSetupToById: (id: number) => {
+    return (state: RootState): DataSetupTO | null => {
+      return state.masterData.dataSetups.find((dataSetup) => dataSetup.id === id) || null;
+    };
+  },
 };
 
 // =============================================== ACTIONS ===============================================
