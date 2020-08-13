@@ -69,7 +69,6 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
               <tr>
                 <th>INDEX</th>
                 <th>NAME</th>
-                <th>RESULT</th>
               </tr>
             </thead>
             <tbody>{getDecisionTableBody()}</tbody>
@@ -151,11 +150,9 @@ const useSequenceTableViewModel = () => {
     const target = getComponentNameById(step.squenceStepTO.targetComponentFk);
 
     let trClass = "carv2Tr";
-    if (index === stepIndex) {
-      trClass = "carv2TrMarked";
-    }
+
     return (
-      <tr key={index} className={trClass} onClick={() => handleTableClickEvent(index)}>
+      <tr key={index} className={trClass}>
         <td className="carv2Td">{index}</td>
         <td className="carv2Td">{name}</td>
         <td className="carv2Td">{source}</td>
@@ -167,11 +164,8 @@ const useSequenceTableViewModel = () => {
   const createDecisionColumn = (decision: DecisionTO, index: number): JSX.Element => {
     const name = decision.name;
     let trClass = "carv2Tr";
-    if (index === stepIndex) {
-      trClass = "carv2TrMarked";
-    }
     return (
-      <tr key={index} className={trClass} onClick={() => handleTableClickEvent(index)}>
+      <tr key={index} className={trClass}>
         <td className="carv2Td">{index}</td>
         <td className="carv2Td">{name}</td>
       </tr>
