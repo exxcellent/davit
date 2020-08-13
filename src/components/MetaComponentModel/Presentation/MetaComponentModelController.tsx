@@ -63,6 +63,7 @@ const useViewModel = () => {
   const decisionToEdit: DecisionTO | null = useSelector(editSelectors.decisionToEdit);
   const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.dataSetupToEdit);
   const initDataToEdit: InitDataTO | null = useSelector(editSelectors.initDataToEdit);
+  const editArrow: Arrows | null = useSelector(editSelectors.editArrow);
   // ----- VIEW -----
   const arrows: Arrows[] = useSelector(sequenceModelSelectors.selectCurrentArrows);
   const currentComponentDatas: ComponentData[] = useSelector(sequenceModelSelectors.selectComponentData);
@@ -230,21 +231,9 @@ const useViewModel = () => {
 
   const getArrows = (): Arrows[] => {
     let ar: Arrows[] = [];
-    if (stepToEdit) {
-      const sourceComp: ComponentCTO | undefined = components.find(
-        (comp) => comp.component.id === stepToEdit.squenceStepTO.sourceComponentFk
-      );
-      const targetComp: ComponentCTO | undefined = components.find(
-        (comp) => comp.component.id === stepToEdit.squenceStepTO.targetComponentFk
-      );
-      if (sourceComp && targetComp) {
-        ar.push({
-          sourceGeometricalData: sourceComp?.geometricalData,
-          targetGeometricalData: targetComp?.geometricalData,
-        });
-      }
-    } else {
-      ar = arrows;
+    ar = arrows;
+    if (editArrow) {
+      ar.push(editArrow);
     }
     return ar;
   };
