@@ -207,13 +207,20 @@ const useViewModel = () => {
   };
 
   const toDnDElements = (components: ComponentCTO[]): { card: Carv2CardProps; position: PositionTO }[] => {
-    return components
+    let cards: { card: Carv2CardProps; position: PositionTO }[] = [];
+    cards = components
       .filter((comp) => !(componentCTOToEdit && componentCTOToEdit.component.id === comp.component.id))
       .map((comp) => {
         return { card: componentToCard(comp), position: comp.geometricalData.position };
       })
       .filter((item) => item !== undefined);
+    // add component to edit
+    if (componentCTOToEdit) {
+      cards.push({ card: componentToCard(componentCTOToEdit), position: componentCTOToEdit.geometricalData.position });
+    }
+    return cards;
   };
+
   const componentToCard = (component: ComponentCTO): Carv2CardProps => {
     return {
       id: component.component.id,
