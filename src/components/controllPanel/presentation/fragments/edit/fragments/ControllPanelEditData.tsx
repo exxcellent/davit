@@ -126,7 +126,7 @@ const useControllPanelEditDataViewModel = () => {
   };
 
   return {
-    label: dataToEdit?.data.id === -1 ? "ADD DATA" : "EDIT DATA",
+    label: dataToEdit?.data.id === -1 ? "ADD DATA" : "EDIT * DATA",
     name: dataToEdit?.data.name,
     changeName,
     saveData,

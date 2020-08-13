@@ -179,11 +179,25 @@ const setModeToView = (): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.VIEW));
 };
 
-const setModeToEdit = (): AppThunk => (dispatch) => {
-  // TODO: dosn't fells right to do this here!
-  dispatch(SequenceModelActions.resetCurrentSequence);
+const setModeToEdit = (): AppThunk => (dispatch, getState) => {
   dispatch(EditSlice.actions.clearObjectToEdit());
-  dispatch(setModeWithStorage(Mode.EDIT));
+  if (getState().edit.mode !== Mode.VIEW) {
+    dispatch(setModeWithStorage(Mode.EDIT));
+  } else {
+    const stepIndex: number | null = getState().sequenceModel.currentStepIndex;
+    if (stepIndex !== null && stepIndex > 0) {
+      const step: SequenceStepCTO | undefined = getState().sequenceModel.selectedSequenceModel?.sequenceStepCTOs.find(
+        (step) => step.squenceStepTO.id === stepIndex
+      );
+      if (step) {
+        dispatch(setModeToEditStep(step));
+      } else {
+        dispatch(setModeWithStorage(Mode.EDIT));
+      }
+    } else {
+      dispatch(setModeWithStorage(Mode.EDIT));
+    }
+  }
 };
 
 const setModeToEditComponent = (component?: ComponentCTO): AppThunk => (dispatch) => {
