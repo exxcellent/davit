@@ -442,13 +442,20 @@
 
 tr {
   color: var(--carv2-text-color);
+  padding-left: 1em;
 }
 
 tbody {
   display: block;
-  height: 30vh;
+  height: 34vh;
   overflow: auto;
 }
+
+th {
+  text-align: start;
+  padding-left: 1em;
+}
+
 thead,
 tbody tr {
   display: table;
@@ -456,7 +463,8 @@ tbody tr {
   table-layout: fixed; /* even columns width , fix width of table too*/
 }
 thead {
-  width: calc(100% - 1.2em); /* scrollbar is average 1em/16px width, remove it from thead width */
+  width: calc(100% - 1.2em);
+  /*scrollbar is average 1em/16px width, remove it from thead width */
   background-color: var(--carv2-background-color-header);
   color: var(--carv2-text-color);
 }
@@ -464,46 +472,52 @@ table {
   width: 100%;
 }
 
-.carv2Table {
-  border: 1px solid var(--carv2-color-primary);
-  border-collapse: collapse;
-  width: 100%;
-  max-width: 100%;
-  color: var(--carv2-text-color);
-  text-align: center;
-  background-color: var(--carv2-background-color-header);
-  font-size: 0.9em;
-  display: table;
+.carv2Tr {
+  background-color: var(--carv2-data-persistent-color);
+  color: black;
+  height: 2.5em;
+  text-align: start;
+  border-bottom: 1px solid black;
+}
+
+.tableBorder {
+  margin: 0.5em;
+  box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.199);
+  /* border-image: linear-gradient(to bottom, var(--carv2-background-color-shadow), var(--carv2-background-color)) 1 1 100%; */
+  /* border: 2px solid var(--carv2-background-color-shadow); */
+  border-radius: 5px;
+  border: 2px solid var(--carv2-background-color-header);
 }
 
 .tabs {
-  background-color: var(--carv2-background-color-shadow);
+  /* background-color: var(--carv2-background-color); */
+  background-color: var(--carv2-background-color-header);
+  display: flex;
+  justify-content: start;
+  height: 3em;
+  border-bottom: 1px solid black;
 }
 
-.carv2TableHeader {
-  background-color: var(--carv2-background-color-shadow);
+.tab {
   display: flex;
   justify-content: center;
-  width: 100%;
-  color: var(--carv2-color-primary);
+  align-items: center;
+  min-width: 7em;
+  border-right: 1px solid black;
+  /* background-color: var(--carv2-background-color-header); */
+  background-color: rgba(0, 0, 0, 0);
+  color: var(--carv2-text-color);
 }
 
-.carv2TBody {
-  overflow: auto;
+.active {
+  background-color: var(--carv2-background-color-header) !important;
 }
 
-.carv2Th {
-  padding: 0.5em;
-  border-bottom: 2px solid var(--carv2-color-primary);
-}
-.carv2Tr {
-  background-color: var(--carv2-background-color-shadow);
-  height: 2.5em;
-  border-bottom: 1px solid var(--carv2-color-primary);
+.tab:hover {
+  cursor: pointer;
 }
 
 .carv2TrMarked {
-  background-color: var(--carv2-color-secondary);
   height: 2.5em;
 }
 
@@ -514,11 +528,6 @@ table {
 .carv2TrTerminalSuccess {
   background-color: var(--carv2-data-add-color);
   height: 2.5em;
-}
-
-.carv2Td {
-  border-right: 1px solid var(--carv2-color-primary);
-  padding: 0.5em;
 }
 
 /* -------------------------------------------- Colors -------------------------------------------- */
