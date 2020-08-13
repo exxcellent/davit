@@ -167,6 +167,8 @@ const useFlowChartViewModel = () => {
         case GoToTypes.FIN:
           nodeModel.id = parentId + "_FIN";
           break;
+        case GoToTypes.IDLE:
+          nodeModel.id = parentId + "_IDLE";
       }
     }
     return nodeModel;
@@ -212,6 +214,6 @@ const useFlowChartViewModel = () => {
     nodeModelTree: buildNodeModelTree(getRoot(sequence)),
     currentStep: getCurrentStep(),
     calcSteps: getSteps(),
-    isSuccess: terminalStep?.type === GoToTypes.FIN ? true : false,
+    isSuccess: terminalStep?.type === GoToTypes.FIN || GoToTypes.IDLE ? true : false,
   };
 };

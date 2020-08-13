@@ -228,6 +228,9 @@ const useControllPanelEditConditionViewModel = () => {
         case GoToTypes.FIN:
           saveGoToType(ifGoTo, gType);
           break;
+        case GoToTypes.IDLE:
+          saveGoToType(ifGoTo, gType);
+          break;
       }
     }
   };
