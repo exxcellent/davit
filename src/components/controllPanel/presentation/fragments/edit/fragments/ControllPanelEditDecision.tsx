@@ -89,10 +89,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
       <div className="columnDivider optionFieldSpacer">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <OptionField label="Type condition true">
-            <GoToOptionDropDown
-              onSelect={(gt) => handleType(true, gt)}
-              value={ifGoTo ? ifGoTo.type : GoToTypes.ERROR}
-            />
+            <GoToOptionDropDown onSelect={(gt) => handleType(true, gt)} value={ifGoTo ? ifGoTo.type : GoToTypes.FIN} />
           </OptionField>
           {ifGoTo!.type === GoToTypes.STEP && (
             <OptionField label="Create or Select next step">
