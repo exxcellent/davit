@@ -37,9 +37,21 @@ export const ConstraintsHelper = {
 
   deleteSequenceConstraintCheck(sequenceId: number, dataStore: DataStoreCTO) {
     const stepExists: boolean = Array.from(dataStore.steps.values()).some((step) => step.sequenceFk === sequenceId);
-    if (stepExists) {
-      throw new Error(`delete.error! sequence: ${sequenceId} is still connected to step(s)!`);
+    const decisionExists: boolean = Array.from(dataStore.decisions.values()).some(
+      (dec) => dec.sequenceFk === sequenceId
+    );
+    if (stepExists || decisionExists) {
+      throw new Error(`delete.error! sequence: ${sequenceId} is still connected to step(s) or decision(s)!`);
     }
+  },
+
+  deleteChainConstraintCheck(chainId: number, dataStore: DataStoreCTO) {
+    // TODO: add constraint!
+    // const stepExists: boolean = Array.from(dataStore.steps.values()).some((step) => step.sequenceFk === chainId);
+    // if (stepExists) {
+    //   throw new Error(`delete.error! sequence: ${chainId} is still connected to step(s)!`);
+    // }
+    return true;
   },
 
   deleteGeometricalDataConstraintCheck(geometDataId: number, dataStore: DataStoreCTO) {

@@ -2,9 +2,11 @@ import React, { FunctionComponent } from "react";
 import { Button } from "semantic-ui-react";
 import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
+import { ChainTO } from "../../../../../../dataAccess/access/to/ChainTO";
 import { DataRelationTO } from "../../../../../../dataAccess/access/to/DataRelationTO";
 import { DataSetupTO } from "../../../../../../dataAccess/access/to/DataSetupTO";
 import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
+import { ChainDropDownButton } from "../../../../../common/fragments/dropdowns/ChainDropDown";
 import { ComponentDropDownButton } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
 import { DataDropDownButton } from "../../../../../common/fragments/dropdowns/DataDropDown";
 import { DataSetupDropDownButton } from "../../../../../common/fragments/dropdowns/DataSetupDropDown";
@@ -20,6 +22,7 @@ export interface ControllPanelEditMenuProps {
   editOrAddSequence: (sequenceId?: number) => void;
   editOrAddGroup: (group?: GroupTO) => void;
   editOrAddDataSetup: (dataSetup?: DataSetupTO) => void;
+  editOrAddChain: (chain?: ChainTO) => void;
 }
 
 export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps> = (props) => {
@@ -30,6 +33,7 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
     editOrAddSequence,
     // editOrAddGroup,
     editOrAddDataSetup,
+    editOrAddChain,
   } = props;
 
   return (
@@ -89,6 +93,13 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
               Sequence
             </Button>
             <SequenceDropDownButton onSelect={(sequenceTO) => editOrAddSequence(sequenceTO?.id)} icon="wrench" />
+          </Button.Group>
+          <Button.Group>
+            <Button icon="add" inverted color="orange" onClick={() => editOrAddChain()} />
+            <Button id="buttonGroupLabel" disabled inverted color="orange">
+              chain
+            </Button>
+            <ChainDropDownButton onSelect={(chain) => editOrAddChain(chain)} icon="wrench" />
           </Button.Group>
         </OptionField>
       </div>

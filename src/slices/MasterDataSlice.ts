@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../app/store";
 import { ComponentCTO } from "../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../dataAccess/access/cto/DataCTO";
+import { ChainTO } from "../dataAccess/access/to/ChainTO";
 import { DataRelationTO } from "../dataAccess/access/to/DataRelationTO";
 import { DataSetupTO } from "../dataAccess/access/to/DataSetupTO";
 import { GroupTO } from "../dataAccess/access/to/GroupTO";
@@ -17,6 +18,7 @@ interface MasterDataState {
   relations: DataRelationTO[];
   sequences: SequenceTO[];
   dataSetups: DataSetupTO[];
+  chains: ChainTO[];
 }
 const getInitialState: MasterDataState = {
   components: [],
@@ -25,6 +27,7 @@ const getInitialState: MasterDataState = {
   relations: [],
   sequences: [],
   dataSetups: [],
+  chains: [],
 };
 
 const MasterDataSlice = createSlice({
@@ -48,6 +51,9 @@ const MasterDataSlice = createSlice({
     },
     setDataSetups: (state, action: PayloadAction<DataSetupTO[]>) => {
       state.dataSetups = action.payload;
+    },
+    setChains: (state, action: PayloadAction<ChainTO[]>) => {
+      state.chains = action.payload;
     },
   },
 });
@@ -108,6 +114,15 @@ const loadDataSetupsFromBackend = (): AppThunk => (dispatch) => {
   }
 };
 
+const loadChainsFromBackend = (): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<ChainTO[]> = DataAccess.findAllChains();
+  if (response.code === 200) {
+    dispatch(MasterDataSlice.actions.setChains(response.object));
+  } else {
+    dispatch(handleError(response.message));
+  }
+};
+
 const loadAll = (): AppThunk => (dispatch) => {
   dispatch(loadGroupsFromBackend());
   dispatch(loadComponentsFromBackend());
@@ -115,6 +130,7 @@ const loadAll = (): AppThunk => (dispatch) => {
   dispatch(loadRelationsFromBackend());
   dispatch(loadSequencesFromBackend());
   dispatch(loadDatasFromBackend());
+  dispatch(loadChainsFromBackend());
 };
 
 // ----------------------------------------------- SEARCH --------------------------------------------------
@@ -128,6 +144,7 @@ export const masterDataSelectors = {
   datas: (state: RootState): DataCTO[] => state.masterData.datas,
   relations: (state: RootState): DataRelationTO[] => state.masterData.relations,
   sequences: (state: RootState): SequenceTO[] => state.masterData.sequences,
+  chains: (state: RootState): ChainTO[] => state.masterData.chains,
   dataSetup: (state: RootState): DataSetupTO[] => state.masterData.dataSetups,
   getSequenceTO: (id: number) => (state: RootState): SequenceTO | undefined => {
     return state.masterData.sequences.find((sequence) => sequence.id === id);
@@ -147,6 +164,7 @@ export const masterDataSelectors = {
 // =============================================== ACTIONS ===============================================
 
 export const MasterDataActions = {
+  loadChainsFromBackend,
   loadGroupsFromBackend,
   loadComponentsFromBackend,
   loadDataSetupsFromBackend,

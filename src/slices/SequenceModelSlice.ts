@@ -6,6 +6,7 @@ import { GeometricalDataCTO } from "../dataAccess/access/cto/GeometraicalDataCTO
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
+import { ChainTO } from "../dataAccess/access/to/ChainTO";
 import { DecisionTO } from "../dataAccess/access/to/DecisionTO";
 import { GoTo, GoToTypes, Terminal } from "../dataAccess/access/types/GoToType";
 import { DataAccess } from "../dataAccess/DataAccess";
@@ -43,6 +44,7 @@ interface SequenceModelState {
   componentDatas: ComponentData[];
   activeFilter: Filter[];
   stepIds: string[];
+  selectedChain: ChainTO | null;
 }
 const getInitialState: SequenceModelState = {
   selectedSequenceModel: null,
@@ -55,6 +57,7 @@ const getInitialState: SequenceModelState = {
   componentDatas: [],
   activeFilter: [],
   stepIds: [],
+  selectedChain: null,
 };
 
 const SequenceModelSlice = createSlice({
@@ -62,7 +65,6 @@ const SequenceModelSlice = createSlice({
   initialState: getInitialState,
   reducers: {
     setSelectedSequence: (state, action: PayloadAction<SequenceCTO | null>) => {
-      console.warn("sequence: ", action.payload + " selected.");
       state.selectedSequenceModel = action.payload;
       // TODO: in extra method und nur ausführen wenn sequence und datasetup gestezt sind sonst reset.
       if (action.payload && state.selectedDataSetup) {
@@ -70,6 +72,9 @@ const SequenceModelSlice = createSlice({
       } else {
         resetState(state);
       }
+    },
+    setSelectedChain: (state, action: PayloadAction<ChainTO | null>) => {
+      state.selectedChain = action.payload;
     },
     setStepIds: (state, action: PayloadAction<string[] | null>) => {
       if (action.payload !== null) {
@@ -335,6 +340,7 @@ const getArrowForStepFk = (
 export const SequenceModelReducer = SequenceModelSlice.reducer;
 export const sequenceModelSelectors = {
   selectSequence: (state: RootState): SequenceCTO | null => state.sequenceModel.selectedSequenceModel,
+  selectChain: (state: RootState): ChainTO | null => state.sequenceModel.selectedChain,
   selectCalcSteps: (state: RootState): CalculatedStep[] =>
     state.edit.mode === Mode.VIEW
       ? filterSteps(
@@ -452,4 +458,5 @@ export const SequenceModelActions = {
   handleDataClickEvent,
   stepNext,
   stepBack,
+  setCurrentChain: SequenceModelSlice.actions.setSelectedChain,
 };

@@ -4,6 +4,7 @@ import { DataSetupCTO } from "./access/cto/DataSetupCTO";
 import { SequenceCTO } from "./access/cto/SequenceCTO";
 import { SequenceStepCTO } from "./access/cto/SequenceStepCTO";
 import { ActionTO } from "./access/to/ActionTO";
+import { ChainTO } from "./access/to/ChainTO";
 import { DataRelationTO } from "./access/to/DataRelationTO";
 import { DataSetupTO } from "./access/to/DataSetupTO";
 import { DataInstanceTO } from "./access/to/DataTO";
@@ -214,6 +215,19 @@ export const DataAccess = {
 
   findDecision(id: number): DataAccessResponse<DecisionTO> {
     return makeTransactional(() => SequenceDataAccessService.findDecision(id));
+  },
+
+  // ========================================= CHAIN =========================================
+
+  findAllChains(): DataAccessResponse<ChainTO[]> {
+    return makeTransactional(SequenceDataAccessService.findAllChains);
+  },
+
+  saveChainTO(chain: ChainTO): DataAccessResponse<ChainTO> {
+    return makeTransactional(() => SequenceDataAccessService.saveChainTO(chain));
+  },
+  deleteChain(chain: ChainTO): DataAccessResponse<ChainTO> {
+    return makeTransactional(() => SequenceDataAccessService.deleteChain(chain));
   },
 };
 // ========================================= PRIVATE =========================================

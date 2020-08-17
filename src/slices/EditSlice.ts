@@ -8,6 +8,7 @@ import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
+import { ChainTO } from "../dataAccess/access/to/ChainTO";
 import { DataRelationTO } from "../dataAccess/access/to/DataRelationTO";
 import { DataInstanceTO } from "../dataAccess/access/to/DataTO";
 import { DecisionTO } from "../dataAccess/access/to/DecisionTO";
@@ -35,6 +36,10 @@ export enum Mode {
   EDIT_DATA_RELATION = "EDIT_DATA_RELATION",
   EDIT_DATA_SETUP = "EDIT_DATA_SETUP",
   EDIT_INIT_DATA = "EDIT_INIT_DATA",
+  EDIT_CHAIN = "EDIT_CHAIN",
+  EDIT_CHAIN_DECISION = "EDIT_CHAIN_DECISION",
+  EDIT_CHAIN_DECISION_CONDITION = "EDIT_CHAIN_DECISION_CONDITION",
+  EDIT_CHAIN_STEP = "EDIT_CHAIN_STEP",
   EDIT_SEQUENCE = "EDIT_SEQUENCE",
   EDIT_SEQUENCE_DECISION = "EDIT_SEQUENCE_DECISION",
   EDIT_SEQUENCE_DECISION_CONDITION = "EDIT_SEQUENCE_DECISION_CONDITION",
@@ -250,6 +255,15 @@ const setModeToEditSequence = (sequenceId?: number): AppThunk => (dispatch) => {
     }
   } else {
     dispatch(EditActions.sequence.create());
+  }
+};
+
+const setModeToEditChain = (chain?: ChainTO): AppThunk => (dispatch) => {
+  dispatch(setModeWithStorage(Mode.EDIT_CHAIN));
+  if (!chain) {
+    dispatch(EditActions.chain.create());
+  } else {
+    dispatch(SequenceModelActions.setCurrentChain(chain));
   }
 };
 
@@ -508,6 +522,35 @@ const deleteInitDataThunk = (initDataId: number): AppThunk => (dispatch) => {
     dispatch(handleError(response.message));
   }
   dispatch(MasterDataActions.loadDataSetupsFromBackend());
+};
+
+// ----------------------------------------------- CHAIN -----------------------------------------------
+
+const createChainThunk = (): AppThunk => (dispatch) => {
+  let chain: ChainTO = new ChainTO();
+  const response: DataAccessResponse<ChainTO> = DataAccess.saveChainTO(chain);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(MasterDataActions.loadChainsFromBackend());
+  dispatch(SequenceModelActions.setCurrentChain(response.object));
+};
+
+const saveChainThunk = (chain: ChainTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<ChainTO> = DataAccess.saveChainTO(chain);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(MasterDataActions.loadChainsFromBackend());
+  dispatch(SequenceModelActions.setCurrentChain(response.object));
+};
+
+const deleteChainThunk = (chain: ChainTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<SequenceTO> = DataAccess.deleteChain(chain);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(MasterDataActions.loadChainsFromBackend());
 };
 
 // ----------------------------------------------- SEQUENCE -----------------------------------------------
@@ -830,6 +873,7 @@ export const EditActions = {
     editDecision: setModeToEditDecision,
     editCondition: setModeToEditCondition,
     editAction: setModeToEditAction,
+    editChain: setModeToEditChain,
     edit: setModeToEdit,
     view: setModeToView,
     file: setModeToFile,
@@ -898,5 +942,10 @@ export const EditActions = {
     save: saveDecisionThunk,
     delete: deleteDecisionThunk,
     find: findDecisionTOThunk,
+  },
+  chain: {
+    create: createChainThunk,
+    save: saveChainThunk,
+    delete: deleteChainThunk,
   },
 };

@@ -17,4 +17,6 @@ export interface StoreTO {
   // setup
   initDatas: any[];
   dataSetups: any[];
+  // chain
+  chains: any[];
 }

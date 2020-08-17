@@ -2,11 +2,13 @@ import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ComponentCTO } from "../../../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
+import { ChainTO } from "../../../../../dataAccess/access/to/ChainTO";
 import { DataRelationTO } from "../../../../../dataAccess/access/to/DataRelationTO";
 import { DataSetupTO } from "../../../../../dataAccess/access/to/DataSetupTO";
 import { GroupTO } from "../../../../../dataAccess/access/to/GroupTO";
 import { EditActions, editSelectors, Mode } from "../../../../../slices/EditSlice";
 import { ControllPanelEditAction } from "./fragments/ControllPanelEditAction";
+import { ControllPanelEditChain } from "./fragments/ControllPanelEditChain";
 import { ControllPanelEditComponent } from "./fragments/ControllPanelEditComponent";
 import { ControllPanelEditCondition } from "./fragments/ControllPanelEditCondition";
 import { ControllPanelEditData } from "./fragments/ControllPanelEditData";
@@ -31,6 +33,7 @@ export const ControllPanelEditController: FunctionComponent<ControllPanelEditCon
     editOrAddSequence,
     editOrAddGroup,
     editOrAddDataSetup,
+    editOrAddChain,
   } = useControllPanelEditViewModel();
 
   const getViewByMode = (currentMode: Mode) => {
@@ -59,6 +62,8 @@ export const ControllPanelEditController: FunctionComponent<ControllPanelEditCon
         return <ControllPanelEditDataSetup />;
       case Mode.EDIT_INIT_DATA:
         return <ControllPanelEditInitData />;
+      case Mode.EDIT_CHAIN:
+        return <ControllPanelEditChain />;
       default:
         return (
           <ControllPanelEditMenu
@@ -68,6 +73,7 @@ export const ControllPanelEditController: FunctionComponent<ControllPanelEditCon
             editOrAddSequence={editOrAddSequence}
             editOrAddGroup={editOrAddGroup}
             editOrAddDataSetup={editOrAddDataSetup}
+            editOrAddChain={editOrAddChain}
           />
         );
     }
@@ -89,5 +95,6 @@ const useControllPanelEditViewModel = () => {
     editOrAddGroup: (group?: GroupTO) => dispatch(EditActions.setMode.editGroup(group)),
     editOrAddDataSetup: (dataSetup?: DataSetupTO) =>
       dispatch(EditActions.setMode.editDataSetup(dataSetup ? dataSetup.id : undefined)),
+    editOrAddChain: (chain?: ChainTO) => dispatch(EditActions.setMode.editChain(chain)),
   };
 };
