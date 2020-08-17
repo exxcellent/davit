@@ -2,8 +2,7 @@ import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
-import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
+import { ChainStepTO } from "../../../../../../dataAccess/access/to/ChainStepTO";
 import { ChainTO } from "../../../../../../dataAccess/access/to/ChainTO";
 import { DecisionTO } from "../../../../../../dataAccess/access/to/DecisionTO";
 import { SequenceTO } from "../../../../../../dataAccess/access/to/SequenceTO";
@@ -13,6 +12,7 @@ import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSl
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
+import { ChainStepDropDownButton } from "../../../../../common/fragments/dropdowns/ChainStepDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
@@ -29,7 +29,9 @@ export const ControllPanelEditChain: FunctionComponent<ControllPanelEditChainPro
     editOrAddDecision,
     saveChain,
     deleteChain,
-  } = useControllPanelEditSequenceViewModel();
+    editOrAddChainStep,
+    id,
+  } = useControllPanelEditChainViewModel();
 
   const menuButtons = (
     <div className="columnDivider controllPanelEditChild">
@@ -61,16 +63,16 @@ export const ControllPanelEditChain: FunctionComponent<ControllPanelEditChainPro
       <div className="columnDivider controllPanelEditChild">
         <OptionField label="Create / Edit | Chain - Step">
           <Button.Group>
-            <Button icon="add" inverted color="orange" onClick={() => {}} />
+            <Button icon="add" inverted color="orange" onClick={() => editOrAddChainStep()} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
-              Step
+              Sequence
             </Button>
-            {/* <StepDropDownButton onSelect={() => {}} icon="wrench" /> */}
+            <ChainStepDropDownButton onSelect={(step) => editOrAddChainStep(step)} icon="wrench" chainId={id} />
           </Button.Group>
         </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <OptionField label="Create / Edit | Sequence - Decision">
+        <OptionField label="Create / Edit | Chain - Decision">
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddDecision()} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
@@ -85,8 +87,7 @@ export const ControllPanelEditChain: FunctionComponent<ControllPanelEditChainPro
   );
 };
 
-const useControllPanelEditSequenceViewModel = () => {
-  const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
+const useControllPanelEditChainViewModel = () => {
   const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
   const dispatch = useDispatch();
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
@@ -139,14 +140,15 @@ const useControllPanelEditSequenceViewModel = () => {
     }
   };
 
-  const editOrAddSequenceStep = (step?: SequenceStepCTO) => {
-    let stepToEdit: SequenceStepCTO | undefined = step;
-    if (stepToEdit === undefined) {
-      stepToEdit = new SequenceStepCTO();
-      stepToEdit.squenceStepTO.sequenceFk = selectedChain?.id || -1;
-      stepToEdit.squenceStepTO.root = isFirst();
+  const editOrAddChainStep = (step?: ChainStepTO) => {
+    let chainStepToEdit: ChainStepTO | undefined = step;
+    if (chainStepToEdit === undefined) {
+      chainStepToEdit = new ChainStepTO();
+      chainStepToEdit.chainFk = selectedChain?.id || -1;
+      // TODO: set root if first element in chain.
+      // chainStepToEdit.root = isFirst();
     }
-    dispatch(EditActions.setMode.editStep(stepToEdit));
+    dispatch(EditActions.setMode.editChainStep(chainStepToEdit));
   };
 
   const editOrAddDecision = (decision?: DecisionTO) => {
@@ -154,20 +156,10 @@ const useControllPanelEditSequenceViewModel = () => {
     if (decisionToEdit === undefined) {
       decisionToEdit = new DecisionTO();
       decisionToEdit.sequenceFk = selectedChain?.id || -1;
-      decisionToEdit.root = isFirst();
+      // TODO: set root if first element in chain.
+      // decisionToEdit.root = isFirst();
     }
     dispatch(EditActions.setMode.editDecision(decisionToEdit));
-  };
-
-  const isFirst = (): boolean => {
-    return selectedSequence?.sequenceStepCTOs.length === 0 && selectedSequence.decisions.length === 0 ? true : false;
-  };
-
-  const copySequence = () => {
-    let copySequence: SequenceTO = Carv2Util.deepCopy(selectedChain);
-    copySequence.name = selectedChain?.name + "-copy";
-    copySequence.id = -1;
-    dispatch(EditActions.sequence.update(copySequence));
   };
 
   const createAnother = () => {
@@ -182,13 +174,13 @@ const useControllPanelEditSequenceViewModel = () => {
   return {
     label: "EDIT * " + (selectedChain?.name || ""),
     name: selectedChain?.name,
+    id: selectedChain?.id ? selectedChain.id : -1,
     changeName,
     saveChain,
     deleteChain,
     textInput,
-    editOrAddSequenceStep,
+    editOrAddChainStep,
     validateInput,
-    copySequence,
     createAnother,
     updateSequence,
     editOrAddDecision,

@@ -20,6 +20,7 @@ export const ModuleRoutes = {
   flowChart: "/flowChart",
 };
 
+// inital data load from backend.
 export function Carv2() {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -29,8 +30,11 @@ export function Carv2() {
     dispatch(MasterDataActions.loadDatasFromBackend());
     dispatch(MasterDataActions.loadRelationsFromBackend());
     dispatch(MasterDataActions.loadSequencesFromBackend());
+    dispatch(MasterDataActions.loadChainsFromBackend());
+    dispatch(MasterDataActions.loadChainStepsFromBackend());
   }, [dispatch]);
 
+  // disable global key shortcuts.
   useZoomDisable();
 
   return (

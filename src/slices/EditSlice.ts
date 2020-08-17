@@ -8,6 +8,7 @@ import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
+import { ChainStepTO } from "../dataAccess/access/to/ChainStepTO";
 import { ChainTO } from "../dataAccess/access/to/ChainTO";
 import { DataRelationTO } from "../dataAccess/access/to/DataRelationTO";
 import { DataInstanceTO } from "../dataAccess/access/to/DataTO";
@@ -67,6 +68,7 @@ interface EditState {
     | InitDataTO
     | GroupTO
     | DecisionTO
+    | ChainStepTO
     | {};
   instanceIdToEdit: number | null;
 }
@@ -82,6 +84,13 @@ const EditSlice = createSlice({
   reducers: {
     setInstanceIdToEdit: (state, action: PayloadAction<number | null>) => {
       state.instanceIdToEdit = action.payload;
+    },
+    setChainStepToEdit: (state, action: PayloadAction<ChainStepTO>) => {
+      if (state.mode === Mode.EDIT_CHAIN_STEP) {
+        state.objectToEdit = action.payload;
+      } else {
+        handleError("Try to set chain step to edit in mode: " + state.mode);
+      }
     },
     setComponentToEdit: (state, action: PayloadAction<ComponentCTO>) => {
       if (state.mode === Mode.EDIT_COMPONENT) {
@@ -264,6 +273,15 @@ const setModeToEditChain = (chain?: ChainTO): AppThunk => (dispatch) => {
     dispatch(EditActions.chain.create());
   } else {
     dispatch(SequenceModelActions.setCurrentChain(chain));
+  }
+};
+
+const setModeToEditChainStep = (chainStep?: ChainStepTO): AppThunk => (dispatch) => {
+  dispatch(setModeWithStorage(Mode.EDIT_CHAIN_STEP));
+  if (!chainStep) {
+    dispatch(EditActions.chainStep.create());
+  } else {
+    dispatch(EditSlice.actions.setChainStepToEdit(chainStep));
   }
 };
 
@@ -553,6 +571,32 @@ const deleteChainThunk = (chain: ChainTO): AppThunk => (dispatch) => {
   dispatch(MasterDataActions.loadChainsFromBackend());
 };
 
+const createChainStepThunk = (): AppThunk => (dispatch) => {
+  let chain: ChainStepTO = new ChainStepTO();
+  const response: DataAccessResponse<ChainStepTO> = DataAccess.saveChainStepTO(chain);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(MasterDataActions.loadChainStepsFromBackend());
+  dispatch(EditSlice.actions.setChainStepToEdit(response.object));
+};
+
+const saveChainStepThunk = (step: ChainStepTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<ChainStepTO> = DataAccess.saveChainStepTO(step);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(MasterDataActions.loadChainStepsFromBackend());
+  dispatch(EditActions.setMode.editChainStep(response.object));
+};
+
+const deleteChainStepThunk = (step: ChainStepTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<ChainStepTO> = DataAccess.deleteChainStep(step);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(MasterDataActions.loadChainStepsFromBackend());
+};
 // ----------------------------------------------- SEQUENCE -----------------------------------------------
 
 const createSequenceThunk = (): AppThunk => (dispatch) => {
@@ -782,6 +826,11 @@ export const editSelectors = {
       ? (state.edit.objectToEdit as ComponentCTO)
       : null;
   },
+  chainStepToEdit: (state: RootState): ChainStepTO | null => {
+    return state.edit.mode === Mode.EDIT_CHAIN_STEP && (state.edit.objectToEdit as ChainStepTO).sourceChainlinkFk
+      ? (state.edit.objectToEdit as ChainStepTO)
+      : null;
+  },
   dataToEdit: (state: RootState): DataCTO | null => {
     return state.edit.mode === Mode.EDIT_DATA || (Mode.EDIT_DATA_INSTANCE && (state.edit.objectToEdit as DataCTO).data)
       ? (state.edit.objectToEdit as DataCTO)
@@ -874,6 +923,7 @@ export const EditActions = {
     editCondition: setModeToEditCondition,
     editAction: setModeToEditAction,
     editChain: setModeToEditChain,
+    editChainStep: setModeToEditChainStep,
     edit: setModeToEdit,
     view: setModeToView,
     file: setModeToFile,
@@ -947,5 +997,10 @@ export const EditActions = {
     create: createChainThunk,
     save: saveChainThunk,
     delete: deleteChainThunk,
+  },
+  chainStep: {
+    create: createChainStepThunk,
+    save: saveChainStepThunk,
+    delete: deleteChainStepThunk,
   },
 };

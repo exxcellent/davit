@@ -3,23 +3,22 @@ import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { ChainTO } from "../../../../dataAccess/access/to/ChainTO";
-import { SequenceTO } from "../../../../dataAccess/access/to/SequenceTO";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 
 interface ChainDropDownProps extends DropdownProps {
-  onSelect: (sequence: SequenceTO | undefined) => void;
+  onSelect: (chain: ChainTO | undefined) => void;
   placeholder?: string;
   value?: number;
 }
 
 interface ChainDropDownPropsButton extends DropdownProps {
-  onSelect: (sequence: SequenceTO | undefined) => void;
+  onSelect: (chain: ChainTO | undefined) => void;
   icon?: string;
 }
 
 export const ChainDropDown: FunctionComponent<ChainDropDownProps> = (props) => {
   const { onSelect, placeholder, value } = props;
-  const { chainToOption, chains, selectChain } = useSequenceDropDownViewModel();
+  const { chainToOption, chains, selectChain } = useChainDropDownViewModel();
 
   return (
     <Dropdown
@@ -39,7 +38,7 @@ export const ChainDropDown: FunctionComponent<ChainDropDownProps> = (props) => {
 
 export const ChainDropDownButton: FunctionComponent<ChainDropDownPropsButton> = (props) => {
   const { onSelect, icon } = props;
-  const { selectChain, chainToOption, chains } = useSequenceDropDownViewModel();
+  const { selectChain, chainToOption, chains } = useChainDropDownViewModel();
 
   return (
     <Dropdown
@@ -58,7 +57,7 @@ export const ChainDropDownButton: FunctionComponent<ChainDropDownPropsButton> = 
   );
 };
 
-const useSequenceDropDownViewModel = () => {
+const useChainDropDownViewModel = () => {
   const chains: ChainTO[] = useSelector(masterDataSelectors.chains);
 
   const selectChain = (id: number): ChainTO | undefined => {

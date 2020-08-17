@@ -68,6 +68,7 @@ class DataStore {
       dataSetups: Array.from(this.data!.dataSetups.values()),
       decisions: Array.from(this.data!.decisions.values()),
       chains: Array.from(this.data!.chains.values()),
+      chainsteps: Array.from(this.data!.chainsteps.values()),
     };
   }
 
