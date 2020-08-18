@@ -3,6 +3,7 @@ import { DataSetupCTO } from "../access/cto/DataSetupCTO";
 import { SequenceCTO } from "../access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../access/cto/SequenceStepCTO";
 import { ActionTO } from "../access/to/ActionTO";
+import { ChainDecisionTO } from "../access/to/ChainDecisionTO";
 import { ChainlinkTO } from "../access/to/ChainlinkTO";
 import { ChainTO } from "../access/to/ChainTO";
 import { DataSetupTO } from "../access/to/DataSetupTO";
@@ -11,6 +12,7 @@ import { InitDataTO } from "../access/to/InitDataTO";
 import { SequenceStepTO } from "../access/to/SequenceStepTO";
 import { SequenceTO } from "../access/to/SequenceTO";
 import { ActionRepository } from "../repositories/ActionRepository";
+import { ChainDecisionRepository } from "../repositories/ChainDecisionRepository";
 import { ChainLinkRepository } from "../repositories/ChainLinkRepository";
 import { ChainRepository } from "../repositories/ChainRepository";
 import { DataSetupRepository } from "../repositories/DataSetupRepository";
@@ -268,6 +270,18 @@ export const SequenceDataAccessService = {
 
   deleteChainTO(chainlink: ChainlinkTO): ChainlinkTO {
     return ChainLinkRepository.delete(chainlink);
+  },
+
+  saveChainDecision(decision: ChainDecisionTO): ChainDecisionTO {
+    return ChainDecisionRepository.save(decision);
+  },
+
+  findAllChainDecisions(): ChainDecisionTO[] {
+    return ChainDecisionRepository.findAll();
+  },
+
+  deleteChainDecision(decision: ChainDecisionTO): ChainDecisionTO {
+    return ChainDecisionRepository.delete(decision);
   },
 };
 // ======================================================== PRIVATE ========================================================

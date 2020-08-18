@@ -8,6 +8,7 @@ import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
+import { ChainDecisionTO } from "../dataAccess/access/to/ChainDecisionTO";
 import { ChainlinkTO } from "../dataAccess/access/to/ChainlinkTO";
 import { ChainTO } from "../dataAccess/access/to/ChainTO";
 import { DataRelationTO } from "../dataAccess/access/to/DataRelationTO";
@@ -70,6 +71,7 @@ interface EditState {
     | GroupTO
     | DecisionTO
     | ChainlinkTO
+    | ChainDecisionTO
     | {};
   instanceIdToEdit: number | null;
 }
@@ -88,6 +90,13 @@ const EditSlice = createSlice({
     },
     setChainLinkToEdit: (state, action: PayloadAction<ChainlinkTO>) => {
       if (state.mode === Mode.EDIT_CHAIN_LINK) {
+        state.objectToEdit = action.payload;
+      } else {
+        handleError("Try to set chain step to edit in mode: " + state.mode);
+      }
+    },
+    setChainDecisionToEdit: (state, action: PayloadAction<ChainDecisionTO>) => {
+      if (state.mode === Mode.EDIT_CHAIN_DECISION) {
         state.objectToEdit = action.payload;
       } else {
         handleError("Try to set chain step to edit in mode: " + state.mode);
@@ -277,11 +286,22 @@ const setModeToEditChain = (chain?: ChainTO): AppThunk => (dispatch) => {
   }
 };
 
-const setModeToEditChainlink = (chainlink: ChainlinkTO, from?: ChainlinkTO, ifGoTo?: boolean): AppThunk => (
-  dispatch
-) => {
+const setModeToEditChainlink = (
+  chainlink: ChainlinkTO,
+  from?: ChainlinkTO | ChainDecisionTO,
+  ifGoTo?: boolean
+): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_CHAIN_LINK));
   dispatch(EditActions.chainLink.create(chainlink, from, ifGoTo));
+};
+
+const setModeEditChainDecision = (
+  chainDecision: ChainDecisionTO,
+  from?: ChainDecisionTO,
+  ifGoTO?: boolean
+): AppThunk => (dispatch) => {
+  dispatch(setModeWithStorage(Mode.EDIT_CHAIN_DECISION));
+  dispatch(EditActions.chainDecision.create(chainDecision, from, ifGoTO));
 };
 
 const setModeToEditStep = (
@@ -570,29 +590,26 @@ const deleteChainThunk = (chain: ChainTO): AppThunk => (dispatch) => {
   dispatch(MasterDataActions.loadChainsFromBackend());
 };
 
-const createChainLinkThunk = (link: ChainlinkTO, from?: ChainlinkTO, ifGoTO?: Boolean): AppThunk => (dispatch) => {
+const createChainLinkThunk = (link: ChainlinkTO, from?: ChainlinkTO | ChainDecisionTO, ifGoTO?: boolean): AppThunk => (
+  dispatch
+) => {
   const response: DataAccessResponse<ChainlinkTO> = DataAccess.saveChainlink(link);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   } else {
     if (from !== undefined) {
-      from.goto = { type: GoToTypesChain.LINK, id: response.object.id };
-      dispatch(EditActions.chainLink.save(from));
-
-      // TODO: need to be implement for decision!
-
-      // if ((from as SequenceStepCTO).squenceStepTO !== undefined) {
-      //   (from as SequenceStepCTO).squenceStepTO.goto = { type: GoToTypes.STEP, id: response.object.squenceStepTO.id };
-      //   dispatch(EditActions.step.save(from as SequenceStepCTO));
-      // }
-      // if ((from as DecisionTO).elseGoTo !== undefined) {
-      //   if (ifGoTO) {
-      //     (from as DecisionTO).ifGoTo = { type: GoToTypes.STEP, id: response.object.squenceStepTO.id };
-      //   } else {
-      //     (from as DecisionTO).elseGoTo = { type: GoToTypes.STEP, id: response.object.squenceStepTO.id };
-      //   }
-      //   dispatch(EditActions.decision.save(from as DecisionTO));
-      // }
+      if ((from as ChainlinkTO).dataSetupFk !== undefined) {
+        (from as ChainlinkTO).goto = { type: GoToTypesChain.LINK, id: response.object.id };
+        dispatch(EditActions.chainLink.save(from as ChainlinkTO));
+      }
+      if ((from as ChainDecisionTO).elseGoTo !== undefined) {
+        if (ifGoTO) {
+          (from as ChainDecisionTO).ifGoTo = { type: GoToTypesChain.DEC, id: response.object.id };
+        } else {
+          (from as ChainDecisionTO).elseGoTo = { type: GoToTypesChain.DEC, id: response.object.id };
+        }
+        dispatch(EditActions.chainDecision.save(from as ChainDecisionTO));
+      }
     }
     dispatch(EditSlice.actions.setChainLinkToEdit(response.object));
   }
@@ -613,6 +630,50 @@ const deleteChainLinkThunk = (step: ChainlinkTO): AppThunk => (dispatch) => {
     dispatch(handleError(response.message));
   }
   dispatch(MasterDataActions.loadChainLinksFromBackend());
+};
+
+const createChainDecisionThunk = (
+  decision: ChainDecisionTO,
+  from?: ChainDecisionTO | ChainlinkTO,
+  ifGoTO?: boolean
+): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<ChainDecisionTO> = DataAccess.saveChaindecision(decision);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  } else {
+    if (from !== undefined) {
+      if ((from as ChainlinkTO).dataSetupFk !== undefined) {
+        (from as ChainlinkTO).goto = { type: GoToTypesChain.LINK, id: response.object.id };
+        dispatch(EditActions.chainLink.save(from as ChainlinkTO));
+      }
+      if ((from as ChainDecisionTO).elseGoTo !== undefined) {
+        if (ifGoTO) {
+          (from as ChainDecisionTO).ifGoTo = { type: GoToTypesChain.DEC, id: response.object.id };
+        } else {
+          (from as ChainDecisionTO).elseGoTo = { type: GoToTypesChain.DEC, id: response.object.id };
+        }
+        dispatch(EditActions.chainDecision.save(from as ChainDecisionTO));
+      }
+    }
+  }
+  dispatch(EditSlice.actions.setChainDecisionToEdit(response.object));
+};
+
+const saveChainDecisionThunk = (decision: ChainDecisionTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<ChainDecisionTO> = DataAccess.saveChaindecision(decision);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(MasterDataActions.loadChainDecisionsFromBackend());
+  dispatch(EditActions.setMode.editChainDecision(response.object));
+};
+
+const deleteChainDecisionThunk = (decision: ChainDecisionTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<ChainDecisionTO> = DataAccess.deleteChaindecision(decision);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(MasterDataActions.loadChainDecisionsFromBackend());
 };
 
 // ----------------------------------------------- SEQUENCE -----------------------------------------------
@@ -849,6 +910,11 @@ export const editSelectors = {
       ? (state.edit.objectToEdit as ChainlinkTO)
       : null;
   },
+  chainDecisionToEdit: (state: RootState): ChainDecisionTO | null => {
+    return state.edit.mode === Mode.EDIT_CHAIN_DECISION && (state.edit.objectToEdit as ChainDecisionTO).elseGoTo
+      ? (state.edit.objectToEdit as ChainDecisionTO)
+      : null;
+  },
   dataToEdit: (state: RootState): DataCTO | null => {
     return state.edit.mode === Mode.EDIT_DATA || (Mode.EDIT_DATA_INSTANCE && (state.edit.objectToEdit as DataCTO).data)
       ? (state.edit.objectToEdit as DataCTO)
@@ -942,6 +1008,7 @@ export const EditActions = {
     editAction: setModeToEditAction,
     editChain: setModeToEditChain,
     editChainLink: setModeToEditChainlink,
+    editChainDecision: setModeEditChainDecision,
     edit: setModeToEdit,
     view: setModeToView,
     file: setModeToFile,
@@ -1020,5 +1087,10 @@ export const EditActions = {
     create: createChainLinkThunk,
     save: saveChainLinkThunk,
     delete: deleteChainLinkThunk,
+  },
+  chainDecision: {
+    create: createChainDecisionThunk,
+    save: saveChainDecisionThunk,
+    delete: deleteChainDecisionThunk,
   },
 };

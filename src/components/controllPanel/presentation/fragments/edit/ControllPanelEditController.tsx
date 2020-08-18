@@ -9,6 +9,7 @@ import { GroupTO } from "../../../../../dataAccess/access/to/GroupTO";
 import { EditActions, editSelectors, Mode } from "../../../../../slices/EditSlice";
 import { ControllPanelEditAction } from "./fragments/ControllPanelEditAction";
 import { ControllPanelEditChain } from "./fragments/ControllPanelEditChain";
+import { ControllPanelEditChainDecision } from "./fragments/ControllPanelEditChainDecision";
 import { ControllPanelEditChainLink } from "./fragments/ControllPanelEditChainLink";
 import { ControllPanelEditComponent } from "./fragments/ControllPanelEditComponent";
 import { ControllPanelEditCondition } from "./fragments/ControllPanelEditCondition";
@@ -67,6 +68,8 @@ export const ControllPanelEditController: FunctionComponent<ControllPanelEditCon
         return <ControllPanelEditChain />;
       case Mode.EDIT_CHAIN_LINK:
         return <ControllPanelEditChainLink />;
+      case Mode.EDIT_CHAIN_DECISION:
+        return <ControllPanelEditChainDecision />;
       default:
         return (
           <ControllPanelEditMenu

@@ -1,4 +1,5 @@
 import { ActionTO } from "../to/ActionTO";
+import { ChainDecisionTO } from "../to/ChainDecisionTO";
 import { ChainlinkTO } from "../to/ChainlinkTO";
 import { ChainTO } from "../to/ChainTO";
 import { ComponentTO } from "../to/ComponentTO";
@@ -36,6 +37,7 @@ export class DataStoreCTO {
     public dataSetups = new Map<number, DataSetupTO>(),
     // Chain
     public chains = new Map<number, ChainTO>(),
-    public chainlinks = new Map<number, ChainlinkTO>()
+    public chainlinks = new Map<number, ChainlinkTO>(),
+    public chaindecisions = new Map<number, ChainDecisionTO>()
   ) {}
 }

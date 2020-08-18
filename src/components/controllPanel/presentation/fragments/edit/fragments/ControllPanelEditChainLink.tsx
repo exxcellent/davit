@@ -90,6 +90,9 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
               />
             </OptionField>
           )}
+
+          {/* TODO: implement decision! */}
+
           {/* {goTo!.type === GoToTypes.COND && (
             <OptionField label="Create or Select next decision">
               <Carv2ButtonIcon icon="add" onClick={createGoToDecision} />
@@ -160,7 +163,6 @@ const useControllPanelEditChainStepViewModel = () => {
     if (goTo !== undefined && !isNullOrUndefined(chainLinkToEdit)) {
       const copyChainlink: ChainlinkTO = Carv2Util.deepCopy(chainLinkToEdit);
       copyChainlink.goto = goTo;
-      dispatch(EditActions.chainLink.save(copyChainlink));
       dispatch(EditActions.chainLink.save(copyChainlink));
     }
   };

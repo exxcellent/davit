@@ -69,6 +69,7 @@ class DataStore {
       decisions: Array.from(this.data!.decisions.values()),
       chains: Array.from(this.data!.chains.values()),
       chainlinks: Array.from(this.data!.chainlinks.values()),
+      chaindecisions: Array.from(this.data!.chaindecisions.values()),
     };
   }
 

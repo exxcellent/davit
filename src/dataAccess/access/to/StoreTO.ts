@@ -20,4 +20,5 @@ export interface StoreTO {
   // chain
   chains: any[];
   chainlinks: any[];
+  chaindecisions: any[];
 }

@@ -97,7 +97,7 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddChain()} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
-              chain
+              Chain
             </Button>
             <ChainDropDownButton onSelect={(chain) => editOrAddChain(chain)} icon="wrench" />
           </Button.Group>

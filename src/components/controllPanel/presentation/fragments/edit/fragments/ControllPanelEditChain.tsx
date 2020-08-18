@@ -2,9 +2,9 @@ import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
+import { ChainDecisionTO } from "../../../../../../dataAccess/access/to/ChainDecisionTO";
 import { ChainlinkTO } from "../../../../../../dataAccess/access/to/ChainlinkTO";
 import { ChainTO } from "../../../../../../dataAccess/access/to/ChainTO";
-import { DecisionTO } from "../../../../../../dataAccess/access/to/DecisionTO";
 import { SequenceTO } from "../../../../../../dataAccess/access/to/SequenceTO";
 import { EditActions } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
@@ -12,6 +12,7 @@ import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSl
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
+import { ChainDecisionDropDownButton } from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
 import { ChainLinkDropDownButton } from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
@@ -78,7 +79,7 @@ export const ControllPanelEditChain: FunctionComponent<ControllPanelEditChainPro
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Decision
             </Button>
-            {/* <DecisionDropDownButton onSelect={editOrAddDecision} icon="wrench" /> */}
+            <ChainDecisionDropDownButton onSelect={editOrAddDecision} icon="wrench" chainId={id} />
           </Button.Group>
         </OptionField>
       </div>
@@ -151,15 +152,15 @@ const useControllPanelEditChainViewModel = () => {
     dispatch(EditActions.setMode.editChainLink(chainLinkToEdit));
   };
 
-  const editOrAddDecision = (decision?: DecisionTO) => {
-    let decisionToEdit: DecisionTO | undefined = decision;
+  const editOrAddChainDecision = (decision?: ChainDecisionTO) => {
+    let decisionToEdit: ChainDecisionTO | undefined = decision;
     if (decisionToEdit === undefined) {
-      decisionToEdit = new DecisionTO();
-      decisionToEdit.sequenceFk = selectedChain?.id || -1;
+      decisionToEdit = new ChainDecisionTO();
+      decisionToEdit.chainFk = selectedChain?.id || -1;
       // TODO: set root if first element in chain.
       // decisionToEdit.root = isFirst();
     }
-    dispatch(EditActions.setMode.editDecision(decisionToEdit));
+    dispatch(EditActions.setMode.editChainDecision(decisionToEdit));
   };
 
   const createAnother = () => {
@@ -182,7 +183,7 @@ const useControllPanelEditChainViewModel = () => {
     validateInput,
     createAnother,
     updateSequence,
-    editOrAddDecision,
+    editOrAddDecision: editOrAddChainDecision,
     editOrAddChainLink,
   };
 };
