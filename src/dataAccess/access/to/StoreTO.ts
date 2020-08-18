@@ -19,5 +19,5 @@ export interface StoreTO {
   dataSetups: any[];
   // chain
   chains: any[];
-  chainsteps: any[];
+  chainlinks: any[];
 }

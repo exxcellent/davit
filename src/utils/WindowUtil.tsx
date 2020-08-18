@@ -62,7 +62,6 @@ export const useCurrentHeight = () => {
 export const useZoomDisable = (zoomCallBacks?: { zoomInCallBack: () => void; zoomOutCallBack: () => void }) => {
   const handleKeyDown = (event: WheelEvent) => {
     if (event.ctrlKey === true) {
-      console.info("delta:", event.deltaY);
       event.preventDefault();
       if (zoomCallBacks) {
         event.deltaY < 0 && zoomCallBacks.zoomInCallBack();
@@ -72,7 +71,6 @@ export const useZoomDisable = (zoomCallBacks?: { zoomInCallBack: () => void; zoo
   };
 
   const checkZoom = (event: KeyboardEvent) => {
-    console.info("Keycode: ", event.keyCode);
     if (event.ctrlKey === true) {
       if (event.keyCode === 171 || event.keyCode === 173) {
         event.preventDefault();

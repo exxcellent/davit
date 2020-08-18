@@ -31,7 +31,7 @@ export function Carv2() {
     dispatch(MasterDataActions.loadRelationsFromBackend());
     dispatch(MasterDataActions.loadSequencesFromBackend());
     dispatch(MasterDataActions.loadChainsFromBackend());
-    dispatch(MasterDataActions.loadChainStepsFromBackend());
+    dispatch(MasterDataActions.loadChainLinksFromBackend());
   }, [dispatch]);
 
   // disable global key shortcuts.

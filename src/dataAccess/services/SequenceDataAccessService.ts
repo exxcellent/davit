@@ -3,7 +3,7 @@ import { DataSetupCTO } from "../access/cto/DataSetupCTO";
 import { SequenceCTO } from "../access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../access/cto/SequenceStepCTO";
 import { ActionTO } from "../access/to/ActionTO";
-import { ChainStepTO } from "../access/to/ChainStepTO";
+import { ChainlinkTO } from "../access/to/ChainlinkTO";
 import { ChainTO } from "../access/to/ChainTO";
 import { DataSetupTO } from "../access/to/DataSetupTO";
 import { DecisionTO } from "../access/to/DecisionTO";
@@ -11,8 +11,8 @@ import { InitDataTO } from "../access/to/InitDataTO";
 import { SequenceStepTO } from "../access/to/SequenceStepTO";
 import { SequenceTO } from "../access/to/SequenceTO";
 import { ActionRepository } from "../repositories/ActionRepository";
+import { ChainLinkRepository } from "../repositories/ChainLinkRepository";
 import { ChainRepository } from "../repositories/ChainRepository";
-import { ChainStepRepository } from "../repositories/ChainStepRepository";
 import { DataSetupRepository } from "../repositories/DataSetupRepository";
 import { DecisionRepository } from "../repositories/DecisionRepository";
 import { InitDataRepository } from "../repositories/InitDataRepository";
@@ -258,16 +258,16 @@ export const SequenceDataAccessService = {
     return ChainRepository.delete(chain);
   },
 
-  saveChainStepTO(step: ChainStepTO): ChainStepTO {
-    return ChainStepRepository.save(step);
+  saveChainlink(link: ChainlinkTO): ChainlinkTO {
+    return ChainLinkRepository.save(link);
   },
 
-  findAllChainSteps(): ChainStepTO[] {
-    return ChainStepRepository.findAll();
+  findAllChainLinks(): ChainlinkTO[] {
+    return ChainLinkRepository.findAll();
   },
 
-  deleteChainStepTO(step: ChainStepTO): ChainStepTO {
-    return ChainStepRepository.delete(step);
+  deleteChainTO(chainlink: ChainlinkTO): ChainlinkTO {
+    return ChainLinkRepository.delete(chainlink);
   },
 };
 // ======================================================== PRIVATE ========================================================

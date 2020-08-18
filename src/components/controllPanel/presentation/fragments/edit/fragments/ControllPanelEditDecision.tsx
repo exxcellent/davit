@@ -249,7 +249,7 @@ const useControllPanelEditConditionViewModel = () => {
     }
   };
 
-  const createGoToStep = (ifGoTo: Boolean) => {
+  const createGoToStep = (ifGoTo: boolean) => {
     if (!isNullOrUndefined(decisionToEdit)) {
       let goToStep: SequenceStepCTO = new SequenceStepCTO();
       goToStep.squenceStepTO.sequenceFk = decisionToEdit.sequenceFk;

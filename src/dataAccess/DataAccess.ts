@@ -4,7 +4,7 @@ import { DataSetupCTO } from "./access/cto/DataSetupCTO";
 import { SequenceCTO } from "./access/cto/SequenceCTO";
 import { SequenceStepCTO } from "./access/cto/SequenceStepCTO";
 import { ActionTO } from "./access/to/ActionTO";
-import { ChainStepTO } from "./access/to/ChainStepTO";
+import { ChainlinkTO } from "./access/to/ChainlinkTO";
 import { ChainTO } from "./access/to/ChainTO";
 import { DataRelationTO } from "./access/to/DataRelationTO";
 import { DataSetupTO } from "./access/to/DataSetupTO";
@@ -227,17 +227,21 @@ export const DataAccess = {
   saveChainTO(chain: ChainTO): DataAccessResponse<ChainTO> {
     return makeTransactional(() => SequenceDataAccessService.saveChainTO(chain));
   },
+
   deleteChain(chain: ChainTO): DataAccessResponse<ChainTO> {
     return makeTransactional(() => SequenceDataAccessService.deleteChain(chain));
   },
-  saveChainStepTO(chainStep: ChainStepTO): DataAccessResponse<ChainStepTO> {
-    return makeTransactional(() => SequenceDataAccessService.saveChainStepTO(chainStep));
+
+  saveChainlink(link: ChainlinkTO): DataAccessResponse<ChainlinkTO> {
+    return makeTransactional(() => SequenceDataAccessService.saveChainlink(link));
   },
-  findAllChainSteps(): DataAccessResponse<ChainStepTO[]> {
-    return makeTransactional(() => SequenceDataAccessService.findAllChainSteps());
+
+  findAllChainLinks(): DataAccessResponse<ChainlinkTO[]> {
+    return makeTransactional(() => SequenceDataAccessService.findAllChainLinks());
   },
-  deleteChainStep(step: ChainStepTO): DataAccessResponse<ChainStepTO> {
-    return makeTransactional(() => SequenceDataAccessService.deleteChainStepTO(step));
+
+  deleteChainLink(step: ChainlinkTO): DataAccessResponse<ChainlinkTO> {
+    return makeTransactional(() => SequenceDataAccessService.deleteChainTO(step));
   },
 };
 // ========================================= PRIVATE =========================================

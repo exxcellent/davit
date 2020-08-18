@@ -1,118 +1,243 @@
-import React, { FunctionComponent, useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Input } from "semantic-ui-react";
+import { isNullOrUndefined } from "util";
+import { ChainlinkTO } from "../../../../../../dataAccess/access/to/ChainlinkTO";
+import { ChainTO } from "../../../../../../dataAccess/access/to/ChainTO";
+import { DataSetupTO } from "../../../../../../dataAccess/access/to/DataSetupTO";
+import { SequenceTO } from "../../../../../../dataAccess/access/to/SequenceTO";
+import { GoToChain, GoToTypesChain } from "../../../../../../dataAccess/access/types/GoToTypeChain";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
+import { handleError } from "../../../../../../slices/GlobalSlice";
+import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
+import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
+import { ChainLinkDropDown } from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
+import { DataSetupDropDown } from "../../../../../common/fragments/dropdowns/DataSetupDropDown";
+import { GoToChainOptionDropDown } from "../../../../../common/fragments/dropdowns/GoToChainOptionDropDown";
+import { SequenceDropDown } from "../../../../../common/fragments/dropdowns/SequenceDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditChainLinkProps {}
 
 export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChainLinkProps> = (props) => {
-  const { label, key } = useControllPanelEditChainLinkViewModel();
+  const {
+    label,
+    name,
+    changeName,
+    textInput,
+    goTo,
+    isRoot,
+    currentDataSetup,
+    currentSequence,
+    deleteChainLink,
+    saveChainLink,
+    setDataSetup,
+    setSequenceModel,
+    linkId,
+    chainId,
+    handleType,
+    setNextLink,
+    createNewChainLink,
+  } = useControllPanelEditChainStepViewModel();
+
+  const stepName = (
+    <OptionField label="Chainlink - name">
+      <Carv2LabelTextfield
+        label="Name:"
+        placeholder="Chainlink Name ..."
+        onChange={(event: any) => changeName(event.target.value)}
+        value={name}
+        autoFocus
+        ref={textInput}
+      />
+    </OptionField>
+  );
 
   return (
-    <ControllPanelEditSub label={label} key={key}>
-      <div className="optionFieldSpacer">
-        <OptionField label="Select Component on which the action will be called">
-          {/* <ComponentDropDown onSelect={setComponent} value={componentId} /> */}
+    <ControllPanelEditSub label={label}>
+      <div className="controllPanelEditChild">{stepName}</div>
+      <div className="optionFieldSpacer columnDivider">
+        <OptionField>
+          <OptionField label="Select Data Setup">
+            <DataSetupDropDown
+              onSelect={(dataSetup) => setDataSetup(dataSetup)}
+              placeholder="Select Data Setup ..."
+              value={currentDataSetup}
+            />
+          </OptionField>
+          <OptionField label="Select Sequence">
+            <SequenceDropDown onSelect={(seqModel) => setSequenceModel(seqModel)} value={currentSequence} />
+          </OptionField>
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
-        <OptionField label="Select action to execute">
-          {/* <ActionTypeDropDown onSelect={setAction} value={actionType} /> */}
-        </OptionField>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <OptionField label="Select type of the next">
+            <GoToChainOptionDropDown onSelect={handleType} value={goTo ? goTo.type : GoToTypesChain.ERROR} />
+          </OptionField>
+          {goTo!.type === GoToTypesChain.LINK && (
+            <OptionField label="Create or Select next link">
+              <Carv2ButtonIcon icon="add" onClick={createNewChainLink} />
+              <ChainLinkDropDown
+                onSelect={setNextLink}
+                value={goTo?.type === GoToTypesChain.LINK ? goTo.id : 1}
+                chainId={chainId}
+                exclude={linkId}
+              />
+            </OptionField>
+          )}
+          {/* {goTo!.type === GoToTypes.COND && (
+            <OptionField label="Create or Select next decision">
+              <Carv2ButtonIcon icon="add" onClick={createGoToDecision} />
+              <DecisionDropDown onSelect={setGoToTypeDecision} value={goTo?.type === GoToTypes.COND ? goTo.id : 1} />
+            </OptionField>
+          )} */}
+        </div>
       </div>
-      <div className="optionFieldSpacer columnDivider">
-        <OptionField label="Select data affected by the action">
-          {/* <DataAndInstanceDropDown onSelect={setData} value={dataId} /> */}
-        </OptionField>
-      </div>
-
       <div className="columnDivider controllPanelEditChild">
-        <div className="innerOptionFieldSpacer">
+        <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
           <OptionField label="Navigation">
-            <Carv2ButtonLabel onClick={() => {}} label="Create another" />
-            <Carv2ButtonIcon onClick={() => {}} icon="reply" />
+            <Carv2ButtonIcon onClick={saveChainLink} icon="reply" />
           </OptionField>
         </div>
         <OptionField label="Sequence - Options">
-          <Carv2DeleteButton onClick={() => {}} />
+          <Carv2ButtonLabel onClick={() => {}} label={isRoot ? "Root" : "Set as Root"} disable={isRoot} />
+          <div>
+            <Carv2DeleteButton onClick={deleteChainLink} />
+          </div>
         </OptionField>
       </div>
     </ControllPanelEditSub>
   );
 };
 
-const useControllPanelEditChainLinkViewModel = () => {
-  // const chainLinkToEdit: ChainlinkTO | null = useSelector(editSelectors.chainLinkToEdit);
+const useControllPanelEditChainStepViewModel = () => {
+  const chainLinkToEdit: ChainlinkTO | null = useSelector(editSelectors.chainLinkToEdit);
+  const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
   const dispatch = useDispatch();
+  const textInput = useRef<Input>(null);
+  const [currentGoTo, setCurrentGoTo] = useState<GoToChain>({ type: GoToTypesChain.LINK, id: -1 });
 
-  const [key, setKey] = useState<number>(0);
+  useEffect(() => {
+    if (isNullOrUndefined(chainLinkToEdit)) {
+      handleError("Tried to go to edit sequence step without sequenceStepToEdit specified");
+      dispatch(EditActions.setMode.edit());
+    }
+    if (chainLinkToEdit) {
+      setCurrentGoTo(chainLinkToEdit.goto);
+    }
+    // used to focus the textfield on create another
+    textInput.current!.focus();
+  }, [dispatch, chainLinkToEdit]);
 
-  // useEffect(() => {
-  //   // check if component to edit is really set or gos back to edit mode
-  //   if (isNullOrUndefined(actionToEdit)) {
-  //     dispatch(handleError("Tried to go to edit action without actionToEdit specified"));
-  //     dispatch(EditActions.setMode.edit());
-  //   }
-  //   // used to focus the textfield on create another
-  // }, [dispatch, actionToEdit]);
+  const changeName = (name: string) => {
+    if (!isNullOrUndefined(chainLinkToEdit)) {
+      const copyChainLink: ChainlinkTO = Carv2Util.deepCopy(chainLinkToEdit);
+      copyChainLink.name = name;
+      dispatch(EditActions.chainLink.save(copyChainLink));
+    }
+  };
 
-  // const deleteAction = () => {
-  //   if (!isNullOrUndefined(actionToEdit)) {
-  //     dispatch(EditActions.action.delete(actionToEdit));
-  //     dispatch(EditActions.setMode.editStep(EditActions.step.find(actionToEdit.sequenceStepFk)));
-  //   }
-  // };
+  const saveChainLink = () => {
+    if (!isNullOrUndefined(chainLinkToEdit) && !isNullOrUndefined(selectedChain)) {
+      dispatch(EditActions.chainLink.save(chainLinkToEdit));
+      dispatch(EditActions.setMode.editChain(selectedChain));
+    }
+  };
 
-  // const setComponent = (component: ComponentCTO | undefined): void => {
-  //   if (!isNullOrUndefined(component)) {
-  //     let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
-  //     copyActionToEdit.componentFk = component.component.id;
-  //     dispatch(EditActions.action.update(copyActionToEdit));
-  //     dispatch(EditActions.action.save(copyActionToEdit));
-  //   }
-  // };
+  const deleteChainLink = () => {
+    if (!isNullOrUndefined(chainLinkToEdit) && !isNullOrUndefined(selectedChain)) {
+      dispatch(EditActions.chainLink.delete(chainLinkToEdit));
+      dispatch(EditActions.setMode.editChain(selectedChain));
+    }
+  };
 
-  // const setAction = (actionType: ActionType | undefined): void => {
-  //   if (!isNullOrUndefined(actionType)) {
-  //     let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
-  //     copyActionToEdit.actionType = actionType;
-  //     dispatch(EditActions.action.update(copyActionToEdit));
-  //     dispatch(EditActions.action.save(copyActionToEdit));
-  //   }
-  // };
+  const saveGoToType = (goTo: GoToChain) => {
+    if (goTo !== undefined && !isNullOrUndefined(chainLinkToEdit)) {
+      const copyChainlink: ChainlinkTO = Carv2Util.deepCopy(chainLinkToEdit);
+      copyChainlink.goto = goTo;
+      dispatch(EditActions.chainLink.save(copyChainlink));
+      dispatch(EditActions.chainLink.save(copyChainlink));
+    }
+  };
 
-  // const setData = (values: { data?: DataCTO; instance?: DataInstanceTO } | undefined): void => {
-  //   if (!isNullOrUndefined(values?.data)) {
-  //     let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
-  //     if (values?.instance) {
-  //       copyActionToEdit.dataFk = values.data.data.id * DATA_INSTANCE_ID_FACTOR + values.instance.id;
-  //     } else {
-  //       copyActionToEdit.dataFk = values!.data.data.id;
-  //     }
-  //     dispatch(EditActions.action.update(copyActionToEdit));
-  //     dispatch(EditActions.action.save(copyActionToEdit));
-  //   }
-  // };
+  const handleType = (newGoToType?: string) => {
+    if (newGoToType !== undefined) {
+      const gType = { type: (GoToTypesChain as any)[newGoToType] };
+      setCurrentGoTo(gType);
+      switch (newGoToType) {
+        case GoToTypesChain.ERROR:
+          saveGoToType(gType);
+          break;
+        case GoToTypesChain.FIN:
+          saveGoToType(gType);
+          break;
+      }
+    }
+  };
 
-  // const backToStep = () => {
-  //   if (!isNullOrUndefined(actionToEdit)) {
-  //     dispatch(EditActions.setMode.editStep(EditActions.step.find(actionToEdit.sequenceStepFk)));
-  //   }
-  // };
+  const setNextLink = (link?: ChainlinkTO) => {
+    if (link) {
+      let newGoTo: GoToChain = { type: GoToTypesChain.LINK, id: link.id };
+      saveGoToType(newGoTo);
+    }
+  };
 
-  // const createAnother = () => {
-  //   if (actionToEdit) {
-  //     let newAction: ActionTO = new ActionTO();
-  //     newAction.sequenceStepFk = actionToEdit.sequenceStepFk;
-  //     dispatch(EditActions.action.create(newAction));
-  //     setKey(key + 1);
-  //   }
-  // };
+  const createNewChainLink = () => {
+    if (!isNullOrUndefined(chainLinkToEdit)) {
+      const copyChainLinkToEdit: ChainlinkTO = Carv2Util.deepCopy(chainLinkToEdit);
+      let newChainLink: ChainlinkTO = new ChainlinkTO();
+      newChainLink.chainFk = chainLinkToEdit.chainFk;
+      dispatch(EditActions.setMode.editChainLink(newChainLink, copyChainLinkToEdit));
+    }
+  };
+
+  const setDataSetup = (dataSetup?: DataSetupTO) => {
+    if (!isNullOrUndefined(chainLinkToEdit)) {
+      let copyChainLinkToEdit: ChainlinkTO = Carv2Util.deepCopy(chainLinkToEdit);
+      if (dataSetup) {
+        copyChainLinkToEdit.dataSetupFk = dataSetup.id;
+      } else {
+        copyChainLinkToEdit.dataSetupFk = -1;
+      }
+      dispatch(EditActions.chainLink.save(copyChainLinkToEdit));
+    }
+  };
+
+  const setSequenceModel = (sequence?: SequenceTO) => {
+    if (!isNullOrUndefined(chainLinkToEdit)) {
+      let copyChainLinkToEdit: ChainlinkTO = Carv2Util.deepCopy(chainLinkToEdit);
+      if (sequence) {
+        copyChainLinkToEdit.sequenceFk = sequence.id;
+      } else {
+        copyChainLinkToEdit.sequenceFk = -1;
+      }
+      dispatch(EditActions.chainLink.save(copyChainLinkToEdit));
+    }
+  };
 
   return {
-    label: "EDIT * CHAIN * STEP * LINK",
-    key,
+    label: "EDIT * " + (selectedChain?.name || "") + " * " + (chainLinkToEdit?.name || ""),
+    name: chainLinkToEdit ? chainLinkToEdit.name : "",
+    changeName,
+    saveChainLink,
+    deleteChainLink,
+    textInput,
+    goTo: currentGoTo,
+    isRoot: chainLinkToEdit?.root ? chainLinkToEdit.root : false,
+    stepId: chainLinkToEdit?.id,
+    currentDataSetup: chainLinkToEdit?.dataSetupFk,
+    currentSequence: chainLinkToEdit?.sequenceFk,
+    setDataSetup,
+    setSequenceModel,
+    linkId: chainLinkToEdit?.id,
+    chainId: chainLinkToEdit?.chainFk || -1,
+    handleType,
+    setNextLink,
+    createNewChainLink,
   };
 };

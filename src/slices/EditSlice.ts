@@ -8,7 +8,7 @@ import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
-import { ChainStepTO } from "../dataAccess/access/to/ChainStepTO";
+import { ChainlinkTO } from "../dataAccess/access/to/ChainlinkTO";
 import { ChainTO } from "../dataAccess/access/to/ChainTO";
 import { DataRelationTO } from "../dataAccess/access/to/DataRelationTO";
 import { DataInstanceTO } from "../dataAccess/access/to/DataTO";
@@ -18,6 +18,7 @@ import { InitDataTO } from "../dataAccess/access/to/InitDataTO";
 import { SequenceStepTO } from "../dataAccess/access/to/SequenceStepTO";
 import { SequenceTO } from "../dataAccess/access/to/SequenceTO";
 import { GoToTypes } from "../dataAccess/access/types/GoToType";
+import { GoToTypesChain } from "../dataAccess/access/types/GoToTypeChain";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
 import { Carv2Util } from "../utils/Carv2Util";
@@ -40,7 +41,7 @@ export enum Mode {
   EDIT_CHAIN = "EDIT_CHAIN",
   EDIT_CHAIN_DECISION = "EDIT_CHAIN_DECISION",
   EDIT_CHAIN_DECISION_CONDITION = "EDIT_CHAIN_DECISION_CONDITION",
-  EDIT_CHAIN_STEP = "EDIT_CHAIN_STEP",
+  EDIT_CHAIN_LINK = "EDIT_CHAIN_LINK",
   EDIT_SEQUENCE = "EDIT_SEQUENCE",
   EDIT_SEQUENCE_DECISION = "EDIT_SEQUENCE_DECISION",
   EDIT_SEQUENCE_DECISION_CONDITION = "EDIT_SEQUENCE_DECISION_CONDITION",
@@ -68,7 +69,7 @@ interface EditState {
     | InitDataTO
     | GroupTO
     | DecisionTO
-    | ChainStepTO
+    | ChainlinkTO
     | {};
   instanceIdToEdit: number | null;
 }
@@ -85,8 +86,8 @@ const EditSlice = createSlice({
     setInstanceIdToEdit: (state, action: PayloadAction<number | null>) => {
       state.instanceIdToEdit = action.payload;
     },
-    setChainStepToEdit: (state, action: PayloadAction<ChainStepTO>) => {
-      if (state.mode === Mode.EDIT_CHAIN_STEP) {
+    setChainLinkToEdit: (state, action: PayloadAction<ChainlinkTO>) => {
+      if (state.mode === Mode.EDIT_CHAIN_LINK) {
         state.objectToEdit = action.payload;
       } else {
         handleError("Try to set chain step to edit in mode: " + state.mode);
@@ -276,19 +277,17 @@ const setModeToEditChain = (chain?: ChainTO): AppThunk => (dispatch) => {
   }
 };
 
-const setModeToEditChainStep = (chainStep?: ChainStepTO): AppThunk => (dispatch) => {
-  dispatch(setModeWithStorage(Mode.EDIT_CHAIN_STEP));
-  if (!chainStep) {
-    dispatch(EditActions.chainStep.create());
-  } else {
-    dispatch(EditSlice.actions.setChainStepToEdit(chainStep));
-  }
+const setModeToEditChainlink = (chainlink: ChainlinkTO, from?: ChainlinkTO, ifGoTo?: boolean): AppThunk => (
+  dispatch
+) => {
+  dispatch(setModeWithStorage(Mode.EDIT_CHAIN_LINK));
+  dispatch(EditActions.chainLink.create(chainlink, from, ifGoTo));
 };
 
 const setModeToEditStep = (
   stepCTO: SequenceStepCTO,
   from?: SequenceStepCTO | DecisionTO,
-  ifGoTo?: Boolean
+  ifGoTo?: boolean
 ): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_STEP));
   dispatch(EditActions.step.create(stepCTO, from, ifGoTo));
@@ -571,32 +570,51 @@ const deleteChainThunk = (chain: ChainTO): AppThunk => (dispatch) => {
   dispatch(MasterDataActions.loadChainsFromBackend());
 };
 
-const createChainStepThunk = (): AppThunk => (dispatch) => {
-  let chain: ChainStepTO = new ChainStepTO();
-  const response: DataAccessResponse<ChainStepTO> = DataAccess.saveChainStepTO(chain);
+const createChainLinkThunk = (link: ChainlinkTO, from?: ChainlinkTO, ifGoTO?: Boolean): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<ChainlinkTO> = DataAccess.saveChainlink(link);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
+  } else {
+    if (from !== undefined) {
+      from.goto = { type: GoToTypesChain.LINK, id: response.object.id };
+      dispatch(EditActions.chainLink.save(from));
+
+      // TODO: need to be implement for decision!
+
+      // if ((from as SequenceStepCTO).squenceStepTO !== undefined) {
+      //   (from as SequenceStepCTO).squenceStepTO.goto = { type: GoToTypes.STEP, id: response.object.squenceStepTO.id };
+      //   dispatch(EditActions.step.save(from as SequenceStepCTO));
+      // }
+      // if ((from as DecisionTO).elseGoTo !== undefined) {
+      //   if (ifGoTO) {
+      //     (from as DecisionTO).ifGoTo = { type: GoToTypes.STEP, id: response.object.squenceStepTO.id };
+      //   } else {
+      //     (from as DecisionTO).elseGoTo = { type: GoToTypes.STEP, id: response.object.squenceStepTO.id };
+      //   }
+      //   dispatch(EditActions.decision.save(from as DecisionTO));
+      // }
+    }
+    dispatch(EditSlice.actions.setChainLinkToEdit(response.object));
   }
-  dispatch(MasterDataActions.loadChainStepsFromBackend());
-  dispatch(EditSlice.actions.setChainStepToEdit(response.object));
 };
 
-const saveChainStepThunk = (step: ChainStepTO): AppThunk => (dispatch) => {
-  const response: DataAccessResponse<ChainStepTO> = DataAccess.saveChainStepTO(step);
+const saveChainLinkThunk = (step: ChainlinkTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<ChainlinkTO> = DataAccess.saveChainlink(step);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
-  dispatch(MasterDataActions.loadChainStepsFromBackend());
-  dispatch(EditActions.setMode.editChainStep(response.object));
+  dispatch(MasterDataActions.loadChainLinksFromBackend());
+  dispatch(EditActions.setMode.editChainLink(response.object));
 };
 
-const deleteChainStepThunk = (step: ChainStepTO): AppThunk => (dispatch) => {
-  const response: DataAccessResponse<ChainStepTO> = DataAccess.deleteChainStep(step);
+const deleteChainLinkThunk = (step: ChainlinkTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<ChainlinkTO> = DataAccess.deleteChainLink(step);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
-  dispatch(MasterDataActions.loadChainStepsFromBackend());
+  dispatch(MasterDataActions.loadChainLinksFromBackend());
 };
+
 // ----------------------------------------------- SEQUENCE -----------------------------------------------
 
 const createSequenceThunk = (): AppThunk => (dispatch) => {
@@ -826,9 +844,9 @@ export const editSelectors = {
       ? (state.edit.objectToEdit as ComponentCTO)
       : null;
   },
-  chainStepToEdit: (state: RootState): ChainStepTO | null => {
-    return state.edit.mode === Mode.EDIT_CHAIN_STEP && (state.edit.objectToEdit as ChainStepTO).sourceChainlinkFk
-      ? (state.edit.objectToEdit as ChainStepTO)
+  chainLinkToEdit: (state: RootState): ChainlinkTO | null => {
+    return state.edit.mode === Mode.EDIT_CHAIN_LINK && (state.edit.objectToEdit as ChainlinkTO).dataSetupFk
+      ? (state.edit.objectToEdit as ChainlinkTO)
       : null;
   },
   dataToEdit: (state: RootState): DataCTO | null => {
@@ -923,7 +941,7 @@ export const EditActions = {
     editCondition: setModeToEditCondition,
     editAction: setModeToEditAction,
     editChain: setModeToEditChain,
-    editChainStep: setModeToEditChainStep,
+    editChainLink: setModeToEditChainlink,
     edit: setModeToEdit,
     view: setModeToView,
     file: setModeToFile,
@@ -998,9 +1016,9 @@ export const EditActions = {
     save: saveChainThunk,
     delete: deleteChainThunk,
   },
-  chainStep: {
-    create: createChainStepThunk,
-    save: saveChainStepThunk,
-    delete: deleteChainStepThunk,
+  chainLink: {
+    create: createChainLinkThunk,
+    save: saveChainLinkThunk,
+    delete: deleteChainLinkThunk,
   },
 };
