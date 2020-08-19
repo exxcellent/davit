@@ -588,6 +588,8 @@ const deleteChainThunk = (chain: ChainTO): AppThunk => (dispatch) => {
     dispatch(handleError(response.message));
   }
   dispatch(MasterDataActions.loadChainsFromBackend());
+  dispatch(MasterDataActions.loadChainDecisionsFromBackend());
+  dispatch(MasterDataActions.loadChainLinksFromBackend());
 };
 
 const createChainLinkThunk = (link: ChainlinkTO, from?: ChainlinkTO | ChainDecisionTO, ifGoTO?: boolean): AppThunk => (

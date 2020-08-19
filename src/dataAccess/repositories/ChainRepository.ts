@@ -1,5 +1,4 @@
 import { ChainTO } from "../access/to/ChainTO";
-import { ConstraintsHelper } from "../ConstraintsHelper";
 import dataStore from "../DataStore";
 import { CheckHelper } from "../util/CheckHelper";
 import { DataAccessUtil } from "../util/DataAccessUtil";
@@ -29,7 +28,7 @@ export const ChainRepository = {
   },
 
   delete(chain: ChainTO): ChainTO {
-    ConstraintsHelper.deleteSequenceConstraintCheck(chain.id, dataStore.getDataStore());
+    // ConstraintsHelper.deleteSequenceConstraintCheck(chain.id, dataStore.getDataStore());
     let success = dataStore.getDataStore().chains.delete(chain.id!);
     if (!success) {
       throw new Error("dataAccess.repository.error.notExists");

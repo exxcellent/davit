@@ -291,6 +291,10 @@ export const SequenceDataAccessService = {
   },
 
   deleteChain(chain: ChainTO): ChainTO {
+    let linksToDelete: ChainlinkTO[] = ChainLinkRepository.findAllForChain(chain.id);
+    let decisionsToDelete: ChainDecisionTO[] = ChainDecisionRepository.findAllForChain(chain.id);
+    linksToDelete.forEach((link) => ChainLinkRepository.delete(link));
+    decisionsToDelete.forEach((dec) => ChainDecisionRepository.delete(dec));
     return ChainRepository.delete(chain);
   },
 

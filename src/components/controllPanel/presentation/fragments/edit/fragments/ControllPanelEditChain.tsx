@@ -8,6 +8,7 @@ import { ChainTO } from "../../../../../../dataAccess/access/to/ChainTO";
 import { SequenceTO } from "../../../../../../dataAccess/access/to/SequenceTO";
 import { EditActions } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
+import { masterDataSelectors } from "../../../../../../slices/MasterDataSlice";
 import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
@@ -92,6 +93,7 @@ const useControllPanelEditChainViewModel = () => {
   const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
   const dispatch = useDispatch();
   const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
+  const isFirst: boolean = useSelector(masterDataSelectors.isFirstChainElement(selectedChain?.id || -1));
   const textInput = useRef<Input>(null);
 
   useEffect(() => {
@@ -146,8 +148,7 @@ const useControllPanelEditChainViewModel = () => {
     if (chainLinkToEdit === undefined) {
       chainLinkToEdit = new ChainlinkTO();
       chainLinkToEdit.chainFk = selectedChain?.id || -1;
-      // TODO: set root if first element in chain.
-      // chainStepToEdit.root = isFirst();
+      chainLinkToEdit.root = isFirst;
     }
     dispatch(EditActions.setMode.editChainLink(chainLinkToEdit));
   };
@@ -157,8 +158,7 @@ const useControllPanelEditChainViewModel = () => {
     if (decisionToEdit === undefined) {
       decisionToEdit = new ChainDecisionTO();
       decisionToEdit.chainFk = selectedChain?.id || -1;
-      // TODO: set root if first element in chain.
-      // decisionToEdit.root = isFirst();
+      decisionToEdit.root = isFirst;
     }
     dispatch(EditActions.setMode.editChainDecision(decisionToEdit));
   };

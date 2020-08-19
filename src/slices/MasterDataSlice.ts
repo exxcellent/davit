@@ -193,6 +193,18 @@ export const masterDataSelectors = {
       return state.masterData.dataSetups.find((dataSetup) => dataSetup.id === id) || null;
     };
   },
+  isFirstChainElement: (id: number) => {
+    return (state: RootState): boolean => {
+      let isFirst: boolean = true;
+      if (state.masterData.chainLinks.some((link) => link.chainFk === id)) {
+        isFirst = false;
+      }
+      if (state.masterData.chainDecisions.some((dec) => dec.chainFk === id)) {
+        isFirst = false;
+      }
+      return isFirst;
+    };
+  },
 };
 
 // =============================================== ACTIONS ===============================================
