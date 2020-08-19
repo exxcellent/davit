@@ -602,11 +602,11 @@ const createChainLinkThunk = (link: ChainlinkTO, from?: ChainlinkTO | ChainDecis
         (from as ChainlinkTO).goto = { type: GoToTypesChain.LINK, id: response.object.id };
         dispatch(EditActions.chainLink.save(from as ChainlinkTO));
       }
-      if ((from as ChainDecisionTO).elseGoTo !== undefined) {
+      if ((from as ChainDecisionTO).ifGoTo !== undefined) {
         if (ifGoTO) {
-          (from as ChainDecisionTO).ifGoTo = { type: GoToTypesChain.DEC, id: response.object.id };
+          (from as ChainDecisionTO).ifGoTo = { type: GoToTypesChain.LINK, id: response.object.id };
         } else {
-          (from as ChainDecisionTO).elseGoTo = { type: GoToTypesChain.DEC, id: response.object.id };
+          (from as ChainDecisionTO).elseGoTo = { type: GoToTypesChain.LINK, id: response.object.id };
         }
         dispatch(EditActions.chainDecision.save(from as ChainDecisionTO));
       }

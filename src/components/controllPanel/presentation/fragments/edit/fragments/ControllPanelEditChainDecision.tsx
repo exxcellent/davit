@@ -247,9 +247,9 @@ const useControllPanelEditChainConditionViewModel = () => {
 
   const createGoToLink = (ifGoTo: boolean) => {
     if (!isNullOrUndefined(decisionToEdit)) {
+      const copyDecision: ChainDecisionTO = Carv2Util.deepCopy(decisionToEdit);
       let goToLink: ChainlinkTO = new ChainlinkTO();
       goToLink.chainFk = decisionToEdit.chainFk;
-      const copyDecision: ChainDecisionTO = Carv2Util.deepCopy(decisionToEdit);
       dispatch(EditActions.setMode.editChainLink(goToLink, copyDecision, ifGoTo));
     }
   };
