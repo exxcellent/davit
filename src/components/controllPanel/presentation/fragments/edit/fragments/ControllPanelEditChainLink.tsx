@@ -2,6 +2,7 @@ import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
+import { ChainDecisionTO } from "../../../../../../dataAccess/access/to/ChainDecisionTO";
 import { ChainlinkTO } from "../../../../../../dataAccess/access/to/ChainlinkTO";
 import { ChainTO } from "../../../../../../dataAccess/access/to/ChainTO";
 import { DataSetupTO } from "../../../../../../dataAccess/access/to/DataSetupTO";
@@ -13,6 +14,7 @@ import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSl
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
+import { ChainDecisionDropDown } from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
 import { ChainLinkDropDown } from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
 import { DataSetupDropDown } from "../../../../../common/fragments/dropdowns/DataSetupDropDown";
 import { GoToChainOptionDropDown } from "../../../../../common/fragments/dropdowns/GoToChainOptionDropDown";
@@ -41,7 +43,9 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
     chainId,
     handleType,
     setNextLink,
+    setNextDecision,
     createNewChainLink,
+    createGoToDecision,
   } = useControllPanelEditChainStepViewModel();
 
   const stepName = (
@@ -91,14 +95,16 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
             </OptionField>
           )}
 
-          {/* TODO: implement decision! */}
-
-          {/* {goTo!.type === GoToTypes.COND && (
+          {goTo!.type === GoToTypesChain.DEC && (
             <OptionField label="Create or Select next decision">
               <Carv2ButtonIcon icon="add" onClick={createGoToDecision} />
-              <DecisionDropDown onSelect={setGoToTypeDecision} value={goTo?.type === GoToTypes.COND ? goTo.id : 1} />
+              <ChainDecisionDropDown
+                onSelect={(cond) => setNextDecision(cond)}
+                value={goTo?.type === GoToTypesChain.DEC ? goTo.id : 1}
+                chainId={chainId}
+              />
             </OptionField>
-          )} */}
+          )}
         </div>
       </div>
       <div className="columnDivider controllPanelEditChild">
@@ -142,6 +148,7 @@ const useControllPanelEditChainStepViewModel = () => {
       const copyChainLink: ChainlinkTO = Carv2Util.deepCopy(chainLinkToEdit);
       copyChainLink.name = name;
       dispatch(EditActions.chainLink.save(copyChainLink));
+      dispatch(EditActions.setMode.editChainLink(copyChainLink));
     }
   };
 
@@ -164,6 +171,7 @@ const useControllPanelEditChainStepViewModel = () => {
       const copyChainlink: ChainlinkTO = Carv2Util.deepCopy(chainLinkToEdit);
       copyChainlink.goto = goTo;
       dispatch(EditActions.chainLink.save(copyChainlink));
+      dispatch(EditActions.setMode.editChainLink(copyChainlink));
     }
   };
 
@@ -189,12 +197,28 @@ const useControllPanelEditChainStepViewModel = () => {
     }
   };
 
+  const setNextDecision = (decision?: ChainDecisionTO) => {
+    if (decision) {
+      let newGoTo: GoToChain = { type: GoToTypesChain.DEC, id: decision.id };
+      saveGoToType(newGoTo);
+    }
+  };
+
   const createNewChainLink = () => {
     if (!isNullOrUndefined(chainLinkToEdit)) {
       const copyChainLinkToEdit: ChainlinkTO = Carv2Util.deepCopy(chainLinkToEdit);
       let newChainLink: ChainlinkTO = new ChainlinkTO();
       newChainLink.chainFk = chainLinkToEdit.chainFk;
       dispatch(EditActions.setMode.editChainLink(newChainLink, copyChainLinkToEdit));
+    }
+  };
+
+  const createGoToDecision = () => {
+    if (!isNullOrUndefined(chainLinkToEdit)) {
+      const copyLinkToEdit: ChainDecisionTO = Carv2Util.deepCopy(chainLinkToEdit);
+      let goToDecision: ChainDecisionTO = new ChainDecisionTO();
+      goToDecision.chainFk = chainLinkToEdit.chainFk;
+      dispatch(EditActions.setMode.editChainDecision(goToDecision, copyLinkToEdit));
     }
   };
 
@@ -207,6 +231,7 @@ const useControllPanelEditChainStepViewModel = () => {
         copyChainLinkToEdit.dataSetupFk = -1;
       }
       dispatch(EditActions.chainLink.save(copyChainLinkToEdit));
+      dispatch(EditActions.setMode.editChainLink(copyChainLinkToEdit));
     }
   };
 
@@ -219,6 +244,7 @@ const useControllPanelEditChainStepViewModel = () => {
         copyChainLinkToEdit.sequenceFk = -1;
       }
       dispatch(EditActions.chainLink.save(copyChainLinkToEdit));
+      dispatch(EditActions.setMode.editChainLink(copyChainLinkToEdit));
     }
   };
 
@@ -240,6 +266,8 @@ const useControllPanelEditChainStepViewModel = () => {
     chainId: chainLinkToEdit?.chainFk || -1,
     handleType,
     setNextLink,
+    setNextDecision,
     createNewChainLink,
+    createGoToDecision,
   };
 };

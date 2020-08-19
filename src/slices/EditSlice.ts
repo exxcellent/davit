@@ -297,7 +297,7 @@ const setModeToEditChainlink = (
 
 const setModeEditChainDecision = (
   chainDecision: ChainDecisionTO,
-  from?: ChainDecisionTO,
+  from?: ChainDecisionTO | ChainlinkTO,
   ifGoTO?: boolean
 ): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_CHAIN_DECISION));
@@ -621,7 +621,6 @@ const saveChainLinkThunk = (step: ChainlinkTO): AppThunk => (dispatch) => {
     dispatch(handleError(response.message));
   }
   dispatch(MasterDataActions.loadChainLinksFromBackend());
-  dispatch(EditActions.setMode.editChainLink(response.object));
 };
 
 const deleteChainLinkThunk = (step: ChainlinkTO): AppThunk => (dispatch) => {
@@ -643,7 +642,7 @@ const createChainDecisionThunk = (
   } else {
     if (from !== undefined) {
       if ((from as ChainlinkTO).dataSetupFk !== undefined) {
-        (from as ChainlinkTO).goto = { type: GoToTypesChain.LINK, id: response.object.id };
+        (from as ChainlinkTO).goto = { type: GoToTypesChain.DEC, id: response.object.id };
         dispatch(EditActions.chainLink.save(from as ChainlinkTO));
       }
       if ((from as ChainDecisionTO).elseGoTo !== undefined) {
@@ -665,7 +664,6 @@ const saveChainDecisionThunk = (decision: ChainDecisionTO): AppThunk => (dispatc
     dispatch(handleError(response.message));
   }
   dispatch(MasterDataActions.loadChainDecisionsFromBackend());
-  dispatch(EditActions.setMode.editChainDecision(response.object));
 };
 
 const deleteChainDecisionThunk = (decision: ChainDecisionTO): AppThunk => (dispatch) => {
