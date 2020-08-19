@@ -40,6 +40,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
     setGoToTypeDecision,
     decId,
     chainId,
+    setRoot,
   } = useControllPanelEditChainConditionViewModel();
 
   const decisionName = (
@@ -61,7 +62,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
         <Carv2ButtonIcon onClick={saveDecision} icon="reply" />
       </OptionField>
       <OptionField label="Sequence - Options">
-        <Carv2ButtonLabel onClick={() => {}} label={isRoot ? "Root" : "Set as Root"} disable={isRoot} />
+        <Carv2ButtonLabel onClick={setRoot} label={isRoot ? "Root" : "Set as Root"} disable={isRoot} />
         <div>
           <Carv2DeleteButton onClick={deleteDecision} />
         </div>
@@ -264,19 +265,12 @@ const useControllPanelEditChainConditionViewModel = () => {
     }
   };
 
-  // const setRoot = () => {
-  //   if (!isNullOrUndefined(decisionToEdit)) {
-  //     dispatch(EditActions.sequence.setRoot(decisionToEdit.sequenceFk, decisionToEdit.id, true));
-  //     dispatch(EditActions.setMode.editDecision(EditActions.decision.find(decisionToEdit.id)));
-  //   }
-  // };
-
-  // TODO: to be implemented!
-  // const editOrAddCondition = () => {
-  //   if (decisionToEdit !== null) {
-  //     dispatch(EditActions.setMode.editCondition(decisionToEdit));
-  //   }
-  // };
+  const setRoot = () => {
+    if (!isNullOrUndefined(decisionToEdit)) {
+      dispatch(EditActions.chain.setRoot(decisionToEdit.chainFk, decisionToEdit.id, true));
+      dispatch(EditActions.setMode.editChainDecision(EditActions.chainDecision.find(decisionToEdit.id)));
+    }
+  };
 
   return {
     label: "EDIT * " + (selectedChain?.name || "") + " * " + (decisionToEdit?.name || ""),
@@ -293,10 +287,9 @@ const useControllPanelEditChainConditionViewModel = () => {
     elseGoTo: currentElseGoTo,
     createGoToStep: createGoToLink,
     createGoToDecision,
-    // setRoot,
+    setRoot,
     isRoot: decisionToEdit?.root ? decisionToEdit.root : false,
     key,
-    // editOrAddCondition,
     decId: decisionToEdit?.id,
     chainId: decisionToEdit?.chainFk || -1,
   };

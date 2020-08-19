@@ -12,6 +12,12 @@ export const ChainLinkRepository = {
     return Array.from(dataStore.getDataStore().chainlinks.values());
   },
 
+  findAllForChain(id: number): ChainlinkTO[] {
+    let all: ChainlinkTO[] = this.findAll();
+    const filtered: ChainlinkTO[] = all.filter((link) => link.chainFk === id);
+    return filtered;
+  },
+
   delete(step: ChainlinkTO) {
     // ConstraintsHelper.deleteStepConstraintCheck(step.id, dataStore.getDataStore());
     let success = dataStore.getDataStore().chainlinks.delete(step.id);

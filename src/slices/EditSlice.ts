@@ -674,6 +674,36 @@ const deleteChainDecisionThunk = (decision: ChainDecisionTO): AppThunk => (dispa
   dispatch(MasterDataActions.loadChainDecisionsFromBackend());
 };
 
+const setChainRootThunk = (chainId: number, rootId: number, isDecision: boolean): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<ChainlinkTO | ChainDecisionTO> = DataAccess.setChainRoot(
+    chainId,
+    rootId,
+    isDecision
+  );
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(MasterDataActions.loadChainsFromBackend());
+  dispatch(MasterDataActions.loadChainLinksFromBackend());
+  dispatch(MasterDataActions.loadChainDecisionsFromBackend());
+};
+
+const findChainDecisionThunk = (id: number): ChainDecisionTO => {
+  const response: DataAccessResponse<ChainDecisionTO> = DataAccess.findChainDecision(id);
+  if (response.code !== 200) {
+    handleError(response.message);
+  }
+  return response.object;
+};
+
+const findChainLinkThunk = (id: number): ChainlinkTO => {
+  const response: DataAccessResponse<ChainlinkTO> = DataAccess.findAllChainLink(id);
+  if (response.code !== 200) {
+    handleError(response.message);
+  }
+  return response.object;
+};
+
 // ----------------------------------------------- SEQUENCE -----------------------------------------------
 
 const createSequenceThunk = (): AppThunk => (dispatch) => {
@@ -1080,15 +1110,18 @@ export const EditActions = {
     create: createChainThunk,
     save: saveChainThunk,
     delete: deleteChainThunk,
+    setRoot: setChainRootThunk,
   },
   chainLink: {
     create: createChainLinkThunk,
     save: saveChainLinkThunk,
     delete: deleteChainLinkThunk,
+    find: findChainLinkThunk,
   },
   chainDecision: {
     create: createChainDecisionThunk,
     save: saveChainDecisionThunk,
     delete: deleteChainDecisionThunk,
+    find: findChainDecisionThunk,
   },
 };

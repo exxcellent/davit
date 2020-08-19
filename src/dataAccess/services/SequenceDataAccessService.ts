@@ -109,6 +109,40 @@ export const SequenceDataAccessService = {
     }
   },
 
+  setChainRoot(chainId: number, id: number, isDecision: boolean): ChainlinkTO | ChainDecisionTO {
+    let root: ChainlinkTO | ChainDecisionTO | null = null;
+    let copyDecisions: ChainDecisionTO[] = ChainDecisionRepository.findAllForChain(chainId);
+    let copySteps: ChainlinkTO[] = ChainLinkRepository.findAllForChain(chainId);
+    // set root
+    copyDecisions.forEach((decision) => {
+      decision.root = false;
+      if (isDecision) {
+        if (decision.id === id) {
+          decision.root = true;
+          root = decision;
+        }
+      }
+    });
+    copySteps.forEach((step) => {
+      step.root = false;
+      if (!isDecision) {
+        if (step.id === id) {
+          step.root = true;
+          root = step;
+        }
+      }
+    });
+    // save
+    copyDecisions.forEach((decision) => ChainDecisionRepository.save(decision));
+    copySteps.forEach((step) => ChainLinkRepository.save(step));
+
+    if (root === null) {
+      throw Error("no root is set!");
+    } else {
+      return root;
+    }
+  },
+
   // ---------------------------------------------------------- Sequence step ----------------------------------------------------------
 
   saveSequenceStep(sequenceStep: SequenceStepCTO): SequenceStepCTO {
@@ -282,6 +316,24 @@ export const SequenceDataAccessService = {
 
   deleteChainDecision(decision: ChainDecisionTO): ChainDecisionTO {
     return ChainDecisionRepository.delete(decision);
+  },
+
+  findChainLink(id: number): ChainlinkTO {
+    const link: ChainlinkTO | undefined = ChainLinkRepository.find(id);
+    if (link) {
+      return link;
+    } else {
+      throw Error("could not find chain link with id: " + id);
+    }
+  },
+
+  findChainDecision(id: number): ChainDecisionTO {
+    const decision: ChainDecisionTO | undefined = ChainDecisionRepository.find(id);
+    if (decision) {
+      return decision;
+    } else {
+      throw Error("could not find chain decision with id: " + id);
+    }
   },
 };
 // ======================================================== PRIVATE ========================================================

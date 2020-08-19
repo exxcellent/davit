@@ -256,7 +256,20 @@ export const DataAccess = {
   deleteChaindecision(decision: ChainDecisionTO): DataAccessResponse<ChainDecisionTO> {
     return makeTransactional(() => SequenceDataAccessService.deleteChainDecision(decision));
   },
+
+  setChainRoot(chainId: number, id: number, isDecision: boolean): DataAccessResponse<ChainlinkTO | ChainDecisionTO> {
+    return makeTransactional(() => SequenceDataAccessService.setChainRoot(chainId, id, isDecision));
+  },
+
+  findChainDecision(id: number): DataAccessResponse<ChainDecisionTO> {
+    return makeTransactional(() => SequenceDataAccessService.findChainDecision(id));
+  },
+
+  findAllChainLink(id: number): DataAccessResponse<ChainlinkTO> {
+    return makeTransactional(() => SequenceDataAccessService.findChainLink(id));
+  },
 };
+
 // ========================================= PRIVATE =========================================
 
 function makeTransactional<T>(callback: () => T): DataAccessResponse<T> {

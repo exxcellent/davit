@@ -46,6 +46,7 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
     setNextDecision,
     createNewChainLink,
     createGoToDecision,
+    setRoot,
   } = useControllPanelEditChainStepViewModel();
 
   const stepName = (
@@ -114,7 +115,7 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
           </OptionField>
         </div>
         <OptionField label="Sequence - Options">
-          <Carv2ButtonLabel onClick={() => {}} label={isRoot ? "Root" : "Set as Root"} disable={isRoot} />
+          <Carv2ButtonLabel onClick={setRoot} label={isRoot ? "Root" : "Set as Root"} disable={isRoot} />
           <div>
             <Carv2DeleteButton onClick={deleteChainLink} />
           </div>
@@ -248,6 +249,13 @@ const useControllPanelEditChainStepViewModel = () => {
     }
   };
 
+  const setRoot = () => {
+    if (!isNullOrUndefined(chainLinkToEdit)) {
+      dispatch(EditActions.chain.setRoot(chainLinkToEdit.chainFk, chainLinkToEdit.id, false));
+      dispatch(EditActions.setMode.editChainLink(EditActions.chainLink.find(chainLinkToEdit.id)));
+    }
+  };
+
   return {
     label: "EDIT * " + (selectedChain?.name || "") + " * " + (chainLinkToEdit?.name || ""),
     name: chainLinkToEdit ? chainLinkToEdit.name : "",
@@ -269,5 +277,6 @@ const useControllPanelEditChainStepViewModel = () => {
     setNextDecision,
     createNewChainLink,
     createGoToDecision,
+    setRoot,
   };
 };

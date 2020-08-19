@@ -12,6 +12,12 @@ export const ChainDecisionRepository = {
     return Array.from(dataStore.getDataStore().chaindecisions.values());
   },
 
+  findAllForChain(id: number): ChainDecisionTO[] {
+    let all: ChainDecisionTO[] = this.findAll();
+    const filtered: ChainDecisionTO[] = all.filter((dec) => dec.chainFk === id);
+    return filtered;
+  },
+
   delete(decision: ChainDecisionTO) {
     // ConstraintsHelper.deleteStepConstraintCheck(step.id, dataStore.getDataStore());
     let success = dataStore.getDataStore().chaindecisions.delete(decision.id);
