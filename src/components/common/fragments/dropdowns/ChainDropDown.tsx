@@ -23,7 +23,7 @@ export const ChainDropDown: FunctionComponent<ChainDropDownProps> = (props) => {
   return (
     <Dropdown
       options={chains.map(chainToOption)}
-      placeholder={placeholder || "Select Sequence ..."}
+      placeholder={placeholder || "Select Chain ..."}
       onChange={(event, sequence) => onSelect(selectChain(Number(sequence.value)))}
       floating
       selectOnBlur={false}

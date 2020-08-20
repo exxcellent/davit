@@ -1,4 +1,5 @@
 import { Carv2Util } from "../../utils/Carv2Util";
+import { ChainCTO } from "../access/cto/ChainCTO";
 import { DataSetupCTO } from "../access/cto/DataSetupCTO";
 import { SequenceCTO } from "../access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../access/cto/SequenceStepCTO";
@@ -284,6 +285,19 @@ export const SequenceDataAccessService = {
   // ---------------------------------------------------------- Chain ----------------------------------------------------------
   findAllChains(): ChainTO[] {
     return ChainRepository.findAll();
+  },
+
+  getChainCTO(chain: ChainTO) {
+    let chainCTO: ChainCTO = new ChainCTO();
+    const chainTO: ChainTO | undefined = ChainRepository.find(chain.id);
+    const chainLinks: ChainlinkTO[] | undefined = ChainLinkRepository.findAllForChain(chain.id);
+    const chainDecisions: ChainDecisionTO[] | undefined = ChainDecisionRepository.findAllForChain(chain.id);
+    if (chainTO && chainLinks && chainDecisions) {
+      chainCTO.chain = chainTO;
+      chainCTO.links = chainLinks;
+      chainCTO.decisions = chainDecisions;
+    }
+    return chainCTO;
   },
 
   saveChainTO(chain: ChainTO): ChainTO {

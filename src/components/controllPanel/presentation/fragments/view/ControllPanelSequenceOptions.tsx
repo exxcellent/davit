@@ -4,9 +4,11 @@ import { Button } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { DataSetupCTO } from "../../../../../dataAccess/access/cto/DataSetupCTO";
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
+import { ChainTO } from "../../../../../dataAccess/access/to/ChainTO";
 import { DataSetupTO } from "../../../../../dataAccess/access/to/DataSetupTO";
 import { SequenceTO } from "../../../../../dataAccess/access/to/SequenceTO";
 import { SequenceModelActions, sequenceModelSelectors } from "../../../../../slices/SequenceModelSlice";
+import { ChainDropDown } from "../../../../common/fragments/dropdowns/ChainDropDown";
 import { DataSetupDropDown } from "../../../../common/fragments/dropdowns/DataSetupDropDown";
 import { SequenceDropDown } from "../../../../common/fragments/dropdowns/SequenceDropDown";
 import { ControllPanelEditSub } from "../edit/common/ControllPanelEditSub";
@@ -25,18 +27,29 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
     selectDataSetup,
     currentDataSetup,
     currentSequence,
+    currentChain,
+    selectChain,
   } = useControllPanelSequenceOptionsViewModel();
 
   return (
     <ControllPanelEditSub label={label}>
       <div className="optionFieldSpacer">
-        <OptionField label="Data - Setup">
-          <DataSetupDropDown onSelect={selectDataSetup} placeholder="Select Data Setup ..." value={currentDataSetup} />
+        <OptionField>
+          <OptionField label="Data - Setup">
+            <DataSetupDropDown
+              onSelect={selectDataSetup}
+              placeholder="Select Data Setup ..."
+              value={currentDataSetup}
+            />
+          </OptionField>
+          <OptionField label="SEQUENCE">
+            <SequenceDropDown onSelect={selectSequence} value={currentSequence} />
+          </OptionField>
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
-        <OptionField label="SEQUENCE">
-          <SequenceDropDown onSelect={selectSequence} value={currentSequence} />
+        <OptionField label="CHAIN">
+          <ChainDropDown onSelect={selectChain} value={currentChain} />
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
@@ -75,6 +88,7 @@ const useControllPanelSequenceOptionsViewModel = () => {
   const sequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
   const stepIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentStepIndex);
   const selectedDataSetup: DataSetupCTO | null = useSelector(sequenceModelSelectors.selectDataSetup);
+  const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
   const dispatch = useDispatch();
 
   const selectSequence = (sequence: SequenceTO | undefined) => {
@@ -84,6 +98,16 @@ const useControllPanelSequenceOptionsViewModel = () => {
     if (sequence === undefined) {
       dispatch(SequenceModelActions.resetCurrentStepIndex);
       dispatch(SequenceModelActions.resetCurrentSequence);
+    }
+  };
+
+  const selectChain = (chain: ChainTO | undefined) => {
+    if (!isNullOrUndefined(chain)) {
+      dispatch(SequenceModelActions.setCurrentChain(chain));
+    }
+    if (chain === undefined) {
+      dispatch(SequenceModelActions.resetCurrentStepIndex);
+      dispatch(SequenceModelActions.resetCurrentChain);
     }
   };
 
@@ -141,5 +165,7 @@ const useControllPanelSequenceOptionsViewModel = () => {
     selectDataSetup,
     currentDataSetup: selectedDataSetup?.dataSetup.id || -1,
     currentSequence: sequence?.sequenceTO.id || -1,
+    currentChain: selectedChain?.id || -1,
+    selectChain,
   };
 };

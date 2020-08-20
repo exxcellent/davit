@@ -1,32 +1,26 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../app/store";
 import { Arrows as Arrow } from "../components/metaComponentModel/presentation/MetaComponentModelController";
+import { ChainCTO } from "../dataAccess/access/cto/ChainCTO";
 import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
 import { GeometricalDataCTO } from "../dataAccess/access/cto/GeometraicalDataCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
+import { ChainDecisionTO } from "../dataAccess/access/to/ChainDecisionTO";
+import { ChainlinkTO } from "../dataAccess/access/to/ChainlinkTO";
 import { ChainTO } from "../dataAccess/access/to/ChainTO";
 import { DecisionTO } from "../dataAccess/access/to/DecisionTO";
 import { GoTo, GoToTypes, Terminal } from "../dataAccess/access/types/GoToType";
+import { GoToChain, GoToTypesChain } from "../dataAccess/access/types/GoToTypeChain";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
 import { SequenceActionReducer, SequenceActionResult } from "../reducer/SequenceActionReducer";
+import { CalcChain } from "../SequenceChainService";
+import { CalcSequence, CalculatedStep } from "../SequenceService";
 import { ComponentData } from "../viewDataTypes/ComponentData";
-import { Mode } from "./EditSlice";
+import { EditActions, Mode } from "./EditSlice";
 import { handleError } from "./GlobalSlice";
-
-export interface CalculatedStep {
-  stepFk: number;
-  stepId: string;
-  componentDatas: ComponentData[];
-  errors: ActionTO[];
-}
-
-export interface CalcSequence {
-  steps: CalculatedStep[];
-  terminal: Terminal;
-}
 
 export interface Filter {
   type: "COMPONENT" | "DATA";
@@ -37,6 +31,7 @@ interface SequenceModelState {
   selectedSequenceModel: SequenceCTO | null;
   selectedDataSetup: DataSetupCTO | null;
   calcSequence: CalcSequence | null;
+  calcChain: CalcChain | null;
   loopStartingStepIndex: number | null;
   currentStepIndex: number;
   errorActions: ActionTO[];
@@ -51,6 +46,7 @@ const getInitialState: SequenceModelState = {
   selectedDataSetup: null,
   loopStartingStepIndex: null,
   calcSequence: null,
+  calcChain: null,
   currentStepIndex: -1,
   errorActions: [],
   actions: [],
@@ -121,10 +117,7 @@ const SequenceModelSlice = createSlice({
 });
 
 function calcSequenceAndSetState(sequenceModel: SequenceCTO, dataSetup: DataSetupCTO, state: SequenceModelState) {
-  const result: { sequence: CalcSequence; loopStartingStepIndex?: number; stepIds: string[] } = calculateSequence(
-    sequenceModel,
-    dataSetup
-  );
+  const result: Result = calculateSequence(sequenceModel, dataSetup);
   state.stepIds = result.stepIds;
   state.currentStepIndex = 0;
   state.errorActions = result.sequence.steps[state.currentStepIndex]?.errors || [];
@@ -144,12 +137,104 @@ function resetState(state: SequenceModelState) {
 
 // =============================================== THUNKS ===============================================
 
+export const getComponentDatas = (dataSetup: DataSetupCTO): ComponentData[] => {
+  return dataSetup.initDatas.map((initData) => {
+    return { componentFk: initData.componentFk, dataFk: initData.dataFk };
+  });
+};
+
 const stepNext = (currentIndex: number): AppThunk => (dispatch) => {
   dispatch(SequenceModelActions.setCurrentStepIndex(currentIndex + 1));
 };
 
 const stepBack = (currentIndex: number): AppThunk => (dispatch) => {
   dispatch(SequenceModelActions.setCurrentStepIndex(currentIndex - 1));
+};
+
+const setSelectedChainThunk = (chain: ChainTO): AppThunk => (dispatch, getState) => {
+  dispatch(SequenceModelSlice.actions.setSelectedChain);
+  if (getState().edit.mode === Mode.VIEW && getState().sequenceModel.selectedChain !== null) {
+    // calc chain.
+    let chainCTO: ChainCTO | null = dispatch(EditActions.chain.getCTO(chain));
+    if (chainCTO) {
+      // TODO: go on ...
+      calculateChain(chainCTO);
+    }
+  }
+};
+
+const getSequenceById = (id: number): SequenceCTO | null => {
+  const response: DataAccessResponse<SequenceCTO> = DataAccess.findSequenceCTO(id);
+  if (response.code === 200) {
+    return response.object;
+  }
+  return null;
+};
+
+const getDataSetupById = (id: number): DataSetupCTO | null => {
+  const response: DataAccessResponse<DataSetupCTO> = DataAccess.findDataSetupCTO(id);
+  if (response.code === 200) {
+    return response.object;
+  }
+  return null;
+};
+
+const getChainRoot = (chain: ChainCTO): ChainlinkTO | ChainDecisionTO => {
+  const rootLink: ChainlinkTO | undefined = chain.links.find((link) => link.root === true);
+  const rootDecision: ChainDecisionTO | undefined = chain.decisions.find((dec) => dec.root === true);
+  if (rootLink) {
+    return rootLink;
+  }
+  if (rootDecision) {
+    return rootDecision;
+  }
+  throw Error("No Root found in Chain!");
+};
+
+const getNextGoToElement = (goto: GoToChain, chainCTO: ChainCTO): ChainDecisionTO | ChainlinkTO | null => {
+  if (goto.type === GoToTypesChain.LINK) {
+    const nextLink: ChainlinkTO | undefined = chainCTO.links.find((link) => link.id === goto.id);
+    if (nextLink) {
+      return nextLink;
+    }
+  }
+  if (goto.type === GoToTypesChain.DEC) {
+    const nextDec: ChainDecisionTO | undefined = chainCTO.decisions.find((dec) => dec.id === goto.id);
+    if (nextDec) {
+      return nextDec;
+    }
+  }
+  // TODO: replace to get Terminal.
+  return null;
+};
+
+const calcLink = (
+  link: ChainlinkTO,
+  chain: ChainCTO
+): { result: Result; nextElement: ChainlinkTO | ChainDecisionTO | null } | null => {
+  const sequenceToCalc: SequenceCTO | null = getSequenceById(link.sequenceFk);
+  const datasetupToCalc: DataSetupCTO | null = getDataSetupById(link.sequenceFk);
+  if (sequenceToCalc && datasetupToCalc) {
+    const result: Result = calculateSequence(sequenceToCalc, datasetupToCalc);
+    return { result: result, nextElement: getNextGoToElement(link.goto, chain) };
+  }
+  return null;
+};
+
+const calculateChain = (chain: ChainCTO): Result[] => {
+  let results: Result[] = [];
+
+  let root: ChainlinkTO | ChainDecisionTO = getChainRoot(chain);
+  if ((root as ChainlinkTO).sequenceFk !== undefined) {
+    const rootLink: ChainlinkTO = root as ChainlinkTO;
+    calcLink(rootLink, chain);
+  }
+  if ((root as ChainDecisionTO).elseGoTo !== undefined) {
+    const rootDecision: ChainDecisionTO = root as ChainDecisionTO;
+    // TODO: GOTO ?
+  }
+
+  return results;
 };
 
 const calculateSequence = (
@@ -453,10 +538,11 @@ export const SequenceModelActions = {
   resetCurrentDataSetup: SequenceModelSlice.actions.setSelectedDataSetup(null),
   resetCurrentStepIndex: SequenceModelSlice.actions.setCurrentStepIndex(-1),
   resetCurrentSequence: SequenceModelSlice.actions.setSelectedSequence(null),
+  resetCurrentChain: SequenceModelSlice.actions.setSelectedChain(null),
   setCurrentStepIndex: SequenceModelSlice.actions.setCurrentStepIndex,
   handleComponentClickEvent,
   handleDataClickEvent,
   stepNext,
   stepBack,
-  setCurrentChain: SequenceModelSlice.actions.setSelectedChain,
+  setCurrentChain: setSelectedChainThunk,
 };

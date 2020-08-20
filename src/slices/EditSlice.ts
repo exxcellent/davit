@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { isNullOrUndefined } from "util";
 import { AppThunk, RootState } from "../app/store";
 import { Arrows } from "../components/metaComponentModel/presentation/MetaComponentModelController";
+import { ChainCTO } from "../dataAccess/access/cto/ChainCTO";
 import { ComponentCTO } from "../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../dataAccess/access/cto/DataCTO";
 import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
@@ -573,6 +574,14 @@ const createChainThunk = (): AppThunk => (dispatch) => {
   dispatch(SequenceModelActions.setCurrentChain(response.object));
 };
 
+const getChainCTO = (chain: ChainTO): ChainCTO | null => {
+  const response: DataAccessResponse<ChainCTO> = DataAccess.getChainCTO(chain);
+  if (response.code !== 200) {
+    handleError(response.message);
+  }
+  return response.object;
+};
+
 const saveChainThunk = (chain: ChainTO): AppThunk => (dispatch) => {
   const response: DataAccessResponse<ChainTO> = DataAccess.saveChainTO(chain);
   if (response.code !== 200) {
@@ -699,7 +708,7 @@ const findChainDecisionThunk = (id: number): ChainDecisionTO => {
 };
 
 const findChainLinkThunk = (id: number): ChainlinkTO => {
-  const response: DataAccessResponse<ChainlinkTO> = DataAccess.findAllChainLink(id);
+  const response: DataAccessResponse<ChainlinkTO> = DataAccess.findChainLink(id);
   if (response.code !== 200) {
     handleError(response.message);
   }
@@ -1113,6 +1122,7 @@ export const EditActions = {
     save: saveChainThunk,
     delete: deleteChainThunk,
     setRoot: setChainRootThunk,
+    getCTO: getChainCTO,
   },
   chainLink: {
     create: createChainLinkThunk,

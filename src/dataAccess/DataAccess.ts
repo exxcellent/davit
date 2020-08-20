@@ -1,3 +1,4 @@
+import { ChainCTO } from "./access/cto/ChainCTO";
 import { ComponentCTO } from "./access/cto/ComponentCTO";
 import { DataCTO } from "./access/cto/DataCTO";
 import { DataSetupCTO } from "./access/cto/DataSetupCTO";
@@ -225,6 +226,10 @@ export const DataAccess = {
     return makeTransactional(SequenceDataAccessService.findAllChains);
   },
 
+  getChainCTO(chain: ChainTO): DataAccessResponse<ChainCTO> {
+    return makeTransactional(() => SequenceDataAccessService.getChainCTO(chain));
+  },
+
   saveChainTO(chain: ChainTO): DataAccessResponse<ChainTO> {
     return makeTransactional(() => SequenceDataAccessService.saveChainTO(chain));
   },
@@ -265,7 +270,7 @@ export const DataAccess = {
     return makeTransactional(() => SequenceDataAccessService.findChainDecision(id));
   },
 
-  findAllChainLink(id: number): DataAccessResponse<ChainlinkTO> {
+  findChainLink(id: number): DataAccessResponse<ChainlinkTO> {
     return makeTransactional(() => SequenceDataAccessService.findChainLink(id));
   },
 };
