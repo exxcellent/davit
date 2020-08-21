@@ -37,9 +37,9 @@ export enum Mode {
   EDIT_GROUP = "EDIT_GROUP",
   EDIT_DATA = "EDIT_DATA",
   EDIT_DATA_INSTANCE = "EDIT_DATA_INSTANCE",
-  EDIT_DATA_RELATION = "EDIT_DATA_RELATION",
-  EDIT_DATA_SETUP = "EDIT_DATA_SETUP",
-  EDIT_INIT_DATA = "EDIT_INIT_DATA",
+  EDIT_RELATION = "EDIT_RELATION",
+  EDIT_DATASETUP = "EDIT_DATASETUP",
+  EDIT_DATASETUP_INITDATA = "EDIT_DATASETUP_INIT DATA",
   EDIT_CHAIN = "EDIT_CHAIN",
   EDIT_CHAIN_DECISION = "EDIT_CHAIN_DECISION",
   EDIT_CHAIN_DECISION_CONDITION = "EDIT_CHAIN_DECISION_CONDITION",
@@ -61,19 +61,19 @@ export interface StepAction {
 interface EditState {
   mode: Mode;
   objectToEdit:
-    | ComponentCTO
-    | DataCTO
-    | DataRelationTO
-    | SequenceTO
-    | SequenceStepCTO
-    | StepAction
-    | DataSetupCTO
-    | InitDataTO
-    | GroupTO
-    | DecisionTO
-    | ChainlinkTO
-    | ChainDecisionTO
-    | {};
+  | ComponentCTO
+  | DataCTO
+  | DataRelationTO
+  | SequenceTO
+  | SequenceStepCTO
+  | StepAction
+  | DataSetupCTO
+  | InitDataTO
+  | GroupTO
+  | DecisionTO
+  | ChainlinkTO
+  | ChainDecisionTO
+  | {};
   instanceIdToEdit: number | null;
 }
 const getInitialState: EditState = {
@@ -118,7 +118,7 @@ const EditSlice = createSlice({
       }
     },
     setRelationToEdit: (state, action: PayloadAction<DataRelationTO>) => {
-      if (state.mode === Mode.EDIT_DATA_RELATION) {
+      if (state.mode === Mode.EDIT_RELATION) {
         state.objectToEdit = action.payload;
       } else {
         handleError("Try to set relation to edit in mode: " + state.mode);
@@ -146,14 +146,14 @@ const EditSlice = createSlice({
       }
     },
     setDataSetupToEdit: (state, action: PayloadAction<DataSetupCTO>) => {
-      if (state.mode === Mode.EDIT_DATA_SETUP) {
+      if (state.mode === Mode.EDIT_DATASETUP) {
         state.objectToEdit = action.payload;
       } else {
         handleError("Try to set dataSetup to edit in mode: " + state.mode);
       }
     },
     setInitDataToEdit: (state, action: PayloadAction<InitDataTO>) => {
-      if (state.mode === Mode.EDIT_INIT_DATA) {
+      if (state.mode === Mode.EDIT_DATASETUP_INITDATA) {
         state.objectToEdit = action.payload;
       } else {
         handleError("Try to set initData to edit in mode: " + state.mode);
@@ -254,7 +254,7 @@ const setModeToEditDataInstance = (data: DataCTO, id?: number): AppThunk => (dis
 };
 
 const setModeToEditRelation = (relation?: DataRelationTO): AppThunk => (dispatch) => {
-  dispatch(setModeWithStorage(Mode.EDIT_DATA_RELATION));
+  dispatch(setModeWithStorage(Mode.EDIT_RELATION));
   if (relation === undefined) {
     dispatch(EditActions.relation.create());
   } else {
@@ -329,7 +329,7 @@ const setModeToEditGroup = (group?: GroupTO): AppThunk => (dispatch) => {
 };
 
 const setModeToEditInitData = (initData: InitDataTO): AppThunk => (dispatch) => {
-  dispatch(setModeWithStorage(Mode.EDIT_INIT_DATA));
+  dispatch(setModeWithStorage(Mode.EDIT_DATASETUP_INITDATA));
   if (initData.id !== -1) {
     let response: DataAccessResponse<InitDataTO> = DataAccess.findInitData(initData.id);
     if (response.code === 200) {
@@ -343,7 +343,7 @@ const setModeToEditInitData = (initData: InitDataTO): AppThunk => (dispatch) => 
 };
 
 const setModeToEditDataSetup = (id?: number): AppThunk => (dispatch) => {
-  dispatch(setModeWithStorage(Mode.EDIT_DATA_SETUP));
+  dispatch(setModeWithStorage(Mode.EDIT_DATASETUP));
   if (id) {
     let response: DataAccessResponse<DataSetupCTO> = DataAccess.findDataSetupCTO(id);
     if (response.code === 200) {
@@ -966,7 +966,7 @@ export const editSelectors = {
       : null;
   },
   relationToEdit: (state: RootState): DataRelationTO | null => {
-    return state.edit.mode === Mode.EDIT_DATA_RELATION && (state.edit.objectToEdit as DataRelationTO).direction1
+    return state.edit.mode === Mode.EDIT_RELATION && (state.edit.objectToEdit as DataRelationTO).direction1
       ? (state.edit.objectToEdit as DataRelationTO)
       : null;
   },
@@ -993,12 +993,12 @@ export const editSelectors = {
     }
   },
   dataSetupToEdit: (state: RootState): DataSetupCTO | null => {
-    return state.edit.mode === Mode.EDIT_DATA_SETUP && (state.edit.objectToEdit as DataSetupCTO).dataSetup
+    return state.edit.mode === Mode.EDIT_DATASETUP && (state.edit.objectToEdit as DataSetupCTO).dataSetup
       ? (state.edit.objectToEdit as DataSetupCTO)
       : null;
   },
   initDataToEdit: (state: RootState): InitDataTO | null => {
-    return state.edit.mode === Mode.EDIT_INIT_DATA && (state.edit.objectToEdit as InitDataTO).dataSetupFk
+    return state.edit.mode === Mode.EDIT_DATASETUP_INITDATA && (state.edit.objectToEdit as InitDataTO).dataSetupFk
       ? (state.edit.objectToEdit as InitDataTO)
       : null;
   },

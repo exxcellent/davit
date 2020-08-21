@@ -24,7 +24,7 @@ import { ControllPanelEditRelation } from "./fragments/ControllPanelEditRelation
 import { ControllPanelEditSequence } from "./fragments/ControllPanelEditSequence";
 import { ControllPanelEditStep } from "./fragments/ControllPanelEditStep";
 
-export interface ControllPanelEditControllerProps {}
+export interface ControllPanelEditControllerProps { }
 
 export const ControllPanelEditController: FunctionComponent<ControllPanelEditControllerProps> = (props) => {
   const {
@@ -48,7 +48,7 @@ export const ControllPanelEditController: FunctionComponent<ControllPanelEditCon
         return <ControllPanelEditData />;
       case Mode.EDIT_DATA_INSTANCE:
         return <ControllPanelEditDataInstance />;
-      case Mode.EDIT_DATA_RELATION:
+      case Mode.EDIT_RELATION:
         return <ControllPanelEditRelation />;
       case Mode.EDIT_SEQUENCE:
         return <ControllPanelEditSequence />;
@@ -60,9 +60,9 @@ export const ControllPanelEditController: FunctionComponent<ControllPanelEditCon
         return <ControllPanelEditCondition />;
       case Mode.EDIT_SEQUENCE_STEP_ACTION:
         return <ControllPanelEditAction />;
-      case Mode.EDIT_DATA_SETUP:
+      case Mode.EDIT_DATASETUP:
         return <ControllPanelEditDataSetup />;
-      case Mode.EDIT_INIT_DATA:
+      case Mode.EDIT_DATASETUP_INITDATA:
         return <ControllPanelEditInitData />;
       case Mode.EDIT_CHAIN:
         return <ControllPanelEditChain />;

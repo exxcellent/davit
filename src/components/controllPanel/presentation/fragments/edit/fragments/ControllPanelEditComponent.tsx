@@ -13,7 +13,7 @@ import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditComponentProps {}
+export interface ControllPanelEditComponentProps { }
 
 export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComponentProps> = (props) => {
   const {
