@@ -259,10 +259,26 @@
       transparent
     )
     0 100%;
+    animation-name: growHeight;
+    animation-duration: 0.8s;
 }
 .verticalTab:hover{
   cursor: pointer;
   background-color: black;
+}
+
+@keyframes growHeight{
+  0% {
+    width: 0;
+    color: transparent;
+  }
+  80% {
+    color: transparent;
+  }
+  100% {
+    width: 2em;
+    color: white;
+  }
 }
 
 .controllPanelEdit {
