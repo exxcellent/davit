@@ -6,12 +6,6 @@ import { GoTo, GoToTypes, Terminal } from "./dataAccess/access/types/GoToType";
 import { SequenceActionReducer, SequenceActionResult } from "./reducer/SequenceActionReducer";
 import { ComponentData } from "./viewDataTypes/ComponentData";
 
-export interface SequenceCalcResult {
-  sequence: CalcSequence;
-  loopStartingStepIndex?: number;
-  stepIds: string[];
-}
-
 export interface CalculatedStep {
   stepFk: number;
   stepId: string;
@@ -20,13 +14,21 @@ export interface CalculatedStep {
 }
 
 export interface CalcSequence {
+  sequenceModel: SequenceCTO | null;
+  stepIds: string[];
   steps: CalculatedStep[];
   terminal: Terminal;
+  loopStartingStepIndex?: number;
 }
 
 export const SequenceService = {
-  calculateSequence: (sequence: SequenceCTO | null, dataSetup: ComponentData[]): SequenceCalcResult => {
-    let calcSequence: CalcSequence = { steps: [], terminal: { type: GoToTypes.ERROR } };
+  calculateSequence: (sequence: SequenceCTO | null, dataSetup: ComponentData[]): CalcSequence => {
+    let calcSequence: CalcSequence = {
+      sequenceModel: sequence,
+      stepIds: [],
+      steps: [],
+      terminal: { type: GoToTypes.ERROR },
+    };
     let stepIds: string[] = [];
     let loopStartingStep: number = -1;
 
@@ -77,6 +79,7 @@ export const SequenceService = {
 
             const newCondID = "_COND_" + decision.id;
             stepId = stepId === "" ? "root" : stepId + newCondID;
+            stepIds.push(stepId);
           }
         }
         if (!isLooping(loopStartingStep)) {
@@ -86,7 +89,7 @@ export const SequenceService = {
       }
     }
     return {
-      sequence: calcSequence,
+      ...calcSequence,
       stepIds: stepIds,
       loopStartingStepIndex: isLooping(loopStartingStep) ? loopStartingStep : undefined,
     };
@@ -122,6 +125,12 @@ const getNext = (goTo: GoTo, sequence: SequenceCTO): SequenceStepCTO | DecisionT
       break;
     case GoToTypes.FIN:
       nextStepOrDecisionOrTerminal = { type: GoToTypes.FIN };
+      break;
+    case GoToTypes.IDLE:
+      nextStepOrDecisionOrTerminal = { type: GoToTypes.IDLE };
+      break;
+    default:
+      nextStepOrDecisionOrTerminal = { type: GoToTypes.ERROR };
   }
   return nextStepOrDecisionOrTerminal;
 };

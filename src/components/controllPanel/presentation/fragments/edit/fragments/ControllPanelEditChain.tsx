@@ -7,7 +7,6 @@ import { ChainlinkTO } from "../../../../../../dataAccess/access/to/ChainlinkTO"
 import { ChainTO } from "../../../../../../dataAccess/access/to/ChainTO";
 import { SequenceTO } from "../../../../../../dataAccess/access/to/SequenceTO";
 import { EditActions } from "../../../../../../slices/EditSlice";
-import { handleError } from "../../../../../../slices/GlobalSlice";
 import { masterDataSelectors } from "../../../../../../slices/MasterDataSlice";
 import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
@@ -58,12 +57,11 @@ export const ControllPanelEditChain: FunctionComponent<ControllPanelEditChainPro
             value={name}
             autoFocus
             ref={textInput}
-            onBlur={() => {}}
           />
         </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <OptionField label="Create / Edit | Chain - Step">
+        <OptionField label="Create / Edit | Chain - Sequence">
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddChainLink()} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
@@ -99,7 +97,7 @@ const useControllPanelEditChainViewModel = () => {
   useEffect(() => {
     // check if sequence to edit is really set or gos back to edit mode
     if (isNullOrUndefined(selectedChain)) {
-      handleError("Tried to go to edit sequence without sequenceToedit specified");
+      console.warn("Tried to go to edit sequence without chain specified" + selectedChain);
       dispatch(EditActions.setMode.edit());
     }
     if (selectedChain?.id !== -1) {

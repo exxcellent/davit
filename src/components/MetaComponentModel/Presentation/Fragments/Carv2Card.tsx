@@ -25,6 +25,7 @@ export const Carv2Card: FunctionComponent<Carv2CardProps> = (props) => {
         initWidth={initWidth}
         initHeigth={initHeigth}
         zoomFactor={zoomFactor}
+        key={id}
       />
     );
   };

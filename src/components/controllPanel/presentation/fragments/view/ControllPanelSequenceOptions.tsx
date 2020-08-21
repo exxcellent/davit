@@ -29,6 +29,8 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
     currentSequence,
     currentChain,
     selectChain,
+    linkBack,
+    linkNext,
   } = useControllPanelSequenceOptionsViewModel();
 
   return (
@@ -58,6 +60,13 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
             <Button
               inverted
               color="orange"
+              icon="fast backward"
+              disabled={isNullOrUndefined(sequence)}
+              onClick={linkBack}
+            />
+            <Button
+              inverted
+              color="orange"
               icon="left arrow"
               content="BACK"
               labelPosition="left"
@@ -74,6 +83,13 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
               disabled={isNullOrUndefined(sequence)}
               onClick={stepNext}
             />
+            <Button
+              inverted
+              color="orange"
+              icon="fast forward"
+              disabled={isNullOrUndefined(sequence)}
+              onClick={linkNext}
+            />
           </Button.Group>
         </OptionField>
       </div>
@@ -89,6 +105,7 @@ const useControllPanelSequenceOptionsViewModel = () => {
   const stepIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentStepIndex);
   const selectedDataSetup: DataSetupCTO | null = useSelector(sequenceModelSelectors.selectDataSetup);
   const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
+  const linkIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentLinkIndex);
   const dispatch = useDispatch();
 
   const selectSequence = (sequence: SequenceTO | undefined) => {
@@ -155,6 +172,14 @@ const useControllPanelSequenceOptionsViewModel = () => {
     }
   };
 
+  const linkNext = () => {
+    dispatch(SequenceModelActions.linkNext(linkIndex));
+  };
+
+  const linkBack = () => {
+    dispatch(SequenceModelActions.linkBack(linkIndex));
+  };
+
   return {
     label: "VIEW" + getDataSetupName() + getSequenceName() + getStepName(),
     sequence,
@@ -167,5 +192,7 @@ const useControllPanelSequenceOptionsViewModel = () => {
     currentSequence: sequence?.sequenceTO.id || -1,
     currentChain: selectedChain?.id || -1,
     selectChain,
+    linkNext,
+    linkBack,
   };
 };

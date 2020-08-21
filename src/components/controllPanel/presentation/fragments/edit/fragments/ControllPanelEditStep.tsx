@@ -271,6 +271,8 @@ const useControllPanelEditSequenceStepViewModel = () => {
         case GoToTypes.FIN:
           saveGoToType(gType);
           break;
+        case GoToTypes.IDLE:
+          saveGoToType(gType);
       }
     }
   };

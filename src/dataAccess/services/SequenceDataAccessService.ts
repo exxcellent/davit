@@ -1,5 +1,6 @@
 import { Carv2Util } from "../../utils/Carv2Util";
 import { ChainCTO } from "../access/cto/ChainCTO";
+import { ChainlinkCTO } from "../access/cto/ChainlinkCTO";
 import { DataSetupCTO } from "../access/cto/DataSetupCTO";
 import { SequenceCTO } from "../access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../access/cto/SequenceStepCTO";
@@ -287,17 +288,8 @@ export const SequenceDataAccessService = {
     return ChainRepository.findAll();
   },
 
-  getChainCTO(chain: ChainTO) {
-    let chainCTO: ChainCTO = new ChainCTO();
-    const chainTO: ChainTO | undefined = ChainRepository.find(chain.id);
-    const chainLinks: ChainlinkTO[] | undefined = ChainLinkRepository.findAllForChain(chain.id);
-    const chainDecisions: ChainDecisionTO[] | undefined = ChainDecisionRepository.findAllForChain(chain.id);
-    if (chainTO && chainLinks && chainDecisions) {
-      chainCTO.chain = chainTO;
-      chainCTO.links = chainLinks;
-      chainCTO.decisions = chainDecisions;
-    }
-    return chainCTO;
+  getChainCTO(chain: ChainTO): ChainCTO {
+    return crateChainCTO(chain);
   },
 
   saveChainTO(chain: ChainTO): ChainTO {
@@ -382,4 +374,35 @@ const createDataSetupCTO = (dataSetupTO: DataSetupTO | undefined): DataSetupCTO 
     dataSetup: dataSetupTO!,
     initDatas: initDatas,
   };
+};
+
+const createChainLinkCTO = (link: ChainlinkTO | undefined): ChainlinkCTO => {
+  CheckHelper.nullCheck(link, "chainlink");
+  let chainLinkCTO: ChainlinkCTO = new ChainlinkCTO();
+  chainLinkCTO.chainLink = link!;
+  const dataSetupTO: DataSetupTO | undefined = DataSetupRepository.find(link!.dataSetupFk);
+  const sequenceTO: SequenceTO | undefined = SequenceRepository.find(link!.sequenceFk);
+  if (dataSetupTO && sequenceTO) {
+    const dataSetupCTO: DataSetupCTO = createDataSetupCTO(dataSetupTO);
+    const sequenceCTO: SequenceCTO = createSequenceCTO(sequenceTO);
+    chainLinkCTO.dataSetup = dataSetupCTO;
+    chainLinkCTO.sequence = sequenceCTO;
+  }
+  return chainLinkCTO;
+};
+
+const crateChainCTO = (chain: ChainTO): ChainCTO => {
+  CheckHelper.nullCheck(chain, "chainTO");
+  const copyChain: ChainTO = Carv2Util.deepCopy(chain);
+  let chainCTO: ChainCTO = new ChainCTO();
+  const chainLinkTOs: ChainlinkTO[] | undefined = ChainLinkRepository.findAllForChain(copyChain.id);
+  let chainLinkCTOs: ChainlinkCTO[] = [];
+  if (chainLinkTOs) {
+    chainLinkCTOs = chainLinkTOs.map((link) => createChainLinkCTO(link));
+  }
+  const chainDecisions: ChainDecisionTO[] = ChainDecisionRepository.findAllForChain(copyChain.id);
+  chainCTO.chain = copyChain;
+  chainCTO.links = chainLinkCTOs;
+  chainCTO.decisions = chainDecisions;
+  return chainCTO;
 };

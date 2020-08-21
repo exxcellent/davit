@@ -93,7 +93,7 @@ const EditSlice = createSlice({
       if (state.mode === Mode.EDIT_CHAIN_LINK) {
         state.objectToEdit = action.payload;
       } else {
-        handleError("Try to set chain step to edit in mode: " + state.mode);
+        console.warn("Try to set chain step to edit in mode: " + state.mode);
       }
     },
     setChainDecisionToEdit: (state, action: PayloadAction<ChainDecisionTO>) => {
@@ -279,12 +279,12 @@ const setModeToEditSequence = (sequenceId?: number): AppThunk => (dispatch) => {
 };
 
 const setModeToEditChain = (chain?: ChainTO): AppThunk => (dispatch) => {
-  dispatch(setModeWithStorage(Mode.EDIT_CHAIN));
   if (!chain) {
     dispatch(EditActions.chain.create());
   } else {
     dispatch(SequenceModelActions.setCurrentChain(chain));
   }
+  dispatch(setModeWithStorage(Mode.EDIT_CHAIN));
 };
 
 const setModeToEditChainlink = (
@@ -574,11 +574,12 @@ const createChainThunk = (): AppThunk => (dispatch) => {
   dispatch(SequenceModelActions.setCurrentChain(response.object));
 };
 
-const getChainCTO = (chain: ChainTO): ChainCTO | null => {
+const getChainCTO = (chain: ChainTO): ChainCTO => {
   const response: DataAccessResponse<ChainCTO> = DataAccess.getChainCTO(chain);
   if (response.code !== 200) {
-    handleError(response.message);
+    console.warn(response.message);
   }
+  console.info(response.object);
   return response.object;
 };
 

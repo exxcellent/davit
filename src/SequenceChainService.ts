@@ -3,18 +3,21 @@ import { ChainlinkCTO } from "./dataAccess/access/cto/ChainlinkCTO";
 import { DataSetupCTO } from "./dataAccess/access/cto/DataSetupCTO";
 import { ChainDecisionTO } from "./dataAccess/access/to/ChainDecisionTO";
 import { GoToChain, GoToTypesChain, TerminalChain } from "./dataAccess/access/types/GoToTypeChain";
-import { CalcSequence, SequenceCalcResult, SequenceService } from "./SequenceService";
+import { CalcSequence, SequenceService } from "./SequenceService";
 import { ComponentData } from "./viewDataTypes/ComponentData";
 
 export interface CalcChainLink {
   chainLinkId: number;
   stepId: string;
+  dataSetup: DataSetupCTO;
   sequence: CalcSequence;
   errors: ComponentData[];
 }
 
 export interface CalcChain {
   calcLinks: CalcChainLink[];
+  linkIds: string[];
+  loopStartingIndex?: number;
   terminal: TerminalChain;
 }
 
@@ -24,11 +27,8 @@ interface MergedComponentDatas {
 }
 
 export const SequenceChainService = {
-  calculateChain: (
-    sequenceChain: ChainCTO | null
-  ): { sequenceChain: CalcChain; linkIds: string[]; loopStartingIndex?: number } => {
-    let calcSequenceChain: CalcChain = { calcLinks: [], terminal: { type: GoToTypesChain.ERROR } };
-    let linkIds: string[] = [];
+  calculateChain: (sequenceChain: ChainCTO | null): CalcChain => {
+    let calcSequenceChain: CalcChain = { calcLinks: [], linkIds: [], terminal: { type: GoToTypesChain.ERROR } };
     let loopStartingStep: number = -1;
     let componenentDatas: ComponentData[] = [];
 
@@ -46,25 +46,23 @@ export const SequenceChainService = {
 
           loopStartingStep = checkForLoop(calcSequenceChain, link, mergedComponentDatas);
 
-          const result: SequenceCalcResult = SequenceService.calculateSequence(
+          const result: CalcSequence = SequenceService.calculateSequence(
             link.sequence,
             mergedComponentDatas.componentDatas
           );
 
-          componenentDatas =
-            result.sequence.steps.length > 0
-              ? result.sequence.steps[result.sequence.steps.length - 1].componentDatas
-              : [];
+          componenentDatas = result.steps.length > 0 ? result.steps[result.steps.length - 1].componentDatas : [];
 
           // STEP ID
           const newLinkId = "_LINK_" + link.chainLink.id;
           stepId = stepId === "" ? "root" : stepId + newLinkId;
-          linkIds.push(stepId);
+          calcSequenceChain.linkIds.push(stepId);
 
           calcSequenceChain.calcLinks.push({
             chainLinkId: link.chainLink.id,
             stepId: stepId,
-            sequence: result.sequence,
+            sequence: result,
+            dataSetup: link.dataSetup,
             errors: mergedComponentDatas.errors,
           });
 
@@ -88,14 +86,10 @@ export const SequenceChainService = {
       }
       if (!isLooping(loopStartingStep)) {
         calcSequenceChain.terminal = step as TerminalChain;
-        linkIds.push(stepId + "_" + (step as TerminalChain).type);
+        calcSequenceChain.linkIds.push(stepId + "_" + (step as TerminalChain).type);
       }
     }
-    return {
-      sequenceChain: calcSequenceChain,
-      linkIds: linkIds,
-      loopStartingIndex: isLooping(loopStartingStep) ? loopStartingStep : undefined,
-    };
+    return { ...calcSequenceChain, loopStartingIndex: isLooping(loopStartingStep) ? loopStartingStep : undefined };
   },
 };
 

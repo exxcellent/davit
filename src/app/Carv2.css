@@ -567,6 +567,7 @@ table {
   /* background-color: var(--carv2-background-color-header); */
   background-color: rgba(0, 0, 0, 0);
   color: var(--carv2-text-color);
+  padding: 1em;
 }
 
 .active {
@@ -581,12 +582,17 @@ table {
   height: 2.5em;
 }
 
-.carv2TrTerminalError {
+.carv2TrTerminalERROR {
   background-color: var(--carv2-data-delete-color);
   height: 2.5em;
 }
-.carv2TrTerminalSuccess {
+.carv2TrTerminalFIN {
   background-color: var(--carv2-data-add-color);
+  height: 2.5em;
+}
+
+.carv2TrTerminalIDLE {
+  background-color: var(--carv2-color-exxcellent-blue);
   height: 2.5em;
 }
 

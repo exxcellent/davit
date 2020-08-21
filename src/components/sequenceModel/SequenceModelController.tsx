@@ -7,8 +7,9 @@ import { SequenceCTO } from "../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
 import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
 import { GoTo, GoToTypes, Terminal } from "../../dataAccess/access/types/GoToType";
+import { CalculatedStep } from "../../SequenceService";
 import { handleError } from "../../slices/GlobalSlice";
-import { CalculatedStep, sequenceModelSelectors } from "../../slices/SequenceModelSlice";
+import { sequenceModelSelectors } from "../../slices/SequenceModelSlice";
 import { Carv2Util } from "../../utils/Carv2Util";
 
 interface SequenceModelControllerProps {
@@ -17,7 +18,7 @@ interface SequenceModelControllerProps {
 
 export const SequenceModelController: FunctionComponent<SequenceModelControllerProps> = (props) => {
   const { fullScreen } = props;
-  const { nodeModelTree, calcSteps, isSuccess, currentStep } = useFlowChartViewModel();
+  const { nodeModelTree, calcSteps, lineColor, currentStep } = useFlowChartViewModel();
 
   const buildChart = (node: NodeModel): JSX.Element => {
     const rel: Relation[] = [];
@@ -30,9 +31,7 @@ export const SequenceModelController: FunctionComponent<SequenceModelControllerP
         style: {
           strokeColor:
             calcSteps.find((step) => step === node.parentId) && calcSteps.find((step) => step === node.id)
-              ? isSuccess
-                ? "var(--carv2-data-add-color)"
-                : "var(--carv2-data-delete-color)"
+              ? lineColor()
               : "var(--carv2-background-color-header)",
           strokeWidth:
             calcSteps.find((step) => step === node.parentId) && calcSteps.find((step) => step === node.id) ? 5 : 3,
@@ -169,6 +168,7 @@ const useFlowChartViewModel = () => {
           break;
         case GoToTypes.IDLE:
           nodeModel.id = parentId + "_IDLE";
+          break;
       }
     }
     return nodeModel;
@@ -197,7 +197,6 @@ const useFlowChartViewModel = () => {
 
   const getSteps = (): string[] => {
     let copyStepIds: string[] = Carv2Util.deepCopy(stepIds);
-    copyStepIds.push("root");
     return copyStepIds;
   };
 
@@ -209,11 +208,25 @@ const useFlowChartViewModel = () => {
     }
   };
 
+  const getLineColor = (): string => {
+    if (terminalStep) {
+      switch (terminalStep.type) {
+        case GoToTypes.ERROR:
+          return "var(--carv2-data-delete-color)";
+        case GoToTypes.FIN:
+          return "var(--carv2-data-add-color)";
+        case GoToTypes.IDLE:
+          return "var(--carv2-color-exxcellent-blue)";
+      }
+    } else {
+      return "#FF00FF";
+    }
+  };
+
   return {
-    sequenceName: sequence?.sequenceTO.name ? sequence.sequenceTO.name : "Select sequence...",
     nodeModelTree: buildNodeModelTree(getRoot(sequence)),
     currentStep: getCurrentStep(),
     calcSteps: getSteps(),
-    isSuccess: terminalStep?.type === GoToTypes.FIN || GoToTypes.IDLE ? true : false,
+    lineColor: getLineColor,
   };
 };
