@@ -17,12 +17,14 @@ import { CalcChain, CalcChainLink } from "../../../SequenceChainService";
 import { CalculatedStep } from "../../../SequenceService";
 import { masterDataSelectors } from "../../../slices/MasterDataSlice";
 import { SequenceModelActions, sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
+import { TabFragment } from "../fragments/TabFragment";
+import { TabGroupFragment } from "../fragments/TabGroupFragment";
 
 interface SequenceTableModelControllerProps {
   fullScreen?: boolean;
 }
 
-interface CarvTableRow {}
+interface CarvTableRow { }
 
 export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (props) => {
   const { fullScreen } = props;
@@ -52,143 +54,88 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
 
   const [body, setBody] = useState<TableBody>(TableBody.sequence);
 
+  const createTable = (headerValues: string[], body: JSX.Element[]) => {
+    return (
+      <table>
+        <thead>
+          <tr>
+            {headerValues.map((value, index) => { return (<th key={index}>{value}</th>) })}
+          </tr>
+        </thead>
+        <tbody>{body}</tbody>
+      </table>
+    )
+  }
+
+  const chainTableHead = ['INDEX', 'SEQUENCE', 'DATASETUP'];
+  const chaindecisionsTableHead = ['NAME'];
+  const chainlinkTableHead = ['NAME', 'SEQUENCE', 'DATASETUP'];
+  const sequenceStepTableHead = ['NAME', 'SENDER', 'RECEIVER'];
+  const seqeunceDcisionsTableHead = ['NAME'];
+  const calcSequenceTableHead = ['INDEX', 'NAME', 'SENDER', 'RECEIVER', 'ACTION-ERROR'];
+  const seqeunceModelTableHead = ['NAME'];
+
+  const getTabsKey = () => {
+    let key = showCalcChainTab ? 'chain' : '';
+    key += showSequenceModelTabs ? 'seqModel' : '';
+    key += showChainModelTab ? 'chainModel' : '';
+    key += showCalcSequenceTab ? 'seq' : '';
+    return key;
+  }
+
   return (
     <div className={fullScreen ? "" : "sequenceTable"}>
       <div className="tableBorder">
-        <div className="tabs">
-          {showCalcChainTab && (
-            <div className={body === TableBody.chain ? "tab active" : "tab"} onClick={() => setBody(TableBody.chain)}>
-              Chain
-            </div>
+        <div className="tabs" key={getTabsKey()}>
+          {(showCalcChainTab || showCalcSequenceTab) && (
+            <TabGroupFragment label='Calculated'>
+              {showCalcChainTab && (
+                <TabFragment label='Chain' isActive={body === TableBody.chain} onClick={() => setBody(TableBody.chain)} />
+              )}
+              {showCalcSequenceTab && (
+                <TabFragment label='Sequence' isActive={body === TableBody.sequence} onClick={() => setBody(TableBody.sequence)} />
+              )}
+            </TabGroupFragment>
           )}
           {showChainModelTab && (
-            <div
-              className={body === TableBody.chaindecisions ? "tab active" : "tab"}
-              onClick={() => setBody(TableBody.chaindecisions)}
-            >
-              Chain Decision
-            </div>
-          )}
-          {showChainModelTab && (
-            <div
-              className={body === TableBody.chainlinks ? "tab active" : "tab"}
-              onClick={() => setBody(TableBody.chainlinks)}
-            >
-              Chain Link
-            </div>
-          )}
-          {showCalcSequenceTab && (
-            <div
-              className={body === TableBody.sequence ? "tab active" : "tab"}
-              onClick={() => setBody(TableBody.sequence)}
-            >
-              Sequence
-            </div>
-          )}
-          <div
-            className={body === TableBody.sequenceModels ? "tab active" : "tab"}
-            onClick={() => setBody(TableBody.sequenceModels)}
-          >
-            SequenceModels
-          </div>
-          {showSequenceModelTabs && (
-            <div
-              className={body === TableBody.decision ? "tab active" : "tab"}
-              onClick={() => setBody(TableBody.decision)}
-            >
-              Decisions
-            </div>
+            <TabGroupFragment label='Chain Model'>
+              <TabFragment label='Decision' isActive={body === TableBody.chaindecisions} onClick={() => setBody(TableBody.chaindecisions)} />
+              <TabFragment label='Links' isActive={body === TableBody.chainlinks} onClick={() => setBody(TableBody.chainlinks)} />
+            </TabGroupFragment>
           )}
           {showSequenceModelTabs && (
-            <div className={body === TableBody.step ? "tab active" : "tab"} onClick={() => setBody(TableBody.step)}>
-              Steps
-            </div>
+            <TabGroupFragment label='Sequence Model'>
+              <TabFragment label='Decision' isActive={body === TableBody.decision} onClick={() => setBody(TableBody.decision)} />
+              <TabFragment label='Steps' isActive={body === TableBody.step} onClick={() => setBody(TableBody.step)} />
+            </TabGroupFragment>
           )}
+          <TabGroupFragment label='Building bricks'>
+            <TabFragment label='Sequence Models' isActive={body === TableBody.sequenceModels} onClick={() => setBody(TableBody.sequenceModels)} />
+          </TabGroupFragment>
         </div>
 
-        {body === TableBody.chain && (
-          <table>
-            <thead>
-              <tr>
-                <th>INDEX</th>
-                <th>SEQUENCE</th>
-                <th>DATASETUP</th>
-              </tr>
-            </thead>
-            <tbody>{getChainTableBody()}</tbody>
-          </table>
-        )}
+        {body === TableBody.chain &&
+          createTable(chainTableHead, getChainTableBody())
+        }
         {body === TableBody.chaindecisions && (
-          <table>
-            <thead>
-              <tr>
-                <th>NAME</th>
-              </tr>
-            </thead>
-            <tbody>{getChainDecisionTableBody()}</tbody>
-          </table>
+          createTable(chaindecisionsTableHead, getChainDecisionTableBody())
         )}
         {body === TableBody.chainlinks && (
-          <table>
-            <thead>
-              <tr>
-                <th>NAME</th>
-                <th>SEQUENCE</th>
-                <th>DATASETUP</th>
-              </tr>
-            </thead>
-            <tbody>{getChainLinkTableBody()}</tbody>
-          </table>
+          createTable(chainlinkTableHead, getChainLinkTableBody())
         )}
-
         {body === TableBody.step && (
-          <table>
-            <thead>
-              <tr>
-                <th>NAME</th>
-                <th>SENDER</th>
-                <th>RECEIVER</th>
-              </tr>
-            </thead>
-            <tbody>{getStepTableBody()}</tbody>
-          </table>
+          createTable(sequenceStepTableHead, getStepTableBody())
         )}
-
         {body === TableBody.decision && (
-          <table>
-            <thead>
-              <tr>
-                <th>NAME</th>
-              </tr>
-            </thead>
-            <tbody>{getDecisionTableBody()}</tbody>
-          </table>
+          createTable(seqeunceDcisionsTableHead, getDecisionTableBody())
         )}
 
         {body === TableBody.sequence && (
-          <table>
-            <thead>
-              <tr>
-                <th>INDEX</th>
-                <th>NAME</th>
-                <th>SENDER</th>
-                <th>RECEIVER</th>
-                <th>ACTION-ERROR</th>
-              </tr>
-            </thead>
-            <tbody>{getCalcSequenceTableBody()}</tbody>
-          </table>
+          createTable(calcSequenceTableHead, getCalcSequenceTableBody())
         )}
 
         {body === TableBody.sequenceModels && (
-          <table>
-            <thead>
-              <tr>
-                <th>NAME</th>
-              </tr>
-            </thead>
-            <tbody>{getSequenceModelsTableBody()}</tbody>
-          </table>
+          createTable(seqeunceModelTableHead, getSequenceModelsTableBody())
         )}
       </div>
     </div>
@@ -200,6 +147,7 @@ const useSequenceTableViewModel = () => {
   const selectSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
   const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
   const stepIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentStepIndex);
+  const chainIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentLinkIndex);
   const calcSteps: CalculatedStep[] = useSelector(sequenceModelSelectors.selectCalcSteps);
   const terminalStep: Terminal | null = useSelector(sequenceModelSelectors.selectTerminalStep);
   const loopStepStartIndex: number | null = useSelector(sequenceModelSelectors.selectLoopStepStartIndex);
@@ -230,14 +178,14 @@ const useSequenceTableViewModel = () => {
       index === 0 && !modelStep
         ? ""
         : modelStep
-        ? getComponentNameById(modelStep.squenceStepTO.sourceComponentFk)
-        : "Source not found";
+          ? getComponentNameById(modelStep.squenceStepTO.sourceComponentFk)
+          : "Source not found";
     const target =
       index === 0 && !modelStep
         ? ""
         : modelStep
-        ? getComponentNameById(modelStep.squenceStepTO.targetComponentFk)
-        : "Target not found";
+          ? getComponentNameById(modelStep.squenceStepTO.targetComponentFk)
+          : "Target not found";
     const hasError = step.errors.length > 0 ? true : false;
 
     return (
@@ -292,6 +240,9 @@ const useSequenceTableViewModel = () => {
     const sequenceName: string = link.sequence.sequenceModel?.sequenceTO.name || "Sequence name not found!";
     const dataSetupName: string = link.dataSetup.dataSetup?.name || "Data setup name not found!";
     let trClass = "carv2Tr";
+    if (index === chainIndex) {
+      trClass = "carv2TrMarked";
+    }
     return (
       <tr key={index} className={trClass} onClick={() => handleChainTableClickEvent(index)}>
         <td className="carv2Td">{index}</td>
@@ -346,11 +297,8 @@ const useSequenceTableViewModel = () => {
     if (terminalStep) {
       list.push(createTerminalColumn(terminalStep));
     }
-    let key: number = list.length;
-    while (list.length < 10) {
-      list.push(createEmptyRow(key.toString(), "carv2Tr"));
-      key++;
-    }
+    const numberOfColumns = 5;
+    fillWithEmptyRows(list, createEmptyRow, numberOfColumns);
     return list;
   };
 
@@ -359,25 +307,18 @@ const useSequenceTableViewModel = () => {
     if (sequences) {
       list = sequences.map((sequence, index) => createSequenceModelColumn(sequence, index));
     }
-    let key: number = list.length;
-    while (list.length < 10) {
-      list.push(createEmptyRow(key.toString(), "carv2Tr"));
-      key++;
-    }
+    const numberOfColumns = 1;
+    fillWithEmptyRows(list, createEmptyRow, numberOfColumns);
     return list;
   };
 
   const getStepTableBody = () => {
     let list: JSX.Element[] = [];
-    let key: number = 0;
     if (selectSequence !== null) {
       list = selectSequence?.sequenceStepCTOs.map((step, index) => createModelStepColumn(step, index));
-      key = list.length;
     }
-    while (list.length < 10) {
-      list.push(createEmptyStepRow(key.toString(), "carv2Tr"));
-      key++;
-    }
+    const numberOfColumns = 4;
+    fillWithEmptyRows(list, createEmptyRow, numberOfColumns);
     return list;
   };
 
@@ -386,11 +327,8 @@ const useSequenceTableViewModel = () => {
     if (selectSequence !== null) {
       list = selectSequence.decisions.map((cond, index) => createDecisionColumn(cond, index));
     }
-    let key: number = list.length;
-    while (list.length < 10) {
-      list.push(createEmptyDecisionRow(key.toString(), "carv2Tr"));
-      key++;
-    }
+    const numberOfColumns = 2;
+    fillWithEmptyRows(list, createEmptyRow, numberOfColumns);
     return list;
   };
 
@@ -399,11 +337,8 @@ const useSequenceTableViewModel = () => {
     if (calcChain !== null) {
       list = calcChain.calcLinks.map((link, index) => createCalcLinkColumn(link, index));
     }
-    let key: number = list.length;
-    while (list.length < 10) {
-      list.push(createEmptyDecisionRow(key.toString(), "carv2Tr"));
-      key++;
-    }
+    const numberOfColumns = 3;
+    fillWithEmptyRows(list, createEmptyRow, numberOfColumns);
     return list;
   };
   const getChainLinkTableBody = () => {
@@ -411,11 +346,8 @@ const useSequenceTableViewModel = () => {
     if (calcChain !== null) {
       list = chainlinks.map((link, index) => createLinkColumn(link, index));
     }
-    let key: number = list.length;
-    while (list.length < 10) {
-      list.push(createEmptyDecisionRow(key.toString(), "carv2Tr"));
-      key++;
-    }
+    const numberOfColumns = 3;
+    fillWithEmptyRows(list, createEmptyRow, numberOfColumns);
     return list;
   };
   const getChainDecisionTableBody = () => {
@@ -423,43 +355,15 @@ const useSequenceTableViewModel = () => {
     if (calcChain !== null) {
       list = chainDecisions.map((decision, index) => createChainDecisionColumn(decision, index));
     }
-    let key: number = list.length;
-    while (list.length < 10) {
-      list.push(createEmptyDecisionRow(key.toString(), "carv2Tr"));
-      key++;
-    }
+    const numberOfColumns = 1;
+    fillWithEmptyRows(list, createEmptyRow, numberOfColumns);
     return list;
   };
 
-  const createEmptyRow = (key: string, className?: string): JSX.Element => {
+  const createEmptyRow = (key: string, numberOfElements: number, className?: string): JSX.Element => {
     return (
       <tr key={key} className={className}>
-        <td> </td>
-        <td> </td>
-        <td> </td>
-        <td> </td>
-        <td> </td>
-      </tr>
-    );
-  };
-
-  const createEmptyStepRow = (key: string, className?: string): JSX.Element => {
-    return (
-      <tr key={key} className={className}>
-        <td> </td>
-        <td> </td>
-        <td> </td>
-        <td> </td>
-      </tr>
-    );
-  };
-
-  const createEmptyDecisionRow = (key: string, className?: string): JSX.Element => {
-    return (
-      <tr key={key} className={className}>
-        <td> </td>
-        <td> </td>
-        <td> </td>
+        {new Array(numberOfElements).map((value, index) => { return (<td key={index} />); })}
       </tr>
     );
   };
@@ -491,3 +395,10 @@ const useSequenceTableViewModel = () => {
     showCalcSequenceTab: calcSteps.length > 0,
   };
 };
+function fillWithEmptyRows(list: JSX.Element[], createEmptyRow: (key: string, numberOfElements: number, className?: string | undefined) => JSX.Element, numberOfColumns: number) {
+  let key: number = list.length;
+  while (list.length < 10) {
+    list.push(createEmptyRow(key.toString(), numberOfColumns, "carv2Tr"));
+    key++;
+  }
+}
