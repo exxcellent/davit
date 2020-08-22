@@ -103,10 +103,12 @@ const SequenceModelSlice = createSlice({
     setDataFilters: (state, action: PayloadAction<number[] | undefined>) => {
       const newDataFilters: Filter[] = action.payload ? action.payload.map(id => { return { type: "DATA", id: id } }) : [];
       state.activeFilter = [...state.activeFilter.filter(fil => fil.type === "COMPONENT"), ...newDataFilters];
+      state.currentStepIndex = 0;
     },
     setComponentFilters: (state, action: PayloadAction<number[] | undefined>) => {
       const newDataFilters: Filter[] = action.payload ? action.payload.map(id => { return { type: "COMPONENT", id: id } }) : [];
       state.activeFilter = [...state.activeFilter.filter(fil => fil.type === "DATA"), ...newDataFilters];
+      state.currentStepIndex = 0;
     },
     setCurrentStepIndex: (state, action: PayloadAction<number>) => {
       let filteredSteps: CalculatedStep[] = [];
