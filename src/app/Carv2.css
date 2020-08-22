@@ -242,7 +242,7 @@
   display:block;
   bottom:0;
   width:2em;
-  height: 8em;
+  height: 7.8em;
   background-color: var(--carv2-background-color-slidebar);
   color: white;
   margin:0;
@@ -279,7 +279,7 @@
       var(--carv2-color-primary),
       transparent
     );
-  height: 8em;
+  height: 7.8em;
 }
 
 @keyframes growWidth{
