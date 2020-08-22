@@ -8,15 +8,16 @@ import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 interface MultiselectDataDropDownProps extends DropdownProps {
   onSelect: (dataIds: number[] | undefined) => void;
   selected: number[];
+  placeholder?: string;
 }
 
 export const MultiselectDataDropDown: FunctionComponent<MultiselectDataDropDownProps> = (props) => {
-  const { onSelect, selected } = props;
+  const { onSelect, selected, placeholder } = props;
   const { datas, dataToOption } = useMultiSelectDataDropDownViewModel();
 
   return (
     <Dropdown
-      placeholder="Select Datas ..."
+      placeholder={placeholder || "Select Datas ..."}
       fluid
       multiple
       selection

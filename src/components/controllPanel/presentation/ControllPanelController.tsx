@@ -17,7 +17,7 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (p
   }
 
   const getModesDivs = (mode: Mode, onClickNavItem: (mode: string) => void): React.ReactNode => {
-    return getModesArray(mode).map(spliitedModeItem => {
+    let navDivs = getModesArray(mode).map(spliitedModeItem => {
       return (
         <div
           onClick={() => onClickNavItem(spliitedModeItem)}
@@ -27,6 +27,10 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (p
         </div>
       );
     });
+    while (navDivs.length < 5) {
+      navDivs.push(<div className="verticalTablDummy"></div>)
+    }
+    return navDivs;
   }
 
   const useGetViewByMode = (mode: Mode) => {

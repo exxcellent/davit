@@ -7,14 +7,16 @@ import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
 import { ChainTO } from "../../../../../dataAccess/access/to/ChainTO";
 import { DataSetupTO } from "../../../../../dataAccess/access/to/DataSetupTO";
 import { SequenceTO } from "../../../../../dataAccess/access/to/SequenceTO";
-import { SequenceModelActions, sequenceModelSelectors } from "../../../../../slices/SequenceModelSlice";
+import { Filter, SequenceModelActions, sequenceModelSelectors } from "../../../../../slices/SequenceModelSlice";
 import { ChainDropDown } from "../../../../common/fragments/dropdowns/ChainDropDown";
 import { DataSetupDropDown } from "../../../../common/fragments/dropdowns/DataSetupDropDown";
+import { MultiselectComponentDropDown } from "../../../../common/fragments/dropdowns/MultiselectComponentDropDown";
+import { MultiselectDataDropDown } from "../../../../common/fragments/dropdowns/MultiselectDataDropDown";
 import { SequenceDropDown } from "../../../../common/fragments/dropdowns/SequenceDropDown";
 import { ControllPanelEditSub } from "../edit/common/ControllPanelEditSub";
 import { OptionField } from "../edit/common/OptionField";
 
-export interface ControllPanelSequenceOptionsProps {}
+export interface ControllPanelSequenceOptionsProps { }
 
 export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequenceOptionsProps> = (props) => {
   const {
@@ -31,6 +33,10 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
     selectChain,
     linkBack,
     linkNext,
+    onSelectDataFilter,
+    selectedDataFilters,
+    onSelectComponentFilter,
+    selectedComponentFilters
   } = useControllPanelSequenceOptionsViewModel();
 
   return (
@@ -94,7 +100,12 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
         </OptionField>
       </div>
       <div className="optionFieldSpacer columnDivider">
-        <OptionField></OptionField>
+        <OptionField>
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around', width: '100%' }}>
+            <MultiselectDataDropDown onSelect={onSelectDataFilter} selected={selectedDataFilters} placeholder={"Selct Data Filter"} />
+            <MultiselectComponentDropDown onSelect={onSelectComponentFilter} selected={selectedComponentFilters} placeholder={"Select Component Filter"} />
+          </div>
+        </OptionField>
       </div>
     </ControllPanelEditSub>
   );
@@ -106,6 +117,7 @@ const useControllPanelSequenceOptionsViewModel = () => {
   const selectedDataSetup: DataSetupCTO | null = useSelector(sequenceModelSelectors.selectDataSetup);
   const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
   const linkIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentLinkIndex);
+  const filters: Filter[] = useSelector(sequenceModelSelectors.activeFilters);
   const dispatch = useDispatch();
 
   const selectSequence = (sequence: SequenceTO | undefined) => {
@@ -180,6 +192,13 @@ const useControllPanelSequenceOptionsViewModel = () => {
     dispatch(SequenceModelActions.linkBack(linkIndex));
   };
 
+  const onSelectDataFilter = (filter: number[] | undefined) => {
+    dispatch(SequenceModelActions.setDataFilters(filter));
+  }
+  const onSelectComponentFilter = (filter: number[] | undefined) => {
+    dispatch(SequenceModelActions.setComponentFilters(filter));
+  }
+
   return {
     label: "VIEW" + getDataSetupName() + getSequenceName() + getStepName(),
     sequence,
@@ -194,5 +213,9 @@ const useControllPanelSequenceOptionsViewModel = () => {
     selectChain,
     linkNext,
     linkBack,
+    onSelectDataFilter,
+    onSelectComponentFilter,
+    selectedDataFilters: filters.filter((fil: Filter) => fil.type === "DATA").map(fil => fil.id),
+    selectedComponentFilters: filters.filter((fil: Filter) => fil.type === "COMPONENT").map(fil => fil.id),
   };
 };
