@@ -101,7 +101,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
       </div>
       <div className="optionFieldSpacer columnDivider">
         <OptionField>
-          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around', width: '100%' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around', width: '100%', height: '5.8em' }}>
             <MultiselectDataDropDown onSelect={onSelectDataFilter} selected={selectedDataFilters} placeholder={"Selct Data Filter"} />
             <MultiselectComponentDropDown onSelect={onSelectComponentFilter} selected={selectedComponentFilters} placeholder={"Select Component Filter"} />
           </div>
