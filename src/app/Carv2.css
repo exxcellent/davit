@@ -259,7 +259,7 @@
       transparent
     )
     0 100%;
-    animation-name: growWidth;
+    /* animation-name: growWidth; */
     animation-duration: var(--animation-time);
 }
 .verticalTab:hover{
@@ -307,6 +307,20 @@
     background-color: transparent;
     border-width: 0 0 0 0;
   }
+}
+
+.slideable-verticaltab {
+  width: 2em;
+}
+
+.slideable {
+  width: 100% !important;
+  transition: width var(--animation-time);
+}
+
+.slideable-hidden {
+  width: 0 !important;
+  transition: width var(--animation-time);
 }
 
 .controllPanelEdit {

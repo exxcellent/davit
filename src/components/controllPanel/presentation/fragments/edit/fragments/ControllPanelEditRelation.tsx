@@ -13,9 +13,12 @@ import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditRelationProps {}
+export interface ControllPanelEditRelationProps {
+  hidden: boolean;
+}
 
 export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelationProps> = (props) => {
+  const { hidden } = props;
   const {
     label,
     data1,
@@ -34,7 +37,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
   } = useControllPanelEditRelationViewModel();
 
   return (
-    <ControllPanelEditSub label={label} key={key}>
+    <ControllPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveRelation}>
       <div className="optionField">
         <OptionField label="Select first relation data">
           <Dropdown

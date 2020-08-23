@@ -23,9 +23,12 @@ import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditStepProps {}
+export interface ControllPanelEditStepProps {
+  hidden: boolean;
+}
 
 export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps> = (props) => {
+  const { hidden } = props;
   const {
     label,
     name,
@@ -86,6 +89,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
         autoFocus
         ref={textInput}
         onBlur={() => updateStep()}
+        unvisible={hidden}
       />
     </OptionField>
   );
@@ -132,7 +136,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
   );
 
   return (
-    <ControllPanelEditSub label={label} key={key}>
+    <ControllPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveSequenceStep}>
       <div className="controllPanelEditChild">
         {stepName}
         {actionDropdown}
@@ -208,10 +212,18 @@ const useControllPanelEditSequenceStepViewModel = () => {
     }
   };
 
-  const saveSequenceStep = () => {
+  const saveSequenceStep = (newMode?: string) => {
     if (!isNullOrUndefined(stepToEdit) && !isNullOrUndefined(selectedSequence)) {
-      dispatch(EditActions.step.save(stepToEdit));
-      dispatch(EditActions.setMode.editSequence(stepToEdit.squenceStepTO.sequenceFk));
+      if (stepToEdit.squenceStepTO.name !== "") {
+        dispatch(EditActions.step.save(stepToEdit));
+      } else {
+        dispatch(EditActions.step.delete(stepToEdit, selectedSequence));
+      }
+      if (newMode && newMode === "EDIT") {
+        dispatch(EditActions.setMode.edit());
+      } else {
+        dispatch(EditActions.setMode.editSequence(stepToEdit.squenceStepTO.sequenceFk));
+      }
     }
   };
 

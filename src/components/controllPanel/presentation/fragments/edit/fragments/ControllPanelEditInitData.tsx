@@ -16,9 +16,12 @@ import { DataAndInstanceDropDown } from "../../../../../common/fragments/dropdow
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditInitDataProps {}
+export interface ControllPanelEditInitDataProps {
+  hidden: boolean;
+}
 
 export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitDataProps> = (props) => {
+  const { hidden } = props;
   const {
     label,
     saveInitData,
@@ -32,13 +35,13 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
   } = useControllPanelEditDataSetupViewModel();
 
   return (
-    <ControllPanelEditSub label={label} key={key}>
+    <ControllPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveInitData}>
       <div className="controllPanelEditChild">
         <OptionField label="Select Component to which data will be added">
           <ComponentDropDown
             onSelect={(comp) => (comp ? setComponentId(comp.component.id) : setComponentId(-1))}
             placeholder="Select Component..."
-            onBlur={() => {}}
+            onBlur={() => { }}
             value={component}
           />
         </OptionField>
@@ -82,7 +85,7 @@ const useControllPanelEditDataSetupViewModel = () => {
     // used to focus the textfield on create another
   }, [dispatch, initDataToEdit]);
 
-  const saveInitData = () => {
+  const saveInitData = (newMode?: string) => {
     if (!isNullOrUndefined(initDataToEdit)) {
       if (
         initDataToEdit !== null &&
@@ -94,7 +97,11 @@ const useControllPanelEditDataSetupViewModel = () => {
       } else {
         deleteInitData();
       }
-      dispatch(EditActions.setMode.editDataSetup(initDataToEdit?.dataSetupFk));
+      if (newMode && newMode === "EDIT") {
+        dispatch(EditActions.setMode.edit());
+      } else {
+        dispatch(EditActions.setMode.editDataSetup(initDataToEdit?.dataSetupFk));
+      }
     }
   };
 

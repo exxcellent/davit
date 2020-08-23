@@ -19,9 +19,12 @@ import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditChainDecisionProps {}
+export interface ControllPanelEditChainDecisionProps {
+  hidden: boolean;
+}
 
 export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEditChainDecisionProps> = (props) => {
+  const { hidden } = props;
   const {
     label,
     name,
@@ -52,6 +55,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
         value={name}
         autoFocus
         ref={textInput}
+        unvisible={hidden}
       />
     </OptionField>
   );
@@ -71,7 +75,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
   );
 
   return (
-    <ControllPanelEditSub label={label} key={key}>
+    <ControllPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveDecision}>
       <div className="controllPanelEditChild">
         {decisionName}
         <OptionField label="Create / Edit Condition">
@@ -79,7 +83,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Condition
             </Button>
-            <Button icon="wrench" inverted color="orange" onClick={() => {}} />
+            <Button icon="wrench" inverted color="orange" onClick={() => { }} />
           </Button.Group>
         </OptionField>
       </div>
@@ -184,10 +188,18 @@ const useControllPanelEditChainConditionViewModel = () => {
     }
   };
 
-  const saveDecision = () => {
+  const saveDecision = (newMode?: string) => {
     if (!isNullOrUndefined(decisionToEdit) && !isNullOrUndefined(selectedChain)) {
-      dispatch(EditActions.chainDecision.save(decisionToEdit));
-      dispatch(EditActions.setMode.editChain(selectedChain));
+      if (decisionToEdit.name !== "") {
+        dispatch(EditActions.chainDecision.save(decisionToEdit));
+      } else {
+        dispatch(EditActions.chainDecision.delete(decisionToEdit));
+      }
+      if (newMode && newMode === "EDIT") {
+        dispatch(EditActions.setMode.edit());
+      } else {
+        dispatch(EditActions.setMode.editChain(selectedChain));
+      }
     }
   };
 

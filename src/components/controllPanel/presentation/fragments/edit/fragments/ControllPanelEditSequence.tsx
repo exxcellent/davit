@@ -18,9 +18,12 @@ import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditSequenceProps {}
+export interface ControllPanelEditSequenceProps {
+  hidden: boolean;
+}
 
 export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSequenceProps> = (props) => {
+  const { hidden } = props;
   const {
     label,
     name,
@@ -47,7 +50,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
   );
 
   return (
-    <ControllPanelEditSub label={label}>
+    <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={saveSequence}>
       <div className="controllPanelEditChild">
         <OptionField label="Sequence - name">
           <Carv2LabelTextfield
@@ -58,6 +61,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
             autoFocus
             ref={textInput}
             onBlur={() => updateSequence()}
+            unvisible={hidden}
           />
         </OptionField>
       </div>
@@ -117,7 +121,11 @@ const useControllPanelEditSequenceViewModel = () => {
   };
 
   const saveSequence = () => {
-    dispatch(EditActions.sequence.save(sequenceToEdit!));
+    if (sequenceToEdit!.name !== "") {
+      dispatch(EditActions.sequence.save(sequenceToEdit!));
+    } else {
+      dispatch(EditActions.sequence.delete(sequenceToEdit!));
+    }
     if (isCreateAnother) {
       dispatch(EditActions.setMode.editSequence());
     } else {

@@ -23,9 +23,12 @@ import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditChainLinkProps {}
+export interface ControllPanelEditChainLinkProps {
+  hidden: boolean
+}
 
 export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChainLinkProps> = (props) => {
+  const { hidden } = props;
   const {
     label,
     name,
@@ -58,12 +61,13 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
         value={name}
         autoFocus
         ref={textInput}
+        unvisible={hidden}
       />
     </OptionField>
   );
 
   return (
-    <ControllPanelEditSub label={label}>
+    <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={saveChainLink}>
       <div className="controllPanelEditChild">{stepName}</div>
       <div className="optionFieldSpacer columnDivider">
         <OptionField>
@@ -153,10 +157,18 @@ const useControllPanelEditChainStepViewModel = () => {
     }
   };
 
-  const saveChainLink = () => {
+  const saveChainLink = (newMode?: string) => {
     if (!isNullOrUndefined(chainLinkToEdit) && !isNullOrUndefined(selectedChain)) {
-      dispatch(EditActions.chainLink.save(chainLinkToEdit));
-      dispatch(EditActions.setMode.editChain(selectedChain));
+      if (chainLinkToEdit.name !== "") {
+        dispatch(EditActions.chainLink.save(chainLinkToEdit));
+      } else {
+        dispatch(EditActions.chainLink.delete(chainLinkToEdit));
+      }
+      if (newMode && newMode === "EDIT") {
+        dispatch(EditActions.setMode.edit());
+      } else {
+        dispatch(EditActions.setMode.editChain(selectedChain));
+      }
     }
   };
 

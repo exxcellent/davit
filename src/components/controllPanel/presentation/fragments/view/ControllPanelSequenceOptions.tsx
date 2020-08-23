@@ -16,9 +16,13 @@ import { SequenceDropDown } from "../../../../common/fragments/dropdowns/Sequenc
 import { ControllPanelEditSub } from "../edit/common/ControllPanelEditSub";
 import { OptionField } from "../edit/common/OptionField";
 
-export interface ControllPanelSequenceOptionsProps { }
+export interface ControllPanelSequenceOptionsProps {
+  hidden: boolean;
+}
 
 export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequenceOptionsProps> = (props) => {
+  const { hidden } = props;
+
   const {
     label,
     sequence,
@@ -40,7 +44,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
   } = useControllPanelSequenceOptionsViewModel();
 
   return (
-    <ControllPanelEditSub label={label}>
+    <ControllPanelEditSub label={label} hidden={hidden}>
       <div className="optionFieldSpacer">
         <OptionField>
           <OptionField label="Data - Setup">

@@ -39,20 +39,24 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (p
         return <ControllPanelEditController />
       }
       if (mode.includes("VIEW")) {
-        return <ControllPanelSequenceOptions />;
+        return <ControllPanelSequenceOptions hidden={!mode.includes("VIEW")} />;
       }
       if (mode.includes("FILE")) {
-        return <ControllPanelFileController />;
+        return <ControllPanelFileController hidden={!mode.includes("FILE")} />;
       }
       if (mode.includes("TAB")) {
-        return <ControllPanelTabController />;
+        return <ControllPanelTabController hidden={!mode.includes("TAB")} />;
       }
     }
   };
 
   return <div className="controllerHeader">
     <div style={{ display: 'flex', width: '100%', padding: '0' }}>
-      {getModesDivs(mode, onClickNavItem)}
+      {/* {getModesDivs(mode, onClickNavItem)} */}
+      {/* <ControllPanelEditController />
+      <ControllPanelSequenceOptions hidden={mode.includes("VIEW")} />
+      <ControllPanelFileController hidden={!mode.includes("FILE")} />
+      <ControllPanelTabController hidden={mode.includes("TAB")} /> */}
       {useGetViewByMode(mode)}
     </div>
 

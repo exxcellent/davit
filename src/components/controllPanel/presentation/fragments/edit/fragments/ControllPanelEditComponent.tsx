@@ -13,9 +13,12 @@ import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditComponentProps { }
+export interface ControllPanelEditComponentProps {
+  hidden: boolean;
+}
 
 export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComponentProps> = (props) => {
+  const { hidden } = props;
   const {
     label,
     name,
@@ -28,7 +31,7 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
   } = useControllPanelEditComponentViewModel();
 
   return (
-    <ControllPanelEditSub label={label}>
+    <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={saveComponent} >
       <div className="optionFieldSpacer" style={{ display: "flex" }}>
         <OptionField label="Component - Name">
           <Carv2LabelTextfield
@@ -39,6 +42,7 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
             value={name}
             autoFocus
             ref={textInput}
+            unvisible={hidden}
           />
         </OptionField>
       </div>
@@ -90,7 +94,7 @@ const useControllPanelEditComponentViewModel = () => {
     dispatch(EditActions.component.save(copyComponentToEdit));
   };
 
-  const saveComponent = () => {
+  const saveComponent = (newMode?: string) => {
     if (!isNullOrUndefined(componentToEdit)) {
       if (componentToEdit?.component.name !== "") {
         dispatch(EditActions.component.save(componentToEdit!));

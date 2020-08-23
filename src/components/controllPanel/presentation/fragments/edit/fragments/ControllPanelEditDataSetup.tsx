@@ -15,9 +15,12 @@ import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditDataSetupProps {}
+export interface ControllPanelEditDataSetupProps {
+  hidden: boolean;
+}
 
 export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditDataSetupProps> = (props) => {
+  const { hidden } = props;
   const {
     label,
     name,
@@ -33,7 +36,7 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
   } = useControllPanelEditDataSetupViewModel();
 
   return (
-    <ControllPanelEditSub label={label}>
+    <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={saveDataSetup}>
       <div className="controllPanelEditChild">
         <OptionField label="Data - SETUP NAME">
           <Carv2LabelTextfield
@@ -44,6 +47,7 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
             autoFocus
             ref={textInput}
             onBlur={() => updateDataSetup()}
+            unvisible={hidden}
           />
         </OptionField>
       </div>

@@ -12,9 +12,12 @@ import { ColorDropDown } from "../../../../../common/fragments/dropdowns/ColorDr
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 
-export interface ControllPanelEditGroupProps {}
+export interface ControllPanelEditGroupProps {
+  hidden: boolean;
+}
 
 export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupProps> = (props) => {
+  const { hidden } = props;
   const {
     label,
     name,
@@ -29,7 +32,7 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
   } = useControllPanelEditGroupViewModel();
 
   return (
-    <ControllPanelEditSub label={label}>
+    <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={saveGroup}>
       <div className="controllPanelEditChild">
         <ColorDropDown onSelect={setGroupColor} placeholder={getGroupColor()} colors={["red", "blue", "green"]} />
       </div>
@@ -42,6 +45,7 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
           autoFocus
           ref={textInput}
           onBlur={() => updateGroup()}
+          unvisible={hidden}
         />
       </div>
       <div className="columnDivider controllPanelEditChild">

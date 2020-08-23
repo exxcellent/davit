@@ -14,12 +14,15 @@ import { MultiselectDataDropDown } from "../../../../../common/fragments/dropdow
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditConditionProps {}
+export interface ControllPanelEditConditionProps {
+  hidden: boolean;
+}
 
 export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditConditionProps> = (props) => {
+  const { hidden } = props;
   const {
     label,
-    setModeEditDecision,
+    setMode,
     componentFk,
     setComponentFk,
     getDecision,
@@ -45,7 +48,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
   );
 
   return (
-    <ControllPanelEditSub label={label}>
+    <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={setMode}>
       <div className="controllPanelEditChild">
         <OptionField label="Select Component">
           <ComponentDropDown value={componentFk} onSelect={(comp) => setComponentFk(comp?.component.id || -1)} />
@@ -64,7 +67,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
       </div>
       <div className="columnDivider optionFieldSpacer">
         <OptionField label="Navigation">
-          <Carv2ButtonIcon onClick={setModeEditDecision} icon="reply" />
+          <Carv2ButtonIcon onClick={setMode} icon="reply" />
         </OptionField>
       </div>
     </ControllPanelEditSub>
@@ -92,11 +95,15 @@ const useControllPanelEditConditionViewModel = () => {
     }
   };
 
-  const setModeEditDecision = () => {
-    console.info("click set edit decision!");
+  const setMode = (newMode?: string) => {
     if (!isNullOrUndefined(decisionToEdit)) {
-      console.info("decisionToEdit is not null!");
-      dispatch(EditActions.setMode.editDecision(decisionToEdit));
+      if (newMode && newMode === "EDIT") {
+        dispatch(EditActions.setMode.edit());
+      } else if (newMode && newMode === "SEQUENCE") {
+        dispatch(EditActions.setMode.editSequence(selectedSequence?.sequenceTO.id));
+      } else {
+        dispatch(EditActions.setMode.editDecision(decisionToEdit));
+      }
     } else {
       console.info("decisionToEdit is null!");
     }
@@ -132,7 +139,7 @@ const useControllPanelEditConditionViewModel = () => {
   return {
     label:
       "EDIT * " + (selectedSequence?.sequenceTO.name || "") + " * " + (decisionToEdit?.name || "") + " * CONDITION",
-    setModeEditDecision,
+    setMode,
     componentFk: decisionToEdit?.componentFk,
     setComponentFk,
     getDecision,

@@ -13,9 +13,12 @@ import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditDataProps {}
+export interface ControllPanelEditDataProps {
+  hidden: boolean;
+}
 
 export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps> = (props) => {
+  const { hidden } = props;
   const {
     label,
     textInput,
@@ -30,7 +33,7 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
   } = useControllPanelEditDataViewModel();
 
   return (
-    <ControllPanelEditSub label={label}>
+    <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={saveData}>
       <OptionField label="Data - Name">
         <Carv2LabelTextfield
           label="Name:"
@@ -40,6 +43,7 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
           autoFocus
           ref={textInput}
           onBlur={() => updateData()}
+          unvisible={hidden}
         />
       </OptionField>
       <div className="columnDivider controllPanelEditChild">

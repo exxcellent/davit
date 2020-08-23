@@ -13,9 +13,12 @@ import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditDataInstanceProps {}
+export interface ControllPanelEditDataInstanceProps {
+  hidden: boolean;
+}
 
 export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditDataInstanceProps> = (props) => {
+  const { hidden } = props;
   const {
     label,
     textInput,
@@ -28,7 +31,7 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
   } = useControllPanelEditDataInstanceViewModel();
 
   return (
-    <ControllPanelEditSub label={label}>
+    <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={saveDataInstace}>
       <OptionField label="Instance - Name">
         <Carv2LabelTextfield
           label="Name:"
@@ -38,6 +41,7 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
           autoFocus
           ref={textInput}
           onBlur={() => updateData()}
+          unvisible={hidden}
         />
       </OptionField>
       <div className="columnDivider controllPanelEditChild"></div>
@@ -100,15 +104,18 @@ const useControllPanelEditDataInstanceViewModel = () => {
     }
   };
 
-  const saveDataInstace = () => {
+  const saveDataInstace = (newMode?: string) => {
     if (!isNullOrUndefined(dataToEdit)) {
       const instance: DataInstanceTO | undefined = dataToEdit.data.inst.find((instance) => instance.id === instanceId);
       if (instance) {
         if (instance.name !== "") {
           dispatch(EditActions.data.save(dataToEdit!));
-          dispatch(EditActions.setMode.editData(dataToEdit!));
         } else {
           deleteDataInstance();
+        }
+        if (newMode && newMode === "EDIT") {
+          dispatch(EditActions.setMode.edit());
+        } else {
           dispatch(EditActions.setMode.editData(dataToEdit!));
         }
       }

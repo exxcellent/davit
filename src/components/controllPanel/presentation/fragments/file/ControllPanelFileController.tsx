@@ -6,9 +6,12 @@ import { ControllPanelEditSub } from "../edit/common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../edit/common/fragments/Carv2LabelTextfield";
 import { ControllPanelFileOptions } from "./fragments/ControllPanelFileOptions";
 
-export interface ControllPanelFileControllerProps {}
+export interface ControllPanelFileControllerProps {
+  hidden: boolean;
+}
 
 export const ControllPanelFileController: FunctionComponent<ControllPanelFileControllerProps> = (props) => {
+  const { hidden } = props;
   const {
     showExportFile,
     toggleShowExportFile,
@@ -18,7 +21,7 @@ export const ControllPanelFileController: FunctionComponent<ControllPanelFileCon
   } = useControllPanelFileViewModel();
 
   return (
-    <ControllPanelEditSub label="FILE">
+    <ControllPanelEditSub label="FILE" hidden={hidden}>
       <div className="optionFieldSpacer">
         <ControllPanelFileOptions showDownloadFile={toggleShowExportFile} />
       </div>
@@ -30,6 +33,7 @@ export const ControllPanelFileController: FunctionComponent<ControllPanelFileCon
             onChange={(event: any) => setProjectName(event.target.value)}
             value={projectName}
             autoFocus
+            unvisible={hidden}
           />
         )}
       </div>

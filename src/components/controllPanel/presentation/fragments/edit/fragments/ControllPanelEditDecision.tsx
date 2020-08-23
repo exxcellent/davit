@@ -19,9 +19,12 @@ import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditDecisionProps {}
+export interface ControllPanelEditDecisionProps {
+  hidden: boolean;
+}
 
 export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecisionProps> = (props) => {
+  const { hidden } = props;
   const {
     label,
     name,
@@ -54,6 +57,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
         autoFocus
         ref={textInput}
         onBlur={() => updateDecision()}
+        unvisible={hidden}
       />
     </OptionField>
   );
@@ -73,7 +77,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
   );
 
   return (
-    <ControllPanelEditSub label={label} key={key}>
+    <ControllPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveDecision}>
       <div className="controllPanelEditChild">
         {decisionName}
         <OptionField label="Create / Edit Condition">
@@ -178,10 +182,18 @@ const useControllPanelEditConditionViewModel = () => {
     }
   };
 
-  const saveDecision = () => {
+  const saveDecision = (newMode?: string) => {
     if (!isNullOrUndefined(decisionToEdit) && !isNullOrUndefined(selectedSequence)) {
-      dispatch(EditActions.decision.save(decisionToEdit));
-      dispatch(EditActions.setMode.editSequence(decisionToEdit.sequenceFk));
+      if (decisionToEdit.name !== "") {
+        dispatch(EditActions.decision.save(decisionToEdit));
+      } else {
+        dispatch(EditActions.decision.delete(decisionToEdit, selectedSequence));
+      }
+      if (newMode && newMode === "EDIT") {
+        dispatch(EditActions.setMode.edit());
+      } else {
+        dispatch(EditActions.setMode.editSequence(decisionToEdit.sequenceFk));
+      }
     }
   };
 
