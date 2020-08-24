@@ -418,7 +418,28 @@
   box-shadow: 0 0 0 1px var(--carv2-color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
 }
 
+.LINK {
+  background-color: var(--carv2-background-color-header);
+  color: var(--carv2-text-color);
+  min-height: 2.4em;
+  min-width: 6em;
+  max-width: 15em;
+  border-radius: 0.3em;
+  padding: 6px;
+  text-align: center;
+  box-shadow: 0 0 0 1px var(--carv2-color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
+}
+
 .COND {
+  z-index: 2;
+  width: 2em;
+  height: 2em;
+  background-color: var(--carv2-background-color-shadow);
+  transform: translateY(0.8em) rotate(45deg);
+  box-shadow: 0 0 0 1px var(--carv2-color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
+}
+
+.DEC {
   z-index: 2;
   width: 2em;
   height: 2em;

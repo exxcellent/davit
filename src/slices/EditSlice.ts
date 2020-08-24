@@ -97,7 +97,7 @@ const EditSlice = createSlice({
       }
     },
     setChainDecisionToEdit: (state, action: PayloadAction<ChainDecisionTO>) => {
-      if (state.mode === Mode.EDIT_CHAIN_DECISION) {
+      if (state.mode === Mode.EDIT_CHAIN_DECISION || state.mode === Mode.EDIT_CHAIN_DECISION_CONDITION) {
         state.objectToEdit = action.payload;
       } else {
         handleError("Try to set chain step to edit in mode: " + state.mode);
@@ -304,6 +304,14 @@ const setModeEditChainDecision = (
 ): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_CHAIN_DECISION));
   dispatch(EditActions.chainDecision.create(chainDecision, from, ifGoTO));
+};
+
+const setModeToEditChainCondition = (decision: ChainDecisionTO): AppThunk => (dispatch) => {
+  if (!isNullOrUndefined(decision)) {
+    dispatch(setModeWithStorage(Mode.EDIT_CHAIN_DECISION_CONDITION));
+  } else {
+    handleError("Edit Condition: 'Decision is null or undefined'.");
+  }
 };
 
 const setModeToEditStep = (
@@ -667,8 +675,9 @@ const createChainDecisionThunk = (
         dispatch(EditActions.chainDecision.save(from as ChainDecisionTO));
       }
     }
+    console.info("save");
+    dispatch(EditSlice.actions.setChainDecisionToEdit(response.object));
   }
-  dispatch(EditSlice.actions.setChainDecisionToEdit(response.object));
 };
 
 const saveChainDecisionThunk = (decision: ChainDecisionTO): AppThunk => (dispatch) => {
@@ -952,7 +961,8 @@ export const editSelectors = {
       : null;
   },
   chainDecisionToEdit: (state: RootState): ChainDecisionTO | null => {
-    return state.edit.mode === Mode.EDIT_CHAIN_DECISION && (state.edit.objectToEdit as ChainDecisionTO).elseGoTo
+    return state.edit.mode === Mode.EDIT_CHAIN_DECISION ||
+      (state.edit.mode === Mode.EDIT_CHAIN_DECISION_CONDITION && (state.edit.objectToEdit as ChainDecisionTO).elseGoTo)
       ? (state.edit.objectToEdit as ChainDecisionTO)
       : null;
   },
@@ -1050,6 +1060,7 @@ export const EditActions = {
     editChain: setModeToEditChain,
     editChainLink: setModeToEditChainlink,
     editChainDecision: setModeEditChainDecision,
+    editChainCondition: setModeToEditChainCondition,
     edit: setModeToEdit,
     view: setModeToView,
     file: setModeToFile,
