@@ -41,7 +41,7 @@ export const SequenceService = {
       if (root !== undefined) {
         let stepOrDecision: SequenceStepCTO | DecisionTO | Terminal = root;
         let type = getType(stepOrDecision);
-        let stepId: string = "";
+        let stepId: string = "root";
 
         while (!isLooping(loopStartingStep) && (type === GoToTypes.STEP || type === GoToTypes.COND)) {
           if (type === GoToTypes.STEP) {
@@ -53,7 +53,7 @@ export const SequenceService = {
 
             // STEP ID
             const newStepId = "_STEP_" + step.squenceStepTO.id;
-            stepId = stepId === "" ? "root" : stepId + newStepId;
+            stepId = stepId + newStepId;
             stepIds.push(stepId);
 
             calcSequence.steps.push({
@@ -78,7 +78,7 @@ export const SequenceService = {
             type = getType(stepOrDecision);
 
             const newCondID = "_COND_" + decision.id;
-            stepId = stepId === "" ? "root" : stepId + newCondID;
+            stepId = stepId + newCondID;
             stepIds.push(stepId);
           }
         }

@@ -5,7 +5,10 @@ import { useSelector } from "react-redux";
 import { isNullOrUndefined } from "util";
 import { SequenceCTO } from "../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
+import { ActionTO } from "../../dataAccess/access/to/ActionTO";
 import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
+import { InitDataTO } from "../../dataAccess/access/to/InitDataTO";
+import { ActionType } from "../../dataAccess/access/types/ActionType";
 import { GoTo, GoToTypes, Terminal } from "../../dataAccess/access/types/GoToType";
 import { CalculatedStep } from "../../SequenceService";
 import { handleError } from "../../slices/GlobalSlice";
@@ -174,6 +177,41 @@ const useFlowChartViewModel = () => {
     return nodeModel;
   };
 
+  const getDataSetup = (): Node => {
+    let initData: Node = { isLoop: false, type: GoToTypes.STEP, value: new SequenceStepCTO() };
+    if (sequence) {
+      const root: Node = getRoot(sequence);
+      if ((root.value as SequenceStepCTO).actions) {
+        (initData.value as SequenceStepCTO).squenceStepTO.goto = {
+          type: GoToTypes.STEP,
+          id: (root.value as SequenceStepCTO).squenceStepTO.id,
+        };
+      }
+      if ((root.value as DecisionTO).elseGoTo) {
+        (initData.value as SequenceStepCTO).squenceStepTO.goto = {
+          type: GoToTypes.COND,
+          id: (root.value as DecisionTO).id,
+        };
+      }
+      initData.isLoop = false;
+    }
+    return initData;
+  };
+
+  const initDataToAction = (initDatas: InitDataTO[]): ActionTO[] => {
+    let actions: ActionTO[] = [];
+    initDatas.forEach((initData) =>
+      actions.push({
+        actionType: ActionType.ADD,
+        componentFk: initData.componentFk,
+        dataFk: initData.dataFk,
+        id: -1,
+        sequenceStepFk: -1,
+      })
+    );
+    return actions;
+  };
+
   const buildNodeModelTree = (node: Node): NodeModel => {
     let parentIds: string[] = [];
     let nodeModel: NodeModel = { id: "root", label: "", leafType: node.type, childs: [] };
@@ -224,7 +262,8 @@ const useFlowChartViewModel = () => {
   };
 
   return {
-    nodeModelTree: buildNodeModelTree(getRoot(sequence)),
+    // nodeModelTree: buildNodeModelTree(getRoot(sequence)),
+    nodeModelTree: buildNodeModelTree(getDataSetup()),
     currentStep: getCurrentStep(),
     calcSteps: getSteps(),
     lineColor: getLineColor,

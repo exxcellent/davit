@@ -61,19 +61,19 @@ export interface StepAction {
 interface EditState {
   mode: Mode;
   objectToEdit:
-  | ComponentCTO
-  | DataCTO
-  | DataRelationTO
-  | SequenceTO
-  | SequenceStepCTO
-  | StepAction
-  | DataSetupCTO
-  | InitDataTO
-  | GroupTO
-  | DecisionTO
-  | ChainlinkTO
-  | ChainDecisionTO
-  | {};
+    | ComponentCTO
+    | DataCTO
+    | DataRelationTO
+    | SequenceTO
+    | SequenceStepCTO
+    | StepAction
+    | DataSetupCTO
+    | InitDataTO
+    | GroupTO
+    | DecisionTO
+    | ChainlinkTO
+    | ChainDecisionTO
+    | {};
   instanceIdToEdit: number | null;
 }
 const getInitialState: EditState = {
@@ -203,6 +203,7 @@ const setModeToTab = (): AppThunk => (dispatch) => {
 const setModeToView = (): AppThunk => (dispatch) => {
   dispatch(EditSlice.actions.clearObjectToEdit());
   dispatch(setModeWithStorage(Mode.VIEW));
+  dispatch(SequenceModelActions.calcChain());
 };
 
 const setModeToEdit = (): AppThunk => (dispatch, getState) => {

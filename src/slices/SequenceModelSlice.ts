@@ -191,6 +191,16 @@ export const getComponentDatas = (dataSetup: DataSetupCTO): ComponentData[] => {
   });
 };
 
+const calcChainThunk = (): AppThunk => (dispatch, getState) => {
+  if (getState().edit.mode === Mode.VIEW && getState().sequenceModel.selectedChain !== null) {
+    dispatch(
+      SequenceModelSlice.actions.setCalcChain(
+        SequenceChainService.calculateChain(getState().sequenceModel.selectedChain)
+      )
+    );
+  }
+};
+
 const stepNext = (currentIndex: number): AppThunk => (dispatch) => {
   dispatch(SequenceModelActions.setCurrentStepIndex(currentIndex + 1));
 };
@@ -402,6 +412,7 @@ export const SequenceModelActions = {
   setCurrentChain: setSelectedChainThunk,
   setDataFilters: SequenceModelSlice.actions.setDataFilters,
   setComponentFilters: SequenceModelSlice.actions.setComponentFilters,
+  calcChain: calcChainThunk,
 };
 function getFilteredSteps(state: RootState) {
   return state.edit.mode === Mode.VIEW
