@@ -3,6 +3,7 @@ import React, { createRef, FunctionComponent, useEffect, useRef, useState } from
 import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
+import { Carv2TableButton } from "../../../components/common/fragments/buttons/Carv2TableButton";
 import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
@@ -15,6 +16,7 @@ import { SequenceTO } from "../../../dataAccess/access/to/SequenceTO";
 import { Terminal } from "../../../dataAccess/access/types/GoToType";
 import { CalcChain, CalcChainLink } from "../../../SequenceChainService";
 import { CalculatedStep } from "../../../SequenceService";
+import { EditActions, editSelectors, Mode } from "../../../slices/EditSlice";
 import { masterDataSelectors } from "../../../slices/MasterDataSlice";
 import { SequenceModelActions, sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
 import { TabFragment } from "../fragments/TabFragment";
@@ -24,7 +26,17 @@ interface SequenceTableModelControllerProps {
   fullScreen?: boolean;
 }
 
-interface CarvTableRow {}
+enum ActiveTab {
+  step = "step",
+  decision = "decision",
+  sequence = "sequence",
+  chain = "chain",
+  chainlinks = "chainlinks",
+  chaindecisions = "chaindecisions",
+  sequenceModels = "sequenceModels",
+  chainModel = "chainModels",
+  dataSetup = "dataSetup",
+}
 
 export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (props) => {
   const { fullScreen } = props;
@@ -36,23 +48,15 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
     getSequenceModelsTableBody,
     getChainDecisionTableBody,
     getChainLinkTableBody,
+    getChainModelsTableBody,
+    getDataSetupTableBody,
     showChainModelTab,
     showSequenceModelTabs,
     showCalcChainTab,
     showCalcSequenceTab,
+    activeTab,
+    setActiveTab,
   } = useSequenceTableViewModel();
-
-  enum TableBody {
-    step = "step",
-    decision = "decision",
-    sequence = "sequence",
-    chain = "chain",
-    chainlinks = "chainlinks",
-    chaindecisions = "chaindecisions",
-    sequenceModels = "sequenceModels",
-  }
-
-  const [body, setBody] = useState<TableBody>(TableBody.sequence);
 
   const createTable = (headerValues: string[], body: JSX.Element[]) => {
     return (
@@ -70,12 +74,14 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
   };
 
   const chainTableHead = ["INDEX", "SEQUENCE", "DATASETUP"];
-  const chaindecisionsTableHead = ["NAME"];
-  const chainlinkTableHead = ["NAME", "SEQUENCE", "DATASETUP"];
-  const sequenceStepTableHead = ["NAME", "SENDER", "RECEIVER"];
-  const seqeunceDcisionsTableHead = ["NAME"];
+  const chaindecisionsTableHead = ["NAME", "ACTIONS"];
+  const chainlinkTableHead = ["NAME", "SEQUENCE", "DATASETUP", "ACTIONS"];
+  const sequenceStepTableHead = ["NAME", "SENDER", "RECEIVER", "ACTIONS"];
+  const seqeunceDcisionsTableHead = ["NAME", "ACTIONS"];
   const calcSequenceTableHead = ["INDEX", "NAME", "SENDER", "RECEIVER", "ACTION-ERROR"];
-  const seqeunceModelTableHead = ["NAME"];
+  const seqeunceModelTableHead = ["NAME", "ACTIONS"];
+  const chainModelTableHead = ["NAME", "ACTIONS"];
+  const dataSetupTableHead = ["NAME", "ACTIONS"];
 
   const getTabsKey = () => {
     let key = showCalcChainTab ? "chain" : "";
@@ -113,15 +119,15 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
               {showCalcChainTab && (
                 <TabFragment
                   label="Chain"
-                  isActive={body === TableBody.chain}
-                  onClick={() => setBody(TableBody.chain)}
+                  isActive={activeTab === ActiveTab.chain}
+                  onClick={() => setActiveTab(ActiveTab.chain)}
                 />
               )}
               {showCalcSequenceTab && (
                 <TabFragment
                   label="Sequence"
-                  isActive={body === TableBody.sequence}
-                  onClick={() => setBody(TableBody.sequence)}
+                  isActive={activeTab === ActiveTab.sequence}
+                  onClick={() => setActiveTab(ActiveTab.sequence)}
                 />
               )}
             </TabGroupFragment>
@@ -130,13 +136,13 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
             <TabGroupFragment label="Chain Model">
               <TabFragment
                 label="Decision"
-                isActive={body === TableBody.chaindecisions}
-                onClick={() => setBody(TableBody.chaindecisions)}
+                isActive={activeTab === ActiveTab.chaindecisions}
+                onClick={() => setActiveTab(ActiveTab.chaindecisions)}
               />
               <TabFragment
                 label="Links"
-                isActive={body === TableBody.chainlinks}
-                onClick={() => setBody(TableBody.chainlinks)}
+                isActive={activeTab === ActiveTab.chainlinks}
+                onClick={() => setActiveTab(ActiveTab.chainlinks)}
               />
             </TabGroupFragment>
           )}
@@ -144,30 +150,42 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
             <TabGroupFragment label="Sequence Model">
               <TabFragment
                 label="Decision"
-                isActive={body === TableBody.decision}
-                onClick={() => setBody(TableBody.decision)}
+                isActive={activeTab === ActiveTab.decision}
+                onClick={() => setActiveTab(ActiveTab.decision)}
               />
-              <TabFragment label="Steps" isActive={body === TableBody.step} onClick={() => setBody(TableBody.step)} />
+              <TabFragment label="Steps" isActive={activeTab === ActiveTab.step} onClick={() => setActiveTab(ActiveTab.step)} />
             </TabGroupFragment>
           )}
-          <TabGroupFragment label="Building bricks">
+          <TabGroupFragment label="Models">
             <TabFragment
-              label="Sequence Models"
-              isActive={body === TableBody.sequenceModels}
-              onClick={() => setBody(TableBody.sequenceModels)}
+              label="Chain"
+              isActive={activeTab === ActiveTab.chainModel}
+              onClick={() => setActiveTab(ActiveTab.chainModel)}
+            />
+            <TabFragment
+              label="Sequence"
+              isActive={activeTab === ActiveTab.sequenceModels}
+              onClick={() => setActiveTab(ActiveTab.sequenceModels)}
+            />
+            <TabFragment
+              label="Data Setup"
+              isActive={activeTab === ActiveTab.dataSetup}
+              onClick={() => setActiveTab(ActiveTab.dataSetup)}
             />
           </TabGroupFragment>
         </div>
 
-        {body === TableBody.chain && createTable(chainTableHead, getChainTableBody())}
-        {body === TableBody.chaindecisions && createTable(chaindecisionsTableHead, getChainDecisionTableBody())}
-        {body === TableBody.chainlinks && createTable(chainlinkTableHead, getChainLinkTableBody())}
-        {body === TableBody.step && createTable(sequenceStepTableHead, getStepTableBody())}
-        {body === TableBody.decision && createTable(seqeunceDcisionsTableHead, getDecisionTableBody())}
+        {activeTab === ActiveTab.chain && createTable(chainTableHead, getChainTableBody())}
+        {activeTab === ActiveTab.chaindecisions && createTable(chaindecisionsTableHead, getChainDecisionTableBody())}
+        {activeTab === ActiveTab.chainlinks && createTable(chainlinkTableHead, getChainLinkTableBody())}
+        {activeTab === ActiveTab.step && createTable(sequenceStepTableHead, getStepTableBody())}
+        {activeTab === ActiveTab.decision && createTable(seqeunceDcisionsTableHead, getDecisionTableBody())}
 
-        {body === TableBody.sequence && createTable(calcSequenceTableHead, getCalcSequenceTableBody())}
+        {activeTab === ActiveTab.sequence && createTable(calcSequenceTableHead, getCalcSequenceTableBody())}
 
-        {body === TableBody.sequenceModels && createTable(seqeunceModelTableHead, getSequenceModelsTableBody())}
+        {activeTab === ActiveTab.sequenceModels && createTable(seqeunceModelTableHead, getSequenceModelsTableBody())}
+        {activeTab === ActiveTab.chainModel && createTable(chainModelTableHead, getChainModelsTableBody())}
+        {activeTab === ActiveTab.dataSetup && createTable(dataSetupTableHead, getDataSetupTableBody())}
       </div>
     </div>
   );
@@ -188,6 +206,45 @@ const useSequenceTableViewModel = () => {
   const chainlinks: ChainlinkTO[] = useSelector(masterDataSelectors.chainLinks);
   const chainDecisions: ChainDecisionTO[] = useSelector(masterDataSelectors.chainDecisions);
   const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
+  const chainModles: ChainTO[] = useSelector(masterDataSelectors.chains);
+  const mode: Mode = useSelector(editSelectors.mode);
+
+  const [activeTab, setActiveTab] = useState<ActiveTab>(ActiveTab.sequence);
+
+  useEffect(() => {
+    let newActiveTab: ActiveTab | undefined = undefined;
+    switch (mode) {
+      case Mode.VIEW:
+        if (selectedChain) {
+          newActiveTab = ActiveTab.chain;
+        } else {
+          newActiveTab = ActiveTab.sequence;
+        }
+        break;
+      case Mode.EDIT_CHAIN:
+        newActiveTab = ActiveTab.chainModel;
+        break;
+      case Mode.EDIT_CHAIN_DECISION:
+      case Mode.EDIT_CHAIN_DECISION_CONDITION:
+        newActiveTab = ActiveTab.chaindecisions;
+        break;
+      case Mode.EDIT_SEQUENCE:
+        newActiveTab = ActiveTab.sequenceModels;
+        break;
+      case Mode.EDIT_SEQUENCE_DECISION:
+      case Mode.EDIT_SEQUENCE_DECISION_CONDITION:
+        newActiveTab = ActiveTab.decision;
+        break;
+      case Mode.EDIT_SEQUENCE_STEP:
+      case Mode.EDIT_SEQUENCE_STEP_ACTION:
+        newActiveTab = ActiveTab.step;
+        break;
+    }
+    if (newActiveTab) {
+      setActiveTab(newActiveTab);
+    }
+
+  }, [mode, selectedChain])
 
   const createCalcSequenceStepColumn = (step: CalculatedStep, index: number): JSX.Element => {
     let trClass: string = loopStepStartIndex && loopStepStartIndex <= index ? "carv2TrTerminalError" : "carv2Tr";
@@ -209,14 +266,14 @@ const useSequenceTableViewModel = () => {
       index === 0 && !modelStep
         ? ""
         : modelStep
-        ? getComponentNameById(modelStep.squenceStepTO.sourceComponentFk)
-        : "Source not found";
+          ? getComponentNameById(modelStep.squenceStepTO.sourceComponentFk)
+          : "Source not found";
     const target =
       index === 0 && !modelStep
         ? ""
         : modelStep
-        ? getComponentNameById(modelStep.squenceStepTO.targetComponentFk)
-        : "Target not found";
+          ? getComponentNameById(modelStep.squenceStepTO.targetComponentFk)
+          : "Target not found";
     const hasError = step.errors.length > 0 ? true : false;
 
     return (
@@ -239,10 +296,10 @@ const useSequenceTableViewModel = () => {
 
     return (
       <tr key={index} className={trClass}>
-        <td className="carv2Td">{index}</td>
         <td className="carv2Td">{name}</td>
         <td className="carv2Td">{source}</td>
         <td className="carv2Td">{target}</td>
+        <td className="carv2Td"><Carv2TableButton icon="wrench" onClick={() => dispatch(EditActions.setMode.editStep(step))} /></td>
       </tr>
     );
   };
@@ -252,6 +309,29 @@ const useSequenceTableViewModel = () => {
     return (
       <tr key={index} className={trClass}>
         <td className="carv2Td">{name}</td>
+        <td className="carv2Td">
+          <Carv2TableButton icon="wrench" onClick={() => dispatch(EditActions.setMode.editSequence(sequence.id))} />
+          <Carv2TableButton icon="hand pointer" onClick={() => {
+            dispatch(SequenceModelActions.setCurrentSequence(sequence.id))
+            dispatch(EditActions.setMode.view())
+          }} />
+        </td>
+      </tr>
+    );
+  };
+  const createChainModelColumn = (chain: ChainTO, index: number): JSX.Element => {
+    const name = chain.name;
+    let trClass = "carv2Tr";
+    return (
+      <tr key={index} className={trClass}>
+        <td className="carv2Td">{name}</td>
+        <td className="carv2Td">
+          <Carv2TableButton icon="wrench" onClick={() => dispatch(EditActions.setMode.editChain(chain))} />
+          <Carv2TableButton icon="hand pointer" onClick={() => {
+            dispatch(SequenceModelActions.setCurrentChain(chain))
+            dispatch(EditActions.setMode.view())
+          }} />
+        </td>
       </tr>
     );
   };
@@ -263,6 +343,7 @@ const useSequenceTableViewModel = () => {
       <tr key={index} className={trClass}>
         <td className="carv2Td">{index}</td>
         <td className="carv2Td">{name}</td>
+        <td className="carv2Td"><Carv2TableButton icon="wrench" onClick={() => dispatch(EditActions.setMode.editDecision(decision))} /></td>
       </tr>
     );
   };
@@ -295,6 +376,7 @@ const useSequenceTableViewModel = () => {
         <td className="carv2Td">{name}</td>
         <td className="carv2Td">{sequenceName}</td>
         <td className="carv2Td">{dataSetupName}</td>
+        <td className="carv2Td"><Carv2TableButton icon="wrench" onClick={() => dispatch(EditActions.setMode.editChainLink(link))} /></td>
       </tr>
     );
   };
@@ -305,6 +387,26 @@ const useSequenceTableViewModel = () => {
     return (
       <tr key={index} className={trClass}>
         <td className="carv2Td">{name}</td>
+        <td className="carv2Td">
+          <Carv2TableButton icon="wrench" onClick={() => dispatch(EditActions.setMode.editChainDecision(decision))} />
+        </td>
+      </tr>
+    );
+  };
+
+  const createDataSetupColumn = (dataSetup: DataSetupTO, index: number): JSX.Element => {
+    const name: string = dataSetup.name;
+    let trClass = "carv2Tr";
+    return (
+      <tr key={index} className={trClass}>
+        <td className="carv2Td">{name}</td>
+        <td className="carv2Td">
+          <Carv2TableButton icon="wrench" onClick={() => dispatch(EditActions.setMode.editDataSetup(dataSetup.id))} />
+          <Carv2TableButton icon="hand pointer" onClick={() => {
+            dispatch(SequenceModelActions.setCurrentDataSetup(dataSetup.id))
+            dispatch(EditActions.setMode.view())
+          }} />
+        </td>
       </tr>
     );
   };
@@ -337,6 +439,16 @@ const useSequenceTableViewModel = () => {
     let list: JSX.Element[] = [];
     if (sequences) {
       list = sequences.map((sequence, index) => createSequenceModelColumn(sequence, index));
+    }
+    const numberOfColumns = 1;
+    fillWithEmptyRows(list, createEmptyRow, numberOfColumns);
+    return list;
+  };
+
+  const getChainModelsTableBody = () => {
+    let list: JSX.Element[] = [];
+    if (sequences) {
+      list = chainModles.map((chain, index) => createChainModelColumn(chain, index));
     }
     const numberOfColumns = 1;
     fillWithEmptyRows(list, createEmptyRow, numberOfColumns);
@@ -390,6 +502,13 @@ const useSequenceTableViewModel = () => {
     fillWithEmptyRows(list, createEmptyRow, numberOfColumns);
     return list;
   };
+  const getDataSetupTableBody = () => {
+    let list: JSX.Element[] = [];
+    list = dataSetups.map((dataSetup, index) => createDataSetupColumn(dataSetup, index));
+    const numberOfColumns = 1;
+    fillWithEmptyRows(list, createEmptyRow, numberOfColumns);
+    return list;
+  }
 
   const createEmptyRow = (key: string, numberOfElements: number, className?: string): JSX.Element => {
     return (
@@ -422,10 +541,15 @@ const useSequenceTableViewModel = () => {
     getSequenceModelsTableBody,
     getChainDecisionTableBody,
     getChainLinkTableBody,
+    getChainModelsTableBody,
+    getDataSetupTableBody,
     showChainModelTab: !isNullOrUndefined(selectedChain),
     showSequenceModelTabs: !isNullOrUndefined(selectSequence),
     showCalcChainTab: !isNullOrUndefined(calcChain),
     showCalcSequenceTab: calcSteps.length > 0,
+    activeTab,
+    setActiveTab
+    ,
   };
 };
 function fillWithEmptyRows(

@@ -228,6 +228,16 @@
   color: var(--carv2-text-color) !important;
 }
 
+.carv2TableButton{
+  background-color: var(--carv2-background-color) !important;
+  transition: background-color 0.4s !important;
+}
+.carv2TableButton:hover{
+  background-color: var(--carv2-background-color-header) !important;
+  transition: background-color 0.4s !important;
+  cursor: pointer;
+}
+
 .pLeft1 {
   padding-left: 0.5em;
 }
@@ -790,11 +800,13 @@ table {
   cursor: pointer;
 }
 
-.tab .active {
-  background-color: var(--carv2-background-color-header) !important;
-  animation-duration: 6s;
-  animation-timing-function: ease-in-out;
-  animation-name: growWidth;
+.active {
+  background-color: var(--carv2-color-secondary) !important;
+  color: black !important;
+  transition: background-color var(--animation-time), color var(--animation-time);
+  /* animation-duration: 6s; */
+  /* animation-timing-function: ease-in-out; */
+  /* animation-name: growWidth; */
 }
 
 .carv2TrMarked {
