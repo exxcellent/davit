@@ -1,5 +1,5 @@
 /* eslint-disable no-case-declarations */
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { ArcherContainer, ArcherElement, Relation } from "react-archer";
 import { useSelector } from "react-redux";
 import { isNullOrUndefined } from "util";
@@ -27,6 +27,25 @@ export const SequenceModelController: FunctionComponent<SequenceModelControllerP
   const { nodeModelTree, calcSteps, lineColor, currentStep, nodeModelChainTree } = useFlowChartViewModel();
 
   const [showChain, setShowChain] = useState<boolean>(false);
+
+  const parentRef = useRef<HTMLDivElement>(null);
+
+  const [tableHeight, setTabelHeihgt] = useState<number>(0);
+
+  useEffect(() => {
+    const resizeListener = () => {
+      if (parentRef && parentRef.current) {
+        setTabelHeihgt(parentRef.current.offsetHeight - 50);
+      }
+    };
+
+    resizeListener();
+    window.addEventListener("resize", resizeListener);
+
+    return () => {
+      window.removeEventListener("resize", resizeListener);
+    };
+  }, [parentRef]);
 
   const buildChart = (node: NodeModel): JSX.Element => {
     const rel: Relation[] = [];
@@ -133,22 +152,22 @@ export const SequenceModelController: FunctionComponent<SequenceModelControllerP
   };
 
   return (
-    <div className={fullScreen ? "fullscreen" : "sequencModel"}>
+    <div className={fullScreen ? "fullscreen" : "sequencModel"} ref={parentRef}>
       <div>
-        <div>
-          <Carv2ButtonLabel
-            label="Chain"
-            onClick={() => {
-              setShowChain(true);
-            }}
-          />{" "}
-          <Carv2ButtonLabel
-            label="sequence"
-            onClick={() => {
-              setShowChain(false);
-            }}
-          />
-        </div>
+        <Carv2ButtonLabel
+          label="Chain"
+          onClick={() => {
+            setShowChain(true);
+          }}
+        />{" "}
+        <Carv2ButtonLabel
+          label="sequence"
+          onClick={() => {
+            setShowChain(false);
+          }}
+        />
+      </div>
+      <div className="flowChart" style={{ height: tableHeight }}>
         {!showChain && buildFlowChart()}
         {showChain && buildChainFlowChart()}
       </div>

@@ -97,10 +97,9 @@
 }
 
 .sequencModel {
-  min-height: 0;
   grid-area: seqModel;
-  border-style: solid;
-  border-width: 0 0 2px 0;
+  min-height: 0;
+  overflow: hidden;
   border-image: linear-gradient(
       to right,
       transparent,
@@ -111,8 +110,16 @@
       transparent
     )
     1 1 100%;
+  border-style: solid;
+  border-width: 0 0 2px 0;
+}
+
+.flowChart {
+  /* grid-area: seqModel; */
   overflow: auto;
   padding: 1em;
+  display: block;
+  width: 100%;
 }
 
 .sequenceTable {
@@ -228,11 +235,11 @@
   color: var(--carv2-text-color) !important;
 }
 
-.carv2TableButton{
+.carv2TableButton {
   background-color: var(--carv2-background-color) !important;
   transition: background-color 0.4s !important;
 }
-.carv2TableButton:hover{
+.carv2TableButton:hover {
   background-color: var(--carv2-background-color-header) !important;
   transition: background-color 0.4s !important;
   cursor: pointer;
