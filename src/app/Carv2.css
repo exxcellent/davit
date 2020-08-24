@@ -677,9 +677,12 @@ table {
   background-color: var(--carv2-data-table-row-odd-color);
 }
 
-.carv2Tr:hover {
+.clickable:hover {
   background-color: var(--carv2-data-table-row-odd-hover);
   transition: background-color 0.4s;
+}
+
+.clickable {
   cursor: pointer;
 }
 

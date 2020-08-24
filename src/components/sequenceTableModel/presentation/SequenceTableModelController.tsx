@@ -277,7 +277,7 @@ const useSequenceTableViewModel = () => {
     const hasError = step.errors.length > 0 ? true : false;
 
     return (
-      <tr key={index} className={trClass} onClick={() => handleSequenceTableClickEvent(index)} ref={myRef}>
+      <tr key={index} className={'clickable ' + trClass} onClick={() => handleSequenceTableClickEvent(index)} ref={myRef}>
         <td className="carv2Td">{index}</td>
         <td className="carv2Td">{name}</td>
         <td className="carv2Td">{source}</td>
@@ -356,7 +356,7 @@ const useSequenceTableViewModel = () => {
       trClass = "carv2TrMarked";
     }
     return (
-      <tr key={index} className={trClass} onClick={() => handleChainTableClickEvent(index)}>
+      <tr key={index} className={'clickable ' + trClass} onClick={() => handleChainTableClickEvent(index)}>
         <td className="carv2Td">{index}</td>
         <td className="carv2Td">{sequenceName}</td>
         <td className="carv2Td">{dataSetupName}</td>
