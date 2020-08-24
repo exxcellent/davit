@@ -1,3 +1,6 @@
+@import "Colors.css";
+@import "SemanticOverwrite.css";
+
 .carvGridContainer {
   display: grid;
   grid-template-columns: 4em 1fr 1fr;
@@ -231,21 +234,21 @@
 
 /* -------------------------------------------- Controllpanel -------------------------------------------- */
 
-.verticalTab{
-  writing-mode:tb-rl;
-  -webkit-transform:rotate(180deg);
-  -moz-transform:rotate(180deg);
+.verticalTab {
+  writing-mode: tb-rl;
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
   -o-transform: rotate(180deg);
-  -ms-transform:rotate(180deg);
+  -ms-transform: rotate(180deg);
   transform: rotate(180deg);
-  white-space:nowrap;
-  display:block;
-  bottom:0;
-  width:2em;
+  white-space: nowrap;
+  display: block;
+  bottom: 0;
+  width: 2em;
   height: 7.8em;
   background-color: var(--carv2-background-color-slidebar);
   color: white;
-  margin:0;
+  margin: 0;
   text-align: center;
   border-style: solid;
   border-width: 0 0 0 2px;
@@ -259,30 +262,30 @@
       transparent
     )
     0 100%;
-    /* animation-name: growWidth; */
-    animation-duration: var(--animation-time);
+  /* animation-name: growWidth; */
+  animation-duration: var(--animation-time);
 }
-.verticalTab:hover{
+.verticalTab:hover {
   cursor: pointer;
   background-color: black;
 }
 
-.verticalTablDummy{
+.verticalTablDummy {
   animation-name: shrinkWidth;
   animation-duration: var(--animation-time);
   border-image: linear-gradient(
-      to bottom,
-      transparent,
-      var(--carv2-color-primary),
-      var(--carv2-color-primary),
-      var(--carv2-color-primary),
-      var(--carv2-color-primary),
-      transparent
-    );
+    to bottom,
+    transparent,
+    var(--carv2-color-primary),
+    var(--carv2-color-primary),
+    var(--carv2-color-primary),
+    var(--carv2-color-primary),
+    transparent
+  );
   height: 7.8em;
 }
 
-@keyframes growWidth{
+@keyframes growWidth {
   0% {
     width: 0;
     color: transparent;
@@ -296,7 +299,7 @@
   }
 }
 
-@keyframes shrinkWidth{
+@keyframes shrinkWidth {
   0% {
     width: 2em;
     background-color: var(--carv2-background-color-slidebar);
@@ -509,7 +512,7 @@
     background-color: var(--carv2-background-color-header);
     box-shadow: 0 0 0 1px var(--carv2-color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
     color: var(--carv2-text-color);
-    height:100%;
+    height: 100%;
   }
 }
 
@@ -529,7 +532,7 @@
   border-top: 0.5px solid var(--carv2-text-color);
 }
 
-.appearAnimation{
+.appearAnimation {
   animation-duration: var(--animation-time);
   animation-name: grow;
   animation-timing-function: ease-in-out;
@@ -599,7 +602,6 @@
 tr {
   color: var(--carv2-text-color);
   padding-left: 1em;
-  
 }
 
 tbody {
@@ -640,7 +642,7 @@ table {
   animation-duration: 0.2s;
 }
 
-.carv2Tr:nth-child(odd){
+.carv2Tr:nth-child(odd) {
   background-color: var(--carv2-data-table-row-odd-color);
 }
 
@@ -675,7 +677,6 @@ table {
   /* height: 3em; */
   border-bottom: 1px solid black;
   height: 4.4em;
-
 }
 
 .tab-group {
@@ -690,7 +691,6 @@ table {
   animation-name: appearTabGroup;
   overflow: hidden;
   height: 4.4em;
-
 }
 
 .tab-aggregator {
@@ -709,7 +709,7 @@ table {
   justify-content: center;
   align-items: center;
   min-width: 7em;
-  border-right: 0.5px solid  rgba(255,250,250, 0.2);
+  border-right: 0.5px solid rgba(255, 250, 250, 0.2);
   /* border-top: 1px solid black; */
   /* background-color: var(--carv2-background-color-header); */
   background-color: rgba(0, 0, 0, 0.2);
@@ -739,7 +739,7 @@ table {
     color: var(--carv2-text-color);
     background-color: rgba(0, 0, 0, 0.2);
     height: 2.2em;
-    border-right: 0.5px solid  rgba(255,250,250, 0.2);
+    border-right: 0.5px solid rgba(255, 250, 250, 0.2);
   }
 }
 @keyframes appearTabGroup {
@@ -747,7 +747,7 @@ table {
     color: transparent;
     background-color: transparent;
     box-shadow: 0 0 0 0 transparent;
-    height:0;
+    height: 0;
   }
   5% {
     color: transparent;
@@ -759,11 +759,11 @@ table {
     color: var(--carv2-text-color);
     background-color: rgba(0, 0, 0, 0.1);
     box-shadow: 0 0 0 1px var(--carv2-color-border);
-    height:4.4em;
+    height: 4.4em;
   }
 }
 
-.tab:hover{
+.tab:hover {
   background-color: rgba(0, 0, 0, 0.4);
   cursor: pointer;
 }
@@ -791,216 +791,4 @@ table {
 .carv2TrTerminalIDLE {
   background-color: var(--carv2-color-exxcellent-blue);
   height: 2.5em;
-}
-
-/* -------------------------------------------- Colors -------------------------------------------- */
-:root {
-  --carv2-background-color: rgb(134, 134, 134);
-  /* --carv2-background-color: rgb(230, 230, 230); */
-  /* --carv2-background-color: rgb(24, 24, 24); */
-  --carv2-background-color-header: rgba(0, 0, 0, 0.5);
-  /* --carv2-background-color-header: rgb(23, 47, 48); */
-  --carv2-background-color-shadow: black;
-  --carv2-color-primary: #e0e1e2;
-  /* --carv2-color-secondary: #3bc97b; */
-  --carv2-color-secondary: #00cdf1;
-  --carv2-color-border: #d4d4d5;
-
-  --carv2-color-exxcellent-blue: #0060a9;
-  --carv2-color-exxcellent-yellow: #c5c800;
-  --carv2-color-exxcellent-gray: #666d71;
-  --carv2-color-exxcellent-purple: #a568a8;
-
-  --carv2-background-color-slidebar: rgba(0, 0, 0, 0.3);
-  --carv2-text-color: white;
-  /* --carv2-data-add-color: #6cbf8f; */
-  --carv2-data-add-color: #0fbd58;
-  --carv2-data-delete-color: #af0837;
-  --carv2-data-text-color: black;
-  
-  --carv2-data-table-row-color: #c8c8c8;
-  --carv2-data-table-row-odd-color: #bdbbbb;
-  --carv2-data-table-row-odd-hover: #a7a5a5;
-  --aspect-ratio: 2/1;
-  --animation-time: 0.6s;
-}
-
-/* -------------------------------------------- Over write -------------------------------------------- */
-
-.ui.attached:not(.message) + .ui.attached.segment:not(.top) {
-  background-color: var(--carv2-background-color-header);
-}
-
-.ui.attached.segment {
-  border: 1px solid black;
-}
-
-.ui.attached.inverted.menu {
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
-}
-
-.ui.inverted.orange.button,
-.ui.inverted.orange.buttons .button {
-  background-color: transparent;
-  box-shadow: 0 0 0 2px var(--carv2-color-secondary) inset !important;
-  color: var(--carv2-color-secondary);
-}
-
-.ui.inverted.orange.button:focus,
-.ui.inverted.orange.buttons .button:focus,
-.ui.inverted.orange.orange.button:hover,
-.ui.inverted.orange.orange.buttons .button:hover {
-  background-color: var(--carv2-color-secondary);
-  color: transparent !important;
-  box-shadow: 0 0 0 2px var(--carv2-color-secondary) inset, 0 0 0 0 rgba(34, 36, 38, 0.15) inset !important;
-}
-
-.ui.orange.label,
-.ui.orange.labels .label {
-  background-color: var(--carv2-color-secondary) !important;
-  border-color: var(--carv2-color-secondary) !important;
-  color: var(--carv2-text-color) !important;
-  text-align: center;
-  vertical-align: center !important;
-}
-
-.ui.buttons .button,
-.ui.button {
-  background-color: transparent;
-  box-shadow: 0 0 0 2px var(--carv2-color-secondary) inset, 0 0 0 0 rgba(34, 36, 38, 0.15) inset !important;
-}
-
-.ui.button:disabled,
-.ui.buttons .disabled.button {
-  opacity: 1 !important;
-  box-shadow: 0 0 0 2px var(--carv2-color-secondary) inset, 0 0 0 0 rgba(34, 36, 38, 0.15) inset !important;
-}
-
-.disabled.item {
-  opacity: 1 !important;
-}
-
-.ui.button:hover {
-  background-color: var(--carv2-color-secondary);
-  color: var(--carv2-text-color);
-  box-shadow: 0 0 0 2px var(--carv2-color-secondary) inset, 0 0 0 0 rgba(34, 36, 38, 0.15) inset !important;
-}
-
-.ui.inverted.orange.orange.button:hover {
-  color: var(--carv2-text-color) !important;
-}
-
-i.icon::before {
-  color: var(--carv2-color-primary);
-}
-
-i.icon.delete::before :hover {
-  color: red;
-}
-
-.ui.card > .content > .header,
-.ui.cards > .card > .content > .header {
-  color: white;
-}
-
-.extra {
-  min-height: 3em !important;
-}
-
-.ui.card,
-.ui.cards > .card {
-  background-color: var(--carv2-background-color-header);
-}
-
-.ui.table td.active,
-.ui.table tr.active {
-  background: var(--carv2-color-secondary) !important;
-  color: black !important;
-}
-
-.ui.toggle.checkbox input:focus:checked ~ .box::before,
-.ui.toggle.checkbox input:focus:checked ~ label::before {
-  background-color: var(--carv2-color-secondary) !important;
-}
-
-.ui.toggle.checkbox input:checked ~ .box::before,
-.ui.toggle.checkbox input:checked ~ label::before {
-  background-color: var(--carv2-color-secondary) !important;
-}
-
-.ui.checkbox input:checked ~ .box::after,
-.ui.checkbox input:checked ~ label::after {
-  color: var(--carv2-text-color) !important;
-}
-
-.ui.checkbox .box::before,
-.ui.checkbox label::before {
-  border: 2px solid var(--carv2-color-secondary) !important;
-}
-
-.ui.labeled.input > .label {
-  background-color: var(--carv2-color-secondary);
-  color: rgba(0, 0, 0, 0.8);
-}
-
-.ui.input > input,
-.ui.input.focus > input {
-  background-color: transparent !important;
-  color: var(--carv2-text-color) !important;
-  border: 2px solid var(--carv2-color-secondary) !important;
-}
-
-input::selection,
-textarea::selection {
-  background-color: var(--carv2-color-secondary) !important;
-}
-
-.ui.input {
-  background-color: transparent !important;
-  color: var(--carv2-text-color);
-}
-
-.ui.input.focus > input::placeholder,
-.ui.input > input:focus::placeholder {
-  background-color: transparent !important;
-  color: var(--carv2-text-color);
-}
-
-.ui.default.dropdown:not(.button) > .text,
-.ui.dropdown:not(.button) > .default.text {
-  color: rgba(250, 250, 250, 0.6);
-}
-
-.ui.selection.dropdown {
-  background-color: transparent;
-  border: solid 2px var(--carv2-color-secondary);
-  color: var(--carv2-text-color);
-}
-.ui.selection.dropdown:hover {
-  background-color: var(--carv2-color-secondary);
-  color: var(--carv2-text-color);
-  border: solid 2px var(--carv2-color-secondary);
-}
-.ui.selection.dropdown:focus {
-  border: solid 2px var(--carv2-color-secondary);
-  color: var(--carv2-color-secondary);
-}
-
-.ui.dropdown .menu > .item:hover,
-.ui.dropdown .menu .selected.item > item:hover {
-  background-color: var(--carv2-color-secondary);
-  color: var(--carv2-text-color);
-}
-
-.ui.dropdown .menu .selected.item,
-.ui.dropdown.selected {
-  background-color: var(--carv2-color-secondary);
-  opacity: 0.5;
-}
-
-.ui.selection.active.dropdown:hover,
-.ui.selection.active.dropdown:focus {
-  background-color: var(--carv2-color-secondary);
-  color: var(--carv2-text-color);
 }

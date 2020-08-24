@@ -1,0 +1,179 @@
+/* -------------------------------------------- Over write -------------------------------------------- */
+
+.ui.attached:not(.message) + .ui.attached.segment:not(.top) {
+  background-color: var(--carv2-background-color-header);
+}
+
+.ui.attached.segment {
+  border: 1px solid black;
+}
+
+.ui.attached.inverted.menu {
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+.ui.inverted.orange.button,
+.ui.inverted.orange.buttons .button {
+  background-color: transparent;
+  box-shadow: 0 0 0 2px var(--carv2-color-secondary) inset !important;
+  color: var(--carv2-color-secondary);
+}
+
+.ui.inverted.orange.button:focus,
+.ui.inverted.orange.buttons .button:focus,
+.ui.inverted.orange.orange.button:hover,
+.ui.inverted.orange.orange.buttons .button:hover {
+  background-color: var(--carv2-color-secondary);
+  color: transparent !important;
+  box-shadow: 0 0 0 2px var(--carv2-color-secondary) inset, 0 0 0 0 rgba(34, 36, 38, 0.15) inset !important;
+}
+
+.ui.orange.label,
+.ui.orange.labels .label {
+  background-color: var(--carv2-color-secondary) !important;
+  border-color: var(--carv2-color-secondary) !important;
+  color: var(--carv2-text-color) !important;
+  text-align: center;
+  vertical-align: center !important;
+}
+
+.ui.buttons .button,
+.ui.button {
+  background-color: transparent;
+  box-shadow: 0 0 0 2px var(--carv2-color-secondary) inset, 0 0 0 0 rgba(34, 36, 38, 0.15) inset !important;
+}
+
+.ui.button:disabled,
+.ui.buttons .disabled.button {
+  opacity: 1 !important;
+  box-shadow: 0 0 0 2px var(--carv2-color-secondary) inset, 0 0 0 0 rgba(34, 36, 38, 0.15) inset !important;
+}
+
+.disabled.item {
+  opacity: 1 !important;
+}
+
+.ui.button:hover {
+  background-color: var(--carv2-color-secondary);
+  color: var(--carv2-text-color);
+  box-shadow: 0 0 0 2px var(--carv2-color-secondary) inset, 0 0 0 0 rgba(34, 36, 38, 0.15) inset !important;
+}
+
+.ui.inverted.orange.orange.button:hover {
+  color: var(--carv2-text-color) !important;
+}
+
+i.icon::before {
+  color: var(--carv2-color-primary);
+}
+
+i.icon.delete::before :hover {
+  color: red;
+}
+
+.ui.card > .content > .header,
+.ui.cards > .card > .content > .header {
+  color: white;
+}
+
+.extra {
+  min-height: 3em !important;
+}
+
+.ui.card,
+.ui.cards > .card {
+  background-color: var(--carv2-background-color-header);
+}
+
+.ui.table td.active,
+.ui.table tr.active {
+  background: var(--carv2-color-secondary) !important;
+  color: black !important;
+}
+
+.ui.toggle.checkbox input:focus:checked ~ .box::before,
+.ui.toggle.checkbox input:focus:checked ~ label::before {
+  background-color: var(--carv2-color-secondary) !important;
+}
+
+.ui.toggle.checkbox input:checked ~ .box::before,
+.ui.toggle.checkbox input:checked ~ label::before {
+  background-color: var(--carv2-color-secondary) !important;
+}
+
+.ui.checkbox input:checked ~ .box::after,
+.ui.checkbox input:checked ~ label::after {
+  color: var(--carv2-text-color) !important;
+}
+
+.ui.checkbox .box::before,
+.ui.checkbox label::before {
+  border: 2px solid var(--carv2-color-secondary) !important;
+}
+
+.ui.labeled.input > .label {
+  background-color: var(--carv2-color-secondary);
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.ui.input > input,
+.ui.input.focus > input {
+  background-color: transparent !important;
+  color: var(--carv2-text-color) !important;
+  border: 2px solid var(--carv2-color-secondary) !important;
+}
+
+input::selection,
+textarea::selection {
+  background-color: var(--carv2-color-secondary) !important;
+}
+
+.ui.input {
+  background-color: transparent !important;
+  color: var(--carv2-text-color);
+}
+
+.ui.input.focus > input::placeholder,
+.ui.input > input:focus::placeholder {
+  background-color: transparent !important;
+  color: var(--carv2-text-color);
+}
+
+.ui.default.dropdown:not(.button) > .text,
+.ui.dropdown:not(.button) > .default.text {
+  color: rgba(250, 250, 250, 0.6);
+}
+
+.ui.selection.dropdown {
+  background-color: transparent;
+  border: solid 2px var(--carv2-color-secondary);
+  color: var(--carv2-text-color);
+}
+.ui.selection.dropdown:hover {
+  background-color: var(--carv2-color-secondary);
+  color: var(--carv2-text-color);
+  border: solid 2px var(--carv2-color-secondary);
+}
+.ui.selection.dropdown:focus {
+  border: solid 2px var(--carv2-color-secondary);
+  color: var(--carv2-color-secondary);
+}
+
+.ui.dropdown .menu > .item:hover,
+.ui.dropdown .menu .selected.item > item:hover {
+  background-color: var(--carv2-color-secondary);
+  color: var(--carv2-text-color);
+}
+
+.ui.dropdown .menu .selected.item,
+.ui.dropdown.selected {
+  background-color: var(--carv2-color-secondary);
+  opacity: 0.5;
+}
+
+.ui.selection.active.dropdown:hover,
+.ui.selection.active.dropdown:focus {
+  background-color: var(--carv2-color-secondary);
+  color: var(--carv2-text-color);
+}
