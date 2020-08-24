@@ -7,36 +7,33 @@ import { ControllPanelFileController } from "./fragments/file/ControllPanelFileC
 import { ControllPanelTabController } from "./fragments/tabs/ControllPanelTabController";
 import { ControllPanelSequenceOptions } from "./fragments/view/ControllPanelSequenceOptions";
 
-export interface ControllPanelProps { }
+export interface ControllPanelProps {}
 
 export const ControllPanelController: FunctionComponent<ControllPanelProps> = (props) => {
-  const { mode, onClickNavItem } = useControllPanelViewModel();
+  const { mode } = useControllPanelViewModel();
 
-  const getModesArray = (mode: string): string[] => {
-    return mode.split('_');
-  }
+  // const getModesArray = (mode: string): string[] => {
+  //   return mode.split("_");
+  // };
 
-  const getModesDivs = (mode: Mode, onClickNavItem: (mode: string) => void): React.ReactNode => {
-    let navDivs = getModesArray(mode).map(spliitedModeItem => {
-      return (
-        <div
-          onClick={() => onClickNavItem(spliitedModeItem)}
-          key={spliitedModeItem}
-          className='verticalTab'>
-          {spliitedModeItem}
-        </div>
-      );
-    });
-    while (navDivs.length < 5) {
-      navDivs.push(<div className="verticalTablDummy"></div>)
-    }
-    return navDivs;
-  }
+  // const getModesDivs = (mode: Mode, onClickNavItem: (mode: string) => void): React.ReactNode => {
+  //   let navDivs = getModesArray(mode).map((splitedModeItem) => {
+  //     return (
+  //       <div onClick={() => onClickNavItem(splitedModeItem)} key={splitedModeItem} className="verticalTab">
+  //         {splitedModeItem}
+  //       </div>
+  //     );
+  //   });
+  //   while (navDivs.length < 5) {
+  //     navDivs.push(<div className="verticalTablDummy"></div>);
+  //   }
+  //   return navDivs;
+  // };
 
   const useGetViewByMode = (mode: Mode) => {
     if (!isNullOrUndefined(mode)) {
       if (mode.includes("EDIT")) {
-        return <ControllPanelEditController />
+        return <ControllPanelEditController />;
       }
       if (mode.includes("VIEW")) {
         return <ControllPanelSequenceOptions hidden={!mode.includes("VIEW")} />;
@@ -50,17 +47,18 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (p
     }
   };
 
-  return <div className="controllerHeader">
-    <div style={{ display: 'flex', width: '100%', padding: '0' }}>
-      {/* {getModesDivs(mode, onClickNavItem)} */}
-      {/* <ControllPanelEditController />
+  return (
+    <div className="controllerHeader">
+      <div style={{ display: "flex", width: "100%", padding: "0" }}>
+        {/* {getModesDivs(mode, onClickNavItem)} */}
+        {/* <ControllPanelEditController />
       <ControllPanelSequenceOptions hidden={mode.includes("VIEW")} />
       <ControllPanelFileController hidden={!mode.includes("FILE")} />
       <ControllPanelTabController hidden={mode.includes("TAB")} /> */}
-      {useGetViewByMode(mode)}
+        {useGetViewByMode(mode)}
+      </div>
     </div>
-
-  </div>;
+  );
 };
 
 const useControllPanelViewModel = () => {
@@ -97,7 +95,7 @@ const useControllPanelViewModel = () => {
       default:
         break;
     }
-  }
+  };
 
   return { mode, onClickNavItem };
 };

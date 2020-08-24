@@ -101,13 +101,21 @@ const SequenceModelSlice = createSlice({
       }
     },
     setDataFilters: (state, action: PayloadAction<number[] | undefined>) => {
-      const newDataFilters: Filter[] = action.payload ? action.payload.map(id => { return { type: "DATA", id: id } }) : [];
-      state.activeFilter = [...state.activeFilter.filter(fil => fil.type === "COMPONENT"), ...newDataFilters];
+      const newDataFilters: Filter[] = action.payload
+        ? action.payload.map((id) => {
+            return { type: "DATA", id: id };
+          })
+        : [];
+      state.activeFilter = [...state.activeFilter.filter((fil) => fil.type === "COMPONENT"), ...newDataFilters];
       state.currentStepIndex = 0;
     },
     setComponentFilters: (state, action: PayloadAction<number[] | undefined>) => {
-      const newDataFilters: Filter[] = action.payload ? action.payload.map(id => { return { type: "COMPONENT", id: id } }) : [];
-      state.activeFilter = [...state.activeFilter.filter(fil => fil.type === "DATA"), ...newDataFilters];
+      const newDataFilters: Filter[] = action.payload
+        ? action.payload.map((id) => {
+            return { type: "COMPONENT", id: id };
+          })
+        : [];
+      state.activeFilter = [...state.activeFilter.filter((fil) => fil.type === "DATA"), ...newDataFilters];
       state.currentStepIndex = 0;
     },
     setCurrentStepIndex: (state, action: PayloadAction<number>) => {
@@ -327,7 +335,7 @@ export const sequenceModelSelectors = {
     const stepId: number | undefined = filteredSteps[state.sequenceModel.currentStepIndex]?.stepFk;
     return stepId
       ? state.sequenceModel.selectedSequenceModel?.sequenceStepCTOs.find((step) => step.squenceStepTO.id === stepId)
-        ?.actions || []
+          ?.actions || []
       : [];
   },
   selectCurrentStepIndex: (state: RootState): number => state.sequenceModel.currentStepIndex,
@@ -339,8 +347,8 @@ export const sequenceModelSelectors = {
     // this hack is because we cannot show more than arrow at the moment. This would calc all arrows if step index === 0. The length hack is because javascript doesnt accept if (false)
     if (arrows.length === -1000) {
       /* TODO: reactivate state.sequenceModel.currentStepIndex === 0)*/ stepFks = filteredSteps.map(
-      (step) => step.stepFk
-    );
+        (step) => step.stepFk
+      );
     } else {
       const stepFk: number | undefined = filteredSteps[state.sequenceModel.currentStepIndex]?.stepFk;
       if (stepFk) {
@@ -348,7 +356,7 @@ export const sequenceModelSelectors = {
       }
     }
     const allArrows: (Arrow | undefined)[] = stepFks.map((stepFk) =>
-      getArrowForStepFk(stepFk, state.sequenceModel.selectedSequenceModel?.sequenceStepCTOs || [], state)
+      getArrowForStepFk(stepFk, getCurrentSequenceModel(state.sequenceModel)?.sequenceStepCTOs || [], state)
     );
     allArrows.forEach((arrow) => {
       if (arrow) arrows.push(arrow);
@@ -398,10 +406,10 @@ export const SequenceModelActions = {
 function getFilteredSteps(state: RootState) {
   return state.edit.mode === Mode.VIEW
     ? filterSteps(
-      getCurrentCalcSequence(state.sequenceModel)?.steps || [],
-      state.sequenceModel.activeFilter,
-      getCurrentSequenceModel(state.sequenceModel)?.sequenceStepCTOs || []
-    )
+        getCurrentCalcSequence(state.sequenceModel)?.steps || [],
+        state.sequenceModel.activeFilter,
+        getCurrentSequenceModel(state.sequenceModel)?.sequenceStepCTOs || []
+      )
     : [];
 }
 
