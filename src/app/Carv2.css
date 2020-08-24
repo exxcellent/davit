@@ -625,7 +625,9 @@ tr {
 
 tbody {
   display: block;
-  height: 34vh;
+  /* height: 30vh; */
+  width: 100%;
+  /* height: 100%; */
   overflow: auto;
 }
 

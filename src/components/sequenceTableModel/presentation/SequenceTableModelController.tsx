@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, { createRef, FunctionComponent, useState } from "react";
+import React, { createRef, FunctionComponent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
@@ -24,7 +24,7 @@ interface SequenceTableModelControllerProps {
   fullScreen?: boolean;
 }
 
-interface CarvTableRow { }
+interface CarvTableRow {}
 
 export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (props) => {
   const { fullScreen } = props;
@@ -59,84 +59,115 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
       <table>
         <thead>
           <tr>
-            {headerValues.map((value, index) => { return (<th key={index}>{value}</th>) })}
+            {headerValues.map((value, index) => {
+              return <th key={index}>{value}</th>;
+            })}
           </tr>
         </thead>
-        <tbody>{body}</tbody>
+        <tbody style={{ height: tableHeight }}>{body}</tbody>
       </table>
-    )
-  }
+    );
+  };
 
-  const chainTableHead = ['INDEX', 'SEQUENCE', 'DATASETUP'];
-  const chaindecisionsTableHead = ['NAME'];
-  const chainlinkTableHead = ['NAME', 'SEQUENCE', 'DATASETUP'];
-  const sequenceStepTableHead = ['NAME', 'SENDER', 'RECEIVER'];
-  const seqeunceDcisionsTableHead = ['NAME'];
-  const calcSequenceTableHead = ['INDEX', 'NAME', 'SENDER', 'RECEIVER', 'ACTION-ERROR'];
-  const seqeunceModelTableHead = ['NAME'];
+  const chainTableHead = ["INDEX", "SEQUENCE", "DATASETUP"];
+  const chaindecisionsTableHead = ["NAME"];
+  const chainlinkTableHead = ["NAME", "SEQUENCE", "DATASETUP"];
+  const sequenceStepTableHead = ["NAME", "SENDER", "RECEIVER"];
+  const seqeunceDcisionsTableHead = ["NAME"];
+  const calcSequenceTableHead = ["INDEX", "NAME", "SENDER", "RECEIVER", "ACTION-ERROR"];
+  const seqeunceModelTableHead = ["NAME"];
 
   const getTabsKey = () => {
-    let key = showCalcChainTab ? 'chain' : '';
-    key += showSequenceModelTabs ? 'seqModel' : '';
-    key += showChainModelTab ? 'chainModel' : '';
-    key += showCalcSequenceTab ? 'seq' : '';
+    let key = showCalcChainTab ? "chain" : "";
+    key += showSequenceModelTabs ? "seqModel" : "";
+    key += showChainModelTab ? "chainModel" : "";
+    key += showCalcSequenceTab ? "seq" : "";
     return key;
-  }
+  };
+
+  const parentRef = useRef<HTMLDivElement>(null);
+
+  const [tableHeight, setTabelHeihgt] = useState<number>(0);
+
+  useEffect(() => {
+    const resizeListener = () => {
+      if (parentRef && parentRef.current) {
+        setTabelHeihgt(parentRef.current.offsetHeight - 120);
+      }
+    };
+
+    resizeListener();
+    window.addEventListener("resize", resizeListener);
+
+    return () => {
+      window.removeEventListener("resize", resizeListener);
+    };
+  }, [parentRef]);
 
   return (
-    <div className={fullScreen ? "" : "sequenceTable"}>
+    <div className={fullScreen ? "" : "sequenceTable"} ref={parentRef}>
       <div className="tableBorder">
         <div className="tabs" key={getTabsKey()}>
           {(showCalcChainTab || showCalcSequenceTab) && (
-            <TabGroupFragment label='Calculated'>
+            <TabGroupFragment label="Calculated">
               {showCalcChainTab && (
-                <TabFragment label='Chain' isActive={body === TableBody.chain} onClick={() => setBody(TableBody.chain)} />
+                <TabFragment
+                  label="Chain"
+                  isActive={body === TableBody.chain}
+                  onClick={() => setBody(TableBody.chain)}
+                />
               )}
               {showCalcSequenceTab && (
-                <TabFragment label='Sequence' isActive={body === TableBody.sequence} onClick={() => setBody(TableBody.sequence)} />
+                <TabFragment
+                  label="Sequence"
+                  isActive={body === TableBody.sequence}
+                  onClick={() => setBody(TableBody.sequence)}
+                />
               )}
             </TabGroupFragment>
           )}
           {showChainModelTab && (
-            <TabGroupFragment label='Chain Model'>
-              <TabFragment label='Decision' isActive={body === TableBody.chaindecisions} onClick={() => setBody(TableBody.chaindecisions)} />
-              <TabFragment label='Links' isActive={body === TableBody.chainlinks} onClick={() => setBody(TableBody.chainlinks)} />
+            <TabGroupFragment label="Chain Model">
+              <TabFragment
+                label="Decision"
+                isActive={body === TableBody.chaindecisions}
+                onClick={() => setBody(TableBody.chaindecisions)}
+              />
+              <TabFragment
+                label="Links"
+                isActive={body === TableBody.chainlinks}
+                onClick={() => setBody(TableBody.chainlinks)}
+              />
             </TabGroupFragment>
           )}
           {showSequenceModelTabs && (
-            <TabGroupFragment label='Sequence Model'>
-              <TabFragment label='Decision' isActive={body === TableBody.decision} onClick={() => setBody(TableBody.decision)} />
-              <TabFragment label='Steps' isActive={body === TableBody.step} onClick={() => setBody(TableBody.step)} />
+            <TabGroupFragment label="Sequence Model">
+              <TabFragment
+                label="Decision"
+                isActive={body === TableBody.decision}
+                onClick={() => setBody(TableBody.decision)}
+              />
+              <TabFragment label="Steps" isActive={body === TableBody.step} onClick={() => setBody(TableBody.step)} />
             </TabGroupFragment>
           )}
-          <TabGroupFragment label='Building bricks'>
-            <TabFragment label='Sequence Models' isActive={body === TableBody.sequenceModels} onClick={() => setBody(TableBody.sequenceModels)} />
+          <TabGroupFragment label="Building bricks">
+            <TabFragment
+              label="Sequence Models"
+              isActive={body === TableBody.sequenceModels}
+              onClick={() => setBody(TableBody.sequenceModels)}
+            />
           </TabGroupFragment>
         </div>
 
-        {body === TableBody.chain &&
-          createTable(chainTableHead, getChainTableBody())
-        }
-        {body === TableBody.chaindecisions && (
-          createTable(chaindecisionsTableHead, getChainDecisionTableBody())
-        )}
-        {body === TableBody.chainlinks && (
-          createTable(chainlinkTableHead, getChainLinkTableBody())
-        )}
-        {body === TableBody.step && (
-          createTable(sequenceStepTableHead, getStepTableBody())
-        )}
-        {body === TableBody.decision && (
-          createTable(seqeunceDcisionsTableHead, getDecisionTableBody())
-        )}
+        {body === TableBody.chain && createTable(chainTableHead, getChainTableBody())}
+        {body === TableBody.chaindecisions && createTable(chaindecisionsTableHead, getChainDecisionTableBody())}
+        {body === TableBody.chainlinks && createTable(chainlinkTableHead, getChainLinkTableBody())}
+        {body === TableBody.step && createTable(sequenceStepTableHead, getStepTableBody())}
+        {body === TableBody.decision && createTable(seqeunceDcisionsTableHead, getDecisionTableBody())}
 
-        {body === TableBody.sequence && (
-          createTable(calcSequenceTableHead, getCalcSequenceTableBody())
-        )}
+        {body === TableBody.sequence && createTable(calcSequenceTableHead, getCalcSequenceTableBody())}
 
-        {body === TableBody.sequenceModels && (
-          createTable(seqeunceModelTableHead, getSequenceModelsTableBody())
-        )}
+        {body === TableBody.sequenceModels && createTable(seqeunceModelTableHead, getSequenceModelsTableBody())}
       </div>
     </div>
   );
@@ -178,14 +209,14 @@ const useSequenceTableViewModel = () => {
       index === 0 && !modelStep
         ? ""
         : modelStep
-          ? getComponentNameById(modelStep.squenceStepTO.sourceComponentFk)
-          : "Source not found";
+        ? getComponentNameById(modelStep.squenceStepTO.sourceComponentFk)
+        : "Source not found";
     const target =
       index === 0 && !modelStep
         ? ""
         : modelStep
-          ? getComponentNameById(modelStep.squenceStepTO.targetComponentFk)
-          : "Target not found";
+        ? getComponentNameById(modelStep.squenceStepTO.targetComponentFk)
+        : "Target not found";
     const hasError = step.errors.length > 0 ? true : false;
 
     return (
@@ -363,7 +394,9 @@ const useSequenceTableViewModel = () => {
   const createEmptyRow = (key: string, numberOfElements: number, className?: string): JSX.Element => {
     return (
       <tr key={key} className={className}>
-        {new Array(numberOfElements).map((value, index) => { return (<td key={index} />); })}
+        {new Array(numberOfElements).map((value, index) => {
+          return <td key={index} />;
+        })}
       </tr>
     );
   };
@@ -395,7 +428,11 @@ const useSequenceTableViewModel = () => {
     showCalcSequenceTab: calcSteps.length > 0,
   };
 };
-function fillWithEmptyRows(list: JSX.Element[], createEmptyRow: (key: string, numberOfElements: number, className?: string | undefined) => JSX.Element, numberOfColumns: number) {
+function fillWithEmptyRows(
+  list: JSX.Element[],
+  createEmptyRow: (key: string, numberOfElements: number, className?: string | undefined) => JSX.Element,
+  numberOfColumns: number
+) {
   let key: number = list.length;
   while (list.length < 10) {
     list.push(createEmptyRow(key.toString(), numberOfColumns, "carv2Tr"));
