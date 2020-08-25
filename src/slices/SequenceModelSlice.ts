@@ -305,6 +305,7 @@ export const sequenceModelSelectors = {
   activeFilters: (state: RootState): Filter[] => state.sequenceModel.activeFilter,
   selectSequence: (state: RootState): SequenceCTO | null => getCurrentSequenceModel(state.sequenceModel),
   selectChain: (state: RootState): ChainTO | null => state.sequenceModel.selectedChain?.chain || null,
+  selectChainCTO: (state: RootState): ChainCTO | null => state.sequenceModel.selectedChain || null,
   selectCalcChain: (state: RootState): CalcChain | null => state.sequenceModel.calcChain || null,
   selectCalcSteps: (state: RootState): CalculatedStep[] => {
     if (state.edit.mode === Mode.VIEW) {

@@ -44,6 +44,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
     decId,
     chainId,
     setRoot,
+    editOrAddChainCondition,
   } = useControllPanelEditChainConditionViewModel();
 
   const decisionName = (
@@ -83,7 +84,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Condition
             </Button>
-            <Button icon="wrench" inverted color="orange" onClick={() => { }} />
+            <Button icon="wrench" inverted color="orange" onClick={editOrAddChainCondition} />
           </Button.Group>
         </OptionField>
       </div>
@@ -284,6 +285,12 @@ const useControllPanelEditChainConditionViewModel = () => {
     }
   };
 
+  const editOrAddChainCondition = () => {
+    if (decisionToEdit !== null) {
+      dispatch(EditActions.setMode.editChainCondition(decisionToEdit));
+    }
+  };
+
   return {
     label: "EDIT * " + (selectedChain?.name || "") + " * " + (decisionToEdit?.name || ""),
     name: decisionToEdit?.name,
@@ -304,5 +311,6 @@ const useControllPanelEditChainConditionViewModel = () => {
     key,
     decId: decisionToEdit?.id,
     chainId: decisionToEdit?.chainFk || -1,
+    editOrAddChainCondition,
   };
 };

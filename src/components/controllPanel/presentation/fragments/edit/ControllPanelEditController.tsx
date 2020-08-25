@@ -9,6 +9,7 @@ import { GroupTO } from "../../../../../dataAccess/access/to/GroupTO";
 import { EditActions, editSelectors, Mode } from "../../../../../slices/EditSlice";
 import { ControllPanelEditAction } from "./fragments/ControllPanelEditAction";
 import { ControllPanelEditChain } from "./fragments/ControllPanelEditChain";
+import { ControllPanelEditChainCondition } from "./fragments/ControllPanelEditChainCondition";
 import { ControllPanelEditChainDecision } from "./fragments/ControllPanelEditChainDecision";
 import { ControllPanelEditChainLink } from "./fragments/ControllPanelEditChainLink";
 import { ControllPanelEditComponent } from "./fragments/ControllPanelEditComponent";
@@ -24,7 +25,7 @@ import { ControllPanelEditRelation } from "./fragments/ControllPanelEditRelation
 import { ControllPanelEditSequence } from "./fragments/ControllPanelEditSequence";
 import { ControllPanelEditStep } from "./fragments/ControllPanelEditStep";
 
-export interface ControllPanelEditControllerProps { }
+export interface ControllPanelEditControllerProps {}
 
 export const ControllPanelEditController: FunctionComponent<ControllPanelEditControllerProps> = (props) => {
   const {
@@ -70,6 +71,8 @@ export const ControllPanelEditController: FunctionComponent<ControllPanelEditCon
         return <ControllPanelEditChainLink hidden={mode !== Mode.EDIT_CHAIN_LINK} />;
       case Mode.EDIT_CHAIN_DECISION:
         return <ControllPanelEditChainDecision hidden={mode !== Mode.EDIT_CHAIN_DECISION} />;
+      case Mode.EDIT_CHAIN_DECISION_CONDITION:
+        return <ControllPanelEditChainCondition hidden={mode !== Mode.EDIT_CHAIN_DECISION_CONDITION} />;
       default:
         return (
           <ControllPanelEditMenu
@@ -86,7 +89,7 @@ export const ControllPanelEditController: FunctionComponent<ControllPanelEditCon
     }
   };
 
-  return (getViewByMode(mode))
+  return getViewByMode(mode);
   // <div style={{ display: 'flex', width: '100%' }}>
   /*{ <ControllPanelEditMenu
     editOrAddComponent={editOrAddComponent}
