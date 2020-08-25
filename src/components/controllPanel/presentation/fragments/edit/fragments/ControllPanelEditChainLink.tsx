@@ -50,6 +50,7 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
     createNewChainLink,
     createGoToDecision,
     setRoot,
+    id,
   } = useControllPanelEditChainStepViewModel();
 
   const stepName = (
@@ -67,7 +68,7 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
   );
 
   return (
-    <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={saveChainLink}>
+    <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveChainLink}>
       <div className="controllPanelEditChild">{stepName}</div>
       <div className="optionFieldSpacer columnDivider">
         <OptionField>
@@ -290,5 +291,6 @@ const useControllPanelEditChainStepViewModel = () => {
     createNewChainLink,
     createGoToDecision,
     setRoot,
+    id: chainLinkToEdit?.id || -1
   };
 };

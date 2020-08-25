@@ -7,6 +7,7 @@ import { CalcSequence, SequenceService } from "./SequenceService";
 import { ComponentData } from "./viewDataTypes/ComponentData";
 
 export interface CalcChainLink {
+  name: string;
   chainLinkId: number;
   stepId: string;
   dataSetup: DataSetupCTO;
@@ -59,6 +60,7 @@ export const SequenceChainService = {
           calcSequenceChain.linkIds.push(stepId);
 
           calcSequenceChain.calcLinks.push({
+            name: link.chainLink.name,
             chainLinkId: link.chainLink.id,
             stepId: stepId,
             sequence: result,

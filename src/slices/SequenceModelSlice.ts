@@ -343,7 +343,7 @@ export const sequenceModelSelectors = {
     const filteredSteps = getFilteredSteps(state);
     const stepId: number | undefined = filteredSteps[state.sequenceModel.currentStepIndex]?.stepFk;
     return stepId
-      ? state.sequenceModel.selectedSequenceModel?.sequenceStepCTOs.find((step) => step.squenceStepTO.id === stepId)
+      ? getCurrentSequenceModel(state.sequenceModel)?.sequenceStepCTOs.find((step) => step.squenceStepTO.id === stepId)
         ?.actions || []
       : [];
   },

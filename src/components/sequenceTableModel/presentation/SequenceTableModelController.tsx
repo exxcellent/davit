@@ -73,7 +73,7 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
     );
   };
 
-  const chainTableHead = ["INDEX", "SEQUENCE", "DATASETUP"];
+  const chainTableHead = ["INDEX", "NAME", "SEQUENCE", "DATASETUP"];
   const chaindecisionsTableHead = ["NAME", "ACTIONS"];
   const chainlinkTableHead = ["NAME", "SEQUENCE", "DATASETUP", "ACTIONS"];
   const sequenceStepTableHead = ["NAME", "SENDER", "RECEIVER", "ACTIONS"];
@@ -349,6 +349,7 @@ const useSequenceTableViewModel = () => {
   };
 
   const createCalcLinkColumn = (link: CalcChainLink, index: number): JSX.Element => {
+    const name: string = link.name || "Link name not found!";
     const sequenceName: string = link.sequence.sequenceModel?.sequenceTO.name || "Sequence name not found!";
     const dataSetupName: string = link.dataSetup.dataSetup?.name || "Data setup name not found!";
     let trClass = "carv2Tr";
@@ -358,6 +359,7 @@ const useSequenceTableViewModel = () => {
     return (
       <tr key={index} className={'clickable ' + trClass} onClick={() => handleChainTableClickEvent(index)}>
         <td className="carv2Td">{index}</td>
+        <td className="carv2Td">{name}</td>
         <td className="carv2Td">{sequenceName}</td>
         <td className="carv2Td">{dataSetupName}</td>
       </tr>
