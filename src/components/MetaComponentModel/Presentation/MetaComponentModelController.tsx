@@ -233,6 +233,7 @@ const useViewModel = () => {
           (comp.parentId as { dataId: number; instanceId: number }).dataId === component.component.id
       ),
       zoomFactor: 1,
+      type: "COMPONENT",
     };
   };
 

@@ -30,10 +30,11 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
     createAnother,
     instances,
     editOrAddInstance,
+    id,
   } = useControllPanelEditDataViewModel();
 
   return (
-    <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={saveData}>
+    <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveData}>
       <OptionField label="Data - Name">
         <Carv2LabelTextfield
           label="Name:"
@@ -140,5 +141,6 @@ const useControllPanelEditDataViewModel = () => {
     createAnother,
     instances: dataToEdit?.data.inst ? dataToEdit.data.inst : [],
     editOrAddInstance,
+    id: dataToEdit?.data.id || -1
   };
 };

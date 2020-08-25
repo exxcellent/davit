@@ -238,6 +238,65 @@
   cursor: pointer;
 }
 
+.Carv2CardMainButton{
+  width: 1.2em;
+  height: 1.2em;
+  padding: 0;
+  margin: 0;
+  box-shadow: 0 0 0 1px var(--carv2-color-border);
+  border: 0.2em solid transparent;
+  color: var(--carv2-color-border);
+  border-radius: 0.2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+@keyframes growWidth{
+  0% {
+    width: 0;
+    color: transparent !important;
+    box-shadow: 0 0 0 1px transparent !important;
+    border-color: transparent !important;
+  }
+  100% {
+    width: 1.2em;
+    color: white !important;
+    box-shadow: 0 0 0 1px var(--carv2-color-border) !important;
+  }
+}
+
+.Carv2CardMainButton:hover{
+  background-color: var(--carv2-color-secondary);
+  transition: background-color 0.4s;
+  color: black;
+}
+
+.Carv2CardButton{
+  box-shadow: 0 0 0 1px var(--carv2-color-border);
+  animation-name: growWidth;
+  animation-duration: var(--animation-time);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 2px var(--carv2-color-secondary);
+  border-radius: 0.2em;
+  width: 2em;
+  height:2em;
+  margin:2px;
+}
+
+.activeButton{
+  background-color: var(--carv2-color-secondary); 
+}
+
+.Carv2CardButton:hover{
+  background-color: var(--carv2-color-secondary);
+  transition: background-color 0.4s;
+  color: black;
+}
+
 .pLeft1 {
   padding-left: 0.5em;
 }
@@ -515,7 +574,7 @@
 
 /* -------------------------------------------- Component -------------------------------------------- */
 
-.metaComponent {
+.card {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -527,6 +586,12 @@
   animation-duration: var(--animation-time);
   animation-name: grow;
   animation-timing-function: ease-in-out;
+  transition: width var(--animation-time), box-shadow var(--animation-time);
+}
+
+.activeFilter{
+  box-shadow: 0 0 0 3px var(--carv2-color-secondary);
+  transition: box-shadow var(--animation-time);
 }
 
 @keyframes grow {
@@ -545,11 +610,34 @@
   }
 }
 
-.metaComponentHeader {
+.cardHeader {
   font-size: 0.8sem;
   font-family: Lato, Helvetica Neue, Arial, Helvetica, sans-serif;
   text-align: center;
   padding: 0.5em;
+  display: flex;
+  transition: color var(--animation-time), height var(--animation-time) width var(--animation-time);
+  color: white;
+  height: 2.7em;
+}
+
+carhHeaderText{
+  color:var(--carv2-text-color);
+  height: 2.5em;
+  transition: color var(--animation-time), height var(--animation-time);
+}
+
+.carhHeaderTextInvisible{
+  color: transparent;
+  height:0.1px;
+}
+
+.cardHeaderButtons{
+  color: transparent;
+  transition: color var(--animation-time), height var(--animation-time);
+  padding: 0.2em;
+  width: 100%;
+  justify-content: end;
 }
 
 .viewFragment {

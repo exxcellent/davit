@@ -28,10 +28,11 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
     textInput,
     updateComponent,
     createAnother,
+    id,
   } = useControllPanelEditComponentViewModel();
 
   return (
-    <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={saveComponent} >
+    <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveComponent} >
       <div className="optionFieldSpacer" style={{ display: "flex" }}>
         <OptionField label="Component - Name">
           <Carv2LabelTextfield
@@ -137,5 +138,6 @@ const useControllPanelEditComponentViewModel = () => {
     compGroup: componentToEdit?.component.groupFks !== -1 ? componentToEdit?.component.groupFks : undefined,
     updateComponent,
     createAnother,
+    id: componentToEdit?.component.id || -1
   };
 };

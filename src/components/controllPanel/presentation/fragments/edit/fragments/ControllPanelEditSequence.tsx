@@ -35,6 +35,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
     createAnother,
     updateSequence,
     editOrAddDecision,
+    id,
   } = useControllPanelEditSequenceViewModel();
 
   const menuButtons = (
@@ -50,7 +51,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
   );
 
   return (
-    <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={saveSequence}>
+    <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveSequence}>
       <div className="controllPanelEditChild">
         <OptionField label="Sequence - name">
           <Carv2LabelTextfield
@@ -199,5 +200,6 @@ const useControllPanelEditSequenceViewModel = () => {
     createAnother,
     updateSequence,
     editOrAddDecision,
+    id: sequenceToEdit?.id || -1
   };
 };

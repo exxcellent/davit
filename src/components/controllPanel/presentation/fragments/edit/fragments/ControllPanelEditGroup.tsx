@@ -29,10 +29,11 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
     setGroupColor,
     createAnother,
     updateGroup,
+    id,
   } = useControllPanelEditGroupViewModel();
 
   return (
-    <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={saveGroup}>
+    <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveGroup}>
       <div className="controllPanelEditChild">
         <ColorDropDown onSelect={setGroupColor} placeholder={getGroupColor()} colors={["red", "blue", "green"]} />
       </div>
@@ -130,5 +131,6 @@ const useControllPanelEditGroupViewModel = () => {
     setGroupColor,
     createAnother,
     updateGroup,
+    id: groupToEdit?.id || -1,
   };
 };
