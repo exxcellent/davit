@@ -16,7 +16,8 @@ import { CalculatedStep } from "../../SequenceService";
 import { handleError } from "../../slices/GlobalSlice";
 import { sequenceModelSelectors } from "../../slices/SequenceModelSlice";
 import { Carv2Util } from "../../utils/Carv2Util";
-import { Carv2ButtonLabel } from "../common/fragments/buttons/Carv2Button";
+import { TabFragment } from "../sequenceTableModel/fragments/TabFragment";
+import { TabGroupFragment } from "../sequenceTableModel/fragments/TabGroupFragment";
 
 interface SequenceModelControllerProps {
   fullScreen?: boolean;
@@ -35,7 +36,7 @@ export const SequenceModelController: FunctionComponent<SequenceModelControllerP
   useEffect(() => {
     const resizeListener = () => {
       if (parentRef && parentRef.current) {
-        setTabelHeihgt(parentRef.current.offsetHeight - 50);
+        setTabelHeihgt(parentRef.current.offsetHeight);
       }
     };
 
@@ -153,19 +154,11 @@ export const SequenceModelController: FunctionComponent<SequenceModelControllerP
 
   return (
     <div className={fullScreen ? "fullscreen" : "sequencModel"} ref={parentRef}>
-      <div>
-        <Carv2ButtonLabel
-          label="Chain"
-          onClick={() => {
-            setShowChain(true);
-          }}
-        />{" "}
-        <Carv2ButtonLabel
-          label="sequence"
-          onClick={() => {
-            setShowChain(false);
-          }}
-        />
+      <div style={{ display: "flex", position: "absolute", zIndex: 1 }}>
+        <TabGroupFragment label="Mode" style={{ backgroundColor: "var(--carv2-background-color-header)" }}>
+          <TabFragment label="Chain" isActive={showChain} onClick={() => setShowChain(true)} />
+          <TabFragment label="Sequence" isActive={!showChain} onClick={() => setShowChain(false)} />
+        </TabGroupFragment>
       </div>
       <div className="flowChart" style={{ height: tableHeight }}>
         {!showChain && buildFlowChart()}
