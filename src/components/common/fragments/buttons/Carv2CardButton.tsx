@@ -5,11 +5,19 @@ interface Carv2CardButtonProps {
   onClick: () => void;
   disable?: boolean;
   icon?: SemanticICONS;
-  isActive?: boolean
+  isActive?: boolean;
 }
 
 export const Carv2CardButton: FunctionComponent<Carv2CardButtonProps> = (props) => {
   const { onClick, disable, icon, isActive } = props;
 
-  return <div onClick={onClick} className={"Carv2CardButton" + (isActive ? " activeButton" : "")} ><Icon size="small" name={icon} /></div>;
+  return (
+    <button
+      onClick={onClick}
+      className={"Carv2CardButton" + (isActive ? " activeButton" : "") + (disable ? " disabled" : "")}
+      disabled={disable}
+    >
+      <Icon size="small" name={icon} />
+    </button>
+  );
 };

@@ -9,5 +9,13 @@ interface Carv2CardMainButtonProps {
 export const Carv2CardMainButton: FunctionComponent<Carv2CardMainButtonProps> = (props) => {
   const { onClick, disable } = props;
 
-  return <div onClick={onClick} className="Carv2CardMainButton" ><Icon name='caret up' size='tiny' /></div>;
+  return (
+    <button
+      onClick={onClick}
+      className={disable !== undefined && disable === true ? "Carv2CardMainButton disabled" : "Carv2CardMainButton"}
+      disabled={disable}
+    >
+      <Icon name="caret up" size="tiny" />
+    </button>
+  );
 };
