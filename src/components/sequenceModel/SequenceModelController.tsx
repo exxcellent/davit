@@ -237,17 +237,11 @@ const useFlowChartViewModel = () => {
     };
     if (!isNullOrUndefined(chain)) {
       const rootStep: ChainlinkCTO | undefined = chain.links.find((link) => link.chainLink.root === true);
-      const rootCond: ChainDecisionTO | undefined = chain.decisions.find((cond) => cond.root === true);
-      if (!rootStep && !rootCond) {
-        handleError("No Root element found in Sequence!");
-      }
-      if (rootStep && !rootCond) {
+      if (rootStep) {
         root.type = GoToTypesChain.LINK;
         root.value = rootStep;
-      }
-      if (rootCond && !rootStep) {
-        root.type = GoToTypesChain.DEC;
-        root.value = rootCond;
+      } else {
+        handleError("No Root element found in Sequence!");
       }
     }
     return root;

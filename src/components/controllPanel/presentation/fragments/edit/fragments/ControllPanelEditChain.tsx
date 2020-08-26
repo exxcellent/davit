@@ -164,7 +164,6 @@ const useControllPanelEditChainViewModel = () => {
     if (decisionToEdit === undefined) {
       decisionToEdit = new ChainDecisionTO();
       decisionToEdit.chainFk = selectedChain?.id || -1;
-      decisionToEdit.root = isFirst;
     }
     dispatch(EditActions.setMode.editChainDecision(decisionToEdit));
   };

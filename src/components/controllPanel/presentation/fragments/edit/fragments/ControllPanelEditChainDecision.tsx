@@ -10,7 +10,7 @@ import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
+import { Carv2ButtonIcon } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ChainDecisionDropDown } from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
 import { ChainLinkDropDown } from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
@@ -36,14 +36,12 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
     elseGoTo,
     setGoToTypeStep,
     createGoToStep,
-    isRoot,
     key,
     deleteDecision,
     createGoToDecision,
     setGoToTypeDecision,
     decId,
     chainId,
-    setRoot,
     editOrAddChainCondition,
   } = useControllPanelEditChainConditionViewModel();
 
@@ -67,10 +65,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
         <Carv2ButtonIcon onClick={saveDecision} icon="reply" />
       </OptionField>
       <OptionField label="Sequence - Options">
-        <Carv2ButtonLabel onClick={setRoot} label={isRoot ? "Root" : "Set as Root"} disable={isRoot} />
-        <div>
-          <Carv2DeleteButton onClick={deleteDecision} />
-        </div>
+        <Carv2DeleteButton onClick={deleteDecision} />
       </OptionField>
     </div>
   );
@@ -278,13 +273,6 @@ const useControllPanelEditChainConditionViewModel = () => {
     }
   };
 
-  const setRoot = () => {
-    if (!isNullOrUndefined(decisionToEdit)) {
-      dispatch(EditActions.chain.setRoot(decisionToEdit.chainFk, decisionToEdit.id, true));
-      dispatch(EditActions.setMode.editChainDecision(EditActions.chainDecision.find(decisionToEdit.id)));
-    }
-  };
-
   const editOrAddChainCondition = () => {
     if (decisionToEdit !== null) {
       dispatch(EditActions.setMode.editChainCondition(decisionToEdit));
@@ -306,8 +294,6 @@ const useControllPanelEditChainConditionViewModel = () => {
     elseGoTo: currentElseGoTo,
     createGoToStep: createGoToLink,
     createGoToDecision,
-    setRoot,
-    isRoot: decisionToEdit?.root ? decisionToEdit.root : false,
     key,
     decId: decisionToEdit?.id,
     chainId: decisionToEdit?.chainFk || -1,

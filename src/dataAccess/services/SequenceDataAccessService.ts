@@ -117,10 +117,8 @@ export const SequenceDataAccessService = {
     let copySteps: ChainlinkTO[] = ChainLinkRepository.findAllForChain(chainId);
     // set root
     copyDecisions.forEach((decision) => {
-      decision.root = false;
       if (isDecision) {
         if (decision.id === id) {
-          decision.root = true;
           root = decision;
         }
       }
