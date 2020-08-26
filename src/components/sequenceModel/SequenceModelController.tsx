@@ -11,7 +11,6 @@ import { ChainDecisionTO } from "../../dataAccess/access/to/ChainDecisionTO";
 import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
 import { GoTo, GoToTypes, Terminal } from "../../dataAccess/access/types/GoToType";
 import { GoToChain, GoToTypesChain, TerminalChain } from "../../dataAccess/access/types/GoToTypeChain";
-import { CalcChain } from "../../SequenceChainService";
 import { CalculatedStep } from "../../SequenceService";
 import { handleError } from "../../slices/GlobalSlice";
 import { sequenceModelSelectors } from "../../slices/SequenceModelSlice";
@@ -203,7 +202,6 @@ const useFlowChartViewModel = () => {
   const terminalStep: Terminal | null = useSelector(sequenceModelSelectors.selectTerminalStep);
   const stepIds: string[] = useSelector(sequenceModelSelectors.selectCalcStepIds);
   const chain: ChainCTO | null = useSelector(sequenceModelSelectors.selectChainCTO);
-  const calcChain: CalcChain | null = useSelector(sequenceModelSelectors.selectCalcChain);
 
   const getRoot = (sequence: SequenceCTO | null): Node => {
     let root: Node = {
