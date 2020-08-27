@@ -65,11 +65,11 @@ export const ControllPanelEditChain: FunctionComponent<ControllPanelEditChainPro
         </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <OptionField label="Create / Edit | Chain - Sequence">
+        <OptionField label="Create / Edit | Chain - Link">
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddChainLink()} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
-              Sequence
+              Link
             </Button>
             <ChainLinkDropDownButton onSelect={(link) => editOrAddChainLink(link)} icon="wrench" chainId={id} />
           </Button.Group>

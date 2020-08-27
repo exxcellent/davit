@@ -23,37 +23,37 @@ interface ChainDecisionDropDownProps extends DropdownProps {
 
 export const ChainDecisionDropDownButton: FunctionComponent<ChainDecisionDropDownButtonProps> = (props) => {
   const { onSelect, icon, chainId, exclude } = props;
-  const { chainDecisions, decisionOptions, selectChainDecision } = useChainDecisionDropDownViewModel(chainId, exclude);
+  const { createDecisionOptions, selectChainDecision } = useChainDecisionDropDownViewModel(chainId, exclude);
 
   return (
     <Dropdown
-      options={decisionOptions()}
-      icon={chainDecisions ? (chainDecisions.length > 0 ? icon : "") : ""}
+      options={createDecisionOptions()}
+      icon={createDecisionOptions().length === 0 ? "" : icon}
       onChange={(event, data) => onSelect(selectChainDecision(Number(data.value)))}
       className="button icon"
       floating
       selectOnBlur={false}
       trigger={<React.Fragment />}
       scrolling
-      disabled={chainDecisions ? (chainDecisions.length > 0 ? false : true) : false}
+      disabled={createDecisionOptions().length === 0}
     />
   );
 };
 
 export const ChainDecisionDropDown: FunctionComponent<ChainDecisionDropDownProps> = (props) => {
   const { onSelect, placeholder, value, chainId, exclude } = props;
-  const { chainDecisions, decisionOptions, selectChainDecision } = useChainDecisionDropDownViewModel(chainId, exclude);
+  const { createDecisionOptions, selectChainDecision } = useChainDecisionDropDownViewModel(chainId, exclude);
 
   return (
     <Dropdown
-      options={decisionOptions()}
+      options={createDecisionOptions()}
       selection
       selectOnBlur={false}
       placeholder={placeholder || "Select link ..."}
       onChange={(event, data) => onSelect(selectChainDecision(Number(data.value)))}
       scrolling
       value={value === -1 ? undefined : value}
-      disabled={chainDecisions ? (chainDecisions.length > 0 ? false : true) : false}
+      disabled={createDecisionOptions().length === 0}
     />
   );
 };
@@ -69,7 +69,7 @@ const useChainDecisionDropDownViewModel = (chainId: number, exclude?: number) =>
     };
   };
 
-  const decisionOptions = (): DropdownItemProps[] => {
+  const createDecisionOptions = (): DropdownItemProps[] => {
     if (!isNullOrUndefined(chainDecisions)) {
       let copyDecision: ChainDecisionTO[] = Carv2Util.deepCopy(chainDecisions);
       copyDecision = copyDecision.filter((dec) => dec.chainFk === chainId);
@@ -88,5 +88,5 @@ const useChainDecisionDropDownViewModel = (chainId: number, exclude?: number) =>
     return undefined;
   };
 
-  return { decisionOptions, selectChainDecision, chainDecisions };
+  return { createDecisionOptions, selectChainDecision };
 };

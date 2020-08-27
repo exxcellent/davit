@@ -24,7 +24,7 @@ import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditChainLinkProps {
-  hidden: boolean
+  hidden: boolean;
 }
 
 export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChainLinkProps> = (props) => {
@@ -122,7 +122,7 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
         <OptionField label="Sequence - Options">
           <Carv2ButtonLabel onClick={setRoot} label={isRoot ? "Root" : "Set as Root"} disable={isRoot} />
           <div>
-            <Carv2DeleteButton onClick={deleteChainLink} />
+            <Carv2DeleteButton onClick={deleteChainLink} disable={isRoot} />
           </div>
         </OptionField>
       </div>
@@ -291,6 +291,6 @@ const useControllPanelEditChainStepViewModel = () => {
     createNewChainLink,
     createGoToDecision,
     setRoot,
-    id: chainLinkToEdit?.id || -1
+    id: chainLinkToEdit?.id || -1,
   };
 };

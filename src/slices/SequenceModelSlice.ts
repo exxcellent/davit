@@ -11,7 +11,7 @@ import { ChainTO } from "../dataAccess/access/to/ChainTO";
 import { Terminal } from "../dataAccess/access/types/GoToType";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
-import { CalcChain, SequenceChainService } from "../SequenceChainService";
+import { CalcChain, getRoot, SequenceChainService } from "../SequenceChainService";
 import { CalcSequence, CalculatedStep, SequenceService } from "../SequenceService";
 import { ComponentData } from "../viewDataTypes/ComponentData";
 import { Mode } from "./EditSlice";
@@ -192,7 +192,11 @@ export const getComponentDatas = (dataSetup: DataSetupCTO): ComponentData[] => {
 };
 
 const calcChainThunk = (): AppThunk => (dispatch, getState) => {
-  if (getState().edit.mode === Mode.VIEW && getState().sequenceModel.selectedChain !== null) {
+  if (
+    getState().edit.mode === Mode.VIEW &&
+    getState().sequenceModel.selectedChain !== null &&
+    getRoot(getState().sequenceModel.selectedChain || null)
+  ) {
     dispatch(
       SequenceModelSlice.actions.setCalcChain(
         SequenceChainService.calculateChain(getState().sequenceModel.selectedChain)
@@ -230,7 +234,7 @@ const setSelectedChainThunk = (chain: ChainTO): AppThunk => (dispatch, getState)
   } else {
     const chainCTO: ChainCTO = response.object;
     dispatch(SequenceModelSlice.actions.setSelectedChain(chainCTO));
-    if (chainCTO && mode === Mode.VIEW) {
+    if (chainCTO && mode === Mode.VIEW && getRoot(chainCTO)) {
       dispatch(SequenceModelSlice.actions.setCalcChain(SequenceChainService.calculateChain(chainCTO)));
     }
   }
