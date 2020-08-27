@@ -40,19 +40,23 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
 
   const menuButtons = (
     <div className="columnDivider controllPanelEditChild">
-      <OptionField label="Navigation">
-        <Carv2ButtonLabel onClick={createAnother} label="Create another" />
-        <Carv2ButtonIcon onClick={saveSequence} icon="reply" />
-      </OptionField>
-      <OptionField label="Sequence - Options">
-        <Carv2DeleteButton onClick={deleteSequence} />
-      </OptionField>
+      <div className="optionFieldSpacer">
+        <OptionField label="Navigation">
+          <Carv2ButtonLabel onClick={createAnother} label="Create another" />
+          <Carv2ButtonIcon onClick={saveSequence} icon="reply" />
+        </OptionField>
+      </div>
+      <div className="optionFieldSpacer">
+        <OptionField label="Sequence - Options">
+          <Carv2DeleteButton onClick={deleteSequence} />
+        </OptionField>
+      </div>
     </div>
   );
 
   return (
     <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveSequence}>
-      <div className="controllPanelEditChild">
+      <div className="optionFieldSpacer">
         <OptionField label="Sequence - name">
           <Carv2LabelTextfield
             label="Name:"
@@ -66,7 +70,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
           />
         </OptionField>
       </div>
-      <div className="columnDivider controllPanelEditChild">
+      <div className="columnDivider optionFieldSpacer">
         <OptionField label="Create / Edit | Sequence - Step">
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddSequenceStep()} />
@@ -77,7 +81,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
           </Button.Group>
         </OptionField>
       </div>
-      <div className="columnDivider controllPanelEditChild">
+      <div className="columnDivider optionFieldSpacer">
         <OptionField label="Create / Edit | Sequence - Decision">
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddDecision()} />
@@ -200,6 +204,6 @@ const useControllPanelEditSequenceViewModel = () => {
     createAnother,
     updateSequence,
     editOrAddDecision,
-    id: sequenceToEdit?.id || -1
+    id: sequenceToEdit?.id || -1,
   };
 };

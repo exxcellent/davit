@@ -47,49 +47,32 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
     decId,
   } = useControllPanelEditConditionViewModel();
 
-  const decisionName = (
-    <OptionField label="Decision - name">
-      <Carv2LabelTextfield
-        label="Name:"
-        placeholder="Decision name ..."
-        onChange={(event: any) => changeName(event.target.value)}
-        value={name}
-        autoFocus
-        ref={textInput}
-        onBlur={() => updateDecision()}
-        unvisible={hidden}
-      />
-    </OptionField>
-  );
-
-  const menuButtons = (
-    <div className="columnDivider controllPanelEditChild">
-      <OptionField label="Navigation">
-        <Carv2ButtonIcon onClick={saveDecision} icon="reply" />
-      </OptionField>
-      <OptionField label="Sequence - Options">
-        <Carv2ButtonLabel onClick={setRoot} label={isRoot ? "Root" : "Set as Root"} disable={isRoot} />
-        <div>
-          <Carv2DeleteButton onClick={deleteDecision} />
-        </div>
-      </OptionField>
-    </div>
-  );
-
   return (
     <ControllPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveDecision}>
       <div className="controllPanelEditChild">
-        {decisionName}
-        <OptionField label="Create / Edit Condition">
-          <Button.Group>
-            <Button id="buttonGroupLabel" disabled inverted color="orange">
-              Condition
-            </Button>
-            <Button icon="wrench" inverted color="orange" onClick={editOrAddCondition} />
-          </Button.Group>
-        </OptionField>
+        <div className="optionField">
+          <OptionField label="Decision - name">
+            <Carv2LabelTextfield
+              label="Name:"
+              placeholder="Decision name ..."
+              onChange={(event: any) => changeName(event.target.value)}
+              value={name}
+              autoFocus
+              ref={textInput}
+              onBlur={() => updateDecision()}
+              unvisible={hidden}
+            />
+          </OptionField>
+          <OptionField label="Create / Edit Condition">
+            <Button.Group>
+              <Button id="buttonGroupLabel" disabled inverted color="orange">
+                Condition
+              </Button>
+              <Button icon="wrench" inverted color="orange" onClick={editOrAddCondition} />
+            </Button.Group>
+          </OptionField>
+        </div>
       </div>
-
       <div className="columnDivider optionFieldSpacer">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <OptionField label="Type condition true">
@@ -145,7 +128,23 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
           )}
         </div>
       </div>
-      {menuButtons}
+      <div className="columnDivider controllPanelEditChild">
+        <div>
+          <OptionField label="Navigation">
+            <Carv2ButtonIcon onClick={saveDecision} icon="reply" />
+          </OptionField>
+        </div>
+        <div className="controllPanelEditChild">
+          <div>
+            <OptionField label="Sequence - Options">
+              <Carv2ButtonLabel onClick={setRoot} label={isRoot ? "Root" : "Set as Root"} disable={isRoot} />
+              <div>
+                <Carv2DeleteButton onClick={deleteDecision} />
+              </div>
+            </OptionField>
+          </div>
+        </div>
+      </div>
     </ControllPanelEditSub>
   );
 };

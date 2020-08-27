@@ -10,7 +10,7 @@ import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
+import { Carv2ButtonIcon } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ChainDecisionDropDown } from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
 import { ChainLinkDropDown } from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
@@ -36,59 +36,40 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
     elseGoTo,
     setGoToTypeStep,
     createGoToStep,
-    isRoot,
     key,
     deleteDecision,
     createGoToDecision,
     setGoToTypeDecision,
     decId,
     chainId,
-    setRoot,
     editOrAddChainCondition,
   } = useControllPanelEditChainConditionViewModel();
-
-  const decisionName = (
-    <OptionField label="Chain decision - name">
-      <Carv2LabelTextfield
-        label="Name:"
-        placeholder="Chain decision name ..."
-        onChange={(event: any) => changeName(event.target.value)}
-        value={name}
-        autoFocus
-        ref={textInput}
-        unvisible={hidden}
-      />
-    </OptionField>
-  );
-
-  const menuButtons = (
-    <div className="columnDivider controllPanelEditChild">
-      <OptionField label="Navigation">
-        <Carv2ButtonIcon onClick={saveDecision} icon="reply" />
-      </OptionField>
-      <OptionField label="Sequence - Options">
-        <Carv2ButtonLabel onClick={setRoot} label={isRoot ? "Root" : "Set as Root"} disable={isRoot} />
-        <div>
-          <Carv2DeleteButton onClick={deleteDecision} />
-        </div>
-      </OptionField>
-    </div>
-  );
 
   return (
     <ControllPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveDecision}>
       <div className="controllPanelEditChild">
-        {decisionName}
-        <OptionField label="Create / Edit Condition">
-          <Button.Group>
-            <Button id="buttonGroupLabel" disabled inverted color="orange">
-              Condition
-            </Button>
-            <Button icon="wrench" inverted color="orange" onClick={editOrAddChainCondition} />
-          </Button.Group>
-        </OptionField>
+        <div className="optionField">
+          <OptionField label="Chain decision - name">
+            <Carv2LabelTextfield
+              label="Name:"
+              placeholder="Chain decision name ..."
+              onChange={(event: any) => changeName(event.target.value)}
+              value={name}
+              autoFocus
+              ref={textInput}
+              unvisible={hidden}
+            />
+          </OptionField>
+          <OptionField label="Create / Edit Condition">
+            <Button.Group>
+              <Button id="buttonGroupLabel" disabled inverted color="orange">
+                Condition
+              </Button>
+              <Button icon="wrench" inverted color="orange" onClick={editOrAddChainCondition} />
+            </Button.Group>
+          </OptionField>
+        </div>
       </div>
-
       <div className="columnDivider optionFieldSpacer">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <OptionField label="Type condition true">
@@ -153,7 +134,18 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
           )}
         </div>
       </div>
-      {menuButtons}
+      <div className="columnDivider controllPanelEditChild">
+        <div className="optionFieldSpacer">
+          <OptionField label="Navigation">
+            <Carv2ButtonIcon onClick={saveDecision} icon="reply" />
+          </OptionField>
+        </div>
+        <div className="optionFieldSpacer">
+          <OptionField label="Sequence - Options">
+            <Carv2DeleteButton onClick={deleteDecision} />
+          </OptionField>
+        </div>
+      </div>
     </ControllPanelEditSub>
   );
 };
@@ -278,13 +270,6 @@ const useControllPanelEditChainConditionViewModel = () => {
     }
   };
 
-  const setRoot = () => {
-    if (!isNullOrUndefined(decisionToEdit)) {
-      dispatch(EditActions.chain.setRoot(decisionToEdit.chainFk, decisionToEdit.id, true));
-      dispatch(EditActions.setMode.editChainDecision(EditActions.chainDecision.find(decisionToEdit.id)));
-    }
-  };
-
   const editOrAddChainCondition = () => {
     if (decisionToEdit !== null) {
       dispatch(EditActions.setMode.editChainCondition(decisionToEdit));
@@ -306,8 +291,6 @@ const useControllPanelEditChainConditionViewModel = () => {
     elseGoTo: currentElseGoTo,
     createGoToStep: createGoToLink,
     createGoToDecision,
-    setRoot,
-    isRoot: decisionToEdit?.root ? decisionToEdit.root : false,
     key,
     decId: decisionToEdit?.id,
     chainId: decisionToEdit?.chainFk || -1,

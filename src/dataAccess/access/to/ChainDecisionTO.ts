@@ -9,8 +9,7 @@ export class ChainDecisionTO extends AbstractTO {
     public componentFk: number = -1,
     public dataFks: number[] = [],
     public ifGoTo: GoToChain = { type: GoToTypesChain.FIN },
-    public elseGoTo: GoToChain = { type: GoToTypesChain.ERROR },
-    public root: boolean = false
+    public elseGoTo: GoToChain = { type: GoToTypesChain.ERROR }
   ) {
     super();
   }

@@ -53,47 +53,6 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
     stepId,
   } = useControllPanelEditSequenceStepViewModel();
 
-  const actionDropdown = (
-    <OptionField label="Create / Edit | Step - Action">
-      <Button.Group>
-        <Button
-          icon="add"
-          inverted
-          color="orange"
-          onClick={() => {
-            editOrAddAction();
-            updateStep();
-          }}
-        />
-        <Button id="buttonGroupLabel" disabled inverted color="orange">
-          Action
-        </Button>
-        <ActionDropDown
-          onSelect={(action) => {
-            editOrAddAction(action);
-            updateStep();
-          }}
-          icon={"wrench"}
-        />
-      </Button.Group>
-    </OptionField>
-  );
-
-  const stepName = (
-    <OptionField label="Step - name">
-      <Carv2LabelTextfield
-        label="Name:"
-        placeholder="Step Name ..."
-        onChange={(event: any) => changeName(event.target.value)}
-        value={name}
-        autoFocus
-        ref={textInput}
-        onBlur={() => updateStep()}
-        unvisible={hidden}
-      />
-    </OptionField>
-  );
-
   const sourceTargetDropDowns = (
     <div className="optionFieldSpacer columnDivider">
       <OptionField>
@@ -119,31 +78,50 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
     </div>
   );
 
-  const menuButtons = (
-    <div className="columnDivider controllPanelEditChild">
-      <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <OptionField label="Navigation">
-          <Carv2ButtonIcon onClick={saveSequenceStep} icon="reply" />
-        </OptionField>
-      </div>
-      <OptionField label="Sequence - Options">
-        <Carv2ButtonLabel onClick={setRoot} label={isRoot ? "Root" : "Set as Root"} disable={isRoot} />
-        <div>
-          <Carv2DeleteButton onClick={deleteSequenceStep} />
-        </div>
-      </OptionField>
-    </div>
-  );
-
   return (
     <ControllPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveSequenceStep}>
       <div className="controllPanelEditChild">
-        {stepName}
-        {actionDropdown}
+        <div className="optionField">
+          <OptionField label="Step - name">
+            <Carv2LabelTextfield
+              label="Name:"
+              placeholder="Step Name ..."
+              onChange={(event: any) => changeName(event.target.value)}
+              value={name}
+              autoFocus
+              ref={textInput}
+              onBlur={() => updateStep()}
+              unvisible={hidden}
+            />
+          </OptionField>
+          <OptionField label="Create / Edit | Step - Action">
+            <Button.Group>
+              <Button
+                icon="add"
+                inverted
+                color="orange"
+                onClick={() => {
+                  editOrAddAction();
+                  updateStep();
+                }}
+              />
+              <Button id="buttonGroupLabel" disabled inverted color="orange">
+                Action
+              </Button>
+              <ActionDropDown
+                onSelect={(action) => {
+                  editOrAddAction(action);
+                  updateStep();
+                }}
+                icon={"wrench"}
+              />
+            </Button.Group>
+          </OptionField>
+        </div>
       </div>
       {sourceTargetDropDowns}
-      <div className="optionFieldSpacer columnDivider">
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div className="columnDivider controllPanelEditChild">
+        <div className="optionField">
           <OptionField label="Select type of the next element">
             <GoToOptionDropDown onSelect={handleType} value={goTo ? goTo.type : GoToTypes.ERROR} />
           </OptionField>
@@ -165,7 +143,23 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
           )}
         </div>
       </div>
-      {menuButtons}
+      <div className="columnDivider controllPanelEditChild">
+        <div>
+          <OptionField label="Navigation">
+            <Carv2ButtonIcon onClick={saveSequenceStep} icon="reply" />
+          </OptionField>
+        </div>
+        <div className="controllPanelEditChild">
+          <div>
+            <OptionField label="Sequence - Options">
+              <Carv2ButtonLabel onClick={setRoot} label={isRoot ? "Root" : "Set as Root"} disable={isRoot} />
+              <div>
+                <Carv2DeleteButton onClick={deleteSequenceStep} />
+              </div>
+            </OptionField>
+          </div>
+        </div>
+      </div>
     </ControllPanelEditSub>
   );
 };

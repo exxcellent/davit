@@ -14,6 +14,7 @@
   overflow: hidden;
   background-color: var(--carv2-background-color);
 }
+
 .componentPage {
   display: grid;
   grid-template-columns: 1fr;
@@ -63,16 +64,13 @@
   grid-area: compModel;
   border-style: solid;
   border-width: 0 2px 2px 0;
-  border-image: linear-gradient(
-      to bottom,
+  border-image: linear-gradient(to bottom,
       transparent,
       var(--carv2-color-primary),
       var(--carv2-color-primary),
       var(--carv2-color-primary),
       var(--carv2-color-primary),
-      transparent
-    )
-    0 100%;
+      transparent) 0 100%;
 }
 
 .dndWrapper {
@@ -85,32 +83,26 @@
   grid-area: dataModel;
   border-style: solid;
   border-width: 2px 0 0 0;
-  border-image: linear-gradient(
-      to right,
+  border-image: linear-gradient(to right,
       transparent,
       var(--carv2-color-primary),
       var(--carv2-color-primary),
       var(--carv2-color-primary),
       var(--carv2-color-primary),
-      transparent
-    )
-    1 1 100%;
+      transparent) 1 1 100%;
 }
 
 .sequencModel {
   grid-area: seqModel;
   min-height: 0;
   overflow: hidden;
-  border-image: linear-gradient(
-      to right,
+  border-image: linear-gradient(to right,
       transparent,
       var(--carv2-color-primary),
       var(--carv2-color-primary),
       var(--carv2-color-primary),
       var(--carv2-color-primary),
-      transparent
-    )
-    1 1 100%;
+      transparent) 1 1 100%;
   border-style: solid;
   border-width: 0 0 2px 0;
 }
@@ -128,16 +120,13 @@
   grid-area: seqTabel;
   border-style: solid;
   border-width: 0 0 0 2px;
-  border-image: linear-gradient(
-      to bottom,
+  border-image: linear-gradient(to bottom,
       transparent,
       var(--carv2-color-primary),
       var(--carv2-color-primary),
       var(--carv2-color-primary),
       var(--carv2-color-primary),
-      transparent
-    )
-    0 100%;
+      transparent) 0 100%;
   padding: 2px;
   overflow: hidden;
 }
@@ -170,6 +159,7 @@
   display: flex;
   justify-content: flex-start;
 }
+
 .controllPanelViewChild {
   margin: 10px;
 }
@@ -209,6 +199,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  padding: 1em;
 }
 
 /* -------------------------------------------- PATH -------------------------------------------- */
@@ -218,6 +209,7 @@
   stroke-width: 2px;
   fill: transparent;
 }
+
 .carvStrokeDasharray {
   stroke-dasharray: 0.5em;
   stroke-width: 3px;
@@ -280,13 +272,14 @@
   background-color: var(--carv2-background-color) !important;
   transition: background-color 0.4s !important;
 }
+
 .carv2TableButton:hover {
   background-color: var(--carv2-background-color-header) !important;
   transition: background-color 0.4s !important;
   cursor: pointer;
 }
 
-.Carv2CardMainButton{
+.Carv2CardMainButton {
   width: 1.2em;
   height: 1.2em;
   padding: 0;
@@ -298,16 +291,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  
+  background-color: transparent;
 }
 
-@keyframes growWidth{
+@keyframes growWidth {
   0% {
     width: 0;
     color: transparent !important;
     box-shadow: 0 0 0 1px transparent !important;
     border-color: transparent !important;
   }
+
   100% {
     width: 1.2em;
     color: white !important;
@@ -315,13 +309,21 @@
   }
 }
 
-.Carv2CardMainButton:hover{
+.Carv2CardMainButton:hover {
   background-color: var(--carv2-color-secondary);
   transition: background-color 0.4s;
   color: black;
+  cursor: pointer;
 }
 
-.Carv2CardButton{
+.disabled:hover {
+  background-color: transparent;
+  transition: background-color 0.4s;
+  color: black;
+  cursor: default;
+}
+
+.Carv2CardButton {
   box-shadow: 0 0 0 1px var(--carv2-color-border);
   animation-name: growWidth;
   animation-duration: var(--animation-time);
@@ -331,17 +333,17 @@
   box-shadow: 0 0 0 2px var(--carv2-color-secondary);
   border-radius: 0.2em;
   width: 2em;
-  height:2em;
-  margin:2px;
+  height: 2em;
+  margin: 2px;
   background-color: transparent;
-  color: white;
+  border: none;
 }
 
-.activeButton{
-  background-color: var(--carv2-color-secondary); 
+.activeButton {
+  background-color: var(--carv2-color-secondary);
 }
 
-.Carv2CardButton:hover{
+.Carv2CardButton:hover {
   background-color: var(--carv2-color-secondary);
   transition: background-color 0.4s;
   color: black;
@@ -390,16 +392,13 @@
   text-align: center;
   border-style: solid;
   border-width: 0 0 0 2px;
-  border-image: linear-gradient(
-      to bottom,
+  border-image: linear-gradient(to bottom,
       transparent,
       var(--carv2-color-primary),
       var(--carv2-color-primary),
       var(--carv2-color-primary),
       var(--carv2-color-primary),
-      transparent
-    )
-    0 100%;
+      transparent) 0 100%;
   /* animation-name: growWidth; */
   animation-duration: var(--animation-time);
 }
@@ -412,15 +411,13 @@
 .verticalTablDummy {
   animation-name: shrinkWidth;
   animation-duration: var(--animation-time);
-  border-image: linear-gradient(
-    to bottom,
-    transparent,
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    transparent
-  );
+  border-image: linear-gradient(to bottom,
+      transparent,
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      transparent);
   height: 7.8em;
 }
 
@@ -429,9 +426,11 @@
     width: 0;
     color: transparent;
   }
+
   80% {
     color: transparent;
   }
+
   100% {
     width: 2em;
     color: white;
@@ -444,6 +443,7 @@
     background-color: var(--carv2-background-color-slidebar);
     border-width: 0 0 0 2px;
   }
+
   100% {
     width: 0;
     background-color: transparent;
@@ -659,10 +659,10 @@
   animation-name: grow;
   animation-timing-function: ease-in-out;
   transition: width var(--animation-time), box-shadow var(--animation-time);
-  cursor: grabbing;
+  cursor: grab;
 }
 
-.activeFilter{
+.activeFilter {
   box-shadow: 0 0 0 3px var(--carv2-color-secondary);
   transition: box-shadow var(--animation-time);
 }
@@ -694,18 +694,18 @@
   height: 2.7em;
 }
 
-carhHeaderText{
-  color:var(--carv2-text-color);
+carhHeaderText {
+  color: var(--carv2-text-color);
   height: 2.5em;
   transition: color var(--animation-time), height var(--animation-time);
 }
 
-.carhHeaderTextInvisible{
+.carhHeaderTextInvisible {
   color: transparent;
-  height:0.1px;
+  height: 0.1px;
 }
 
-.cardHeaderButtons{
+.cardHeaderButtons {
   color: transparent;
   transition: color var(--animation-time), height var(--animation-time);
   padding: 0.2em;
@@ -737,6 +737,7 @@ carhHeaderText{
   background-color: var(--carv2-data-add-color) !important;
   color: var(--carv2-data-text-color) !important;
 }
+
 .carv2ComponentDataPERSISTENT {
   display: flex;
   justify-content: center;
@@ -746,6 +747,7 @@ carhHeaderText{
   background-color: var(--carv2-data-persistent-color) !important;
   color: var(--carv2-data-text-color) !important;
 }
+
 .carv2ComponentDataDELETED {
   display: flex;
   justify-content: center;
@@ -766,6 +768,7 @@ carhHeaderText{
   color: var(--carv2-text-color) !important;
   box-shadow: 6px 6px 10px var(--carv2-data-add-color) inset !important;
 }
+
 .carv2ComponentDataCHECK {
   display: flex;
   justify-content: center;
@@ -776,6 +779,7 @@ carhHeaderText{
   color: var(--carv2-text-color) !important;
   box-shadow: 6px 6px 10px var(--carv2-data-persistent-color) inset !important;
 }
+
 .carv2ComponentDataDELETE {
   display: flex;
   justify-content: center;
@@ -811,8 +815,10 @@ thead,
 tbody tr {
   display: table;
   width: 100%;
-  table-layout: fixed; /* even columns width , fix width of table too*/
+  table-layout: fixed;
+  /* even columns width , fix width of table too*/
 }
+
 thead {
   width: calc(100% - 1.2em);
   /*scrollbar is average 1em/16px width, remove it from thead width */
@@ -821,6 +827,7 @@ thead {
   animation-name: appearText;
   animation-duration: 0.2s;
 }
+
 table {
   width: 100%;
 }
@@ -851,6 +858,7 @@ table {
   0% {
     color: transparent;
   }
+
   100% {
     color: black;
   }
@@ -925,6 +933,7 @@ table {
     height: 0;
     border-right: 0.5px solid transparent;
   }
+
   10% {
     background-color: transparent;
     color: transparent;
@@ -938,6 +947,7 @@ table {
     border-right: 0.5px solid rgba(255, 250, 250, 0.2);
   }
 }
+
 @keyframes appearTabGroup {
   0% {
     color: transparent;
@@ -945,6 +955,7 @@ table {
     box-shadow: 0 0 0 0 transparent;
     height: 0;
   }
+
   5% {
     color: transparent;
     background-color: transparent;
@@ -981,6 +992,7 @@ table {
   background-color: var(--carv2-data-delete-color);
   height: 2.5em;
 }
+
 .carv2TrTerminalFIN {
   background-color: var(--carv2-data-add-color);
   height: 2.5em;

@@ -11,7 +11,7 @@ import { ChainTO } from "../dataAccess/access/to/ChainTO";
 import { Terminal } from "../dataAccess/access/types/GoToType";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
-import { CalcChain, SequenceChainService } from "../SequenceChainService";
+import { CalcChain, getRoot, SequenceChainService } from "../SequenceChainService";
 import { CalcSequence, CalculatedStep, SequenceService } from "../SequenceService";
 import { ComponentData } from "../viewDataTypes/ComponentData";
 import { Mode } from "./EditSlice";
@@ -105,7 +105,7 @@ const SequenceModelSlice = createSlice({
       state.currentStepIndex = 0;
     },
     removeDataFilter: (state, action: PayloadAction<number>) => {
-      state.activeFilter = state.activeFilter.filter(filt => !(filt.type === "DATA" && filt.id === action.payload));
+      state.activeFilter = state.activeFilter.filter((filt) => !(filt.type === "DATA" && filt.id === action.payload));
       state.currentStepIndex = 0;
     },
     addComponentFilters: (state, action: PayloadAction<number>) => {
@@ -113,7 +113,9 @@ const SequenceModelSlice = createSlice({
       state.currentStepIndex = 0;
     },
     removeComponentFilter: (state, action: PayloadAction<number>) => {
-      state.activeFilter = state.activeFilter.filter(filt => !(filt.type === "COMPONENT" && filt.id === action.payload));
+      state.activeFilter = state.activeFilter.filter(
+        (filt) => !(filt.type === "COMPONENT" && filt.id === action.payload)
+      );
       state.currentStepIndex = 0;
     },
     setCurrentStepIndex: (state, action: PayloadAction<number>) => {
@@ -190,7 +192,11 @@ export const getComponentDatas = (dataSetup: DataSetupCTO): ComponentData[] => {
 };
 
 const calcChainThunk = (): AppThunk => (dispatch, getState) => {
-  if (getState().edit.mode === Mode.VIEW && getState().sequenceModel.selectedChain !== null) {
+  if (
+    getState().edit.mode === Mode.VIEW &&
+    getState().sequenceModel.selectedChain !== null &&
+    getRoot(getState().sequenceModel.selectedChain || null)
+  ) {
     dispatch(
       SequenceModelSlice.actions.setCalcChain(
         SequenceChainService.calculateChain(getState().sequenceModel.selectedChain)
@@ -228,7 +234,7 @@ const setSelectedChainThunk = (chain: ChainTO): AppThunk => (dispatch, getState)
   } else {
     const chainCTO: ChainCTO = response.object;
     dispatch(SequenceModelSlice.actions.setSelectedChain(chainCTO));
-    if (chainCTO && mode === Mode.VIEW) {
+    if (chainCTO && mode === Mode.VIEW && getRoot(chainCTO)) {
       dispatch(SequenceModelSlice.actions.setCalcChain(SequenceChainService.calculateChain(chainCTO)));
     }
   }
@@ -344,7 +350,7 @@ export const sequenceModelSelectors = {
     const stepId: number | undefined = filteredSteps[state.sequenceModel.currentStepIndex]?.stepFk;
     return stepId
       ? getCurrentSequenceModel(state.sequenceModel)?.sequenceStepCTOs.find((step) => step.squenceStepTO.id === stepId)
-        ?.actions || []
+          ?.actions || []
       : [];
   },
   selectCurrentStepIndex: (state: RootState): number => state.sequenceModel.currentStepIndex,
@@ -356,8 +362,8 @@ export const sequenceModelSelectors = {
     // this hack is because we cannot show more than arrow at the moment. This would calc all arrows if step index === 0. The length hack is because javascript doesnt accept if (false)
     if (arrows.length === -1000) {
       /* TODO: reactivate state.sequenceModel.currentStepIndex === 0)*/ stepFks = filteredSteps.map(
-      (step) => step.stepFk
-    );
+        (step) => step.stepFk
+      );
     } else {
       const stepFk: number | undefined = filteredSteps[state.sequenceModel.currentStepIndex]?.stepFk;
       if (stepFk) {
@@ -418,10 +424,10 @@ export const SequenceModelActions = {
 function getFilteredSteps(state: RootState) {
   return state.edit.mode === Mode.VIEW
     ? filterSteps(
-      getCurrentCalcSequence(state.sequenceModel)?.steps || [],
-      state.sequenceModel.activeFilter,
-      getCurrentSequenceModel(state.sequenceModel)?.sequenceStepCTOs || []
-    )
+        getCurrentCalcSequence(state.sequenceModel)?.steps || [],
+        state.sequenceModel.activeFilter,
+        getCurrentSequenceModel(state.sequenceModel)?.sequenceStepCTOs || []
+      )
     : [];
 }
 

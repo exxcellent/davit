@@ -1,3 +1,4 @@
+import { isNullOrUndefined } from "util";
 import { ChainCTO } from "./dataAccess/access/cto/ChainCTO";
 import { ChainlinkCTO } from "./dataAccess/access/cto/ChainlinkCTO";
 import { DataSetupCTO } from "./dataAccess/access/cto/DataSetupCTO";
@@ -34,61 +35,63 @@ export const SequenceChainService = {
     let componenentDatas: ComponentData[] = [];
 
     if (sequenceChain) {
-      const root: ChainlinkCTO = getRoot(sequenceChain);
+      const root: ChainlinkCTO | null = getRoot(sequenceChain);
 
-      let step: ChainlinkCTO | ChainDecisionTO | TerminalChain = root;
-      let type = getType(step);
-      let stepId: string = "";
+      if (root) {
+        let step: ChainlinkCTO | ChainDecisionTO | TerminalChain = root;
+        let type = getType(step);
+        let stepId: string = "";
 
-      while (!isLooping(loopStartingStep) && (type === GoToTypesChain.LINK || type === GoToTypesChain.DEC)) {
-        if (type === GoToTypesChain.LINK) {
-          const link: ChainlinkCTO = step as ChainlinkCTO;
-          const mergedComponentDatas: MergedComponentDatas = mergeComponentDatas(componenentDatas, link.dataSetup);
+        while (!isLooping(loopStartingStep) && (type === GoToTypesChain.LINK || type === GoToTypesChain.DEC)) {
+          if (type === GoToTypesChain.LINK) {
+            const link: ChainlinkCTO = step as ChainlinkCTO;
+            const mergedComponentDatas: MergedComponentDatas = mergeComponentDatas(componenentDatas, link.dataSetup);
 
-          loopStartingStep = checkForLoop(calcSequenceChain, link, mergedComponentDatas);
+            loopStartingStep = checkForLoop(calcSequenceChain, link, mergedComponentDatas);
 
-          const result: CalcSequence = SequenceService.calculateSequence(
-            link.sequence,
-            mergedComponentDatas.componentDatas
-          );
+            const result: CalcSequence = SequenceService.calculateSequence(
+              link.sequence,
+              mergedComponentDatas.componentDatas
+            );
 
-          componenentDatas = result.steps.length > 0 ? result.steps[result.steps.length - 1].componentDatas : [];
+            componenentDatas = result.steps.length > 0 ? result.steps[result.steps.length - 1].componentDatas : [];
 
-          // STEP ID
-          const newLinkId = "_LINK_" + link.chainLink.id;
-          stepId = stepId === "" ? "root" : stepId + newLinkId;
-          calcSequenceChain.linkIds.push(stepId);
+            // STEP ID
+            const newLinkId = "_LINK_" + link.chainLink.id;
+            stepId = stepId === "" ? "root" : stepId + newLinkId;
+            calcSequenceChain.linkIds.push(stepId);
 
-          calcSequenceChain.calcLinks.push({
-            name: link.chainLink.name,
-            chainLinkId: link.chainLink.id,
-            stepId: stepId,
-            sequence: result,
-            dataSetup: link.dataSetup,
-            errors: mergedComponentDatas.errors,
-          });
+            calcSequenceChain.calcLinks.push({
+              name: link.chainLink.name,
+              chainLinkId: link.chainLink.id,
+              stepId: stepId,
+              sequence: result,
+              dataSetup: link.dataSetup,
+              errors: mergedComponentDatas.errors,
+            });
 
-          if (!isLooping(loopStartingStep)) {
-            // set next object.
-            step = getNext((step as ChainlinkCTO).chainLink.goto, sequenceChain);
+            if (!isLooping(loopStartingStep)) {
+              // set next object.
+              step = getNext((step as ChainlinkCTO).chainLink.goto, sequenceChain);
+              type = getType(step);
+            }
+          }
+
+          if (type === GoToTypesChain.DEC) {
+            const decision: ChainDecisionTO = step as ChainDecisionTO;
+
+            const goTo: GoToChain = executeDecisionCheck(decision, componenentDatas);
+            step = getNext(goTo, sequenceChain);
             type = getType(step);
+
+            const newCondID = "_COND_" + decision.id;
+            stepId = stepId === "" ? "root" : stepId + newCondID;
           }
         }
-
-        if (type === GoToTypesChain.DEC) {
-          const decision: ChainDecisionTO = step as ChainDecisionTO;
-
-          const goTo: GoToChain = executeDecisionCheck(decision, componenentDatas);
-          step = getNext(goTo, sequenceChain);
-          type = getType(step);
-
-          const newCondID = "_COND_" + decision.id;
-          stepId = stepId === "" ? "root" : stepId + newCondID;
+        if (!isLooping(loopStartingStep)) {
+          calcSequenceChain.terminal = step as TerminalChain;
+          calcSequenceChain.linkIds.push(stepId + "_" + (step as TerminalChain).type);
         }
-      }
-      if (!isLooping(loopStartingStep)) {
-        calcSequenceChain.terminal = step as TerminalChain;
-        calcSequenceChain.linkIds.push(stepId + "_" + (step as TerminalChain).type);
       }
     }
     return { ...calcSequenceChain, loopStartingIndex: isLooping(loopStartingStep) ? loopStartingStep : undefined };
@@ -117,10 +120,10 @@ const getDecisionFromChain = (id: number, chain: ChainCTO): ChainDecisionTO | un
   return chain.decisions.find((decision) => decision.id === id);
 };
 
-const getRoot = (chain: ChainCTO): ChainlinkCTO => {
-  const rootLink: ChainlinkCTO | undefined = chain.links.find((link) => link.chainLink.root === true);
-  if (!rootLink) {
-    throw Error("No Root found in Chain!");
+export const getRoot = (chain: ChainCTO | null): ChainlinkCTO | null => {
+  let rootLink: ChainlinkCTO | null = null;
+  if (!isNullOrUndefined(chain)) {
+    rootLink = chain.links.find((link) => link.chainLink.root === true) || null;
   }
   return rootLink;
 };

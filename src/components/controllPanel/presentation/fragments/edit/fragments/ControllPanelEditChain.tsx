@@ -37,21 +37,9 @@ export const ControllPanelEditChain: FunctionComponent<ControllPanelEditChainPro
     editOrAddChainLink,
   } = useControllPanelEditChainViewModel();
 
-  const menuButtons = (
-    <div className="columnDivider controllPanelEditChild">
-      <OptionField label="Navigation">
-        <Carv2ButtonLabel onClick={createAnother} label="Create another" />
-        <Carv2ButtonIcon onClick={saveChain} icon="reply" />
-      </OptionField>
-      <OptionField label="Sequence - Options">
-        <Carv2DeleteButton onClick={deleteChain} />
-      </OptionField>
-    </div>
-  );
-
   return (
     <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={saveChain}>
-      <div className="controllPanelEditChild">
+      <div className="optionFieldSpacer">
         <OptionField label="Chain - name">
           <Carv2LabelTextfield
             label="Name:"
@@ -64,18 +52,18 @@ export const ControllPanelEditChain: FunctionComponent<ControllPanelEditChainPro
           />
         </OptionField>
       </div>
-      <div className="columnDivider controllPanelEditChild">
-        <OptionField label="Create / Edit | Chain - Sequence">
+      <div className="columnDivider optionFieldSpacer">
+        <OptionField label="Create / Edit | Chain - Link">
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddChainLink()} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
-              Sequence
+              Link
             </Button>
             <ChainLinkDropDownButton onSelect={(link) => editOrAddChainLink(link)} icon="wrench" chainId={id} />
           </Button.Group>
         </OptionField>
       </div>
-      <div className="columnDivider controllPanelEditChild">
+      <div className="columnDivider optionFieldSpacer">
         <OptionField label="Create / Edit | Chain - Decision">
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddDecision()} />
@@ -86,7 +74,21 @@ export const ControllPanelEditChain: FunctionComponent<ControllPanelEditChainPro
           </Button.Group>
         </OptionField>
       </div>
-      {menuButtons}
+      <div className="columnDivider controllPanelEditChild">
+        <div>
+          <OptionField label="Navigation">
+            <Carv2ButtonLabel onClick={createAnother} label="Create another" />
+            <Carv2ButtonIcon onClick={saveChain} icon="reply" />
+          </OptionField>
+        </div>
+        <div className="optionFieldSpacer">
+          <div>
+            <OptionField label="Sequence - Options">
+              <Carv2DeleteButton onClick={deleteChain} />
+            </OptionField>
+          </div>
+        </div>
+      </div>
     </ControllPanelEditSub>
   );
 };
@@ -164,7 +166,6 @@ const useControllPanelEditChainViewModel = () => {
     if (decisionToEdit === undefined) {
       decisionToEdit = new ChainDecisionTO();
       decisionToEdit.chainFk = selectedChain?.id || -1;
-      decisionToEdit.root = isFirst;
     }
     dispatch(EditActions.setMode.editChainDecision(decisionToEdit));
   };

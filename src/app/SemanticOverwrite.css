@@ -1,6 +1,6 @@
 /* -------------------------------------------- Over write -------------------------------------------- */
 
-.ui.attached:not(.message) + .ui.attached.segment:not(.top) {
+.ui.attached:not(.message)+.ui.attached.segment:not(.top) {
   background-color: var(--carv2-background-color-header);
 }
 
@@ -72,8 +72,8 @@ i.icon.delete::before :hover {
   color: red;
 }
 
-.ui.card > .content > .header,
-.ui.cards > .card > .content > .header {
+.ui.card>.content>.header,
+.ui.cards>.card>.content>.header {
   color: white;
 }
 
@@ -82,7 +82,7 @@ i.icon.delete::before :hover {
 }
 
 .ui.card,
-.ui.cards > .card {
+.ui.cards>.card {
   background-color: var(--carv2-background-color-header);
 }
 
@@ -92,18 +92,18 @@ i.icon.delete::before :hover {
   color: black !important;
 }
 
-.ui.toggle.checkbox input:focus:checked ~ .box::before,
-.ui.toggle.checkbox input:focus:checked ~ label::before {
+.ui.toggle.checkbox input:focus:checked~.box::before,
+.ui.toggle.checkbox input:focus:checked~label::before {
   background-color: var(--carv2-color-secondary) !important;
 }
 
-.ui.toggle.checkbox input:checked ~ .box::before,
-.ui.toggle.checkbox input:checked ~ label::before {
+.ui.toggle.checkbox input:checked~.box::before,
+.ui.toggle.checkbox input:checked~label::before {
   background-color: var(--carv2-color-secondary) !important;
 }
 
-.ui.checkbox input:checked ~ .box::after,
-.ui.checkbox input:checked ~ label::after {
+.ui.checkbox input:checked~.box::after,
+.ui.checkbox input:checked~label::after {
   color: var(--carv2-text-color) !important;
 }
 
@@ -112,13 +112,13 @@ i.icon.delete::before :hover {
   border: 2px solid var(--carv2-color-secondary) !important;
 }
 
-.ui.labeled.input > .label {
+.ui.labeled.input>.label {
   background-color: var(--carv2-color-secondary);
   color: rgba(0, 0, 0, 0.8);
 }
 
-.ui.input > input,
-.ui.input.focus > input {
+.ui.input>input,
+.ui.input.focus>input {
   background-color: transparent !important;
   color: var(--carv2-text-color) !important;
   border: 2px solid var(--carv2-color-secondary) !important;
@@ -134,14 +134,14 @@ textarea::selection {
   color: var(--carv2-text-color);
 }
 
-.ui.input.focus > input::placeholder,
-.ui.input > input:focus::placeholder {
+.ui.input.focus>input::placeholder,
+.ui.input>input:focus::placeholder {
   background-color: transparent !important;
   color: var(--carv2-text-color);
 }
 
-.ui.default.dropdown:not(.button) > .text,
-.ui.dropdown:not(.button) > .default.text {
+.ui.default.dropdown:not(.button)>.text,
+.ui.dropdown:not(.button)>.default.text {
   color: rgba(250, 250, 250, 0.6);
 }
 
@@ -150,18 +150,20 @@ textarea::selection {
   border: solid 2px var(--carv2-color-secondary);
   color: var(--carv2-text-color);
 }
+
 .ui.selection.dropdown:hover {
   background-color: var(--carv2-color-secondary);
   color: var(--carv2-text-color);
   border: solid 2px var(--carv2-color-secondary);
 }
+
 .ui.selection.dropdown:focus {
   border: solid 2px var(--carv2-color-secondary);
   color: var(--carv2-color-secondary);
 }
 
-.ui.dropdown .menu > .item:hover,
-.ui.dropdown .menu .selected.item > item:hover {
+.ui.dropdown .menu>.item:hover,
+.ui.dropdown .menu .selected.item>item:hover {
   background-color: var(--carv2-color-secondary);
   color: var(--carv2-text-color);
 }
@@ -176,4 +178,16 @@ textarea::selection {
 .ui.selection.active.dropdown:focus {
   background-color: var(--carv2-color-secondary);
   color: var(--carv2-text-color);
+}
+
+
+.ui.inverted.orange.orange.buttons .button:hover {
+  background-color: var(--carv2-color-secondary);
+  color: var(--carv2-text-color) !important;
+}
+
+.ui.inverted.orange.button:focus,
+.ui.inverted.orange.buttons .button:focus {
+  background-color: transparent;
+  color: var(--carv2-color-secondary) !important
 }

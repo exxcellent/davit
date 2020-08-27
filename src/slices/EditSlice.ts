@@ -61,19 +61,19 @@ export interface StepAction {
 interface EditState {
   mode: Mode;
   objectToEdit:
-  | ComponentCTO
-  | DataCTO
-  | DataRelationTO
-  | SequenceTO
-  | SequenceStepCTO
-  | StepAction
-  | DataSetupCTO
-  | InitDataTO
-  | GroupTO
-  | DecisionTO
-  | ChainlinkTO
-  | ChainDecisionTO
-  | {};
+    | ComponentCTO
+    | DataCTO
+    | DataRelationTO
+    | SequenceTO
+    | SequenceStepCTO
+    | StepAction
+    | DataSetupCTO
+    | InitDataTO
+    | GroupTO
+    | DecisionTO
+    | ChainlinkTO
+    | ChainDecisionTO
+    | {};
   instanceIdToEdit: number | null;
 }
 const getInitialState: EditState = {
@@ -237,19 +237,21 @@ const setModeToEditComponent = (component?: ComponentCTO): AppThunk => (dispatch
 };
 
 const setModeToEditCompoenntById = (id: number): AppThunk => (dispatch, getState) => {
-  const component: ComponentCTO | undefined = getState().masterData.components.find(component => component.component.id === id);
+  const component: ComponentCTO | undefined = getState().masterData.components.find(
+    (component) => component.component.id === id
+  );
   if (component) {
     dispatch(setModeWithStorage(Mode.EDIT_COMPONENT));
     dispatch(EditSlice.actions.setComponentToEdit(component));
   }
-}
+};
 const setModeToEditDataById = (id: number): AppThunk => (dispatch, getState) => {
-  const data: DataCTO | undefined = getState().masterData.datas.find(data => data.data.id === id);
+  const data: DataCTO | undefined = getState().masterData.datas.find((data) => data.data.id === id);
   if (data) {
     dispatch(setModeWithStorage(Mode.EDIT_DATA));
     dispatch(EditSlice.actions.setDataToEdit(data));
   }
-}
+};
 
 const setModeToEditData = (data?: DataCTO): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_DATA));
@@ -270,13 +272,13 @@ const setModeToEditDataInstance = (data: DataCTO, id?: number): AppThunk => (dis
 };
 
 const setModeToEditDataInstanceById = (instanceId: number, dataId: number): AppThunk => (dispatch, getState) => {
-  const data: DataCTO | undefined = getState().masterData.datas.find(data => data.data.id === dataId);
+  const data: DataCTO | undefined = getState().masterData.datas.find((data) => data.data.id === dataId);
   if (data) {
     dispatch(EditSlice.actions.setDataToEdit(data));
     dispatch(EditSlice.actions.setInstanceIdToEdit(instanceId));
     dispatch(setModeWithStorage(Mode.EDIT_DATA_INSTANCE));
   }
-}
+};
 
 const setModeToEditRelation = (relation?: DataRelationTO): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_RELATION));

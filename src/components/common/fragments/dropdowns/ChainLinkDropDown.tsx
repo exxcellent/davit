@@ -23,26 +23,26 @@ interface ChainLinkDropDownProps extends DropdownProps {
 
 export const ChainLinkDropDownButton: FunctionComponent<ChainLinkDropDownButtonProps> = (props) => {
   const { onSelect, icon, chainId, exclude } = props;
-  const { chainlinks, selectChainLink, linkOptions } = useChainStepDropDownViewModel(chainId, exclude);
+  const { selectChainLink, linkOptions } = useChainStepDropDownViewModel(chainId, exclude);
 
   return (
     <Dropdown
       options={linkOptions()}
-      icon={chainlinks ? (chainlinks.length > 0 ? icon : "") : ""}
+      icon={linkOptions().length === 0 ? "" : icon}
       onChange={(event, data) => onSelect(selectChainLink(Number(data.value)))}
       className="button icon"
       floating
       selectOnBlur={false}
       trigger={<React.Fragment />}
       scrolling
-      disabled={chainlinks ? (chainlinks.length > 0 ? false : true) : false}
+      disabled={linkOptions().length === 0}
     />
   );
 };
 
 export const ChainLinkDropDown: FunctionComponent<ChainLinkDropDownProps> = (props) => {
   const { onSelect, placeholder, value, chainId, exclude } = props;
-  const { chainlinks, linkOptions, selectChainLink } = useChainStepDropDownViewModel(chainId, exclude);
+  const { linkOptions, selectChainLink } = useChainStepDropDownViewModel(chainId, exclude);
 
   return (
     <Dropdown
@@ -53,7 +53,7 @@ export const ChainLinkDropDown: FunctionComponent<ChainLinkDropDownProps> = (pro
       onChange={(event, data) => onSelect(selectChainLink(Number(data.value)))}
       scrolling
       value={value === -1 ? undefined : value}
-      disabled={chainlinks ? (chainlinks.length > 0 ? false : true) : false}
+      disabled={linkOptions().length === 0}
     />
   );
 };
@@ -88,5 +88,5 @@ const useChainStepDropDownViewModel = (chainId: number, exclude?: number) => {
     return undefined;
   };
 
-  return { linkOptions, selectChainLink, chainlinks };
+  return { linkOptions, selectChainLink };
 };
