@@ -53,23 +53,21 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
     id,
   } = useControllPanelEditChainStepViewModel();
 
-  const stepName = (
-    <OptionField label="Chainlink - name">
-      <Carv2LabelTextfield
-        label="Name:"
-        placeholder="Chainlink Name ..."
-        onChange={(event: any) => changeName(event.target.value)}
-        value={name}
-        autoFocus
-        ref={textInput}
-        unvisible={hidden}
-      />
-    </OptionField>
-  );
-
   return (
     <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveChainLink}>
-      <div className="controllPanelEditChild">{stepName}</div>
+      <div className="optionFieldSpacer">
+        <OptionField label="Chainlink - name">
+          <Carv2LabelTextfield
+            label="Name:"
+            placeholder="Chainlink Name ..."
+            onChange={(event: any) => changeName(event.target.value)}
+            value={name}
+            autoFocus
+            ref={textInput}
+            unvisible={hidden}
+          />
+        </OptionField>
+      </div>
       <div className="optionFieldSpacer columnDivider">
         <OptionField>
           <OptionField label="Select Data Setup">
@@ -114,17 +112,21 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
         </div>
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <div>
           <OptionField label="Navigation">
             <Carv2ButtonIcon onClick={saveChainLink} icon="reply" />
           </OptionField>
         </div>
-        <OptionField label="Sequence - Options">
-          <Carv2ButtonLabel onClick={setRoot} label={isRoot ? "Root" : "Set as Root"} disable={isRoot} />
+        <div className="controllPanelEditChild">
           <div>
-            <Carv2DeleteButton onClick={deleteChainLink} disable={isRoot} />
+            <OptionField label="Sequence - Options">
+              <Carv2ButtonLabel onClick={setRoot} label={isRoot ? "Root" : "Set as Root"} disable={isRoot} />
+              <div>
+                <Carv2DeleteButton onClick={deleteChainLink} disable={isRoot} />
+              </div>
+            </OptionField>
           </div>
-        </OptionField>
+        </div>
       </div>
     </ControllPanelEditSub>
   );

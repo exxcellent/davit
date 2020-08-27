@@ -32,8 +32,8 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
   } = useControllPanelEditComponentViewModel();
 
   return (
-    <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveComponent} >
-      <div className="optionFieldSpacer" style={{ display: "flex" }}>
+    <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveComponent}>
+      <div className="optionFieldSpacer">
         <OptionField label="Component - Name">
           <Carv2LabelTextfield
             label="Name:"
@@ -58,12 +58,10 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
           </OptionField>
         </div>
       </div>
-      <div className="columnDivider">
-        <div className="controllPanelEditChild" style={{ display: "flex", alignItems: "center", height: "100%" }}>
-          <OptionField label="Component - Options">
-            <Carv2DeleteButton onClick={deleteComponent} />
-          </OptionField>
-        </div>
+      <div className="optionFieldSpacer columnDivider">
+        <OptionField label="Component - Options">
+          <Carv2DeleteButton onClick={deleteComponent} />
+        </OptionField>
       </div>
     </ControllPanelEditSub>
   );
@@ -138,6 +136,6 @@ const useControllPanelEditComponentViewModel = () => {
     compGroup: componentToEdit?.component.groupFks !== -1 ? componentToEdit?.component.groupFks : undefined,
     updateComponent,
     createAnother,
-    id: componentToEdit?.component.id || -1
+    id: componentToEdit?.component.id || -1,
   };
 };

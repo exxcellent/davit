@@ -63,16 +63,13 @@
   grid-area: compModel;
   border-style: solid;
   border-width: 0 2px 2px 0;
-  border-image: linear-gradient(
-      to bottom,
+  border-image: linear-gradient(to bottom,
       transparent,
       var(--carv2-color-primary),
       var(--carv2-color-primary),
       var(--carv2-color-primary),
       var(--carv2-color-primary),
-      transparent
-    )
-    0 100%;
+      transparent) 0 100%;
 }
 
 .dndWrapper {
@@ -85,32 +82,26 @@
   grid-area: dataModel;
   border-style: solid;
   border-width: 2px 0 0 0;
-  border-image: linear-gradient(
-      to right,
+  border-image: linear-gradient(to right,
       transparent,
       var(--carv2-color-primary),
       var(--carv2-color-primary),
       var(--carv2-color-primary),
       var(--carv2-color-primary),
-      transparent
-    )
-    1 1 100%;
+      transparent) 1 1 100%;
 }
 
 .sequencModel {
   grid-area: seqModel;
   min-height: 0;
   overflow: hidden;
-  border-image: linear-gradient(
-      to right,
+  border-image: linear-gradient(to right,
       transparent,
       var(--carv2-color-primary),
       var(--carv2-color-primary),
       var(--carv2-color-primary),
       var(--carv2-color-primary),
-      transparent
-    )
-    1 1 100%;
+      transparent) 1 1 100%;
   border-style: solid;
   border-width: 0 0 2px 0;
 }
@@ -128,16 +119,13 @@
   grid-area: seqTabel;
   border-style: solid;
   border-width: 0 0 0 2px;
-  border-image: linear-gradient(
-      to bottom,
+  border-image: linear-gradient(to bottom,
       transparent,
       var(--carv2-color-primary),
       var(--carv2-color-primary),
       var(--carv2-color-primary),
       var(--carv2-color-primary),
-      transparent
-    )
-    0 100%;
+      transparent) 0 100%;
   padding: 2px;
   overflow: hidden;
 }
@@ -210,6 +198,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  padding: 1em;
 }
 
 /* -------------------------------------------- PATH -------------------------------------------- */
@@ -361,16 +350,13 @@
   text-align: center;
   border-style: solid;
   border-width: 0 0 0 2px;
-  border-image: linear-gradient(
-      to bottom,
+  border-image: linear-gradient(to bottom,
       transparent,
       var(--carv2-color-primary),
       var(--carv2-color-primary),
       var(--carv2-color-primary),
       var(--carv2-color-primary),
-      transparent
-    )
-    0 100%;
+      transparent) 0 100%;
   /* animation-name: growWidth; */
   animation-duration: var(--animation-time);
 }
@@ -383,15 +369,13 @@
 .verticalTablDummy {
   animation-name: shrinkWidth;
   animation-duration: var(--animation-time);
-  border-image: linear-gradient(
-    to bottom,
-    transparent,
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    transparent
-  );
+  border-image: linear-gradient(to bottom,
+      transparent,
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      transparent);
   height: 7.8em;
 }
 

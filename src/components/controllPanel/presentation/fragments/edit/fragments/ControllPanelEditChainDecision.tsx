@@ -45,45 +45,31 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
     editOrAddChainCondition,
   } = useControllPanelEditChainConditionViewModel();
 
-  const decisionName = (
-    <OptionField label="Chain decision - name">
-      <Carv2LabelTextfield
-        label="Name:"
-        placeholder="Chain decision name ..."
-        onChange={(event: any) => changeName(event.target.value)}
-        value={name}
-        autoFocus
-        ref={textInput}
-        unvisible={hidden}
-      />
-    </OptionField>
-  );
-
-  const menuButtons = (
-    <div className="columnDivider controllPanelEditChild">
-      <OptionField label="Navigation">
-        <Carv2ButtonIcon onClick={saveDecision} icon="reply" />
-      </OptionField>
-      <OptionField label="Sequence - Options">
-        <Carv2DeleteButton onClick={deleteDecision} />
-      </OptionField>
-    </div>
-  );
-
   return (
     <ControllPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveDecision}>
       <div className="controllPanelEditChild">
-        {decisionName}
-        <OptionField label="Create / Edit Condition">
-          <Button.Group>
-            <Button id="buttonGroupLabel" disabled inverted color="orange">
-              Condition
-            </Button>
-            <Button icon="wrench" inverted color="orange" onClick={editOrAddChainCondition} />
-          </Button.Group>
-        </OptionField>
+        <div className="optionField">
+          <OptionField label="Chain decision - name">
+            <Carv2LabelTextfield
+              label="Name:"
+              placeholder="Chain decision name ..."
+              onChange={(event: any) => changeName(event.target.value)}
+              value={name}
+              autoFocus
+              ref={textInput}
+              unvisible={hidden}
+            />
+          </OptionField>
+          <OptionField label="Create / Edit Condition">
+            <Button.Group>
+              <Button id="buttonGroupLabel" disabled inverted color="orange">
+                Condition
+              </Button>
+              <Button icon="wrench" inverted color="orange" onClick={editOrAddChainCondition} />
+            </Button.Group>
+          </OptionField>
+        </div>
       </div>
-
       <div className="columnDivider optionFieldSpacer">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <OptionField label="Type condition true">
@@ -148,7 +134,18 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
           )}
         </div>
       </div>
-      {menuButtons}
+      <div className="columnDivider controllPanelEditChild">
+        <div className="optionFieldSpacer">
+          <OptionField label="Navigation">
+            <Carv2ButtonIcon onClick={saveDecision} icon="reply" />
+          </OptionField>
+        </div>
+        <div className="optionFieldSpacer">
+          <OptionField label="Sequence - Options">
+            <Carv2DeleteButton onClick={deleteDecision} />
+          </OptionField>
+        </div>
+      </div>
     </ControllPanelEditSub>
   );
 };
