@@ -26,7 +26,7 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
   const { fullScreen } = props;
   const { nodeModelTree, calcSteps, lineColor, currentStepId, nodeModelChainTree } = useFlowChartViewModel();
 
-  console.info("current step id: " + currentStepId);
+  // console.info("current step id: " + currentStepId);
 
   const [showChain, setShowChain] = useState<boolean>(false);
   const parentRef = useRef<HTMLDivElement>(null);
@@ -48,7 +48,7 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
   }, [parentRef]);
 
   const buildChart = (node: NodeModel): JSX.Element => {
-    console.info("node id: " + node.id);
+    // console.info("node id: " + node.id);
     const rel: Relation[] = [];
 
     if (node.parentId) {

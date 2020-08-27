@@ -76,9 +76,9 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
 
   const chainTableHead = ["INDEX", "NAME", "SEQUENCE", "DATASETUP"];
   const chaindecisionsTableHead = ["NAME", "IF GOTO", "ELSE GOTO", "ACTIONS"];
-  const chainlinkTableHead = ["NAME", "SEQUENCE", "DATASETUP", "GOTO", "ACTIONS"];
-  const sequenceStepTableHead = ["NAME", "SENDER", "RECEIVER", "GOTO", "ACTIONS"];
-  const seqeunceDcisionsTableHead = ["NAME", "IF GOTO", "ELSE GOTO", "ACTIONS"];
+  const chainlinkTableHead = ["NAME", "SEQUENCE", "DATASETUP", "GOTO", "ACTIONS", "ROOT"];
+  const sequenceStepTableHead = ["NAME", "SENDER", "RECEIVER", "GOTO", "ACTIONS", "ROOT"];
+  const seqeunceDcisionsTableHead = ["NAME", "IF GOTO", "ELSE GOTO", "ACTIONS", "ROOT"];
   const calcSequenceTableHead = ["INDEX", "NAME", "SENDER", "RECEIVER", "ACTION-ERROR"];
   const seqeunceModelTableHead = ["NAME", "ACTIONS"];
   const chainModelTableHead = ["NAME", "ACTIONS"];
@@ -287,11 +287,11 @@ const useSequenceTableViewModel = () => {
         onClick={() => handleSequenceTableClickEvent(index)}
         ref={myRef}
       >
-        <td className="carv2Td">{index}</td>
-        <td className="carv2Td">{name}</td>
-        <td className="carv2Td">{source}</td>
-        <td className="carv2Td">{target}</td>
-        <td className="carv2Td">{hasError && <Icon name="warning sign" color="red" />}</td>
+        <td>{index}</td>
+        <td>{name}</td>
+        <td>{source}</td>
+        <td>{target}</td>
+        <td>{hasError && <Icon name="warning sign" color="red" />}</td>
       </tr>
     );
   };
@@ -305,18 +305,20 @@ const useSequenceTableViewModel = () => {
       selectSequence?.sequenceStepCTOs || [],
       selectSequence?.decisions || []
     );
+    const root: string = step.squenceStepTO.root ? "root" : "";
 
     let trClass = "carv2Tr";
 
     return (
       <tr key={index} className={trClass}>
-        <td className="carv2Td">{name}</td>
-        <td className="carv2Td">{source}</td>
-        <td className="carv2Td">{target}</td>
-        <td className="carv2Td">{gotoName}</td>
-        <td className="carv2Td">
+        <td>{name}</td>
+        <td>{source}</td>
+        <td>{target}</td>
+        <td>{gotoName}</td>
+        <td>
           <Carv2TableButton icon="wrench" onClick={() => dispatch(EditActions.setMode.editStep(step))} />
         </td>
+        <td>{root}</td>
       </tr>
     );
   };
@@ -325,8 +327,8 @@ const useSequenceTableViewModel = () => {
     let trClass = "carv2Tr";
     return (
       <tr key={index} className={trClass}>
-        <td className="carv2Td">{name}</td>
-        <td className="carv2Td">
+        <td>{name}</td>
+        <td>
           <Carv2TableButton icon="wrench" onClick={() => dispatch(EditActions.setMode.editSequence(sequence.id))} />
           <Carv2TableButton
             icon="hand pointer"
@@ -344,8 +346,8 @@ const useSequenceTableViewModel = () => {
     let trClass = "carv2Tr";
     return (
       <tr key={index} className={trClass}>
-        <td className="carv2Td">{name}</td>
-        <td className="carv2Td">
+        <td>{name}</td>
+        <td>
           <Carv2TableButton icon="wrench" onClick={() => dispatch(EditActions.setMode.editChain(chain))} />
           <Carv2TableButton
             icon="hand pointer"
@@ -355,6 +357,24 @@ const useSequenceTableViewModel = () => {
             }}
           />
         </td>
+      </tr>
+    );
+  };
+
+  const createCalcLinkColumn = (link: CalcChainLink, index: number): JSX.Element => {
+    const name: string = link.name || "Link name not found!";
+    const sequenceName: string = link.sequence.sequenceModel?.sequenceTO.name || "Sequence name not found!";
+    const dataSetupName: string = link.dataSetup.dataSetup?.name || "Data setup name not found!";
+    let trClass = "carv2Tr";
+    if (index === chainIndex) {
+      trClass = "carv2TrMarked";
+    }
+    return (
+      <tr key={index} className={"clickable " + trClass} onClick={() => handleChainTableClickEvent(index)}>
+        <td>{index + 1}</td>
+        <td>{name}</td>
+        <td>{sequenceName}</td>
+        <td>{dataSetupName}</td>
       </tr>
     );
   };
@@ -371,33 +391,17 @@ const useSequenceTableViewModel = () => {
       selectSequence?.sequenceStepCTOs || [],
       selectSequence?.decisions || []
     );
+    const root: string = decision.root ? "root" : "";
     let trClass = "carv2Tr";
     return (
       <tr key={index} className={trClass}>
-        <td className="carv2Td">{name}</td>
-        <td className="carv2Td">{ifgotoName}</td>
-        <td className="carv2Td">{elsegotoName}</td>
-        <td className="carv2Td">
+        <td>{name}</td>
+        <td>{ifgotoName}</td>
+        <td>{elsegotoName}</td>
+        <td>
           <Carv2TableButton icon="wrench" onClick={() => dispatch(EditActions.setMode.editDecision(decision))} />
         </td>
-      </tr>
-    );
-  };
-
-  const createCalcLinkColumn = (link: CalcChainLink, index: number): JSX.Element => {
-    const name: string = link.name || "Link name not found!";
-    const sequenceName: string = link.sequence.sequenceModel?.sequenceTO.name || "Sequence name not found!";
-    const dataSetupName: string = link.dataSetup.dataSetup?.name || "Data setup name not found!";
-    let trClass = "carv2Tr";
-    if (index === chainIndex) {
-      trClass = "carv2TrMarked";
-    }
-    return (
-      <tr key={index} className={"clickable " + trClass} onClick={() => handleChainTableClickEvent(index)}>
-        <td className="carv2Td">{index}</td>
-        <td className="carv2Td">{name}</td>
-        <td className="carv2Td">{sequenceName}</td>
-        <td className="carv2Td">{dataSetupName}</td>
+        <td>{root}</td>
       </tr>
     );
   };
@@ -407,16 +411,18 @@ const useSequenceTableViewModel = () => {
     const sequenceName: string = link.sequence.sequenceTO.name;
     const dataSetupName: string = link.dataSetup.dataSetup.name;
     let gotoName: string = getChainGotoName(link.chainLink.goto, selectedChainlinks, selectedChainDecisions);
+    const root: string = link.chainLink.root ? "root" : "";
     let trClass = "carv2Tr";
     return (
       <tr key={index} className={trClass}>
-        <td className="carv2Td">{name}</td>
-        <td className="carv2Td">{sequenceName}</td>
-        <td className="carv2Td">{dataSetupName}</td>
-        <td className="carv2Td">{gotoName}</td>
-        <td className="carv2Td">
+        <td>{name}</td>
+        <td>{sequenceName}</td>
+        <td>{dataSetupName}</td>
+        <td>{gotoName}</td>
+        <td>
           <Carv2TableButton icon="wrench" onClick={() => dispatch(EditActions.setMode.editChainLink(link.chainLink))} />
         </td>
+        <td>{root}</td>
       </tr>
     );
   };
@@ -428,10 +434,10 @@ const useSequenceTableViewModel = () => {
     let trClass = "carv2Tr";
     return (
       <tr key={index} className={trClass}>
-        <td className="carv2Td">{name}</td>
-        <td className="carv2Td">{ifgoto}</td>
-        <td className="carv2Td">{elsegoto}</td>
-        <td className="carv2Td">
+        <td>{name}</td>
+        <td>{ifgoto}</td>
+        <td>{elsegoto}</td>
+        <td>
           <Carv2TableButton icon="wrench" onClick={() => dispatch(EditActions.setMode.editChainDecision(decision))} />
         </td>
       </tr>
@@ -443,8 +449,8 @@ const useSequenceTableViewModel = () => {
     let trClass = "carv2Tr";
     return (
       <tr key={index} className={trClass}>
-        <td className="carv2Td">{name}</td>
-        <td className="carv2Td">
+        <td>{name}</td>
+        <td>
           <Carv2TableButton icon="wrench" onClick={() => dispatch(EditActions.setMode.editDataSetup(dataSetup.id))} />
           <Carv2TableButton
             icon="hand pointer"
@@ -599,6 +605,7 @@ const useSequenceTableViewModel = () => {
     setActiveTab,
   };
 };
+
 function getChainGotoName(
   goto: GoToChain,
   selectedChainlinks: ChainlinkCTO[],

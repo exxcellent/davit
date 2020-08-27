@@ -751,9 +751,26 @@ carhHeaderText {
 
 /* -------------------------------------------- Table -------------------------------------------- */
 
+td {
+  /* border-right: 1px solid rgb(255, 252, 252); */
+  border-style: solid;
+  border-width: 0 2px 2px 0;
+  border-image: linear-gradient(to bottom,
+      transparent,
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      transparent) 0 100%;
+}
+
+td:last-child {
+  border: none;
+}
+
 tr {
   color: var(--carv2-text-color);
-  padding-left: 1em;
+  padding: 0 0 0 1em;
 }
 
 tbody {
@@ -761,7 +778,7 @@ tbody {
   /* height: 30vh; */
   width: 100%;
   /* height: 100%; */
-  overflow: auto;
+  overflow-y: scroll;
 }
 
 th {
@@ -784,6 +801,7 @@ thead {
   color: var(--carv2-text-color);
   animation-name: appearText;
   animation-duration: 0.2s;
+  padding-right: 1em;
 }
 
 table {

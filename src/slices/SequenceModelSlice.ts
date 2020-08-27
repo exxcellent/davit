@@ -360,7 +360,7 @@ export const sequenceModelSelectors = {
   },
   selectCurrentStepIndex: (state: RootState): number => state.sequenceModel.currentStepIndex,
   selectCurrentStepId: (state: RootState): string => {
-    console.info("steps: ", getCurrentCalcSequence(state.sequenceModel)?.steps);
+    // console.info("steps: ", getCurrentCalcSequence(state.sequenceModel)?.steps);
     return getCurrentCalcSequence(state.sequenceModel)?.steps[state.sequenceModel.currentStepIndex]?.stepId || "";
   },
   selectCurrentLinkIndex: (state: RootState): number => state.sequenceModel.currentLinkIndex,

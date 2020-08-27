@@ -25,6 +25,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
     label,
     sequence,
     stepIndex,
+    linkIndex,
     selectSequence,
     stepBack,
     stepNext,
@@ -36,6 +37,16 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
     linkBack,
     linkNext,
   } = useControllPanelSequenceOptionsViewModel();
+
+  console.info("step index: ", stepIndex);
+  console.info("link index: ", linkIndex);
+
+  const getIndex = (): string => {
+    const link: string = (linkIndex + 1).toString() || "0";
+    const step: string = stepIndex.toString() || "0";
+    const index: string = link + " / " + step;
+    return index;
+  };
 
   return (
     <ControllPanelEditSub label={label} hidden={hidden}>
@@ -77,7 +88,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
               disabled={isNullOrUndefined(sequence)}
               onClick={stepBack}
             />
-            <Button inverted color="orange" content={stepIndex || 0} disabled={true} />
+            <Button inverted color="orange" content={getIndex()} disabled={true} />
             <Button
               inverted
               color="orange"
@@ -188,6 +199,7 @@ const useControllPanelSequenceOptionsViewModel = () => {
     label: "VIEW" + getDataSetupName() + getSequenceName() + getStepName(),
     sequence,
     stepIndex,
+    linkIndex,
     selectSequence,
     stepNext,
     stepBack,
