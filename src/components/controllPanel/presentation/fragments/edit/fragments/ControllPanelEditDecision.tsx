@@ -87,12 +87,12 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
               />
             </OptionField>
           )}
-          {ifGoTo!.type === GoToTypes.COND && (
+          {ifGoTo!.type === GoToTypes.DEC && (
             <OptionField label="Create or Select next condition">
               <Carv2ButtonIcon icon="add" onClick={() => createGoToDecision(true)} />
               <DecisionDropDown
                 onSelect={(cond) => setGoToTypeDecision(true, cond)}
-                value={ifGoTo?.type === GoToTypes.COND ? ifGoTo.id : 1}
+                value={ifGoTo?.type === GoToTypes.DEC ? ifGoTo.id : 1}
                 exclude={decId}
               />
             </OptionField>
@@ -116,12 +116,12 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
               />
             </OptionField>
           )}
-          {elseGoTo!.type === GoToTypes.COND && (
+          {elseGoTo!.type === GoToTypes.DEC && (
             <OptionField label="Create or Select next condition">
               <Carv2ButtonIcon icon="add" onClick={() => createGoToDecision(false)} />
               <DecisionDropDown
                 onSelect={(cond) => setGoToTypeDecision(false, cond)}
-                value={elseGoTo?.type === GoToTypes.COND ? elseGoTo.id : 1}
+                value={elseGoTo?.type === GoToTypes.DEC ? elseGoTo.id : 1}
                 exclude={decId}
               />
             </OptionField>
@@ -255,7 +255,7 @@ const useControllPanelEditConditionViewModel = () => {
 
   const setGoToTypeDecision = (ifGoTo: Boolean, decision?: DecisionTO) => {
     if (decision) {
-      let newGoTo: GoTo = { type: GoToTypes.COND, id: decision.id };
+      let newGoTo: GoTo = { type: GoToTypes.DEC, id: decision.id };
       saveGoToType(ifGoTo, newGoTo);
     }
   };

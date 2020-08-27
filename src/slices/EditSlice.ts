@@ -906,14 +906,14 @@ const createDecisionThunk = (decision: DecisionTO, from?: SequenceStepCTO | Deci
   } else {
     if (from) {
       if ((from as SequenceStepCTO).squenceStepTO !== undefined) {
-        (from as SequenceStepCTO).squenceStepTO.goto = { type: GoToTypes.COND, id: response.object.id };
+        (from as SequenceStepCTO).squenceStepTO.goto = { type: GoToTypes.DEC, id: response.object.id };
         dispatch(EditActions.step.save(from as SequenceStepCTO));
       }
       if ((from as DecisionTO).elseGoTo !== undefined) {
         if (ifGoTo) {
-          (from as DecisionTO).ifGoTo = { type: GoToTypes.COND, id: response.object.id };
+          (from as DecisionTO).ifGoTo = { type: GoToTypes.DEC, id: response.object.id };
         } else {
-          (from as DecisionTO).elseGoTo = { type: GoToTypes.COND, id: response.object.id };
+          (from as DecisionTO).elseGoTo = { type: GoToTypes.DEC, id: response.object.id };
         }
         dispatch(EditActions.decision.save(from as DecisionTO));
       }
@@ -935,18 +935,18 @@ const deleteDecisionThunk = (decision: DecisionTO, sequenceCTO?: SequenceCTO): A
     const copySequence: SequenceCTO = Carv2Util.deepCopy(sequenceCTO);
     // update steps
     copySequence.sequenceStepCTOs.forEach((step) => {
-      if (step.squenceStepTO.goto.type === GoToTypes.COND && step.squenceStepTO.goto.id === decision.id) {
+      if (step.squenceStepTO.goto.type === GoToTypes.DEC && step.squenceStepTO.goto.id === decision.id) {
         step.squenceStepTO.goto = { type: GoToTypes.ERROR };
         dispatch(EditActions.step.save(step));
       }
     });
     // update decisions
     copySequence.decisions.forEach((cond) => {
-      if (cond.ifGoTo.type === GoToTypes.COND && cond.ifGoTo.id === decision.id) {
+      if (cond.ifGoTo.type === GoToTypes.DEC && cond.ifGoTo.id === decision.id) {
         cond.ifGoTo = { type: GoToTypes.ERROR };
         dispatch(EditActions.decision.save(cond));
       }
-      if (cond.elseGoTo.type === GoToTypes.COND && cond.elseGoTo.id === decision.id) {
+      if (cond.elseGoTo.type === GoToTypes.DEC && cond.elseGoTo.id === decision.id) {
         cond.elseGoTo = { type: GoToTypes.ERROR };
         dispatch(EditActions.decision.save(cond));
       }

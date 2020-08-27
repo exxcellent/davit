@@ -58,7 +58,7 @@ export const SequenceChainService = {
 
             // STEP ID
             const newLinkId = "_LINK_" + link.chainLink.id;
-            stepId = stepId === "" ? "root" : stepId + newLinkId;
+            stepId = stepId === "" ? link.chainLink.id.toString() : stepId + newLinkId;
             calcSequenceChain.linkIds.push(stepId);
 
             calcSequenceChain.calcLinks.push({

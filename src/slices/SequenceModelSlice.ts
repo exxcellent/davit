@@ -2,11 +2,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../app/store";
 import { Arrows as Arrow } from "../components/metaComponentModel/presentation/MetaComponentModelController";
 import { ChainCTO } from "../dataAccess/access/cto/ChainCTO";
+import { ChainlinkCTO } from "../dataAccess/access/cto/ChainlinkCTO";
 import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
 import { GeometricalDataCTO } from "../dataAccess/access/cto/GeometraicalDataCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
+import { ChainDecisionTO } from "../dataAccess/access/to/ChainDecisionTO";
 import { ChainTO } from "../dataAccess/access/to/ChainTO";
 import { Terminal } from "../dataAccess/access/types/GoToType";
 import { DataAccess } from "../dataAccess/DataAccess";
@@ -312,6 +314,9 @@ export const sequenceModelSelectors = {
   selectSequence: (state: RootState): SequenceCTO | null => getCurrentSequenceModel(state.sequenceModel),
   selectChain: (state: RootState): ChainTO | null => state.sequenceModel.selectedChain?.chain || null,
   selectChainCTO: (state: RootState): ChainCTO | null => state.sequenceModel.selectedChain || null,
+  selectCurrentChainLinks: (state: RootState): ChainlinkCTO[] => state.sequenceModel.selectedChain?.links || [],
+  selectCurrentChainDecisions: (state: RootState): ChainDecisionTO[] =>
+    state.sequenceModel.selectedChain?.decisions || [],
   selectCalcChain: (state: RootState): CalcChain | null => state.sequenceModel.calcChain || null,
   selectCalcSteps: (state: RootState): CalculatedStep[] => {
     if (state.edit.mode === Mode.VIEW) {
@@ -354,6 +359,10 @@ export const sequenceModelSelectors = {
       : [];
   },
   selectCurrentStepIndex: (state: RootState): number => state.sequenceModel.currentStepIndex,
+  selectCurrentStepId: (state: RootState): string => {
+    console.info("steps: ", getCurrentCalcSequence(state.sequenceModel)?.steps);
+    return getCurrentCalcSequence(state.sequenceModel)?.steps[state.sequenceModel.currentStepIndex]?.stepId || "";
+  },
   selectCurrentLinkIndex: (state: RootState): number => state.sequenceModel.currentLinkIndex,
   selectCurrentArrows: (state: RootState): Arrow[] => {
     const arrows: Arrow[] = [];

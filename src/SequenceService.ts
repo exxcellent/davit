@@ -43,7 +43,7 @@ export const SequenceService = {
         let type = getType(stepOrDecision);
         let stepId: string = "root";
 
-        while (!isLooping(loopStartingStep) && (type === GoToTypes.STEP || type === GoToTypes.COND)) {
+        while (!isLooping(loopStartingStep) && (type === GoToTypes.STEP || type === GoToTypes.DEC)) {
           if (type === GoToTypes.STEP) {
             const step: SequenceStepCTO = stepOrDecision as SequenceStepCTO;
             const result: SequenceActionResult = calculateStep(step, componentDatas);
@@ -70,7 +70,7 @@ export const SequenceService = {
             }
           }
 
-          if (type === GoToTypes.COND) {
+          if (type === GoToTypes.DEC) {
             const decision: DecisionTO = stepOrDecision as DecisionTO;
 
             const goTo: GoTo = SequenceActionReducer.executeDecisionCheck(decision, componentDatas);
@@ -97,7 +97,7 @@ export const SequenceService = {
 };
 
 const getInitStep = (componenentDatas: ComponentData[]): CalculatedStep => {
-  return { stepId: "", componentDatas: componenentDatas, stepFk: 0, errors: [] };
+  return { stepId: "root", componentDatas: componenentDatas, stepFk: 0, errors: [] };
 };
 
 const getStepFromSequence = (stepId: number, sequence: SequenceCTO): SequenceStepCTO | undefined => {
@@ -120,7 +120,7 @@ const getNext = (goTo: GoTo, sequence: SequenceCTO): SequenceStepCTO | DecisionT
     case GoToTypes.STEP:
       nextStepOrDecisionOrTerminal = getStepFromSequence(goTo.id, sequence) || { type: GoToTypes.ERROR };
       break;
-    case GoToTypes.COND:
+    case GoToTypes.DEC:
       nextStepOrDecisionOrTerminal = getDecisionFromSequence(goTo.id, sequence) || { type: GoToTypes.ERROR };
       break;
     case GoToTypes.FIN:
@@ -143,7 +143,7 @@ const getType = (stepOrDecisionOrTerminal: SequenceStepCTO | DecisionTO | Termin
   if ((stepOrDecisionOrTerminal as SequenceStepCTO).squenceStepTO) {
     return GoToTypes.STEP;
   } else if ((stepOrDecisionOrTerminal as DecisionTO).elseGoTo) {
-    return GoToTypes.COND;
+    return GoToTypes.DEC;
   } else if ((stepOrDecisionOrTerminal as Terminal).type) {
     return (stepOrDecisionOrTerminal as Terminal).type;
   } else {

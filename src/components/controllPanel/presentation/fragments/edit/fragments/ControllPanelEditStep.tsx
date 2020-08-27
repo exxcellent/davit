@@ -135,10 +135,10 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
               />
             </OptionField>
           )}
-          {goTo!.type === GoToTypes.COND && (
+          {goTo!.type === GoToTypes.DEC && (
             <OptionField label="Create or Select next decision">
               <Carv2ButtonIcon icon="add" onClick={createGoToDecision} />
-              <DecisionDropDown onSelect={setGoToTypeDecision} value={goTo?.type === GoToTypes.COND ? goTo.id : 1} />
+              <DecisionDropDown onSelect={setGoToTypeDecision} value={goTo?.type === GoToTypes.DEC ? goTo.id : 1} />
             </OptionField>
           )}
         </div>
@@ -292,7 +292,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
   const setGoToTypeDecision = (decision?: DecisionTO) => {
     if (decision) {
-      let newGoTo: GoTo = { type: GoToTypes.COND, id: decision.id };
+      let newGoTo: GoTo = { type: GoToTypes.DEC, id: decision.id };
       saveGoToType(newGoTo);
     }
   };
