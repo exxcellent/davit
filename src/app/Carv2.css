@@ -38,6 +38,7 @@
   grid-area: leftBar;
   justify-self: center;
   background-color: var(--carv2-background-color-slidebar);
+  width: 100%;
 }
 
 .controllerHeader {
@@ -227,6 +228,46 @@
   color: var(--carv2-text-color) !important;
 }
 
+.ButtonGroup{
+  display: flex;
+  flex-direction: column;
+  border-radius: 3em;
+  /* margin: 2px; */
+  margin: 2px 4px 0 2px;
+  align-items: center;
+}
+
+.carv2Button{
+  background-color: transparent;
+  box-shadow: 0 0 0 1px var(--carv2-color-secondary);
+  color: white;
+
+}
+.carv2SidePanelButton{
+  background-color: transparent;
+  box-shadow: 0 0 0 1px var(--carv2-color-border);
+  color: white;
+  width: 100%;
+  height: 50px;
+  padding: 1em 0 0 1.1em;
+  margin: 1px;
+  border-radius: 2px;
+  display: flex;
+  transition: background-color var(--animation-time);
+}
+.carv2SidePanelButton:hover{
+  /* background-color: rgba(0, 0, 0, 0.4); */
+  box-shadow: 0 0 0 2px var(--carv2-color-secondary);
+  color: white;
+}
+
+.SidePanelButtonActive{
+  color: black;
+  background-color: var(--carv2-color-secondary);
+  box-shadow: 0 0 0 2px var(--carv2-color-secondary);
+  transition: background-color var(--animation-time);
+}
+
 .carv2TableButton {
   background-color: var(--carv2-background-color) !important;
   transition: background-color 0.4s !important;
@@ -323,6 +364,7 @@
   transform: rotate(180deg);
   text-align: center;
   font-size: 3em;
+  /* font-family: ArialRoundedMTBold, "Arial Rounded MT Bold"; */
   font-family: ArialRoundedMTBold, "Arial Rounded MT Bold";
   margin-left: 13px;
   margin-top: 0.5em;
