@@ -61,8 +61,6 @@ export const ChainLinkDropDown: FunctionComponent<ChainLinkDropDownProps> = (pro
 const useChainStepDropDownViewModel = (chainId: number, exclude?: number) => {
   const chainlinks: ChainlinkTO[] = useSelector(masterDataSelectors.chainLinks);
 
-  console.info(chainlinks);
-
   const chainStepToOption = (link: ChainlinkTO): DropdownItemProps => {
     return {
       key: link.id,
@@ -89,8 +87,6 @@ const useChainStepDropDownViewModel = (chainId: number, exclude?: number) => {
     }
     return undefined;
   };
-
-  console.info(linkOptions);
 
   return { linkOptions, selectChainLink };
 };
