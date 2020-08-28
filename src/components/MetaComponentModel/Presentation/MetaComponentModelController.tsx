@@ -85,7 +85,7 @@ const useViewModel = () => {
 
   const getComponentDatasFromView = (): ViewFragmentProps[] => {
     let compDatas: ViewFragmentProps[] = [];
-    const compDatasFromErros: ViewFragmentProps[] = errors.map(mapActionToComponentDatas);
+    const compDatasFromErros: ViewFragmentProps[] = errors.map(mapErrorToComponentDatas);
     const compDatasFromActions: ViewFragmentProps[] = actions.map(mapActionToComponentDatas);
     const compDatasFromCompDatas: ViewFragmentProps[] = currentComponentDatas.map(mapComponentDataToCompoenntData);
     compDatas.push(...compDatasFromErros);
@@ -142,6 +142,12 @@ const useViewModel = () => {
     return { name: getDataNameById(errorItem.dataFk), state: state, parentId: errorItem.componentFk };
   };
 
+  const mapErrorToComponentDatas = (errorItem: ActionTO): ViewFragmentProps => {
+    const state: ViewFragmentState = mapErrorTypeToViewFragmentState(errorItem.actionType);
+
+    return { name: getDataNameById(errorItem.dataFk), state: state, parentId: errorItem.componentFk };
+  };
+
   const mapComponentDataToCompoenntData = (compData: ComponentData): ViewFragmentProps => {
     return {
       name: getDataNameById(compData.dataFk),
@@ -191,6 +197,19 @@ const useViewModel = () => {
         break;
       case ActionType.DELETE:
         cdState = ViewFragmentState.DELETED;
+        break;
+    }
+    return cdState;
+  };
+
+  const mapErrorTypeToViewFragmentState = (actionType: ActionType): ViewFragmentState => {
+    let cdState: ViewFragmentState;
+    switch (actionType) {
+      case ActionType.ADD:
+        cdState = ViewFragmentState.ERROR_ADD;
+        break;
+      case ActionType.DELETE:
+        cdState = ViewFragmentState.ERROR_DELETE;
         break;
     }
     return cdState;

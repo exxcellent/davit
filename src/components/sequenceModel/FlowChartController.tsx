@@ -11,7 +11,6 @@ import { ChainDecisionTO } from "../../dataAccess/access/to/ChainDecisionTO";
 import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
 import { GoTo, GoToTypes, Terminal } from "../../dataAccess/access/types/GoToType";
 import { GoToChain, GoToTypesChain, TerminalChain } from "../../dataAccess/access/types/GoToTypeChain";
-import { CalculatedStep } from "../../SequenceService";
 import { handleError } from "../../slices/GlobalSlice";
 import { sequenceModelSelectors } from "../../slices/SequenceModelSlice";
 import { Carv2Util } from "../../utils/Carv2Util";
@@ -24,11 +23,23 @@ interface FlowChartControllerProps {
 
 export const FlowChartController: FunctionComponent<FlowChartControllerProps> = (props) => {
   const { fullScreen } = props;
-  const { nodeModelTree, calcSteps, lineColor, currentStepId, nodeModelChainTree } = useFlowChartViewModel();
+  const {
+    nodeModelTree,
+    calcSteps,
+    lineColor,
+    currentStepId,
+    nodeModelChainTree,
+    currentLinkId,
+    chain,
+    sequence,
+  } = useFlowChartViewModel();
 
   // console.info("current step id: " + currentStepId);
 
   const [showChain, setShowChain] = useState<boolean>(false);
+  useEffect(() => {
+    setShowChain(!isNullOrUndefined(chain));
+  }, [chain]);
   const parentRef = useRef<HTMLDivElement>(null);
   const [tableHeight, setTabelHeihgt] = useState<number>(0);
 
@@ -115,10 +126,11 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
       <div className="flowChartFlex" style={{ margin: node.id === "root" ? "" : "50px 0" }} key={node.id}>
         <ArcherElement id={node.id} relations={rel}>
           <div
-            className={node.id === "root" ? "ROOT" : node.leafType}
-            // id={currentStep?.stepId === node.id ? "flowChartCurrentStep" : ""}
+            // className={node.id === "root" ? "ROOT" : node.leafType}
+            className={node.leafType}
+            id={currentLinkId === node.id ? "flowChartCurrentStep" : ""}
           >
-            {node.id === "root" || node.leafType === GoToTypesChain.DEC ? "" : node.label}
+            {node.leafType === GoToTypesChain.DEC ? "" : node.label}
           </div>
         </ArcherElement>
         {node.leafType === GoToTypesChain.DEC && <div className="condLabel">{node.label}</div>}
@@ -154,15 +166,17 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
 
   return (
     <div className={fullScreen ? "fullscreen" : "sequencModel"} ref={parentRef}>
-      <div style={{ display: "flex", position: "absolute", zIndex: 1 }}>
-        <TabGroupFragment label="Mode" style={{ backgroundColor: "var(--carv2-background-color-header)" }}>
-          <TabFragment label="Chain" isActive={showChain} onClick={() => setShowChain(true)} />
-          <TabFragment label="Sequence" isActive={!showChain} onClick={() => setShowChain(false)} />
-        </TabGroupFragment>
-      </div>
+      {chain && (
+        <div style={{ display: "flex", position: "absolute", zIndex: 1 }}>
+          <TabGroupFragment label="Mode" style={{ backgroundColor: "var(--carv2-background-color-header)" }}>
+            <TabFragment label="Chain" isActive={showChain} onClick={() => setShowChain(true)} />
+            <TabFragment label="Sequence" isActive={!showChain} onClick={() => setShowChain(false)} />
+          </TabGroupFragment>
+        </div>
+      )}
       <div className="flowChart" style={{ height: tableHeight }}>
-        {!showChain && buildFlowChart()}
-        {showChain && buildChainFlowChart()}
+        {!showChain && sequence && buildFlowChart()}
+        {showChain && chain && buildChainFlowChart()}
       </div>
     </div>
   );
@@ -198,11 +212,11 @@ interface NodeChain {
 
 const useFlowChartViewModel = () => {
   const sequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
-  const calcSteps: CalculatedStep[] = useSelector(sequenceModelSelectors.selectCalcSteps);
   const terminalStep: Terminal | null = useSelector(sequenceModelSelectors.selectTerminalStep);
   const stepIds: string[] = useSelector(sequenceModelSelectors.selectCalcStepIds);
   const chain: ChainCTO | null = useSelector(sequenceModelSelectors.selectChainCTO);
   const currentStepId: string = useSelector(sequenceModelSelectors.selectCurrentStepId);
+  const currentLinkId: string = useSelector(sequenceModelSelectors.selectCurrentLinkId);
 
   const getRoot = (sequence: SequenceCTO | null): Node => {
     let root: Node = {
@@ -429,5 +443,8 @@ const useFlowChartViewModel = () => {
     currentStepId,
     calcSteps: getSteps(),
     lineColor: getLineColor,
+    currentLinkId,
+    sequence,
+    chain,
   };
 };

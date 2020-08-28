@@ -61,10 +61,16 @@ const SequenceModelSlice = createSlice({
       state.selectedChain = null;
       state.calcChain = null;
       state.currentLinkIndex = 0;
+      state.currentStepIndex = 0;
       if (action.payload && state.selectedDataSetup) {
         calcSequenceAndSetState(action.payload, state.selectedDataSetup, state);
       } else {
         resetState(state);
+      }
+    },
+    recalcSequence: (state) => {
+      if (state.selectedSequenceModel && state.selectedDataSetup) {
+        calcSequenceAndSetState(state.selectedSequenceModel, state.selectedDataSetup, state);
       }
     },
     setCurrentLinkIndex: (state, action: PayloadAction<number>) => {
@@ -83,9 +89,8 @@ const SequenceModelSlice = createSlice({
       resetState(state);
       state.selectedSequenceModel = null;
       state.selectedDataSetup = null;
-      if (!action.payload) {
-        state.currentLinkIndex = 0;
-      }
+      state.currentLinkIndex = 0;
+      state.currentStepIndex = 0;
     },
     setCalcChain: (state, action: PayloadAction<CalcChain | null>) => {
       state.calcChain = action.payload;
@@ -193,17 +198,25 @@ export const getComponentDatas = (dataSetup: DataSetupCTO): ComponentData[] => {
   });
 };
 
-const calcChainThunk = (): AppThunk => (dispatch, getState) => {
+const calcModelsThunk = (): AppThunk => (dispatch, getState) => {
   if (
     getState().edit.mode === Mode.VIEW &&
     getState().sequenceModel.selectedChain !== null &&
     getRoot(getState().sequenceModel.selectedChain || null)
   ) {
+    dispatch(SequenceModelActions.setCurrentChain(getState().sequenceModel.selectedChain!.chain));
     dispatch(
       SequenceModelSlice.actions.setCalcChain(
         SequenceChainService.calculateChain(getState().sequenceModel.selectedChain)
       )
     );
+  } else if (
+    getState().edit.mode === Mode.VIEW &&
+    getState().sequenceModel.selectedSequenceModel !== null &&
+    getState().sequenceModel.selectedDataSetup !== null
+  ) {
+    dispatch(SequenceModelActions.setCurrentSequence(getState().sequenceModel.selectedSequenceModel!.sequenceTO.id));
+    dispatch(SequenceModelActions.setCurrentDataSetup(getState().sequenceModel.selectedDataSetup!.dataSetup.id));
   }
 };
 
@@ -364,6 +377,8 @@ export const sequenceModelSelectors = {
     return getCurrentCalcSequence(state.sequenceModel)?.steps[state.sequenceModel.currentStepIndex]?.stepId || "";
   },
   selectCurrentLinkIndex: (state: RootState): number => state.sequenceModel.currentLinkIndex,
+  selectCurrentLinkId: (state: RootState): string =>
+    state.sequenceModel.calcChain?.calcLinks[state.sequenceModel.currentLinkIndex]?.stepId || "",
   selectCurrentArrows: (state: RootState): Arrow[] => {
     const arrows: Arrow[] = [];
     const filteredSteps = getFilteredSteps(state);
@@ -428,7 +443,7 @@ export const SequenceModelActions = {
   removeDataFilters: SequenceModelSlice.actions.removeDataFilter,
   addComponentFilters: SequenceModelSlice.actions.addComponentFilters,
   removeComponentFilter: SequenceModelSlice.actions.removeComponentFilter,
-  calcChain: calcChainThunk,
+  calcChain: calcModelsThunk,
 };
 function getFilteredSteps(state: RootState) {
   return state.edit.mode === Mode.VIEW

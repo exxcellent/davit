@@ -228,7 +228,7 @@
   color: var(--carv2-text-color) !important;
 }
 
-.ButtonGroup{
+.ButtonGroup {
   display: flex;
   flex-direction: column;
   border-radius: 3em;
@@ -237,13 +237,14 @@
   align-items: center;
 }
 
-.carv2Button{
+.carv2Button {
   background-color: transparent;
   box-shadow: 0 0 0 1px var(--carv2-color-secondary);
   color: white;
 
 }
-.carv2SidePanelButton{
+
+.carv2SidePanelButton {
   background-color: transparent;
   box-shadow: 0 0 0 1px var(--carv2-color-border);
   color: white;
@@ -255,13 +256,14 @@
   display: flex;
   transition: background-color var(--animation-time);
 }
-.carv2SidePanelButton:hover{
+
+.carv2SidePanelButton:hover {
   /* background-color: rgba(0, 0, 0, 0.4); */
   box-shadow: 0 0 0 2px var(--carv2-color-secondary);
   color: white;
 }
 
-.SidePanelButtonActive{
+.SidePanelButtonActive {
   color: black;
   background-color: var(--carv2-color-secondary);
   box-shadow: 0 0 0 2px var(--carv2-color-secondary);
@@ -789,6 +791,28 @@ carhHeaderText {
   background-color: var(--carv2-background-color-header) !important;
   color: var(--carv2-text-color) !important;
   box-shadow: 6px 6px 10px var(--carv2-data-delete-color) inset !important;
+}
+
+.carv2ComponentDataERROR_ADD {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--carv2-data-add-color) !important;
+  color: var(--carv2-text-color) !important;
+  box-shadow: 0px 0px 20px rgb(255, 0, 0);
+}
+
+.carv2ComponentDataERROR_DELETE {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--carv2-data-delete-color) !important;
+  color: var(--carv2-text-color) !important;
+  box-shadow: 0px 0px 20px rgb(255, 0, 0);
 }
 
 /* -------------------------------------------- Table -------------------------------------------- */

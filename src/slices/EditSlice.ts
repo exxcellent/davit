@@ -489,7 +489,7 @@ const createDataThunk = (): AppThunk => (dispatch) => {
 const createDataInstanceThunk = (data: DataCTO): AppThunk => (dispatch) => {
   let dataInstance: DataInstanceTO = new DataInstanceTO();
   dataInstance.dataFk = data.data.id;
-  dataInstance.id = data.data.inst.length;
+  dataInstance.id = Math.max(...data.data.inst.map((inst) => inst.id)) + 1;
   data.data.inst.push(dataInstance);
   const response: DataAccessResponse<DataCTO> = DataAccess.saveDataCTO(data);
   console.log(response);
@@ -863,6 +863,7 @@ const saveSequenceStepThunk = (step: SequenceStepCTO): AppThunk => (dispatch) =>
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
+  dispatch(MasterDataActions.loadSequencesFromBackend());
 };
 
 const findStepCTOThunk = (stepId: number): SequenceStepCTO => {
