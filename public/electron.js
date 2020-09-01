@@ -16,6 +16,9 @@ function createWindow() {
   //   win.loadFile('index.html')
   win.loadURL(isDev ? "http://localhost:9000" : `file://${path.join(__dirname, "../build/index.html")}`);
 
+  // full screen
+  win.maximize();
+
   // Open the DevTools.
   //   win.webContents.openDevTools();
 }
