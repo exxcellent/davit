@@ -180,7 +180,15 @@ const useMetaDataModelViewModel = () => {
   };
 
   const compDataExists = (propOne: ViewFragmentProps, propTwo: ViewFragmentProps) => {
-    return propOne.parentId === propTwo.parentId && propOne.name === propTwo.name;
+    const dataId1 = (propOne.parentId as { dataId: number; instanceId: number }).dataId || propOne.parentId;
+    const instanceId1 = (propOne.parentId as { dataId: number; instanceId: number }).instanceId;
+    const dataId2 = (propTwo.parentId as { dataId: number; instanceId: number }).dataId || propTwo.parentId;
+    const instanceId2 = (propTwo.parentId as { dataId: number; instanceId: number }).instanceId;
+    return (
+      (dataId1 === dataId2 || propOne.parentId === propTwo.parentId) &&
+      propOne.name === propTwo.name &&
+      (!(instanceId1 || instanceId2) || instanceId1 === instanceId2)
+    );
   };
 
   const mapActionTypeToViewFragmentState = (actionType: ActionType): ViewFragmentState => {

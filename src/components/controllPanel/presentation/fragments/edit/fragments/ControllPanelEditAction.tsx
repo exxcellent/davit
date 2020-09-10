@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
+import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
 import { ActionTO } from "../../../../../../dataAccess/access/to/ActionTO";
 import { DataInstanceTO, DATA_INSTANCE_ID_FACTOR } from "../../../../../../dataAccess/access/to/DataTO";
 import { ActionType } from "../../../../../../dataAccess/access/types/ActionType";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
+import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
@@ -17,9 +19,12 @@ import { DataAndInstanceDropDown } from "../../../../../common/fragments/dropdow
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditActionProps {}
+export interface ControllPanelEditActionProps {
+  hidden: boolean;
+}
 
 export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionProps> = (props) => {
+  const { hidden } = props;
   const {
     label,
     setComponent,
@@ -29,13 +34,13 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
     componentId,
     dataId,
     actionType,
-    backToStep,
+    setMode,
     createAnother,
     key,
   } = useControllPanelEditActionViewModel();
 
   return (
-    <ControllPanelEditSub label={label} key={key}>
+    <ControllPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={setMode}>
       <div className="optionFieldSpacer">
         <OptionField label="Select Component on which the action will be called">
           <ComponentDropDown onSelect={setComponent} value={componentId} />
@@ -56,7 +61,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
         <div className="innerOptionFieldSpacer">
           <OptionField label="Navigation">
             <Carv2ButtonLabel onClick={createAnother} label="Create another" />
-            <Carv2ButtonIcon onClick={backToStep} icon="reply" />
+            <Carv2ButtonIcon onClick={setMode} icon="reply" />
           </OptionField>
         </div>
         <OptionField label="Sequence - Options">
@@ -69,6 +74,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
 
 const useControllPanelEditActionViewModel = () => {
   const actionToEdit: ActionTO | null = useSelector(editSelectors.actionToEdit);
+  const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence)
   const dispatch = useDispatch();
 
   const [key, setKey] = useState<number>(0);
@@ -120,9 +126,15 @@ const useControllPanelEditActionViewModel = () => {
     }
   };
 
-  const backToStep = () => {
+  const setMode = (newMode?: string) => {
     if (!isNullOrUndefined(actionToEdit)) {
-      dispatch(EditActions.setMode.editStep(EditActions.step.find(actionToEdit.sequenceStepFk)));
+      if (newMode && newMode === "EDIT") {
+        dispatch(EditActions.setMode.edit());
+      } else if (newMode && newMode === "SEQUENCE") {
+        dispatch(EditActions.setMode.editSequence(selectedSequence?.sequenceTO.id));
+      } else {
+        dispatch(EditActions.setMode.editStep(EditActions.step.find(actionToEdit.sequenceStepFk)));
+      }
     }
   };
 
@@ -145,7 +157,7 @@ const useControllPanelEditActionViewModel = () => {
     dataId: actionToEdit?.dataFk === -1 ? undefined : actionToEdit?.dataFk,
     actionType: actionToEdit?.actionType,
     deleteAction,
-    backToStep,
+    setMode,
     createAnother,
     key,
   };

@@ -13,9 +13,12 @@ import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditRelationProps {}
+export interface ControllPanelEditRelationProps {
+  hidden: boolean;
+}
 
 export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelationProps> = (props) => {
+  const { hidden } = props;
   const {
     label,
     data1,
@@ -34,32 +37,34 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
   } = useControllPanelEditRelationViewModel();
 
   return (
-    <ControllPanelEditSub label={label} key={key}>
-      <div className="optionField">
-        <OptionField label="Select first relation data">
-          <Dropdown
-            placeholder="Select Data..."
-            selection
-            selectOnBlur={false}
-            options={dataOptions}
-            onChange={(event, data) => {
-              setData(Number(data.value));
-            }}
-            value={data1}
-            onBlur={() => updateRelation()}
-          />
-        </OptionField>
+    <ControllPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveRelation}>
+      <div className="optionFieldSpacer">
+        <div className="optionField">
+          <OptionField label="Select first relation data">
+            <Dropdown
+              placeholder="Select Data..."
+              selection
+              selectOnBlur={false}
+              options={dataOptions}
+              onChange={(event, data) => {
+                setData(Number(data.value));
+              }}
+              value={data1}
+              onBlur={() => updateRelation()}
+            />
+          </OptionField>
 
-        <OptionField label="Select line ''out'' direction">
-          <Dropdown
-            placeholder="Select Direction1"
-            selection
-            options={directionOptions}
-            onChange={(event, data) => setDirection(Direction[data.value as Direction])}
-            value={direction1}
-            onBlur={() => updateRelation()}
-          />
-        </OptionField>
+          <OptionField label="Select line ''out'' direction">
+            <Dropdown
+              placeholder="Select Direction1"
+              selection
+              options={directionOptions}
+              onChange={(event, data) => setDirection(Direction[data.value as Direction])}
+              value={direction1}
+              onBlur={() => updateRelation()}
+            />
+          </OptionField>
+        </div>
       </div>
       <div className="columnDivider controllPanelEditChild">
         <div className="optionField">
@@ -112,12 +117,10 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
           </OptionField>
         </div>
       </div>
-      <div className="columnDivider">
-        <div className="controllPanelEditChild" style={{ display: "flex", alignItems: "center", height: "100%" }}>
-          <OptionField label="Relation options">
-            <Carv2DeleteButton onClick={deleteRelation} />
-          </OptionField>
-        </div>
+      <div className="columnDivider optionFieldSpacer">
+        <OptionField label="Relation options">
+          <Carv2DeleteButton onClick={deleteRelation} />
+        </OptionField>
       </div>
     </ControllPanelEditSub>
   );

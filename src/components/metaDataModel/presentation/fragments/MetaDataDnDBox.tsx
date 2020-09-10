@@ -97,6 +97,7 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
         )}
         instances={dataCTO.data.inst}
         zoomFactor={1}
+        type="DATA"
       />
     );
     return createDnDItem(dataCTO.geometricalData.position, onPositionUpdate, constraintsRef, metaDataFragment);

@@ -1,14 +1,22 @@
 import { Carv2Util } from "../../utils/Carv2Util";
+import { ChainCTO } from "../access/cto/ChainCTO";
+import { ChainlinkCTO } from "../access/cto/ChainlinkCTO";
 import { DataSetupCTO } from "../access/cto/DataSetupCTO";
 import { SequenceCTO } from "../access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../access/cto/SequenceStepCTO";
 import { ActionTO } from "../access/to/ActionTO";
+import { ChainDecisionTO } from "../access/to/ChainDecisionTO";
+import { ChainlinkTO } from "../access/to/ChainlinkTO";
+import { ChainTO } from "../access/to/ChainTO";
 import { DataSetupTO } from "../access/to/DataSetupTO";
 import { DecisionTO } from "../access/to/DecisionTO";
 import { InitDataTO } from "../access/to/InitDataTO";
 import { SequenceStepTO } from "../access/to/SequenceStepTO";
 import { SequenceTO } from "../access/to/SequenceTO";
 import { ActionRepository } from "../repositories/ActionRepository";
+import { ChainDecisionRepository } from "../repositories/ChainDecisionRepository";
+import { ChainLinkRepository } from "../repositories/ChainLinkRepository";
+import { ChainRepository } from "../repositories/ChainRepository";
 import { DataSetupRepository } from "../repositories/DataSetupRepository";
 import { DecisionRepository } from "../repositories/DecisionRepository";
 import { InitDataRepository } from "../repositories/InitDataRepository";
@@ -95,6 +103,38 @@ export const SequenceDataAccessService = {
     // save
     copyDecisions.forEach((decision) => DecisionRepository.save(decision));
     copySteps.forEach((step) => SequenceStepRepository.save(step));
+
+    if (root === null) {
+      throw Error("no root is set!");
+    } else {
+      return root;
+    }
+  },
+
+  setChainRoot(chainId: number, id: number, isDecision: boolean): ChainlinkTO | ChainDecisionTO {
+    let root: ChainlinkTO | ChainDecisionTO | null = null;
+    let copyDecisions: ChainDecisionTO[] = ChainDecisionRepository.findAllForChain(chainId);
+    let copySteps: ChainlinkTO[] = ChainLinkRepository.findAllForChain(chainId);
+    // set root
+    copyDecisions.forEach((decision) => {
+      if (isDecision) {
+        if (decision.id === id) {
+          root = decision;
+        }
+      }
+    });
+    copySteps.forEach((step) => {
+      step.root = false;
+      if (!isDecision) {
+        if (step.id === id) {
+          step.root = true;
+          root = step;
+        }
+      }
+    });
+    // save
+    copyDecisions.forEach((decision) => ChainDecisionRepository.save(decision));
+    copySteps.forEach((step) => ChainLinkRepository.save(step));
 
     if (root === null) {
       throw Error("no root is set!");
@@ -240,6 +280,69 @@ export const SequenceDataAccessService = {
   deleteInitData(id: number): InitDataTO {
     return InitDataRepository.delete(id);
   },
+
+  // ---------------------------------------------------------- Chain ----------------------------------------------------------
+  findAllChains(): ChainTO[] {
+    return ChainRepository.findAll();
+  },
+
+  getChainCTO(chain: ChainTO): ChainCTO {
+    return crateChainCTO(chain);
+  },
+
+  saveChainTO(chain: ChainTO): ChainTO {
+    return ChainRepository.saveTO(chain);
+  },
+
+  deleteChain(chain: ChainTO): ChainTO {
+    let linksToDelete: ChainlinkTO[] = ChainLinkRepository.findAllForChain(chain.id);
+    let decisionsToDelete: ChainDecisionTO[] = ChainDecisionRepository.findAllForChain(chain.id);
+    linksToDelete.forEach((link) => ChainLinkRepository.delete(link));
+    decisionsToDelete.forEach((dec) => ChainDecisionRepository.delete(dec));
+    return ChainRepository.delete(chain);
+  },
+
+  saveChainlink(link: ChainlinkTO): ChainlinkTO {
+    return ChainLinkRepository.save(link);
+  },
+
+  findAllChainLinks(): ChainlinkTO[] {
+    return ChainLinkRepository.findAll();
+  },
+
+  deleteChainTO(chainlink: ChainlinkTO): ChainlinkTO {
+    return ChainLinkRepository.delete(chainlink);
+  },
+
+  saveChainDecision(decision: ChainDecisionTO): ChainDecisionTO {
+    return ChainDecisionRepository.save(decision);
+  },
+
+  findAllChainDecisions(): ChainDecisionTO[] {
+    return ChainDecisionRepository.findAll();
+  },
+
+  deleteChainDecision(decision: ChainDecisionTO): ChainDecisionTO {
+    return ChainDecisionRepository.delete(decision);
+  },
+
+  findChainLink(id: number): ChainlinkTO {
+    const link: ChainlinkTO | undefined = ChainLinkRepository.find(id);
+    if (link) {
+      return link;
+    } else {
+      throw Error("could not find chain link with id: " + id);
+    }
+  },
+
+  findChainDecision(id: number): ChainDecisionTO {
+    const decision: ChainDecisionTO | undefined = ChainDecisionRepository.find(id);
+    if (decision) {
+      return decision;
+    } else {
+      throw Error("could not find chain decision with id: " + id);
+    }
+  },
 };
 // ======================================================== PRIVATE ========================================================
 
@@ -269,4 +372,35 @@ const createDataSetupCTO = (dataSetupTO: DataSetupTO | undefined): DataSetupCTO 
     dataSetup: dataSetupTO!,
     initDatas: initDatas,
   };
+};
+
+const createChainLinkCTO = (link: ChainlinkTO | undefined): ChainlinkCTO => {
+  CheckHelper.nullCheck(link, "chainlink");
+  let chainLinkCTO: ChainlinkCTO = new ChainlinkCTO();
+  chainLinkCTO.chainLink = link!;
+  const dataSetupTO: DataSetupTO | undefined = DataSetupRepository.find(link!.dataSetupFk);
+  const sequenceTO: SequenceTO | undefined = SequenceRepository.find(link!.sequenceFk);
+  if (dataSetupTO && sequenceTO) {
+    const dataSetupCTO: DataSetupCTO = createDataSetupCTO(dataSetupTO);
+    const sequenceCTO: SequenceCTO = createSequenceCTO(sequenceTO);
+    chainLinkCTO.dataSetup = dataSetupCTO;
+    chainLinkCTO.sequence = sequenceCTO;
+  }
+  return chainLinkCTO;
+};
+
+const crateChainCTO = (chain: ChainTO): ChainCTO => {
+  CheckHelper.nullCheck(chain, "chainTO");
+  const copyChain: ChainTO = Carv2Util.deepCopy(chain);
+  let chainCTO: ChainCTO = new ChainCTO();
+  const chainLinkTOs: ChainlinkTO[] | undefined = ChainLinkRepository.findAllForChain(copyChain.id);
+  let chainLinkCTOs: ChainlinkCTO[] = [];
+  if (chainLinkTOs) {
+    chainLinkCTOs = chainLinkTOs.map((link) => createChainLinkCTO(link));
+  }
+  const chainDecisions: ChainDecisionTO[] = ChainDecisionRepository.findAllForChain(copyChain.id);
+  chainCTO.chain = copyChain;
+  chainCTO.links = chainLinkCTOs;
+  chainCTO.decisions = chainDecisions;
+  return chainCTO;
 };

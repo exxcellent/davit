@@ -1,9 +1,13 @@
+import { ChainCTO } from "./access/cto/ChainCTO";
 import { ComponentCTO } from "./access/cto/ComponentCTO";
 import { DataCTO } from "./access/cto/DataCTO";
 import { DataSetupCTO } from "./access/cto/DataSetupCTO";
 import { SequenceCTO } from "./access/cto/SequenceCTO";
 import { SequenceStepCTO } from "./access/cto/SequenceStepCTO";
 import { ActionTO } from "./access/to/ActionTO";
+import { ChainDecisionTO } from "./access/to/ChainDecisionTO";
+import { ChainlinkTO } from "./access/to/ChainlinkTO";
+import { ChainTO } from "./access/to/ChainTO";
 import { DataRelationTO } from "./access/to/DataRelationTO";
 import { DataSetupTO } from "./access/to/DataSetupTO";
 import { DataInstanceTO } from "./access/to/DataTO";
@@ -215,7 +219,62 @@ export const DataAccess = {
   findDecision(id: number): DataAccessResponse<DecisionTO> {
     return makeTransactional(() => SequenceDataAccessService.findDecision(id));
   },
+
+  // ========================================= CHAIN =========================================
+
+  findAllChains(): DataAccessResponse<ChainTO[]> {
+    return makeTransactional(SequenceDataAccessService.findAllChains);
+  },
+
+  getChainCTO(chain: ChainTO): DataAccessResponse<ChainCTO> {
+    return makeTransactional(() => SequenceDataAccessService.getChainCTO(chain));
+  },
+
+  saveChainTO(chain: ChainTO): DataAccessResponse<ChainTO> {
+    return makeTransactional(() => SequenceDataAccessService.saveChainTO(chain));
+  },
+
+  deleteChain(chain: ChainTO): DataAccessResponse<ChainTO> {
+    return makeTransactional(() => SequenceDataAccessService.deleteChain(chain));
+  },
+
+  saveChainlink(link: ChainlinkTO): DataAccessResponse<ChainlinkTO> {
+    return makeTransactional(() => SequenceDataAccessService.saveChainlink(link));
+  },
+
+  findAllChainLinks(): DataAccessResponse<ChainlinkTO[]> {
+    return makeTransactional(SequenceDataAccessService.findAllChainLinks);
+  },
+
+  deleteChainLink(step: ChainlinkTO): DataAccessResponse<ChainlinkTO> {
+    return makeTransactional(() => SequenceDataAccessService.deleteChainTO(step));
+  },
+
+  saveChaindecision(decision: ChainDecisionTO): DataAccessResponse<ChainDecisionTO> {
+    return makeTransactional(() => SequenceDataAccessService.saveChainDecision(decision));
+  },
+
+  findAllChainDecisions(): DataAccessResponse<ChainDecisionTO[]> {
+    return makeTransactional(SequenceDataAccessService.findAllChainDecisions);
+  },
+
+  deleteChaindecision(decision: ChainDecisionTO): DataAccessResponse<ChainDecisionTO> {
+    return makeTransactional(() => SequenceDataAccessService.deleteChainDecision(decision));
+  },
+
+  setChainRoot(chainId: number, id: number, isDecision: boolean): DataAccessResponse<ChainlinkTO | ChainDecisionTO> {
+    return makeTransactional(() => SequenceDataAccessService.setChainRoot(chainId, id, isDecision));
+  },
+
+  findChainDecision(id: number): DataAccessResponse<ChainDecisionTO> {
+    return makeTransactional(() => SequenceDataAccessService.findChainDecision(id));
+  },
+
+  findChainLink(id: number): DataAccessResponse<ChainlinkTO> {
+    return makeTransactional(() => SequenceDataAccessService.findChainLink(id));
+  },
 };
+
 // ========================================= PRIVATE =========================================
 
 function makeTransactional<T>(callback: () => T): DataAccessResponse<T> {

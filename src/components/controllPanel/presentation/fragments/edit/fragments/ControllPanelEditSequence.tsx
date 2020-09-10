@@ -18,9 +18,12 @@ import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditSequenceProps {}
+export interface ControllPanelEditSequenceProps {
+  hidden: boolean;
+}
 
 export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSequenceProps> = (props) => {
+  const { hidden } = props;
   const {
     label,
     name,
@@ -32,23 +35,28 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
     createAnother,
     updateSequence,
     editOrAddDecision,
+    id,
   } = useControllPanelEditSequenceViewModel();
 
   const menuButtons = (
     <div className="columnDivider controllPanelEditChild">
-      <OptionField label="Navigation">
-        <Carv2ButtonLabel onClick={createAnother} label="Create another" />
-        <Carv2ButtonIcon onClick={saveSequence} icon="reply" />
-      </OptionField>
-      <OptionField label="Sequence - Options">
-        <Carv2DeleteButton onClick={deleteSequence} />
-      </OptionField>
+      <div className="optionFieldSpacer">
+        <OptionField label="Navigation">
+          <Carv2ButtonLabel onClick={createAnother} label="Create another" />
+          <Carv2ButtonIcon onClick={saveSequence} icon="reply" />
+        </OptionField>
+      </div>
+      <div className="optionFieldSpacer">
+        <OptionField label="Sequence - Options">
+          <Carv2DeleteButton onClick={deleteSequence} />
+        </OptionField>
+      </div>
     </div>
   );
 
   return (
-    <ControllPanelEditSub label={label}>
-      <div className="controllPanelEditChild">
+    <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveSequence}>
+      <div className="optionFieldSpacer">
         <OptionField label="Sequence - name">
           <Carv2LabelTextfield
             label="Name:"
@@ -58,10 +66,11 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
             autoFocus
             ref={textInput}
             onBlur={() => updateSequence()}
+            unvisible={hidden}
           />
         </OptionField>
       </div>
-      <div className="columnDivider controllPanelEditChild">
+      <div className="columnDivider optionFieldSpacer">
         <OptionField label="Create / Edit | Sequence - Step">
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddSequenceStep()} />
@@ -72,7 +81,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
           </Button.Group>
         </OptionField>
       </div>
-      <div className="columnDivider controllPanelEditChild">
+      <div className="columnDivider optionFieldSpacer">
         <OptionField label="Create / Edit | Sequence - Decision">
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddDecision()} />
@@ -117,7 +126,11 @@ const useControllPanelEditSequenceViewModel = () => {
   };
 
   const saveSequence = () => {
-    dispatch(EditActions.sequence.save(sequenceToEdit!));
+    if (sequenceToEdit!.name !== "") {
+      dispatch(EditActions.sequence.save(sequenceToEdit!));
+    } else {
+      dispatch(EditActions.sequence.delete(sequenceToEdit!));
+    }
     if (isCreateAnother) {
       dispatch(EditActions.setMode.editSequence());
     } else {
@@ -191,5 +204,6 @@ const useControllPanelEditSequenceViewModel = () => {
     createAnother,
     updateSequence,
     editOrAddDecision,
+    id: sequenceToEdit?.id || -1,
   };
 };

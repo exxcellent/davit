@@ -13,9 +13,12 @@ import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditDataProps {}
+export interface ControllPanelEditDataProps {
+  hidden: boolean;
+}
 
 export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps> = (props) => {
+  const { hidden } = props;
   const {
     label,
     textInput,
@@ -27,22 +30,26 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
     createAnother,
     instances,
     editOrAddInstance,
+    id,
   } = useControllPanelEditDataViewModel();
 
   return (
-    <ControllPanelEditSub label={label}>
-      <OptionField label="Data - Name">
-        <Carv2LabelTextfield
-          label="Name:"
-          placeholder="Data Name"
-          onChange={(event: any) => changeName(event.target.value)}
-          value={name}
-          autoFocus
-          ref={textInput}
-          onBlur={() => updateData()}
-        />
-      </OptionField>
-      <div className="columnDivider controllPanelEditChild">
+    <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveData}>
+      <div className="optionFieldSpacer">
+        <OptionField label="Data - Name">
+          <Carv2LabelTextfield
+            label="Name:"
+            placeholder="Data Name"
+            onChange={(event: any) => changeName(event.target.value)}
+            value={name}
+            autoFocus
+            ref={textInput}
+            onBlur={() => updateData()}
+            unvisible={hidden}
+          />
+        </OptionField>
+      </div>
+      <div className="columnDivider optionFieldSpacer">
         <OptionField label="create / edit | Data - Instance">
           <Button.Group>
             <Button icon="add" inverted color="orange" onClick={() => editOrAddInstance()} />
@@ -61,12 +68,10 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
           </OptionField>
         </div>
       </div>
-      <div className="columnDivider">
-        <div className="controllPanelEditChild" style={{ display: "felx", alignItems: "center", height: "100%" }}>
-          <OptionField label="Data - Options">
-            <Carv2DeleteButton onClick={deleteData} />
-          </OptionField>
-        </div>
+      <div className="columnDivider optionFieldSpacer">
+        <OptionField label="Data - Options">
+          <Carv2DeleteButton onClick={deleteData} />
+        </OptionField>
       </div>
     </ControllPanelEditSub>
   );
@@ -136,5 +141,6 @@ const useControllPanelEditDataViewModel = () => {
     createAnother,
     instances: dataToEdit?.data.inst ? dataToEdit.data.inst : [],
     editOrAddInstance,
+    id: dataToEdit?.data.id || -1,
   };
 };

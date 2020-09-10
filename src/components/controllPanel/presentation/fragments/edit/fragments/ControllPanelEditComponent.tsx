@@ -13,9 +13,12 @@ import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
 import { OptionField } from "../common/OptionField";
 
-export interface ControllPanelEditComponentProps {}
+export interface ControllPanelEditComponentProps {
+  hidden: boolean;
+}
 
 export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComponentProps> = (props) => {
+  const { hidden } = props;
   const {
     label,
     name,
@@ -25,11 +28,12 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
     textInput,
     updateComponent,
     createAnother,
+    id,
   } = useControllPanelEditComponentViewModel();
 
   return (
-    <ControllPanelEditSub label={label}>
-      <div className="optionFieldSpacer" style={{ display: "flex" }}>
+    <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveComponent}>
+      <div className="optionFieldSpacer">
         <OptionField label="Component - Name">
           <Carv2LabelTextfield
             label="Name:"
@@ -39,6 +43,7 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
             value={name}
             autoFocus
             ref={textInput}
+            unvisible={hidden}
           />
         </OptionField>
       </div>
@@ -53,12 +58,10 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
           </OptionField>
         </div>
       </div>
-      <div className="columnDivider">
-        <div className="controllPanelEditChild" style={{ display: "flex", alignItems: "center", height: "100%" }}>
-          <OptionField label="Component - Options">
-            <Carv2DeleteButton onClick={deleteComponent} />
-          </OptionField>
-        </div>
+      <div className="optionFieldSpacer columnDivider">
+        <OptionField label="Component - Options">
+          <Carv2DeleteButton onClick={deleteComponent} />
+        </OptionField>
       </div>
     </ControllPanelEditSub>
   );
@@ -90,7 +93,7 @@ const useControllPanelEditComponentViewModel = () => {
     dispatch(EditActions.component.save(copyComponentToEdit));
   };
 
-  const saveComponent = () => {
+  const saveComponent = (newMode?: string) => {
     if (!isNullOrUndefined(componentToEdit)) {
       if (componentToEdit?.component.name !== "") {
         dispatch(EditActions.component.save(componentToEdit!));
@@ -133,5 +136,6 @@ const useControllPanelEditComponentViewModel = () => {
     compGroup: componentToEdit?.component.groupFks !== -1 ? componentToEdit?.component.groupFks : undefined,
     updateComponent,
     createAnother,
+    id: componentToEdit?.component.id || -1,
   };
 };

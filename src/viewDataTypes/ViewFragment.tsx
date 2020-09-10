@@ -13,7 +13,7 @@ const getClassnameForViewFragmentState = (state: ViewFragmentState) => {
 
 export const createViewFragment = (componentDataFragmentProps: ViewFragmentProps, key: number) => {
   return (
-    <div className="viewFragment">
+    <div className="viewFragment" key={key}>
       <div className={getClassnameForViewFragmentState(componentDataFragmentProps.state)} key={key}>
         {componentDataFragmentProps.name}
       </div>

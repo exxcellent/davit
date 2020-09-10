@@ -85,7 +85,7 @@ const useViewModel = () => {
 
   const getComponentDatasFromView = (): ViewFragmentProps[] => {
     let compDatas: ViewFragmentProps[] = [];
-    const compDatasFromErros: ViewFragmentProps[] = errors.map(mapActionToComponentDatas);
+    const compDatasFromErros: ViewFragmentProps[] = errors.map(mapErrorToComponentDatas);
     const compDatasFromActions: ViewFragmentProps[] = actions.map(mapActionToComponentDatas);
     const compDatasFromCompDatas: ViewFragmentProps[] = currentComponentDatas.map(mapComponentDataToCompoenntData);
     compDatas.push(...compDatasFromErros);
@@ -139,6 +139,12 @@ const useViewModel = () => {
 
   const mapActionToComponentDatas = (errorItem: ActionTO): ViewFragmentProps => {
     const state: ViewFragmentState = mapActionTypeToViewFragmentState(errorItem.actionType);
+    return { name: getDataNameById(errorItem.dataFk), state: state, parentId: errorItem.componentFk };
+  };
+
+  const mapErrorToComponentDatas = (errorItem: ActionTO): ViewFragmentProps => {
+    const state: ViewFragmentState = mapErrorTypeToViewFragmentState(errorItem.actionType);
+
     return { name: getDataNameById(errorItem.dataFk), state: state, parentId: errorItem.componentFk };
   };
 
@@ -196,6 +202,19 @@ const useViewModel = () => {
     return cdState;
   };
 
+  const mapErrorTypeToViewFragmentState = (actionType: ActionType): ViewFragmentState => {
+    let cdState: ViewFragmentState;
+    switch (actionType) {
+      case ActionType.ADD:
+        cdState = ViewFragmentState.ERROR_ADD;
+        break;
+      case ActionType.DELETE:
+        cdState = ViewFragmentState.ERROR_DELETE;
+        break;
+    }
+    return cdState;
+  };
+
   const onPositionUpdate = (x: number, y: number, positionId: number) => {
     const componentCTO = components.find((componentCTO) => componentCTO.geometricalData.position.id === positionId);
     if (componentCTO) {
@@ -233,6 +252,7 @@ const useViewModel = () => {
           (comp.parentId as { dataId: number; instanceId: number }).dataId === component.component.id
       ),
       zoomFactor: 1,
+      type: "COMPONENT",
     };
   };
 
