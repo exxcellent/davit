@@ -16,7 +16,7 @@ import { SequenceModelActions, sequenceModelSelectors } from "../../../slices/Se
 import { ComponentData } from "../../../viewDataTypes/ComponentData";
 import { ViewFragmentProps } from "../../../viewDataTypes/ViewFragment";
 import { ViewFragmentState } from "../../../viewDataTypes/ViewFragmentState";
-import { MetaDataDnDBox } from "./fragments/MetaDataDnDBox";
+import { MetaDataDnDBox } from "./fragments2/MetaDataDnDBox";
 
 interface MetaDataModelControllerProps {
   fullScreen?: boolean;
