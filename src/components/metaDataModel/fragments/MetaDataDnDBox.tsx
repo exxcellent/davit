@@ -1,15 +1,15 @@
 import { motion } from "framer-motion";
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { ASPECT_RATIO, WINDOW_FACTOR } from "../../../../app/Carv2Constanc";
-import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
-import { GeometricalDataCTO } from "../../../../dataAccess/access/cto/GeometraicalDataCTO";
-import { DataRelationTO } from "../../../../dataAccess/access/to/DataRelationTO";
-import { Carv2Util } from "../../../../utils/Carv2Util";
-import { useCurrentHeight, useCurrentWitdh } from "../../../../utils/WindowUtil";
-import { ViewFragmentProps } from "../../../../viewDataTypes/ViewFragment";
-import { createDnDItem } from "../../../common/fragments/DnDWrapper";
-import { createCornerConnection } from "../../../common/fragments/svg/Carv2Path";
-import { Carv2Card } from "../../../metaComponentModel/presentation/fragments/Carv2Card";
+import { ASPECT_RATIO, WINDOW_FACTOR } from "../../../app/Carv2Constanc";
+import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
+import { GeometricalDataCTO } from "../../../dataAccess/access/cto/GeometraicalDataCTO";
+import { DataRelationTO } from "../../../dataAccess/access/to/DataRelationTO";
+import { Carv2Util } from "../../../utils/Carv2Util";
+import { useCurrentHeight, useCurrentWitdh } from "../../../utils/WindowUtil";
+import { ViewFragmentProps } from "../../../viewDataTypes/ViewFragment";
+import { createDnDItem } from "../../common/fragments/DnDWrapper";
+import { createCornerConnection } from "../../common/fragments/svg/Carv2Path";
+import { Carv2Card } from "../../metaComponentModel/presentation/fragments/Carv2Card";
 
 interface MetaDataDnDBox {
   dataCTOs: DataCTO[];
