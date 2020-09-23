@@ -1,8 +1,9 @@
 import { Carv2Util } from "../../utils/Carv2Util";
 import { DataCTO } from "../access/cto/DataCTO";
 import { GeometricalDataCTO } from "../access/cto/GeometraicalDataCTO";
+import { DataInstanceTO } from "../access/to/DataInstanceTO";
 import { DataRelationTO } from "../access/to/DataRelationTO";
-import { DataInstanceTO, DataTO } from "../access/to/DataTO";
+import { DataTO } from "../access/to/DataTO";
 import { DataConnectionRepository } from "../repositories/DataConnectionRepository";
 import { DataRepository } from "../repositories/DataRepository";
 import { CheckHelper } from "../util/CheckHelper";

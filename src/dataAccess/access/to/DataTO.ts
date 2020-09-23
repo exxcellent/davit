@@ -1,4 +1,5 @@
 import { AbstractTO } from "./AbstractTO";
+import { DataInstanceTO } from "./DataInstanceTO";
 
 export class DataTO extends AbstractTO {
   constructor(
@@ -8,12 +9,7 @@ export class DataTO extends AbstractTO {
     public inst: DataInstanceTO[] = []
   ) {
     super();
-  }
-}
-
-export class DataInstanceTO extends AbstractTO {
-  constructor(public name: string = "", public dataFk: number = -1) {
-    super();
+    inst.push({ id: -1, dataFk: this.id, name: this.name });
   }
 }
 

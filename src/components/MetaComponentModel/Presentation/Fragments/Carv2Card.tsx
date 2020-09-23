@@ -1,7 +1,8 @@
 import React, { FunctionComponent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { isNullOrUndefined } from "util";
-import { DataInstanceTO, DATA_INSTANCE_ID_FACTOR, getDataAndInstanceIds } from "../../../../dataAccess/access/to/DataTO";
+import { DataInstanceTO } from "../../../../dataAccess/access/to/DataInstanceTO";
+import { DATA_INSTANCE_ID_FACTOR, getDataAndInstanceIds } from "../../../../dataAccess/access/to/DataTO";
 import { EditActions } from "../../../../slices/EditSlice";
 import { Filter, SequenceModelActions, sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
 import { createViewFragment, ViewFragmentProps } from "../../../../viewDataTypes/ViewFragment";
@@ -47,17 +48,21 @@ export const Carv2Card: FunctionComponent<Carv2CardProps> = (props) => {
       onClick={props.onClick ? () => props.onClick!(props.id) : undefined}
       key={id}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+      <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
         <div className={showMenu ? "cardHeaderButtons" : "cardHeader"}>
           <div className={showMenu ? "carhHeaderTextInvisible" : "cardHeaderText"}>{initName}</div>
-          {showMenu &&
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          {showMenu && (
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
               <Carv2CardButton icon="wrench" onClick={() => onClickEdit(id, type)} />
               <Carv2CardButton icon="filter" onClick={() => onClickFilter(id, type)} isActive={isActiveFilter} />
             </div>
-          }
+          )}
         </div>
-        <Carv2CardMainButton onClick={() => { setShowMenu(!showMenu) }} />
+        <Carv2CardMainButton
+          onClick={() => {
+            setShowMenu(!showMenu);
+          }}
+        />
       </div>
       {instances && (
         <div style={{ display: "flex", alignItems: "start" }}>
@@ -78,7 +83,6 @@ export const Carv2Card: FunctionComponent<Carv2CardProps> = (props) => {
 };
 
 const useCarv2CardViewModel = (type: "DATA" | "COMPONENT" | "INSTANCE", id: number) => {
-
   const activeFilters: Filter[] = useSelector(sequenceModelSelectors.activeFilters);
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const dispatch = useDispatch();
@@ -93,11 +97,16 @@ const useCarv2CardViewModel = (type: "DATA" | "COMPONENT" | "INSTANCE", id: numb
         break;
       case "INSTANCE":
         if (!isNullOrUndefined(getDataAndInstanceIds(currentId).instanceId)) {
-          dispatch(EditActions.setMode.editDataInstanceById(getDataAndInstanceIds(currentId).instanceId!, getDataAndInstanceIds(currentId).dataId));
+          dispatch(
+            EditActions.setMode.editDataInstanceById(
+              getDataAndInstanceIds(currentId).instanceId!,
+              getDataAndInstanceIds(currentId).dataId
+            )
+          );
         }
     }
     setShowMenu(false);
-  }
+  };
   const onClickFilter = (currentId: number, currentType: "DATA" | "COMPONENT" | "INSTANCE") => {
     switch (currentType) {
       case "COMPONENT":
@@ -118,9 +127,11 @@ const useCarv2CardViewModel = (type: "DATA" | "COMPONENT" | "INSTANCE", id: numb
         }
         break;
     }
-  }
+  };
 
-  const isActiveFilter = activeFilters.some(filter => (filter.type === type || (filter.type === "DATA" && type === "INSTANCE")) && filter.id === id);
+  const isActiveFilter = activeFilters.some(
+    (filter) => (filter.type === type || (filter.type === "DATA" && type === "INSTANCE")) && filter.id === id
+  );
 
   return {
     onClickEdit,
@@ -128,5 +139,5 @@ const useCarv2CardViewModel = (type: "DATA" | "COMPONENT" | "INSTANCE", id: numb
     showMenu,
     setShowMenu,
     isActiveFilter: isActiveFilter,
-  }
-}
+  };
+};

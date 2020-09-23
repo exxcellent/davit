@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
-import { DataInstanceTO } from "../../../../dataAccess/access/to/DataTO";
+import { DataInstanceTO } from "../../../../dataAccess/access/to/DataInstanceTO";
 
 interface DataInstanceDropDownProps extends DropdownProps {
   onSelect: (instanc: number | undefined) => void;

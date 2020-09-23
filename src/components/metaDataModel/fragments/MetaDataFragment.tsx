@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { DataInstanceTO } from "../../../dataAccess/access/to/DataTO";
+import { DataInstanceTO } from "../../../dataAccess/access/to/DataInstanceTO";
 import { ViewFragmentProps } from "../../../viewDataTypes/ViewFragment";
 
 export interface MetaDataFragmentProps {

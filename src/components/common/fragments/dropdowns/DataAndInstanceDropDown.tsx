@@ -3,11 +3,8 @@ import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
-import {
-  DataInstanceTO,
-  DATA_INSTANCE_ID_FACTOR,
-  getDataAndInstanceIds,
-} from "../../../../dataAccess/access/to/DataTO";
+import { DataInstanceTO } from "../../../../dataAccess/access/to/DataInstanceTO";
+import { DATA_INSTANCE_ID_FACTOR, getDataAndInstanceIds } from "../../../../dataAccess/access/to/DataTO";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 
 interface DataAndInstanceDropDownProps extends DropdownProps {

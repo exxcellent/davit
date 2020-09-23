@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
-import { DataInstanceTO } from "../../../../../../dataAccess/access/to/DataTO";
+import { DataInstanceTO } from "../../../../../../dataAccess/access/to/DataInstanceTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
@@ -33,31 +33,33 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
 
   return (
     <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveDataInstace}>
-      <OptionField label="Instance - Name">
-        <Carv2LabelTextfield
-          label="Name:"
-          placeholder="Data Instance Name"
-          onChange={(event: any) => changeName(event.target.value)}
-          value={name}
-          autoFocus
-          ref={textInput}
-          onBlur={() => updateData()}
-          unvisible={hidden}
-        />
-      </OptionField>
-      <div className="columnDivider controllPanelEditChild"></div>
-      <div className="columnDivider controllPanelEditChild">
-        <OptionField label="Navigation">
-          <Carv2ButtonLabel onClick={createAnother} label="Create another" />
-          <Carv2ButtonIcon onClick={saveDataInstace} icon="reply" />
+      <div className="optionFieldSpacer">
+        <OptionField label="Instance - Name">
+          <Carv2LabelTextfield
+            label="Name:"
+            placeholder="Data Instance Name"
+            onChange={(event: any) => changeName(event.target.value)}
+            value={name}
+            autoFocus
+            ref={textInput}
+            onBlur={() => updateData()}
+            unvisible={hidden}
+          />
         </OptionField>
       </div>
-      <div className="columnDivider">
-        <div className="controllPanelEditChild" style={{ display: "felx", alignItems: "center", height: "100%" }}>
-          <OptionField label="Instance - Options">
-            <Carv2DeleteButton onClick={deleteDataInstance} />
+      <div className="columnDivider controllPanelEditChild"></div>
+      <div className="columnDivider controllPanelEditChild">
+        <div>
+          <OptionField label="Navigation">
+            <Carv2ButtonLabel onClick={createAnother} label="Create another" />
+            <Carv2ButtonIcon onClick={saveDataInstace} icon="reply" />
           </OptionField>
         </div>
+      </div>
+      <div className="columnDivider optionFieldSpacer">
+        <OptionField label="Data - Options">
+          <Carv2DeleteButton onClick={deleteDataInstance} />
+        </OptionField>
       </div>
     </ControllPanelEditSub>
   );
