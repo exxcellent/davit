@@ -75,7 +75,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
   }, [dataToEdit]);
 
   useEffect(() => {
-    // check if component to edit is really set or gso back to edit mode
+    // check if component to edit is really set or go back to edit mode
     if (isNullOrUndefined(dataToEdit)) {
       handleError("Tried to go to edit data without dataToedit specified");
       dispatch(EditActions.setMode.edit());
@@ -156,6 +156,6 @@ const useControllPanelEditDataInstanceViewModel = () => {
     deleteDataInstance,
     createAnother,
     instances: dataToEdit?.data.inst ? dataToEdit.data.inst : [],
-    id: (dataToEdit?.data.id || -1) + (instanceId || -1)
+    id: (dataToEdit?.data.id || -1) + (instanceId || -1),
   };
 };

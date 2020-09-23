@@ -6,7 +6,8 @@ export class ActionTO extends AbstractTO {
     public sequenceStepFk = -1,
     public componentFk = -1,
     public dataFk = -1,
-    public actionType = ActionType.ADD
+    public actionType = ActionType.ADD,
+    public sendingComponentFk = -1
   ) {
     super();
   }

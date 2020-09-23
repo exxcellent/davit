@@ -1,10 +1,10 @@
-import { SequenceCTO } from "./dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "./dataAccess/access/cto/SequenceStepCTO";
-import { ActionTO } from "./dataAccess/access/to/ActionTO";
-import { DecisionTO } from "./dataAccess/access/to/DecisionTO";
-import { GoTo, GoToTypes, Terminal } from "./dataAccess/access/types/GoToType";
-import { SequenceActionReducer, SequenceActionResult } from "./reducer/SequenceActionReducer";
-import { ComponentData } from "./viewDataTypes/ComponentData";
+import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
+import { ActionTO } from "../dataAccess/access/to/ActionTO";
+import { DecisionTO } from "../dataAccess/access/to/DecisionTO";
+import { GoTo, GoToTypes, Terminal } from "../dataAccess/access/types/GoToType";
+import { SequenceActionReducer, SequenceActionResult } from "../reducer/SequenceActionReducer";
+import { ComponentData } from "../viewDataTypes/ComponentData";
 
 export interface CalculatedStep {
   stepFk: number;
@@ -43,7 +43,9 @@ export const SequenceService = {
         let type = getType(stepOrDecision);
         let stepId: string = "root";
 
+        // calc next step or decision if not looping.
         while (!isLooping(loopStartingStep) && (type === GoToTypes.STEP || type === GoToTypes.DEC)) {
+          // calc next step.
           if (type === GoToTypes.STEP) {
             const step: SequenceStepCTO = stepOrDecision as SequenceStepCTO;
             const result: SequenceActionResult = calculateStep(step, componentDatas);
@@ -51,7 +53,6 @@ export const SequenceService = {
 
             loopStartingStep = checkForLoop(calcSequence, step, result);
 
-            // STEP ID
             const newStepId = "_STEP_" + step.squenceStepTO.id;
             stepId = stepId + newStepId;
             stepIds.push(stepId);
@@ -70,6 +71,7 @@ export const SequenceService = {
             }
           }
 
+          // calc next decision
           if (type === GoToTypes.DEC) {
             const decision: DecisionTO = stepOrDecision as DecisionTO;
 

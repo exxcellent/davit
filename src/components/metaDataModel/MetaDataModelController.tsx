@@ -203,6 +203,9 @@ const useMetaDataModelViewModel = () => {
       case ActionType.SEND:
         cdState = ViewFragmentState.NEW;
         break;
+      case ActionType.SEND_AND_DELETE:
+        cdState = ViewFragmentState.NEW;
+        break;
     }
     return cdState;
   };

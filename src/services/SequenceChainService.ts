@@ -1,11 +1,11 @@
 import { isNullOrUndefined } from "util";
-import { ChainCTO } from "./dataAccess/access/cto/ChainCTO";
-import { ChainlinkCTO } from "./dataAccess/access/cto/ChainlinkCTO";
-import { DataSetupCTO } from "./dataAccess/access/cto/DataSetupCTO";
-import { ChainDecisionTO } from "./dataAccess/access/to/ChainDecisionTO";
-import { GoToChain, GoToTypesChain, TerminalChain } from "./dataAccess/access/types/GoToTypeChain";
+import { ChainCTO } from "../dataAccess/access/cto/ChainCTO";
+import { ChainlinkCTO } from "../dataAccess/access/cto/ChainlinkCTO";
+import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
+import { ChainDecisionTO } from "../dataAccess/access/to/ChainDecisionTO";
+import { GoToChain, GoToTypesChain, TerminalChain } from "../dataAccess/access/types/GoToTypeChain";
+import { ComponentData } from "../viewDataTypes/ComponentData";
 import { CalcSequence, SequenceService } from "./SequenceService";
-import { ComponentData } from "./viewDataTypes/ComponentData";
 
 export interface CalcChainLink {
   name: string;

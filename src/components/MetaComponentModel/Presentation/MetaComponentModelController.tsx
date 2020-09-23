@@ -201,6 +201,9 @@ const useViewModel = () => {
       case ActionType.SEND:
         cdState = ViewFragmentState.NEW;
         break;
+      case ActionType.SEND_AND_DELETE:
+        cdState = ViewFragmentState.NEW;
+        break;
     }
     return cdState;
   };
@@ -215,6 +218,9 @@ const useViewModel = () => {
         cdState = ViewFragmentState.ERROR_DELETE;
         break;
       case ActionType.SEND:
+        cdState = ViewFragmentState.ERROR_ADD;
+        break;
+      case ActionType.SEND_AND_DELETE:
         cdState = ViewFragmentState.ERROR_ADD;
         break;
     }
