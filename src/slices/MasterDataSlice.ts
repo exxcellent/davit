@@ -105,14 +105,14 @@ const loadDatasFromBackend = (): AppThunk => async (dispatch) => {
   }
 };
 
-const loadDataInstancesFromBackend = (): AppThunk => (dispatch) => {
-  const response: DataAccessResponse<DataInstanceTO[]> = DataAccess.findAllInstances();
-  if (response.code === 200) {
-    dispatch(MasterDataSlice.actions.setInstances(response.object));
-  } else {
-    dispatch(handleError(response.message));
-  }
-};
+// const loadDataInstancesFromBackend = (): AppThunk => (dispatch) => {
+//   const response: DataAccessResponse<DataInstanceTO[]> = DataAccess.findAllInstances();
+//   if (response.code === 200) {
+//     dispatch(MasterDataSlice.actions.setInstances(response.object));
+//   } else {
+//     dispatch(handleError(response.message));
+//   }
+// };
 
 const loadRelationsFromBackend = (): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<DataRelationTO[]> = await DataAccess.findAllDataRelations();
