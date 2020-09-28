@@ -16,7 +16,7 @@ export const DataInstanceRepository = {
   },
 
   save(instance: DataInstanceTO): DataInstanceTO {
-    CheckHelper.nullCheck(instance, "data");
+    CheckHelper.nullCheck(instance, "instance");
     let dataInstanceTO: DataInstanceTO;
     if (instance.id === -1) {
       dataInstanceTO = {

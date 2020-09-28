@@ -96,8 +96,8 @@ const loadComponentsFromBackend = (): AppThunk => async (dispatch) => {
   }
 };
 
-const loadDatasFromBackend = (): AppThunk => async (dispatch) => {
-  const response: DataAccessResponse<DataCTO[]> = await DataAccess.findAllDatas();
+const loadDatasFromBackend = (): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<DataCTO[]> = DataAccess.findAllDatas();
   if (response.code === 200) {
     dispatch(MasterDataSlice.actions.setDatas(response.object));
   } else {
@@ -105,14 +105,14 @@ const loadDatasFromBackend = (): AppThunk => async (dispatch) => {
   }
 };
 
-// const loadDataInstancesFromBackend = (): AppThunk => (dispatch) => {
-//   const response: DataAccessResponse<DataInstanceTO[]> = DataAccess.findAllInstances();
-//   if (response.code === 200) {
-//     dispatch(MasterDataSlice.actions.setInstances(response.object));
-//   } else {
-//     dispatch(handleError(response.message));
-//   }
-// };
+const loadDataInstancesFromBackend = (): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<DataInstanceTO[]> = DataAccess.findAllInstances();
+  if (response.code === 200) {
+    dispatch(MasterDataSlice.actions.setInstances(response.object));
+  } else {
+    dispatch(handleError(response.message));
+  }
+};
 
 const loadRelationsFromBackend = (): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<DataRelationTO[]> = await DataAccess.findAllDataRelations();
@@ -175,6 +175,7 @@ const loadAll = (): AppThunk => (dispatch) => {
   dispatch(loadRelationsFromBackend());
   dispatch(loadSequencesFromBackend());
   dispatch(loadDatasFromBackend());
+  dispatch(loadDataInstancesFromBackend());
   dispatch(loadChainsFromBackend());
   dispatch(loadChainLinksFromBackend());
   dispatch(loadChainDecisionsFromBackend());
@@ -206,7 +207,10 @@ export const masterDataSelectors = {
   },
   getDataCTOById: (id: number) => {
     return (state: RootState): DataCTO | null => {
-      return state.masterData.datas.find((data) => data.data.id === id) || null;
+      console.info("search data id: " + id);
+      const data: DataCTO | null = state.masterData.datas.find((data) => data.data.id === id) || null;
+      console.info("data found: ", data);
+      return data;
     };
   },
   getDataSetupToById: (id: number) => {
@@ -240,5 +244,6 @@ export const MasterDataActions = {
   loadRelationsFromBackend,
   loadSequencesFromBackend,
   loadDatasFromBackend,
+  loadDataInstancesFromBackend,
   loadAll,
 };

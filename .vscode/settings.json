@@ -1,0 +1,6 @@
+{
+    "editor.defaultFormatter": "rbbit.typescript-hero",
+    "editor.formatOnSave": true,
+    "eslint.format.enable": true,
+    "vue3snippets.enable-compile-vue-file-on-did-save-code": false
+}

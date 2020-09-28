@@ -1,11 +1,9 @@
 import React, { FunctionComponent, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Input } from "semantic-ui-react";
-import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { DataInstanceTO } from "../../../../../../dataAccess/access/to/DataInstanceTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
-import { masterDataSelectors } from "../../../../../../slices/MasterDataSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
@@ -41,7 +39,7 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
             value={name}
             autoFocus
             ref={textInput}
-            onBlur={() => saveDataInstace()}
+            // onBlur={() => saveDataInstace()}
             unvisible={hidden}
           />
         </OptionField>
@@ -66,9 +64,6 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
 
 const useControllPanelEditDataInstanceViewModel = () => {
   const instanceToEdit: DataInstanceTO | null = useSelector(editSelectors.instanceToEdit);
-  const dataToEdit: DataCTO | null = useSelector(
-    masterDataSelectors.getDataCTOById(instanceToEdit ? instanceToEdit.dataFk : -1)
-  );
   const dispatch = useDispatch();
   const textInput = useRef<Input>(null);
 
@@ -90,6 +85,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
       let copyInstance: DataInstanceTO = Carv2Util.deepCopy(instanceToEdit);
       copyInstance.name = name;
       dispatch(EditActions.instance.update(copyInstance));
+      dispatch(EditActions.instance.save(copyInstance));
     }
   };
 
@@ -101,6 +97,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
       } else {
         deleteDataInstance();
       }
+      dispatch(EditActions.setMode.editDataById(instanceToEdit.dataFk));
     }
   };
 
@@ -108,7 +105,9 @@ const useControllPanelEditDataInstanceViewModel = () => {
     if (instanceToEdit !== null) {
       const copyInstance: DataInstanceTO = Carv2Util.deepCopy(instanceToEdit);
       dispatch(EditActions.instance.delete(copyInstance));
-      dataToEdit ? dispatch(EditActions.setMode.editData(dataToEdit)) : dispatch(EditActions.setMode.edit());
+      dispatch(EditActions.setMode.editDataById(instanceToEdit.dataFk));
+    }else{
+      dispatch(EditActions.setMode.edit());
     }
   };
 

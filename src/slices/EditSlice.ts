@@ -107,7 +107,7 @@ const EditSlice = createSlice({
       }
     },
     setDataToEdit: (state, action: PayloadAction<DataCTO>) => {
-      if (state.mode === Mode.EDIT_DATA || Mode.EDIT_DATA_INSTANCE) {
+      if (state.mode === Mode.EDIT_DATA) {
         state.objectToEdit = action.payload;
       } else {
         handleError("Try to set data to edit in mode: " + state.mode);
@@ -275,8 +275,11 @@ const setModeToEditData = (data?: DataCTO): AppThunk => (dispatch) => {
 
 const setModeToEditDataInstance = (instance: DataInstanceTO): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_DATA_INSTANCE));
-  dispatch(EditActions.instance.save(instance));
-  dispatch(EditSlice.actions.setInstanceToEdit(instance));
+  if(instance.id === -1){
+    dispatch(EditActions.instance.create(instance));
+  }else{
+    dispatch(EditSlice.actions.setInstanceToEdit(instance));
+  }
 };
 
 const setModeToEditRelation = (relation?: DataRelationTO): AppThunk => (dispatch) => {
@@ -475,12 +478,17 @@ const deleteGroupThunk = (group: GroupTO): AppThunk => async (dispatch) => {
 // ----------------------------------------------- DATA -----------------------------------------------
 
 const createDataThunk = (): AppThunk => (dispatch) => {
-  let data: DataCTO = new DataCTO();
+  const data: DataCTO = new DataCTO();
   const response: DataAccessResponse<DataCTO> = DataAccess.saveDataCTO(data);
   console.log(response);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
+  // create default instance.
+  const instance: DataInstanceTO = new DataInstanceTO();
+  instance.dataFk = response.object.data.id;
+  instance.name = response.object.data.name;
+  dispatch(EditActions.instance.save(instance));
   dispatch(MasterDataActions.loadDatasFromBackend());
   dispatch(EditActions.data.update(response.object));
 };
@@ -510,7 +518,16 @@ const saveDataInstanceThunk = (instance: DataInstanceTO): AppThunk => (dispatch)
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
+  dispatch(MasterDataActions.loadDataInstancesFromBackend());
   dispatch(MasterDataActions.loadDatasFromBackend());
+};
+
+const createDataInstanceThunk = (instance: DataInstanceTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<DataInstanceTO> = DataAccess.saveDataInstanceTO(instance);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(EditActions.setMode.editDataInstance(response.object));
 };
 
 const delteDataInstanceThunk = (instance: DataInstanceTO): AppThunk => (dispatch) => {
@@ -519,6 +536,7 @@ const delteDataInstanceThunk = (instance: DataInstanceTO): AppThunk => (dispatch
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
+  dispatch(MasterDataActions.loadDatasFromBackend());
   dispatch(MasterDataActions.loadDatasFromBackend());
 };
 
@@ -1114,6 +1132,7 @@ export const EditActions = {
     update: EditSlice.actions.setInstanceToEdit,
     save: saveDataInstanceThunk,
     delete: delteDataInstanceThunk,
+    create: createDataInstanceThunk,
   },
   group: {
     save: saveGroupThunk,

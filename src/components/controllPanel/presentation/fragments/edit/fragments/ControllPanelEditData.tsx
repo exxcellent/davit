@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, Input } from "semantic-ui-react";
 import { isNullOrUndefined } from "util";
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
+import { DataInstanceTO } from "../../../../../../dataAccess/access/to/DataInstanceTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
@@ -124,10 +125,12 @@ const useControllPanelEditDataViewModel = () => {
     dispatch(EditActions.setMode.editData());
   };
 
-  const editOrAddInstance = (id?: number) => {
-    if (!isNullOrUndefined(dataToEdit)) {
-      dispatch(EditActions.setMode.editDataInstance(Carv2Util.deepCopy(dataToEdit)));
+  const editOrAddInstance = (instance?: DataInstanceTO) => {
+    if (!instance && dataToEdit !== null) {
+      instance = new DataInstanceTO();
+      instance.dataFk = dataToEdit.data.id;
     }
+    dispatch(EditActions.setMode.editDataInstance(instance!));
   };
 
   return {
