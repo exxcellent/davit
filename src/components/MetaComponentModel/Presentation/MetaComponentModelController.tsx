@@ -6,7 +6,6 @@ import { DataSetupCTO } from "../../../dataAccess/access/cto/DataSetupCTO";
 import { GeometricalDataCTO } from "../../../dataAccess/access/cto/GeometraicalDataCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../../../dataAccess/access/to/ActionTO";
-import { DataTO, DATA_INSTANCE_ID_FACTOR, getDataAndInstanceIds } from "../../../dataAccess/access/to/DataTO";
 import { DecisionTO } from "../../../dataAccess/access/to/DecisionTO";
 import { InitDataTO } from "../../../dataAccess/access/to/InitDataTO";
 import { PositionTO } from "../../../dataAccess/access/to/PositionTO";
@@ -179,14 +178,15 @@ const useViewModel = () => {
   };
 
   const getDataNameById = (id: number): string => {
-    if (id < DATA_INSTANCE_ID_FACTOR) {
-      return datas.find((data) => data.data.id === id)?.data.name || "Could not find Data";
-    } else {
-      const ids = getDataAndInstanceIds(id);
-      const data: DataTO | undefined = datas.find((data) => data.data.id === ids.dataId)?.data;
-      const instance = data?.inst.find((instance) => instance.id === ids.instanceId);
-      return instance && data ? data.name + ": " + instance.name : "Could not find Data";
-    }
+    // TODO: this need to be replaced with instances.
+    // if (id < DATA_INSTANCE_ID_FACTOR) {
+    return datas.find((data) => data.data.id === id)?.data.name || "Could not find Data";
+    // } else {
+    //   const ids = getDataAndInstanceIds(id);
+    //   const data: DataTO | undefined = datas.find((data) => data.data.id === ids.dataId)?.data;
+    //   const instance = data?.inst.find((instance) => instance.id === ids.instanceId);
+    //   return instance && data ? data.name + ": " + instance.name : "Could not find Data";
+    // }
   };
 
   const mapActionTypeToViewFragmentState = (actionType: ActionType): ViewFragmentState => {

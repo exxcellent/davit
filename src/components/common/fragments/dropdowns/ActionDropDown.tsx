@@ -5,7 +5,6 @@ import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { ActionTO } from "../../../../dataAccess/access/to/ActionTO";
-import { getDataAndInstanceIds } from "../../../../dataAccess/access/to/DataTO";
 import { editSelectors } from "../../../../slices/EditSlice";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 
@@ -42,10 +41,16 @@ const getComponentName = (compId: number, components: ComponentCTO[]): string =>
 };
 
 const getDataName = (dataId: number, datas: DataCTO[]): string => {
-  const ids = getDataAndInstanceIds(dataId);
-  const data: DataCTO | undefined = datas.find((data) => data.data.id === ids.dataId);
-  const instance = ids.instanceId ? data?.data.inst.find((instance) => instance.id === ids.instanceId) : undefined;
-  const name: string = data?.data.name + " " + (instance?.name || "");
+  // TODO: clean up
+  // const ids = getDataAndInstanceIds(dataId);
+  // const ids = getDataAndInstanceIds(dataId);
+  const ids = dataId;
+  // const data: DataCTO | undefined = datas.find((data) => data.data.id === ids.dataId);
+  const data: DataCTO | undefined = datas.find((data) => data.data.id === dataId);
+  // const instance = ids.instanceId ? data?.data.inst.find((instance) => instance.id === ids.instanceId) : undefined;
+  const instance = undefined;
+  // const name: string = data?.data.name + " " + (instance?.name || "");
+  const name: string = data ? data?.data.name : "data is null";
   return name;
 };
 

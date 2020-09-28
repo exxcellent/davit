@@ -6,7 +6,6 @@ import { DataSetupCTO } from "../../dataAccess/access/cto/DataSetupCTO";
 import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../../dataAccess/access/to/ActionTO";
 import { DataRelationTO } from "../../dataAccess/access/to/DataRelationTO";
-import { DATA_INSTANCE_ID_FACTOR, getDataAndInstanceIds } from "../../dataAccess/access/to/DataTO";
 import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
 import { InitDataTO } from "../../dataAccess/access/to/InitDataTO";
 import { ActionType } from "../../dataAccess/access/types/ActionType";
@@ -145,14 +144,16 @@ const useMetaDataModelViewModel = () => {
 
   function mapActionToComponentDatas(actionItem: ActionTO): ViewFragmentProps {
     const state: ViewFragmentState = mapActionTypeToViewFragmentState(actionItem.actionType);
-    const parentId = getDataAndInstanceIds(actionItem.dataFk);
+    // const parentId = getDataAndInstanceIds(actionItem.dataFk);
+    const parentId = actionItem.dataFk;
     return { name: getComponentNameById(actionItem.componentFk), state: state, parentId: parentId };
   }
 
   const mapComponentDataToCompoenntData = (compData: ComponentData): ViewFragmentProps => {
     return {
       name: getComponentNameById(compData.componentFk),
-      parentId: compData.dataFk > DATA_INSTANCE_ID_FACTOR ? getDataAndInstanceIds(compData.dataFk) : compData.dataFk,
+      // parentId: compData.dataFk > DATA_INSTANCE_ID_FACTOR ? getDataAndInstanceIds(compData.dataFk) : compData.dataFk,
+      parentId: compData.dataFk,
       state: ViewFragmentState.PERSISTENT,
     };
   };
@@ -162,7 +163,8 @@ const useMetaDataModelViewModel = () => {
     if (decision) {
       props = decision.dataFks.map((data) => {
         return {
-          parentId: data > DATA_INSTANCE_ID_FACTOR ? getDataAndInstanceIds(data) : data,
+          // parentId: data > DATA_INSTANCE_ID_FACTOR ? getDataAndInstanceIds(data) : data,
+          parentId: data,
           name: getComponentNameById(decision.componentFk),
           state: decision.has ? ViewFragmentState.CHECKED : ViewFragmentState.DELETED,
         };

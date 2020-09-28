@@ -1,11 +1,11 @@
 import React, { FunctionComponent, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Input } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { DataInstanceTO } from "../../../../../../dataAccess/access/to/DataInstanceTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
+import { masterDataSelectors } from "../../../../../../slices/MasterDataSlice";
 import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
@@ -25,14 +25,13 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
     changeName,
     name,
     saveDataInstace,
-    updateData,
     deleteDataInstance,
     createAnother,
-    id,
+    key,
   } = useControllPanelEditDataInstanceViewModel();
 
   return (
-    <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveDataInstace}>
+    <ControllPanelEditSub key={key} label={label} hidden={hidden} onClickNavItem={saveDataInstace}>
       <div className="optionFieldSpacer">
         <OptionField label="Instance - Name">
           <Carv2LabelTextfield
@@ -42,7 +41,7 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
             value={name}
             autoFocus
             ref={textInput}
-            onBlur={() => updateData()}
+            onBlur={() => saveDataInstace()}
             unvisible={hidden}
           />
         </OptionField>
@@ -66,98 +65,69 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
 };
 
 const useControllPanelEditDataInstanceViewModel = () => {
-  const dataToEdit: DataCTO | null = useSelector(editSelectors.dataToEdit);
-  const instanceId: number | null = useSelector(editSelectors.instanceIndexToEdit);
+  const instanceToEdit: DataInstanceTO | null = useSelector(editSelectors.instanceToEdit);
+  const dataToEdit: DataCTO | null = useSelector(
+    masterDataSelectors.getDataCTOById(instanceToEdit ? instanceToEdit.dataFk : -1)
+  );
   const dispatch = useDispatch();
   const textInput = useRef<Input>(null);
 
   useEffect(() => {
     // used to focus the textfield on create another
     textInput.current!.focus();
-  }, [dataToEdit]);
+  }, [instanceToEdit]);
 
   useEffect(() => {
     // check if component to edit is really set or go back to edit mode
-    if (isNullOrUndefined(dataToEdit)) {
+    if (instanceToEdit === null) {
       handleError("Tried to go to edit data without dataToedit specified");
       dispatch(EditActions.setMode.edit());
     }
   });
 
   const changeName = (name: string) => {
-    if (!isNullOrUndefined(instanceId)) {
-      let copyDataToEdit: DataCTO = Carv2Util.deepCopy(dataToEdit);
-      // TODO: validate name so every instance name is unic.
-      copyDataToEdit.data.inst.find((instance) => instance.id === instanceId)!.name = name;
-      dispatch(EditActions.data.update(copyDataToEdit));
+    if (instanceToEdit !== null) {
+      let copyInstance: DataInstanceTO = Carv2Util.deepCopy(instanceToEdit);
+      copyInstance.name = name;
+      dispatch(EditActions.instance.update(copyInstance));
     }
   };
 
-  const updateData = () => {
-    if (!isNullOrUndefined(dataToEdit)) {
-      let copyDataToEdit: DataCTO = Carv2Util.deepCopy(dataToEdit);
-      const instance: DataInstanceTO | undefined = copyDataToEdit.data.inst.find(
-        (instance) => instance.id === instanceId
-      );
-      if (instance) {
-        if (instance.name !== "") {
-          dispatch(EditActions.data.save(copyDataToEdit));
-        }
-      }
-    }
-  };
-
-  const saveDataInstace = (newMode?: string) => {
-    if (!isNullOrUndefined(dataToEdit)) {
-      const instance: DataInstanceTO | undefined = dataToEdit.data.inst.find((instance) => instance.id === instanceId);
-      if (instance) {
-        if (instance.name !== "") {
-          dispatch(EditActions.data.save(dataToEdit!));
-        } else {
-          deleteDataInstance();
-        }
-        if (newMode && newMode === "EDIT") {
-          dispatch(EditActions.setMode.edit());
-        } else {
-          dispatch(EditActions.setMode.editData(dataToEdit!));
-        }
+  const saveDataInstace = () => {
+    if (instanceToEdit !== null) {
+      const copyInstance: DataInstanceTO = Carv2Util.deepCopy(instanceToEdit);
+      if (copyInstance.name !== "") {
+        dispatch(EditActions.instance.save(copyInstance));
+      } else {
+        deleteDataInstance();
       }
     }
   };
 
   const deleteDataInstance = () => {
-    if (!isNullOrUndefined(dataToEdit) && !isNullOrUndefined(instanceId)) {
-      let copyDataToEdit: DataCTO = Carv2Util.deepCopy(dataToEdit);
-      copyDataToEdit.data.inst.splice(instanceId, 1);
-      dispatch(EditActions.data.save(copyDataToEdit));
-      dispatch(EditActions.setMode.editData(copyDataToEdit));
+    if (instanceToEdit !== null) {
+      const copyInstance: DataInstanceTO = Carv2Util.deepCopy(instanceToEdit);
+      dispatch(EditActions.instance.delete(copyInstance));
+      dataToEdit ? dispatch(EditActions.setMode.editData(dataToEdit)) : dispatch(EditActions.setMode.edit());
     }
-  };
-
-  const getName = (): string => {
-    let name: string = "";
-    if (!isNullOrUndefined(dataToEdit) && !isNullOrUndefined(instanceId)) {
-      name = dataToEdit.data.inst.find((instance) => instance.id === instanceId)?.name || "";
-    }
-    return name;
   };
 
   const createAnother = () => {
-    if (!isNullOrUndefined(dataToEdit)) {
-      dispatch(EditActions.setMode.editDataInstance(Carv2Util.deepCopy(dataToEdit), undefined));
+    if (instanceToEdit !== null) {
+      const newInstance: DataInstanceTO = new DataInstanceTO();
+      newInstance.dataFk = instanceToEdit.dataFk;
+      dispatch(EditActions.setMode.editDataInstance(newInstance));
     }
   };
 
   return {
     label: "EDIT * DATA * INSTANCE",
-    name: getName(),
+    name: instanceToEdit?.name,
     changeName,
     saveDataInstace,
     textInput,
-    updateData,
     deleteDataInstance,
     createAnother,
-    instances: dataToEdit?.data.inst ? dataToEdit.data.inst : [],
-    id: (dataToEdit?.data.id || -1) + (instanceId || -1),
+    key: instanceToEdit?.id,
   };
 };

@@ -13,6 +13,7 @@ export interface StoreTO {
   decisions: any[];
   // Data
   datas: any[];
+  instances: any[];
   dataConnections: any[];
   // setup
   initDatas: any[];

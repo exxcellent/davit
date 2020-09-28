@@ -2,12 +2,10 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { isNullOrUndefined } from "util";
 import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
-import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../../../../../../dataAccess/access/to/ActionTO";
 import { DataInstanceTO } from "../../../../../../dataAccess/access/to/DataInstanceTO";
-import { DATA_INSTANCE_ID_FACTOR } from "../../../../../../dataAccess/access/to/DataTO";
 import { ActionType } from "../../../../../../dataAccess/access/types/ActionType";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
@@ -17,7 +15,7 @@ import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragmen
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ActionTypeDropDown } from "../../../../../common/fragments/dropdowns/ActionTypeDropDown";
 import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
-import { DataAndInstanceDropDown } from "../../../../../common/fragments/dropdowns/DataAndInstanceDropDown";
+import { InstanceDropDown } from "../../../../../common/fragments/dropdowns/InstanceDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { OptionField } from "../common/OptionField";
 
@@ -55,7 +53,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
       </div>
       <div className="optionFieldSpacer columnDivider">
         <OptionField label="Select data affected by the action">
-          <DataAndInstanceDropDown onSelect={setData} value={dataId} />
+          <InstanceDropDown onSelect={setData} value={dataId} />
         </OptionField>
       </div>
 
@@ -131,14 +129,11 @@ const useControllPanelEditActionViewModel = () => {
     return sendingComponendId;
   };
 
-  const setData = (values: { data?: DataCTO; instance?: DataInstanceTO } | undefined): void => {
-    if (!isNullOrUndefined(values?.data)) {
+  const setData = (instance: DataInstanceTO | undefined): void => {
+    if (instance !== null) {
       let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
-      if (values?.instance) {
-        copyActionToEdit.dataFk = values.data.data.id * DATA_INSTANCE_ID_FACTOR + values.instance.id;
-      } else {
-        copyActionToEdit.dataFk = values!.data.data.id;
-      }
+      // TODO: add to select a instace as well.
+      copyActionToEdit.dataFk = instance ? instance.dataFk : -1;
       dispatch(EditActions.action.update(copyActionToEdit));
       dispatch(EditActions.action.save(copyActionToEdit));
     }

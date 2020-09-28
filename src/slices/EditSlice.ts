@@ -63,6 +63,7 @@ interface EditState {
   objectToEdit:
     | ComponentCTO
     | DataCTO
+    | DataInstanceTO
     | DataRelationTO
     | SequenceTO
     | SequenceStepCTO
@@ -74,21 +75,16 @@ interface EditState {
     | ChainlinkTO
     | ChainDecisionTO
     | {};
-  instanceIdToEdit: number | null;
 }
 const getInitialState: EditState = {
   objectToEdit: {},
   mode: Mode.EDIT,
-  instanceIdToEdit: null,
 };
 
 const EditSlice = createSlice({
   name: "edit",
   initialState: getInitialState,
   reducers: {
-    setInstanceIdToEdit: (state, action: PayloadAction<number | null>) => {
-      state.instanceIdToEdit = action.payload;
-    },
     setChainLinkToEdit: (state, action: PayloadAction<ChainlinkTO>) => {
       if (state.mode === Mode.EDIT_CHAIN_LINK) {
         state.objectToEdit = action.payload;
@@ -112,6 +108,13 @@ const EditSlice = createSlice({
     },
     setDataToEdit: (state, action: PayloadAction<DataCTO>) => {
       if (state.mode === Mode.EDIT_DATA || Mode.EDIT_DATA_INSTANCE) {
+        state.objectToEdit = action.payload;
+      } else {
+        handleError("Try to set data to edit in mode: " + state.mode);
+      }
+    },
+    setInstanceToEdit: (state, action: PayloadAction<DataInstanceTO>) => {
+      if (state.mode === Mode.EDIT_DATA_INSTANCE) {
         state.objectToEdit = action.payload;
       } else {
         handleError("Try to set data to edit in mode: " + state.mode);
@@ -253,6 +256,14 @@ const setModeToEditDataById = (id: number): AppThunk => (dispatch, getState) => 
   }
 };
 
+const editDataInstanceById = (id: number): AppThunk => (dispatch, getState) => {
+  const instance: DataInstanceTO | undefined = getState().masterData.instances.find((instance) => instance.id === id);
+  if (instance) {
+    dispatch(setModeWithStorage(Mode.EDIT_DATA_INSTANCE));
+    dispatch(EditSlice.actions.setInstanceToEdit(instance));
+  }
+};
+
 const setModeToEditData = (data?: DataCTO): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_DATA));
   if (data === undefined) {
@@ -262,22 +273,10 @@ const setModeToEditData = (data?: DataCTO): AppThunk => (dispatch) => {
   }
 };
 
-const setModeToEditDataInstance = (data: DataCTO, id?: number): AppThunk => (dispatch) => {
+const setModeToEditDataInstance = (instance: DataInstanceTO): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_DATA_INSTANCE));
-  if (id === undefined) {
-    dispatch(EditActions.data.createInstance(data));
-  } else {
-    dispatch(EditSlice.actions.setInstanceIdToEdit(id));
-  }
-};
-
-const setModeToEditDataInstanceById = (instanceId: number, dataId: number): AppThunk => (dispatch, getState) => {
-  const data: DataCTO | undefined = getState().masterData.datas.find((data) => data.data.id === dataId);
-  if (data) {
-    dispatch(EditSlice.actions.setDataToEdit(data));
-    dispatch(EditSlice.actions.setInstanceIdToEdit(instanceId));
-    dispatch(setModeWithStorage(Mode.EDIT_DATA_INSTANCE));
-  }
+  dispatch(EditActions.instance.save(instance));
+  dispatch(EditSlice.actions.setInstanceToEdit(instance));
 };
 
 const setModeToEditRelation = (relation?: DataRelationTO): AppThunk => (dispatch) => {
@@ -486,21 +485,6 @@ const createDataThunk = (): AppThunk => (dispatch) => {
   dispatch(EditActions.data.update(response.object));
 };
 
-const createDataInstanceThunk = (data: DataCTO): AppThunk => (dispatch) => {
-  let dataInstance: DataInstanceTO = new DataInstanceTO();
-  dataInstance.dataFk = data.data.id;
-  dataInstance.id = Math.max(...data.data.inst.map((inst) => inst.id)) + 1;
-  data.data.inst.push(dataInstance);
-  const response: DataAccessResponse<DataCTO> = DataAccess.saveDataCTO(data);
-  console.log(response);
-  if (response.code !== 200) {
-    dispatch(handleError(response.message));
-  }
-  dispatch(MasterDataActions.loadDatasFromBackend());
-  dispatch(EditSlice.actions.setInstanceIdToEdit(dataInstance.id));
-  dispatch(EditActions.data.update(response.object));
-};
-
 const saveDataThunk = (data: DataCTO): AppThunk => (dispatch) => {
   const response: DataAccessResponse<DataCTO> = DataAccess.saveDataCTO(data);
   console.log(response);
@@ -518,6 +502,24 @@ const deleteDataThunk = (data: DataCTO): AppThunk => async (dispatch) => {
   }
   dispatch(MasterDataActions.loadDatasFromBackend());
   dispatch(MasterDataActions.loadRelationsFromBackend());
+};
+
+const saveDataInstanceThunk = (instance: DataInstanceTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<DataInstanceTO> = DataAccess.saveDataInstanceTO(instance);
+  console.log(response);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(MasterDataActions.loadDatasFromBackend());
+};
+
+const delteDataInstanceThunk = (instance: DataInstanceTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<DataInstanceTO> = DataAccess.deleteDataInstanceTO(instance);
+  console.log(response);
+  if (response.code !== 200) {
+    dispatch(handleError(response.message));
+  }
+  dispatch(MasterDataActions.loadDatasFromBackend());
 };
 
 // ----------------------------------------------- RELATION -----------------------------------------------
@@ -998,6 +1000,9 @@ export const editSelectors = {
       ? (state.edit.objectToEdit as DataCTO)
       : null;
   },
+  instanceToEdit: (state: RootState): DataInstanceTO | null => {
+    return state.edit.mode === Mode.EDIT_DATA_INSTANCE ? (state.edit.objectToEdit as DataInstanceTO) : null;
+  },
   groupToEdit: (state: RootState): GroupTO | null => {
     return state.edit.mode === Mode.EDIT_GROUP && (state.edit.objectToEdit as GroupTO).color
       ? (state.edit.objectToEdit as GroupTO)
@@ -1063,9 +1068,6 @@ export const editSelectors = {
       ? (state.edit.objectToEdit as DecisionTO)
       : null;
   },
-  instanceIndexToEdit: (state: RootState): number | null => {
-    return state.edit.instanceIdToEdit;
-  },
 };
 
 // =============================================== ACTIONS ===============================================
@@ -1077,7 +1079,7 @@ export const EditActions = {
     editData: setModeToEditData,
     editDataById: setModeToEditDataById,
     editDataInstance: setModeToEditDataInstance,
-    editDataInstanceById: setModeToEditDataInstanceById,
+    editInstaceById: editDataInstanceById,
     editGroup: setModeToEditGroup,
     editRelation: setModeToEditRelation,
     editSequence: setModeToEditSequence,
@@ -1107,7 +1109,11 @@ export const EditActions = {
     delete: deleteDataThunk,
     update: EditSlice.actions.setDataToEdit,
     create: createDataThunk,
-    createInstance: createDataInstanceThunk,
+  },
+  instance: {
+    update: EditSlice.actions.setInstanceToEdit,
+    save: saveDataInstanceThunk,
+    delete: delteDataInstanceThunk,
   },
   group: {
     save: saveGroupThunk,

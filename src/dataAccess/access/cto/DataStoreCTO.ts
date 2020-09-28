@@ -3,6 +3,7 @@ import { ChainDecisionTO } from "../to/ChainDecisionTO";
 import { ChainlinkTO } from "../to/ChainlinkTO";
 import { ChainTO } from "../to/ChainTO";
 import { ComponentTO } from "../to/ComponentTO";
+import { DataInstanceTO } from "../to/DataInstanceTO";
 import { DataRelationTO } from "../to/DataRelationTO";
 import { DataSetupTO } from "../to/DataSetupTO";
 import { DataTO } from "../to/DataTO";
@@ -31,6 +32,7 @@ export class DataStoreCTO {
     public decisions = new Map<number, DecisionTO>(),
     // Data
     public datas = new Map<number, DataTO>(),
+    public instances = new Map<number, DataInstanceTO>(),
     public dataConnections = new Map<number, DataRelationTO>(),
     // Setup
     public initDatas = new Map<number, InitDataTO>(),

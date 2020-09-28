@@ -95,7 +95,7 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
             comp.parentId === dataCTO.data.id ||
             (comp.parentId as { dataId: number; instanceId: number }).dataId === dataCTO.data.id
         )}
-        instances={dataCTO.data.inst}
+        instances={dataCTO.instances}
         zoomFactor={1}
         type="DATA"
       />

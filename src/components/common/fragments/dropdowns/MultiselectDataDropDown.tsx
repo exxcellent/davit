@@ -2,7 +2,6 @@ import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
-import { DATA_INSTANCE_ID_FACTOR } from "../../../../dataAccess/access/to/DataTO";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 
 interface MultiselectDataDropDownProps extends DropdownProps {
@@ -38,7 +37,7 @@ const useMultiSelectDataDropDownViewModel = () => {
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
 
   const dataToOption = (data: DataCTO): DropdownItemProps[] => {
-    if (data.data.inst.length === 0) {
+    if (data.instances.length === 0) {
       return [
         {
           key: data.data.id,
@@ -47,11 +46,10 @@ const useMultiSelectDataDropDownViewModel = () => {
         },
       ];
     } else {
-      return data.data.inst.map((instance) => {
-        const value = data.data.id * DATA_INSTANCE_ID_FACTOR + instance.id;
+      return data.instances.map((instance) => {
         return {
-          key: value,
-          value: value,
+          key: instance.id,
+          value: instance.id,
           text: `${data.data.name}: ${instance.name}`,
         };
       });

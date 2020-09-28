@@ -1,10 +1,8 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { isNullOrUndefined } from "util";
-import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { DataInstanceTO } from "../../../../../../dataAccess/access/to/DataInstanceTO";
 import { DataSetupTO } from "../../../../../../dataAccess/access/to/DataSetupTO";
-import { DATA_INSTANCE_ID_FACTOR } from "../../../../../../dataAccess/access/to/DataTO";
 import { InitDataTO } from "../../../../../../dataAccess/access/to/InitDataTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
@@ -13,7 +11,7 @@ import { Carv2Util } from "../../../../../../utils/Carv2Util";
 import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
 import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
 import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
-import { DataAndInstanceDropDown } from "../../../../../common/fragments/dropdowns/DataAndInstanceDropDown";
+import { InstanceDropDown } from "../../../../../common/fragments/dropdowns/InstanceDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { OptionField } from "../common/OptionField";
 
@@ -49,7 +47,7 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
       </div>
       <div className="columnDivider optionFieldSpacer">
         <OptionField label="Select Data which will be added">
-          <DataAndInstanceDropDown onSelect={setData} value={data} />
+          <InstanceDropDown onSelect={setData} value={data} />
         </OptionField>
       </div>
       <div className="columnDivider controllPanelEditChild" style={{ paddingLeft: "10px", paddingRight: "10px" }}>
@@ -121,14 +119,10 @@ const useControllPanelEditDataSetupViewModel = () => {
     }
   };
 
-  const setData = (values: { data?: DataCTO; instance?: DataInstanceTO } | undefined): void => {
-    if (!isNullOrUndefined(values?.data)) {
+  const setData = (instance: DataInstanceTO | undefined): void => {
+    if (instance !== undefined) {
       const copyInitDataToEdit: InitDataTO = Carv2Util.deepCopy(initDataToEdit);
-      if (values?.instance) {
-        copyInitDataToEdit.dataFk = values.data.data.id * DATA_INSTANCE_ID_FACTOR + values.instance.id;
-      } else {
-        copyInitDataToEdit.dataFk = values!.data.data.id;
-      }
+      copyInitDataToEdit.dataFk = instance.dataFk;
       dispatch(EditActions.initData.update(copyInitDataToEdit));
     }
   };

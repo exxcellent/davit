@@ -126,7 +126,7 @@ const useControllPanelEditDataViewModel = () => {
 
   const editOrAddInstance = (id?: number) => {
     if (!isNullOrUndefined(dataToEdit)) {
-      dispatch(EditActions.setMode.editDataInstance(Carv2Util.deepCopy(dataToEdit), id));
+      dispatch(EditActions.setMode.editDataInstance(Carv2Util.deepCopy(dataToEdit)));
     }
   };
 
@@ -139,7 +139,7 @@ const useControllPanelEditDataViewModel = () => {
     textInput,
     updateData,
     createAnother,
-    instances: dataToEdit?.data.inst ? dataToEdit.data.inst : [],
+    instances: dataToEdit?.instances ? dataToEdit.instances : [],
     editOrAddInstance,
     id: dataToEdit?.data.id || -1,
   };

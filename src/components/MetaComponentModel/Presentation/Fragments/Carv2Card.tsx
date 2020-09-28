@@ -1,8 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { isNullOrUndefined } from "util";
 import { DataInstanceTO } from "../../../../dataAccess/access/to/DataInstanceTO";
-import { DATA_INSTANCE_ID_FACTOR, getDataAndInstanceIds } from "../../../../dataAccess/access/to/DataTO";
 import { EditActions } from "../../../../slices/EditSlice";
 import { Filter, SequenceModelActions, sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
 import { createViewFragment, ViewFragmentProps } from "../../../../viewDataTypes/ViewFragment";
@@ -68,7 +66,7 @@ export const Carv2Card: FunctionComponent<Carv2CardProps> = (props) => {
         <div style={{ display: "flex", alignItems: "start" }}>
           {instances.map((instance, index) =>
             createInstances(
-              id * DATA_INSTANCE_ID_FACTOR + index,
+              instance.id,
               instance.name,
               dataFragments.filter(
                 (component) => (component.parentId as { dataId: number; instanceId: number }).instanceId === index
@@ -96,14 +94,7 @@ const useCarv2CardViewModel = (type: "DATA" | "COMPONENT" | "INSTANCE", id: numb
         dispatch(EditActions.setMode.editDataById(currentId));
         break;
       case "INSTANCE":
-        if (!isNullOrUndefined(getDataAndInstanceIds(currentId).instanceId)) {
-          dispatch(
-            EditActions.setMode.editDataInstanceById(
-              getDataAndInstanceIds(currentId).instanceId!,
-              getDataAndInstanceIds(currentId).dataId
-            )
-          );
-        }
+        dispatch(EditActions.setMode.editInstaceById(currentId));
     }
     setShowMenu(false);
   };

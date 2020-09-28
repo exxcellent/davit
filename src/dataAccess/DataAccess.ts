@@ -156,16 +156,24 @@ export const DataAccess = {
     return makeTransactional(DataDataAccessService.findAllDatas);
   },
 
+  findAllInstances(): DataAccessResponse<DataInstanceTO[]> {
+    return makeTransactional(DataDataAccessService.findAllInstances);
+  },
+
   saveDataCTO(dataCTO: DataCTO): DataAccessResponse<DataCTO> {
     return makeTransactional(() => DataDataAccessService.saveDataCTO(dataCTO));
   },
 
-  saveDataInstanceTO(dataInstanceTO: DataInstanceTO): DataAccessResponse<DataCTO> {
+  saveDataInstanceTO(dataInstanceTO: DataInstanceTO): DataAccessResponse<DataInstanceTO> {
     return makeTransactional(() => DataDataAccessService.saveDataInstanceTO(dataInstanceTO));
   },
 
   deleteDataCTO(dataCTO: DataCTO): DataAccessResponse<DataCTO> {
     return makeTransactional(() => DataDataAccessService.deleteDataCTO(dataCTO));
+  },
+
+  deleteDataInstanceTO(instance: DataInstanceTO): DataAccessResponse<DataInstanceTO> {
+    return makeTransactional(() => DataDataAccessService.deleteDataInstance(instance));
   },
 
   // ========================================= RELATION =========================================
