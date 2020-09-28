@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Input } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { DataInstanceTO } from "../../../../../../dataAccess/access/to/DataInstanceTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
@@ -90,7 +89,7 @@ const useControllPanelEditDataViewModel = () => {
 
   useEffect(() => {
     // check if component to edit is really set or gso back to edit mode
-    if (isNullOrUndefined(dataToEdit)) {
+    if (dataToEdit === null || dataToEdit === undefined) {
       handleError("Tried to go to edit data without dataToedit specified");
       dispatch(EditActions.setMode.edit());
     }
