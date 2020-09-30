@@ -68,7 +68,8 @@ export const DataDataAccessService = {
     const relationsToDelete: DataRelationTO[] | undefined = relations.filter(
       (relation) => relation.data1Fk === dataCTO.data.id || relation.data2Fk === dataCTO.data.id
     );
-    relationsToDelete.map((relation) => this.deleteDataRelationCTO(relation));
+    relationsToDelete.forEach((relation) => this.deleteDataRelationCTO(relation));
+    dataCTO.instances.forEach(instance => this.deleteDataInstance(instance));
     DataRepository.delete(dataCTO.data);
     TechnicalDataAccessService.deleteGeometricalDataCTO(dataCTO.geometricalData);
     return dataCTO;

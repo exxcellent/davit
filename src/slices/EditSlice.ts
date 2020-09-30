@@ -502,8 +502,8 @@ const saveDataThunk = (data: DataCTO): AppThunk => (dispatch) => {
   dispatch(MasterDataActions.loadDatasFromBackend());
 };
 
-const deleteDataThunk = (data: DataCTO): AppThunk => async (dispatch) => {
-  const response: DataAccessResponse<DataCTO> = await DataAccess.deleteDataCTO(data);
+const deleteDataThunk = (data: DataCTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<DataCTO> = DataAccess.deleteDataCTO(data);
   console.log(response);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
