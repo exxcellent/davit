@@ -1,32 +1,32 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { isNullOrUndefined } from "util";
-import { AppThunk, RootState } from "../app/store";
-import { Arrows } from "../components/metaComponentModel/presentation/MetaComponentModelController";
-import { ChainCTO } from "../dataAccess/access/cto/ChainCTO";
-import { ComponentCTO } from "../dataAccess/access/cto/ComponentCTO";
-import { DataCTO } from "../dataAccess/access/cto/DataCTO";
-import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
-import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
-import { ActionTO } from "../dataAccess/access/to/ActionTO";
-import { ChainDecisionTO } from "../dataAccess/access/to/ChainDecisionTO";
-import { ChainlinkTO } from "../dataAccess/access/to/ChainlinkTO";
-import { ChainTO } from "../dataAccess/access/to/ChainTO";
-import { DataInstanceTO } from "../dataAccess/access/to/DataInstanceTO";
-import { DataRelationTO } from "../dataAccess/access/to/DataRelationTO";
-import { DecisionTO } from "../dataAccess/access/to/DecisionTO";
-import { GroupTO } from "../dataAccess/access/to/GroupTO";
-import { InitDataTO } from "../dataAccess/access/to/InitDataTO";
-import { SequenceStepTO } from "../dataAccess/access/to/SequenceStepTO";
-import { SequenceTO } from "../dataAccess/access/to/SequenceTO";
-import { GoToTypes } from "../dataAccess/access/types/GoToType";
-import { GoToTypesChain } from "../dataAccess/access/types/GoToTypeChain";
-import { DataAccess } from "../dataAccess/DataAccess";
-import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
-import { Carv2Util } from "../utils/Carv2Util";
-import { handleError } from "./GlobalSlice";
-import { MasterDataActions } from "./MasterDataSlice";
-import { SequenceModelActions } from "./SequenceModelSlice";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+import { AppThunk, RootState } from '../app/store';
+import { Arrows } from '../components/metaComponentModel/presentation/MetaComponentModelController';
+import { ChainCTO } from '../dataAccess/access/cto/ChainCTO';
+import { ComponentCTO } from '../dataAccess/access/cto/ComponentCTO';
+import { DataCTO } from '../dataAccess/access/cto/DataCTO';
+import { DataSetupCTO } from '../dataAccess/access/cto/DataSetupCTO';
+import { SequenceCTO } from '../dataAccess/access/cto/SequenceCTO';
+import { SequenceStepCTO } from '../dataAccess/access/cto/SequenceStepCTO';
+import { ActionTO } from '../dataAccess/access/to/ActionTO';
+import { ChainDecisionTO } from '../dataAccess/access/to/ChainDecisionTO';
+import { ChainlinkTO } from '../dataAccess/access/to/ChainlinkTO';
+import { ChainTO } from '../dataAccess/access/to/ChainTO';
+import { DataInstanceTO } from '../dataAccess/access/to/DataInstanceTO';
+import { DataRelationTO } from '../dataAccess/access/to/DataRelationTO';
+import { DecisionTO } from '../dataAccess/access/to/DecisionTO';
+import { GroupTO } from '../dataAccess/access/to/GroupTO';
+import { InitDataTO } from '../dataAccess/access/to/InitDataTO';
+import { SequenceStepTO } from '../dataAccess/access/to/SequenceStepTO';
+import { SequenceTO } from '../dataAccess/access/to/SequenceTO';
+import { GoToTypes } from '../dataAccess/access/types/GoToType';
+import { GoToTypesChain } from '../dataAccess/access/types/GoToTypeChain';
+import { DataAccess } from '../dataAccess/DataAccess';
+import { DataAccessResponse } from '../dataAccess/DataAccessResponse';
+import { Carv2Util } from '../utils/Carv2Util';
+import { handleError } from './GlobalSlice';
+import { MasterDataActions } from './MasterDataSlice';
+import { SequenceModelActions } from './SequenceModelSlice';
 
 export enum Mode {
   TAB = "TAB",
@@ -63,7 +63,6 @@ interface EditState {
   objectToEdit:
     | ComponentCTO
     | DataCTO
-    | DataInstanceTO
     | DataRelationTO
     | SequenceTO
     | SequenceStepCTO
@@ -257,11 +256,12 @@ const setModeToEditDataById = (id: number): AppThunk => (dispatch, getState) => 
 };
 
 const editDataInstanceById = (id: number): AppThunk => (dispatch, getState) => {
-  const instance: DataInstanceTO | undefined = getState().masterData.instances.find((instance) => instance.id === id);
-  if (instance) {
-    dispatch(setModeWithStorage(Mode.EDIT_DATA_INSTANCE));
-    dispatch(EditSlice.actions.setInstanceToEdit(instance));
-  }
+  // TODO: have to fix this!
+  // const instance: DataInstanceTO | undefined = getState().masterData.instances.find((instance) => instance.id === id);
+  // if (instance) {
+  //   dispatch(setModeWithStorage(Mode.EDIT_DATA_INSTANCE));
+  //   dispatch(EditSlice.actions.setInstanceToEdit(instance));
+  // }
 };
 
 const setModeToEditData = (data?: DataCTO): AppThunk => (dispatch) => {
@@ -273,13 +273,9 @@ const setModeToEditData = (data?: DataCTO): AppThunk => (dispatch) => {
   }
 };
 
-const setModeToEditDataInstance = (instance: DataInstanceTO): AppThunk => (dispatch) => {
+const setModeToEditDataInstance = (data: DataCTO): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_DATA_INSTANCE));
-  if(instance.id === -1){
-    dispatch(EditActions.instance.create(instance));
-  }else{
-    dispatch(EditSlice.actions.setInstanceToEdit(instance));
-  }
+  dispatch(EditSlice.actions.setDataToEdit(data));
 };
 
 const setModeToEditRelation = (relation?: DataRelationTO): AppThunk => (dispatch) => {
@@ -335,7 +331,7 @@ const setModeEditChainDecision = (
 };
 
 const setModeToEditChainCondition = (decision: ChainDecisionTO): AppThunk => (dispatch) => {
-  if (!isNullOrUndefined(decision)) {
+  if (decision !== null && decision !==  undefined) {
     dispatch(setModeWithStorage(Mode.EDIT_CHAIN_DECISION_CONDITION));
   } else {
     handleError("Edit Condition: 'Decision is null or undefined'.");
@@ -403,7 +399,7 @@ const setModeToEditDecision = (
 };
 
 const setModeToEditCondition = (decision: DecisionTO): AppThunk => (dispatch) => {
-  if (!isNullOrUndefined(decision)) {
+  if (decision !== null && decision !==  undefined) {
     dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_DECISION_CONDITION));
     // dispatch(EditSlice.actions.setDecisionToEdit(decision));
   } else {
@@ -485,10 +481,6 @@ const createDataThunk = (): AppThunk => (dispatch) => {
     dispatch(handleError(response.message));
   }
   // create default instance.
-  const instance: DataInstanceTO = new DataInstanceTO();
-  instance.dataFk = response.object.data.id;
-  instance.name = response.object.data.name;
-  dispatch(EditActions.instance.save(instance));
   dispatch(MasterDataActions.loadDatasFromBackend());
   dispatch(EditActions.data.update(response.object));
 };
@@ -510,34 +502,6 @@ const deleteDataThunk = (data: DataCTO): AppThunk => (dispatch) => {
   }
   dispatch(MasterDataActions.loadDatasFromBackend());
   dispatch(MasterDataActions.loadRelationsFromBackend());
-};
-
-const saveDataInstanceThunk = (instance: DataInstanceTO): AppThunk => (dispatch) => {
-  const response: DataAccessResponse<DataInstanceTO> = DataAccess.saveDataInstanceTO(instance);
-  console.log(response);
-  if (response.code !== 200) {
-    dispatch(handleError(response.message));
-  }
-  dispatch(MasterDataActions.loadDataInstancesFromBackend());
-  dispatch(MasterDataActions.loadDatasFromBackend());
-};
-
-const createDataInstanceThunk = (instance: DataInstanceTO): AppThunk => (dispatch) => {
-  const response: DataAccessResponse<DataInstanceTO> = DataAccess.saveDataInstanceTO(instance);
-  if (response.code !== 200) {
-    dispatch(handleError(response.message));
-  }
-  dispatch(EditActions.setMode.editDataInstance(response.object));
-};
-
-const delteDataInstanceThunk = (instance: DataInstanceTO): AppThunk => (dispatch) => {
-  const response: DataAccessResponse<DataInstanceTO> = DataAccess.deleteDataInstanceTO(instance);
-  console.log(response);
-  if (response.code !== 200) {
-    dispatch(handleError(response.message));
-  }
-  dispatch(MasterDataActions.loadDatasFromBackend());
-  dispatch(MasterDataActions.loadDatasFromBackend());
 };
 
 // ----------------------------------------------- RELATION -----------------------------------------------
@@ -1127,12 +1091,6 @@ export const EditActions = {
     delete: deleteDataThunk,
     update: EditSlice.actions.setDataToEdit,
     create: createDataThunk,
-  },
-  instance: {
-    update: EditSlice.actions.setInstanceToEdit,
-    save: saveDataInstanceThunk,
-    delete: delteDataInstanceThunk,
-    create: createDataInstanceThunk,
   },
   group: {
     save: saveGroupThunk,

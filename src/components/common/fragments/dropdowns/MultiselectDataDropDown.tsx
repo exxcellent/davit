@@ -1,8 +1,9 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import React, { FunctionComponent } from 'react';
+import { useSelector } from 'react-redux';
+import { Dropdown, DropdownItemProps, DropdownProps } from 'semantic-ui-react';
+
+import { DataCTO } from '../../../../dataAccess/access/cto/DataCTO';
+import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
 
 interface MultiselectDataDropDownProps extends DropdownProps {
   onSelect: (dataIds: number[] | undefined) => void;
@@ -10,7 +11,9 @@ interface MultiselectDataDropDownProps extends DropdownProps {
   placeholder?: string;
 }
 
-export const MultiselectDataDropDown: FunctionComponent<MultiselectDataDropDownProps> = (props) => {
+export const MultiselectDataDropDown: FunctionComponent<MultiselectDataDropDownProps> = (
+  props
+) => {
   const { onSelect, selected, placeholder } = props;
   const { datas, dataToOption } = useMultiSelectDataDropDownViewModel();
 
@@ -20,9 +23,11 @@ export const MultiselectDataDropDown: FunctionComponent<MultiselectDataDropDownP
       fluid
       multiple
       selection
-      options={([] as DropdownItemProps[]).concat.apply([], datas.map(dataToOption)).sort(function (a, b) {
-        return ("" + a.attr).localeCompare(b.attr);
-      })}
+      options={([] as DropdownItemProps[]).concat
+        .apply([], datas.map(dataToOption))
+        .sort(function (a, b) {
+          return ("" + a.attr).localeCompare(b.attr);
+        })}
       onChange={(event, data) => {
         onSelect((data.value as number[]) || undefined);
       }}
@@ -37,7 +42,7 @@ const useMultiSelectDataDropDownViewModel = () => {
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
 
   const dataToOption = (data: DataCTO): DropdownItemProps[] => {
-    if (data.instances.length === 0) {
+    if (data.data.instances.length === 0) {
       return [
         {
           key: data.data.id,
@@ -46,7 +51,7 @@ const useMultiSelectDataDropDownViewModel = () => {
         },
       ];
     } else {
-      return data.instances.map((instance) => {
+      return data.data.instances.map((instance) => {
         return {
           key: instance.id,
           value: instance.id,

@@ -1,26 +1,25 @@
-import { ChainCTO } from "./access/cto/ChainCTO";
-import { ComponentCTO } from "./access/cto/ComponentCTO";
-import { DataCTO } from "./access/cto/DataCTO";
-import { DataSetupCTO } from "./access/cto/DataSetupCTO";
-import { SequenceCTO } from "./access/cto/SequenceCTO";
-import { SequenceStepCTO } from "./access/cto/SequenceStepCTO";
-import { ActionTO } from "./access/to/ActionTO";
-import { ChainDecisionTO } from "./access/to/ChainDecisionTO";
-import { ChainlinkTO } from "./access/to/ChainlinkTO";
-import { ChainTO } from "./access/to/ChainTO";
-import { DataInstanceTO } from "./access/to/DataInstanceTO";
-import { DataRelationTO } from "./access/to/DataRelationTO";
-import { DataSetupTO } from "./access/to/DataSetupTO";
-import { DecisionTO } from "./access/to/DecisionTO";
-import { GroupTO } from "./access/to/GroupTO";
-import { InitDataTO } from "./access/to/InitDataTO";
-import { SequenceStepTO } from "./access/to/SequenceStepTO";
-import { SequenceTO } from "./access/to/SequenceTO";
-import { DataAccessResponse } from "./DataAccessResponse";
-import dataStore from "./DataStore";
-import { ComponentDataAccessService } from "./services/ComponentDataAccessService";
-import { DataDataAccessService } from "./services/DataDataAccessService";
-import { SequenceDataAccessService } from "./services/SequenceDataAccessService";
+import { ChainCTO } from './access/cto/ChainCTO';
+import { ComponentCTO } from './access/cto/ComponentCTO';
+import { DataCTO } from './access/cto/DataCTO';
+import { DataSetupCTO } from './access/cto/DataSetupCTO';
+import { SequenceCTO } from './access/cto/SequenceCTO';
+import { SequenceStepCTO } from './access/cto/SequenceStepCTO';
+import { ActionTO } from './access/to/ActionTO';
+import { ChainDecisionTO } from './access/to/ChainDecisionTO';
+import { ChainlinkTO } from './access/to/ChainlinkTO';
+import { ChainTO } from './access/to/ChainTO';
+import { DataRelationTO } from './access/to/DataRelationTO';
+import { DataSetupTO } from './access/to/DataSetupTO';
+import { DecisionTO } from './access/to/DecisionTO';
+import { GroupTO } from './access/to/GroupTO';
+import { InitDataTO } from './access/to/InitDataTO';
+import { SequenceStepTO } from './access/to/SequenceStepTO';
+import { SequenceTO } from './access/to/SequenceTO';
+import { DataAccessResponse } from './DataAccessResponse';
+import dataStore from './DataStore';
+import { ComponentDataAccessService } from './services/ComponentDataAccessService';
+import { DataDataAccessService } from './services/DataDataAccessService';
+import { SequenceDataAccessService } from './services/SequenceDataAccessService';
 
 export const DataAccess = {
   // ========================================= FILE =========================================
@@ -156,24 +155,12 @@ export const DataAccess = {
     return makeTransactional(DataDataAccessService.findAllDatas);
   },
 
-  findAllInstances(): DataAccessResponse<DataInstanceTO[]> {
-    return makeTransactional(DataDataAccessService.findAllInstances);
-  },
-
   saveDataCTO(dataCTO: DataCTO): DataAccessResponse<DataCTO> {
     return makeTransactional(() => DataDataAccessService.saveDataCTO(dataCTO));
   },
 
-  saveDataInstanceTO(dataInstanceTO: DataInstanceTO): DataAccessResponse<DataInstanceTO> {
-    return makeTransactional(() => DataDataAccessService.saveDataInstanceTO(dataInstanceTO));
-  },
-
   deleteDataCTO(dataCTO: DataCTO): DataAccessResponse<DataCTO> {
     return makeTransactional(() => DataDataAccessService.deleteDataCTO(dataCTO));
-  },
-
-  deleteDataInstanceTO(instance: DataInstanceTO): DataAccessResponse<DataInstanceTO> {
-    return makeTransactional(() => DataDataAccessService.deleteDataInstance(instance));
   },
 
   // ========================================= RELATION =========================================

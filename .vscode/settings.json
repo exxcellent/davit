@@ -1,13 +1,18 @@
 {
-    "editor.defaultFormatter": "rbbit.typescript-hero",
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.formatOnSave": true,
     "eslint.format.enable": true,
-    "vue3snippets.enable-compile-vue-file-on-did-save-code": false,
-    "compile-hero.disable-compile-files-on-did-save-code": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true
+    },
     "[typescript]": {
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
     "[typescriptreact]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
-    }
+    },
+    "editor.formatOnPaste": true,
+    "javascript.format.semicolons": "insert",
+    "typescript.format.semicolons": "insert",
+    "typescriptHero.imports.organizeOnSave": true
 }

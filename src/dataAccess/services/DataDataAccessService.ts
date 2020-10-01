@@ -1,14 +1,12 @@
-import { Carv2Util } from "../../utils/Carv2Util";
-import { DataCTO } from "../access/cto/DataCTO";
-import { GeometricalDataCTO } from "../access/cto/GeometraicalDataCTO";
-import { DataInstanceTO } from "../access/to/DataInstanceTO";
-import { DataRelationTO } from "../access/to/DataRelationTO";
-import { DataTO } from "../access/to/DataTO";
-import { DataConnectionRepository } from "../repositories/DataConnectionRepository";
-import { DataInstanceRepository } from "../repositories/DataInstanceRepository";
-import { DataRepository } from "../repositories/DataRepository";
-import { CheckHelper } from "../util/CheckHelper";
-import { TechnicalDataAccessService } from "./TechnicalDataAccessService";
+import { Carv2Util } from '../../utils/Carv2Util';
+import { DataCTO } from '../access/cto/DataCTO';
+import { GeometricalDataCTO } from '../access/cto/GeometraicalDataCTO';
+import { DataRelationTO } from '../access/to/DataRelationTO';
+import { DataTO } from '../access/to/DataTO';
+import { DataConnectionRepository } from '../repositories/DataConnectionRepository';
+import { DataRepository } from '../repositories/DataRepository';
+import { CheckHelper } from '../util/CheckHelper';
+import { TechnicalDataAccessService } from './TechnicalDataAccessService';
 
 export const DataDataAccessService = {
   findData(id: number): DataTO | undefined {
@@ -23,28 +21,16 @@ export const DataDataAccessService = {
     return DataRepository.findAll().map((data) => createDataCTO(data));
   },
 
-  findAllInstances(): DataInstanceTO[] {
-    return DataInstanceRepository.findAll();
-  },
-
   saveDataCTO(dataCTO: DataCTO): DataCTO {
     CheckHelper.nullCheck(dataCTO, "dataCTO");
     const savedGeometricalData = TechnicalDataAccessService.saveGeometricalData(dataCTO.geometricalData);
-    const existingInstances: DataInstanceTO[] = DataInstanceRepository.findAllDataInstances(dataCTO.data.id);
     const copyDataCTO: DataCTO = Carv2Util.deepCopy(dataCTO);
     copyDataCTO.data.geometricalDataFk = savedGeometricalData.geometricalData.id;
     const savedData = DataRepository.save(copyDataCTO.data);
     return {
       data: savedData,
-      instances: existingInstances,
       geometricalData: savedGeometricalData,
     };
-  },
-
-  saveDataInstanceTO(dataInstanceTO: DataInstanceTO): DataInstanceTO {
-    CheckHelper.nullCheck(dataInstanceTO, "dataInstanceTO");
-    const savedInstance: DataInstanceTO = DataInstanceRepository.save(dataInstanceTO);
-    return savedInstance;
   },
 
   findAllDataRelationTOs(): DataRelationTO[] {
@@ -69,15 +55,9 @@ export const DataDataAccessService = {
       (relation) => relation.data1Fk === dataCTO.data.id || relation.data2Fk === dataCTO.data.id
     );
     relationsToDelete.forEach((relation) => this.deleteDataRelationCTO(relation));
-    dataCTO.instances.forEach(instance => this.deleteDataInstance(instance));
     DataRepository.delete(dataCTO.data);
     TechnicalDataAccessService.deleteGeometricalDataCTO(dataCTO.geometricalData);
     return dataCTO;
-  },
-
-  deleteDataInstance(instance: DataInstanceTO): DataInstanceTO {
-    CheckHelper.nullCheck(instance, "instance");
-    return DataInstanceRepository.delete(instance);
   },
 
   deleteDataRelationCTO(dataRelationTO: DataRelationTO): DataRelationTO {
@@ -101,11 +81,9 @@ const createDataCTO = (data: DataTO | undefined): DataCTO => {
   const geometricalData: GeometricalDataCTO | undefined = TechnicalDataAccessService.findGeometricalDataCTO(
     data!.geometricalDataFk!
   );
-  const instances: DataInstanceTO[] = DataInstanceRepository.findAllDataInstances(data!.id);
   CheckHelper.nullCheck(geometricalData, "geometricalData");
   return {
     data: data!,
-    instances: instances,
     geometricalData: geometricalData!,
   };
 };

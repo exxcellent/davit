@@ -1,11 +1,12 @@
-import React, { FunctionComponent, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { DataInstanceTO } from "../../../../dataAccess/access/to/DataInstanceTO";
-import { EditActions } from "../../../../slices/EditSlice";
-import { Filter, SequenceModelActions, sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
-import { createViewFragment, ViewFragmentProps } from "../../../../viewDataTypes/ViewFragment";
-import { Carv2CardButton } from "../../../common/fragments/buttons/Carv2CardButton";
-import { Carv2CardMainButton } from "../../../common/fragments/buttons/Carv2CardMainButton";
+import React, { FunctionComponent, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { DataInstanceTO } from '../../../../dataAccess/access/to/DataInstanceTO';
+import { EditActions } from '../../../../slices/EditSlice';
+import { Filter, SequenceModelActions, sequenceModelSelectors } from '../../../../slices/SequenceModelSlice';
+import { createViewFragment, ViewFragmentProps } from '../../../../viewDataTypes/ViewFragment';
+import { Carv2CardButton } from '../../../common/fragments/buttons/Carv2CardButton';
+import { Carv2CardMainButton } from '../../../common/fragments/buttons/Carv2CardMainButton';
 
 export interface Carv2CardProps {
   id: number;
@@ -20,11 +21,30 @@ export interface Carv2CardProps {
 }
 
 export const Carv2Card: FunctionComponent<Carv2CardProps> = (props) => {
-  const { id, initName, initWidth, initHeigth, dataFragments, instances, zoomFactor, type } = props;
+  const {
+    id,
+    initName,
+    initWidth,
+    initHeigth,
+    dataFragments,
+    instances,
+    zoomFactor,
+    type,
+  } = props;
 
-  const { onClickEdit, onClickFilter, showMenu, setShowMenu, isActiveFilter } = useCarv2CardViewModel(type, id);
+  const {
+    onClickEdit,
+    onClickFilter,
+    showMenu,
+    setShowMenu,
+    isActiveFilter,
+  } = useCarv2CardViewModel(type, id);
 
-  const createInstances = (id: number, instanceName: string, components: ViewFragmentProps[]) => {
+  const createInstances = (
+    id: number,
+    instanceName: string,
+    components: ViewFragmentProps[]
+  ) => {
     return (
       <Carv2Card
         id={id}
@@ -42,17 +62,38 @@ export const Carv2Card: FunctionComponent<Carv2CardProps> = (props) => {
   return (
     <div
       className={isActiveFilter ? "activeFilter card" : "card"}
-      style={{ minWidth: initWidth * zoomFactor, minHeight: initHeigth * zoomFactor, fontSize: `${1 * zoomFactor}em` }}
+      style={{
+        minWidth: initWidth * zoomFactor,
+        minHeight: initHeigth * zoomFactor,
+        fontSize: `${1 * zoomFactor}em`,
+      }}
       onClick={props.onClick ? () => props.onClick!(props.id) : undefined}
       key={id}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          width: "100%",
+        }}
+      >
         <div className={showMenu ? "cardHeaderButtons" : "cardHeader"}>
-          <div className={showMenu ? "carhHeaderTextInvisible" : "cardHeaderText"}>{initName}</div>
+          <div
+            className={showMenu ? "carhHeaderTextInvisible" : "cardHeaderText"}
+          >
+            {initName}
+          </div>
           {showMenu && (
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <Carv2CardButton icon="wrench" onClick={() => onClickEdit(id, type)} />
-              <Carv2CardButton icon="filter" onClick={() => onClickFilter(id, type)} isActive={isActiveFilter} />
+              <Carv2CardButton
+                icon="wrench"
+                onClick={() => onClickEdit(id, type)}
+              />
+              <Carv2CardButton
+                icon="filter"
+                onClick={() => onClickFilter(id, type)}
+                isActive={isActiveFilter}
+              />
             </div>
           )}
         </div>
@@ -66,26 +107,37 @@ export const Carv2Card: FunctionComponent<Carv2CardProps> = (props) => {
         <div style={{ display: "flex", alignItems: "start" }}>
           {instances.map((instance, index) =>
             createInstances(
-              instance.id,
+              index,
               instance.name,
               dataFragments.filter(
-                (component) => (component.parentId as { dataId: number; instanceId: number }).instanceId === index
+                (component) =>
+                  (component.parentId as { dataId: number; instanceId: number })
+                    .instanceId === index
               )
             )
           )}
         </div>
       )}
-      {(instances === undefined || instances?.length === 0) && dataFragments.map(createViewFragment)}
+      {(instances === undefined || instances?.length === 0) &&
+        dataFragments.map(createViewFragment)}
     </div>
   );
 };
 
-const useCarv2CardViewModel = (type: "DATA" | "COMPONENT" | "INSTANCE", id: number) => {
-  const activeFilters: Filter[] = useSelector(sequenceModelSelectors.activeFilters);
+const useCarv2CardViewModel = (
+  type: "DATA" | "COMPONENT" | "INSTANCE",
+  id: number
+) => {
+  const activeFilters: Filter[] = useSelector(
+    sequenceModelSelectors.activeFilters
+  );
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const dispatch = useDispatch();
 
-  const onClickEdit = (currentId: number, currentType: "DATA" | "COMPONENT" | "INSTANCE") => {
+  const onClickEdit = (
+    currentId: number,
+    currentType: "DATA" | "COMPONENT" | "INSTANCE"
+  ) => {
     switch (currentType) {
       case "COMPONENT":
         dispatch(EditActions.setMode.editComponentById(currentId));
@@ -98,7 +150,10 @@ const useCarv2CardViewModel = (type: "DATA" | "COMPONENT" | "INSTANCE", id: numb
     }
     setShowMenu(false);
   };
-  const onClickFilter = (currentId: number, currentType: "DATA" | "COMPONENT" | "INSTANCE") => {
+  const onClickFilter = (
+    currentId: number,
+    currentType: "DATA" | "COMPONENT" | "INSTANCE"
+  ) => {
     switch (currentType) {
       case "COMPONENT":
         if (isActiveFilter) {
@@ -121,7 +176,10 @@ const useCarv2CardViewModel = (type: "DATA" | "COMPONENT" | "INSTANCE", id: numb
   };
 
   const isActiveFilter = activeFilters.some(
-    (filter) => (filter.type === type || (filter.type === "DATA" && type === "INSTANCE")) && filter.id === id
+    (filter) =>
+      (filter.type === type ||
+        (filter.type === "DATA" && type === "INSTANCE")) &&
+      filter.id === id
   );
 
   return {

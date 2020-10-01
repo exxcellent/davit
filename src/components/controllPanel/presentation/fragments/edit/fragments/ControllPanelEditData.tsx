@@ -1,23 +1,26 @@
-import React, { FunctionComponent, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Input } from "semantic-ui-react";
-import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
-import { DataInstanceTO } from "../../../../../../dataAccess/access/to/DataInstanceTO";
-import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
-import { handleError } from "../../../../../../slices/GlobalSlice";
-import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
-import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
-import { DataInstanceDropDownButton } from "../../../../../common/fragments/dropdowns/DataInstanceDropDown";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
-import { OptionField } from "../common/OptionField";
+import React, { FunctionComponent, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Input } from 'semantic-ui-react';
+
+import { DataCTO } from '../../../../../../dataAccess/access/cto/DataCTO';
+import { DataInstanceTO } from '../../../../../../dataAccess/access/to/DataInstanceTO';
+import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
+import { handleError } from '../../../../../../slices/GlobalSlice';
+import { Carv2Util } from '../../../../../../utils/Carv2Util';
+import { Carv2ButtonIcon, Carv2ButtonLabel } from '../../../../../common/fragments/buttons/Carv2Button';
+import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
+import { DataInstanceDropDownButton } from '../../../../../common/fragments/dropdowns/DataInstanceDropDown';
+import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
+import { Carv2LabelTextfield } from '../common/fragments/Carv2LabelTextfield';
+import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditDataProps {
   hidden: boolean;
 }
 
-export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps> = (props) => {
+export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps> = (
+  props
+) => {
   const { hidden } = props;
   const {
     label,
@@ -34,7 +37,12 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
   } = useControllPanelEditDataViewModel();
 
   return (
-    <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveData}>
+    <ControllPanelEditSub
+      key={id}
+      label={label}
+      hidden={hidden}
+      onClickNavItem={saveData}
+    >
       <div className="optionFieldSpacer">
         <OptionField label="Data - Name">
           <Carv2LabelTextfield
@@ -52,11 +60,20 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
       <div className="columnDivider optionFieldSpacer">
         <OptionField label="create / edit | Data - Instance">
           <Button.Group>
-            <Button icon="add" inverted color="orange" onClick={() => editOrAddInstance()} />
+            <Button
+              icon="add"
+              inverted
+              color="orange"
+              onClick={() => editOrAddInstance()}
+            />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Instance
             </Button>
-            <DataInstanceDropDownButton onSelect={editOrAddInstance} icon={"wrench"} instances={instances} />
+            <DataInstanceDropDownButton
+              onSelect={editOrAddInstance}
+              icon={"wrench"}
+              instances={instances}
+            />
           </Button.Group>
         </OptionField>
       </div>
@@ -125,11 +142,9 @@ const useControllPanelEditDataViewModel = () => {
   };
 
   const editOrAddInstance = (instance?: DataInstanceTO) => {
-    if (!instance && dataToEdit !== null) {
-      instance = new DataInstanceTO();
-      instance.dataFk = dataToEdit.data.id;
+    if (dataToEdit !== null) {
+      dispatch(EditActions.setMode.editDataInstance(dataToEdit));
     }
-    dispatch(EditActions.setMode.editDataInstance(instance!));
   };
 
   return {
@@ -141,7 +156,7 @@ const useControllPanelEditDataViewModel = () => {
     textInput,
     updateData,
     createAnother,
-    instances: dataToEdit?.instances ? dataToEdit.instances : [],
+    instances: dataToEdit?.data.instances ? dataToEdit.data.instances : [],
     editOrAddInstance,
     id: dataToEdit?.data.id || -1,
   };

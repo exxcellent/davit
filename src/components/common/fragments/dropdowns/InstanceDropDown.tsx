@@ -1,35 +1,34 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { DataInstanceTO } from "../../../../dataAccess/access/to/DataInstanceTO";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import React, { FunctionComponent } from 'react';
+import { Dropdown, DropdownItemProps, DropdownProps } from 'semantic-ui-react';
+
+import { DataInstanceTO } from '../../../../dataAccess/access/to/DataInstanceTO';
 
 interface InstanceDropDownProps extends DropdownProps {
   onSelect: (instance: DataInstanceTO | undefined) => void;
+  instances: DataInstanceTO[];
   placeholder?: string;
   value?: number;
-  filterDataId?: number;
 }
 
 interface InstanceDropDownButtonProps extends DropdownProps {
   onSelect: (instance: DataInstanceTO | undefined) => void;
+  instances: DataInstanceTO[];
   icon?: string;
-  filterDataId?: number;
 }
 
-export const InstanceDropDown: FunctionComponent<InstanceDropDownProps> = (props) => {
-  const { onSelect, placeholder, value, filterDataId } = props;
-  const { instances, selectInstance, instanceToOption } = useDataDropDownViewModel();
+export const InstanceDropDown: FunctionComponent<InstanceDropDownProps> = (
+  props
+) => {
+  const { onSelect, placeholder, value, instances } = props;
+  const { selectInstance, instanceToOption } = useDataDropDownViewModel();
 
   return (
     <Dropdown
-      options={
-        filterDataId
-          ? instances.filter((inst) => inst.dataFk === filterDataId).map(instanceToOption)
-          : instances.map(instanceToOption)
-      }
+      options={instances.map(instanceToOption)}
       placeholder={placeholder || "Select Data ..."}
-      onChange={(event, instance) => onSelect(selectInstance(Number(instance.value), instances))}
+      onChange={(event, instance) =>
+        onSelect(selectInstance(instance.key, instances))
+      }
       selectOnBlur={false}
       scrolling
       selection
@@ -39,19 +38,19 @@ export const InstanceDropDown: FunctionComponent<InstanceDropDownProps> = (props
   );
 };
 
-export const InstanceDropDownButton: FunctionComponent<InstanceDropDownButtonProps> = (props) => {
-  const { onSelect, icon, filterDataId } = props;
-  const { instances, selectInstance, instanceToOption } = useDataDropDownViewModel();
+export const InstanceDropDownButton: FunctionComponent<InstanceDropDownButtonProps> = (
+  props
+) => {
+  const { onSelect, icon, instances } = props;
+  const { selectInstance, instanceToOption } = useDataDropDownViewModel();
 
   return (
     <Dropdown
-      options={
-        filterDataId
-          ? instances.filter((inst) => inst.dataFk === filterDataId).map(instanceToOption)
-          : instances.map(instanceToOption)
-      }
+      options={instances.map(instanceToOption)}
       icon={instances.length > 0 ? icon : ""}
-      onChange={(event, instance) => onSelect(selectInstance(Number(instance.value), instances))}
+      onChange={(event, instance) =>
+        onSelect(selectInstance(instance.key, instances))
+      }
       className="button icon"
       inverted="true"
       color="orange"
@@ -65,11 +64,12 @@ export const InstanceDropDownButton: FunctionComponent<InstanceDropDownButtonPro
 };
 
 const useDataDropDownViewModel = () => {
-  const instances: DataInstanceTO[] = useSelector(masterDataSelectors.instances);
-
-  const selectInstance = (id: number, instances: DataInstanceTO[]): DataInstanceTO | undefined => {
-    if (id !== null && instances !== null) {
-      return instances.find((inst) => inst.id === id);
+  const selectInstance = (
+    idName: string,
+    instances: DataInstanceTO[]
+  ): DataInstanceTO | undefined => {
+    if (idName !== null && instances !== null) {
+      return instances.find((inst) => inst.id === idName);
     }
     return undefined;
   };
@@ -82,5 +82,5 @@ const useDataDropDownViewModel = () => {
     };
   };
 
-  return { instances, selectInstance, instanceToOption };
+  return { selectInstance, instanceToOption };
 };

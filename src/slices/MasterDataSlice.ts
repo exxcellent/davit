@@ -1,24 +1,23 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk, RootState } from "../app/store";
-import { ComponentCTO } from "../dataAccess/access/cto/ComponentCTO";
-import { DataCTO } from "../dataAccess/access/cto/DataCTO";
-import { ChainDecisionTO } from "../dataAccess/access/to/ChainDecisionTO";
-import { ChainlinkTO } from "../dataAccess/access/to/ChainlinkTO";
-import { ChainTO } from "../dataAccess/access/to/ChainTO";
-import { DataInstanceTO } from "../dataAccess/access/to/DataInstanceTO";
-import { DataRelationTO } from "../dataAccess/access/to/DataRelationTO";
-import { DataSetupTO } from "../dataAccess/access/to/DataSetupTO";
-import { GroupTO } from "../dataAccess/access/to/GroupTO";
-import { SequenceTO } from "../dataAccess/access/to/SequenceTO";
-import { DataAccess } from "../dataAccess/DataAccess";
-import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
-import { handleError } from "./GlobalSlice";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+import { AppThunk, RootState } from '../app/store';
+import { ComponentCTO } from '../dataAccess/access/cto/ComponentCTO';
+import { DataCTO } from '../dataAccess/access/cto/DataCTO';
+import { ChainDecisionTO } from '../dataAccess/access/to/ChainDecisionTO';
+import { ChainlinkTO } from '../dataAccess/access/to/ChainlinkTO';
+import { ChainTO } from '../dataAccess/access/to/ChainTO';
+import { DataRelationTO } from '../dataAccess/access/to/DataRelationTO';
+import { DataSetupTO } from '../dataAccess/access/to/DataSetupTO';
+import { GroupTO } from '../dataAccess/access/to/GroupTO';
+import { SequenceTO } from '../dataAccess/access/to/SequenceTO';
+import { DataAccess } from '../dataAccess/DataAccess';
+import { DataAccessResponse } from '../dataAccess/DataAccessResponse';
+import { handleError } from './GlobalSlice';
 
 interface MasterDataState {
   components: ComponentCTO[];
   groups: GroupTO[];
   datas: DataCTO[];
-  instances: DataInstanceTO[];
   relations: DataRelationTO[];
   sequences: SequenceTO[];
   dataSetups: DataSetupTO[];
@@ -30,7 +29,6 @@ const getInitialState: MasterDataState = {
   components: [],
   groups: [],
   datas: [],
-  instances: [],
   relations: [],
   sequences: [],
   dataSetups: [],
@@ -48,9 +46,6 @@ const MasterDataSlice = createSlice({
     },
     setGroups: (state, action: PayloadAction<GroupTO[]>) => {
       state.groups = action.payload;
-    },
-    setInstances: (state, action: PayloadAction<DataInstanceTO[]>) => {
-      state.instances = action.payload;
     },
     setDatas: (state, action: PayloadAction<DataCTO[]>) => {
       state.datas = action.payload;
@@ -105,17 +100,8 @@ const loadDatasFromBackend = (): AppThunk => (dispatch) => {
   }
 };
 
-const loadDataInstancesFromBackend = (): AppThunk => (dispatch) => {
-  const response: DataAccessResponse<DataInstanceTO[]> = DataAccess.findAllInstances();
-  if (response.code === 200) {
-    dispatch(MasterDataSlice.actions.setInstances(response.object));
-  } else {
-    dispatch(handleError(response.message));
-  }
-};
-
-const loadRelationsFromBackend = (): AppThunk => async (dispatch) => {
-  const response: DataAccessResponse<DataRelationTO[]> = await DataAccess.findAllDataRelations();
+const loadRelationsFromBackend = (): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<DataRelationTO[]> = DataAccess.findAllDataRelations();
   if (response.code === 200) {
     dispatch(MasterDataSlice.actions.setRelations(response.object));
   } else {
@@ -175,7 +161,6 @@ const loadAll = (): AppThunk => (dispatch) => {
   dispatch(loadRelationsFromBackend());
   dispatch(loadSequencesFromBackend());
   dispatch(loadDatasFromBackend());
-  dispatch(loadDataInstancesFromBackend());
   dispatch(loadChainsFromBackend());
   dispatch(loadChainLinksFromBackend());
   dispatch(loadChainDecisionsFromBackend());
@@ -190,7 +175,6 @@ export const masterDataSelectors = {
   components: (state: RootState): ComponentCTO[] => state.masterData.components,
   groups: (state: RootState): GroupTO[] => state.masterData.groups,
   datas: (state: RootState): DataCTO[] => state.masterData.datas,
-  instances: (state: RootState): DataInstanceTO[] => state.masterData.instances,
   relations: (state: RootState): DataRelationTO[] => state.masterData.relations,
   sequences: (state: RootState): SequenceTO[] => state.masterData.sequences,
   chains: (state: RootState): ChainTO[] => state.masterData.chains,
@@ -244,6 +228,5 @@ export const MasterDataActions = {
   loadRelationsFromBackend,
   loadSequencesFromBackend,
   loadDatasFromBackend,
-  loadDataInstancesFromBackend,
   loadAll,
 };
