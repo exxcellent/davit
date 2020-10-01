@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Input } from 'semantic-ui-react';
 
 import { DataCTO } from '../../../../../../dataAccess/access/cto/DataCTO';
-import { DataInstanceTO } from '../../../../../../dataAccess/access/to/DataInstanceTO';
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
 import { handleError } from '../../../../../../slices/GlobalSlice';
 import { Carv2Util } from '../../../../../../utils/Carv2Util';
@@ -73,9 +72,12 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
 
 const useControllPanelEditDataInstanceViewModel = () => {
   const dataToEdit: DataCTO | null = useSelector(editSelectors.dataToEdit);
-  const instanceIndex: number | null = null;
+  const instanceId: number | null = useSelector(editSelectors.instanceToEdit);
   const dispatch = useDispatch();
   const textInput = useRef<Input>(null);
+
+  console.info("data: ", dataToEdit);
+  console.info("id: ", instanceId);
 
   useEffect(() => {
     // used to focus the textfield on create another
@@ -84,58 +86,60 @@ const useControllPanelEditDataInstanceViewModel = () => {
 
   useEffect(() => {
     // check if component to edit is really set or go back to edit mode
-    if (dataToEdit === null) {
+    if (dataToEdit === null && instanceId === -1) {
       handleError("Tried to go to edit data without dataToedit specified");
       dispatch(EditActions.setMode.edit());
     }
   });
 
   const changeName = (name: string) => {
-    if (dataToEdit !== null && instanceIndex !== null) {
+    if (dataToEdit !== null && instanceId !== null) {
       let copyData: DataCTO = Carv2Util.deepCopy(dataToEdit);
-      copyData.data.instances[instanceIndex].name = name;
+      copyData.data.instances.find(
+        (inst) => inst.id === instanceId
+      )!.name = name;
+      dispatch(EditActions.data.save(copyData));
       dispatch(EditActions.data.update(copyData));
     }
   };
 
   const saveDataInstace = () => {
-    if (dataToEdit !== null && instanceIndex !== null) {
+    if (dataToEdit !== null && instanceId !== null) {
       const copyData: DataCTO = Carv2Util.deepCopy(dataToEdit);
-      if (copyData.data.instances[instanceIndex].name !== "") {
-        dispatch(EditActions.data.save(copyData));
-      } else {
+      if (
+        copyData.data.instances.find((inst) => inst.id === instanceId)!.name ===
+        ""
+      ) {
         deleteDataInstance();
+      } else {
+        dispatch(EditActions.data.save(copyData));
+        dispatch(EditActions.setMode.editData(copyData));
       }
-      dispatch(EditActions.setMode.editData(copyData));
     }
   };
 
   const deleteDataInstance = () => {
-    if (dataToEdit !== null && instanceIndex !== null) {
+    if (dataToEdit !== null && instanceId !== null) {
       const copyData: DataCTO = Carv2Util.deepCopy(dataToEdit);
-      copyData.data.instances.splice(instanceIndex, 1);
+      copyData.data.instances = copyData.data.instances.filter(
+        (inst) => inst.id !== instanceId
+      );
       dispatch(EditActions.data.save(copyData));
       dispatch(EditActions.setMode.editData(copyData));
-    } else {
-      dispatch(EditActions.setMode.edit());
     }
   };
 
   const createAnother = () => {
     if (dataToEdit !== null) {
-      const copyData = Carv2Util.deepCopy(dataToEdit);
-      const newInstance: DataInstanceTO = new DataInstanceTO();
-      // TODO: create new id for instance.
-      copyData.data.instances.push(newInstance);
-      dispatch(EditActions.setMode.editDataInstance(copyData));
+      dispatch(EditActions.setMode.editDataInstance());
     }
   };
 
   return {
     label: "EDIT * DATA * INSTANCE",
     name:
-      instanceIndex && dataToEdit
-        ? dataToEdit.data.instances[instanceIndex].name
+      instanceId && dataToEdit
+        ? dataToEdit.data.instances.find((inst) => inst.id === instanceId)!.name
         : "instance not found",
     changeName,
     saveDataInstace,
@@ -143,8 +147,8 @@ const useControllPanelEditDataInstanceViewModel = () => {
     deleteDataInstance,
     createAnother,
     key:
-      instanceIndex && dataToEdit
-        ? dataToEdit.data.instances[instanceIndex].name
-        : 1,
+      instanceId && dataToEdit
+        ? dataToEdit.data.instances.find((inst) => inst.id === instanceId)!.id
+        : -1,
   };
 };

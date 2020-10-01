@@ -23,6 +23,7 @@ import { GoToTypes } from '../dataAccess/access/types/GoToType';
 import { GoToTypesChain } from '../dataAccess/access/types/GoToTypeChain';
 import { DataAccess } from '../dataAccess/DataAccess';
 import { DataAccessResponse } from '../dataAccess/DataAccessResponse';
+import { DataAccessUtil } from '../dataAccess/util/DataAccessUtil';
 import { Carv2Util } from '../utils/Carv2Util';
 import { handleError } from './GlobalSlice';
 import { MasterDataActions } from './MasterDataSlice';
@@ -74,10 +75,12 @@ interface EditState {
     | ChainlinkTO
     | ChainDecisionTO
     | {};
+    instanceId: number;
 }
 const getInitialState: EditState = {
   objectToEdit: {},
   mode: Mode.EDIT,
+  instanceId: -1,
 };
 
 const EditSlice = createSlice({
@@ -90,6 +93,9 @@ const EditSlice = createSlice({
       } else {
         console.warn("Try to set chain step to edit in mode: " + state.mode);
       }
+    },
+    setInstanceId: (state, action: PayloadAction<number>) => {
+      state.instanceId = action.payload;
     },
     setChainDecisionToEdit: (state, action: PayloadAction<ChainDecisionTO>) => {
       if (state.mode === Mode.EDIT_CHAIN_DECISION || state.mode === Mode.EDIT_CHAIN_DECISION_CONDITION) {
@@ -256,12 +262,12 @@ const setModeToEditDataById = (id: number): AppThunk => (dispatch, getState) => 
 };
 
 const editDataInstanceById = (id: number): AppThunk => (dispatch, getState) => {
-  // TODO: have to fix this!
-  // const instance: DataInstanceTO | undefined = getState().masterData.instances.find((instance) => instance.id === id);
-  // if (instance) {
-  //   dispatch(setModeWithStorage(Mode.EDIT_DATA_INSTANCE));
-  //   dispatch(EditSlice.actions.setInstanceToEdit(instance));
-  // }
+  if((getState().edit.objectToEdit as DataCTO).data){
+      dispatch(setModeWithStorage(Mode.EDIT_DATA_INSTANCE));
+      dispatch(EditSlice.actions.setInstanceId(id));
+  }else{
+    dispatch(setModeWithStorage(Mode.EDIT));
+  }
 };
 
 const setModeToEditData = (data?: DataCTO): AppThunk => (dispatch) => {
@@ -273,9 +279,20 @@ const setModeToEditData = (data?: DataCTO): AppThunk => (dispatch) => {
   }
 };
 
-const setModeToEditDataInstance = (data: DataCTO): AppThunk => (dispatch) => {
-  dispatch(setModeWithStorage(Mode.EDIT_DATA_INSTANCE));
-  dispatch(EditSlice.actions.setDataToEdit(data));
+const setModeToEditDataInstance = (id?: number): AppThunk => (dispatch, getState) => {
+  if((getState().edit.objectToEdit as DataCTO).data){
+    if(!id){
+      let copyData: DataCTO = Carv2Util.deepCopy(getState().edit.objectToEdit as DataCTO);
+      const newInstance: DataInstanceTO = new DataInstanceTO();
+      newInstance.id = DataAccessUtil.determineNewId(copyData.data.instances);
+      copyData.data.instances.push(newInstance);
+      id = newInstance.id;
+      dispatch(EditActions.data.save(copyData));
+      dispatch(EditSlice.actions.setDataToEdit(copyData));
+    }
+    dispatch(EditSlice.actions.setInstanceId(id));
+    dispatch(setModeWithStorage(Mode.EDIT_DATA_INSTANCE));
+  }
 };
 
 const setModeToEditRelation = (relation?: DataRelationTO): AppThunk => (dispatch) => {
@@ -474,13 +491,12 @@ const deleteGroupThunk = (group: GroupTO): AppThunk => async (dispatch) => {
 // ----------------------------------------------- DATA -----------------------------------------------
 
 const createDataThunk = (): AppThunk => (dispatch) => {
-  const data: DataCTO = new DataCTO();
-  const response: DataAccessResponse<DataCTO> = DataAccess.saveDataCTO(data);
+  let data: DataCTO = new DataCTO();
+  let response: DataAccessResponse<DataCTO> = DataAccess.saveDataCTO(data);
   console.log(response);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
-  // create default instance.
   dispatch(MasterDataActions.loadDatasFromBackend());
   dispatch(EditActions.data.update(response.object));
 };
@@ -982,9 +998,6 @@ export const editSelectors = {
       ? (state.edit.objectToEdit as DataCTO)
       : null;
   },
-  instanceToEdit: (state: RootState): DataInstanceTO | null => {
-    return state.edit.mode === Mode.EDIT_DATA_INSTANCE ? (state.edit.objectToEdit as DataInstanceTO) : null;
-  },
   groupToEdit: (state: RootState): GroupTO | null => {
     return state.edit.mode === Mode.EDIT_GROUP && (state.edit.objectToEdit as GroupTO).color
       ? (state.edit.objectToEdit as GroupTO)
@@ -1049,6 +1062,9 @@ export const editSelectors = {
       (state.edit.objectToEdit as DecisionTO).elseGoTo
       ? (state.edit.objectToEdit as DecisionTO)
       : null;
+  },
+  instanceToEdit: (state: RootState): number => {
+    return state.edit.instanceId;
   },
 };
 

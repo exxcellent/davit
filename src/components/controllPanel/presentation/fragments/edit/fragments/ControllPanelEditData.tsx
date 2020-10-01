@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input } from 'semantic-ui-react';
 
 import { DataCTO } from '../../../../../../dataAccess/access/cto/DataCTO';
-import { DataInstanceTO } from '../../../../../../dataAccess/access/to/DataInstanceTO';
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
 import { handleError } from '../../../../../../slices/GlobalSlice';
 import { Carv2Util } from '../../../../../../utils/Carv2Util';
@@ -70,7 +69,7 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
               Instance
             </Button>
             <DataInstanceDropDownButton
-              onSelect={editOrAddInstance}
+              onSelect={(id) => editOrAddInstance(id)}
               icon={"wrench"}
               instances={instances}
             />
@@ -141,9 +140,10 @@ const useControllPanelEditDataViewModel = () => {
     dispatch(EditActions.setMode.editData());
   };
 
-  const editOrAddInstance = (instance?: DataInstanceTO) => {
+  const editOrAddInstance = (id?: number) => {
     if (dataToEdit !== null) {
-      dispatch(EditActions.setMode.editDataInstance(dataToEdit));
+      console.info("id: ", id);
+      dispatch(EditActions.setMode.editDataInstance(id));
     }
   };
 

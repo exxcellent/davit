@@ -53,8 +53,8 @@ const useMultiSelectDataDropDownViewModel = () => {
     } else {
       return data.data.instances.map((instance) => {
         return {
-          key: instance.id,
-          value: instance.id,
+          key: instance.name,
+          value: instance.name,
           text: `${data.data.name}: ${instance.name}`,
         };
       });

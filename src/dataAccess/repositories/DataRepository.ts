@@ -1,8 +1,9 @@
-import { DataTO } from "../access/to/DataTO";
-import { ConstraintsHelper } from "../ConstraintsHelper";
-import dataStore from "../DataStore";
-import { CheckHelper } from "../util/CheckHelper";
-import { DataAccessUtil } from "../util/DataAccessUtil";
+import { DataInstanceTO } from '../access/to/DataInstanceTO';
+import { DataTO } from '../access/to/DataTO';
+import { ConstraintsHelper } from '../ConstraintsHelper';
+import dataStore from '../DataStore';
+import { CheckHelper } from '../util/CheckHelper';
+import { DataAccessUtil } from '../util/DataAccessUtil';
 
 export const DataRepository = {
   find(dataId: number): DataTO | undefined {
@@ -22,6 +23,15 @@ export const DataRepository = {
       };
     } else {
       dataTO = { ...data };
+    }
+    // check default instance
+    if(dataTO.instances.find(inst => inst.defaultInstance === true)){
+      dataTO.instances.find(inst => inst.defaultInstance === true)!.name = dataTO.name;
+    }else{
+      // create missing default instance
+      const defaultInstance: DataInstanceTO = new DataInstanceTO(dataTO.name, true);
+      defaultInstance.id = DataAccessUtil.determineNewId(dataTO.instances);
+      dataTO.instances.push(defaultInstance);
     }
     dataStore.getDataStore().datas.set(dataTO.id!, dataTO);
     return dataTO;

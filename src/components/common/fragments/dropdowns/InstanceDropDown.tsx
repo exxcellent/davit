@@ -69,7 +69,7 @@ const useDataDropDownViewModel = () => {
     instances: DataInstanceTO[]
   ): DataInstanceTO | undefined => {
     if (idName !== null && instances !== null) {
-      return instances.find((inst) => inst.id === idName);
+      return instances.find((inst) => inst.name === idName);
     }
     return undefined;
   };

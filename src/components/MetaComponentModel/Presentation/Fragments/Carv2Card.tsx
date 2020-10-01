@@ -105,17 +105,21 @@ export const Carv2Card: FunctionComponent<Carv2CardProps> = (props) => {
       </div>
       {instances && (
         <div style={{ display: "flex", alignItems: "start" }}>
-          {instances.map((instance, index) =>
-            createInstances(
-              index,
-              instance.name,
-              dataFragments.filter(
-                (component) =>
-                  (component.parentId as { dataId: number; instanceId: number })
-                    .instanceId === index
+          {instances
+            .filter((inst) => inst.defaultInstance === false)
+            .map((instance, index) =>
+              createInstances(
+                index,
+                instance.name,
+                dataFragments.filter(
+                  (component) =>
+                    (component.parentId as {
+                      dataId: number;
+                      instanceId: number;
+                    }).instanceId === index
+                )
               )
-            )
-          )}
+            )}
         </div>
       )}
       {(instances === undefined || instances?.length === 0) &&
