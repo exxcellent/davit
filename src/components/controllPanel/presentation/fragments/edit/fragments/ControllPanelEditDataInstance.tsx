@@ -24,7 +24,7 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
     label,
     textInput,
     changeName,
-    name,
+    getName,
     saveDataInstace,
     deleteDataInstance,
     createAnother,
@@ -44,7 +44,7 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
             label="Name:"
             placeholder="Data Instance Name"
             onChange={(event: any) => changeName(event.target.value)}
-            value={name}
+            value={getName()}
             autoFocus
             ref={textInput}
             // onBlur={() => saveDataInstace()}
@@ -72,12 +72,9 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
 
 const useControllPanelEditDataInstanceViewModel = () => {
   const dataToEdit: DataCTO | null = useSelector(editSelectors.dataToEdit);
-  const instanceId: number | null = useSelector(editSelectors.instanceToEdit);
+  const instanceId: number | null = useSelector(editSelectors.instanceIdToEdit);
   const dispatch = useDispatch();
   const textInput = useRef<Input>(null);
-
-  console.info("data: ", dataToEdit);
-  console.info("id: ", instanceId);
 
   useEffect(() => {
     // used to focus the textfield on create another
@@ -135,12 +132,22 @@ const useControllPanelEditDataInstanceViewModel = () => {
     }
   };
 
+  const getName = (): string => {
+    let name = "";
+    const instance = dataToEdit?.data.instances.find(
+      (inst) => inst.id === instanceId
+    );
+    if (instance) {
+      name = instance.name;
+    } else {
+      name = "could not find instance!";
+    }
+    return name;
+  };
+
   return {
     label: "EDIT * DATA * INSTANCE",
-    name:
-      instanceId && dataToEdit
-        ? dataToEdit.data.instances.find((inst) => inst.id === instanceId)!.name
-        : "instance not found",
+    getName,
     changeName,
     saveDataInstace,
     textInput,

@@ -112,7 +112,7 @@ const EditSlice = createSlice({
       }
     },
     setDataToEdit: (state, action: PayloadAction<DataCTO>) => {
-      if (state.mode === Mode.EDIT_DATA) {
+      if (state.mode === Mode.EDIT_DATA || state.mode === Mode.EDIT_DATA_INSTANCE) {
         state.objectToEdit = action.payload;
       } else {
         handleError("Try to set data to edit in mode: " + state.mode);
@@ -1063,7 +1063,7 @@ export const editSelectors = {
       ? (state.edit.objectToEdit as DecisionTO)
       : null;
   },
-  instanceToEdit: (state: RootState): number => {
+  instanceIdToEdit: (state: RootState): number => {
     return state.edit.instanceId;
   },
 };
