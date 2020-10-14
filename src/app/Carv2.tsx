@@ -1,16 +1,18 @@
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { Route, Switch } from "react-router-dom";
-import { ErrorNotification } from "../components/common/fragments/ErrorNotification";
-import { ControllPanelController } from "../components/controllPanel/presentation/ControllPanelController";
-import { MetaComponentModelController } from "../components/metaComponentModel/presentation/MetaComponentModelController";
-import { MetaDataModelController } from "../components/metaDataModel/MetaDataModelController";
-import { FlowChartController } from "../components/sequenceModel/FlowChartController";
-import { SequenceTableModelController } from "../components/sequenceTableModel/presentation/SequenceTableModelController";
-import { SidePanelController } from "../components/sidePanel/SidePanelController";
-import { MasterDataActions } from "../slices/MasterDataSlice";
-import { useZoomDisable } from "../utils/WindowUtil";
-import "./Carv2.css";
+import './Carv2.css';
+
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { Route, Switch } from 'react-router-dom';
+
+import { ErrorNotification } from '../components/common/fragments/ErrorNotification';
+import { ControllPanelController } from '../components/controllPanel/presentation/ControllPanelController';
+import { MetaComponentModelController } from '../components/metaComponentModel/presentation/MetaComponentModelController';
+import { MetaDataModelController } from '../components/metaDataModel/MetaDataModelController';
+import { FlowChartController } from '../components/sequenceModel/FlowChartController';
+import { SequenceTableModelController } from '../components/sequenceTableModel/presentation/SequenceTableModelController';
+import { SidePanelController } from '../components/sidePanel/SidePanelController';
+import { MasterDataActions } from '../slices/MasterDataSlice';
+import { useZoomDisable } from '../utils/WindowUtil';
 
 export const ModuleRoutes = {
   home: "/",
@@ -24,15 +26,7 @@ export const ModuleRoutes = {
 export function Carv2() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(MasterDataActions.loadDataSetupsFromBackend());
-    dispatch(MasterDataActions.loadComponentsFromBackend());
-    dispatch(MasterDataActions.loadGroupsFromBackend());
-    dispatch(MasterDataActions.loadDatasFromBackend());
-    dispatch(MasterDataActions.loadRelationsFromBackend());
-    dispatch(MasterDataActions.loadSequencesFromBackend());
-    dispatch(MasterDataActions.loadChainsFromBackend());
-    dispatch(MasterDataActions.loadChainLinksFromBackend());
-    dispatch(MasterDataActions.loadChainDecisionsFromBackend());
+    dispatch(MasterDataActions.loadAll());
   }, [dispatch]);
 
   // disable global key shortcuts.
