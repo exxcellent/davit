@@ -1,7 +1,8 @@
-import { motion, useInvertedScale, useMotionValue } from "framer-motion";
-import React, { FunctionComponent, useEffect } from "react";
-import { WINDOW_FACTOR } from "../../../app/Carv2Constanc";
-import { PositionTO } from "../../../dataAccess/access/to/PositionTO";
+import { motion, useInvertedScale, useMotionValue } from 'framer-motion';
+import React, { FunctionComponent, useEffect } from 'react';
+
+import { WINDOW_FACTOR } from '../../../app/Carv2Constants';
+import { PositionTO } from '../../../dataAccess/access/to/PositionTO';
 
 export interface DnDWrapperProps {
   dragConstraintsRef: any;
@@ -13,7 +14,14 @@ export interface DnDWrapperProps {
 }
 
 export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
-  const { dragConstraintsRef, initX, initY, onPositionUpdate, positionId, shadow } = props;
+  const {
+    dragConstraintsRef,
+    initX,
+    initY,
+    onPositionUpdate,
+    positionId,
+    shadow,
+  } = props;
 
   const x = useMotionValue(initX);
   const y = useMotionValue(initY);
@@ -36,8 +44,10 @@ export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
           keine Nachkommastellen 
           Positioniert das DnD Element entsprechend der Fenster größe.
           */
-          Number(info.point.x.toFixed(0)) / (dragConstraintsRef.current.offsetWidth / WINDOW_FACTOR),
-          Number(info.point.y.toFixed(0)) / (dragConstraintsRef.current.offsetHeight / WINDOW_FACTOR),
+          Number(info.point.x.toFixed(0)) /
+            (dragConstraintsRef.current.offsetWidth / WINDOW_FACTOR),
+          Number(info.point.y.toFixed(0)) /
+            (dragConstraintsRef.current.offsetHeight / WINDOW_FACTOR),
           positionId
         );
       }}

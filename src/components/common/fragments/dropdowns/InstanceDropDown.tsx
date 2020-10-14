@@ -7,7 +7,7 @@ import { DataInstanceTO } from '../../../../dataAccess/access/to/DataInstanceTO'
 import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
 
 export interface DataAndInstanceId {
-  data: DataCTO;
+  dataFk: number;
   instanceId: number;
 }
 
@@ -38,7 +38,7 @@ export const InstanceDropDown: FunctionComponent<InstanceDropDownProps> = (
       selectOnBlur={false}
       scrolling
       selection
-      value={value?.length === 0 ? undefined : value}
+      value={value !== "" ? value : undefined}
       disabled={createOptions().length > 0 ? false : true}
     />
   );
@@ -72,27 +72,14 @@ export const InstanceDropDownButton: FunctionComponent<InstanceDropDownButtonPro
 const useInstanceDropDownViewModel = () => {
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
 
-  const selectInstance = (itemId: string): DataAndInstanceId | undefined => {
-    console.info("Itemid: ", itemId);
-    if (itemId !== null && datas !== null) {
-      const data: DataCTO | undefined = datas.find(
-        (data) => data.data.id === getDataId(itemId)
-      );
-      if (data) {
-        return { data: data, instanceId: getInstanceId(itemId) };
-      }
+  const selectInstance = (
+    optionItemString: string
+  ): DataAndInstanceId | undefined => {
+    if (optionItemString !== null && datas !== null) {
+      const optionItem: DataAndInstanceId = JSON.parse(optionItemString);
+      return optionItem;
     }
     return undefined;
-  };
-
-  const getDataId = (instanceId: string): number => {
-    const ids: string[] = instanceId.split(":");
-    return Number(ids[0]);
-  };
-
-  const getInstanceId = (instanceId: string): number => {
-    const ids: string[] = instanceId.split(":");
-    return Number(ids[1]);
   };
 
   const createOptions = (): DropdownItemProps[] => {
@@ -100,7 +87,7 @@ const useInstanceDropDownViewModel = () => {
     if (datas) {
       datas.forEach((data) =>
         data.data.instances.forEach((inst) =>
-          dropdownItemas.push(instanceToOption(inst, data.data.id))
+          dropdownItemas.push(instanceToOption(inst, data))
         )
       );
     }
@@ -109,13 +96,21 @@ const useInstanceDropDownViewModel = () => {
 
   const instanceToOption = (
     instance: DataInstanceTO,
-    dataFk: number
+    data: DataCTO
   ): DropdownItemProps => {
-    const instanceId: string = dataFk + ":" + instance.id;
+    const optionItem: DataAndInstanceId = {
+      dataFk: data.data.id,
+      instanceId: instance.id,
+    };
+    const optionItemString: string = JSON.stringify(optionItem);
+    let optionLabel: string = data.data.name;
+    if (instance.id > 1) {
+      optionLabel = optionLabel + " - " + instance.name;
+    }
     return {
-      key: instanceId,
-      value: instanceId,
-      text: instance.name,
+      key: optionItemString,
+      value: optionItemString,
+      text: optionLabel,
     };
   };
 

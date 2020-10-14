@@ -1,9 +1,9 @@
-import { ActionTO } from "../dataAccess/access/to/ActionTO";
-import { DecisionTO } from "../dataAccess/access/to/DecisionTO";
-import { ActionType } from "../dataAccess/access/types/ActionType";
-import { GoTo } from "../dataAccess/access/types/GoToType";
-import { Carv2Util } from "../utils/Carv2Util";
-import { ComponentData } from "../viewDataTypes/ComponentData";
+import { ActionTO } from '../dataAccess/access/to/ActionTO';
+import { DecisionTO } from '../dataAccess/access/to/DecisionTO';
+import { ActionType } from '../dataAccess/access/types/ActionType';
+import { GoTo } from '../dataAccess/access/types/GoToType';
+import { Carv2Util } from '../utils/Carv2Util';
+import { ComponentData } from '../viewDataTypes/ComponentData';
 
 export interface SequenceActionResult {
   componenDatas: ComponentData[];
@@ -22,7 +22,11 @@ export const SequenceActionReducer = {
     let errors: ActionTO[] = [];
 
     actions.forEach((action) => {
-      const indexComponentToEdit: number = findComponentDataIndex(action.componentFk, action.dataFk, newComponentDatas);
+      const indexComponentToEdit: number = findComponentDataIndex(
+        action.componentFk, 
+        action.dataFk, 
+        newComponentDatas
+        );
       const indexComponentSending: number = findComponentDataIndex(
         action.sendingComponentFk,
         action.dataFk,
@@ -31,7 +35,7 @@ export const SequenceActionReducer = {
       switch (action.actionType) {
         case ActionType.ADD:
           indexComponentToEdit === -1
-            ? newComponentDatas.push({ componentFk: action.componentFk, dataFk: action.dataFk })
+            ? newComponentDatas.push({ componentFk: action.componentFk, dataFk: action.dataFk, instanceFk: action.instanceFk })
             : errors.push(action);
           break;
         case ActionType.DELETE:
@@ -39,12 +43,12 @@ export const SequenceActionReducer = {
           break;
         case ActionType.SEND:
           indexComponentSending !== -1 && indexComponentToEdit === -1
-            ? newComponentDatas.push({ componentFk: action.componentFk, dataFk: action.dataFk })
+            ? newComponentDatas.push({ componentFk: action.componentFk, dataFk: action.dataFk, instanceFk: componentDatas[indexComponentSending].instanceFk })
             : errors.push(action);
           break;
         case ActionType.SEND_AND_DELETE:
           if (indexComponentSending !== -1 && indexComponentToEdit === -1) {
-            newComponentDatas.push({ componentFk: action.componentFk, dataFk: action.dataFk });
+            newComponentDatas.push({ componentFk: action.componentFk, dataFk: action.dataFk, instanceFk: componentDatas[indexComponentSending].instanceFk });
             newComponentDatas.splice(indexComponentSending, 1);
           } else {
             errors.push(action);

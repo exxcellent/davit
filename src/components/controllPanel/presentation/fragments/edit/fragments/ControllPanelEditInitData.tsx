@@ -148,7 +148,7 @@ const useControllPanelEditDataSetupViewModel = () => {
     console.info("set Instance: ", dataAndInstanceId);
     if (dataAndInstanceId !== undefined) {
       const copyInitDataToEdit: InitDataTO = Carv2Util.deepCopy(initDataToEdit);
-      copyInitDataToEdit.dataFk = dataAndInstanceId.data.data.id;
+      copyInitDataToEdit.dataFk = dataAndInstanceId.dataFk;
       copyInitDataToEdit.instanceFk = dataAndInstanceId.instanceId;
       console.info("updated initData: ", copyInitDataToEdit);
       dispatch(EditActions.initData.update(copyInitDataToEdit));
@@ -182,7 +182,10 @@ const useControllPanelEditDataSetupViewModel = () => {
 
   return {
     label: "EDIT * " + (dataSetup?.name || "") + " * INIT DATA",
-    data: initDataToEdit?.dataFk + ":" + initDataToEdit?.instanceFk,
+    data: JSON.stringify({
+      dataFk: initDataToEdit?.dataFk,
+      instanceId: initDataToEdit?.instanceFk,
+    }),
     getInstances,
     component: initDataToEdit?.componentFk,
     deleteInitData,

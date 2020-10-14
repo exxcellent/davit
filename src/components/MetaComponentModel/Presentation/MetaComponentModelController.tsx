@@ -180,7 +180,7 @@ const useViewModel = () => {
       errorItem.actionType
     );
     return {
-      name: getDataNameById(errorItem.dataFk),
+      name: getDataNameById(errorItem.dataFk, errorItem.instanceFk),
       state: state,
       parentId: errorItem.componentFk,
     };
@@ -192,7 +192,7 @@ const useViewModel = () => {
     );
 
     return {
-      name: getDataNameById(errorItem.dataFk),
+      name: getDataNameById(errorItem.dataFk, errorItem.instanceFk),
       state: state,
       parentId: errorItem.componentFk,
     };
@@ -202,7 +202,7 @@ const useViewModel = () => {
     compData: ComponentData
   ): ViewFragmentProps => {
     return {
-      name: getDataNameById(compData.dataFk),
+      name: getDataNameById(compData.dataFk, compData.instanceFk),
       parentId: compData.componentFk,
       state: ViewFragmentState.PERSISTENT,
     };

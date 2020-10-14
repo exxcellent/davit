@@ -1,11 +1,12 @@
-import { isNullOrUndefined } from "util";
-import { ChainCTO } from "../dataAccess/access/cto/ChainCTO";
-import { ChainlinkCTO } from "../dataAccess/access/cto/ChainlinkCTO";
-import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
-import { ChainDecisionTO } from "../dataAccess/access/to/ChainDecisionTO";
-import { GoToChain, GoToTypesChain, TerminalChain } from "../dataAccess/access/types/GoToTypeChain";
-import { ComponentData } from "../viewDataTypes/ComponentData";
-import { CalcSequence, SequenceService } from "./SequenceService";
+import { isNullOrUndefined } from 'util';
+
+import { ChainCTO } from '../dataAccess/access/cto/ChainCTO';
+import { ChainlinkCTO } from '../dataAccess/access/cto/ChainlinkCTO';
+import { DataSetupCTO } from '../dataAccess/access/cto/DataSetupCTO';
+import { ChainDecisionTO } from '../dataAccess/access/to/ChainDecisionTO';
+import { GoToChain, GoToTypesChain, TerminalChain } from '../dataAccess/access/types/GoToTypeChain';
+import { ComponentData } from '../viewDataTypes/ComponentData';
+import { CalcSequence, SequenceService } from './SequenceService';
 
 export interface CalcChainLink {
   name: string;
@@ -178,7 +179,7 @@ const isLooping = (loopStartingStep: number) => {
 const mergeComponentDatas = (compDatas: ComponentData[], dataSetup: DataSetupCTO): MergedComponentDatas => {
   const errorCompDatas: ComponentData[] = [];
   const dataSetupCompData: ComponentData[] = dataSetup.initDatas.map((initData) => {
-    return { componentFk: initData.componentFk, dataFk: initData.dataFk };
+    return { componentFk: initData.componentFk, dataFk: initData.dataFk, instanceFk: initData.instanceFk };
   });
   dataSetupCompData.forEach((compData) => {
     if (compDatas.some((cp) => isCompDataEqual(cp, compData))) {

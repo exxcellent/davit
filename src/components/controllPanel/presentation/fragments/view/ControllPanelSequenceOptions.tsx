@@ -1,24 +1,27 @@
-import React, { FunctionComponent } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { DataSetupCTO } from "../../../../../dataAccess/access/cto/DataSetupCTO";
-import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
-import { ChainTO } from "../../../../../dataAccess/access/to/ChainTO";
-import { DataSetupTO } from "../../../../../dataAccess/access/to/DataSetupTO";
-import { SequenceTO } from "../../../../../dataAccess/access/to/SequenceTO";
-import { SequenceModelActions, sequenceModelSelectors } from "../../../../../slices/SequenceModelSlice";
-import { ChainDropDown } from "../../../../common/fragments/dropdowns/ChainDropDown";
-import { DataSetupDropDown } from "../../../../common/fragments/dropdowns/DataSetupDropDown";
-import { SequenceDropDown } from "../../../../common/fragments/dropdowns/SequenceDropDown";
-import { ControllPanelEditSub } from "../edit/common/ControllPanelEditSub";
-import { OptionField } from "../edit/common/OptionField";
+import React, { FunctionComponent } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button } from 'semantic-ui-react';
+import { isNullOrUndefined } from 'util';
+
+import { DataSetupCTO } from '../../../../../dataAccess/access/cto/DataSetupCTO';
+import { SequenceCTO } from '../../../../../dataAccess/access/cto/SequenceCTO';
+import { ChainTO } from '../../../../../dataAccess/access/to/ChainTO';
+import { DataSetupTO } from '../../../../../dataAccess/access/to/DataSetupTO';
+import { SequenceTO } from '../../../../../dataAccess/access/to/SequenceTO';
+import { SequenceModelActions, sequenceModelSelectors } from '../../../../../slices/SequenceModelSlice';
+import { ChainDropDown } from '../../../../common/fragments/dropdowns/ChainDropDown';
+import { DataSetupDropDown } from '../../../../common/fragments/dropdowns/DataSetupDropDown';
+import { SequenceDropDown } from '../../../../common/fragments/dropdowns/SequenceDropDown';
+import { ControllPanelEditSub } from '../edit/common/ControllPanelEditSub';
+import { OptionField } from '../edit/common/OptionField';
 
 export interface ControllPanelSequenceOptionsProps {
   hidden: boolean;
 }
 
-export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequenceOptionsProps> = (props) => {
+export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequenceOptionsProps> = (
+  props
+) => {
   const { hidden } = props;
 
   const {
@@ -37,9 +40,6 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
     linkBack,
     linkNext,
   } = useControllPanelSequenceOptionsViewModel();
-
-  console.info("step index: ", stepIndex);
-  console.info("link index: ", linkIndex);
 
   const getIndex = (): string => {
     const link: string = (linkIndex + 1).toString() || "0";
@@ -60,7 +60,10 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
             />
           </OptionField>
           <OptionField label="SEQUENCE">
-            <SequenceDropDown onSelect={selectSequence} value={currentSequence} />
+            <SequenceDropDown
+              onSelect={selectSequence}
+              value={currentSequence}
+            />
           </OptionField>
         </OptionField>
       </div>
@@ -88,7 +91,12 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
               disabled={isNullOrUndefined(sequence)}
               onClick={stepBack}
             />
-            <Button inverted color="orange" content={getIndex()} disabled={true} />
+            <Button
+              inverted
+              color="orange"
+              content={getIndex()}
+              disabled={true}
+            />
             <Button
               inverted
               color="orange"
@@ -116,11 +124,21 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
 };
 
 const useControllPanelSequenceOptionsViewModel = () => {
-  const sequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
-  const stepIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentStepIndex);
-  const selectedDataSetup: DataSetupCTO | null = useSelector(sequenceModelSelectors.selectDataSetup);
-  const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
-  const linkIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentLinkIndex);
+  const sequence: SequenceCTO | null = useSelector(
+    sequenceModelSelectors.selectSequence
+  );
+  const stepIndex: number | null = useSelector(
+    sequenceModelSelectors.selectCurrentStepIndex
+  );
+  const selectedDataSetup: DataSetupCTO | null = useSelector(
+    sequenceModelSelectors.selectDataSetup
+  );
+  const selectedChain: ChainTO | null = useSelector(
+    sequenceModelSelectors.selectChain
+  );
+  const linkIndex: number | null = useSelector(
+    sequenceModelSelectors.selectCurrentLinkIndex
+  );
   const dispatch = useDispatch();
 
   const selectSequence = (sequence: SequenceTO | undefined) => {
@@ -181,7 +199,12 @@ const useControllPanelSequenceOptionsViewModel = () => {
 
   const getStepName = (): string => {
     if (stepIndex && sequence) {
-      return " * " + sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.id === stepIndex)?.squenceStepTO.name;
+      return (
+        " * " +
+        sequence.sequenceStepCTOs.find(
+          (step) => step.squenceStepTO.id === stepIndex
+        )?.squenceStepTO.name
+      );
     } else {
       return "";
     }

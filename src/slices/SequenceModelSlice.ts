@@ -1,23 +1,24 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk, RootState } from "../app/store";
-import { Arrows as Arrow } from "../components/metaComponentModel/presentation/MetaComponentModelController";
-import { ChainCTO } from "../dataAccess/access/cto/ChainCTO";
-import { ChainlinkCTO } from "../dataAccess/access/cto/ChainlinkCTO";
-import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
-import { GeometricalDataCTO } from "../dataAccess/access/cto/GeometraicalDataCTO";
-import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
-import { ActionTO } from "../dataAccess/access/to/ActionTO";
-import { ChainDecisionTO } from "../dataAccess/access/to/ChainDecisionTO";
-import { ChainTO } from "../dataAccess/access/to/ChainTO";
-import { Terminal } from "../dataAccess/access/types/GoToType";
-import { DataAccess } from "../dataAccess/DataAccess";
-import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
-import { CalcChain, getRoot, SequenceChainService } from "../services/SequenceChainService";
-import { CalcSequence, CalculatedStep, SequenceService } from "../services/SequenceService";
-import { ComponentData } from "../viewDataTypes/ComponentData";
-import { Mode } from "./EditSlice";
-import { handleError } from "./GlobalSlice";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+import { AppThunk, RootState } from '../app/store';
+import { Arrows as Arrow } from '../components/metaComponentModel/presentation/MetaComponentModelController';
+import { ChainCTO } from '../dataAccess/access/cto/ChainCTO';
+import { ChainlinkCTO } from '../dataAccess/access/cto/ChainlinkCTO';
+import { DataSetupCTO } from '../dataAccess/access/cto/DataSetupCTO';
+import { GeometricalDataCTO } from '../dataAccess/access/cto/GeometraicalDataCTO';
+import { SequenceCTO } from '../dataAccess/access/cto/SequenceCTO';
+import { SequenceStepCTO } from '../dataAccess/access/cto/SequenceStepCTO';
+import { ActionTO } from '../dataAccess/access/to/ActionTO';
+import { ChainDecisionTO } from '../dataAccess/access/to/ChainDecisionTO';
+import { ChainTO } from '../dataAccess/access/to/ChainTO';
+import { Terminal } from '../dataAccess/access/types/GoToType';
+import { DataAccess } from '../dataAccess/DataAccess';
+import { DataAccessResponse } from '../dataAccess/DataAccessResponse';
+import { CalcChain, getRoot, SequenceChainService } from '../services/SequenceChainService';
+import { CalcSequence, CalculatedStep, SequenceService } from '../services/SequenceService';
+import { ComponentData } from '../viewDataTypes/ComponentData';
+import { Mode } from './EditSlice';
+import { handleError } from './GlobalSlice';
 
 export interface Filter {
   type: "COMPONENT" | "DATA";
@@ -194,7 +195,7 @@ function resetState(state: SequenceModelState) {
 
 export const getComponentDatas = (dataSetup: DataSetupCTO): ComponentData[] => {
   return dataSetup.initDatas.map((initData) => {
-    return { componentFk: initData.componentFk, dataFk: initData.dataFk };
+    return { componentFk: initData.componentFk, dataFk: initData.dataFk, instanceFk: initData.instanceFk };
   });
 };
 
@@ -373,7 +374,6 @@ export const sequenceModelSelectors = {
   },
   selectCurrentStepIndex: (state: RootState): number => state.sequenceModel.currentStepIndex,
   selectCurrentStepId: (state: RootState): string => {
-    // console.info("steps: ", getCurrentCalcSequence(state.sequenceModel)?.steps);
     return getCurrentCalcSequence(state.sequenceModel)?.steps[state.sequenceModel.currentStepIndex]?.stepId || "";
   },
   selectCurrentLinkIndex: (state: RootState): number => state.sequenceModel.currentLinkIndex,
