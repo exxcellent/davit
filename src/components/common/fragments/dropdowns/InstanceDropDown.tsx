@@ -1,39 +1,45 @@
 import React, { FunctionComponent } from 'react';
+import { useSelector } from 'react-redux';
 import { Dropdown, DropdownItemProps, DropdownProps } from 'semantic-ui-react';
 
+import { DataCTO } from '../../../../dataAccess/access/cto/DataCTO';
 import { DataInstanceTO } from '../../../../dataAccess/access/to/DataInstanceTO';
+import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
+
+export interface DataAndInstanceId {
+  data: DataCTO;
+  instanceId: number;
+}
 
 interface InstanceDropDownProps extends DropdownProps {
-  onSelect: (instance: DataInstanceTO | undefined) => void;
-  instances: DataInstanceTO[];
+  onSelect: (dataAndInstance: DataAndInstanceId | undefined) => void;
   placeholder?: string;
-  value?: number;
+  value?: string;
 }
 
 interface InstanceDropDownButtonProps extends DropdownProps {
-  onSelect: (instance: DataInstanceTO | undefined) => void;
-  instances: DataInstanceTO[];
+  onSelect: (dataAndInstance: DataAndInstanceId | undefined) => void;
   icon?: string;
 }
 
 export const InstanceDropDown: FunctionComponent<InstanceDropDownProps> = (
   props
 ) => {
-  const { onSelect, placeholder, value, instances } = props;
-  const { selectInstance, instanceToOption } = useDataDropDownViewModel();
+  const { onSelect, placeholder, value } = props;
+  const { selectInstance, createOptions } = useInstanceDropDownViewModel();
 
   return (
     <Dropdown
-      options={instances.map(instanceToOption)}
+      options={createOptions()}
       placeholder={placeholder || "Select Data ..."}
       onChange={(event, instance) =>
-        onSelect(selectInstance(instance.key, instances))
+        onSelect(selectInstance(instance.value!.toString()))
       }
       selectOnBlur={false}
       scrolling
       selection
-      value={value === -1 ? undefined : value}
-      disabled={instances.length > 0 ? false : true}
+      value={value?.length === 0 ? undefined : value}
+      disabled={createOptions().length > 0 ? false : true}
     />
   );
 };
@@ -41,15 +47,15 @@ export const InstanceDropDown: FunctionComponent<InstanceDropDownProps> = (
 export const InstanceDropDownButton: FunctionComponent<InstanceDropDownButtonProps> = (
   props
 ) => {
-  const { onSelect, icon, instances } = props;
-  const { selectInstance, instanceToOption } = useDataDropDownViewModel();
+  const { onSelect, icon } = props;
+  const { selectInstance, createOptions } = useInstanceDropDownViewModel();
 
   return (
     <Dropdown
-      options={instances.map(instanceToOption)}
-      icon={instances.length > 0 ? icon : ""}
+      options={createOptions()}
+      icon={createOptions().length > 0 ? icon : ""}
       onChange={(event, instance) =>
-        onSelect(selectInstance(instance.key, instances))
+        onSelect(selectInstance(instance.value!.toString()))
       }
       className="button icon"
       inverted="true"
@@ -58,29 +64,60 @@ export const InstanceDropDownButton: FunctionComponent<InstanceDropDownButtonPro
       selectOnBlur={false}
       trigger={<React.Fragment />}
       scrolling
-      disabled={instances.length > 0 ? false : true}
+      disabled={createOptions().length > 0 ? false : true}
     />
   );
 };
 
-const useDataDropDownViewModel = () => {
-  const selectInstance = (
-    idName: string,
-    instances: DataInstanceTO[]
-  ): DataInstanceTO | undefined => {
-    if (idName !== null && instances !== null) {
-      return instances.find((inst) => inst.name === idName);
+const useInstanceDropDownViewModel = () => {
+  const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
+
+  const selectInstance = (itemId: string): DataAndInstanceId | undefined => {
+    console.info("Itemid: ", itemId);
+    if (itemId !== null && datas !== null) {
+      const data: DataCTO | undefined = datas.find(
+        (data) => data.data.id === getDataId(itemId)
+      );
+      if (data) {
+        return { data: data, instanceId: getInstanceId(itemId) };
+      }
     }
     return undefined;
   };
 
-  const instanceToOption = (instance: DataInstanceTO): DropdownItemProps => {
+  const getDataId = (instanceId: string): number => {
+    const ids: string[] = instanceId.split(":");
+    return Number(ids[0]);
+  };
+
+  const getInstanceId = (instanceId: string): number => {
+    const ids: string[] = instanceId.split(":");
+    return Number(ids[1]);
+  };
+
+  const createOptions = (): DropdownItemProps[] => {
+    let dropdownItemas: DropdownItemProps[] = [];
+    if (datas) {
+      datas.forEach((data) =>
+        data.data.instances.forEach((inst) =>
+          dropdownItemas.push(instanceToOption(inst, data.data.id))
+        )
+      );
+    }
+    return dropdownItemas;
+  };
+
+  const instanceToOption = (
+    instance: DataInstanceTO,
+    dataFk: number
+  ): DropdownItemProps => {
+    const instanceId: string = dataFk + ":" + instance.id;
     return {
-      key: instance.id,
-      value: instance.id,
+      key: instanceId,
+      value: instanceId,
       text: instance.name,
     };
   };
 
-  return { selectInstance, instanceToOption };
+  return { selectInstance, createOptions };
 };

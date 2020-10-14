@@ -73,7 +73,6 @@ const useDataInstanceDropDownViewModel = () => {
           text: instanc.name,
         })
       );
-    console.info("instances: ", dropdownItemProps);
     return dropdownItemProps;
   };
 

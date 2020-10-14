@@ -12,7 +12,7 @@ import { Carv2Util } from '../../../../../../utils/Carv2Util';
 import { Carv2ButtonIcon, Carv2ButtonLabel } from '../../../../../common/fragments/buttons/Carv2Button';
 import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { ComponentDropDown } from '../../../../../common/fragments/dropdowns/ComponentDropDown';
-import { InstanceDropDown } from '../../../../../common/fragments/dropdowns/InstanceDropDown';
+import { DataAndInstanceId, InstanceDropDown } from '../../../../../common/fragments/dropdowns/InstanceDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
 import { OptionField } from '../common/OptionField';
 
@@ -31,10 +31,10 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
     data,
     component,
     setComponentId,
-    setData,
+    setInstance,
     createAnother,
     key,
-    getInstances,
+    // getInstances,
   } = useControllPanelEditDataSetupViewModel();
 
   return (
@@ -58,11 +58,7 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
       </div>
       <div className="columnDivider optionFieldSpacer">
         <OptionField label="Select Data which will be added">
-          <InstanceDropDown
-            onSelect={setData}
-            value={data}
-            instances={getInstances()}
-          />
+          <InstanceDropDown onSelect={setInstance} value={data} />
         </OptionField>
       </div>
       <div
@@ -109,10 +105,12 @@ const useControllPanelEditDataSetupViewModel = () => {
 
   const saveInitData = (newMode?: string) => {
     if (initDataToEdit !== null) {
+      console.info(initDataToEdit);
       if (
         initDataToEdit !== null &&
         initDataToEdit?.componentFk !== -1 &&
         initDataToEdit?.dataFk !== -1 &&
+        initDataToEdit?.instanceFk !== -1 &&
         initDataToEdit?.dataSetupFk !== -1
       ) {
         dispatch(EditActions.initData.save(initDataToEdit));
@@ -144,9 +142,15 @@ const useControllPanelEditDataSetupViewModel = () => {
     }
   };
 
-  const setData = (instance: DataInstanceTO | undefined): void => {
-    if (instance !== undefined) {
+  const setInstance = (
+    dataAndInstanceId: DataAndInstanceId | undefined
+  ): void => {
+    console.info("set Instance: ", dataAndInstanceId);
+    if (dataAndInstanceId !== undefined) {
       const copyInitDataToEdit: InitDataTO = Carv2Util.deepCopy(initDataToEdit);
+      copyInitDataToEdit.dataFk = dataAndInstanceId.data.data.id;
+      copyInitDataToEdit.instanceFk = dataAndInstanceId.instanceId;
+      console.info("updated initData: ", copyInitDataToEdit);
       dispatch(EditActions.initData.update(copyInitDataToEdit));
     }
   };
@@ -178,13 +182,13 @@ const useControllPanelEditDataSetupViewModel = () => {
 
   return {
     label: "EDIT * " + (dataSetup?.name || "") + " * INIT DATA",
-    data: initDataToEdit?.dataFk,
+    data: initDataToEdit?.dataFk + ":" + initDataToEdit?.instanceFk,
     getInstances,
     component: initDataToEdit?.componentFk,
     deleteInitData,
     saveInitData,
     setComponentId,
-    setData,
+    setInstance,
     createAnother,
     key,
   };

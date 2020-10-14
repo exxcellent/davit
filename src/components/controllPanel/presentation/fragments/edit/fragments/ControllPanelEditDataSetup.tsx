@@ -1,25 +1,28 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Input } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
-import { DataSetupCTO } from "../../../../../../dataAccess/access/cto/DataSetupCTO";
-import { InitDataTO } from "../../../../../../dataAccess/access/to/InitDataTO";
-import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
-import { handleError } from "../../../../../../slices/GlobalSlice";
-import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
-import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
-import { InitDataDropDownButton } from "../../../../../common/fragments/dropdowns/InitDataDropDown";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
-import { OptionField } from "../common/OptionField";
+import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Input } from 'semantic-ui-react';
+import { isNullOrUndefined } from 'util';
+
+import { ComponentCTO } from '../../../../../../dataAccess/access/cto/ComponentCTO';
+import { DataSetupCTO } from '../../../../../../dataAccess/access/cto/DataSetupCTO';
+import { InitDataTO } from '../../../../../../dataAccess/access/to/InitDataTO';
+import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
+import { handleError } from '../../../../../../slices/GlobalSlice';
+import { Carv2Util } from '../../../../../../utils/Carv2Util';
+import { Carv2ButtonIcon, Carv2ButtonLabel } from '../../../../../common/fragments/buttons/Carv2Button';
+import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
+import { InitDataDropDownButton } from '../../../../../common/fragments/dropdowns/InitDataDropDown';
+import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
+import { Carv2LabelTextfield } from '../common/fragments/Carv2LabelTextfield';
+import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditDataSetupProps {
   hidden: boolean;
 }
 
-export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditDataSetupProps> = (props) => {
+export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditDataSetupProps> = (
+  props
+) => {
   const { hidden } = props;
   const {
     label,
@@ -36,7 +39,11 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
   } = useControllPanelEditDataSetupViewModel();
 
   return (
-    <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={saveDataSetup}>
+    <ControllPanelEditSub
+      label={label}
+      hidden={hidden}
+      onClickNavItem={saveDataSetup}
+    >
       <div className="optionFieldSpacer">
         <OptionField label="Data - SETUP NAME">
           <Carv2LabelTextfield
@@ -54,11 +61,20 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
       <div className="columnDivider optionFieldSpacer">
         <OptionField label="Create / edit | Init - Data">
           <Button.Group>
-            <Button icon="add" inverted color="orange" onClick={createInitData} />
+            <Button
+              icon="add"
+              inverted
+              color="orange"
+              onClick={createInitData}
+            />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Data
             </Button>
-            <InitDataDropDownButton onSelect={editInitData} icon="wrench" initDatas={getInitDatas} />
+            <InitDataDropDownButton
+              onSelect={editInitData}
+              icon="wrench"
+              initDatas={getInitDatas}
+            />
           </Button.Group>
         </OptionField>
       </div>
@@ -80,15 +96,21 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
 };
 
 const useControllPanelEditDataSetupViewModel = () => {
-  const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.dataSetupToEdit);
+  const dataSetupToEdit: DataSetupCTO | null = useSelector(
+    editSelectors.dataSetupToEdit
+  );
   const dispatch = useDispatch();
-  const [componentToEdit, setComponentToEdit] = useState<ComponentCTO | null>(null);
+  const [componentToEdit, setComponentToEdit] = useState<ComponentCTO | null>(
+    null
+  );
   const textInput = useRef<Input>(null);
 
   useEffect(() => {
     // check if sequence to edit is really set or gos back to edit mode
     if (isNullOrUndefined(dataSetupToEdit)) {
-      handleError("Tried to go to edit dataSetup without dataSetupToedit specified");
+      handleError(
+        "Tried to go to edit dataSetup without dataSetupToedit specified"
+      );
       dispatch(EditActions.setMode.edit());
     }
     // used to focus the textfield on create another
@@ -97,7 +119,9 @@ const useControllPanelEditDataSetupViewModel = () => {
 
   const changeName = (name: string) => {
     if (!isNullOrUndefined(dataSetupToEdit)) {
-      let copyDataSetupToEdit: DataSetupCTO = Carv2Util.deepCopy(dataSetupToEdit);
+      let copyDataSetupToEdit: DataSetupCTO = Carv2Util.deepCopy(
+        dataSetupToEdit
+      );
       copyDataSetupToEdit.dataSetup.name = name;
       dispatch(EditActions.dataSetup.update(copyDataSetupToEdit));
     }
@@ -137,35 +161,16 @@ const useControllPanelEditDataSetupViewModel = () => {
     dispatch(EditActions.setMode.editDataSetup(copyDataSetup.dataSetup.id));
   };
 
-  const setInitDatas = (dataIds: number[] | undefined): void => {
-    if (!isNullOrUndefined(dataSetupToEdit) && !isNullOrUndefined(componentToEdit)) {
-      let copyDataSetupToEdit: DataSetupCTO = Carv2Util.deepCopy(dataSetupToEdit);
-      // remove old init data.
-      const clearInitDatas: InitDataTO[] = Carv2Util.deepCopy(
-        dataSetupToEdit.initDatas.filter((initData) => initData.componentFk !== componentToEdit.component.id)
-      );
-      // add new init data.
-      if (dataIds !== undefined) {
-        dataIds.forEach((dataId) =>
-          clearInitDatas.push({
-            id: -1,
-            componentFk: componentToEdit.component.id,
-            dataFk: dataId,
-            dataSetupFk: dataSetupToEdit.dataSetup.id,
-          })
-        );
-      }
-      copyDataSetupToEdit.initDatas = clearInitDatas;
-      dispatch(EditActions.dataSetup.save(copyDataSetupToEdit));
-      dispatch(EditActions.dataSetup.update(copyDataSetupToEdit));
-    }
-  };
-
   const getDatas = (): number[] => {
     let dataIds: number[] = [];
-    if (!isNullOrUndefined(dataSetupToEdit) && !isNullOrUndefined(componentToEdit)) {
+    if (
+      !isNullOrUndefined(dataSetupToEdit) &&
+      !isNullOrUndefined(componentToEdit)
+    ) {
       dataSetupToEdit.initDatas
-        .filter((initData) => initData.componentFk === componentToEdit.component.id)
+        .filter(
+          (initData) => initData.componentFk === componentToEdit.component.id
+        )
         .forEach((initData) => dataIds.push(initData.dataFk));
     }
     return dataIds;
@@ -194,7 +199,6 @@ const useControllPanelEditDataSetupViewModel = () => {
     textInput,
     copyDataSetup,
     setComponentToEdit,
-    setInitDatas,
     getInitDatas: dataSetupToEdit?.initDatas ? dataSetupToEdit.initDatas : [],
     getDatas,
     createAnother,
