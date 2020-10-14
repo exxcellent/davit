@@ -1,7 +1,8 @@
-import { Point } from "framer-motion";
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { GeometricalDataCTO } from "../../../../dataAccess/access/cto/GeometraicalDataCTO";
-import { DataRelationTO, Direction, RelationType } from "../../../../dataAccess/access/to/DataRelationTO";
+import { Point } from 'framer-motion';
+import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
+
+import { GeometricalDataCTO } from '../../../../dataAccess/access/cto/GeometraicalDataCTO';
+import { DataRelationTO, Direction, RelationType } from '../../../../dataAccess/access/to/DataRelationTO';
 
 export interface Carv2PathProps {
   xSource: number;
@@ -61,7 +62,12 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
       sourceWidth,
       sourceHeight
     );
-    let endPoint: Point = getDirectionPoint({ x: initXTarget, y: initYTarget }, direction2, targetWidth, targetHeight);
+    let endPoint: Point = getDirectionPoint(
+      { x: initXTarget, y: initYTarget },
+      direction2,
+      targetWidth,
+      targetHeight
+    );
     // set interfaces
     const offset1 = getDirectionOffset(direction1);
     const offset2 = getDirectionOffset(direction2);
@@ -85,7 +91,14 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
     );
   };
 
-  const getDirectionPoint = (point: Point, direction: Direction, width: number, height: number): Point => {
+  const getDirectionPoint = (
+    point: Point,
+    direction: Direction,
+    width: number,
+    height: number
+  ): Point => {
+    // TODO: remove this constance
+    const PADDING: number = 10;
     switch (direction) {
       case Direction.TOP:
         point.x = point.x + width / 2;
@@ -99,7 +112,7 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
         break;
       case Direction.BOTTOM:
         point.x = point.x + width / 2;
-        point.y = point.y + height;
+        point.y = point.y + height + PADDING;
         break;
     }
     return point;
