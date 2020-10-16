@@ -16,6 +16,7 @@ import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2
 import { ActionTypeDropDown } from '../../../../../common/fragments/dropdowns/ActionTypeDropDown';
 import { ComponentDropDown } from '../../../../../common/fragments/dropdowns/ComponentDropDown';
 import { DataDropDown } from '../../../../../common/fragments/dropdowns/DataDropDown';
+import { DataAndInstanceId, InstanceDropDown } from '../../../../../common/fragments/dropdowns/InstanceDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
 import { OptionField } from '../common/OptionField';
 
@@ -33,12 +34,15 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
     setAction,
     setData,
     deleteAction,
-    componentId,
+    sendingComponentId,
+    receivingComponentId,
     dataId,
     actionType,
     setMode,
     createAnother,
     key,
+    setDataAndInstance,
+    dataAndInstance,
   } = useControllPanelEditActionViewModel();
 
   return (
@@ -49,29 +53,59 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
       onClickNavItem={setMode}
     >
       <div className="optionFieldSpacer">
-        <OptionField label="Select Component on which the action will be called">
-          <ComponentDropDown onSelect={setComponent} value={componentId} />
+        <OptionField>
+          <OptionField label="Select action to execute">
+            <ActionTypeDropDown onSelect={setAction} value={actionType} />
+          </OptionField>
+          <OptionField label="Data">
+            {actionType === ActionType.ADD && (
+              <InstanceDropDown
+                onSelect={setDataAndInstance}
+                value={dataAndInstance}
+              />
+            )}
+            {actionType !== ActionType.ADD && (
+              <DataDropDown onSelect={setData} value={dataId} />
+            )}
+          </OptionField>
         </OptionField>
       </div>
-      <div className="optionFieldSpacer columnDivider">
-        <OptionField label="Select action to execute">
-          <ActionTypeDropDown onSelect={setAction} value={actionType} />
+      <div className="optionFieldSpacer">
+        <OptionField label=" ">
+          <label className="optionFieldLabel">
+            {actionType === ActionType.ADD ? "TO" : "FROM"}
+          </label>
+          <OptionField label="Select sending Component">
+            <ComponentDropDown
+              onSelect={(comp) =>
+                setComponent(comp, actionType !== ActionType.ADD)
+              }
+              value={sendingComponentId}
+            />
+          </OptionField>
         </OptionField>
       </div>
-      <div className="optionFieldSpacer columnDivider">
-        <OptionField label="Select data affected by the action">
-          <DataDropDown onSelect={setData} value={dataId} />
-        </OptionField>
+      <div className="optionFieldSpacer">
+        {actionType?.includes("SEND") && (
+          <OptionField label=" ">
+            <label className="optionFieldLabel">TO</label>
+            <OptionField label="Select receiving Component">
+              <ComponentDropDown
+                onSelect={(comp) => setComponent(comp, false)}
+                value={receivingComponentId}
+              />
+            </OptionField>
+          </OptionField>
+        )}
       </div>
-
       <div className="columnDivider controllPanelEditChild">
-        <div className="innerOptionFieldSpacer">
+        <div className="optionFieldSpacer">
           <OptionField label="Navigation">
             <Carv2ButtonLabel onClick={createAnother} label="Create another" />
             <Carv2ButtonIcon onClick={setMode} icon="reply" />
           </OptionField>
         </div>
-        <div className="innerOptionFieldSpacer">
+        <div className="optionFieldSpacer">
           <OptionField label="Sequence - Options">
             <Carv2DeleteButton onClick={deleteAction} />
           </OptionField>
@@ -112,10 +146,15 @@ const useControllPanelEditActionViewModel = () => {
     }
   };
 
-  const setComponent = (component: ComponentCTO | undefined): void => {
+  const setComponent = (
+    component: ComponentCTO | undefined,
+    sending: boolean
+  ): void => {
     if (component !== undefined) {
       let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
-      copyActionToEdit.componentFk = component.component.id;
+      sending
+        ? (copyActionToEdit.sendingComponentFk = component.component.id)
+        : (copyActionToEdit.receivingComponentFk = component.component.id);
       dispatch(EditActions.action.update(copyActionToEdit));
       dispatch(EditActions.action.save(copyActionToEdit));
     }
@@ -161,6 +200,18 @@ const useControllPanelEditActionViewModel = () => {
     }
   };
 
+  const setDataAndInstance = (
+    dataAndInstance: DataAndInstanceId | undefined
+  ): void => {
+    if (dataAndInstance !== undefined) {
+      let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
+      copyActionToEdit.dataFk = dataAndInstance.dataFk;
+      copyActionToEdit.instanceFk = dataAndInstance.instanceId;
+      dispatch(EditActions.action.update(copyActionToEdit));
+      dispatch(EditActions.action.save(copyActionToEdit));
+    }
+  };
+
   const setMode = (newMode?: string) => {
     if (actionToEdit !== null) {
       if (newMode && newMode === "EDIT") {
@@ -194,13 +245,18 @@ const useControllPanelEditActionViewModel = () => {
     setComponent,
     setAction,
     setData,
-    componentId:
-      actionToEdit?.componentFk === -1 ? undefined : actionToEdit?.componentFk,
+    sendingComponentId: actionToEdit?.sendingComponentFk,
+    receivingComponentId: actionToEdit?.receivingComponentFk,
     dataId: actionToEdit?.dataFk === -1 ? undefined : actionToEdit?.dataFk,
     actionType: actionToEdit?.actionType,
     deleteAction,
     setMode,
     createAnother,
     key,
+    setDataAndInstance,
+    dataAndInstance: JSON.stringify({
+      dataFk: actionToEdit?.dataFk,
+      instanceId: actionToEdit?.instanceFk,
+    }),
   };
 };

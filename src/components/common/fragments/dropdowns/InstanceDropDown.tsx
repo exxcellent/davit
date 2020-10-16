@@ -85,11 +85,17 @@ const useInstanceDropDownViewModel = () => {
   const createOptions = (): DropdownItemProps[] => {
     let dropdownItemas: DropdownItemProps[] = [];
     if (datas) {
-      datas.forEach((data) =>
-        data.data.instances.forEach((inst) =>
-          dropdownItemas.push(instanceToOption(inst, data))
-        )
-      );
+      datas.forEach((data) => {
+        data.data.instances.forEach((inst) => {
+          if (data.data.instances.length > 1) {
+            if (inst.id !== 1) {
+              dropdownItemas.push(instanceToOption(inst, data));
+            }
+          } else {
+            dropdownItemas.push(instanceToOption(inst, data));
+          }
+        });
+      });
     }
     return dropdownItemas;
   };

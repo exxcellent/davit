@@ -186,7 +186,7 @@ const useMetaDataModelViewModel = () => {
     // const parentId = getDataAndInstanceIds(actionItem.dataFk);
     const parentId = actionItem.dataFk;
     return {
-      name: getComponentNameById(actionItem.componentFk),
+      name: getComponentNameById(actionItem.receivingComponentFk),
       state: state,
       parentId: parentId,
     };

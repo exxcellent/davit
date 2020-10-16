@@ -1,33 +1,35 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Input } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
-import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
-import { ActionTO } from "../../../../../../dataAccess/access/to/ActionTO";
-import { DecisionTO } from "../../../../../../dataAccess/access/to/DecisionTO";
-import { GoTo, GoToTypes } from "../../../../../../dataAccess/access/types/GoToType";
-import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
-import { handleError } from "../../../../../../slices/GlobalSlice";
-import { SequenceModelActions, sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
-import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
-import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
-import { ActionDropDown } from "../../../../../common/fragments/dropdowns/ActionDropDown";
-import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
-import { DecisionDropDown } from "../../../../../common/fragments/dropdowns/DecisionDropDown";
-import { GoToOptionDropDown } from "../../../../../common/fragments/dropdowns/GoToOptionDropDown";
-import { StepDropDown } from "../../../../../common/fragments/dropdowns/StepDropDown";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
-import { OptionField } from "../common/OptionField";
+import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Input } from 'semantic-ui-react';
+import { isNullOrUndefined } from 'util';
+
+import { ComponentCTO } from '../../../../../../dataAccess/access/cto/ComponentCTO';
+import { SequenceCTO } from '../../../../../../dataAccess/access/cto/SequenceCTO';
+import { SequenceStepCTO } from '../../../../../../dataAccess/access/cto/SequenceStepCTO';
+import { ActionTO } from '../../../../../../dataAccess/access/to/ActionTO';
+import { DecisionTO } from '../../../../../../dataAccess/access/to/DecisionTO';
+import { GoTo, GoToTypes } from '../../../../../../dataAccess/access/types/GoToType';
+import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
+import { handleError } from '../../../../../../slices/GlobalSlice';
+import { SequenceModelActions, sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
+import { Carv2Util } from '../../../../../../utils/Carv2Util';
+import { Carv2ButtonIcon, Carv2ButtonLabel } from '../../../../../common/fragments/buttons/Carv2Button';
+import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
+import { ActionDropDown } from '../../../../../common/fragments/dropdowns/ActionDropDown';
+import { DecisionDropDown } from '../../../../../common/fragments/dropdowns/DecisionDropDown';
+import { GoToOptionDropDown } from '../../../../../common/fragments/dropdowns/GoToOptionDropDown';
+import { StepDropDown } from '../../../../../common/fragments/dropdowns/StepDropDown';
+import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
+import { Carv2LabelTextfield } from '../common/fragments/Carv2LabelTextfield';
+import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditStepProps {
   hidden: boolean;
 }
 
-export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps> = (props) => {
+export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps> = (
+  props
+) => {
   const { hidden } = props;
   const {
     label,
@@ -36,10 +38,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
     deleteSequenceStep,
     saveSequenceStep,
     textInput,
-    setComponent,
     editOrAddAction,
-    sourceCompId,
-    targetCompId,
     updateStep,
     handleType,
     setGoToTypeStep,
@@ -53,33 +52,13 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
     stepId,
   } = useControllPanelEditSequenceStepViewModel();
 
-  const sourceTargetDropDowns = (
-    <div className="optionFieldSpacer columnDivider">
-      <OptionField>
-        <OptionField label="Select sending Component">
-          <ComponentDropDown
-            onSelect={(comp) => {
-              setComponent(comp, true);
-              updateStep();
-            }}
-            value={sourceCompId}
-          />
-        </OptionField>
-        <OptionField label="Select reciving component">
-          <ComponentDropDown
-            onSelect={(comp) => {
-              setComponent(comp, false);
-              updateStep();
-            }}
-            value={targetCompId}
-          />
-        </OptionField>
-      </OptionField>
-    </div>
-  );
-
   return (
-    <ControllPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveSequenceStep}>
+    <ControllPanelEditSub
+      label={label}
+      key={key}
+      hidden={hidden}
+      onClickNavItem={saveSequenceStep}
+    >
       <div className="controllPanelEditChild">
         <div className="optionField">
           <OptionField label="Step - name">
@@ -94,6 +73,10 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
               unvisible={hidden}
             />
           </OptionField>
+        </div>
+      </div>
+      <div className="columnDivider controllPanelEditChild">
+        <div>
           <OptionField label="Create / Edit | Step - Action">
             <Button.Group>
               <Button
@@ -119,11 +102,13 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
           </OptionField>
         </div>
       </div>
-      {sourceTargetDropDowns}
       <div className="columnDivider controllPanelEditChild">
         <div className="optionField">
           <OptionField label="Select type of the next element">
-            <GoToOptionDropDown onSelect={handleType} value={goTo ? goTo.type : GoToTypes.ERROR} />
+            <GoToOptionDropDown
+              onSelect={handleType}
+              value={goTo ? goTo.type : GoToTypes.ERROR}
+            />
           </OptionField>
           {goTo!.type === GoToTypes.STEP && (
             <OptionField label="Create or Select next step">
@@ -138,7 +123,10 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
           {goTo!.type === GoToTypes.DEC && (
             <OptionField label="Create or Select next decision">
               <Carv2ButtonIcon icon="add" onClick={createGoToDecision} />
-              <DecisionDropDown onSelect={setGoToTypeDecision} value={goTo?.type === GoToTypes.DEC ? goTo.id : 1} />
+              <DecisionDropDown
+                onSelect={setGoToTypeDecision}
+                value={goTo?.type === GoToTypes.DEC ? goTo.id : 1}
+              />
             </OptionField>
           )}
         </div>
@@ -152,7 +140,11 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
         <div className="controllPanelEditChild">
           <div>
             <OptionField label="Sequence - Options">
-              <Carv2ButtonLabel onClick={setRoot} label={isRoot ? "Root" : "Set as Root"} disable={isRoot} />
+              <Carv2ButtonLabel
+                onClick={setRoot}
+                label={isRoot ? "Root" : "Set as Root"}
+                disable={isRoot}
+              />
               <div>
                 <Carv2DeleteButton onClick={deleteSequenceStep} />
               </div>
@@ -165,16 +157,25 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
 };
 
 const useControllPanelEditSequenceStepViewModel = () => {
-  const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.stepToEdit);
-  const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
+  const stepToEdit: SequenceStepCTO | null = useSelector(
+    editSelectors.stepToEdit
+  );
+  const selectedSequence: SequenceCTO | null = useSelector(
+    sequenceModelSelectors.selectSequence
+  );
   const dispatch = useDispatch();
   const textInput = useRef<Input>(null);
-  const [currentGoTo, setCurrentGoTo] = useState<GoTo>({ type: GoToTypes.STEP, id: -1 });
+  const [currentGoTo, setCurrentGoTo] = useState<GoTo>({
+    type: GoToTypes.STEP,
+    id: -1,
+  });
   const [key, setKey] = useState<number>(0);
 
   useEffect(() => {
     if (isNullOrUndefined(stepToEdit)) {
-      handleError("Tried to go to edit sequence step without sequenceStepToEdit specified");
+      handleError(
+        "Tried to go to edit sequence step without sequenceStepToEdit specified"
+      );
       dispatch(EditActions.setMode.edit());
     }
     if (stepToEdit) {
@@ -190,24 +191,36 @@ const useControllPanelEditSequenceStepViewModel = () => {
       copySequenceStep.squenceStepTO.name = name;
       dispatch(EditActions.setMode.editStep(copySequenceStep));
       dispatch(EditActions.step.save(copySequenceStep));
-      dispatch(SequenceModelActions.setCurrentSequence(copySequenceStep.squenceStepTO.sequenceFk));
+      dispatch(
+        SequenceModelActions.setCurrentSequence(
+          copySequenceStep.squenceStepTO.sequenceFk
+        )
+      );
     }
   };
 
-  const setComponent = (component: ComponentCTO | undefined, isSource?: boolean) => {
+  const setComponent = (
+    component: ComponentCTO | undefined,
+    isSource?: boolean
+  ) => {
     if (component !== undefined && !isNullOrUndefined(stepToEdit)) {
       const copySequenceStep: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
       if (isSource) {
-        copySequenceStep.squenceStepTO.sourceComponentFk = component.component.id;
+        copySequenceStep.squenceStepTO.sourceComponentFk =
+          component.component.id;
       } else {
-        copySequenceStep.squenceStepTO.targetComponentFk = component.component.id;
+        copySequenceStep.squenceStepTO.targetComponentFk =
+          component.component.id;
       }
       dispatch(EditActions.setMode.editStep(copySequenceStep));
     }
   };
 
   const saveSequenceStep = (newMode?: string) => {
-    if (!isNullOrUndefined(stepToEdit) && !isNullOrUndefined(selectedSequence)) {
+    if (
+      !isNullOrUndefined(stepToEdit) &&
+      !isNullOrUndefined(selectedSequence)
+    ) {
       if (stepToEdit.squenceStepTO.name !== "") {
         dispatch(EditActions.step.save(stepToEdit));
       } else {
@@ -216,15 +229,22 @@ const useControllPanelEditSequenceStepViewModel = () => {
       if (newMode && newMode === "EDIT") {
         dispatch(EditActions.setMode.edit());
       } else {
-        dispatch(EditActions.setMode.editSequence(stepToEdit.squenceStepTO.sequenceFk));
+        dispatch(
+          EditActions.setMode.editSequence(stepToEdit.squenceStepTO.sequenceFk)
+        );
       }
     }
   };
 
   const deleteSequenceStep = () => {
-    if (!isNullOrUndefined(stepToEdit) && !isNullOrUndefined(selectedSequence)) {
+    if (
+      !isNullOrUndefined(stepToEdit) &&
+      !isNullOrUndefined(selectedSequence)
+    ) {
       dispatch(EditActions.step.delete(stepToEdit, selectedSequence));
-      dispatch(EditActions.setMode.editSequence(stepToEdit.squenceStepTO.sequenceFk));
+      dispatch(
+        EditActions.setMode.editSequence(stepToEdit.squenceStepTO.sequenceFk)
+      );
     }
   };
 
@@ -262,7 +282,11 @@ const useControllPanelEditSequenceStepViewModel = () => {
       copySequenceStep.squenceStepTO.goto = goTo;
       dispatch(EditActions.step.update(copySequenceStep));
       dispatch(EditActions.step.save(copySequenceStep));
-      dispatch(SequenceModelActions.setCurrentSequence(copySequenceStep.squenceStepTO.sequenceFk));
+      dispatch(
+        SequenceModelActions.setCurrentSequence(
+          copySequenceStep.squenceStepTO.sequenceFk
+        )
+      );
     }
   };
 
@@ -304,7 +328,11 @@ const useControllPanelEditSequenceStepViewModel = () => {
       const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
       setKey(key + 1);
       dispatch(EditActions.setMode.editStep(goToStep, copyStepToEdit));
-      dispatch(SequenceModelActions.setCurrentSequence(goToStep.squenceStepTO.sequenceFk));
+      dispatch(
+        SequenceModelActions.setCurrentSequence(
+          goToStep.squenceStepTO.sequenceFk
+        )
+      );
     }
   };
 
@@ -318,14 +346,31 @@ const useControllPanelEditSequenceStepViewModel = () => {
   };
 
   const setRoot = () => {
-    if (!isNullOrUndefined(stepToEdit) && !isNullOrUndefined(selectedSequence)) {
-      dispatch(EditActions.sequence.setRoot(stepToEdit.squenceStepTO.sequenceFk, stepToEdit.squenceStepTO.id, false));
-      dispatch(EditActions.setMode.editStep(EditActions.step.find(stepToEdit.squenceStepTO.id)));
+    if (
+      !isNullOrUndefined(stepToEdit) &&
+      !isNullOrUndefined(selectedSequence)
+    ) {
+      dispatch(
+        EditActions.sequence.setRoot(
+          stepToEdit.squenceStepTO.sequenceFk,
+          stepToEdit.squenceStepTO.id,
+          false
+        )
+      );
+      dispatch(
+        EditActions.setMode.editStep(
+          EditActions.step.find(stepToEdit.squenceStepTO.id)
+        )
+      );
     }
   };
 
   return {
-    label: "EDIT * " + (selectedSequence?.sequenceTO.name || "") + " * " + (stepToEdit?.squenceStepTO.name || ""),
+    label:
+      "EDIT * " +
+      (selectedSequence?.sequenceTO.name || "") +
+      " * " +
+      (stepToEdit?.squenceStepTO.name || ""),
     name: stepToEdit ? stepToEdit!.squenceStepTO.name : "",
     changeName,
     saveSequenceStep,
@@ -335,9 +380,13 @@ const useControllPanelEditSequenceStepViewModel = () => {
     validStep,
     editOrAddAction,
     sourceCompId:
-      stepToEdit?.squenceStepTO.sourceComponentFk !== -1 ? stepToEdit?.squenceStepTO.sourceComponentFk : undefined,
+      stepToEdit?.squenceStepTO.sourceComponentFk !== -1
+        ? stepToEdit?.squenceStepTO.sourceComponentFk
+        : undefined,
     targetCompId:
-      stepToEdit?.squenceStepTO.targetComponentFk !== -1 ? stepToEdit?.squenceStepTO.targetComponentFk : undefined,
+      stepToEdit?.squenceStepTO.targetComponentFk !== -1
+        ? stepToEdit?.squenceStepTO.targetComponentFk
+        : undefined,
     updateStep,
     handleType,
     goTo: currentGoTo,
@@ -346,7 +395,9 @@ const useControllPanelEditSequenceStepViewModel = () => {
     createGoToStep,
     createGoToDecision,
     setRoot,
-    isRoot: stepToEdit?.squenceStepTO.root ? stepToEdit?.squenceStepTO.root : false,
+    isRoot: stepToEdit?.squenceStepTO.root
+      ? stepToEdit?.squenceStepTO.root
+      : false,
     key,
     stepId: stepToEdit?.squenceStepTO.id,
   };

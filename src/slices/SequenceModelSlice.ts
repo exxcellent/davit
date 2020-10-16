@@ -296,7 +296,7 @@ const filterSteps = (steps: CalculatedStep[], filter: Filter[], modelSteps: Sequ
         modelSteps.find((modelStep) => modelStep.squenceStepTO.id === step.stepFk)?.actions || [];
       switch (currentFilter.type) {
         case "COMPONENT":
-          return actions.some((action) => action.componentFk === currentFilter.id);
+          return actions.some((action) => action.receivingComponentFk === currentFilter.id);
         case "DATA":
           return actions.some((action) => action.dataFk === currentFilter.id);
         default:

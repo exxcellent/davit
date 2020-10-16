@@ -187,6 +187,9 @@
 }
 
 .optionFieldLabel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   min-width: 10em;
   text-align: center;
   color: var(--carv2-text-color);

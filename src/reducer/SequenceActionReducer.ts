@@ -23,7 +23,7 @@ export const SequenceActionReducer = {
 
     actions.forEach((action) => {
       const indexComponentToEdit: number = findComponentDataIndex(
-        action.componentFk, 
+        action.receivingComponentFk, 
         action.dataFk, 
         newComponentDatas
         );
@@ -35,7 +35,7 @@ export const SequenceActionReducer = {
       switch (action.actionType) {
         case ActionType.ADD:
           indexComponentToEdit === -1
-            ? newComponentDatas.push({ componentFk: action.componentFk, dataFk: action.dataFk, instanceFk: action.instanceFk })
+            ? newComponentDatas.push({ componentFk: action.receivingComponentFk, dataFk: action.dataFk, instanceFk: action.instanceFk })
             : errors.push(action);
           break;
         case ActionType.DELETE:
@@ -43,12 +43,12 @@ export const SequenceActionReducer = {
           break;
         case ActionType.SEND:
           indexComponentSending !== -1 && indexComponentToEdit === -1
-            ? newComponentDatas.push({ componentFk: action.componentFk, dataFk: action.dataFk, instanceFk: componentDatas[indexComponentSending].instanceFk })
+            ? newComponentDatas.push({ componentFk: action.receivingComponentFk, dataFk: action.dataFk, instanceFk: componentDatas[indexComponentSending].instanceFk })
             : errors.push(action);
           break;
         case ActionType.SEND_AND_DELETE:
           if (indexComponentSending !== -1 && indexComponentToEdit === -1) {
-            newComponentDatas.push({ componentFk: action.componentFk, dataFk: action.dataFk, instanceFk: componentDatas[indexComponentSending].instanceFk });
+            newComponentDatas.push({ componentFk: action.receivingComponentFk, dataFk: action.dataFk, instanceFk: componentDatas[indexComponentSending].instanceFk });
             newComponentDatas.splice(indexComponentSending, 1);
           } else {
             errors.push(action);

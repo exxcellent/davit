@@ -1,11 +1,12 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
-import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
-import { InitDataTO } from "../../../../dataAccess/access/to/InitDataTO";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import React, { FunctionComponent } from 'react';
+import { useSelector } from 'react-redux';
+import { Dropdown, DropdownItemProps, DropdownProps } from 'semantic-ui-react';
+import { isNullOrUndefined } from 'util';
+
+import { ComponentCTO } from '../../../../dataAccess/access/cto/ComponentCTO';
+import { DataCTO } from '../../../../dataAccess/access/cto/DataCTO';
+import { InitDataTO } from '../../../../dataAccess/access/to/InitDataTO';
+import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
 
 interface InitDataDropDownDownProps extends DropdownProps {
   initDatas: InitDataTO[];
@@ -20,7 +21,9 @@ interface InitDataDropDownPropsButton extends DropdownProps {
   icon?: string;
 }
 
-export const InitDataDropDown: FunctionComponent<InitDataDropDownDownProps> = (props) => {
+export const InitDataDropDown: FunctionComponent<InitDataDropDownDownProps> = (
+  props
+) => {
   const { onSelect, placeholder, value, initDatas } = props;
   const { initDataToOption, selectInitData } = useDataSetupDropDownViewModel();
 
@@ -32,7 +35,9 @@ export const InitDataDropDown: FunctionComponent<InitDataDropDownDownProps> = (p
       selection
       selectOnBlur={false}
       placeholder={placeholder || "Select Data ..."}
-      onChange={(event, data) => onSelect(selectInitData(Number(data.value), initDatas))}
+      onChange={(event, data) =>
+        onSelect(selectInitData(Number(data.value), initDatas))
+      }
       scrolling
       clearable={true}
       value={value}
@@ -41,7 +46,9 @@ export const InitDataDropDown: FunctionComponent<InitDataDropDownDownProps> = (p
   );
 };
 
-export const InitDataDropDownButton: FunctionComponent<InitDataDropDownPropsButton> = (props) => {
+export const InitDataDropDownButton: FunctionComponent<InitDataDropDownPropsButton> = (
+  props
+) => {
   const { onSelect, icon, initDatas } = props;
   const { initDataToOption, selectInitData } = useDataSetupDropDownViewModel();
 
@@ -52,7 +59,9 @@ export const InitDataDropDownButton: FunctionComponent<InitDataDropDownPropsButt
       })}
       icon={initDatas.length > 0 ? icon : ""}
       selectOnBlur={false}
-      onChange={(event, data) => onSelect(selectInitData(Number(data.value), initDatas))}
+      onChange={(event, data) =>
+        onSelect(selectInitData(Number(data.value), initDatas))
+      }
       className="button icon"
       trigger={<React.Fragment />}
       scrolling
@@ -62,26 +71,48 @@ export const InitDataDropDownButton: FunctionComponent<InitDataDropDownPropsButt
 };
 
 const useDataSetupDropDownViewModel = () => {
-  const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
+  const components: ComponentCTO[] = useSelector(
+    masterDataSelectors.components
+  );
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
 
   const getComponentName = (compId: number): string => {
-    return components.find((comp) => comp.component.id === compId)?.component.name || "";
+    return (
+      components.find((comp) => comp.component.id === compId)?.component.name ||
+      ""
+    );
   };
 
-  const getDataName = (id: number): string => {
-    return datas.find((data) => data.data.id === id)?.data.name || "";
+  const getDataName = (dataId: number, instanceId?: number): string => {
+    let dataName: string = "";
+    let instanceName: string = "";
+    const data: DataCTO | undefined = datas.find(
+      (data) => data.data.id === dataId
+    );
+    dataName = data?.data.name || "";
+    if (data && instanceId && instanceId > 1) {
+      instanceName =
+        data.data.instances.find((inst) => inst.id === instanceId)?.name || "";
+      dataName = dataName + " - " + instanceName;
+    }
+    return dataName;
   };
 
   const initDataToOption = (initData: InitDataTO): DropdownItemProps => {
     return {
       key: initData.id,
       value: initData.id,
-      text: getComponentName(initData.componentFk) + " - " + getDataName(initData.dataFk),
+      text:
+        getComponentName(initData.componentFk) +
+        " + " +
+        getDataName(initData.dataFk, initData.instanceFk),
     };
   };
 
-  const selectInitData = (initDataId: number, initDatas: InitDataTO[]): InitDataTO | undefined => {
+  const selectInitData = (
+    initDataId: number,
+    initDatas: InitDataTO[]
+  ): InitDataTO | undefined => {
     if (!isNullOrUndefined(initDataId) && !isNullOrUndefined(initDatas)) {
       return initDatas.find((initData) => initData.id === initDataId);
     }

@@ -1,4 +1,4 @@
-import { DataStoreCTO } from "./access/cto/DataStoreCTO";
+import { DataStoreCTO } from './access/cto/DataStoreCTO';
 
 export const ConstraintsHelper = {
   deleteDataConstraintCheck(dataId: number, dataStore: DataStoreCTO) {
@@ -15,7 +15,7 @@ export const ConstraintsHelper = {
 
   deleteComponentConstraintCheck(componentId: number, dataStore: DataStoreCTO) {
     const compDataExists: boolean = Array.from(dataStore.actions.values()).some(
-      (compData) => compData.componentFk === componentId
+      (compData) => compData.receivingComponentFk === componentId
     );
     const stepContainsComponent: boolean = Array.from(dataStore.steps.values()).some(
       (step) => step.sourceComponentFk === componentId || step.targetComponentFk === componentId

@@ -182,7 +182,7 @@ const useViewModel = () => {
     return {
       name: getDataNameById(errorItem.dataFk, errorItem.instanceFk),
       state: state,
-      parentId: errorItem.componentFk,
+      parentId: errorItem.receivingComponentFk,
     };
   };
 
@@ -194,7 +194,7 @@ const useViewModel = () => {
     return {
       name: getDataNameById(errorItem.dataFk, errorItem.instanceFk),
       state: state,
-      parentId: errorItem.componentFk,
+      parentId: errorItem.receivingComponentFk,
     };
   };
 
@@ -242,7 +242,7 @@ const useViewModel = () => {
     );
     if (data) {
       dataName = data.data.name;
-      if (instanceId && instanceId !== defaultInstanceId) {
+      if (instanceId && instanceId > defaultInstanceId) {
         dataName =
           dataName +
             " - " +
