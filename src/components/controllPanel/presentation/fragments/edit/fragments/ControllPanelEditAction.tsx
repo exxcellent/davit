@@ -72,7 +72,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
       </div>
       <div className="optionFieldSpacer">
         <OptionField label=" ">
-          <label className="optionFieldLabel">
+          <label className="optionFieldLabel" style={{ paddingTop: "1em" }}>
             {actionType === ActionType.ADD ? "TO" : "FROM"}
           </label>
           <OptionField label="Select sending Component">
@@ -88,7 +88,9 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
       <div className="optionFieldSpacer">
         {actionType?.includes("SEND") && (
           <OptionField label=" ">
-            <label className="optionFieldLabel">TO</label>
+            <label className="optionFieldLabel" style={{ paddingTop: "1em" }}>
+              TO
+            </label>
             <OptionField label="Select receiving Component">
               <ComponentDropDown
                 onSelect={(comp) => setComponent(comp, false)}
