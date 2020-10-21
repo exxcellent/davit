@@ -1,8 +1,8 @@
 
 export const Carv2Util = {
   
-  isNullOrUndefined<T>(object: T | null | undefined): boolean{
-    return object === null || object === undefined ? true : false;
+  isNullOrUndefined(object: any): boolean{
+    return object === null || object === undefined;
   },
 
   deepCopy(object: any) {

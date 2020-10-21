@@ -74,12 +74,22 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
           <label className="optionFieldLabel" style={{ paddingTop: "1em" }}>
             {actionType === ActionType.ADD ? "TO" : "FROM"}
           </label>
-          <OptionField label="Select sending Component">
+          <OptionField
+            label={
+              actionType?.includes("SEND")
+                ? "Select sending Component"
+                : "Component"
+            }
+          >
             <ComponentDropDown
               onSelect={(comp) =>
-                setComponent(comp, actionType !== ActionType.ADD)
+                setComponent(comp, actionType?.includes("SEND") ? true : false)
               }
-              value={sendingComponentId}
+              value={
+                actionType?.includes("SEND")
+                  ? sendingComponentId
+                  : receivingComponentId
+              }
             />
           </OptionField>
         </OptionField>
@@ -162,7 +172,6 @@ const useControllPanelEditActionViewModel = () => {
   };
 
   const setAction = (newActionType: ActionType | undefined): void => {
-    console.info("action to edit: ", actionToEdit);
     if (
       newActionType !== undefined &&
       selectedSequence !== null &&
@@ -171,7 +180,7 @@ const useControllPanelEditActionViewModel = () => {
       let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
       copyActionToEdit.actionType = newActionType;
       copyActionToEdit.sendingComponentFk = newActionType.includes("SEND")
-        ? actionToEdit.sequenceStepFk
+        ? actionToEdit.sendingComponentFk
         : -1;
       copyActionToEdit.receivingComponentFk = newActionType.includes("SEND")
         ? actionToEdit.receivingComponentFk
@@ -202,8 +211,24 @@ const useControllPanelEditActionViewModel = () => {
     }
   };
 
+  const validAction = (action: ActionTO): boolean => {
+    let valid: boolean = false;
+    if (action.actionType.includes("SEND")) {
+      valid =
+        action.dataFk !== -1 &&
+        action.receivingComponentFk !== -1 &&
+        action.sendingComponentFk !== -1;
+    } else {
+      valid = action.dataFk !== -1 && action.receivingComponentFk !== -1;
+    }
+    return valid;
+  };
+
   const setMode = (newMode?: string) => {
-    if (actionToEdit !== null) {
+    if (!Carv2Util.isNullOrUndefined(actionToEdit)) {
+      if (!validAction(actionToEdit!)) {
+        deleteAction();
+      }
       if (newMode && newMode === "EDIT") {
         dispatch(EditActions.setMode.edit());
       } else if (newMode && newMode === "SEQUENCE") {
@@ -213,7 +238,7 @@ const useControllPanelEditActionViewModel = () => {
       } else {
         dispatch(
           EditActions.setMode.editStep(
-            EditActions.step.find(actionToEdit.sequenceStepFk)
+            EditActions.step.find(actionToEdit!.sequenceStepFk)
           )
         );
       }

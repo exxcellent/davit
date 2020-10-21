@@ -199,15 +199,13 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
   const saveSequenceStep = (newMode?: string) => {
     if (
-      stepToEdit !== null &&
-      undefined &&
-      selectedSequence !== null &&
-      undefined
+      !Carv2Util.isNullOrUndefined(stepToEdit) &&
+      !Carv2Util.isNullOrUndefined(selectedSequence)
     ) {
       if (stepToEdit!.squenceStepTO.name !== "") {
-        dispatch(EditActions.step.save(stepToEdit));
+        dispatch(EditActions.step.save(stepToEdit!));
       } else {
-        dispatch(EditActions.step.delete(stepToEdit, selectedSequence));
+        dispatch(EditActions.step.delete(stepToEdit!, selectedSequence!));
       }
       if (newMode && newMode === "EDIT") {
         dispatch(EditActions.setMode.edit());

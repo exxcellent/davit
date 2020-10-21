@@ -47,13 +47,15 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (
       key={key}
     >
       {toDnDElements.map(wrappItem)}
-      {arrows.map((arrow) => {
-        return createCurveArrow(
-          arrow.sourceGeometricalData,
-          arrow.targetGeometricalData,
-          constraintsRef
-        );
-      })}
+      <motion.svg className="dataSVGArea">
+        {arrows.map((arrow) => {
+          return createCurveArrow(
+            arrow.sourceGeometricalData,
+            arrow.targetGeometricalData,
+            constraintsRef
+          );
+        })}
+      </motion.svg>
     </motion.div>
   );
 };

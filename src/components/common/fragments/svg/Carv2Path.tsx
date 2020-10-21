@@ -97,7 +97,7 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
     width: number,
     height: number
   ): Point => {
-    // TODO: remove this constance
+    // TODO: remove this constanse
     const PADDING: number = 10;
     switch (direction) {
       case Direction.TOP:
