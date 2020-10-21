@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { AppThunk, RootState } from '../app/store';
-import { Arrows as Arrow } from '../components/metaComponentModel/presentation/MetaComponentModelController';
+import { Arrow } from '../components/common/fragments/svg/Arrow';
 import { ChainCTO } from '../dataAccess/access/cto/ChainCTO';
 import { ChainlinkCTO } from '../dataAccess/access/cto/ChainlinkCTO';
 import { DataSetupCTO } from '../dataAccess/access/cto/DataSetupCTO';

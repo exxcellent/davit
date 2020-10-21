@@ -22,6 +22,13 @@ interface InstanceDropDownButtonProps extends DropdownProps {
   icon?: string;
 }
 
+interface InstanceDropDownMultiselectProps extends DropdownProps {
+  // onSelect: (dataIds: number[] | undefined) => void;
+  onSelect: (dataAndInstaces: DataAndInstanceId[] | undefined) => void;
+  selected: DataAndInstanceId[];
+  placeholder?: string;
+}
+
 export const InstanceDropDown: FunctionComponent<InstanceDropDownProps> = (
   props
 ) => {
@@ -69,6 +76,36 @@ export const InstanceDropDownButton: FunctionComponent<InstanceDropDownButtonPro
   );
 };
 
+export const InstanceDropDownMultiselect: FunctionComponent<InstanceDropDownMultiselectProps> = (
+  props
+) => {
+  const { onSelect, selected, placeholder } = props;
+  const { selectInstances, createOptions } = useInstanceDropDownViewModel();
+
+  console.info(
+    "selected: ",
+    selected.map((select) => JSON.stringify(select))
+  );
+
+  return (
+    <Dropdown
+      placeholder={placeholder || "Select Datas ..."}
+      fluid
+      multiple
+      selection
+      options={createOptions()}
+      onChange={(event, instances) => {
+        console.info("instaces: ", instances.value as string[]);
+        console.info("instaces: ", event);
+        onSelect(selectInstances((instances.value as string[]) || undefined));
+      }}
+      value={selected.map((select) => JSON.stringify(select))}
+      scrolling
+      disabled={createOptions().length > 0 ? false : true}
+    />
+  );
+};
+
 const useInstanceDropDownViewModel = () => {
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
 
@@ -80,6 +117,21 @@ const useInstanceDropDownViewModel = () => {
       return optionItem;
     }
     return undefined;
+  };
+
+  const selectInstances = (
+    optionItemStrings: string[] | undefined
+  ): DataAndInstanceId[] => {
+    const dataAndInstanceIds: DataAndInstanceId[] = [];
+    if (optionItemStrings) {
+      optionItemStrings.forEach((op) => {
+        const dataInst: DataAndInstanceId | undefined = selectInstance(op);
+        if (dataInst) {
+          dataAndInstanceIds.push(dataInst);
+        }
+      });
+    }
+    return dataAndInstanceIds;
   };
 
   const createOptions = (): DropdownItemProps[] => {
@@ -120,5 +172,5 @@ const useInstanceDropDownViewModel = () => {
     };
   };
 
-  return { selectInstance, createOptions };
+  return { selectInstance, selectInstances, createOptions };
 };

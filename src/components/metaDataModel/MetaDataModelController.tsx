@@ -206,10 +206,10 @@ const useMetaDataModelViewModel = () => {
   ): ViewFragmentProps[] => {
     let props: ViewFragmentProps[] = [];
     if (decision) {
-      props = decision.dataFks.map((data) => {
+      props = decision.dataAndInstaceId.map((data) => {
         return {
           // parentId: data > DATA_INSTANCE_ID_FACTOR ? getDataAndInstanceIds(data) : data,
-          parentId: data,
+          parentId: { dataId: data.dataFk, instanceId: data.instanceId },
           name: getComponentNameById(decision.componentFk),
           state: decision.has
             ? ViewFragmentState.CHECKED

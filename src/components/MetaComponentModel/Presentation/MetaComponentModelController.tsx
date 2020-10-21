@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ComponentCTO } from '../../../dataAccess/access/cto/ComponentCTO';
 import { DataCTO } from '../../../dataAccess/access/cto/DataCTO';
 import { DataSetupCTO } from '../../../dataAccess/access/cto/DataSetupCTO';
-import { GeometricalDataCTO } from '../../../dataAccess/access/cto/GeometraicalDataCTO';
 import { SequenceStepCTO } from '../../../dataAccess/access/cto/SequenceStepCTO';
 import { ActionTO } from '../../../dataAccess/access/to/ActionTO';
 import { DecisionTO } from '../../../dataAccess/access/to/DecisionTO';
@@ -18,6 +17,7 @@ import { Carv2Util } from '../../../utils/Carv2Util';
 import { ComponentData } from '../../../viewDataTypes/ComponentData';
 import { ViewFragmentProps } from '../../../viewDataTypes/ViewFragment';
 import { ViewFragmentState } from '../../../viewDataTypes/ViewFragmentState';
+import { Arrow } from '../../common/fragments/svg/Arrow';
 import { Carv2Card, Carv2CardProps } from './fragments/Carv2Card';
 import { MetaComponentDnDBox } from './fragments/MetaComponentDnDBox';
 
@@ -48,11 +48,6 @@ export const MetaComponentModelController: FunctionComponent<MetaComponentModelC
   );
 };
 
-export interface Arrows {
-  sourceGeometricalData: GeometricalDataCTO;
-  targetGeometricalData: GeometricalDataCTO;
-}
-
 const useViewModel = () => {
   const dispatch = useDispatch();
   // ====== SELECTORS =====
@@ -77,9 +72,9 @@ const useViewModel = () => {
   const initDataToEdit: InitDataTO | null = useSelector(
     editSelectors.initDataToEdit
   );
-  const editArrow: Arrows | null = useSelector(editSelectors.editArrow);
+  const editArrow: Arrow | null = useSelector(editSelectors.editArrow);
   // ----- VIEW -----
-  const arrows: Arrows[] = useSelector(
+  const arrows: Arrow[] = useSelector(
     sequenceModelSelectors.selectCurrentArrows
   );
   const currentComponentDatas: ComponentData[] = useSelector(
@@ -213,10 +208,10 @@ const useViewModel = () => {
   ): ViewFragmentProps[] => {
     let props: ViewFragmentProps[] = [];
     if (decision) {
-      props = decision.dataFks.map((data) => {
+      props = decision.dataAndInstaceId.map((data) => {
         return {
           parentId: decision.componentFk,
-          name: getDataNameById(data),
+          name: getDataNameById(data.dataFk, data.instanceId),
           state: decision.has
             ? ViewFragmentState.CHECKED
             : ViewFragmentState.DELETED,
@@ -353,8 +348,8 @@ const useViewModel = () => {
     };
   };
 
-  const getArrows = (): Arrows[] => {
-    let ar: Arrows[] = [];
+  const getArrows = (): Arrow[] => {
+    let ar: Arrow[] = [];
     ar = arrows;
     if (editArrow) {
       ar.push(editArrow);

@@ -1,6 +1,7 @@
-import { motion, Point } from "framer-motion";
-import React, { FunctionComponent, useEffect, useState } from "react";
-import { GeometricalDataCTO } from "../../../../dataAccess/access/cto/GeometraicalDataCTO";
+import { motion, Point } from 'framer-motion';
+import React, { FunctionComponent, useEffect, useState } from 'react';
+
+import { GeometricalDataCTO } from '../../../../dataAccess/access/cto/GeometraicalDataCTO';
 
 export interface ArrowProps {
   xSource: number;
@@ -15,18 +16,41 @@ export interface ArrowProps {
   parentRef: any;
 }
 
+export interface Arrow {
+  sourceGeometricalData: GeometricalDataCTO;
+  targetGeometricalData: GeometricalDataCTO;
+}
+
 enum ArrowType {
   CURVE = "Curve",
   CORNER = "CORNER",
 }
 
 const Arrow: FunctionComponent<ArrowProps> = (props) => {
-  const { xSource, ySource, xTarget, yTarget, type, parentRef, sourceHeight, sourceWidth, targetHeight } = props;
+  const {
+    xSource,
+    ySource,
+    xTarget,
+    yTarget,
+    type,
+    parentRef,
+    sourceHeight,
+    sourceWidth,
+    targetHeight,
+  } = props;
 
-  const [initXSource, setInitXSource] = useState<number>(xSource * (parentRef.current.offsetWidth / 100));
-  const [initYSource, setInitYSource] = useState<number>(ySource * (parentRef.current.offsetHeight / 100));
-  const [initXTarget, setInitXTarget] = useState<number>(xTarget * (parentRef.current.offsetWidth / 100));
-  const [initYTarget, setInitYTarget] = useState<number>(yTarget * (parentRef.current.offsetHeight / 100));
+  const [initXSource, setInitXSource] = useState<number>(
+    xSource * (parentRef.current.offsetWidth / 100)
+  );
+  const [initYSource, setInitYSource] = useState<number>(
+    ySource * (parentRef.current.offsetHeight / 100)
+  );
+  const [initXTarget, setInitXTarget] = useState<number>(
+    xTarget * (parentRef.current.offsetWidth / 100)
+  );
+  const [initYTarget, setInitYTarget] = useState<number>(
+    yTarget * (parentRef.current.offsetHeight / 100)
+  );
 
   useEffect(() => {
     if (parentRef !== undefined && parentRef.current !== undefined) {
@@ -117,7 +141,10 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
     };
   };
 
-  const getCurvRefPoint = (curveStartPoint: Point, curveEndPoint: Point): Point => {
+  const getCurvRefPoint = (
+    curveStartPoint: Point,
+    curveEndPoint: Point
+  ): Point => {
     return {
       x: getMiddleValue(curveStartPoint.x, curveEndPoint.x),
       y: curveStartPoint.y,
@@ -127,12 +154,22 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
   return (
     <motion.svg className="componentSVGArea">
       <defs>
-        <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" strokeWidth="0">
+        <marker
+          id="arrow"
+          markerWidth="10"
+          markerHeight="10"
+          refX="8"
+          refY="3"
+          orient="auto"
+          strokeWidth="0"
+        >
           <path d="M0,0 L0,6 L9,3 z" className="carvArrowMarker" />
         </marker>
       </defs>
-      {type === ArrowType.CURVE && createCurve(initXSource, initYSource, initXTarget, initYTarget)}
-      {type === ArrowType.CORNER && createCornerLine(initXSource, initYSource, initXTarget, initYTarget)}
+      {type === ArrowType.CURVE &&
+        createCurve(initXSource, initYSource, initXTarget, initYTarget)}
+      {type === ArrowType.CORNER &&
+        createCornerLine(initXSource, initYSource, initXTarget, initYTarget)}
     </motion.svg>
   );
 };
@@ -140,6 +177,7 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
 export const createCurveArrow = (
   source: GeometricalDataCTO | undefined,
   target: GeometricalDataCTO | undefined,
+  key: number,
   parentRef: any
 ) => {
   if (source && target) {
@@ -154,7 +192,7 @@ export const createCurveArrow = (
         targetWidth={target.geometricalData.width}
         targetHeight={target.geometricalData.height}
         type={ArrowType.CURVE}
-        key={source.geometricalData.id + target.geometricalData.id}
+        key={key}
         parentRef={parentRef}
       />
     );

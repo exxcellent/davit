@@ -64,8 +64,8 @@ export const SequenceActionReducer = {
       (compData) => compData.componentFk === decision.componentFk
     );
     let goTo: GoTo | undefined;
-    decision.dataFks.forEach((dataFk) => {
-      let isIncluded: boolean = filteredCompData.some((cd) => cd.dataFk === dataFk);
+    decision.dataAndInstaceId.forEach((dataFk) => {
+      let isIncluded: boolean = filteredCompData.some((cd) => cd.dataFk === dataFk.dataFk);
       if (decision.has !== isIncluded) {
         goTo = decision.elseGoTo;
       }

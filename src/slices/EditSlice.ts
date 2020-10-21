@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { AppThunk, RootState } from '../app/store';
-import { Arrows } from '../components/metaComponentModel/presentation/MetaComponentModelController';
+import { Arrow } from '../components/common/fragments/svg/Arrow';
 import { ChainCTO } from '../dataAccess/access/cto/ChainCTO';
 import { ComponentCTO } from '../dataAccess/access/cto/ComponentCTO';
 import { DataCTO } from '../dataAccess/access/cto/DataCTO';
@@ -1013,7 +1013,7 @@ export const editSelectors = {
       ? (state.edit.objectToEdit as SequenceTO)
       : null;
   },
-  editArrow: (state: RootState): Arrows | null => {
+  editArrow: (state: RootState): Arrow | null => {
     if ((state.edit.mode === Mode.EDIT_SEQUENCE_STEP || Mode.EDIT_SEQUENCE_STEP_ACTION) && (state.edit.objectToEdit as StepAction).actionTO) {
       const sourceComp: ComponentCTO | undefined = state.masterData.components.find(
         (comp) => comp.component.id === (state.edit.objectToEdit as StepAction).actionTO.sendingComponentFk

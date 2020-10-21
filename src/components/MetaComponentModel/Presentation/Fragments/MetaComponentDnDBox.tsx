@@ -5,12 +5,11 @@ import { ASPECT_RATIO, WINDOW_FACTOR } from '../../../../app/Carv2Constants';
 import { PositionTO } from '../../../../dataAccess/access/to/PositionTO';
 import { useCurrentHeight, useCurrentWitdh } from '../../../../utils/WindowUtil';
 import { createDnDItem } from '../../../common/fragments/DnDWrapper';
-import { createCurveArrow } from '../../../common/fragments/svg/Arrow';
-import { Arrows } from '../MetaComponentModelController';
+import { Arrow, createCurveArrow } from '../../../common/fragments/svg/Arrow';
 
 interface MetaComponentDnDBox {
   toDnDElements: { element: JSX.Element; position: PositionTO }[];
-  arrows: Arrows[];
+  arrows: Arrow[];
   fullScreen?: boolean;
   onPositionUpdate: (x: number, y: number, positionId: number) => void;
 }
@@ -48,10 +47,11 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (
     >
       {toDnDElements.map(wrappItem)}
       <motion.svg className="dataSVGArea">
-        {arrows.map((arrow) => {
+        {arrows.map((arrow, index) => {
           return createCurveArrow(
             arrow.sourceGeometricalData,
             arrow.targetGeometricalData,
+            index,
             constraintsRef
           );
         })}

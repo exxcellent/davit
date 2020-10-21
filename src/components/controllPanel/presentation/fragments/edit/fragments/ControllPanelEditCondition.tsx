@@ -11,7 +11,7 @@ import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSl
 import { Carv2Util } from '../../../../../../utils/Carv2Util';
 import { Carv2ButtonIcon } from '../../../../../common/fragments/buttons/Carv2Button';
 import { ComponentDropDown } from '../../../../../common/fragments/dropdowns/ComponentDropDown';
-import { MultiselectDataDropDown } from '../../../../../common/fragments/dropdowns/MultiselectDataDropDown';
+import { DataAndInstanceId, InstanceDropDownMultiselect } from '../../../../../common/fragments/dropdowns/InstanceDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
 import { OptionField } from '../common/OptionField';
 
@@ -67,7 +67,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
       <div className="columnDivider optionFieldSpacer">{hasDropDown}</div>
       <div className="columnDivider optionFieldSpacer">
         <OptionField label="Select data for component">
-          <MultiselectDataDropDown
+          <InstanceDropDownMultiselect
             onSelect={(data) => {
               setData(data);
             }}
@@ -104,10 +104,10 @@ const useControllPanelEditConditionViewModel = () => {
     }
   }, [dispatch, decisionToEdit]);
 
-  const setData = (dataIds: number[] | undefined) => {
+  const setData = (dataAndInstanceIds: DataAndInstanceId[] | undefined) => {
     if (!isNullOrUndefined(decisionToEdit)) {
       const copyDecisionToEdit: DecisionTO = Carv2Util.deepCopy(decisionToEdit);
-      copyDecisionToEdit.dataFks = dataIds || [];
+      copyDecisionToEdit.dataAndInstaceId = dataAndInstanceIds || [];
       dispatch(EditActions.decision.save(copyDecisionToEdit));
       dispatch(EditActions.decision.update(copyDecisionToEdit));
     }
@@ -169,6 +169,6 @@ const useControllPanelEditConditionViewModel = () => {
     getDecision,
     setHas,
     setData,
-    dataFks: decisionToEdit?.dataFks,
+    dataFks: decisionToEdit?.dataAndInstaceId,
   };
 };
