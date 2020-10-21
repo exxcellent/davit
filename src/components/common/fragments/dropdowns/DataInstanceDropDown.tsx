@@ -16,6 +16,9 @@ interface DataInstanceDropDownButtonProps extends DropdownProps {
   icon?: string;
 }
 
+/**
+ * List's all instances of a data object.
+ */
 export const DataInstanceDropDown: FunctionComponent<DataInstanceDropDownProps> = (
   props
 ) => {

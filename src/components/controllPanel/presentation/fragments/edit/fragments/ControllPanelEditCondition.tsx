@@ -1,24 +1,27 @@
-import React, { FunctionComponent, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Dropdown } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
-import { DecisionTO } from "../../../../../../dataAccess/access/to/DecisionTO";
-import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
-import { handleError } from "../../../../../../slices/GlobalSlice";
-import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
-import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonIcon } from "../../../../../common/fragments/buttons/Carv2Button";
-import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
-import { MultiselectDataDropDown } from "../../../../../common/fragments/dropdowns/MultiselectDataDropDown";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { OptionField } from "../common/OptionField";
+import React, { FunctionComponent, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Dropdown } from 'semantic-ui-react';
+import { isNullOrUndefined } from 'util';
+
+import { SequenceCTO } from '../../../../../../dataAccess/access/cto/SequenceCTO';
+import { DecisionTO } from '../../../../../../dataAccess/access/to/DecisionTO';
+import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
+import { handleError } from '../../../../../../slices/GlobalSlice';
+import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
+import { Carv2Util } from '../../../../../../utils/Carv2Util';
+import { Carv2ButtonIcon } from '../../../../../common/fragments/buttons/Carv2Button';
+import { ComponentDropDown } from '../../../../../common/fragments/dropdowns/ComponentDropDown';
+import { MultiselectDataDropDown } from '../../../../../common/fragments/dropdowns/MultiselectDataDropDown';
+import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
+import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditConditionProps {
   hidden: boolean;
 }
 
-export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditConditionProps> = (props) => {
+export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditConditionProps> = (
+  props
+) => {
   const { hidden } = props;
   const {
     label,
@@ -48,10 +51,17 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
   );
 
   return (
-    <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={setMode}>
-      <div className="controllPanelEditChild">
+    <ControllPanelEditSub
+      label={label}
+      hidden={hidden}
+      onClickNavItem={setMode}
+    >
+      <div className="optionFieldSpacer">
         <OptionField label="Select Component">
-          <ComponentDropDown value={componentFk} onSelect={(comp) => setComponentFk(comp?.component.id || -1)} />
+          <ComponentDropDown
+            value={componentFk}
+            onSelect={(comp) => setComponentFk(comp?.component.id || -1)}
+          />
         </OptionField>
       </div>
       <div className="columnDivider optionFieldSpacer">{hasDropDown}</div>
@@ -75,13 +85,21 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
 };
 
 const useControllPanelEditConditionViewModel = () => {
-  const decisionToEdit: DecisionTO | null = useSelector(editSelectors.decisionToEdit);
-  const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
+  const decisionToEdit: DecisionTO | null = useSelector(
+    editSelectors.decisionToEdit
+  );
+  const selectedSequence: SequenceCTO | null = useSelector(
+    sequenceModelSelectors.selectSequence
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (isNullOrUndefined(decisionToEdit)) {
-      dispatch(handleError("Tried to go to edit decision without decisionToEdit specified"));
+      dispatch(
+        handleError(
+          "Tried to go to edit decision without decisionToEdit specified"
+        )
+      );
       dispatch(EditActions.setMode.edit());
     }
   }, [dispatch, decisionToEdit]);
@@ -100,7 +118,9 @@ const useControllPanelEditConditionViewModel = () => {
       if (newMode && newMode === "EDIT") {
         dispatch(EditActions.setMode.edit());
       } else if (newMode && newMode === "SEQUENCE") {
-        dispatch(EditActions.setMode.editSequence(selectedSequence?.sequenceTO.id));
+        dispatch(
+          EditActions.setMode.editSequence(selectedSequence?.sequenceTO.id)
+        );
       } else {
         dispatch(EditActions.setMode.editDecision(decisionToEdit));
       }
@@ -138,7 +158,11 @@ const useControllPanelEditConditionViewModel = () => {
 
   return {
     label:
-      "EDIT * " + (selectedSequence?.sequenceTO.name || "") + " * " + (decisionToEdit?.name || "") + " * CONDITION",
+      "EDIT * " +
+      (selectedSequence?.sequenceTO.name || "") +
+      " * " +
+      (decisionToEdit?.name || "") +
+      " * CONDITION",
     setMode,
     componentFk: decisionToEdit?.componentFk,
     setComponentFk,

@@ -1,12 +1,12 @@
 
 export const Carv2Util = {
   
-    isNullOrUndefined<T>(object: T | null | undefined): boolean{
-      return object === null || undefined ? true : false;
-    },
+  isNullOrUndefined<T>(object: T | null | undefined): boolean{
+    return object === null || object === undefined ? true : false;
+  },
 
   deepCopy(object: any) {
-    return this.isNullOrUndefined(object) ? object : JSON.parse(JSON.stringify(object));
+    return Carv2Util.isNullOrUndefined(object) ? object : JSON.parse(JSON.stringify(object));
   },
 
   isValidName(name: string): boolean {

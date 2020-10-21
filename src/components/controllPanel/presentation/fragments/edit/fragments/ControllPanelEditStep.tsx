@@ -184,7 +184,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
   }, [dispatch, stepToEdit]);
 
   const changeName = (name: string) => {
-    if (stepToEdit !== undefined && null) {
+    if (!Carv2Util.isNullOrUndefined(stepToEdit)) {
       const copySequenceStep: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
       copySequenceStep.squenceStepTO.name = name;
       dispatch(EditActions.setMode.editStep(copySequenceStep));

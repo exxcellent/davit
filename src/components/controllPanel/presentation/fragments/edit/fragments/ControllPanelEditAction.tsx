@@ -161,18 +161,19 @@ const useControllPanelEditActionViewModel = () => {
     }
   };
 
-  const setAction = (actionType: ActionType | undefined): void => {
+  const setAction = (newActionType: ActionType | undefined): void => {
+    console.info("action to edit: ", actionToEdit);
     if (
-      actionType !== undefined &&
+      newActionType !== undefined &&
       selectedSequence !== null &&
       actionToEdit !== null
     ) {
       let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
-      copyActionToEdit.actionType = actionType;
-      copyActionToEdit.sendingComponentFk = actionType.includes("SEND")
+      copyActionToEdit.actionType = newActionType;
+      copyActionToEdit.sendingComponentFk = newActionType.includes("SEND")
         ? actionToEdit.sequenceStepFk
         : -1;
-      copyActionToEdit.receivingComponentFk = actionType.includes("SEND")
+      copyActionToEdit.receivingComponentFk = newActionType.includes("SEND")
         ? actionToEdit.receivingComponentFk
         : -1;
       dispatch(EditActions.action.update(copyActionToEdit));

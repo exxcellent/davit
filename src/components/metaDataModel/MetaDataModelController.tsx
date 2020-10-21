@@ -117,7 +117,6 @@ const useMetaDataModelViewModel = () => {
     let compDatas: ViewFragmentProps[] = [];
     compDatas.push(...getComponentDatasFromView());
     compDatas.push(...getComponentDatasFromEdit());
-    console.info("compDatas: ", compDatas);
     return compDatas;
   };
 
