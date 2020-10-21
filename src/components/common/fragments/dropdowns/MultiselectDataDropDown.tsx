@@ -52,10 +52,12 @@ const useMultiSelectDataDropDownViewModel = () => {
       ];
     } else {
       return data.data.instances.map((instance) => {
+        const instanceLabel: string =
+          data.data.name === instance.name ? "" : " : " + instance.name;
         return {
           key: instance.name,
           value: instance.name,
-          text: `${data.data.name}: ${instance.name}`,
+          text: `${data.data.name} ${instanceLabel}`,
         };
       });
     }
