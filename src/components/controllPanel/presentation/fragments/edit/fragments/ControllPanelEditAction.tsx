@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ComponentCTO } from '../../../../../../dataAccess/access/cto/ComponentCTO';
 import { DataCTO } from '../../../../../../dataAccess/access/cto/DataCTO';
 import { SequenceCTO } from '../../../../../../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../../../../../../dataAccess/access/cto/SequenceStepCTO';
 import { ActionTO } from '../../../../../../dataAccess/access/to/ActionTO';
 import { ActionType } from '../../../../../../dataAccess/access/types/ActionType';
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
@@ -171,26 +170,14 @@ const useControllPanelEditActionViewModel = () => {
       let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
       copyActionToEdit.actionType = actionType;
       copyActionToEdit.sendingComponentFk = actionType.includes("SEND")
-        ? getSendingComponendId(actionToEdit.sequenceStepFk)
+        ? actionToEdit.sequenceStepFk
+        : -1;
+      copyActionToEdit.receivingComponentFk = actionType.includes("SEND")
+        ? actionToEdit.receivingComponentFk
         : -1;
       dispatch(EditActions.action.update(copyActionToEdit));
       dispatch(EditActions.action.save(copyActionToEdit));
     }
-  };
-
-  const getSendingComponendId = (stepId: number): number => {
-    let sendingComponendId: number = -1;
-    if (selectedSequence !== null && actionToEdit !== null) {
-      const step:
-        | SequenceStepCTO
-        | undefined = selectedSequence.sequenceStepCTOs.find(
-        (step) => step.squenceStepTO.id === actionToEdit.sequenceStepFk
-      );
-      if (step) {
-        sendingComponendId = step.squenceStepTO.sourceComponentFk;
-      }
-    }
-    return sendingComponendId;
   };
 
   const setData = (data: DataCTO | undefined): void => {

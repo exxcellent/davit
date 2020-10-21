@@ -306,18 +306,25 @@ const filterSteps = (steps: CalculatedStep[], filter: Filter[], modelSteps: Sequ
   );
 };
 
-const getArrowForStepFk = (
+const getArrowsForStepFk = (
   stepFk: number,
   sequenceStepCTOs: SequenceStepCTO[],
   rootState: RootState
-): Arrow | undefined => {
+): Arrow[] => {
+  let arrows: Arrow[] = [];
   let step: SequenceStepCTO | undefined;
   if (stepFk && sequenceStepCTOs) {
     step = sequenceStepCTOs.find((stp) => stp.squenceStepTO.id === stepFk);
   }
   if (step) {
-    return mapStepToArrow(step, rootState);
+    step.actions.forEach(action => {
+      const arrow: Arrow | undefined = mapActionToArrow(action, rootState);
+      if(arrow){
+        arrows.push(arrow);
+      }
+    });
   }
+  return arrows;
 };
 
 // =============================================== SELECTORS ===============================================
@@ -394,8 +401,12 @@ export const sequenceModelSelectors = {
         stepFks.push(stepFk);
       }
     }
-    const allArrows: (Arrow | undefined)[] = stepFks.map((stepFk) =>
-      getArrowForStepFk(stepFk, getCurrentSequenceModel(state.sequenceModel)?.sequenceStepCTOs || [], state)
+    let allArrows: Arrow[] = []
+    stepFks.forEach((stepFk) =>
+    {
+      const arr: Arrow[] = getArrowsForStepFk(stepFk, getCurrentSequenceModel(state.sequenceModel)?.sequenceStepCTOs || [], state)
+      allArrows = allArrows.concat(arr);
+    }
     );
     allArrows.forEach((arrow) => {
       if (arrow) arrows.push(arrow);
@@ -406,12 +417,12 @@ export const sequenceModelSelectors = {
     getCurrentCalcSequence(state.sequenceModel)?.loopStartingStepIndex || null,
 };
 
-const mapStepToArrow = (step: SequenceStepCTO, state: RootState): Arrow | undefined => {
+const mapActionToArrow = (action: ActionTO, state: RootState): Arrow | undefined => {
   const sourceGeometricalData: GeometricalDataCTO | undefined = state.masterData.components.find(
-    (comp) => comp.component.id === step.squenceStepTO.sourceComponentFk
+    (comp) => comp.component.id === action.sendingComponentFk
   )?.geometricalData;
   const targetGeometricalData: GeometricalDataCTO | undefined = state.masterData.components.find(
-    (comp) => comp.component.id === step.squenceStepTO.targetComponentFk
+    (comp) => comp.component.id === action.receivingComponentFk
   )?.geometricalData;
   if (sourceGeometricalData && targetGeometricalData) {
     return {

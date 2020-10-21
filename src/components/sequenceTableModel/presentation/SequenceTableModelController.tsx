@@ -1,27 +1,27 @@
 /* eslint-disable react/display-name */
-import React, { createRef, FunctionComponent, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Icon } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { Carv2TableButton } from "../../../components/common/fragments/buttons/Carv2TableButton";
-import { ChainlinkCTO } from "../../../dataAccess/access/cto/ChainlinkCTO";
-import { ComponentCTO } from "../../../dataAccess/access/cto/ComponentCTO";
-import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
-import { ChainDecisionTO } from "../../../dataAccess/access/to/ChainDecisionTO";
-import { ChainTO } from "../../../dataAccess/access/to/ChainTO";
-import { DataSetupTO } from "../../../dataAccess/access/to/DataSetupTO";
-import { DecisionTO } from "../../../dataAccess/access/to/DecisionTO";
-import { SequenceTO } from "../../../dataAccess/access/to/SequenceTO";
-import { GoTo, GoToTypes, Intermediate, Terminal } from "../../../dataAccess/access/types/GoToType";
-import { GoToChain, GoToTypesChain, IntermediateChain } from "../../../dataAccess/access/types/GoToTypeChain";
-import { CalcChain, CalcChainLink } from "../../../services/SequenceChainService";
-import { CalculatedStep } from "../../../services/SequenceService";
-import { EditActions, editSelectors, Mode } from "../../../slices/EditSlice";
-import { masterDataSelectors } from "../../../slices/MasterDataSlice";
-import { SequenceModelActions, sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
-import { TabFragment } from "../fragments/TabFragment";
-import { TabGroupFragment } from "../fragments/TabGroupFragment";
+import React, { createRef, FunctionComponent, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Icon } from 'semantic-ui-react';
+import { isNullOrUndefined } from 'util';
+
+import { Carv2TableButton } from '../../../components/common/fragments/buttons/Carv2TableButton';
+import { ChainlinkCTO } from '../../../dataAccess/access/cto/ChainlinkCTO';
+import { SequenceCTO } from '../../../dataAccess/access/cto/SequenceCTO';
+import { SequenceStepCTO } from '../../../dataAccess/access/cto/SequenceStepCTO';
+import { ChainDecisionTO } from '../../../dataAccess/access/to/ChainDecisionTO';
+import { ChainTO } from '../../../dataAccess/access/to/ChainTO';
+import { DataSetupTO } from '../../../dataAccess/access/to/DataSetupTO';
+import { DecisionTO } from '../../../dataAccess/access/to/DecisionTO';
+import { SequenceTO } from '../../../dataAccess/access/to/SequenceTO';
+import { GoTo, GoToTypes, Intermediate, Terminal } from '../../../dataAccess/access/types/GoToType';
+import { GoToChain, GoToTypesChain, IntermediateChain } from '../../../dataAccess/access/types/GoToTypeChain';
+import { CalcChain, CalcChainLink } from '../../../services/SequenceChainService';
+import { CalculatedStep } from '../../../services/SequenceService';
+import { EditActions, editSelectors, Mode } from '../../../slices/EditSlice';
+import { masterDataSelectors } from '../../../slices/MasterDataSlice';
+import { SequenceModelActions, sequenceModelSelectors } from '../../../slices/SequenceModelSlice';
+import { TabFragment } from '../fragments/TabFragment';
+import { TabGroupFragment } from '../fragments/TabGroupFragment';
 
 interface SequenceTableModelControllerProps {
   fullScreen?: boolean;
@@ -39,7 +39,9 @@ enum ActiveTab {
   dataSetup = "dataSetup",
 }
 
-export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (props) => {
+export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (
+  props
+) => {
   const { fullScreen } = props;
   const {
     getCalcSequenceTableBody,
@@ -76,10 +78,36 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
 
   const chainTableHead = ["INDEX", "NAME", "SEQUENCE", "DATASETUP"];
   const chaindecisionsTableHead = ["NAME", "IF GOTO", "ELSE GOTO", "ACTIONS"];
-  const chainlinkTableHead = ["NAME", "SEQUENCE", "DATASETUP", "GOTO", "ACTIONS", "ROOT"];
-  const sequenceStepTableHead = ["NAME", "SENDER", "RECEIVER", "GOTO", "ACTIONS", "ROOT"];
-  const seqeunceDcisionsTableHead = ["NAME", "IF GOTO", "ELSE GOTO", "ACTIONS", "ROOT"];
-  const calcSequenceTableHead = ["INDEX", "NAME", "SENDER", "RECEIVER", "ACTION-ERROR"];
+  const chainlinkTableHead = [
+    "NAME",
+    "SEQUENCE",
+    "DATASETUP",
+    "GOTO",
+    "ACTIONS",
+    "ROOT",
+  ];
+  const sequenceStepTableHead = [
+    "NAME",
+    "SENDER",
+    "RECEIVER",
+    "GOTO",
+    "ACTIONS",
+    "ROOT",
+  ];
+  const seqeunceDcisionsTableHead = [
+    "NAME",
+    "IF GOTO",
+    "ELSE GOTO",
+    "ACTIONS",
+    "ROOT",
+  ];
+  const calcSequenceTableHead = [
+    "INDEX",
+    "NAME",
+    "SENDER",
+    "RECEIVER",
+    "ACTION-ERROR",
+  ];
   const seqeunceModelTableHead = ["NAME", "ACTIONS"];
   const chainModelTableHead = ["NAME", "ACTIONS"];
   const dataSetupTableHead = ["NAME", "ACTIONS"];
@@ -180,17 +208,26 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
           </TabGroupFragment>
         </div>
 
-        {activeTab === ActiveTab.chain && createTable(chainTableHead, getChainTableBody())}
-        {activeTab === ActiveTab.chaindecisions && createTable(chaindecisionsTableHead, getChainDecisionTableBody())}
-        {activeTab === ActiveTab.chainlinks && createTable(chainlinkTableHead, getChainLinkTableBody())}
-        {activeTab === ActiveTab.step && createTable(sequenceStepTableHead, getStepTableBody())}
-        {activeTab === ActiveTab.decision && createTable(seqeunceDcisionsTableHead, getDecisionTableBody())}
+        {activeTab === ActiveTab.chain &&
+          createTable(chainTableHead, getChainTableBody())}
+        {activeTab === ActiveTab.chaindecisions &&
+          createTable(chaindecisionsTableHead, getChainDecisionTableBody())}
+        {activeTab === ActiveTab.chainlinks &&
+          createTable(chainlinkTableHead, getChainLinkTableBody())}
+        {activeTab === ActiveTab.step &&
+          createTable(sequenceStepTableHead, getStepTableBody())}
+        {activeTab === ActiveTab.decision &&
+          createTable(seqeunceDcisionsTableHead, getDecisionTableBody())}
 
-        {activeTab === ActiveTab.sequence && createTable(calcSequenceTableHead, getCalcSequenceTableBody())}
+        {activeTab === ActiveTab.sequence &&
+          createTable(calcSequenceTableHead, getCalcSequenceTableBody())}
 
-        {activeTab === ActiveTab.sequenceModels && createTable(seqeunceModelTableHead, getSequenceModelsTableBody())}
-        {activeTab === ActiveTab.chainModel && createTable(chainModelTableHead, getChainModelsTableBody())}
-        {activeTab === ActiveTab.dataSetup && createTable(dataSetupTableHead, getDataSetupTableBody())}
+        {activeTab === ActiveTab.sequenceModels &&
+          createTable(seqeunceModelTableHead, getSequenceModelsTableBody())}
+        {activeTab === ActiveTab.chainModel &&
+          createTable(chainModelTableHead, getChainModelsTableBody())}
+        {activeTab === ActiveTab.dataSetup &&
+          createTable(dataSetupTableHead, getDataSetupTableBody())}
       </div>
     </div>
   );
@@ -198,21 +235,40 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
 
 const useSequenceTableViewModel = () => {
   const dispatch = useDispatch();
-  const selectSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
-  const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
-  const stepIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentStepIndex);
-  const chainIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentLinkIndex);
-  const calcSteps: CalculatedStep[] = useSelector(sequenceModelSelectors.selectCalcSteps);
-  const terminalStep: Terminal | null = useSelector(sequenceModelSelectors.selectTerminalStep);
-  const loopStepStartIndex: number | null = useSelector(sequenceModelSelectors.selectLoopStepStartIndex);
-  const calcChain: CalcChain | null = useSelector(sequenceModelSelectors.selectCalcChain);
+  const selectSequence: SequenceCTO | null = useSelector(
+    sequenceModelSelectors.selectSequence
+  );
+  const stepIndex: number | null = useSelector(
+    sequenceModelSelectors.selectCurrentStepIndex
+  );
+  const chainIndex: number | null = useSelector(
+    sequenceModelSelectors.selectCurrentLinkIndex
+  );
+  const calcSteps: CalculatedStep[] = useSelector(
+    sequenceModelSelectors.selectCalcSteps
+  );
+  const terminalStep: Terminal | null = useSelector(
+    sequenceModelSelectors.selectTerminalStep
+  );
+  const loopStepStartIndex: number | null = useSelector(
+    sequenceModelSelectors.selectLoopStepStartIndex
+  );
+  const calcChain: CalcChain | null = useSelector(
+    sequenceModelSelectors.selectCalcChain
+  );
   const sequences: SequenceTO[] = useSelector(masterDataSelectors.sequences);
   const dataSetups: DataSetupTO[] = useSelector(masterDataSelectors.dataSetup);
-  const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
+  const selectedChain: ChainTO | null = useSelector(
+    sequenceModelSelectors.selectChain
+  );
   const chainModles: ChainTO[] = useSelector(masterDataSelectors.chains);
   const mode: Mode = useSelector(editSelectors.mode);
-  const selectedChainlinks: ChainlinkCTO[] = useSelector(sequenceModelSelectors.selectCurrentChainLinks);
-  const selectedChainDecisions: ChainDecisionTO[] = useSelector(sequenceModelSelectors.selectCurrentChainDecisions);
+  const selectedChainlinks: ChainlinkCTO[] = useSelector(
+    sequenceModelSelectors.selectCurrentChainLinks
+  );
+  const selectedChainDecisions: ChainDecisionTO[] = useSelector(
+    sequenceModelSelectors.selectCurrentChainDecisions
+  );
 
   const [activeTab, setActiveTab] = useState<ActiveTab>(ActiveTab.sequence);
 
@@ -250,8 +306,14 @@ const useSequenceTableViewModel = () => {
     }
   }, [mode, selectedChain]);
 
-  const createCalcSequenceStepColumn = (step: CalculatedStep, index: number): JSX.Element => {
-    let trClass: string = loopStepStartIndex && loopStepStartIndex <= index ? "carv2TrTerminalError" : "carv2Tr";
+  const createCalcSequenceStepColumn = (
+    step: CalculatedStep,
+    index: number
+  ): JSX.Element => {
+    let trClass: string =
+      loopStepStartIndex && loopStepStartIndex <= index
+        ? "carv2TrTerminalError"
+        : "carv2Tr";
 
     const myRef = createRef<HTMLTableRowElement>();
     const scrollToRef = (ref: any) => window.scrollTo(0, ref.offsetTop);
@@ -260,24 +322,32 @@ const useSequenceTableViewModel = () => {
       trClass = "carv2TrMarked";
       scrollToRef(myRef);
     }
-    const modelStep: SequenceStepCTO | undefined = selectSequence?.sequenceStepCTOs.find(
+    const modelStep:
+      | SequenceStepCTO
+      | undefined = selectSequence?.sequenceStepCTOs.find(
       (item) => item.squenceStepTO.id === step.stepFk
     );
 
-    let name = index === 0 && !modelStep ? "Initial" : modelStep?.squenceStepTO.name || "Step not found";
+    let name =
+      index === 0 && !modelStep
+        ? "Initial"
+        : modelStep?.squenceStepTO.name || "Step not found";
 
-    const source =
-      index === 0 && !modelStep
-        ? ""
-        : modelStep
-        ? getComponentNameById(modelStep.squenceStepTO.sourceComponentFk)
-        : "Source not found";
-    const target =
-      index === 0 && !modelStep
-        ? ""
-        : modelStep
-        ? getComponentNameById(modelStep.squenceStepTO.targetComponentFk)
-        : "Target not found";
+    // TODO: this have to move to a new table 'actions'
+    const source = "";
+    // index === 0 && !modelStep
+    // ? ""
+    // : modelStep
+    // ? getComponentNameById(modelStep.squenceStepTO.sourceComponentFk)
+    // : "Source not found";
+
+    // TODO: this have to move to a new table 'actions'
+    const target = "";
+    // index === 0 && !modelStep
+    //   ? ""
+    //   : modelStep
+    //   ? getComponentNameById(modelStep.squenceStepTO.targetComponentFk)
+    //   : "Target not found";
     const hasError = step.errors.length > 0 ? true : false;
 
     return (
@@ -296,10 +366,16 @@ const useSequenceTableViewModel = () => {
     );
   };
 
-  const createModelStepColumn = (step: SequenceStepCTO, index: number): JSX.Element => {
+  const createModelStepColumn = (
+    step: SequenceStepCTO,
+    index: number
+  ): JSX.Element => {
     const name = step.squenceStepTO.name;
-    const source = getComponentNameById(step.squenceStepTO.sourceComponentFk);
-    const target = getComponentNameById(step.squenceStepTO.targetComponentFk);
+    // TODO: this have to be moved in a new table 'actions'
+    // const source = getComponentNameById(step.squenceStepTO.sourceComponentFk);
+    // const target = getComponentNameById(step.squenceStepTO.targetComponentFk);
+    const source = "";
+    const target = "";
     const gotoName: string = getGotoName(
       step.squenceStepTO.goto,
       selectSequence?.sequenceStepCTOs || [],
@@ -316,20 +392,31 @@ const useSequenceTableViewModel = () => {
         <td>{target}</td>
         <td>{gotoName}</td>
         <td>
-          <Carv2TableButton icon="wrench" onClick={() => dispatch(EditActions.setMode.editStep(step))} />
+          <Carv2TableButton
+            icon="wrench"
+            onClick={() => dispatch(EditActions.setMode.editStep(step))}
+          />
         </td>
         <td>{root}</td>
       </tr>
     );
   };
-  const createSequenceModelColumn = (sequence: SequenceTO, index: number): JSX.Element => {
+  const createSequenceModelColumn = (
+    sequence: SequenceTO,
+    index: number
+  ): JSX.Element => {
     const name = sequence.name;
     let trClass = "carv2Tr";
     return (
       <tr key={index} className={trClass}>
         <td>{name}</td>
         <td>
-          <Carv2TableButton icon="wrench" onClick={() => dispatch(EditActions.setMode.editSequence(sequence.id))} />
+          <Carv2TableButton
+            icon="wrench"
+            onClick={() =>
+              dispatch(EditActions.setMode.editSequence(sequence.id))
+            }
+          />
           <Carv2TableButton
             icon="hand pointer"
             onClick={() => {
@@ -341,14 +428,20 @@ const useSequenceTableViewModel = () => {
       </tr>
     );
   };
-  const createChainModelColumn = (chain: ChainTO, index: number): JSX.Element => {
+  const createChainModelColumn = (
+    chain: ChainTO,
+    index: number
+  ): JSX.Element => {
     const name = chain.name;
     let trClass = "carv2Tr";
     return (
       <tr key={index} className={trClass}>
         <td>{name}</td>
         <td>
-          <Carv2TableButton icon="wrench" onClick={() => dispatch(EditActions.setMode.editChain(chain))} />
+          <Carv2TableButton
+            icon="wrench"
+            onClick={() => dispatch(EditActions.setMode.editChain(chain))}
+          />
           <Carv2TableButton
             icon="hand pointer"
             onClick={() => {
@@ -361,16 +454,26 @@ const useSequenceTableViewModel = () => {
     );
   };
 
-  const createCalcLinkColumn = (link: CalcChainLink, index: number): JSX.Element => {
+  const createCalcLinkColumn = (
+    link: CalcChainLink,
+    index: number
+  ): JSX.Element => {
     const name: string = link.name || "Link name not found!";
-    const sequenceName: string = link.sequence.sequenceModel?.sequenceTO.name || "Sequence name not found!";
-    const dataSetupName: string = link.dataSetup.dataSetup?.name || "Data setup name not found!";
+    const sequenceName: string =
+      link.sequence.sequenceModel?.sequenceTO.name ||
+      "Sequence name not found!";
+    const dataSetupName: string =
+      link.dataSetup.dataSetup?.name || "Data setup name not found!";
     let trClass = "carv2Tr";
     if (index === chainIndex) {
       trClass = "carv2TrMarked";
     }
     return (
-      <tr key={index} className={"clickable " + trClass} onClick={() => handleChainTableClickEvent(index)}>
+      <tr
+        key={index}
+        className={"clickable " + trClass}
+        onClick={() => handleChainTableClickEvent(index)}
+      >
         <td>{index + 1}</td>
         <td>{name}</td>
         <td>{sequenceName}</td>
@@ -379,7 +482,10 @@ const useSequenceTableViewModel = () => {
     );
   };
 
-  const createDecisionColumn = (decision: DecisionTO, index: number): JSX.Element => {
+  const createDecisionColumn = (
+    decision: DecisionTO,
+    index: number
+  ): JSX.Element => {
     const name = decision.name;
     const ifgotoName: string = getGotoName(
       decision.ifGoTo,
@@ -399,7 +505,10 @@ const useSequenceTableViewModel = () => {
         <td>{ifgotoName}</td>
         <td>{elsegotoName}</td>
         <td>
-          <Carv2TableButton icon="wrench" onClick={() => dispatch(EditActions.setMode.editDecision(decision))} />
+          <Carv2TableButton
+            icon="wrench"
+            onClick={() => dispatch(EditActions.setMode.editDecision(decision))}
+          />
         </td>
         <td>{root}</td>
       </tr>
@@ -410,7 +519,11 @@ const useSequenceTableViewModel = () => {
     const name: string = link.chainLink.name;
     const sequenceName: string = link.sequence.sequenceTO.name;
     const dataSetupName: string = link.dataSetup.dataSetup.name;
-    let gotoName: string = getChainGotoName(link.chainLink.goto, selectedChainlinks, selectedChainDecisions);
+    let gotoName: string = getChainGotoName(
+      link.chainLink.goto,
+      selectedChainlinks,
+      selectedChainDecisions
+    );
     const root: string = link.chainLink.root ? "root" : "";
     let trClass = "carv2Tr";
     return (
@@ -420,17 +533,33 @@ const useSequenceTableViewModel = () => {
         <td>{dataSetupName}</td>
         <td>{gotoName}</td>
         <td>
-          <Carv2TableButton icon="wrench" onClick={() => dispatch(EditActions.setMode.editChainLink(link.chainLink))} />
+          <Carv2TableButton
+            icon="wrench"
+            onClick={() =>
+              dispatch(EditActions.setMode.editChainLink(link.chainLink))
+            }
+          />
         </td>
         <td>{root}</td>
       </tr>
     );
   };
 
-  const createChainDecisionColumn = (decision: ChainDecisionTO, index: number): JSX.Element => {
+  const createChainDecisionColumn = (
+    decision: ChainDecisionTO,
+    index: number
+  ): JSX.Element => {
     const name: string = decision.name;
-    const ifgoto: string = getChainGotoName(decision.ifGoTo, selectedChainlinks, selectedChainDecisions);
-    const elsegoto: string = getChainGotoName(decision.elseGoTo, selectedChainlinks, selectedChainDecisions);
+    const ifgoto: string = getChainGotoName(
+      decision.ifGoTo,
+      selectedChainlinks,
+      selectedChainDecisions
+    );
+    const elsegoto: string = getChainGotoName(
+      decision.elseGoTo,
+      selectedChainlinks,
+      selectedChainDecisions
+    );
     let trClass = "carv2Tr";
     return (
       <tr key={index} className={trClass}>
@@ -438,20 +567,33 @@ const useSequenceTableViewModel = () => {
         <td>{ifgoto}</td>
         <td>{elsegoto}</td>
         <td>
-          <Carv2TableButton icon="wrench" onClick={() => dispatch(EditActions.setMode.editChainDecision(decision))} />
+          <Carv2TableButton
+            icon="wrench"
+            onClick={() =>
+              dispatch(EditActions.setMode.editChainDecision(decision))
+            }
+          />
         </td>
       </tr>
     );
   };
 
-  const createDataSetupColumn = (dataSetup: DataSetupTO, index: number): JSX.Element => {
+  const createDataSetupColumn = (
+    dataSetup: DataSetupTO,
+    index: number
+  ): JSX.Element => {
     const name: string = dataSetup.name;
     let trClass = "carv2Tr";
     return (
       <tr key={index} className={trClass}>
         <td>{name}</td>
         <td>
-          <Carv2TableButton icon="wrench" onClick={() => dispatch(EditActions.setMode.editDataSetup(dataSetup.id))} />
+          <Carv2TableButton
+            icon="wrench"
+            onClick={() =>
+              dispatch(EditActions.setMode.editDataSetup(dataSetup.id))
+            }
+          />
           <Carv2TableButton
             icon="hand pointer"
             onClick={() => {
@@ -479,7 +621,9 @@ const useSequenceTableViewModel = () => {
 
   const getCalcSequenceTableBody = () => {
     let list: JSX.Element[] = [];
-    list = calcSteps.map((step, index) => createCalcSequenceStepColumn(step, index));
+    list = calcSteps.map((step, index) =>
+      createCalcSequenceStepColumn(step, index)
+    );
     if (terminalStep) {
       list.push(createTerminalColumn(terminalStep));
     }
@@ -491,7 +635,9 @@ const useSequenceTableViewModel = () => {
   const getSequenceModelsTableBody = () => {
     let list: JSX.Element[] = [];
     if (sequences) {
-      list = sequences.map((sequence, index) => createSequenceModelColumn(sequence, index));
+      list = sequences.map((sequence, index) =>
+        createSequenceModelColumn(sequence, index)
+      );
     }
     const numberOfColumns = 1;
     fillWithEmptyRows(list, createEmptyRow, numberOfColumns);
@@ -501,7 +647,9 @@ const useSequenceTableViewModel = () => {
   const getChainModelsTableBody = () => {
     let list: JSX.Element[] = [];
     if (sequences) {
-      list = chainModles.map((chain, index) => createChainModelColumn(chain, index));
+      list = chainModles.map((chain, index) =>
+        createChainModelColumn(chain, index)
+      );
     }
     const numberOfColumns = 1;
     fillWithEmptyRows(list, createEmptyRow, numberOfColumns);
@@ -511,7 +659,9 @@ const useSequenceTableViewModel = () => {
   const getStepTableBody = () => {
     let list: JSX.Element[] = [];
     if (selectSequence !== null) {
-      list = selectSequence?.sequenceStepCTOs.map((step, index) => createModelStepColumn(step, index));
+      list = selectSequence?.sequenceStepCTOs.map((step, index) =>
+        createModelStepColumn(step, index)
+      );
     }
     const numberOfColumns = 4;
     fillWithEmptyRows(list, createEmptyRow, numberOfColumns);
@@ -521,7 +671,9 @@ const useSequenceTableViewModel = () => {
   const getDecisionTableBody = () => {
     let list: JSX.Element[] = [];
     if (selectSequence !== null) {
-      list = selectSequence.decisions.map((cond, index) => createDecisionColumn(cond, index));
+      list = selectSequence.decisions.map((cond, index) =>
+        createDecisionColumn(cond, index)
+      );
     }
     const numberOfColumns = 2;
     fillWithEmptyRows(list, createEmptyRow, numberOfColumns);
@@ -531,7 +683,9 @@ const useSequenceTableViewModel = () => {
   const getChainTableBody = () => {
     let list: JSX.Element[] = [];
     if (calcChain !== null) {
-      list = calcChain.calcLinks.map((link, index) => createCalcLinkColumn(link, index));
+      list = calcChain.calcLinks.map((link, index) =>
+        createCalcLinkColumn(link, index)
+      );
     }
     const numberOfColumns = 3;
     fillWithEmptyRows(list, createEmptyRow, numberOfColumns);
@@ -540,7 +694,9 @@ const useSequenceTableViewModel = () => {
   const getChainLinkTableBody = () => {
     let list: JSX.Element[] = [];
     if (calcChain !== null) {
-      list = selectedChainlinks.map((link, index) => createLinkColumn(link, index));
+      list = selectedChainlinks.map((link, index) =>
+        createLinkColumn(link, index)
+      );
     }
     const numberOfColumns = 3;
     fillWithEmptyRows(list, createEmptyRow, numberOfColumns);
@@ -549,7 +705,9 @@ const useSequenceTableViewModel = () => {
   const getChainDecisionTableBody = () => {
     let list: JSX.Element[] = [];
     if (calcChain !== null) {
-      list = selectedChainDecisions.map((decision, index) => createChainDecisionColumn(decision, index));
+      list = selectedChainDecisions.map((decision, index) =>
+        createChainDecisionColumn(decision, index)
+      );
       // list = chainDecisions.map((decision, index) => createChainDecisionColumn(decision, index));
     }
     const numberOfColumns = 1;
@@ -558,13 +716,19 @@ const useSequenceTableViewModel = () => {
   };
   const getDataSetupTableBody = () => {
     let list: JSX.Element[] = [];
-    list = dataSetups.map((dataSetup, index) => createDataSetupColumn(dataSetup, index));
+    list = dataSetups.map((dataSetup, index) =>
+      createDataSetupColumn(dataSetup, index)
+    );
     const numberOfColumns = 1;
     fillWithEmptyRows(list, createEmptyRow, numberOfColumns);
     return list;
   };
 
-  const createEmptyRow = (key: string, numberOfElements: number, className?: string): JSX.Element => {
+  const createEmptyRow = (
+    key: string,
+    numberOfElements: number,
+    className?: string
+  ): JSX.Element => {
     return (
       <tr key={key} className={className}>
         {new Array(numberOfElements).map((value, index) => {
@@ -572,10 +736,6 @@ const useSequenceTableViewModel = () => {
         })}
       </tr>
     );
-  };
-
-  const getComponentNameById = (id: number): string => {
-    return components.find((comp) => comp.component.id === id)?.component.name || "Could not find Component!";
   };
 
   const handleSequenceTableClickEvent = (index: number) => {
@@ -587,7 +747,9 @@ const useSequenceTableViewModel = () => {
   };
 
   return {
-    title: selectSequence ? selectSequence.sequenceTO.name : "Select data setup and sequence to calculate ...",
+    title: selectSequence
+      ? selectSequence.sequenceTO.name
+      : "Select data setup and sequence to calculate ...",
     getCalcSequenceTableBody,
     getDecisionTableBody,
     getStepTableBody,
@@ -619,17 +781,25 @@ function getChainGotoName(
       break;
     case GoToTypesChain.LINK:
       gotoName =
-        selectedChainlinks.find((link) => link.chainLink.id === (goto as IntermediateChain).id)?.chainLink.name ||
-        gotoName;
+        selectedChainlinks.find(
+          (link) => link.chainLink.id === (goto as IntermediateChain).id
+        )?.chainLink.name || gotoName;
       break;
     case GoToTypesChain.DEC:
-      gotoName = selectedChainDecisions.find((dec) => dec.id === (goto as IntermediateChain).id)?.name || gotoName;
+      gotoName =
+        selectedChainDecisions.find(
+          (dec) => dec.id === (goto as IntermediateChain).id
+        )?.name || gotoName;
       break;
   }
   return gotoName;
 }
 
-function getGotoName(goto: GoTo, steps: SequenceStepCTO[], decisions: DecisionTO[]) {
+function getGotoName(
+  goto: GoTo,
+  steps: SequenceStepCTO[],
+  decisions: DecisionTO[]
+) {
   let gotoName: string = "could not find goto";
   switch (goto.type) {
     case GoToTypes.ERROR:
@@ -639,10 +809,14 @@ function getGotoName(goto: GoTo, steps: SequenceStepCTO[], decisions: DecisionTO
       break;
     case GoToTypes.STEP:
       gotoName =
-        steps.find((step) => step.squenceStepTO.id === (goto as Intermediate).id)?.squenceStepTO.name || gotoName;
+        steps.find(
+          (step) => step.squenceStepTO.id === (goto as Intermediate).id
+        )?.squenceStepTO.name || gotoName;
       break;
     case GoToTypes.DEC:
-      gotoName = decisions.find((dec) => dec.id === (goto as Intermediate).id)?.name || gotoName;
+      gotoName =
+        decisions.find((dec) => dec.id === (goto as Intermediate).id)?.name ||
+        gotoName;
       break;
   }
   return gotoName;
@@ -650,7 +824,11 @@ function getGotoName(goto: GoTo, steps: SequenceStepCTO[], decisions: DecisionTO
 
 function fillWithEmptyRows(
   list: JSX.Element[],
-  createEmptyRow: (key: string, numberOfElements: number, className?: string | undefined) => JSX.Element,
+  createEmptyRow: (
+    key: string,
+    numberOfElements: number,
+    className?: string | undefined
+  ) => JSX.Element,
   numberOfColumns: number
 ) {
   let key: number = list.length;

@@ -1014,12 +1014,12 @@ export const editSelectors = {
       : null;
   },
   editArrow: (state: RootState): Arrows | null => {
-    if (state.edit.mode === Mode.EDIT_SEQUENCE_STEP && (state.edit.objectToEdit as SequenceStepCTO).actions) {
+    if ((state.edit.mode === Mode.EDIT_SEQUENCE_STEP || Mode.EDIT_SEQUENCE_STEP_ACTION) && (state.edit.objectToEdit as StepAction).actionTO) {
       const sourceComp: ComponentCTO | undefined = state.masterData.components.find(
-        (comp) => comp.component.id === (state.edit.objectToEdit as SequenceStepCTO).squenceStepTO.sourceComponentFk
+        (comp) => comp.component.id === (state.edit.objectToEdit as StepAction).actionTO.sendingComponentFk
       );
       const targetComp: ComponentCTO | undefined = state.masterData.components.find(
-        (comp) => comp.component.id === (state.edit.objectToEdit as SequenceStepCTO).squenceStepTO.targetComponentFk
+        (comp) => comp.component.id === (state.edit.objectToEdit as StepAction).actionTO.receivingComponentFk
       );
       if (sourceComp && targetComp) {
         return { sourceGeometricalData: sourceComp.geometricalData, targetGeometricalData: targetComp.geometricalData };

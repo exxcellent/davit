@@ -17,8 +17,8 @@ export const ConstraintsHelper = {
     const compDataExists: boolean = Array.from(dataStore.actions.values()).some(
       (compData) => compData.receivingComponentFk === componentId
     );
-    const stepContainsComponent: boolean = Array.from(dataStore.steps.values()).some(
-      (step) => step.sourceComponentFk === componentId || step.targetComponentFk === componentId
+    const stepContainsComponent: boolean = Array.from(dataStore.actions.values()).some(
+      (action) => action.sendingComponentFk === componentId || action.receivingComponentFk === componentId
     );
 
     if (compDataExists || stepContainsComponent) {
