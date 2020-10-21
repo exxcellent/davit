@@ -107,7 +107,7 @@ const useViewModel = () => {
       mapActionToComponentDatas
     );
     const compDatasFromCompDatas: ViewFragmentProps[] = currentComponentDatas.map(
-      mapComponentDataToCompoenntData
+      mapComponentDataToViewFramgent
     );
     compDatas.push(...compDatasFromErros);
     compDatas.push(
@@ -193,7 +193,7 @@ const useViewModel = () => {
     };
   };
 
-  const mapComponentDataToCompoenntData = (
+  const mapComponentDataToViewFramgent = (
     compData: ComponentData
   ): ViewFragmentProps => {
     return {
