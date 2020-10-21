@@ -1,16 +1,19 @@
-import React, { FunctionComponent } from "react";
-import { useDispatch } from "react-redux";
-import { ButtonGroup } from "semantic-ui-react";
-import { EditActions } from "../../../../../../slices/EditSlice";
-import { GlobalActions } from "../../../../../../slices/GlobalSlice";
-import { Carv2ButtonIcon } from "../../../../../common/fragments/buttons/Carv2Button";
-import { Carv2FileInput } from "../../../../../common/fragments/buttons/Carv2FileInput";
+import React, { FunctionComponent } from 'react';
+import { useDispatch } from 'react-redux';
+import { ButtonGroup } from 'semantic-ui-react';
+
+import { EditActions } from '../../../../../../slices/EditSlice';
+import { GlobalActions } from '../../../../../../slices/GlobalSlice';
+import { Carv2ButtonIcon } from '../../../../../common/fragments/buttons/Carv2Button';
+import { Carv2FileInput } from '../../../../../common/fragments/buttons/Carv2FileInput';
 
 export interface ControllPanelFileOptionsProps {
   showDownloadFile: () => void;
 }
 
-export const ControllPanelFileOptions: FunctionComponent<ControllPanelFileOptionsProps> = (props) => {
+export const ControllPanelFileOptions: FunctionComponent<ControllPanelFileOptionsProps> = (
+  props
+) => {
   const { showDownloadFile } = props;
   const { deleteLocalStorage } = useFileOptionModelView();
 
@@ -20,10 +23,15 @@ export const ControllPanelFileOptions: FunctionComponent<ControllPanelFileOption
         <ButtonGroup>
           <Carv2FileInput />
           <Carv2ButtonIcon icon="download" onClick={showDownloadFile} />
-          <Carv2ButtonIcon icon="edit" onClick={deleteLocalStorage} />
+          <Carv2ButtonIcon
+            icon="trash alternate"
+            onClick={deleteLocalStorage}
+          />
         </ButtonGroup>
       </div>
-      <div style={{ textAlign: "center", color: "white" }}>{"file".toUpperCase()}</div>
+      <div style={{ textAlign: "center", color: "white" }}>
+        {"file".toUpperCase()}
+      </div>
     </div>
   );
 };
