@@ -6,6 +6,7 @@ import { ChainCTO } from '../dataAccess/access/cto/ChainCTO';
 import { ComponentCTO } from '../dataAccess/access/cto/ComponentCTO';
 import { DataCTO } from '../dataAccess/access/cto/DataCTO';
 import { DataSetupCTO } from '../dataAccess/access/cto/DataSetupCTO';
+import { GeometricalDataCTO } from '../dataAccess/access/cto/GeometraicalDataCTO';
 import { SequenceCTO } from '../dataAccess/access/cto/SequenceCTO';
 import { SequenceStepCTO } from '../dataAccess/access/cto/SequenceStepCTO';
 import { ActionTO } from '../dataAccess/access/to/ActionTO';
@@ -28,6 +29,28 @@ import { Carv2Util } from '../utils/Carv2Util';
 import { handleError } from './GlobalSlice';
 import { MasterDataActions, masterDataSelectors } from './MasterDataSlice';
 import { SequenceModelActions } from './SequenceModelSlice';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export enum Mode {
   TAB = "TAB",
@@ -969,6 +992,55 @@ const findDecisionTOThunk = (decisionId: number): DecisionTO => {
   return response.object;
 };
 
+// TODO: this method is copied from sequencemodelslice! remove one and mage the other reachable in both slices
+const getArrowsForStepFk = (
+  sequenceStepCTO: SequenceStepCTO,
+  rootState: RootState
+): Arrow[] => {
+  let arrows: Arrow[] = [];
+      arrows = mapActionsToArrows(sequenceStepCTO.actions, rootState);
+  return arrows;
+};
+
+// TODO: this method is copied from sequencemodelslice! remove one and mage the other reachable in both slices
+const mapActionsToArrows = (actions: ActionTO[], state: RootState): Arrow[] => {
+  const arrows: Arrow[] = [];
+
+  actions.forEach(action => {
+    
+    const sourceGeometricalData: GeometricalDataCTO | undefined = state.masterData.components.find(
+      (comp) => comp.component.id === action.sendingComponentFk
+      )?.geometricalData;
+      
+      const targetGeometricalData: GeometricalDataCTO | undefined = state.masterData.components.find(
+        (comp) => comp.component.id === action.receivingComponentFk
+        )?.geometricalData;
+        
+        const dataLabels: string[] = [];
+        const dataLabel: string | undefined = state.masterData.datas.find(data => data.data.id === action.dataFk)?.data.name;
+        if(dataLabel){
+          dataLabels.push(dataLabel);
+        }
+        
+        if (sourceGeometricalData && targetGeometricalData) {
+
+          const existingArrow: Arrow | undefined = arrows.find(arrow => arrow.sourceGeometricalData.geometricalData.id === sourceGeometricalData.geometricalData.id && arrow.targetGeometricalData.geometricalData.id === targetGeometricalData.geometricalData.id);
+
+          if(existingArrow){
+            existingArrow.dataLabels.push(...dataLabels)
+          }else{
+            arrows.push({
+              sourceGeometricalData,
+              targetGeometricalData,
+              dataLabels
+            });
+          }
+        }
+      })
+      return arrows;
+};
+
+
 // =============================================== SELECTORS ===============================================
 export const EditReducer = EditSlice.reducer;
 /**
@@ -1013,17 +1085,18 @@ export const editSelectors = {
       ? (state.edit.objectToEdit as SequenceTO)
       : null;
   },
-  editArrow: (state: RootState): Arrow | null => {
-    if ((state.edit.mode === Mode.EDIT_SEQUENCE_STEP || Mode.EDIT_SEQUENCE_STEP_ACTION) && (state.edit.objectToEdit as StepAction).actionTO) {
+  editActionArrow: (state: RootState): Arrow | null => {
+    if (state.edit.mode === Mode.EDIT_SEQUENCE_STEP_ACTION && (state.edit.objectToEdit as ActionTO).receivingComponentFk) {
+
       const sourceComp: ComponentCTO | undefined = state.masterData.components.find(
-        (comp) => comp.component.id === (state.edit.objectToEdit as StepAction).actionTO.sendingComponentFk
+        (comp) => comp.component.id === (state.edit.objectToEdit as ActionTO).sendingComponentFk
       );
 
       const targetComp: ComponentCTO | undefined = state.masterData.components.find(
-        (comp) => comp.component.id === (state.edit.objectToEdit as StepAction).actionTO.receivingComponentFk
+        (comp) => comp.component.id === (state.edit.objectToEdit as ActionTO).receivingComponentFk
       );
 
-      const dataLabel: string = masterDataSelectors.getDataCTOById((state.edit.objectToEdit as StepAction).actionTO.dataFk)(state)?.data.name || "Could not find data";
+      const dataLabel: string = masterDataSelectors.getDataCTOById((state.edit.objectToEdit as ActionTO).dataFk)(state)?.data.name || "Could not find data";
 
       if (sourceComp && targetComp) {
         return { sourceGeometricalData: sourceComp.geometricalData, targetGeometricalData: targetComp.geometricalData, dataLabels: [dataLabel]};
@@ -1033,6 +1106,15 @@ export const editSelectors = {
     } else {
       return null;
     }
+  },
+  editStepArrows: (state: RootState): Arrow[] => {
+
+    let arrows: Arrow[] = []
+
+    if (state.edit.mode === Mode.EDIT_SEQUENCE_STEP && (state.edit.objectToEdit as SequenceStepCTO).squenceStepTO) {
+      arrows = getArrowsForStepFk((state.edit.objectToEdit as SequenceStepCTO), state);
+    }
+    return arrows;
   },
   dataSetupToEdit: (state: RootState): DataSetupCTO | null => {
     return state.edit.mode === Mode.EDIT_DATASETUP && (state.edit.objectToEdit as DataSetupCTO).dataSetup
