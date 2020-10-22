@@ -103,9 +103,12 @@ const useViewModel = () => {
     const compDatasFromErros: ViewFragmentProps[] = errors.map(
       mapErrorToComponentDatas
     );
-    const compDatasFromActions: ViewFragmentProps[] = actions.map(
-      mapActionToComponentDatas
+
+    const compDatasFromActions: ViewFragmentProps[] = mapActionsToComponentDatas(
+      actions,
+      currentComponentDatas
     );
+
     const compDatasFromCompDatas: ViewFragmentProps[] = currentComponentDatas.map(
       mapComponentDataToViewFramgent
     );
@@ -168,16 +171,47 @@ const useViewModel = () => {
     );
   };
 
+  const mapActionsToComponentDatas = (
+    actions: ActionTO[],
+    compDatas: ComponentData[]
+  ): ViewFragmentProps[] => {
+    const viewProps: ViewFragmentProps[] = [];
+
+    actions.forEach((action) => {
+      const instanceId: number | undefined = compDatas.find(
+        (cd) =>
+          cd.dataFk === action.dataFk &&
+          cd.componentFk === action.receivingComponentFk
+      )?.instanceFk;
+
+      viewProps.push(mapActionToComponentDatas(action, instanceId));
+
+      if (action.actionType === ActionType.SEND_AND_DELETE) {
+        viewProps.push({
+          name: getDataNameById(action.dataFk, action.instanceFk),
+          state: ViewFragmentState.DELETED,
+          parentId: action.sendingComponentFk,
+        });
+      }
+    });
+
+    return viewProps;
+  };
+
   const mapActionToComponentDatas = (
-    errorItem: ActionTO
+    actionItem: ActionTO,
+    instanceId?: number
   ): ViewFragmentProps => {
     const state: ViewFragmentState = mapActionTypeToViewFragmentState(
-      errorItem.actionType
+      actionItem.actionType
     );
     return {
-      name: getDataNameById(errorItem.dataFk, errorItem.instanceFk),
+      name: getDataNameById(
+        actionItem.dataFk,
+        instanceId || actionItem.instanceFk
+      ),
       state: state,
-      parentId: errorItem.receivingComponentFk,
+      parentId: actionItem.receivingComponentFk,
     };
   };
 

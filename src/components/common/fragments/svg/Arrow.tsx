@@ -14,11 +14,13 @@ export interface ArrowProps {
   targetHeight: number;
   type: ArrowType;
   parentRef: any;
+  dataLabels: string[];
 }
 
 export interface Arrow {
   sourceGeometricalData: GeometricalDataCTO;
   targetGeometricalData: GeometricalDataCTO;
+  dataLabels: string[];
 }
 
 enum ArrowType {
@@ -37,6 +39,7 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
     sourceHeight,
     sourceWidth,
     targetHeight,
+    dataLabels,
   } = props;
 
   const [initXSource, setInitXSource] = useState<number>(
@@ -79,8 +82,9 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
     const curveRefPoint = getCurvRefPoint(offsetStartPoint, middlePoint);
 
     return (
-      <path
-        d={`M ${startPoint.x},${startPoint.y} 
+      <>
+        <path
+          d={`M ${startPoint.x},${startPoint.y} 
         l 10,0
         Q ${curveRefPoint.x}, 
         ${curveRefPoint.y} 
@@ -89,9 +93,17 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
         T ${endPoint.x}, ${endPoint.y}
         l 10,0
         `}
-        className="carvPath"
-        markerEnd="url(#arrow)"
-      />
+          className="carvPath"
+          markerEnd="url(#arrow)"
+        />
+        {dataLabels.map((label, index) => {
+          return (
+            <text x={middlePoint.x} y={middlePoint.y + index * 20} key={index}>
+              {label}
+            </text>
+          );
+        })}
+      </>
     );
   };
 
@@ -177,6 +189,7 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
 export const createCurveArrow = (
   source: GeometricalDataCTO | undefined,
   target: GeometricalDataCTO | undefined,
+  dataLabels: string[],
   key: number,
   parentRef: any
 ) => {
@@ -194,6 +207,7 @@ export const createCurveArrow = (
         type={ArrowType.CURVE}
         key={key}
         parentRef={parentRef}
+        dataLabels={dataLabels}
       />
     );
   }
@@ -219,6 +233,7 @@ export const createCornerArrow = (
         type={ArrowType.CORNER}
         key={key}
         parentRef={parentRef}
+        dataLabels={[]}
       />
     );
   }

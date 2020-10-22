@@ -26,7 +26,7 @@ import { DataAccessResponse } from '../dataAccess/DataAccessResponse';
 import { DataAccessUtil } from '../dataAccess/util/DataAccessUtil';
 import { Carv2Util } from '../utils/Carv2Util';
 import { handleError } from './GlobalSlice';
-import { MasterDataActions } from './MasterDataSlice';
+import { MasterDataActions, masterDataSelectors } from './MasterDataSlice';
 import { SequenceModelActions } from './SequenceModelSlice';
 
 export enum Mode {
@@ -1018,11 +1018,15 @@ export const editSelectors = {
       const sourceComp: ComponentCTO | undefined = state.masterData.components.find(
         (comp) => comp.component.id === (state.edit.objectToEdit as StepAction).actionTO.sendingComponentFk
       );
+
       const targetComp: ComponentCTO | undefined = state.masterData.components.find(
         (comp) => comp.component.id === (state.edit.objectToEdit as StepAction).actionTO.receivingComponentFk
       );
+
+      const dataLabel: string = masterDataSelectors.getDataCTOById((state.edit.objectToEdit as StepAction).actionTO.dataFk)(state)?.data.name || "Could not find data";
+
       if (sourceComp && targetComp) {
-        return { sourceGeometricalData: sourceComp.geometricalData, targetGeometricalData: targetComp.geometricalData };
+        return { sourceGeometricalData: sourceComp.geometricalData, targetGeometricalData: targetComp.geometricalData, dataLabels: [dataLabel]};
       } else {
         return null;
       }

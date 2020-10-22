@@ -51,6 +51,7 @@ export const MetaComponentDnDBox: FunctionComponent<MetaComponentDnDBox> = (
           return createCurveArrow(
             arrow.sourceGeometricalData,
             arrow.targetGeometricalData,
+            arrow.dataLabels,
             index,
             constraintsRef
           );

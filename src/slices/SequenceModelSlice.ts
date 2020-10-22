@@ -317,14 +317,48 @@ const getArrowsForStepFk = (
     step = sequenceStepCTOs.find((stp) => stp.squenceStepTO.id === stepFk);
   }
   if (step) {
-    step.actions.forEach(action => {
-      const arrow: Arrow | undefined = mapActionToArrow(action, rootState);
-      if(arrow){
-        arrows.push(arrow);
-      }
-    });
+    
+      arrows = mapActionsToArrows(step.actions, rootState);
+    
   }
   return arrows;
+};
+
+const mapActionsToArrows = (actions: ActionTO[], state: RootState): Arrow[] => {
+  const arrows: Arrow[] = [];
+
+  actions.forEach(action => {
+    
+    const sourceGeometricalData: GeometricalDataCTO | undefined = state.masterData.components.find(
+      (comp) => comp.component.id === action.sendingComponentFk
+      )?.geometricalData;
+      
+      const targetGeometricalData: GeometricalDataCTO | undefined = state.masterData.components.find(
+        (comp) => comp.component.id === action.receivingComponentFk
+        )?.geometricalData;
+        
+        const dataLabels: string[] = [];
+        const dataLabel: string | undefined = state.masterData.datas.find(data => data.data.id === action.dataFk)?.data.name;
+        if(dataLabel){
+          dataLabels.push(dataLabel);
+        }
+        
+        if (sourceGeometricalData && targetGeometricalData) {
+
+          const existingArrow: Arrow | undefined = arrows.find(arrow => arrow.sourceGeometricalData.geometricalData.id === sourceGeometricalData.geometricalData.id && arrow.targetGeometricalData.geometricalData.id === targetGeometricalData.geometricalData.id);
+
+          if(existingArrow){
+            existingArrow.dataLabels.push(...dataLabels)
+          }else{
+            arrows.push({
+              sourceGeometricalData,
+              targetGeometricalData,
+              dataLabels
+            });
+          }
+        }
+      })
+      return arrows;
 };
 
 // =============================================== SELECTORS ===============================================
@@ -417,20 +451,7 @@ export const sequenceModelSelectors = {
     getCurrentCalcSequence(state.sequenceModel)?.loopStartingStepIndex || null,
 };
 
-const mapActionToArrow = (action: ActionTO, state: RootState): Arrow | undefined => {
-  const sourceGeometricalData: GeometricalDataCTO | undefined = state.masterData.components.find(
-    (comp) => comp.component.id === action.sendingComponentFk
-  )?.geometricalData;
-  const targetGeometricalData: GeometricalDataCTO | undefined = state.masterData.components.find(
-    (comp) => comp.component.id === action.receivingComponentFk
-  )?.geometricalData;
-  if (sourceGeometricalData && targetGeometricalData) {
-    return {
-      sourceGeometricalData,
-      targetGeometricalData,
-    };
-  }
-};
+
 
 // =============================================== ACTIONS ===============================================
 
