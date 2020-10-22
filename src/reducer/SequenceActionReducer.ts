@@ -43,12 +43,12 @@ export const SequenceActionReducer = {
           break;
         case ActionType.SEND:
           indexComponentSending !== -1 && indexComponentToEdit === -1
-            ? newComponentDatas.push({ componentFk: action.receivingComponentFk, dataFk: action.dataFk, instanceFk: componentDatas[indexComponentSending].instanceFk })
+            ? newComponentDatas.push({ componentFk: action.receivingComponentFk, dataFk: action.dataFk, instanceFk: newComponentDatas[indexComponentSending].instanceFk })
             : errors.push(action);
           break;
         case ActionType.SEND_AND_DELETE:
           if (indexComponentSending !== -1 && indexComponentToEdit === -1) {
-            newComponentDatas.push({ componentFk: action.receivingComponentFk, dataFk: action.dataFk, instanceFk: componentDatas[indexComponentSending].instanceFk });
+            newComponentDatas.push({ componentFk: action.receivingComponentFk, dataFk: action.dataFk, instanceFk: newComponentDatas[indexComponentSending].instanceFk });
             newComponentDatas.splice(indexComponentSending, 1);
           } else {
             errors.push(action);

@@ -35,23 +35,6 @@ import { SequenceModelActions } from './SequenceModelSlice';
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export enum Mode {
   TAB = "TAB",
   FILE = "FILE",
@@ -724,7 +707,6 @@ const createChainDecisionThunk = (
         dispatch(EditActions.chainDecision.save(from as ChainDecisionTO));
       }
     }
-    console.info("save");
     dispatch(EditSlice.actions.setChainDecisionToEdit(response.object));
   }
 };
