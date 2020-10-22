@@ -1,18 +1,19 @@
-import React, { FunctionComponent, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Dropdown } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { ChainDecisionTO } from "../../../../../../dataAccess/access/to/ChainDecisionTO";
-import { ChainTO } from "../../../../../../dataAccess/access/to/ChainTO";
-import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
-import { handleError } from "../../../../../../slices/GlobalSlice";
-import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
-import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonIcon } from "../../../../../common/fragments/buttons/Carv2Button";
-import { ComponentDropDown } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
-import { MultiselectDataDropDown } from "../../../../../common/fragments/dropdowns/MultiselectDataDropDown";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { OptionField } from "../common/OptionField";
+import React, { FunctionComponent, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Dropdown } from 'semantic-ui-react';
+import { isNullOrUndefined } from 'util';
+
+import { ChainDecisionTO } from '../../../../../../dataAccess/access/to/ChainDecisionTO';
+import { ChainTO } from '../../../../../../dataAccess/access/to/ChainTO';
+import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
+import { handleError } from '../../../../../../slices/GlobalSlice';
+import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
+import { Carv2Util } from '../../../../../../utils/Carv2Util';
+import { Carv2ButtonIcon } from '../../../../../common/fragments/buttons/Carv2Button';
+import { ComponentDropDown } from '../../../../../common/fragments/dropdowns/ComponentDropDown';
+import { DataAndInstanceId, InstanceDropDownMultiselect } from '../../../../../common/fragments/dropdowns/InstanceDropDown';
+import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
+import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditChainConditionProps {
   hidden: boolean;
@@ -57,13 +58,21 @@ export const ControllPanelEditChainCondition: FunctionComponent<ControllPanelEdi
       <div className="columnDivider optionFieldSpacer">{hasDropDown}</div>
       <div className="columnDivider optionFieldSpacer">
         <OptionField label="Select data for component">
-          <MultiselectDataDropDown
+          <InstanceDropDownMultiselect
             onSelect={(data) => {
               setData(data);
             }}
             selected={dataFks || []}
           />
         </OptionField>
+        {/* <OptionField label="Select data for component">
+          <MultiselectDataDropDown
+            onSelect={(data) => {
+              setData(data);
+            }}
+            selected={dataFks || []}
+          />
+        </OptionField> */}
       </div>
       <div className="columnDivider optionFieldSpacer">
         <OptionField label="Navigation">
@@ -86,10 +95,10 @@ const useControllPanelEditConditionViewModel = () => {
     }
   }, [dispatch, decisionToEdit]);
 
-  const setData = (dataIds: number[] | undefined) => {
+  const setData = (dataAndInstanceIds: DataAndInstanceId[] | undefined) => {
     if (!isNullOrUndefined(decisionToEdit)) {
       const copyDecisionToEdit: ChainDecisionTO = Carv2Util.deepCopy(decisionToEdit);
-      copyDecisionToEdit.dataFks = dataIds || [];
+      copyDecisionToEdit.dataAndInstaceIds = dataAndInstanceIds || [];
       dispatch(EditActions.chainDecision.create(copyDecisionToEdit));
     }
   };
@@ -141,6 +150,6 @@ const useControllPanelEditConditionViewModel = () => {
     getDecision,
     setHas,
     setData,
-    dataFks: decisionToEdit?.dataFks,
+    dataFks: decisionToEdit?.dataAndInstaceIds,
   };
 };

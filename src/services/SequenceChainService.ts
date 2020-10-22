@@ -8,6 +8,9 @@ import { GoToChain, GoToTypesChain, TerminalChain } from '../dataAccess/access/t
 import { ComponentData } from '../viewDataTypes/ComponentData';
 import { CalcSequence, SequenceService } from './SequenceService';
 
+
+
+
 export interface CalcChainLink {
   name: string;
   chainLinkId: number;
@@ -104,12 +107,14 @@ const executeDecisionCheck = (decision: ChainDecisionTO, componenDatas: Componen
     (compData) => compData.componentFk === decision.componentFk
   );
   let goTo: GoToChain | undefined;
-  decision.dataFks.forEach((dataFk) => {
-    let isIncluded: boolean = filteredCompData.some((cd) => cd.dataFk === dataFk);
-    if (decision.has !== isIncluded) {
-      goTo = decision.elseGoTo;
-    }
-  });
+  if(decision.dataAndInstaceIds !== undefined){
+    decision.dataAndInstaceIds.forEach((dataAndInstaceId) => {
+      let isIncluded: boolean = filteredCompData.some((cd) => cd.dataFk === dataAndInstaceId.dataFk);
+      if (decision.has !== isIncluded) {
+        goTo = decision.elseGoTo;
+      }
+    });
+  }
   return goTo || decision.ifGoTo;
 };
 
