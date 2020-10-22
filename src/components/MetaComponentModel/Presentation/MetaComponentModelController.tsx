@@ -187,13 +187,15 @@ const useViewModel = () => {
   const mapDecisionToCompData = (decision: DecisionTO | null): ViewFragmentProps[] => {
     let props: ViewFragmentProps[] = [];
     if (decision) {
-      props = decision.dataAndInstaceId.map((data) => {
-        return {
-          parentId: decision.componentFk,
-          name: getDataNameById(data.dataFk, data.instanceId),
-          state: decision.has ? ViewFragmentState.CHECKED : ViewFragmentState.DELETED,
-        };
-      });
+      if (decision.dataAndInstaceId !== undefined && decision.dataAndInstaceId.length > 0) {
+        props = decision.dataAndInstaceId.map((data) => {
+          return {
+            parentId: decision.componentFk,
+            name: getDataNameById(data.dataFk, data.instanceId),
+            state: decision.has ? ViewFragmentState.CHECKED : ViewFragmentState.DELETED,
+          };
+        });
+      }
     }
     return props;
   };
