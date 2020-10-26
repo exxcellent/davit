@@ -38,6 +38,7 @@ class DataStore {
             dataEntry[1].set(abstractTO.id, abstractTO);
           });
         } else {
+          console.warn(`Data has wrong format: key ${key}, value ${value}`);
           throw new Error(`Data has wrong format: key ${key}, value ${value}`);
         }
       } else {
