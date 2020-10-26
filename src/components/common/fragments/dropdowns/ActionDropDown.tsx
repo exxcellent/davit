@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Dropdown, DropdownItemProps, DropdownProps } from 'semantic-ui-react';
 import { isNullOrUndefined } from 'util';
 
-import { ComponentCTO } from '../../../../dataAccess/access/cto/ActorCTO';
+import { ActorCTO } from '../../../../dataAccess/access/cto/ActorCTO';
 import { DataCTO } from '../../../../dataAccess/access/cto/DataCTO';
 import { ActionTO } from '../../../../dataAccess/access/to/ActionTO';
 import { editSelectors } from '../../../../slices/EditSlice';
@@ -37,7 +37,7 @@ export const ActionDropDown: FunctionComponent<ActionDropDownProps> = (props) =>
 };
 
 // TODO: in den master data slice verschieben!
-const getComponentName = (compId: number, components: ComponentCTO[]): string => {
+const getComponentName = (compId: number, components: ActorCTO[]): string => {
   return components.find((comp) => comp.component.id === compId)?.component.name || "";
 };
 
@@ -57,7 +57,7 @@ const getDataName = (dataId: number, datas: DataCTO[]): string => {
 
 const useActionDropDownViewModel = () => {
   const actions: ActionTO[] = useSelector(editSelectors.stepToEdit)?.actions || [];
-  const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
+  const components: ActorCTO[] = useSelector(masterDataSelectors.components);
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
 
   const actionToOption = (action: ActionTO): DropdownItemProps => {

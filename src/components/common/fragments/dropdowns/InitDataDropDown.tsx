@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Dropdown, DropdownItemProps, DropdownProps } from 'semantic-ui-react';
 import { isNullOrUndefined } from 'util';
 
-import { ComponentCTO } from '../../../../dataAccess/access/cto/ActorCTO';
+import { ActorCTO } from '../../../../dataAccess/access/cto/ActorCTO';
 import { DataCTO } from '../../../../dataAccess/access/cto/DataCTO';
 import { InitDataTO } from '../../../../dataAccess/access/to/InitDataTO';
 import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
@@ -63,7 +63,7 @@ export const InitDataDropDownButton: FunctionComponent<InitDataDropDownPropsButt
 };
 
 const useDataSetupDropDownViewModel = () => {
-  const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
+  const components: ActorCTO[] = useSelector(masterDataSelectors.components);
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
 
   const getComponentName = (compId: number): string => {

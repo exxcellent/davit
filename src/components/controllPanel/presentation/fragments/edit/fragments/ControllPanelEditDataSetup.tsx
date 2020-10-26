@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input } from 'semantic-ui-react';
 import { isNullOrUndefined } from 'util';
 
-import { ComponentCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
+import { ActorCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
 import { DataSetupCTO } from '../../../../../../dataAccess/access/cto/DataSetupCTO';
 import { InitDataTO } from '../../../../../../dataAccess/access/to/InitDataTO';
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
@@ -83,7 +83,7 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
 const useControllPanelEditDataSetupViewModel = () => {
   const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.dataSetupToEdit);
   const dispatch = useDispatch();
-  const [componentToEdit, setComponentToEdit] = useState<ComponentCTO | null>(null);
+  const [componentToEdit, setComponentToEdit] = useState<ActorCTO | null>(null);
   const textInput = useRef<Input>(null);
 
   useEffect(() => {

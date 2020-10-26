@@ -1,4 +1,4 @@
-import { ComponentCTO } from './access/cto/ActorCTO';
+import { ActorCTO } from './access/cto/ActorCTO';
 import { ChainCTO } from './access/cto/ChainCTO';
 import { DataCTO } from './access/cto/DataCTO';
 import { DataSetupCTO } from './access/cto/DataSetupCTO';
@@ -54,15 +54,15 @@ export const DataAccess = {
 
   // ========================================= COMPONENT =========================================
 
-  findAllComponents(): DataAccessResponse<ComponentCTO[]> {
+  findAllComponents(): DataAccessResponse<ActorCTO[]> {
     return makeTransactional(ComponentDataAccessService.findAll);
   },
 
-  saveComponentCTO(component: ComponentCTO): DataAccessResponse<ComponentCTO> {
+  saveComponentCTO(component: ActorCTO): DataAccessResponse<ActorCTO> {
     return makeTransactional(() => ComponentDataAccessService.saveCTO(component));
   },
 
-  deleteComponentCTO(component: ComponentCTO): DataAccessResponse<ComponentCTO> {
+  deleteComponentCTO(component: ActorCTO): DataAccessResponse<ActorCTO> {
     return makeTransactional(() => ComponentDataAccessService.delete(component));
   },
 

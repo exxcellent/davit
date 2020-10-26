@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { AppThunk, RootState } from '../app/store';
 import { Arrow } from '../components/common/fragments/svg/Arrow';
-import { ComponentCTO } from '../dataAccess/access/cto/ActorCTO';
+import { ActorCTO } from '../dataAccess/access/cto/ActorCTO';
 import { ChainCTO } from '../dataAccess/access/cto/ChainCTO';
 import { DataCTO } from '../dataAccess/access/cto/DataCTO';
 import { DataSetupCTO } from '../dataAccess/access/cto/DataSetupCTO';
@@ -29,6 +29,7 @@ import { Carv2Util } from '../utils/Carv2Util';
 import { handleError } from './GlobalSlice';
 import { MasterDataActions, masterDataSelectors } from './MasterDataSlice';
 import { SequenceModelActions } from './SequenceModelSlice';
+
 
 
 
@@ -69,7 +70,7 @@ export interface StepAction {
 interface EditState {
   mode: Mode;
   objectToEdit:
-    | ComponentCTO
+    | ActorCTO
     | DataCTO
     | DataRelationTO
     | SequenceTO
@@ -111,7 +112,7 @@ const EditSlice = createSlice({
         handleError("Try to set chain step to edit in mode: " + state.mode);
       }
     },
-    setComponentToEdit: (state, action: PayloadAction<ComponentCTO>) => {
+    setComponentToEdit: (state, action: PayloadAction<ActorCTO>) => {
       if (state.mode === Mode.EDIT_COMPONENT) {
         state.objectToEdit = action.payload;
       } else {
@@ -242,7 +243,7 @@ const setModeToEdit = (): AppThunk => (dispatch, getState) => {
   }
 };
 
-const setModeToEditComponent = (component?: ComponentCTO): AppThunk => (dispatch) => {
+const setModeToEditComponent = (component?: ActorCTO): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_COMPONENT));
   if (component === undefined) {
     dispatch(EditActions.component.create());
@@ -252,7 +253,7 @@ const setModeToEditComponent = (component?: ComponentCTO): AppThunk => (dispatch
 };
 
 const setModeToEditCompoenntById = (id: number): AppThunk => (dispatch, getState) => {
-  const component: ComponentCTO | undefined = getState().masterData.components.find(
+  const component: ActorCTO | undefined = getState().masterData.components.find(
     (component) => component.component.id === id
   );
   if (component) {
@@ -434,9 +435,9 @@ const setModeToEditCondition = (decision: DecisionTO): AppThunk => (dispatch) =>
 // ----------------------------------------------- COMPONENT -----------------------------------------------
 
 const createComponentThunk = (): AppThunk => (dispatch) => {
-  let component: ComponentCTO = new ComponentCTO();
+  let component: ActorCTO = new ActorCTO();
   // component.component.name = "neu";
-  const response: DataAccessResponse<ComponentCTO> = DataAccess.saveComponentCTO(component);
+  const response: DataAccessResponse<ActorCTO> = DataAccess.saveComponentCTO(component);
   console.log(response);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
@@ -445,8 +446,8 @@ const createComponentThunk = (): AppThunk => (dispatch) => {
   dispatch(EditActions.component.update(response.object));
 };
 
-const saveComponentThunk = (component: ComponentCTO): AppThunk => (dispatch) => {
-  const response: DataAccessResponse<ComponentCTO> = DataAccess.saveComponentCTO(component);
+const saveComponentThunk = (component: ActorCTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<ActorCTO> = DataAccess.saveComponentCTO(component);
   console.log(response);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
@@ -454,8 +455,8 @@ const saveComponentThunk = (component: ComponentCTO): AppThunk => (dispatch) => 
   dispatch(MasterDataActions.loadComponentsFromBackend());
 };
 
-const deleteComponentThunk = (component: ComponentCTO): AppThunk => async (dispatch) => {
-  const response: DataAccessResponse<ComponentCTO> = await DataAccess.deleteComponentCTO(component);
+const deleteComponentThunk = (component: ActorCTO): AppThunk => async (dispatch) => {
+  const response: DataAccessResponse<ActorCTO> = await DataAccess.deleteComponentCTO(component);
   console.log(response);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
@@ -1032,9 +1033,9 @@ export const EditReducer = EditSlice.reducer;
  */
 export const editSelectors = {
   mode: (state: RootState): Mode => state.edit.mode,
-  componentToEdit: (state: RootState): ComponentCTO | null => {
-    return state.edit.mode === Mode.EDIT_COMPONENT && (state.edit.objectToEdit as ComponentCTO).component
-      ? (state.edit.objectToEdit as ComponentCTO)
+  componentToEdit: (state: RootState): ActorCTO | null => {
+    return state.edit.mode === Mode.EDIT_COMPONENT && (state.edit.objectToEdit as ActorCTO).component
+      ? (state.edit.objectToEdit as ActorCTO)
       : null;
   },
   chainLinkToEdit: (state: RootState): ChainlinkTO | null => {
@@ -1071,11 +1072,11 @@ export const editSelectors = {
   editActionArrow: (state: RootState): Arrow | null => {
     if (state.edit.mode === Mode.EDIT_SEQUENCE_STEP_ACTION && (state.edit.objectToEdit as ActionTO).receivingComponentFk) {
 
-      const sourceComp: ComponentCTO | undefined = state.masterData.components.find(
+      const sourceComp: ActorCTO | undefined = state.masterData.components.find(
         (comp) => comp.component.id === (state.edit.objectToEdit as ActionTO).sendingComponentFk
       );
 
-      const targetComp: ComponentCTO | undefined = state.masterData.components.find(
+      const targetComp: ActorCTO | undefined = state.masterData.components.find(
         (comp) => comp.component.id === (state.edit.objectToEdit as ActionTO).receivingComponentFk
       );
 

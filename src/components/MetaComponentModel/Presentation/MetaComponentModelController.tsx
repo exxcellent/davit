@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ComponentCTO } from '../../../dataAccess/access/cto/ActorCTO';
+import { ActorCTO } from '../../../dataAccess/access/cto/ActorCTO';
 import { DataCTO } from '../../../dataAccess/access/cto/DataCTO';
 import { DataSetupCTO } from '../../../dataAccess/access/cto/DataSetupCTO';
 import { SequenceStepCTO } from '../../../dataAccess/access/cto/SequenceStepCTO';
@@ -49,10 +49,10 @@ export const MetaComponentModelController: FunctionComponent<MetaComponentModelC
 const useViewModel = () => {
   const dispatch = useDispatch();
   // ====== SELECTORS =====
-  const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
+  const components: ActorCTO[] = useSelector(masterDataSelectors.components);
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
   // ----- EDIT -----
-  const componentCTOToEdit: ComponentCTO | null = useSelector(editSelectors.componentToEdit);
+  const componentCTOToEdit: ActorCTO | null = useSelector(editSelectors.componentToEdit);
   const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.stepToEdit);
   const actionToEdit: ActionTO | null = useSelector(editSelectors.actionToEdit);
   const decisionToEdit: DecisionTO | null = useSelector(editSelectors.decisionToEdit);
@@ -264,14 +264,14 @@ const useViewModel = () => {
   const onPositionUpdate = (x: number, y: number, positionId: number) => {
     const componentCTO = components.find((componentCTO) => componentCTO.geometricalData.position.id === positionId);
     if (componentCTO) {
-      let copyComponentCTO: ComponentCTO = Carv2Util.deepCopy(componentCTO);
+      let copyComponentCTO: ActorCTO = Carv2Util.deepCopy(componentCTO);
       copyComponentCTO.geometricalData.position.x = x;
       copyComponentCTO.geometricalData.position.y = y;
       dispatch(EditActions.component.save(copyComponentCTO));
     }
   };
 
-  const toDnDElements = (components: ComponentCTO[]): { card: Carv2CardProps; position: PositionTO }[] => {
+  const toDnDElements = (components: ActorCTO[]): { card: Carv2CardProps; position: PositionTO }[] => {
     let cards: { card: Carv2CardProps; position: PositionTO }[] = [];
     cards = components
       .filter((comp) => !(componentCTOToEdit && componentCTOToEdit.component.id === comp.component.id))
@@ -292,7 +292,7 @@ const useViewModel = () => {
     return cards;
   };
 
-  const componentToCard = (component: ComponentCTO): Carv2CardProps => {
+  const componentToCard = (component: ActorCTO): Carv2CardProps => {
     return {
       id: component.component.id,
       initName: component.component.name,

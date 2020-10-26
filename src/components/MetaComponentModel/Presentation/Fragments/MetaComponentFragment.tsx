@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { Card } from 'semantic-ui-react';
 
-import { ComponentCTO } from '../../../../dataAccess/access/cto/ActorCTO';
+import { ActorCTO } from '../../../../dataAccess/access/cto/ActorCTO';
 import { createViewFragment, ViewFragmentProps } from '../../../../viewDataTypes/ViewFragment';
 
 export interface MetaComponentFragmentProps {
@@ -30,7 +30,7 @@ export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps
 };
 
 export const createMetaComponentFragment = (
-  componentCTO: ComponentCTO,
+  componentCTO: ActorCTO,
   componentDatas: ViewFragmentProps[],
   onClick?: (id: number) => void
 ) => {

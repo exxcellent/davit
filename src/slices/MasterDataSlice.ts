@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { AppThunk, RootState } from '../app/store';
-import { ComponentCTO } from '../dataAccess/access/cto/ActorCTO';
+import { ActorCTO } from '../dataAccess/access/cto/ActorCTO';
 import { DataCTO } from '../dataAccess/access/cto/DataCTO';
 import { ChainDecisionTO } from '../dataAccess/access/to/ChainDecisionTO';
 import { ChainlinkTO } from '../dataAccess/access/to/ChainlinkTO';
@@ -15,8 +15,9 @@ import { DataAccessResponse } from '../dataAccess/DataAccessResponse';
 import { handleError } from './GlobalSlice';
 
 
+
 interface MasterDataState {
-  components: ComponentCTO[];
+  components: ActorCTO[];
   groups: GroupTO[];
   datas: DataCTO[];
   relations: DataRelationTO[];
@@ -42,7 +43,7 @@ const MasterDataSlice = createSlice({
   name: "masterData",
   initialState: getInitialState,
   reducers: {
-    setComponents: (state, action: PayloadAction<ComponentCTO[]>) => {
+    setComponents: (state, action: PayloadAction<ActorCTO[]>) => {
       state.components = action.payload;
     },
     setGroups: (state, action: PayloadAction<GroupTO[]>) => {
@@ -84,7 +85,7 @@ const loadGroupsFromBackend = (): AppThunk => async (dispatch) => {
 };
 
 const loadComponentsFromBackend = (): AppThunk => async (dispatch) => {
-  const response: DataAccessResponse<ComponentCTO[]> = await DataAccess.findAllComponents();
+  const response: DataAccessResponse<ActorCTO[]> = await DataAccess.findAllComponents();
   if (response.code === 200) {
     dispatch(MasterDataSlice.actions.setComponents(response.object));
   } else {
@@ -173,7 +174,7 @@ const loadAll = (): AppThunk => (dispatch) => {
 
 export const MasterDataReducer = MasterDataSlice.reducer;
 export const masterDataSelectors = {
-  components: (state: RootState): ComponentCTO[] => state.masterData.components,
+  components: (state: RootState): ActorCTO[] => state.masterData.components,
   groups: (state: RootState): GroupTO[] => state.masterData.groups,
   datas: (state: RootState): DataCTO[] => state.masterData.datas,
   relations: (state: RootState): DataRelationTO[] => state.masterData.relations,
@@ -186,7 +187,7 @@ export const masterDataSelectors = {
     return state.masterData.sequences.find((sequence) => sequence.id === id);
   },
   getComponentById: (id: number) => {
-    return (state: RootState): ComponentCTO | null => {
+    return (state: RootState): ActorCTO | null => {
       return state.masterData.components.find((comp) => comp.component.id === id) || null;
     };
   },

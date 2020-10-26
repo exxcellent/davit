@@ -1,7 +1,7 @@
 import { Carv2Util } from '../../utils/Carv2Util';
-import { ComponentCTO } from '../access/cto/ActorCTO';
+import { ActorCTO } from '../access/cto/ActorCTO';
 import { GeometricalDataCTO } from '../access/cto/GeometraicalDataCTO';
-import { ComponentTO } from '../access/to/ActorTO';
+import { ActorTO } from '../access/to/ActorTO';
 import { DesignTO } from '../access/to/DesignTO';
 import { GroupTO } from '../access/to/GroupTO';
 import { ComponentRepository } from '../repositories/ComponentRepository';
@@ -10,15 +10,15 @@ import { CheckHelper } from '../util/CheckHelper';
 import { TechnicalDataAccessService } from './TechnicalDataAccessService';
 
 export const ComponentDataAccessService = {
-  findAll(): ComponentCTO[] {
+  findAll(): ActorCTO[] {
     return ComponentRepository.findAll().map((component) => createComponentCTO(component));
   },
 
-  findCTO(id: number): ComponentCTO {
+  findCTO(id: number): ActorCTO {
     return createComponentCTO(ComponentRepository.find(id));
   },
 
-  find(id: number): ComponentTO | undefined {
+  find(id: number): ActorTO | undefined {
     return ComponentRepository.find(id);
   },
 
@@ -26,7 +26,7 @@ export const ComponentDataAccessService = {
     return GroupRepository.findAll();
   },
 
-  delete(component: ComponentCTO): ComponentCTO {
+  delete(component: ActorCTO): ActorCTO {
     CheckHelper.nullCheck(component.geometricalData, "GeometricalDataCTO");
     CheckHelper.nullCheck(component.design, "DesignTO");
     CheckHelper.nullCheck(component.component, "ComponentTO");
@@ -38,7 +38,7 @@ export const ComponentDataAccessService = {
 
   deleteGroup(group: GroupTO): GroupTO {
     CheckHelper.nullCheck(group, "group");
-    const componentsToClean: ComponentCTO[] = this.findAll().filter(
+    const componentsToClean: ActorCTO[] = this.findAll().filter(
       (component) => component.component.groupFks === group.id
     );
     componentsToClean.forEach((component) => {
@@ -49,9 +49,9 @@ export const ComponentDataAccessService = {
     return group;
   },
 
-  saveCTO(componentCTO: ComponentCTO): ComponentCTO {
+  saveCTO(componentCTO: ActorCTO): ActorCTO {
     CheckHelper.nullCheck(componentCTO, "ComponentCTO");
-    let copy: ComponentCTO = Carv2Util.deepCopy(componentCTO);
+    let copy: ActorCTO = Carv2Util.deepCopy(componentCTO);
     const savedDesign = TechnicalDataAccessService.saveDesign(copy.design);
     copy.component.designFk = savedDesign.id;
     const savedGeometricalData = TechnicalDataAccessService.saveGeometricalData(copy.geometricalData);
@@ -70,7 +70,7 @@ export const ComponentDataAccessService = {
   },
 };
 
-const createComponentCTO = (component: ComponentTO | undefined): ComponentCTO => {
+const createComponentCTO = (component: ActorTO | undefined): ActorCTO => {
   CheckHelper.nullCheck(component, "component");
   let design: DesignTO | undefined = TechnicalDataAccessService.findDesign(component!.designFk!);
   CheckHelper.nullCheck(design, "design");

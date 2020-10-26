@@ -1,5 +1,5 @@
 import { ActionTO } from '../to/ActionTO';
-import { ComponentTO } from '../to/ActorTO';
+import { ActorTO } from '../to/ActorTO';
 import { ChainDecisionTO } from '../to/ChainDecisionTO';
 import { ChainlinkTO } from '../to/ChainlinkTO';
 import { ChainTO } from '../to/ChainTO';
@@ -19,7 +19,7 @@ import { SequenceTO } from '../to/SequenceTO';
 export class DataStoreCTO {
   constructor(
     // Components
-    public components = new Map<number, ComponentTO>(),
+    public components = new Map<number, ActorTO>(),
     public groups = new Map<number, GroupTO>(),
     // Technical
     public positions = new Map<number, PositionTO>(),

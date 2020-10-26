@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ComponentCTO } from '../../dataAccess/access/cto/ActorCTO';
+import { ActorCTO } from '../../dataAccess/access/cto/ActorCTO';
 import { DataCTO } from '../../dataAccess/access/cto/DataCTO';
 import { DataSetupCTO } from '../../dataAccess/access/cto/DataSetupCTO';
 import { SequenceStepCTO } from '../../dataAccess/access/cto/SequenceStepCTO';
@@ -59,7 +59,7 @@ const useMetaDataModelViewModel = () => {
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
   const dataCTOToEdit: DataCTO | null = useSelector(editSelectors.dataToEdit);
   const dataRelations: DataRelationTO[] = useSelector(masterDataSelectors.relations);
-  const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
+  const components: ActorCTO[] = useSelector(masterDataSelectors.components);
   // ----- EDIT -----
   const dataRelationToEdit: DataRelationTO | null = useSelector(editSelectors.relationToEdit);
   const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.stepToEdit);

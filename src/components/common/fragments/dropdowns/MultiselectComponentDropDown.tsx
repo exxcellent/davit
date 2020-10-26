@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { useSelector } from 'react-redux';
 import { Dropdown, DropdownItemProps, DropdownProps } from 'semantic-ui-react';
 
-import { ComponentCTO } from '../../../../dataAccess/access/cto/ActorCTO';
+import { ActorCTO } from '../../../../dataAccess/access/cto/ActorCTO';
 import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
 
 interface MultiselectComponentDropDownProps extends DropdownProps {
@@ -36,9 +36,9 @@ export const MultiselectComponentDropDown: FunctionComponent<MultiselectComponen
 };
 
 const useMultiselectComponentDropDownViewModel = () => {
-  const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
+  const components: ActorCTO[] = useSelector(masterDataSelectors.components);
 
-  const componentToOption = (component: ComponentCTO): DropdownItemProps[] => {
+  const componentToOption = (component: ActorCTO): DropdownItemProps[] => {
     return [
       {
         key: component.component.id,

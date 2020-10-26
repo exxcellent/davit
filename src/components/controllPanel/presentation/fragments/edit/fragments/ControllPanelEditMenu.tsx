@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { Button } from 'semantic-ui-react';
 
-import { ComponentCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
+import { ActorCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
 import { DataCTO } from '../../../../../../dataAccess/access/cto/DataCTO';
 import { ChainTO } from '../../../../../../dataAccess/access/to/ChainTO';
 import { DataRelationTO } from '../../../../../../dataAccess/access/to/DataRelationTO';
@@ -17,7 +17,7 @@ import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
 import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditMenuProps {
-  editOrAddComponent: (component?: ComponentCTO) => void;
+  editOrAddComponent: (component?: ActorCTO) => void;
   editOrAddData: (data?: DataCTO) => void;
   editOrAddRelation: (relation?: DataRelationTO) => void;
   editOrAddSequence: (sequenceId?: number) => void;

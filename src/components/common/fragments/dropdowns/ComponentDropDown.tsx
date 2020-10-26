@@ -3,17 +3,17 @@ import { useSelector } from 'react-redux';
 import { Dropdown, DropdownItemProps, DropdownProps } from 'semantic-ui-react';
 import { isNullOrUndefined } from 'util';
 
-import { ComponentCTO } from '../../../../dataAccess/access/cto/ActorCTO';
+import { ActorCTO } from '../../../../dataAccess/access/cto/ActorCTO';
 import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
 
 interface ComponentDropDownProps extends DropdownProps {
-  onSelect: (component: ComponentCTO | undefined) => void;
+  onSelect: (component: ActorCTO | undefined) => void;
   placeholder?: string;
   value?: number;
 }
 
 interface ComponentDropDownButtonProps extends DropdownProps {
-  onSelect: (component: ComponentCTO | undefined) => void;
+  onSelect: (component: ActorCTO | undefined) => void;
   icon?: string;
 }
 
@@ -58,9 +58,9 @@ export const ComponentDropDownButton: FunctionComponent<ComponentDropDownButtonP
 };
 
 const useComponentDropDownViewModel = () => {
-  const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
+  const components: ActorCTO[] = useSelector(masterDataSelectors.components);
 
-  const componentToOption = (component: ComponentCTO): DropdownItemProps => {
+  const componentToOption = (component: ActorCTO): DropdownItemProps => {
     return {
       key: component.component.id,
       value: component.component.id,
@@ -68,7 +68,7 @@ const useComponentDropDownViewModel = () => {
     };
   };
 
-  const selectComponent = (componentId: number, components: ComponentCTO[]): ComponentCTO | undefined => {
+  const selectComponent = (componentId: number, components: ActorCTO[]): ActorCTO | undefined => {
     if (!isNullOrUndefined(components) && !isNullOrUndefined(componentId)) {
       return components.find((component) => component.component.id === componentId);
     }

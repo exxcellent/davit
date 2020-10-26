@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Input } from 'semantic-ui-react';
 import { isNullOrUndefined } from 'util';
 
-import { ComponentCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
+import { ActorCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
 import { GroupTO } from '../../../../../../dataAccess/access/to/GroupTO';
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
 import { handleError } from '../../../../../../slices/GlobalSlice';
@@ -69,7 +69,7 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
 };
 
 const useControllPanelEditComponentViewModel = () => {
-  const componentToEdit: ComponentCTO | null = useSelector(editSelectors.componentToEdit);
+  const componentToEdit: ActorCTO | null = useSelector(editSelectors.componentToEdit);
   const dispatch = useDispatch();
   const textInput = useRef<Input>(null);
 
@@ -84,13 +84,13 @@ const useControllPanelEditComponentViewModel = () => {
   }, [componentToEdit]);
 
   const changeName = (name: string) => {
-    let copyComponentToEdit: ComponentCTO = Carv2Util.deepCopy(componentToEdit);
+    let copyComponentToEdit: ActorCTO = Carv2Util.deepCopy(componentToEdit);
     copyComponentToEdit.component.name = name;
     dispatch(EditActions.setMode.editComponent(copyComponentToEdit));
   };
 
   const updateComponent = () => {
-    let copyComponentToEdit: ComponentCTO = Carv2Util.deepCopy(componentToEdit);
+    let copyComponentToEdit: ActorCTO = Carv2Util.deepCopy(componentToEdit);
     dispatch(EditActions.component.save(copyComponentToEdit));
   };
 
@@ -116,7 +116,7 @@ const useControllPanelEditComponentViewModel = () => {
 
   const setGroup = (group: GroupTO | undefined) => {
     if (!isNullOrUndefined(componentToEdit)) {
-      let copyComponentToEdit: ComponentCTO = Carv2Util.deepCopy(componentToEdit);
+      let copyComponentToEdit: ActorCTO = Carv2Util.deepCopy(componentToEdit);
       if (group !== undefined) {
         copyComponentToEdit.component.groupFks = group.id;
       } else {

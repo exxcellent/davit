@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ComponentCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
+import { ActorCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
 import { DataCTO } from '../../../../../../dataAccess/access/cto/DataCTO';
 import { SequenceCTO } from '../../../../../../dataAccess/access/cto/SequenceCTO';
 import { ActionTO } from '../../../../../../dataAccess/access/to/ActionTO';
@@ -122,7 +122,7 @@ const useControllPanelEditActionViewModel = () => {
     }
   };
 
-  const setComponent = (component: ComponentCTO | undefined, sending: boolean): void => {
+  const setComponent = (component: ActorCTO | undefined, sending: boolean): void => {
     if (component !== undefined) {
       let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
       sending

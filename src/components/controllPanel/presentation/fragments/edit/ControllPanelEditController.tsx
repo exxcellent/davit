@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ComponentCTO } from '../../../../../dataAccess/access/cto/ActorCTO';
+import { ActorCTO } from '../../../../../dataAccess/access/cto/ActorCTO';
 import { DataCTO } from '../../../../../dataAccess/access/cto/DataCTO';
 import { ChainTO } from '../../../../../dataAccess/access/to/ChainTO';
 import { DataRelationTO } from '../../../../../dataAccess/access/to/DataRelationTO';
@@ -127,7 +127,7 @@ const useControllPanelEditViewModel = () => {
 
   return {
     mode,
-    editOrAddComponent: (component?: ComponentCTO) => dispatch(EditActions.setMode.editComponent(component)),
+    editOrAddComponent: (component?: ActorCTO) => dispatch(EditActions.setMode.editComponent(component)),
     editOrAddData: (data?: DataCTO) => dispatch(EditActions.setMode.editData(data)),
     editOrAddRelation: (relation?: DataRelationTO) => dispatch(EditActions.setMode.editRelation(relation)),
     editOrAddSequence: (sequenceId?: number) => dispatch(EditActions.setMode.editSequence(sequenceId)),
