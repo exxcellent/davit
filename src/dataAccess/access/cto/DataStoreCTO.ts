@@ -18,8 +18,8 @@ import { SequenceTO } from '../to/SequenceTO';
 
 export class DataStoreCTO {
   constructor(
-    // Components
-    public components = new Map<number, ActorTO>(),
+    // Actors
+    public actors = new Map<number, ActorTO>(),
     public groups = new Map<number, GroupTO>(),
     // Technical
     public positions = new Map<number, PositionTO>(),

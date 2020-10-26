@@ -16,8 +16,16 @@ import { handleError } from './GlobalSlice';
 
 
 
+
+
+
+
+
+
+
+
 interface MasterDataState {
-  components: ActorCTO[];
+  actors: ActorCTO[];
   groups: GroupTO[];
   datas: DataCTO[];
   relations: DataRelationTO[];
@@ -28,7 +36,7 @@ interface MasterDataState {
   chainDecisions: ChainDecisionTO[];
 }
 const getInitialState: MasterDataState = {
-  components: [],
+  actors: [],
   groups: [],
   datas: [],
   relations: [],
@@ -43,8 +51,8 @@ const MasterDataSlice = createSlice({
   name: "masterData",
   initialState: getInitialState,
   reducers: {
-    setComponents: (state, action: PayloadAction<ActorCTO[]>) => {
-      state.components = action.payload;
+    setActors: (state, action: PayloadAction<ActorCTO[]>) => {
+      state.actors = action.payload;
     },
     setGroups: (state, action: PayloadAction<GroupTO[]>) => {
       state.groups = action.payload;
@@ -84,10 +92,10 @@ const loadGroupsFromBackend = (): AppThunk => async (dispatch) => {
   }
 };
 
-const loadComponentsFromBackend = (): AppThunk => async (dispatch) => {
-  const response: DataAccessResponse<ActorCTO[]> = await DataAccess.findAllComponents();
+const loadActorsFromBackend = (): AppThunk => async (dispatch) => {
+  const response: DataAccessResponse<ActorCTO[]> = await DataAccess.findAllActors();
   if (response.code === 200) {
-    dispatch(MasterDataSlice.actions.setComponents(response.object));
+    dispatch(MasterDataSlice.actions.setActors(response.object));
   } else {
     dispatch(handleError(response.message));
   }
@@ -158,7 +166,7 @@ const loadChainDecisionsFromBackend = (): AppThunk => (dispatch) => {
 
 const loadAll = (): AppThunk => (dispatch) => {
   dispatch(loadGroupsFromBackend());
-  dispatch(loadComponentsFromBackend());
+  dispatch(loadActorsFromBackend());
   dispatch(loadDataSetupsFromBackend());
   dispatch(loadRelationsFromBackend());
   dispatch(loadSequencesFromBackend());
@@ -174,7 +182,7 @@ const loadAll = (): AppThunk => (dispatch) => {
 
 export const MasterDataReducer = MasterDataSlice.reducer;
 export const masterDataSelectors = {
-  components: (state: RootState): ActorCTO[] => state.masterData.components,
+  actors: (state: RootState): ActorCTO[] => state.masterData.actors,
   groups: (state: RootState): GroupTO[] => state.masterData.groups,
   datas: (state: RootState): DataCTO[] => state.masterData.datas,
   relations: (state: RootState): DataRelationTO[] => state.masterData.relations,
@@ -186,9 +194,9 @@ export const masterDataSelectors = {
   getSequenceTO: (id: number) => (state: RootState): SequenceTO | undefined => {
     return state.masterData.sequences.find((sequence) => sequence.id === id);
   },
-  getComponentById: (id: number) => {
+  getActorById: (id: number) => {
     return (state: RootState): ActorCTO | null => {
-      return state.masterData.components.find((comp) => comp.component.id === id) || null;
+      return state.masterData.actors.find((actor) => actor.actor.id === id) || null;
     };
   },
   getDataCTOById: (id: number) => {
@@ -225,7 +233,7 @@ export const MasterDataActions = {
   loadChainLinksFromBackend,
   loadChainDecisionsFromBackend,
   loadGroupsFromBackend,
-  loadComponentsFromBackend,
+  loadActorsFromBackend,
   loadDataSetupsFromBackend,
   loadRelationsFromBackend,
   loadSequencesFromBackend,

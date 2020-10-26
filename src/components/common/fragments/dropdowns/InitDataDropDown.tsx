@@ -63,11 +63,11 @@ export const InitDataDropDownButton: FunctionComponent<InitDataDropDownPropsButt
 };
 
 const useDataSetupDropDownViewModel = () => {
-  const components: ActorCTO[] = useSelector(masterDataSelectors.components);
+  const actors: ActorCTO[] = useSelector(masterDataSelectors.actors);
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
 
-  const getComponentName = (compId: number): string => {
-    return components.find((comp) => comp.component.id === compId)?.component.name || "";
+  const getActorName = (actorId: number): string => {
+    return actors.find((actor) => actor.actor.id === actorId)?.actor.name || "";
   };
 
   const getDataName = (dataId: number, instanceId?: number): string => {
@@ -86,7 +86,7 @@ const useDataSetupDropDownViewModel = () => {
     return {
       key: initData.id,
       value: initData.id,
-      text: getComponentName(initData.componentFk) + " + " + getDataName(initData.dataFk, initData.instanceFk),
+      text: getActorName(initData.actorFk) + " + " + getDataName(initData.dataFk, initData.instanceFk),
     };
   };
 

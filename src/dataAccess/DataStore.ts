@@ -1,5 +1,5 @@
-import { DataStoreCTO } from "./access/cto/DataStoreCTO";
-import { StoreTO } from "./access/to/StoreTO";
+import { DataStoreCTO } from './access/cto/DataStoreCTO';
+import { StoreTO } from './access/to/StoreTO';
 
 const STORE_ID = "carv2";
 
@@ -54,7 +54,7 @@ class DataStore {
 
   private getDataStoreObject(): StoreTO {
     return {
-      components: Array.from(this.data!.components.values()),
+      actors: Array.from(this.data!.actors.values()),
       groups: Array.from(this.data!.groups.values()),
       designs: Array.from(this.data!.designs.values()),
       geometricalDatas: Array.from(this.data!.geometricalDatas.values()),

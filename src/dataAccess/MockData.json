@@ -1,5 +1,5 @@
 {
-  "components": [
+  "actors": [
     { "id": 1, "name": "comp1", "geometricalDataFk": 1, "designFk": 1, "groupFks": 1 },
     { "id": 2, "name": "comp2", "geometricalDataFk": 2, "designFk": 2, "groupFks": -1 },
     { "id": 3, "name": "comp3", "geometricalDataFk": 8, "designFk": 3, "groupFks": -1 }

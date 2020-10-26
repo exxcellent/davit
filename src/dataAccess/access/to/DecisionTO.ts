@@ -6,7 +6,7 @@ export class DecisionTO extends AbstractTO {
   constructor(
     public name: string = "",
     public sequenceFk: number = -1,
-    public componentFk: number = -1,
+    public actorFk: number = -1,
     public has: boolean = true,
     public dataAndInstaceId: DataAndInstanceId[] = [],
     public ifGoTo: GoTo = { type: GoToTypes.FIN },

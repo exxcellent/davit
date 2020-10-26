@@ -1,8 +1,9 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
-import { sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
+import React, { FunctionComponent } from 'react';
+import { useSelector } from 'react-redux';
+import { Dropdown, DropdownItemProps, DropdownProps } from 'semantic-ui-react';
+
+import { SequenceCTO } from '../../../../dataAccess/access/cto/SequenceCTO';
+import { sequenceModelSelectors } from '../../../../slices/SequenceModelSlice';
 
 interface StepIndexDropDownProps extends DropdownProps {
   onSelect: (index: number | undefined) => void;
@@ -19,7 +20,7 @@ export const StepIndexDropDown: FunctionComponent<StepIndexDropDownProps> = (pro
       options={getSteps().map(indexToOptions)}
       selection
       selectOnBlur={false}
-      placeholder={placeholder || "Select Component ..."}
+      placeholder={placeholder || "Select Actor ..."}
       onChange={(event, data) => onSelect(Number(data.value))}
       scrolling
       value={value}

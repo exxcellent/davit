@@ -83,7 +83,7 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
 const useControllPanelEditDataSetupViewModel = () => {
   const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.dataSetupToEdit);
   const dispatch = useDispatch();
-  const [componentToEdit, setComponentToEdit] = useState<ActorCTO | null>(null);
+  const [actorToEdit, setActorToEdit] = useState<ActorCTO | null>(null);
   const textInput = useRef<Input>(null);
 
   useEffect(() => {
@@ -140,9 +140,9 @@ const useControllPanelEditDataSetupViewModel = () => {
 
   const getDatas = (): number[] => {
     let dataIds: number[] = [];
-    if (!isNullOrUndefined(dataSetupToEdit) && !isNullOrUndefined(componentToEdit)) {
+    if (!isNullOrUndefined(dataSetupToEdit) && !isNullOrUndefined(actorToEdit)) {
       dataSetupToEdit.initDatas
-        .filter((initData) => initData.componentFk === componentToEdit.component.id)
+        .filter((initData) => initData.actorFk === actorToEdit.actor.id)
         .forEach((initData) => dataIds.push(initData.dataFk));
     }
     return dataIds;
@@ -170,7 +170,7 @@ const useControllPanelEditDataSetupViewModel = () => {
     deleteDataSetup,
     textInput,
     copyDataSetup,
-    setComponentToEdit,
+    setActorToEdit,
     getInitDatas: dataSetupToEdit?.initDatas ? dataSetupToEdit.initDatas : [],
     getDatas,
     createAnother,

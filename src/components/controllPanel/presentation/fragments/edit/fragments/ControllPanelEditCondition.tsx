@@ -10,7 +10,7 @@ import { handleError } from '../../../../../../slices/GlobalSlice';
 import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
 import { Carv2Util } from '../../../../../../utils/Carv2Util';
 import { Carv2ButtonIcon } from '../../../../../common/fragments/buttons/Carv2Button';
-import { ComponentDropDown } from '../../../../../common/fragments/dropdowns/ComponentDropDown';
+import { ActorDropDown } from '../../../../../common/fragments/dropdowns/ActorDropDown';
 import { DataAndInstanceId, InstanceDropDownMultiselect } from '../../../../../common/fragments/dropdowns/InstanceDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
 import { OptionField } from '../common/OptionField';
@@ -19,15 +19,13 @@ export interface ControllPanelEditConditionProps {
   hidden: boolean;
 }
 
-export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditConditionProps> = (
-  props
-) => {
+export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditConditionProps> = (props) => {
   const { hidden } = props;
   const {
     label,
     setMode,
-    componentFk,
-    setComponentFk,
+    actorFk,
+    setActorFk,
     getDecision,
     setHas,
     setData,
@@ -51,22 +49,15 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
   );
 
   return (
-    <ControllPanelEditSub
-      label={label}
-      hidden={hidden}
-      onClickNavItem={setMode}
-    >
+    <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={setMode}>
       <div className="optionFieldSpacer">
-        <OptionField label="Select Component">
-          <ComponentDropDown
-            value={componentFk}
-            onSelect={(comp) => setComponentFk(comp?.component.id || -1)}
-          />
+        <OptionField label="Select Actor">
+          <ActorDropDown value={actorFk} onSelect={(actor) => setActorFk(actor?.actor.id || -1)} />
         </OptionField>
       </div>
       <div className="columnDivider optionFieldSpacer">{hasDropDown}</div>
       <div className="columnDivider optionFieldSpacer">
-        <OptionField label="Select data for component">
+        <OptionField label="Select data for actor">
           <InstanceDropDownMultiselect
             onSelect={(data) => {
               setData(data);
@@ -85,21 +76,13 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
 };
 
 const useControllPanelEditConditionViewModel = () => {
-  const decisionToEdit: DecisionTO | null = useSelector(
-    editSelectors.decisionToEdit
-  );
-  const selectedSequence: SequenceCTO | null = useSelector(
-    sequenceModelSelectors.selectSequence
-  );
+  const decisionToEdit: DecisionTO | null = useSelector(editSelectors.decisionToEdit);
+  const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (isNullOrUndefined(decisionToEdit)) {
-      dispatch(
-        handleError(
-          "Tried to go to edit decision without decisionToEdit specified"
-        )
-      );
+      dispatch(handleError("Tried to go to edit decision without decisionToEdit specified"));
       dispatch(EditActions.setMode.edit());
     }
   }, [dispatch, decisionToEdit]);
@@ -118,9 +101,7 @@ const useControllPanelEditConditionViewModel = () => {
       if (newMode && newMode === "EDIT") {
         dispatch(EditActions.setMode.edit());
       } else if (newMode && newMode === "SEQUENCE") {
-        dispatch(
-          EditActions.setMode.editSequence(selectedSequence?.sequenceTO.id)
-        );
+        dispatch(EditActions.setMode.editSequence(selectedSequence?.sequenceTO.id));
       } else {
         dispatch(EditActions.setMode.editDecision(decisionToEdit));
       }
@@ -129,10 +110,10 @@ const useControllPanelEditConditionViewModel = () => {
     }
   };
 
-  const setComponentFk = (compId: number) => {
+  const setActorFk = (actorId: number) => {
     if (!isNullOrUndefined(decisionToEdit)) {
       let copyDecisionToEdit: DecisionTO = Carv2Util.deepCopy(decisionToEdit);
-      copyDecisionToEdit.componentFk = compId;
+      copyDecisionToEdit.actorFk = actorId;
       dispatch(EditActions.decision.save(copyDecisionToEdit));
       dispatch(EditActions.decision.update(copyDecisionToEdit));
     }
@@ -158,14 +139,10 @@ const useControllPanelEditConditionViewModel = () => {
 
   return {
     label:
-      "EDIT * " +
-      (selectedSequence?.sequenceTO.name || "") +
-      " * " +
-      (decisionToEdit?.name || "") +
-      " * CONDITION",
+      "EDIT * " + (selectedSequence?.sequenceTO.name || "") + " * " + (decisionToEdit?.name || "") + " * CONDITION",
     setMode,
-    componentFk: decisionToEdit?.componentFk,
-    setComponentFk,
+    actorFk: decisionToEdit?.actorFk,
+    setActorFk,
     getDecision,
     setHas,
     setData,

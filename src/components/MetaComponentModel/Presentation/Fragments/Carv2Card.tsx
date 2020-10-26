@@ -17,7 +17,7 @@ export interface Carv2CardProps {
   instances?: DataInstanceTO[];
   zoomFactor: number;
   onClick?: (id: number) => void;
-  type: "DATA" | "COMPONENT" | "INSTANCE";
+  type: "DATA" | "ACTOR" | "INSTANCE";
 }
 
 export const Carv2Card: FunctionComponent<Carv2CardProps> = (props) => {
@@ -25,12 +25,12 @@ export const Carv2Card: FunctionComponent<Carv2CardProps> = (props) => {
 
   const { onClickEdit, onClickFilter, showMenu, setShowMenu, isActiveFilter } = useCarv2CardViewModel(type, id);
 
-  const createInstances = (id: number, instanceName: string, components: ViewFragmentProps[]) => {
+  const createInstances = (id: number, instanceName: string, actors: ViewFragmentProps[]) => {
     return (
       <Carv2Card
         id={id}
         initName={instanceName}
-        dataFragments={components}
+        dataFragments={actors}
         initWidth={initWidth}
         initHeigth={initHeigth}
         zoomFactor={zoomFactor}
@@ -82,8 +82,8 @@ export const Carv2Card: FunctionComponent<Carv2CardProps> = (props) => {
                 index,
                 instance.name,
                 dataFragments.filter(
-                  (component) =>
-                    (component.parentId as {
+                  (actor) =>
+                    (actor.parentId as {
                       dataId: number;
                       instanceId: number;
                     }).instanceId === instance.id
@@ -97,15 +97,15 @@ export const Carv2Card: FunctionComponent<Carv2CardProps> = (props) => {
   );
 };
 
-const useCarv2CardViewModel = (type: "DATA" | "COMPONENT" | "INSTANCE", id: number) => {
+const useCarv2CardViewModel = (type: "DATA" | "ACTOR" | "INSTANCE", id: number) => {
   const activeFilters: Filter[] = useSelector(sequenceModelSelectors.activeFilters);
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const dispatch = useDispatch();
 
-  const onClickEdit = (currentId: number, currentType: "DATA" | "COMPONENT" | "INSTANCE") => {
+  const onClickEdit = (currentId: number, currentType: "DATA" | "ACTOR" | "INSTANCE") => {
     switch (currentType) {
-      case "COMPONENT":
-        dispatch(EditActions.setMode.editComponentById(currentId));
+      case "ACTOR":
+        dispatch(EditActions.setMode.editActorById(currentId));
         break;
       case "DATA":
         dispatch(EditActions.setMode.editDataById(currentId));
@@ -115,14 +115,14 @@ const useCarv2CardViewModel = (type: "DATA" | "COMPONENT" | "INSTANCE", id: numb
     }
     setShowMenu(false);
   };
-  const onClickFilter = (currentId: number, currentType: "DATA" | "COMPONENT" | "INSTANCE") => {
+  const onClickFilter = (currentId: number, currentType: "DATA" | "ACTOR" | "INSTANCE") => {
     switch (currentType) {
-      case "COMPONENT":
+      case "ACTOR":
         if (isActiveFilter) {
-          dispatch(SequenceModelActions.removeComponentFilter(currentId));
+          dispatch(SequenceModelActions.removeActorFilter(currentId));
           setShowMenu(false);
         } else {
-          dispatch(SequenceModelActions.addComponentFilters(currentId));
+          dispatch(SequenceModelActions.addActorFilters(currentId));
         }
         break;
       case "DATA":

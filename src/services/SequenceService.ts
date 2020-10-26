@@ -1,15 +1,15 @@
-import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
-import { ActionTO } from "../dataAccess/access/to/ActionTO";
-import { DecisionTO } from "../dataAccess/access/to/DecisionTO";
-import { GoTo, GoToTypes, Terminal } from "../dataAccess/access/types/GoToType";
-import { SequenceActionReducer, SequenceActionResult } from "../reducer/SequenceActionReducer";
-import { ComponentData } from "../viewDataTypes/ComponentData";
+import { SequenceCTO } from '../dataAccess/access/cto/SequenceCTO';
+import { SequenceStepCTO } from '../dataAccess/access/cto/SequenceStepCTO';
+import { ActionTO } from '../dataAccess/access/to/ActionTO';
+import { DecisionTO } from '../dataAccess/access/to/DecisionTO';
+import { GoTo, GoToTypes, Terminal } from '../dataAccess/access/types/GoToType';
+import { SequenceActionReducer, SequenceActionResult } from '../reducer/SequenceActionReducer';
+import { ActorData } from '../viewDataTypes/ActorData';
 
 export interface CalculatedStep {
   stepFk: number;
   stepId: string;
-  componentDatas: ComponentData[];
+  actorDatas: ActorData[];
   errors: ActionTO[];
 }
 
@@ -22,7 +22,7 @@ export interface CalcSequence {
 }
 
 export const SequenceService = {
-  calculateSequence: (sequence: SequenceCTO | null, dataSetup: ComponentData[]): CalcSequence => {
+  calculateSequence: (sequence: SequenceCTO | null, dataSetup: ActorData[]): CalcSequence => {
     let calcSequence: CalcSequence = {
       sequenceModel: sequence,
       stepIds: [],
@@ -33,8 +33,8 @@ export const SequenceService = {
     let loopStartingStep: number = -1;
 
     if (sequence && dataSetup) {
-      let componentDatas: ComponentData[] = dataSetup;
-      calcSequence.steps.push(getInitStep(componentDatas));
+      let actorDatas: ActorData[] = dataSetup;
+      calcSequence.steps.push(getInitStep(actorDatas));
 
       const root: SequenceStepCTO | DecisionTO | undefined = getRoot(sequence);
 
@@ -48,8 +48,8 @@ export const SequenceService = {
           // calc next step.
           if (type === GoToTypes.STEP) {
             const step: SequenceStepCTO = stepOrDecision as SequenceStepCTO;
-            const result: SequenceActionResult = calculateStep(step, componentDatas);
-            componentDatas = result.componenDatas;
+            const result: SequenceActionResult = calculateStep(step, actorDatas);
+            actorDatas = result.actorDatas;
 
             loopStartingStep = checkForLoop(calcSequence, step, result);
 
@@ -59,7 +59,7 @@ export const SequenceService = {
 
             calcSequence.steps.push({
               stepId: stepId,
-              componentDatas: componentDatas,
+              actorDatas: actorDatas,
               errors: result.errors,
               stepFk: step.squenceStepTO.id,
             });
@@ -75,7 +75,7 @@ export const SequenceService = {
           if (type === GoToTypes.DEC) {
             const decision: DecisionTO = stepOrDecision as DecisionTO;
 
-            const goTo: GoTo = SequenceActionReducer.executeDecisionCheck(decision, componentDatas);
+            const goTo: GoTo = SequenceActionReducer.executeDecisionCheck(decision, actorDatas);
             stepOrDecision = getNext(goTo, sequence);
             type = getType(stepOrDecision);
 
@@ -98,8 +98,8 @@ export const SequenceService = {
   },
 };
 
-const getInitStep = (componenentDatas: ComponentData[]): CalculatedStep => {
-  return { stepId: "root", componentDatas: componenentDatas, stepFk: 0, errors: [] };
+const getInitStep = (actorDatas: ActorData[]): CalculatedStep => {
+  return { stepId: "root", actorDatas: actorDatas, stepFk: 0, errors: [] };
 };
 
 const getStepFromSequence = (stepId: number, sequence: SequenceCTO): SequenceStepCTO | undefined => {
@@ -137,8 +137,8 @@ const getNext = (goTo: GoTo, sequence: SequenceCTO): SequenceStepCTO | DecisionT
   return nextStepOrDecisionOrTerminal;
 };
 
-const calculateStep = (step: SequenceStepCTO, componentDatas: ComponentData[]): SequenceActionResult => {
-  return SequenceActionReducer.executeActionsOnComponentDatas(step.actions, componentDatas);
+const calculateStep = (step: SequenceStepCTO, actorDatas: ActorData[]): SequenceActionResult => {
+  return SequenceActionReducer.executeActionsOnActorDatas(step.actions, actorDatas);
 };
 
 const getType = (stepOrDecisionOrTerminal: SequenceStepCTO | DecisionTO | Terminal): GoToTypes => {
@@ -157,9 +157,9 @@ const checkForLoop = (calcSequence: CalcSequence, step: SequenceStepCTO, result:
   return calcSequence.steps.findIndex(
     (calcStep) =>
       calcStep.stepFk === step.squenceStepTO.id &&
-      calcStep.componentDatas.length === result.componenDatas.length &&
-      !calcStep.componentDatas.some(
-        (cp) => !result.componenDatas.some((rcp) => rcp.componentFk === cp.componentFk && rcp.dataFk === cp.dataFk)
+      calcStep.actorDatas.length === result.actorDatas.length &&
+      !calcStep.actorDatas.some(
+        (cp) => !result.actorDatas.some((rcp) => rcp.actorFk === cp.actorFk && rcp.dataFk === cp.dataFk)
       )
   );
 };

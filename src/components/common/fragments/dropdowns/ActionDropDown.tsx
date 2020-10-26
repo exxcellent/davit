@@ -37,8 +37,8 @@ export const ActionDropDown: FunctionComponent<ActionDropDownProps> = (props) =>
 };
 
 // TODO: in den master data slice verschieben!
-const getComponentName = (compId: number, components: ActorCTO[]): string => {
-  return components.find((comp) => comp.component.id === compId)?.component.name || "";
+const getActorName = (actorId: number, actors: ActorCTO[]): string => {
+  return actors.find((actor) => actor.actor.id === actorId)?.actor.name || "";
 };
 
 const getDataName = (dataId: number, datas: DataCTO[]): string => {
@@ -57,13 +57,14 @@ const getDataName = (dataId: number, datas: DataCTO[]): string => {
 
 const useActionDropDownViewModel = () => {
   const actions: ActionTO[] = useSelector(editSelectors.stepToEdit)?.actions || [];
-  const components: ActorCTO[] = useSelector(masterDataSelectors.components);
+  const actors: ActorCTO[] = useSelector(masterDataSelectors.actors);
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
 
   const actionToOption = (action: ActionTO): DropdownItemProps => {
-    const text: string = `${getComponentName(action.receivingComponentFk, components)} - ${
-      action.actionType
-    } - ${getDataName(action.dataFk, datas)}`;
+    const text: string = `${getActorName(action.receivingActorFk, actors)} - ${action.actionType} - ${getDataName(
+      action.dataFk,
+      datas
+    )}`;
     return {
       key: action.id,
       value: action.id,

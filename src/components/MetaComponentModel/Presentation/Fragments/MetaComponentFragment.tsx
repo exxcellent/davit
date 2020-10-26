@@ -4,7 +4,7 @@ import { Card } from 'semantic-ui-react';
 import { ActorCTO } from '../../../../dataAccess/access/cto/ActorCTO';
 import { createViewFragment, ViewFragmentProps } from '../../../../viewDataTypes/ViewFragment';
 
-export interface MetaComponentFragmentProps {
+export interface MetaActorFragmentProps {
   id: number;
   initName: string;
   initColor: string;
@@ -14,7 +14,7 @@ export interface MetaComponentFragmentProps {
   onClick?: (id: number) => void;
 }
 
-export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps> = (props) => {
+export const MetaActorFragment: FunctionComponent<MetaActorFragmentProps> = (props) => {
   const { initName, dataFragments, initWidth, initHeigth } = props;
 
   return (
@@ -29,19 +29,19 @@ export const MetaComponentFragment: FunctionComponent<MetaComponentFragmentProps
   );
 };
 
-export const createMetaComponentFragment = (
-  componentCTO: ActorCTO,
-  componentDatas: ViewFragmentProps[],
+export const createMetaActorFragment = (
+  actorCTO: ActorCTO,
+  actorDatas: ViewFragmentProps[],
   onClick?: (id: number) => void
 ) => {
   return (
-    <MetaComponentFragment
-      id={componentCTO.component.id}
-      initName={componentCTO.component.name}
-      initColor={componentCTO.design.color}
-      initWidth={componentCTO.geometricalData.geometricalData.width}
-      initHeigth={componentCTO.geometricalData.geometricalData.height}
-      dataFragments={componentDatas}
+    <MetaActorFragment
+      id={actorCTO.actor.id}
+      initName={actorCTO.actor.name}
+      initColor={actorCTO.design.color}
+      initWidth={actorCTO.geometricalData.geometricalData.width}
+      initHeigth={actorCTO.geometricalData.geometricalData.height}
+      dataFragments={actorDatas}
     />
   );
 };

@@ -37,12 +37,24 @@ import { SequenceModelActions } from './SequenceModelSlice';
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 export enum Mode {
   TAB = "TAB",
   FILE = "FILE",
   VIEW = "VIEW",
   EDIT = "EDIT",
-  EDIT_COMPONENT = "EDIT_COMPONENT",
+  EDIT_ACTOR = "EDIT_ACTOR",
   EDIT_GROUP = "EDIT_GROUP",
   EDIT_DATA = "EDIT_DATA",
   EDIT_DATA_INSTANCE = "EDIT_DATA_INSTANCE",
@@ -112,11 +124,11 @@ const EditSlice = createSlice({
         handleError("Try to set chain step to edit in mode: " + state.mode);
       }
     },
-    setComponentToEdit: (state, action: PayloadAction<ActorCTO>) => {
-      if (state.mode === Mode.EDIT_COMPONENT) {
+    setActorToEdit: (state, action: PayloadAction<ActorCTO>) => {
+      if (state.mode === Mode.EDIT_ACTOR) {
         state.objectToEdit = action.payload;
       } else {
-        handleError("Try to set component to edit in mode: " + state.mode);
+        handleError("Try to set actor to edit in mode: " + state.mode);
       }
     },
     setDataToEdit: (state, action: PayloadAction<DataCTO>) => {
@@ -243,22 +255,22 @@ const setModeToEdit = (): AppThunk => (dispatch, getState) => {
   }
 };
 
-const setModeToEditComponent = (component?: ActorCTO): AppThunk => (dispatch) => {
-  dispatch(setModeWithStorage(Mode.EDIT_COMPONENT));
-  if (component === undefined) {
-    dispatch(EditActions.component.create());
+const setModeToEditActor = (actor?: ActorCTO): AppThunk => (dispatch) => {
+  dispatch(setModeWithStorage(Mode.EDIT_ACTOR));
+  if (actor === undefined) {
+    dispatch(EditActions.actor.create());
   } else {
-    dispatch(EditSlice.actions.setComponentToEdit(component));
+    dispatch(EditSlice.actions.setActorToEdit(actor));
   }
 };
 
-const setModeToEditCompoenntById = (id: number): AppThunk => (dispatch, getState) => {
-  const component: ActorCTO | undefined = getState().masterData.components.find(
-    (component) => component.component.id === id
+const setModeToEditActorById = (id: number): AppThunk => (dispatch, getState) => {
+  const actor: ActorCTO | undefined = getState().masterData.actors.find(
+    (act) => act.actor.id === id
   );
-  if (component) {
-    dispatch(setModeWithStorage(Mode.EDIT_COMPONENT));
-    dispatch(EditSlice.actions.setComponentToEdit(component));
+  if (actor) {
+    dispatch(setModeWithStorage(Mode.EDIT_ACTOR));
+    dispatch(EditSlice.actions.setActorToEdit(actor));
   }
 };
 const setModeToEditDataById = (id: number): AppThunk => (dispatch, getState) => {
@@ -432,36 +444,35 @@ const setModeToEditCondition = (decision: DecisionTO): AppThunk => (dispatch) =>
   }
 };
 
-// ----------------------------------------------- COMPONENT -----------------------------------------------
+// ----------------------------------------------- ACTOR -----------------------------------------------
 
-const createComponentThunk = (): AppThunk => (dispatch) => {
-  let component: ActorCTO = new ActorCTO();
-  // component.component.name = "neu";
-  const response: DataAccessResponse<ActorCTO> = DataAccess.saveComponentCTO(component);
+const createActorThunk = (): AppThunk => (dispatch) => {
+  let actor: ActorCTO = new ActorCTO();
+  const response: DataAccessResponse<ActorCTO> = DataAccess.saveActorCTO(actor);
   console.log(response);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
-  dispatch(MasterDataActions.loadComponentsFromBackend());
-  dispatch(EditActions.component.update(response.object));
+  dispatch(MasterDataActions.loadActorsFromBackend());
+  dispatch(EditActions.actor.update(response.object));
 };
 
-const saveComponentThunk = (component: ActorCTO): AppThunk => (dispatch) => {
-  const response: DataAccessResponse<ActorCTO> = DataAccess.saveComponentCTO(component);
+const saveActorThunk = (actor: ActorCTO): AppThunk => (dispatch) => {
+  const response: DataAccessResponse<ActorCTO> = DataAccess.saveActorCTO(actor);
   console.log(response);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
-  dispatch(MasterDataActions.loadComponentsFromBackend());
+  dispatch(MasterDataActions.loadActorsFromBackend());
 };
 
-const deleteComponentThunk = (component: ActorCTO): AppThunk => async (dispatch) => {
-  const response: DataAccessResponse<ActorCTO> = await DataAccess.deleteComponentCTO(component);
+const deleteActorThunk = (actor: ActorCTO): AppThunk => async (dispatch) => {
+  const response: DataAccessResponse<ActorCTO> = await DataAccess.deleteActorCTO(actor);
   console.log(response);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
   }
-  dispatch(MasterDataActions.loadComponentsFromBackend());
+  dispatch(MasterDataActions.loadActorsFromBackend());
 };
 
 // ----------------------------------------------- GROUP -----------------------------------------------
@@ -493,7 +504,7 @@ const deleteGroupThunk = (group: GroupTO): AppThunk => async (dispatch) => {
     dispatch(handleError(response.message));
   }
   dispatch(MasterDataActions.loadGroupsFromBackend());
-  dispatch(MasterDataActions.loadComponentsFromBackend());
+  dispatch(MasterDataActions.loadActorsFromBackend());
 };
 
 // ----------------------------------------------- DATA -----------------------------------------------
@@ -992,12 +1003,12 @@ const mapActionsToArrows = (actions: ActionTO[], state: RootState): Arrow[] => {
 
   actions.forEach(action => {
     
-    const sourceGeometricalData: GeometricalDataCTO | undefined = state.masterData.components.find(
-      (comp) => comp.component.id === action.sendingComponentFk
+    const sourceGeometricalData: GeometricalDataCTO | undefined = state.masterData.actors.find(
+      (comp) => comp.actor.id === action.sendingActorFk
       )?.geometricalData;
       
-      const targetGeometricalData: GeometricalDataCTO | undefined = state.masterData.components.find(
-        (comp) => comp.component.id === action.receivingComponentFk
+      const targetGeometricalData: GeometricalDataCTO | undefined = state.masterData.actors.find(
+        (comp) => comp.actor.id === action.receivingActorFk
         )?.geometricalData;
         
         const dataLabels: string[] = [];
@@ -1033,8 +1044,8 @@ export const EditReducer = EditSlice.reducer;
  */
 export const editSelectors = {
   mode: (state: RootState): Mode => state.edit.mode,
-  componentToEdit: (state: RootState): ActorCTO | null => {
-    return state.edit.mode === Mode.EDIT_COMPONENT && (state.edit.objectToEdit as ActorCTO).component
+  actorToEdit: (state: RootState): ActorCTO | null => {
+    return state.edit.mode === Mode.EDIT_ACTOR && (state.edit.objectToEdit as ActorCTO).actor
       ? (state.edit.objectToEdit as ActorCTO)
       : null;
   },
@@ -1070,14 +1081,14 @@ export const editSelectors = {
       : null;
   },
   editActionArrow: (state: RootState): Arrow | null => {
-    if (state.edit.mode === Mode.EDIT_SEQUENCE_STEP_ACTION && (state.edit.objectToEdit as ActionTO).receivingComponentFk) {
+    if (state.edit.mode === Mode.EDIT_SEQUENCE_STEP_ACTION && (state.edit.objectToEdit as ActionTO).receivingActorFk) {
 
-      const sourceComp: ActorCTO | undefined = state.masterData.components.find(
-        (comp) => comp.component.id === (state.edit.objectToEdit as ActionTO).sendingComponentFk
+      const sourceComp: ActorCTO | undefined = state.masterData.actors.find(
+        (comp) => comp.actor.id === (state.edit.objectToEdit as ActionTO).sendingActorFk
       );
 
-      const targetComp: ActorCTO | undefined = state.masterData.components.find(
-        (comp) => comp.component.id === (state.edit.objectToEdit as ActionTO).receivingComponentFk
+      const targetComp: ActorCTO | undefined = state.masterData.actors.find(
+        (comp) => comp.actor.id === (state.edit.objectToEdit as ActionTO).receivingActorFk
       );
 
       const dataLabel: string = masterDataSelectors.getDataCTOById((state.edit.objectToEdit as ActionTO).dataFk)(state)?.data.name || "Could not find data";
@@ -1142,8 +1153,8 @@ export const editSelectors = {
 
 export const EditActions = {
   setMode: {
-    editComponent: setModeToEditComponent,
-    editComponentById: setModeToEditCompoenntById,
+    editActor: setModeToEditActor,
+    editActorById: setModeToEditActorById,
     editData: setModeToEditData,
     editDataById: setModeToEditDataById,
     editDataInstance: setModeToEditDataInstance,
@@ -1166,11 +1177,11 @@ export const EditActions = {
     file: setModeToFile,
     tab: setModeToTab,
   },
-  component: {
-    save: saveComponentThunk,
-    delete: deleteComponentThunk,
-    update: EditSlice.actions.setComponentToEdit,
-    create: createComponentThunk,
+  actor: {
+    save: saveActorThunk,
+    delete: deleteActorThunk,
+    update: EditSlice.actions.setActorToEdit,
+    create: createActorThunk,
   },
   data: {
     save: saveDataThunk,

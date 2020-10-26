@@ -16,12 +16,28 @@ import { DataAccess } from '../dataAccess/DataAccess';
 import { DataAccessResponse } from '../dataAccess/DataAccessResponse';
 import { CalcChain, getRoot, SequenceChainService } from '../services/SequenceChainService';
 import { CalcSequence, CalculatedStep, SequenceService } from '../services/SequenceService';
-import { ComponentData } from '../viewDataTypes/ComponentData';
+import { ActorData } from '../viewDataTypes/ActorData';
 import { Mode } from './EditSlice';
 import { handleError } from './GlobalSlice';
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export interface Filter {
-  type: "COMPONENT" | "DATA";
+  type: "ACTOR" | "DATA";
   id: number;
 }
 
@@ -34,7 +50,7 @@ interface SequenceModelState {
   currentLinkIndex: number;
   errorActions: ActionTO[];
   actions: ActionTO[];
-  componentDatas: ComponentData[];
+  actorDatas: ActorData[];
   activeFilter: Filter[];
   selectedChain: ChainCTO | null;
 }
@@ -47,7 +63,7 @@ const getInitialState: SequenceModelState = {
   currentLinkIndex: 0,
   errorActions: [],
   actions: [],
-  componentDatas: [],
+  actorDatas: [],
   activeFilter: [],
   selectedChain: null,
 };
@@ -116,13 +132,13 @@ const SequenceModelSlice = createSlice({
       state.activeFilter = state.activeFilter.filter((filt) => !(filt.type === "DATA" && filt.id === action.payload));
       state.currentStepIndex = 0;
     },
-    addComponentFilters: (state, action: PayloadAction<number>) => {
-      state.activeFilter = [...state.activeFilter, { type: "COMPONENT", id: action.payload }];
+    addActorFilters: (state, action: PayloadAction<number>) => {
+      state.activeFilter = [...state.activeFilter, { type: "ACTOR", id: action.payload }];
       state.currentStepIndex = 0;
     },
-    removeComponentFilter: (state, action: PayloadAction<number>) => {
+    removeActorFilter: (state, action: PayloadAction<number>) => {
       state.activeFilter = state.activeFilter.filter(
-        (filt) => !(filt.type === "COMPONENT" && filt.id === action.payload)
+        (filt) => !(filt.type === "ACTOR" && filt.id === action.payload)
       );
       state.currentStepIndex = 0;
     },
@@ -166,8 +182,8 @@ const SequenceModelSlice = createSlice({
     setActions: (state, action: PayloadAction<ActionTO[]>) => {
       state.actions = action.payload;
     },
-    setComponentDatas: (state, action: PayloadAction<ComponentData[]>) => {
-      state.componentDatas = action.payload;
+    setActorDatas: (state, action: PayloadAction<ActorData[]>) => {
+      state.actorDatas = action.payload;
     },
     setFilter: (state, action: PayloadAction<Filter[]>) => {
       state.activeFilter = action.payload;
@@ -177,25 +193,25 @@ const SequenceModelSlice = createSlice({
 });
 
 function calcSequenceAndSetState(sequenceModel: SequenceCTO, dataSetup: DataSetupCTO, state: SequenceModelState) {
-  const result: CalcSequence = SequenceService.calculateSequence(sequenceModel, getComponentDatas(dataSetup));
+  const result: CalcSequence = SequenceService.calculateSequence(sequenceModel, getActorDatas(dataSetup));
   state.currentStepIndex = 0;
   state.errorActions = result.steps[state.currentStepIndex]?.errors || [];
-  state.componentDatas = result.steps[state.currentStepIndex]?.componentDatas || [];
+  state.actorDatas = result.steps[state.currentStepIndex]?.actorDatas || [];
   state.calcSequence = result;
 }
 
 function resetState(state: SequenceModelState) {
   state.errorActions = [];
-  state.componentDatas = [];
+  state.actorDatas = [];
   state.calcSequence = null;
   state.activeFilter = [];
 }
 
 // =============================================== THUNKS ===============================================
 
-export const getComponentDatas = (dataSetup: DataSetupCTO): ComponentData[] => {
+export const getActorDatas = (dataSetup: DataSetupCTO): ActorData[] => {
   return dataSetup.initDatas.map((initData) => {
-    return { componentFk: initData.componentFk, dataFk: initData.dataFk, instanceFk: initData.instanceFk };
+    return { actorFk: initData.actorFk, dataFk: initData.dataFk, instanceFk: initData.instanceFk };
   });
 };
 
@@ -274,9 +290,9 @@ const getSequenceCTOFromBackend = (sequenceId: number): AppThunk => (dispatch) =
   }
 };
 
-const handleComponentClickEvent = (componentId: number): AppThunk => (dispatch) => {
+const handleActorClickEvent = (actorId: number): AppThunk => (dispatch) => {
   const filter: Filter[] = [];
-  filter.push({ type: "COMPONENT", id: componentId });
+  filter.push({ type: "ACTOR", id: actorId });
   dispatch(SequenceModelSlice.actions.setFilter(filter));
 };
 
@@ -295,8 +311,8 @@ const filterSteps = (steps: CalculatedStep[], filter: Filter[], modelSteps: Sequ
       const actions: ActionTO[] =
         modelSteps.find((modelStep) => modelStep.squenceStepTO.id === step.stepFk)?.actions || [];
       switch (currentFilter.type) {
-        case "COMPONENT":
-          return actions.some((action) => action.receivingComponentFk === currentFilter.id);
+        case "ACTOR":
+          return actions.some((action) => action.receivingActorFk === currentFilter.id);
         case "DATA":
           return actions.some((action) => action.dataFk === currentFilter.id);
         default:
@@ -329,12 +345,12 @@ const mapActionsToArrows = (actions: ActionTO[], state: RootState): Arrow[] => {
 
   actions.forEach(action => {
     
-    const sourceGeometricalData: GeometricalDataCTO | undefined = state.masterData.components.find(
-      (comp) => comp.component.id === action.sendingComponentFk
+    const sourceGeometricalData: GeometricalDataCTO | undefined = state.masterData.actors.find(
+      (actor) => actor.actor.id === action.sendingActorFk
       )?.geometricalData;
       
-      const targetGeometricalData: GeometricalDataCTO | undefined = state.masterData.components.find(
-        (comp) => comp.component.id === action.receivingComponentFk
+      const targetGeometricalData: GeometricalDataCTO | undefined = state.masterData.actors.find(
+        (comp) => comp.actor.id === action.receivingActorFk
         )?.geometricalData;
         
         const dataLabels: string[] = [];
@@ -397,9 +413,9 @@ export const sequenceModelSelectors = {
       return null;
     }
   },
-  selectComponentData: (state: RootState): ComponentData[] => {
+  selectActorData: (state: RootState): ActorData[] => {
     const filteredSteps = getFilteredSteps(state);
-    return filteredSteps[state.sequenceModel.currentStepIndex]?.componentDatas || [];
+    return filteredSteps[state.sequenceModel.currentStepIndex]?.actorDatas || [];
   },
   selectErrors: (state: RootState): ActionTO[] => {
     const filteredSteps = getFilteredSteps(state);
@@ -464,7 +480,7 @@ export const SequenceModelActions = {
   resetCurrentChain: SequenceModelSlice.actions.setSelectedChain(null),
   setCurrentStepIndex: SequenceModelSlice.actions.setCurrentStepIndex,
   setCurrentLinkIndex: SequenceModelSlice.actions.setCurrentLinkIndex,
-  handleComponentClickEvent,
+  handleActorClickEvent: handleActorClickEvent,
   handleDataClickEvent,
   stepNext,
   stepBack,
@@ -473,8 +489,8 @@ export const SequenceModelActions = {
   setCurrentChain: setSelectedChainThunk,
   addDataFilters: SequenceModelSlice.actions.addDataFilter,
   removeDataFilters: SequenceModelSlice.actions.removeDataFilter,
-  addComponentFilters: SequenceModelSlice.actions.addComponentFilters,
-  removeComponentFilter: SequenceModelSlice.actions.removeComponentFilter,
+  addActorFilters: SequenceModelSlice.actions.addActorFilters,
+  removeActorFilter: SequenceModelSlice.actions.removeActorFilter,
   calcChain: calcModelsThunk,
 };
 function getFilteredSteps(state: RootState) {

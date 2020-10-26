@@ -7,7 +7,7 @@ export class ChainDecisionTO extends AbstractTO {
     public name: string = "",
     public chainFk: number = -1,
     public has: boolean = true,
-    public componentFk: number = -1,
+    public actorFk: number = -1,
     public dataAndInstaceIds: DataAndInstanceId[] = [],
     public ifGoTo: GoToChain = { type: GoToTypesChain.FIN },
     public elseGoTo: GoToChain = { type: GoToTypesChain.ERROR }

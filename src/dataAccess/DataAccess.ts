@@ -17,7 +17,7 @@ import { SequenceStepTO } from './access/to/SequenceStepTO';
 import { SequenceTO } from './access/to/SequenceTO';
 import { DataAccessResponse } from './DataAccessResponse';
 import dataStore from './DataStore';
-import { ComponentDataAccessService } from './services/ComponentDataAccessService';
+import { ActorDataAccessService } from './services/ComponentDataAccessService';
 import { DataDataAccessService } from './services/DataDataAccessService';
 import { SequenceDataAccessService } from './services/SequenceDataAccessService';
 
@@ -52,18 +52,18 @@ export const DataAccess = {
     }
   },
 
-  // ========================================= COMPONENT =========================================
+  // ========================================= ACTOR =========================================
 
-  findAllComponents(): DataAccessResponse<ActorCTO[]> {
-    return makeTransactional(ComponentDataAccessService.findAll);
+  findAllActors(): DataAccessResponse<ActorCTO[]> {
+    return makeTransactional(ActorDataAccessService.findAll);
   },
 
-  saveComponentCTO(component: ActorCTO): DataAccessResponse<ActorCTO> {
-    return makeTransactional(() => ComponentDataAccessService.saveCTO(component));
+  saveActorCTO(actor: ActorCTO): DataAccessResponse<ActorCTO> {
+    return makeTransactional(() => ActorDataAccessService.saveCTO(actor));
   },
 
-  deleteComponentCTO(component: ActorCTO): DataAccessResponse<ActorCTO> {
-    return makeTransactional(() => ComponentDataAccessService.delete(component));
+  deleteActorCTO(actor: ActorCTO): DataAccessResponse<ActorCTO> {
+    return makeTransactional(() => ActorDataAccessService.delete(actor));
   },
 
   // ========================================= SEQUENCE =========================================
@@ -180,15 +180,15 @@ export const DataAccess = {
   // ========================================= GROUP =========================================
 
   findAllGroups(): DataAccessResponse<GroupTO[]> {
-    return makeTransactional(ComponentDataAccessService.findAllGroups);
+    return makeTransactional(ActorDataAccessService.findAllGroups);
   },
 
   saveGroup(group: GroupTO): DataAccessResponse<GroupTO> {
-    return makeTransactional(() => ComponentDataAccessService.saveGroup(group));
+    return makeTransactional(() => ActorDataAccessService.saveGroup(group));
   },
 
   deleteGroupTO(group: GroupTO): DataAccessResponse<GroupTO> {
-    return makeTransactional(() => ComponentDataAccessService.deleteGroup(group));
+    return makeTransactional(() => ActorDataAccessService.deleteGroup(group));
   },
 
   // ========================================= ACTION =========================================
