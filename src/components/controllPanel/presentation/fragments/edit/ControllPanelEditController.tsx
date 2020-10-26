@@ -1,29 +1,30 @@
-import React, { FunctionComponent } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { ComponentCTO } from "../../../../../dataAccess/access/cto/ComponentCTO";
-import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
-import { ChainTO } from "../../../../../dataAccess/access/to/ChainTO";
-import { DataRelationTO } from "../../../../../dataAccess/access/to/DataRelationTO";
-import { DataSetupTO } from "../../../../../dataAccess/access/to/DataSetupTO";
-import { GroupTO } from "../../../../../dataAccess/access/to/GroupTO";
-import { EditActions, editSelectors, Mode } from "../../../../../slices/EditSlice";
-import { ControllPanelEditAction } from "./fragments/ControllPanelEditAction";
-import { ControllPanelEditChain } from "./fragments/ControllPanelEditChain";
-import { ControllPanelEditChainCondition } from "./fragments/ControllPanelEditChainCondition";
-import { ControllPanelEditChainDecision } from "./fragments/ControllPanelEditChainDecision";
-import { ControllPanelEditChainLink } from "./fragments/ControllPanelEditChainLink";
-import { ControllPanelEditComponent } from "./fragments/ControllPanelEditComponent";
-import { ControllPanelEditCondition } from "./fragments/ControllPanelEditCondition";
-import { ControllPanelEditData } from "./fragments/ControllPanelEditData";
-import { ControllPanelEditDataInstance } from "./fragments/ControllPanelEditDataInstance";
-import { ControllPanelEditDataSetup } from "./fragments/ControllPanelEditDataSetup";
-import { ControllPanelEditDecision } from "./fragments/ControllPanelEditDecision";
-import { ControllPanelEditGroup } from "./fragments/ControllPanelEditGroup";
-import { ControllPanelEditInitData } from "./fragments/ControllPanelEditInitData";
-import { ControllPanelEditMenu } from "./fragments/ControllPanelEditMenu";
-import { ControllPanelEditRelation } from "./fragments/ControllPanelEditRelation";
-import { ControllPanelEditSequence } from "./fragments/ControllPanelEditSequence";
-import { ControllPanelEditStep } from "./fragments/ControllPanelEditStep";
+import React, { FunctionComponent } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { ComponentCTO } from '../../../../../dataAccess/access/cto/ActorCTO';
+import { DataCTO } from '../../../../../dataAccess/access/cto/DataCTO';
+import { ChainTO } from '../../../../../dataAccess/access/to/ChainTO';
+import { DataRelationTO } from '../../../../../dataAccess/access/to/DataRelationTO';
+import { DataSetupTO } from '../../../../../dataAccess/access/to/DataSetupTO';
+import { GroupTO } from '../../../../../dataAccess/access/to/GroupTO';
+import { EditActions, editSelectors, Mode } from '../../../../../slices/EditSlice';
+import { ControllPanelEditAction } from './fragments/ControllPanelEditAction';
+import { ControllPanelEditChain } from './fragments/ControllPanelEditChain';
+import { ControllPanelEditChainCondition } from './fragments/ControllPanelEditChainCondition';
+import { ControllPanelEditChainDecision } from './fragments/ControllPanelEditChainDecision';
+import { ControllPanelEditChainLink } from './fragments/ControllPanelEditChainLink';
+import { ControllPanelEditComponent } from './fragments/ControllPanelEditComponent';
+import { ControllPanelEditCondition } from './fragments/ControllPanelEditCondition';
+import { ControllPanelEditData } from './fragments/ControllPanelEditData';
+import { ControllPanelEditDataInstance } from './fragments/ControllPanelEditDataInstance';
+import { ControllPanelEditDataSetup } from './fragments/ControllPanelEditDataSetup';
+import { ControllPanelEditDecision } from './fragments/ControllPanelEditDecision';
+import { ControllPanelEditGroup } from './fragments/ControllPanelEditGroup';
+import { ControllPanelEditInitData } from './fragments/ControllPanelEditInitData';
+import { ControllPanelEditMenu } from './fragments/ControllPanelEditMenu';
+import { ControllPanelEditRelation } from './fragments/ControllPanelEditRelation';
+import { ControllPanelEditSequence } from './fragments/ControllPanelEditSequence';
+import { ControllPanelEditStep } from './fragments/ControllPanelEditStep';
 
 export interface ControllPanelEditControllerProps {}
 

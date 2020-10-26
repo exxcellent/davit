@@ -1,8 +1,8 @@
-import { ComponentTO } from "../access/to/ComponentTO";
-import { ConstraintsHelper } from "../ConstraintsHelper";
-import dataStore from "../DataStore";
-import { CheckHelper } from "../util/CheckHelper";
-import { DataAccessUtil } from "../util/DataAccessUtil";
+import { ComponentTO } from '../access/to/ActorTO';
+import { ConstraintsHelper } from '../ConstraintsHelper';
+import dataStore from '../DataStore';
+import { CheckHelper } from '../util/CheckHelper';
+import { DataAccessUtil } from '../util/DataAccessUtil';
 
 export const ComponentRepository = {
   find(id: number): ComponentTO | undefined {

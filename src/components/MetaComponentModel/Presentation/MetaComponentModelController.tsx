@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ComponentCTO } from '../../../dataAccess/access/cto/ComponentCTO';
+import { ComponentCTO } from '../../../dataAccess/access/cto/ActorCTO';
 import { DataCTO } from '../../../dataAccess/access/cto/DataCTO';
 import { DataSetupCTO } from '../../../dataAccess/access/cto/DataSetupCTO';
 import { SequenceStepCTO } from '../../../dataAccess/access/cto/SequenceStepCTO';

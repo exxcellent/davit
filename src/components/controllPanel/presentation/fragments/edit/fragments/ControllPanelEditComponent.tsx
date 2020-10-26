@@ -1,17 +1,18 @@
-import React, { FunctionComponent, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Input } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
-import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
-import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
-import { handleError } from "../../../../../../slices/GlobalSlice";
-import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
-import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
-import { OptionField } from "../common/OptionField";
+import React, { FunctionComponent, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Input } from 'semantic-ui-react';
+import { isNullOrUndefined } from 'util';
+
+import { ComponentCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
+import { GroupTO } from '../../../../../../dataAccess/access/to/GroupTO';
+import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
+import { handleError } from '../../../../../../slices/GlobalSlice';
+import { Carv2Util } from '../../../../../../utils/Carv2Util';
+import { Carv2ButtonIcon, Carv2ButtonLabel } from '../../../../../common/fragments/buttons/Carv2Button';
+import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
+import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
+import { Carv2LabelTextfield } from '../common/fragments/Carv2LabelTextfield';
+import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditComponentProps {
   hidden: boolean;

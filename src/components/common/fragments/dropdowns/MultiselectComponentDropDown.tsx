@@ -1,8 +1,9 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import React, { FunctionComponent } from 'react';
+import { useSelector } from 'react-redux';
+import { Dropdown, DropdownItemProps, DropdownProps } from 'semantic-ui-react';
+
+import { ComponentCTO } from '../../../../dataAccess/access/cto/ActorCTO';
+import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
 
 interface MultiselectComponentDropDownProps extends DropdownProps {
   onSelect: (dataIds: number[] | undefined) => void;
@@ -29,7 +30,7 @@ export const MultiselectComponentDropDown: FunctionComponent<MultiselectComponen
       value={selected}
       scrolling
       disabled={components.length > 0 ? false : true}
-      style={{ overflow: 'auto' }}
+      style={{ overflow: "auto" }}
     />
   );
 };

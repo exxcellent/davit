@@ -1,5 +1,5 @@
+import { ComponentCTO } from './access/cto/ActorCTO';
 import { ChainCTO } from './access/cto/ChainCTO';
-import { ComponentCTO } from './access/cto/ComponentCTO';
 import { DataCTO } from './access/cto/DataCTO';
 import { DataSetupCTO } from './access/cto/DataSetupCTO';
 import { SequenceCTO } from './access/cto/SequenceCTO';

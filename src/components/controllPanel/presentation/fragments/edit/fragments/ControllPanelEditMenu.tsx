@@ -1,19 +1,20 @@
-import React, { FunctionComponent } from "react";
-import { Button } from "semantic-ui-react";
-import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
-import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
-import { ChainTO } from "../../../../../../dataAccess/access/to/ChainTO";
-import { DataRelationTO } from "../../../../../../dataAccess/access/to/DataRelationTO";
-import { DataSetupTO } from "../../../../../../dataAccess/access/to/DataSetupTO";
-import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
-import { ChainDropDownButton } from "../../../../../common/fragments/dropdowns/ChainDropDown";
-import { ComponentDropDownButton } from "../../../../../common/fragments/dropdowns/ComponentDropDown";
-import { DataDropDownButton } from "../../../../../common/fragments/dropdowns/DataDropDown";
-import { DataSetupDropDownButton } from "../../../../../common/fragments/dropdowns/DataSetupDropDown";
-import { RelationDropDownButton } from "../../../../../common/fragments/dropdowns/RelationDropDown";
-import { SequenceDropDownButton } from "../../../../../common/fragments/dropdowns/SequenceDropDown";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { OptionField } from "../common/OptionField";
+import React, { FunctionComponent } from 'react';
+import { Button } from 'semantic-ui-react';
+
+import { ComponentCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
+import { DataCTO } from '../../../../../../dataAccess/access/cto/DataCTO';
+import { ChainTO } from '../../../../../../dataAccess/access/to/ChainTO';
+import { DataRelationTO } from '../../../../../../dataAccess/access/to/DataRelationTO';
+import { DataSetupTO } from '../../../../../../dataAccess/access/to/DataSetupTO';
+import { GroupTO } from '../../../../../../dataAccess/access/to/GroupTO';
+import { ChainDropDownButton } from '../../../../../common/fragments/dropdowns/ChainDropDown';
+import { ComponentDropDownButton } from '../../../../../common/fragments/dropdowns/ComponentDropDown';
+import { DataDropDownButton } from '../../../../../common/fragments/dropdowns/DataDropDown';
+import { DataSetupDropDownButton } from '../../../../../common/fragments/dropdowns/DataSetupDropDown';
+import { RelationDropDownButton } from '../../../../../common/fragments/dropdowns/RelationDropDown';
+import { SequenceDropDownButton } from '../../../../../common/fragments/dropdowns/SequenceDropDown';
+import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
+import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditMenuProps {
   editOrAddComponent: (component?: ComponentCTO) => void;
@@ -39,7 +40,13 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
   } = props;
 
   return (
-    <ControllPanelEditSub label="EDIT" hidden={hidden} onClickNavItem={() => { return; }}>
+    <ControllPanelEditSub
+      label="EDIT"
+      hidden={hidden}
+      onClickNavItem={() => {
+        return;
+      }}
+    >
       <div className="optionFieldSpacer">
         <OptionField label="component">
           <Button.Group>

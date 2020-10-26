@@ -1,13 +1,13 @@
-import { Carv2Util } from "../../utils/Carv2Util";
-import { ComponentCTO } from "../access/cto/ComponentCTO";
-import { GeometricalDataCTO } from "../access/cto/GeometraicalDataCTO";
-import { ComponentTO } from "../access/to/ComponentTO";
-import { DesignTO } from "../access/to/DesignTO";
-import { GroupTO } from "../access/to/GroupTO";
-import { ComponentRepository } from "../repositories/ComponentRepository";
-import { GroupRepository } from "../repositories/GroupRepository";
-import { CheckHelper } from "../util/CheckHelper";
-import { TechnicalDataAccessService } from "./TechnicalDataAccessService";
+import { Carv2Util } from '../../utils/Carv2Util';
+import { ComponentCTO } from '../access/cto/ActorCTO';
+import { GeometricalDataCTO } from '../access/cto/GeometraicalDataCTO';
+import { ComponentTO } from '../access/to/ActorTO';
+import { DesignTO } from '../access/to/DesignTO';
+import { GroupTO } from '../access/to/GroupTO';
+import { ComponentRepository } from '../repositories/ComponentRepository';
+import { GroupRepository } from '../repositories/GroupRepository';
+import { CheckHelper } from '../util/CheckHelper';
+import { TechnicalDataAccessService } from './TechnicalDataAccessService';
 
 export const ComponentDataAccessService = {
   findAll(): ComponentCTO[] {

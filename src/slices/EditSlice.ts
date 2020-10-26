@@ -2,8 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { AppThunk, RootState } from '../app/store';
 import { Arrow } from '../components/common/fragments/svg/Arrow';
+import { ComponentCTO } from '../dataAccess/access/cto/ActorCTO';
 import { ChainCTO } from '../dataAccess/access/cto/ChainCTO';
-import { ComponentCTO } from '../dataAccess/access/cto/ComponentCTO';
 import { DataCTO } from '../dataAccess/access/cto/DataCTO';
 import { DataSetupCTO } from '../dataAccess/access/cto/DataSetupCTO';
 import { GeometricalDataCTO } from '../dataAccess/access/cto/GeometraicalDataCTO';
@@ -29,6 +29,7 @@ import { Carv2Util } from '../utils/Carv2Util';
 import { handleError } from './GlobalSlice';
 import { MasterDataActions, masterDataSelectors } from './MasterDataSlice';
 import { SequenceModelActions } from './SequenceModelSlice';
+
 
 
 

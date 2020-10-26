@@ -1,7 +1,8 @@
-import React, { FunctionComponent } from "react";
-import { Card } from "semantic-ui-react";
-import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
-import { createViewFragment, ViewFragmentProps } from "../../../../viewDataTypes/ViewFragment";
+import React, { FunctionComponent } from 'react';
+import { Card } from 'semantic-ui-react';
+
+import { ComponentCTO } from '../../../../dataAccess/access/cto/ActorCTO';
+import { createViewFragment, ViewFragmentProps } from '../../../../viewDataTypes/ViewFragment';
 
 export interface MetaComponentFragmentProps {
   id: number;

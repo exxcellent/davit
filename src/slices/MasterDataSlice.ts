@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { AppThunk, RootState } from '../app/store';
-import { ComponentCTO } from '../dataAccess/access/cto/ComponentCTO';
+import { ComponentCTO } from '../dataAccess/access/cto/ActorCTO';
 import { DataCTO } from '../dataAccess/access/cto/DataCTO';
 import { ChainDecisionTO } from '../dataAccess/access/to/ChainDecisionTO';
 import { ChainlinkTO } from '../dataAccess/access/to/ChainlinkTO';
@@ -13,6 +13,7 @@ import { SequenceTO } from '../dataAccess/access/to/SequenceTO';
 import { DataAccess } from '../dataAccess/DataAccess';
 import { DataAccessResponse } from '../dataAccess/DataAccessResponse';
 import { handleError } from './GlobalSlice';
+
 
 interface MasterDataState {
   components: ComponentCTO[];
