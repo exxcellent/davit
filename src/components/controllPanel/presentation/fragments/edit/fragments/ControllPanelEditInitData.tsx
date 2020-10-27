@@ -11,7 +11,7 @@ import { masterDataSelectors } from '../../../../../../slices/MasterDataSlice';
 import { Carv2Util } from '../../../../../../utils/Carv2Util';
 import { Carv2ButtonIcon, Carv2ButtonLabel } from '../../../../../common/fragments/buttons/Carv2Button';
 import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
-import { ComponentDropDown } from '../../../../../common/fragments/dropdowns/ComponentDropDown';
+import { ActorDropDown } from '../../../../../common/fragments/dropdowns/ActorDropDown';
 import { DataAndInstanceId, InstanceDropDown } from '../../../../../common/fragments/dropdowns/InstanceDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
 import { OptionField } from '../common/OptionField';
@@ -20,17 +20,15 @@ export interface ControllPanelEditInitDataProps {
   hidden: boolean;
 }
 
-export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitDataProps> = (
-  props
-) => {
+export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitDataProps> = (props) => {
   const { hidden } = props;
   const {
     label,
     saveInitData,
     deleteInitData,
     data,
-    component,
-    setComponentId,
+    actor,
+    setActorId,
     setInstance,
     createAnother,
     key,
@@ -38,21 +36,14 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
   } = useControllPanelEditDataSetupViewModel();
 
   return (
-    <ControllPanelEditSub
-      label={label}
-      key={key}
-      hidden={hidden}
-      onClickNavItem={saveInitData}
-    >
+    <ControllPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveInitData}>
       <div className="optionFieldSpacer">
-        <OptionField label="Select Component to which data will be added">
-          <ComponentDropDown
-            onSelect={(comp) =>
-              comp ? setComponentId(comp.component.id) : setComponentId(-1)
-            }
-            placeholder="Select Component..."
+        <OptionField label="Select Actor to which data will be added">
+          <ActorDropDown
+            onSelect={(actor) => (actor ? setActorId(actor.actor.id) : setActorId(-1))}
+            placeholder="Select Actor..."
             onBlur={() => {}}
-            value={component}
+            value={actor}
           />
         </OptionField>
       </div>
@@ -61,10 +52,7 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
           <InstanceDropDown onSelect={setInstance} value={data} />
         </OptionField>
       </div>
-      <div
-        className="columnDivider controllPanelEditChild"
-        style={{ paddingLeft: "10px", paddingRight: "10px" }}
-      >
+      <div className="columnDivider controllPanelEditChild" style={{ paddingLeft: "10px", paddingRight: "10px" }}>
         <div>
           <OptionField label="Navigation">
             <Carv2ButtonLabel onClick={createAnother} label="Create another" />
@@ -82,9 +70,7 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
 };
 
 const useControllPanelEditDataSetupViewModel = () => {
-  const initDataToEdit: InitDataTO | null = useSelector(
-    editSelectors.initDataToEdit
-  );
+  const initDataToEdit: InitDataTO | null = useSelector(editSelectors.initDataToEdit);
   const dataSetup: DataSetupTO | null = useSelector(
     masterDataSelectors.getDataSetupToById(initDataToEdit?.dataSetupFk || -1)
   );
@@ -95,9 +81,7 @@ const useControllPanelEditDataSetupViewModel = () => {
   useEffect(() => {
     // check if sequence to edit is really set or gos back to edit mode
     if (initDataToEdit === null) {
-      handleError(
-        "Tried to go to edit initData without initDataToedit specified"
-      );
+      handleError("Tried to go to edit initData without initDataToedit specified");
       dispatch(EditActions.setMode.edit());
     }
     // used to focus the textfield on create another
@@ -108,7 +92,7 @@ const useControllPanelEditDataSetupViewModel = () => {
       console.info(initDataToEdit);
       if (
         initDataToEdit !== null &&
-        initDataToEdit?.componentFk !== -1 &&
+        initDataToEdit?.actorFk !== -1 &&
         initDataToEdit?.dataFk !== -1 &&
         initDataToEdit?.instanceFk !== -1 &&
         initDataToEdit?.dataSetupFk !== -1
@@ -120,9 +104,7 @@ const useControllPanelEditDataSetupViewModel = () => {
       if (newMode && newMode === "EDIT") {
         dispatch(EditActions.setMode.edit());
       } else {
-        dispatch(
-          EditActions.setMode.editDataSetup(initDataToEdit?.dataSetupFk)
-        );
+        dispatch(EditActions.setMode.editDataSetup(initDataToEdit?.dataSetupFk));
       }
     }
   };
@@ -134,17 +116,15 @@ const useControllPanelEditDataSetupViewModel = () => {
     }
   };
 
-  const setComponentId = (id: number) => {
+  const setActorId = (id: number) => {
     if (initDataToEdit !== null) {
       const copyInitDataToEdit: InitDataTO = Carv2Util.deepCopy(initDataToEdit);
-      copyInitDataToEdit.componentFk = id;
+      copyInitDataToEdit.actorFk = id;
       dispatch(EditActions.initData.update(copyInitDataToEdit));
     }
   };
 
-  const setInstance = (
-    dataAndInstanceId: DataAndInstanceId | undefined
-  ): void => {
+  const setInstance = (dataAndInstanceId: DataAndInstanceId | undefined): void => {
     if (dataAndInstanceId !== undefined) {
       const copyInitDataToEdit: InitDataTO = Carv2Util.deepCopy(initDataToEdit);
       copyInitDataToEdit.dataFk = dataAndInstanceId.dataFk;
@@ -185,10 +165,10 @@ const useControllPanelEditDataSetupViewModel = () => {
       instanceId: initDataToEdit?.instanceFk,
     }),
     getInstances,
-    component: initDataToEdit?.componentFk,
+    actor: initDataToEdit?.actorFk,
     deleteInitData,
     saveInitData,
-    setComponentId,
+    setActorId,
     setInstance,
     createAnother,
     key,

@@ -1,7 +1,7 @@
-import { ActionTO } from "../access/to/ActionTO";
-import dataStore from "../DataStore";
-import { CheckHelper } from "../util/CheckHelper";
-import { DataAccessUtil } from "../util/DataAccessUtil";
+import { ActionTO } from '../access/to/ActionTO';
+import dataStore from '../DataStore';
+import { CheckHelper } from '../util/CheckHelper';
+import { DataAccessUtil } from '../util/DataAccessUtil';
 
 export const ActionRepository = {
   find(actionId: number): ActionTO | undefined {
@@ -17,7 +17,7 @@ export const ActionRepository = {
   },
 
   save(action: ActionTO): ActionTO {
-    CheckHelper.nullCheck(action, "componentData");
+    CheckHelper.nullCheck(action, "actorData");
     let actionTO: ActionTO;
     if (action.id === -1) {
       actionTO = {

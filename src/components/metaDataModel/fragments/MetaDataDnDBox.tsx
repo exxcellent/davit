@@ -17,22 +17,14 @@ interface MetaDataDnDBox {
   dataCTOToEdit: DataCTO | null;
   dataRelationToEdit: DataRelationTO | null;
   dataRelations: DataRelationTO[];
-  componentDatas: ViewFragmentProps[];
+  actorDatas: ViewFragmentProps[];
   onSaveCallBack: (dataCTO: DataCTO) => void;
   onClick: (dataId: number) => void;
   fullScreen?: boolean;
 }
 
 export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
-  const {
-    dataCTOs,
-    dataCTOToEdit,
-    onSaveCallBack,
-    dataRelations,
-    dataRelationToEdit,
-    componentDatas,
-    fullScreen,
-  } = props;
+  const { dataCTOs, dataCTOToEdit, onSaveCallBack, dataRelations, dataRelationToEdit, actorDatas, fullScreen } = props;
 
   const constraintsRef = useRef(null);
 
@@ -57,9 +49,7 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
   const newWidth: number = (currentWindowHeight / ASPECT_RATIO) * WINDOW_FACTOR;
 
   const onPositionUpdate = (x: number, y: number, positionId: number) => {
-    const dataCTO = dataCTOs.find(
-      (dataCTO) => dataCTO.geometricalData.position.id === positionId
-    );
+    const dataCTO = dataCTOs.find((dataCTO) => dataCTO.geometricalData.position.id === positionId);
     if (dataCTO) {
       let copyDataCTO: DataCTO = Carv2Util.deepCopy(dataCTO);
       copyDataCTO.geometricalData.position.x = x;
@@ -70,24 +60,10 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
 
   const createConnections = () => {
     return dataRelations.map((dataRelation) => {
-      const geoData1: GeometricalDataCTO | null = getGeometriaclDataByDataId(
-        dataRelation.data1Fk
-      );
-      const geoData2: GeometricalDataCTO | null = getGeometriaclDataByDataId(
-        dataRelation.data2Fk
-      );
-      if (
-        !(dataRelationToEdit && dataRelationToEdit.id === dataRelation.id) &&
-        geoData1 &&
-        geoData2
-      ) {
-        return createCornerConnection(
-          geoData1,
-          geoData2,
-          dataRelation,
-          dataRelation.id,
-          constraintsRef
-        );
+      const geoData1: GeometricalDataCTO | null = getGeometriaclDataByDataId(dataRelation.data1Fk);
+      const geoData2: GeometricalDataCTO | null = getGeometriaclDataByDataId(dataRelation.data2Fk);
+      if (!(dataRelationToEdit && dataRelationToEdit.id === dataRelation.id) && geoData1 && geoData2) {
+        return createCornerConnection(geoData1, geoData2, dataRelation, dataRelation.id, constraintsRef);
       } else {
         return <></>;
       }
@@ -107,32 +83,22 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
         initName={dataCTO.data.name}
         initWidth={dataCTO.geometricalData.geometricalData.width}
         initHeigth={dataCTO.geometricalData.geometricalData.height}
-        dataFragments={componentDatas.filter(
-          (comp) =>
-            comp.parentId === dataCTO.data.id ||
-            (comp.parentId as { dataId: number; instanceId: number }).dataId ===
-              dataCTO.data.id
+        dataFragments={actorDatas.filter(
+          (actor) =>
+            actor.parentId === dataCTO.data.id ||
+            (actor.parentId as { dataId: number; instanceId: number }).dataId === dataCTO.data.id
         )}
         instances={dataCTO.data.instances}
         zoomFactor={1}
         type="DATA"
       />
     );
-    return createDnDItem(
-      dataCTO.geometricalData.position,
-      onPositionUpdate,
-      constraintsRef,
-      metaDataFragment
-    );
+    return createDnDItem(dataCTO.geometricalData.position, onPositionUpdate, constraintsRef, metaDataFragment);
   };
 
   const createDataRelationToEdit = (dataRelation: DataRelationTO) => {
-    const geoData1: GeometricalDataCTO | null = getGeometriaclDataByDataId(
-      dataRelation.data1Fk
-    );
-    const geoData2: GeometricalDataCTO | null = getGeometriaclDataByDataId(
-      dataRelation.data2Fk
-    );
+    const geoData1: GeometricalDataCTO | null = getGeometriaclDataByDataId(dataRelation.data1Fk);
+    const geoData2: GeometricalDataCTO | null = getGeometriaclDataByDataId(dataRelation.data2Fk);
     if (
       dataRelation.data1Fk !== -1 &&
       dataRelation.data2Fk !== -1 &&
@@ -141,23 +107,12 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
       geoData1 &&
       geoData2
     ) {
-      return createCornerConnection(
-        geoData1,
-        geoData2,
-        dataRelation,
-        dataRelation.id,
-        constraintsRef,
-        true
-      );
+      return createCornerConnection(geoData1, geoData2, dataRelation, dataRelation.id, constraintsRef, true);
     }
   };
 
-  const getGeometriaclDataByDataId = (
-    dataId: number
-  ): GeometricalDataCTO | null => {
-    const data: DataCTO | undefined = dataCTOs.find(
-      (data) => data.data.id === dataId
-    );
+  const getGeometriaclDataByDataId = (dataId: number): GeometricalDataCTO | null => {
+    const data: DataCTO | undefined = dataCTOs.find((data) => data.data.id === dataId);
     if (data) {
       return data.geometricalData;
     }

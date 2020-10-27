@@ -10,7 +10,7 @@ import { handleError } from '../../../../../../slices/GlobalSlice';
 import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
 import { Carv2Util } from '../../../../../../utils/Carv2Util';
 import { Carv2ButtonIcon } from '../../../../../common/fragments/buttons/Carv2Button';
-import { ComponentDropDown } from '../../../../../common/fragments/dropdowns/ComponentDropDown';
+import { ActorDropDown } from '../../../../../common/fragments/dropdowns/ActorDropDown';
 import { DataAndInstanceId, InstanceDropDownMultiselect } from '../../../../../common/fragments/dropdowns/InstanceDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
 import { OptionField } from '../common/OptionField';
@@ -24,8 +24,8 @@ export const ControllPanelEditChainCondition: FunctionComponent<ControllPanelEdi
   const {
     label,
     setMode,
-    componentFk,
-    setComponentFk,
+    actorFk,
+    setActorFk,
     getDecision,
     setHas,
     setData,
@@ -51,13 +51,13 @@ export const ControllPanelEditChainCondition: FunctionComponent<ControllPanelEdi
   return (
     <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={setMode}>
       <div className="controllPanelEditChild">
-        <OptionField label="Select Component">
-          <ComponentDropDown value={componentFk} onSelect={(comp) => setComponentFk(comp?.component.id || -1)} />
+        <OptionField label="Select Actor">
+          <ActorDropDown value={actorFk} onSelect={(actor) => setActorFk(actor?.actor.id || -1)} />
         </OptionField>
       </div>
       <div className="columnDivider optionFieldSpacer">{hasDropDown}</div>
       <div className="columnDivider optionFieldSpacer">
-        <OptionField label="Select data for component">
+        <OptionField label="Select data for actor">
           <InstanceDropDownMultiselect
             onSelect={(data) => {
               setData(data);
@@ -65,7 +65,7 @@ export const ControllPanelEditChainCondition: FunctionComponent<ControllPanelEdi
             selected={dataFks || []}
           />
         </OptionField>
-        {/* <OptionField label="Select data for component">
+        {/* <OptionField label="Select data for actor">
           <MultiselectDataDropDown
             onSelect={(data) => {
               setData(data);
@@ -117,10 +117,10 @@ const useControllPanelEditConditionViewModel = () => {
     }
   };
 
-  const setComponentFk = (compId: number) => {
+  const setActorFk = (actorId: number) => {
     if (!isNullOrUndefined(decisionToEdit)) {
       let copyDecisionToEdit: ChainDecisionTO = Carv2Util.deepCopy(decisionToEdit);
-      copyDecisionToEdit.componentFk = compId;
+      copyDecisionToEdit.actorFk = actorId;
       dispatch(EditActions.chainDecision.create(copyDecisionToEdit));
     }
   };
@@ -145,8 +145,8 @@ const useControllPanelEditConditionViewModel = () => {
   return {
     label: "EDIT * " + (chain?.name || "") + " * " + (decisionToEdit?.name || "") + " * CONDITION",
     setMode,
-    componentFk: decisionToEdit?.componentFk,
-    setComponentFk,
+    actorFk: decisionToEdit?.actorFk,
+    setActorFk,
     getDecision,
     setHas,
     setData,

@@ -49,7 +49,7 @@
   border-image: linear-gradient(to bottom, var(--carv2-background-color-shadow), var(--carv2-background-color)) 1 1 100%;
 }
 
-.componentModelFullscreen {
+.actorModelFullscreen {
   border: 1px solid black;
   background-color: var(--carv2-background-color);
 }
@@ -59,7 +59,7 @@
   background-color: var(--carv2-background-color);
 }
 
-.componentModel {
+.actorModel {
   grid-area: compModel;
   border-style: solid;
   border-width: 0 2px 2px 0;
@@ -577,7 +577,7 @@
   animation-name: glow;
 }
 
-/* -------------------------------------------- Component -------------------------------------------- */
+/* -------------------------------------------- Acrot -------------------------------------------- */
 
 .card {
   display: flex;
@@ -645,7 +645,7 @@ carhHeaderText {
   animation-timing-function: ease-in-out;
 }
 
-.carv2ComponentDataNEW {
+.carv2ActorDataNEW {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -655,7 +655,7 @@ carhHeaderText {
   color: var(--carv2-data-text-color) !important;
 }
 
-.carv2ComponentDataPERSISTENT {
+.carv2ActorDataPERSISTENT {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -665,7 +665,7 @@ carhHeaderText {
   color: var(--carv2-data-text-color) !important;
 }
 
-.carv2ComponentDataDELETED {
+.carv2ActorDataDELETED {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -675,7 +675,7 @@ carhHeaderText {
   color: var(--carv2-data-text-color) !important;
 }
 
-.carv2ComponentDataADD {
+.carv2ActorDataADD {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -686,7 +686,7 @@ carhHeaderText {
   box-shadow: 6px 6px 10px var(--carv2-data-add-color) inset !important;
 }
 
-.carv2ComponentDataCHECK {
+.carv2ActorDataCHECK {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -697,7 +697,7 @@ carhHeaderText {
   box-shadow: 6px 6px 10px var(--carv2-data-persistent-color) inset !important;
 }
 
-.carv2ComponentDataDELETE {
+.carv2ActorDataDELETE {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -708,7 +708,7 @@ carhHeaderText {
   box-shadow: 6px 6px 10px var(--carv2-data-delete-color) inset !important;
 }
 
-.carv2ComponentDataERROR_ADD {
+.carv2ActorDataERROR_ADD {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -719,7 +719,7 @@ carhHeaderText {
   box-shadow: 0px 0px 20px rgb(255, 0, 0);
 }
 
-.carv2ComponentDataERROR_DELETE {
+.carv2ActorDataERROR_DELETE {
   display: flex;
   justify-content: center;
   align-items: center;

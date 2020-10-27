@@ -1,40 +1,40 @@
-import { ComponentTO } from "../access/to/ComponentTO";
-import { ConstraintsHelper } from "../ConstraintsHelper";
-import dataStore from "../DataStore";
-import { CheckHelper } from "../util/CheckHelper";
-import { DataAccessUtil } from "../util/DataAccessUtil";
+import { ActorTO } from '../access/to/ActorTO';
+import { ConstraintsHelper } from '../ConstraintsHelper';
+import dataStore from '../DataStore';
+import { CheckHelper } from '../util/CheckHelper';
+import { DataAccessUtil } from '../util/DataAccessUtil';
 
-export const ComponentRepository = {
-  find(id: number): ComponentTO | undefined {
-    return dataStore.getDataStore().components.get(id);
+export const ActorRepository = {
+  find(id: number): ActorTO | undefined {
+    return dataStore.getDataStore().actors.get(id);
   },
 
-  findAll(): ComponentTO[] {
-    return Array.from(dataStore.getDataStore().components.values());
+  findAll(): ActorTO[] {
+    return Array.from(dataStore.getDataStore().actors.values());
   },
 
-  delete(component: ComponentTO): ComponentTO {
-    ConstraintsHelper.deleteComponentConstraintCheck(component.id, dataStore.getDataStore());
-    let success = dataStore.getDataStore().components.delete(component.id!);
+  delete(actor: ActorTO): ActorTO {
+    ConstraintsHelper.deleteActorConstraintCheck(actor.id, dataStore.getDataStore());
+    let success = dataStore.getDataStore().actors.delete(actor.id!);
     if (!success) {
       throw new Error("dataAccess.repository.error.notExists");
     }
-    return component;
+    return actor;
   },
 
-  save(component: ComponentTO): ComponentTO {
-    CheckHelper.nullCheck(component, "component");
-    let componentTO: ComponentTO;
-    if (component.id === -1) {
-      componentTO = {
-        ...component,
+  save(actor: ActorTO): ActorTO {
+    CheckHelper.nullCheck(actor, "actor");
+    let actorTO: ActorTO;
+    if (actor.id === -1) {
+      actorTO = {
+        ...actor,
         id: DataAccessUtil.determineNewId(this.findAll()),
       };
-      console.info("set new component id: " + componentTO.id);
+      console.info("set new actor id: " + actorTO.id);
     } else {
-      componentTO = { ...component };
+      actorTO = { ...actor };
     }
-    dataStore.getDataStore().components.set(componentTO.id!, componentTO);
-    return componentTO;
+    dataStore.getDataStore().actors.set(actorTO.id!, actorTO);
+    return actorTO;
   },
 };

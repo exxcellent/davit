@@ -1,17 +1,18 @@
-import React, { FunctionComponent, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Input } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { ComponentCTO } from "../../../../../../dataAccess/access/cto/ComponentCTO";
-import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
-import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
-import { handleError } from "../../../../../../slices/GlobalSlice";
-import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
-import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
-import { OptionField } from "../common/OptionField";
+import React, { FunctionComponent, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Input } from 'semantic-ui-react';
+import { isNullOrUndefined } from 'util';
+
+import { ActorCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
+import { GroupTO } from '../../../../../../dataAccess/access/to/GroupTO';
+import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
+import { handleError } from '../../../../../../slices/GlobalSlice';
+import { Carv2Util } from '../../../../../../utils/Carv2Util';
+import { Carv2ButtonIcon, Carv2ButtonLabel } from '../../../../../common/fragments/buttons/Carv2Button';
+import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
+import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
+import { Carv2LabelTextfield } from '../common/fragments/Carv2LabelTextfield';
+import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditComponentProps {
   hidden: boolean;
@@ -68,7 +69,7 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
 };
 
 const useControllPanelEditComponentViewModel = () => {
-  const componentToEdit: ComponentCTO | null = useSelector(editSelectors.componentToEdit);
+  const componentToEdit: ActorCTO | null = useSelector(editSelectors.actorToEdit);
   const dispatch = useDispatch();
   const textInput = useRef<Input>(null);
 
@@ -83,20 +84,20 @@ const useControllPanelEditComponentViewModel = () => {
   }, [componentToEdit]);
 
   const changeName = (name: string) => {
-    let copyComponentToEdit: ComponentCTO = Carv2Util.deepCopy(componentToEdit);
-    copyComponentToEdit.component.name = name;
-    dispatch(EditActions.setMode.editComponent(copyComponentToEdit));
+    let copyComponentToEdit: ActorCTO = Carv2Util.deepCopy(componentToEdit);
+    copyComponentToEdit.actor.name = name;
+    dispatch(EditActions.setMode.editActor(copyComponentToEdit));
   };
 
   const updateComponent = () => {
-    let copyComponentToEdit: ComponentCTO = Carv2Util.deepCopy(componentToEdit);
-    dispatch(EditActions.component.save(copyComponentToEdit));
+    let copyComponentToEdit: ActorCTO = Carv2Util.deepCopy(componentToEdit);
+    dispatch(EditActions.actor.save(copyComponentToEdit));
   };
 
   const saveComponent = (newMode?: string) => {
     if (!isNullOrUndefined(componentToEdit)) {
-      if (componentToEdit?.component.name !== "") {
-        dispatch(EditActions.component.save(componentToEdit!));
+      if (componentToEdit?.actor.name !== "") {
+        dispatch(EditActions.actor.save(componentToEdit!));
       } else {
         deleteComponent();
       }
@@ -105,37 +106,37 @@ const useControllPanelEditComponentViewModel = () => {
   };
 
   const createAnother = () => {
-    dispatch(EditActions.setMode.editComponent());
+    dispatch(EditActions.setMode.editActor());
   };
 
   const deleteComponent = () => {
-    dispatch(EditActions.component.delete(componentToEdit!));
+    dispatch(EditActions.actor.delete(componentToEdit!));
     dispatch(EditActions.setMode.edit());
   };
 
   const setGroup = (group: GroupTO | undefined) => {
     if (!isNullOrUndefined(componentToEdit)) {
-      let copyComponentToEdit: ComponentCTO = Carv2Util.deepCopy(componentToEdit);
+      let copyComponentToEdit: ActorCTO = Carv2Util.deepCopy(componentToEdit);
       if (group !== undefined) {
-        copyComponentToEdit.component.groupFks = group.id;
+        copyComponentToEdit.actor.groupFks = group.id;
       } else {
-        copyComponentToEdit.component.groupFks = -1;
+        copyComponentToEdit.actor.groupFks = -1;
       }
-      dispatch(EditActions.setMode.editComponent(copyComponentToEdit));
+      dispatch(EditActions.setMode.editActor(copyComponentToEdit));
     }
   };
 
   return {
-    label: "EDIT * " + (componentToEdit?.component.name || ""),
-    name: componentToEdit?.component.name,
+    label: "EDIT * " + (componentToEdit?.actor.name || ""),
+    name: componentToEdit?.actor.name,
     changeName,
     saveComponent,
     deleteComponent,
     textInput,
     setGroup,
-    compGroup: componentToEdit?.component.groupFks !== -1 ? componentToEdit?.component.groupFks : undefined,
+    compGroup: componentToEdit?.actor.groupFks !== -1 ? componentToEdit?.actor.groupFks : undefined,
     updateComponent,
     createAnother,
-    id: componentToEdit?.component.id || -1,
+    id: componentToEdit?.actor.id || -1,
   };
 };

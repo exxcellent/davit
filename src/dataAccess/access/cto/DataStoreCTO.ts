@@ -1,25 +1,25 @@
-import { ActionTO } from "../to/ActionTO";
-import { ChainDecisionTO } from "../to/ChainDecisionTO";
-import { ChainlinkTO } from "../to/ChainlinkTO";
-import { ChainTO } from "../to/ChainTO";
-import { ComponentTO } from "../to/ComponentTO";
-import { DataInstanceTO } from "../to/DataInstanceTO";
-import { DataRelationTO } from "../to/DataRelationTO";
-import { DataSetupTO } from "../to/DataSetupTO";
-import { DataTO } from "../to/DataTO";
-import { DecisionTO } from "../to/DecisionTO";
-import { DesignTO } from "../to/DesignTO";
-import { GeometricalDataTO } from "../to/GeometricalDataTO";
-import { GroupTO } from "../to/GroupTO";
-import { InitDataTO } from "../to/InitDataTO";
-import { PositionTO } from "../to/PositionTO";
-import { SequenceStepTO } from "../to/SequenceStepTO";
-import { SequenceTO } from "../to/SequenceTO";
+import { ActionTO } from '../to/ActionTO';
+import { ActorTO } from '../to/ActorTO';
+import { ChainDecisionTO } from '../to/ChainDecisionTO';
+import { ChainlinkTO } from '../to/ChainlinkTO';
+import { ChainTO } from '../to/ChainTO';
+import { DataInstanceTO } from '../to/DataInstanceTO';
+import { DataRelationTO } from '../to/DataRelationTO';
+import { DataSetupTO } from '../to/DataSetupTO';
+import { DataTO } from '../to/DataTO';
+import { DecisionTO } from '../to/DecisionTO';
+import { DesignTO } from '../to/DesignTO';
+import { GeometricalDataTO } from '../to/GeometricalDataTO';
+import { GroupTO } from '../to/GroupTO';
+import { InitDataTO } from '../to/InitDataTO';
+import { PositionTO } from '../to/PositionTO';
+import { SequenceStepTO } from '../to/SequenceStepTO';
+import { SequenceTO } from '../to/SequenceTO';
 
 export class DataStoreCTO {
   constructor(
-    // Components
-    public components = new Map<number, ComponentTO>(),
+    // Actors
+    public actors = new Map<number, ActorTO>(),
     public groups = new Map<number, GroupTO>(),
     // Technical
     public positions = new Map<number, PositionTO>(),

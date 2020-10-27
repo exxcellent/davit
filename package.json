@@ -1,11 +1,11 @@
 {
-  "name": "carv_2",
-  "version": "0.1.0",
+  "name": "DAVIT",
+  "version": "0.2.0",
   "description": "Modeling Tool",
   "author": "Flo Andy",
   "main": "public/electron.js",
   "build": {
-    "appId": "carv_2"
+    "appId": "DAVIT"
   },
   "homepage": "./",
   "dependencies": {

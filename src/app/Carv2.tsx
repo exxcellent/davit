@@ -6,7 +6,7 @@ import { Route, Switch } from 'react-router-dom';
 
 import { ErrorNotification } from '../components/common/fragments/ErrorNotification';
 import { ControllPanelController } from '../components/controllPanel/presentation/ControllPanelController';
-import { MetaComponentModelController } from '../components/metaComponentModel/presentation/MetaComponentModelController';
+import { ActorModelController } from '../components/metaComponentModel/presentation/ActorModelController';
 import { MetaDataModelController } from '../components/metaDataModel/MetaDataModelController';
 import { FlowChartController } from '../components/sequenceModel/FlowChartController';
 import { SequenceTableModelController } from '../components/sequenceTableModel/presentation/SequenceTableModelController';
@@ -16,7 +16,7 @@ import { useZoomDisable } from '../utils/WindowUtil';
 
 export const ModuleRoutes = {
   home: "/",
-  component: "/component",
+  actor: "/component",
   data: "/data",
   table: "/table",
   flowChart: "/flowChart",
@@ -38,7 +38,7 @@ export function Carv2() {
         <Route exact path={ModuleRoutes.home}>
           <div className="carvGridContainer">
             <ControllPanelController />
-            <MetaComponentModelController />
+            <ActorModelController />
             <MetaDataModelController />
             <SidePanelController />
             <FlowChartController />
@@ -46,10 +46,10 @@ export function Carv2() {
             <ErrorNotification />
           </div>
         </Route>
-        <Route exact path={ModuleRoutes.component}>
+        <Route exact path={ModuleRoutes.actor}>
           <div className="Carv2">
             <div className="componentPage">
-              <MetaComponentModelController fullScreen />
+              <ActorModelController fullScreen />
             </div>
           </div>
         </Route>

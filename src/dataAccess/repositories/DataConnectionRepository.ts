@@ -1,7 +1,7 @@
-import { DataRelationTO } from "../access/to/DataRelationTO";
-import dataStore from "../DataStore";
-import { CheckHelper } from "../util/CheckHelper";
-import { DataAccessUtil } from "../util/DataAccessUtil";
+import { DataRelationTO } from '../access/to/DataRelationTO';
+import dataStore from '../DataStore';
+import { CheckHelper } from '../util/CheckHelper';
+import { DataAccessUtil } from '../util/DataAccessUtil';
 
 export const DataConnectionRepository = {
   find(dataConnectionId: number): DataRelationTO | undefined {
@@ -18,7 +18,7 @@ export const DataConnectionRepository = {
         ...dataRelation,
         id: DataAccessUtil.determineNewId(this.findAll()),
       };
-      console.info("set new component id: " + dataRelationTO.id);
+      console.info("set new actor id: " + dataRelationTO.id);
     } else {
       dataRelationTO = { ...dataRelation };
     }

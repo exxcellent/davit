@@ -1,6 +1,6 @@
 export interface StoreTO {
-  // Component
-  components: any[];
+  // Acotrs
+  actors: any[];
   groups: any[];
   // Technical
   geometricalDatas: any[];

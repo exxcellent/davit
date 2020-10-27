@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input } from 'semantic-ui-react';
 import { isNullOrUndefined } from 'util';
 
-import { ComponentCTO } from '../../../../../../dataAccess/access/cto/ComponentCTO';
+import { ActorCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
 import { DataSetupCTO } from '../../../../../../dataAccess/access/cto/DataSetupCTO';
 import { InitDataTO } from '../../../../../../dataAccess/access/to/InitDataTO';
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
@@ -20,9 +20,7 @@ export interface ControllPanelEditDataSetupProps {
   hidden: boolean;
 }
 
-export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditDataSetupProps> = (
-  props
-) => {
+export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditDataSetupProps> = (props) => {
   const { hidden } = props;
   const {
     label,
@@ -39,11 +37,7 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
   } = useControllPanelEditDataSetupViewModel();
 
   return (
-    <ControllPanelEditSub
-      label={label}
-      hidden={hidden}
-      onClickNavItem={saveDataSetup}
-    >
+    <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={saveDataSetup}>
       <div className="optionFieldSpacer">
         <OptionField label="Data - SETUP NAME">
           <Carv2LabelTextfield
@@ -61,20 +55,11 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
       <div className="columnDivider optionFieldSpacer">
         <OptionField label="Create / edit | Init - Data">
           <Button.Group>
-            <Button
-              icon="add"
-              inverted
-              color="orange"
-              onClick={createInitData}
-            />
+            <Button icon="add" inverted color="orange" onClick={createInitData} />
             <Button id="buttonGroupLabel" disabled inverted color="orange">
               Data
             </Button>
-            <InitDataDropDownButton
-              onSelect={editInitData}
-              icon="wrench"
-              initDatas={getInitDatas}
-            />
+            <InitDataDropDownButton onSelect={editInitData} icon="wrench" initDatas={getInitDatas} />
           </Button.Group>
         </OptionField>
       </div>
@@ -96,21 +81,15 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
 };
 
 const useControllPanelEditDataSetupViewModel = () => {
-  const dataSetupToEdit: DataSetupCTO | null = useSelector(
-    editSelectors.dataSetupToEdit
-  );
+  const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.dataSetupToEdit);
   const dispatch = useDispatch();
-  const [componentToEdit, setComponentToEdit] = useState<ComponentCTO | null>(
-    null
-  );
+  const [actorToEdit, setActorToEdit] = useState<ActorCTO | null>(null);
   const textInput = useRef<Input>(null);
 
   useEffect(() => {
     // check if sequence to edit is really set or gos back to edit mode
     if (isNullOrUndefined(dataSetupToEdit)) {
-      handleError(
-        "Tried to go to edit dataSetup without dataSetupToedit specified"
-      );
+      handleError("Tried to go to edit dataSetup without dataSetupToedit specified");
       dispatch(EditActions.setMode.edit());
     }
     // used to focus the textfield on create another
@@ -119,9 +98,7 @@ const useControllPanelEditDataSetupViewModel = () => {
 
   const changeName = (name: string) => {
     if (!isNullOrUndefined(dataSetupToEdit)) {
-      let copyDataSetupToEdit: DataSetupCTO = Carv2Util.deepCopy(
-        dataSetupToEdit
-      );
+      let copyDataSetupToEdit: DataSetupCTO = Carv2Util.deepCopy(dataSetupToEdit);
       copyDataSetupToEdit.dataSetup.name = name;
       dispatch(EditActions.dataSetup.update(copyDataSetupToEdit));
     }
@@ -163,14 +140,9 @@ const useControllPanelEditDataSetupViewModel = () => {
 
   const getDatas = (): number[] => {
     let dataIds: number[] = [];
-    if (
-      !isNullOrUndefined(dataSetupToEdit) &&
-      !isNullOrUndefined(componentToEdit)
-    ) {
+    if (!isNullOrUndefined(dataSetupToEdit) && !isNullOrUndefined(actorToEdit)) {
       dataSetupToEdit.initDatas
-        .filter(
-          (initData) => initData.componentFk === componentToEdit.component.id
-        )
+        .filter((initData) => initData.actorFk === actorToEdit.actor.id)
         .forEach((initData) => dataIds.push(initData.dataFk));
     }
     return dataIds;
@@ -198,7 +170,7 @@ const useControllPanelEditDataSetupViewModel = () => {
     deleteDataSetup,
     textInput,
     copyDataSetup,
-    setComponentToEdit,
+    setActorToEdit,
     getInitDatas: dataSetupToEdit?.initDatas ? dataSetupToEdit.initDatas : [],
     getDatas,
     createAnother,

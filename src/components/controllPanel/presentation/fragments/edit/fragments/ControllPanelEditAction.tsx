@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ComponentCTO } from '../../../../../../dataAccess/access/cto/ComponentCTO';
+import { ActorCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
 import { DataCTO } from '../../../../../../dataAccess/access/cto/DataCTO';
 import { SequenceCTO } from '../../../../../../dataAccess/access/cto/SequenceCTO';
 import { ActionTO } from '../../../../../../dataAccess/access/to/ActionTO';
@@ -13,7 +13,7 @@ import { Carv2Util } from '../../../../../../utils/Carv2Util';
 import { Carv2ButtonIcon, Carv2ButtonLabel } from '../../../../../common/fragments/buttons/Carv2Button';
 import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { ActionTypeDropDown } from '../../../../../common/fragments/dropdowns/ActionTypeDropDown';
-import { ComponentDropDown } from '../../../../../common/fragments/dropdowns/ComponentDropDown';
+import { ActorDropDown } from '../../../../../common/fragments/dropdowns/ActorDropDown';
 import { DataDropDown } from '../../../../../common/fragments/dropdowns/DataDropDown';
 import { DataAndInstanceId, InstanceDropDown } from '../../../../../common/fragments/dropdowns/InstanceDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
@@ -23,18 +23,16 @@ export interface ControllPanelEditActionProps {
   hidden: boolean;
 }
 
-export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionProps> = (
-  props
-) => {
+export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionProps> = (props) => {
   const { hidden } = props;
   const {
     label,
-    setComponent,
+    setActor,
     setAction,
     setData,
     deleteAction,
-    sendingComponentId,
-    receivingComponentId,
+    sendingActorId,
+    receivingActorId,
     dataId,
     actionType,
     setMode,
@@ -45,12 +43,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
   } = useControllPanelEditActionViewModel();
 
   return (
-    <ControllPanelEditSub
-      label={label}
-      key={key}
-      hidden={hidden}
-      onClickNavItem={setMode}
-    >
+    <ControllPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={setMode}>
       <div className="optionFieldSpacer">
         <OptionField>
           <OptionField label="Select action to execute">
@@ -58,14 +51,9 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
           </OptionField>
           <OptionField label="Data">
             {actionType === ActionType.ADD && (
-              <InstanceDropDown
-                onSelect={setDataAndInstance}
-                value={dataAndInstance}
-              />
+              <InstanceDropDown onSelect={setDataAndInstance} value={dataAndInstance} />
             )}
-            {actionType !== ActionType.ADD && (
-              <DataDropDown onSelect={setData} value={dataId} />
-            )}
+            {actionType !== ActionType.ADD && <DataDropDown onSelect={setData} value={dataId} />}
           </OptionField>
         </OptionField>
       </div>
@@ -74,22 +62,10 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
           <label className="optionFieldLabel" style={{ paddingTop: "1em" }}>
             {actionType === ActionType.ADD ? "TO" : "FROM"}
           </label>
-          <OptionField
-            label={
-              actionType?.includes("SEND")
-                ? "Select sending Component"
-                : "Component"
-            }
-          >
-            <ComponentDropDown
-              onSelect={(comp) =>
-                setComponent(comp, actionType?.includes("SEND") ? true : false)
-              }
-              value={
-                actionType?.includes("SEND")
-                  ? sendingComponentId
-                  : receivingComponentId
-              }
+          <OptionField label={actionType?.includes("SEND") ? "Select sending Actor" : "Actor"}>
+            <ActorDropDown
+              onSelect={(actor) => setActor(actor, actionType?.includes("SEND") ? true : false)}
+              value={actionType?.includes("SEND") ? sendingActorId : receivingActorId}
             />
           </OptionField>
         </OptionField>
@@ -100,11 +76,8 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
             <label className="optionFieldLabel" style={{ paddingTop: "1em" }}>
               TO
             </label>
-            <OptionField label="Select receiving Component">
-              <ComponentDropDown
-                onSelect={(comp) => setComponent(comp, false)}
-                value={receivingComponentId}
-              />
+            <OptionField label="Select receiving Actor">
+              <ActorDropDown onSelect={(actor) => setActor(actor, false)} value={receivingActorId} />
             </OptionField>
           </OptionField>
         )}
@@ -128,19 +101,15 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
 
 const useControllPanelEditActionViewModel = () => {
   const actionToEdit: ActionTO | null = useSelector(editSelectors.actionToEdit);
-  const selectedSequence: SequenceCTO | null = useSelector(
-    sequenceModelSelectors.selectSequence
-  );
+  const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
   const dispatch = useDispatch();
 
   const [key, setKey] = useState<number>(0);
 
   useEffect(() => {
-    // check if component to edit is really set or gos back to edit mode
+    // check if actor to edit is really set or gos back to edit mode
     if (actionToEdit === null || actionToEdit === undefined) {
-      dispatch(
-        handleError("Tried to go to edit action without actionToEdit specified")
-      );
+      dispatch(handleError("Tried to go to edit action without actionToEdit specified"));
       dispatch(EditActions.setMode.edit());
     }
     // used to focus the textfield on create another
@@ -149,42 +118,27 @@ const useControllPanelEditActionViewModel = () => {
   const deleteAction = () => {
     if (actionToEdit !== null) {
       dispatch(EditActions.action.delete(actionToEdit));
-      dispatch(
-        EditActions.setMode.editStep(
-          EditActions.step.find(actionToEdit.sequenceStepFk)
-        )
-      );
+      dispatch(EditActions.setMode.editStep(EditActions.step.find(actionToEdit.sequenceStepFk)));
     }
   };
 
-  const setComponent = (
-    component: ComponentCTO | undefined,
-    sending: boolean
-  ): void => {
-    if (component !== undefined) {
+  const setActor = (actor: ActorCTO | undefined, sending: boolean): void => {
+    if (actor !== undefined) {
       let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
       sending
-        ? (copyActionToEdit.sendingComponentFk = component.component.id)
-        : (copyActionToEdit.receivingComponentFk = component.component.id);
+        ? (copyActionToEdit.sendingActorFk = actor.actor.id)
+        : (copyActionToEdit.receivingActorFk = actor.actor.id);
       dispatch(EditActions.action.update(copyActionToEdit));
       dispatch(EditActions.action.save(copyActionToEdit));
     }
   };
 
   const setAction = (newActionType: ActionType | undefined): void => {
-    if (
-      newActionType !== undefined &&
-      selectedSequence !== null &&
-      actionToEdit !== null
-    ) {
+    if (newActionType !== undefined && selectedSequence !== null && actionToEdit !== null) {
       let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
       copyActionToEdit.actionType = newActionType;
-      copyActionToEdit.sendingComponentFk = newActionType.includes("SEND")
-        ? actionToEdit.sendingComponentFk
-        : -1;
-      copyActionToEdit.receivingComponentFk = newActionType.includes("SEND")
-        ? actionToEdit.receivingComponentFk
-        : -1;
+      copyActionToEdit.sendingActorFk = newActionType.includes("SEND") ? actionToEdit.sendingActorFk : -1;
+      copyActionToEdit.receivingActorFk = newActionType.includes("SEND") ? actionToEdit.receivingActorFk : -1;
       dispatch(EditActions.action.update(copyActionToEdit));
       dispatch(EditActions.action.save(copyActionToEdit));
     }
@@ -199,9 +153,7 @@ const useControllPanelEditActionViewModel = () => {
     }
   };
 
-  const setDataAndInstance = (
-    dataAndInstance: DataAndInstanceId | undefined
-  ): void => {
+  const setDataAndInstance = (dataAndInstance: DataAndInstanceId | undefined): void => {
     if (dataAndInstance !== undefined) {
       let copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
       copyActionToEdit.dataFk = dataAndInstance.dataFk;
@@ -214,12 +166,9 @@ const useControllPanelEditActionViewModel = () => {
   const validAction = (action: ActionTO): boolean => {
     let valid: boolean = false;
     if (action.actionType.includes("SEND")) {
-      valid =
-        action.dataFk !== -1 &&
-        action.receivingComponentFk !== -1 &&
-        action.sendingComponentFk !== -1;
+      valid = action.dataFk !== -1 && action.receivingActorFk !== -1 && action.sendingActorFk !== -1;
     } else {
-      valid = action.dataFk !== -1 && action.receivingComponentFk !== -1;
+      valid = action.dataFk !== -1 && action.receivingActorFk !== -1;
     }
     return valid;
   };
@@ -232,15 +181,9 @@ const useControllPanelEditActionViewModel = () => {
       if (newMode && newMode === "EDIT") {
         dispatch(EditActions.setMode.edit());
       } else if (newMode && newMode === "SEQUENCE") {
-        dispatch(
-          EditActions.setMode.editSequence(selectedSequence?.sequenceTO.id)
-        );
+        dispatch(EditActions.setMode.editSequence(selectedSequence?.sequenceTO.id));
       } else {
-        dispatch(
-          EditActions.setMode.editStep(
-            EditActions.step.find(actionToEdit!.sequenceStepFk)
-          )
-        );
+        dispatch(EditActions.setMode.editStep(EditActions.step.find(actionToEdit!.sequenceStepFk)));
       }
     }
   };
@@ -257,11 +200,11 @@ const useControllPanelEditActionViewModel = () => {
   return {
     label: "EDIT * SEQUENCE * STEP * ACTION",
     action: actionToEdit,
-    setComponent,
+    setActor,
     setAction,
     setData,
-    sendingComponentId: actionToEdit?.sendingComponentFk,
-    receivingComponentId: actionToEdit?.receivingComponentFk,
+    sendingActorId: actionToEdit?.sendingActorFk,
+    receivingActorId: actionToEdit?.receivingActorFk,
     dataId: actionToEdit?.dataFk === -1 ? undefined : actionToEdit?.dataFk,
     actionType: actionToEdit?.actionType,
     deleteAction,

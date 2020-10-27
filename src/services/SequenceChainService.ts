@@ -5,8 +5,24 @@ import { ChainlinkCTO } from '../dataAccess/access/cto/ChainlinkCTO';
 import { DataSetupCTO } from '../dataAccess/access/cto/DataSetupCTO';
 import { ChainDecisionTO } from '../dataAccess/access/to/ChainDecisionTO';
 import { GoToChain, GoToTypesChain, TerminalChain } from '../dataAccess/access/types/GoToTypeChain';
-import { ComponentData } from '../viewDataTypes/ComponentData';
+import { ActorData } from '../viewDataTypes/ActorData';
 import { CalcSequence, SequenceService } from './SequenceService';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -17,7 +33,7 @@ export interface CalcChainLink {
   stepId: string;
   dataSetup: DataSetupCTO;
   sequence: CalcSequence;
-  errors: ComponentData[];
+  errors: ActorData[];
 }
 
 export interface CalcChain {
@@ -27,16 +43,16 @@ export interface CalcChain {
   terminal: TerminalChain;
 }
 
-interface MergedComponentDatas {
-  componentDatas: ComponentData[];
-  errors: ComponentData[];
+interface MergedActorDatas {
+  actorDatas: ActorData[];
+  errors: ActorData[];
 }
 
 export const SequenceChainService = {
   calculateChain: (sequenceChain: ChainCTO | null): CalcChain => {
     let calcSequenceChain: CalcChain = { calcLinks: [], linkIds: [], terminal: { type: GoToTypesChain.ERROR } };
     let loopStartingStep: number = -1;
-    let componenentDatas: ComponentData[] = [];
+    let actorDatas: ActorData[] = [];
 
     if (sequenceChain) {
       const root: ChainlinkCTO | null = getRoot(sequenceChain);
@@ -49,16 +65,16 @@ export const SequenceChainService = {
         while (!isLooping(loopStartingStep) && (type === GoToTypesChain.LINK || type === GoToTypesChain.DEC)) {
           if (type === GoToTypesChain.LINK) {
             const link: ChainlinkCTO = step as ChainlinkCTO;
-            const mergedComponentDatas: MergedComponentDatas = mergeComponentDatas(componenentDatas, link.dataSetup);
+            const mergedActorDatas: MergedActorDatas = mergeActorDatas(actorDatas, link.dataSetup);
 
-            loopStartingStep = checkForLoop(calcSequenceChain, link, mergedComponentDatas);
+            loopStartingStep = checkForLoop(calcSequenceChain, link, mergedActorDatas);
 
             const result: CalcSequence = SequenceService.calculateSequence(
               link.sequence,
-              mergedComponentDatas.componentDatas
+              mergedActorDatas.actorDatas
             );
 
-            componenentDatas = result.steps.length > 0 ? result.steps[result.steps.length - 1].componentDatas : [];
+            actorDatas = result.steps.length > 0 ? result.steps[result.steps.length - 1].actorDatas : [];
 
             // STEP ID
             const newLinkId = "_LINK_" + link.chainLink.id;
@@ -71,7 +87,7 @@ export const SequenceChainService = {
               stepId: stepId,
               sequence: result,
               dataSetup: link.dataSetup,
-              errors: mergedComponentDatas.errors,
+              errors: mergedActorDatas.errors,
             });
 
             if (!isLooping(loopStartingStep)) {
@@ -84,7 +100,7 @@ export const SequenceChainService = {
           if (type === GoToTypesChain.DEC) {
             const decision: ChainDecisionTO = step as ChainDecisionTO;
 
-            const goTo: GoToChain = executeDecisionCheck(decision, componenentDatas);
+            const goTo: GoToChain = executeDecisionCheck(decision, actorDatas);
             step = getNext(goTo, sequenceChain);
             type = getType(step);
 
@@ -102,9 +118,9 @@ export const SequenceChainService = {
   },
 };
 
-const executeDecisionCheck = (decision: ChainDecisionTO, componenDatas: ComponentData[]): GoToChain => {
-  const filteredCompData: ComponentData[] = componenDatas.filter(
-    (compData) => compData.componentFk === decision.componentFk
+const executeDecisionCheck = (decision: ChainDecisionTO, actorDatas: ActorData[]): GoToChain => {
+  const filteredCompData: ActorData[] = actorDatas.filter(
+    (actorData) => actorData.actorFk === decision.actorFk
   );
   let goTo: GoToChain | undefined;
   if(decision.dataAndInstaceIds !== undefined){
@@ -164,15 +180,15 @@ const getType = (step: ChainlinkCTO | ChainDecisionTO | TerminalChain): GoToType
 const checkForLoop = (
   calcSequenceChain: CalcChain,
   step: ChainlinkCTO,
-  mergedCompData: MergedComponentDatas
+  mergedActorData: MergedActorDatas
 ): number => {
   return calcSequenceChain.calcLinks.findIndex(
     (calcLink) =>
       calcLink.chainLinkId === step.chainLink.id &&
-      calcLink.sequence.steps[0].componentDatas.length === mergedCompData.componentDatas.length &&
-      !calcLink.sequence.steps[0].componentDatas.some(
+      calcLink.sequence.steps[0].actorDatas.length === mergedActorData.actorDatas.length &&
+      !calcLink.sequence.steps[0].actorDatas.some(
         (cp) =>
-          !mergedCompData.componentDatas.some((rcp) => rcp.componentFk === cp.componentFk && rcp.dataFk === cp.dataFk)
+          !mergedActorData.actorDatas.some((rcp) => rcp.actorFk === cp.actorFk && rcp.dataFk === cp.dataFk)
       )
   );
 };
@@ -181,21 +197,21 @@ const isLooping = (loopStartingStep: number) => {
   return loopStartingStep > -1;
 };
 
-const mergeComponentDatas = (compDatas: ComponentData[], dataSetup: DataSetupCTO): MergedComponentDatas => {
-  const errorCompDatas: ComponentData[] = [];
-  const dataSetupCompData: ComponentData[] = dataSetup.initDatas.map((initData) => {
-    return { componentFk: initData.componentFk, dataFk: initData.dataFk, instanceFk: initData.instanceFk };
+const mergeActorDatas = (actorDatas: ActorData[], dataSetup: DataSetupCTO): MergedActorDatas => {
+  const errorCompDatas: ActorData[] = [];
+  const dataSetupActorData: ActorData[] = dataSetup.initDatas.map((initData) => {
+    return { actorFk: initData.actorFk, dataFk: initData.dataFk, instanceFk: initData.instanceFk };
   });
-  dataSetupCompData.forEach((compData) => {
-    if (compDatas.some((cp) => isCompDataEqual(cp, compData))) {
-      errorCompDatas.push(compData);
+  dataSetupActorData.forEach((actorData) => {
+    if (actorDatas.some((cp) => isCompDataEqual(cp, actorData))) {
+      errorCompDatas.push(actorData);
     } else {
-      compDatas.push(compData);
+      actorDatas.push(actorData);
     }
   });
-  return { componentDatas: compDatas, errors: errorCompDatas };
+  return { actorDatas: actorDatas, errors: errorCompDatas };
 };
 
-const isCompDataEqual = (compData1: ComponentData, compData2: ComponentData): boolean => {
-  return compData1.componentFk === compData2.componentFk && compData1.dataFk === compData2.dataFk ? true : false;
+const isCompDataEqual = (actorData1: ActorData, actorData2: ActorData): boolean => {
+  return actorData1.actorFk === actorData2.actorFk && actorData1.dataFk === actorData2.dataFk ? true : false;
 };

@@ -3,69 +3,69 @@ import { DecisionTO } from '../dataAccess/access/to/DecisionTO';
 import { ActionType } from '../dataAccess/access/types/ActionType';
 import { GoTo } from '../dataAccess/access/types/GoToType';
 import { Carv2Util } from '../utils/Carv2Util';
-import { ComponentData } from '../viewDataTypes/ComponentData';
+import { ActorData } from '../viewDataTypes/ActorData';
 
 export interface SequenceActionResult {
-  componenDatas: ComponentData[];
+  actorDatas: ActorData[];
   errors: ActionTO[];
 }
 
 interface Result {
-  compData: ComponentData | undefined;
-  sendingCompData: ComponentData | undefined;
+  actorData: ActorData | undefined;
+  sendingActorData: ActorData | undefined;
   errorItem: ActionTO | null;
 }
 
 export const SequenceActionReducer = {
-  executeActionsOnComponentDatas(actions: ActionTO[], componentDatas: ComponentData[]): SequenceActionResult {
-    let newComponentDatas: ComponentData[] = Carv2Util.deepCopy(componentDatas);
+  executeActionsOnActorDatas(actions: ActionTO[], actorDatas: ActorData[]): SequenceActionResult {
+    let newActorDatas: ActorData[] = Carv2Util.deepCopy(actorDatas);
     let errors: ActionTO[] = [];
 
     actions.forEach((action) => {
-      const indexComponentToEdit: number = findComponentDataIndex(
-        action.receivingComponentFk, 
+      const indexActorToEdit: number = findActorDataIndex(
+        action.receivingActorFk, 
         action.dataFk, 
-        newComponentDatas
+        newActorDatas
         );
-      const indexComponentSending: number = findComponentDataIndex(
-        action.sendingComponentFk,
+      const indexActorSending: number = findActorDataIndex(
+        action.sendingActorFk,
         action.dataFk,
-        newComponentDatas
+        newActorDatas
       );
       switch (action.actionType) {
         case ActionType.ADD:
-          indexComponentToEdit === -1
-            ? newComponentDatas.push({ componentFk: action.receivingComponentFk, dataFk: action.dataFk, instanceFk: action.instanceFk })
+          indexActorToEdit === -1
+            ? newActorDatas.push({ actorFk: action.receivingActorFk, dataFk: action.dataFk, instanceFk: action.instanceFk })
             : errors.push(action);
           break;
         case ActionType.DELETE:
-          indexComponentToEdit !== -1 ? newComponentDatas.splice(indexComponentToEdit, 1) : errors.push(action);
+          indexActorToEdit !== -1 ? newActorDatas.splice(indexActorToEdit, 1) : errors.push(action);
           break;
         case ActionType.SEND:
-          indexComponentSending !== -1 && indexComponentToEdit === -1
-            ? newComponentDatas.push({ componentFk: action.receivingComponentFk, dataFk: action.dataFk, instanceFk: newComponentDatas[indexComponentSending].instanceFk })
+          indexActorSending !== -1 && indexActorToEdit === -1
+            ? newActorDatas.push({ actorFk: action.receivingActorFk, dataFk: action.dataFk, instanceFk: newActorDatas[indexActorSending].instanceFk })
             : errors.push(action);
           break;
         case ActionType.SEND_AND_DELETE:
-          if (indexComponentSending !== -1 && indexComponentToEdit === -1) {
-            newComponentDatas.push({ componentFk: action.receivingComponentFk, dataFk: action.dataFk, instanceFk: newComponentDatas[indexComponentSending].instanceFk });
-            newComponentDatas.splice(indexComponentSending, 1);
+          if (indexActorSending !== -1 && indexActorToEdit === -1) {
+            newActorDatas.push({ actorFk: action.receivingActorFk, dataFk: action.dataFk, instanceFk: newActorDatas[indexActorSending].instanceFk });
+            newActorDatas.splice(indexActorSending, 1);
           } else {
             errors.push(action);
           }
           break;
       }
     });
-    return { componenDatas: newComponentDatas, errors };
+    return { actorDatas: newActorDatas, errors };
   },
 
-  executeDecisionCheck(decision: DecisionTO, componenDatas: ComponentData[]): GoTo {
-    const filteredCompData: ComponentData[] = componenDatas.filter(
-      (compData) => compData.componentFk === decision.componentFk
+  executeDecisionCheck(decision: DecisionTO, actorDatas: ActorData[]): GoTo {
+    const filteredActorData: ActorData[] = actorDatas.filter(
+      (actorData) => actorData.actorFk === decision.actorFk
     );
     let goTo: GoTo | undefined;
     decision.dataAndInstaceId.forEach((dataFk) => {
-      let isIncluded: boolean = filteredCompData.some((cd) => cd.dataFk === dataFk.dataFk);
+      let isIncluded: boolean = filteredActorData.some((actor) => actor.dataFk === dataFk.dataFk);
       if (decision.has !== isIncluded) {
         goTo = decision.elseGoTo;
       }
@@ -74,6 +74,6 @@ export const SequenceActionReducer = {
   },
 };
 
-const findComponentDataIndex = (compId: number, dataId: number, componentDatas: ComponentData[]): number => {
-  return componentDatas.findIndex((compData) => compData.componentFk === compId && compData.dataFk === dataId);
+const findActorDataIndex = (actorId: number, dataId: number, actorDatas: ActorData[]): number => {
+  return actorDatas.findIndex((actorData) => actorData.actorFk === actorId && actorData.dataFk === dataId);
 };
