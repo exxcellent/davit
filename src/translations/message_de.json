@@ -1,3 +1,6 @@
 {
-  "language": "deutsch"
+  "language": "deutsch",
+  "null.error": "Das Object {object} ist null oder undefind.",
+  "dataAccess.repository.error.notExists": "Das Object mit der ID: {objectId} existiert nicht.",
+  "dataAccess.repository.error.hasReference": "Das Object hält noch eine Referenz auf den Fremdschlüssel: {Fk}."
 }

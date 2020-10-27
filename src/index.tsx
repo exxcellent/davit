@@ -1,18 +1,23 @@
+import './index.css';
+import 'semantic-ui-css/semantic.min.css';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import { store } from './app/store';
+import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
-import * as serviceWorker from './serviceWorker';
+import { HashRouter as BrowserRouter } from 'react-router-dom';
+
 import { Carv2 } from './app/Carv2';
-import { IntlProvider } from "react-intl";
+import { store } from './app/store';
+import * as serviceWorker from './serviceWorker';
 import { languages } from './translations/languages';
 
+// import { BrowserRouter } from 'react-router-dom';
 // TODO: if we rollout to english countries, this must be redefined (changing the locale "de" to "en" already works)
 /* support variables for languages */
 // const locale = navigator.language;
 // DE
-const locale = 'de';
+const locale = "de";
 // EN
 // const locale = 'en';
 const localeData = languages[locale];
@@ -20,10 +25,13 @@ const localeData = languages[locale];
 ReactDOM.render(
   <Provider store={store}>
     <IntlProvider locale={locale} messages={localeData}>
-      <Carv2 />
+      {/* TODO: remove # from url */}
+      <BrowserRouter>
+        <Carv2 />
+      </BrowserRouter>
     </IntlProvider>
   </Provider>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change

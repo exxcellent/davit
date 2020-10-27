@@ -1,0 +1,1035 @@
+@import "Colors.css";
+@import "SemanticOverwrite.css";
+
+.carvGridContainer {
+  display: grid;
+  grid-template-columns: 4em 1fr 1fr;
+  grid-template-rows: minmax(8em, 8em) 1fr 1fr;
+  grid-template-areas:
+    "leftBar header header"
+    "leftBar compModel seqModel"
+    "leftBar dataModel seqTabel";
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  background-color: var(--carv2-background-color);
+}
+
+.componentPage {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  background-color: var(--carv2-background-color);
+  grid-template-areas: "compModel";
+}
+
+.notificationPanel {
+  grid-column-start: 2;
+  grid-column-end: 4;
+  grid-row-start: 4;
+  grid-row-end: 4;
+  justify-self: center;
+}
+
+.leftPanel {
+  grid-area: leftBar;
+  justify-self: center;
+  background-color: var(--carv2-background-color-slidebar);
+  width: 100%;
+}
+
+.controllerHeader {
+  grid-area: header;
+  background-color: var(--carv2-background-color-header);
+  border-style: solid;
+  border-width: 0 0 5px 0;
+  border-image: linear-gradient(to bottom, var(--carv2-background-color-shadow), var(--carv2-background-color)) 1 1 100%;
+}
+
+.componentModelFullscreen {
+  border: 1px solid black;
+  background-color: var(--carv2-background-color);
+}
+
+.dataModelFullscreen {
+  border: 1px solid black;
+  background-color: var(--carv2-background-color);
+}
+
+.componentModel {
+  grid-area: compModel;
+  border-style: solid;
+  border-width: 0 2px 2px 0;
+  border-image: linear-gradient(to bottom,
+      transparent,
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      transparent) 0 100%;
+}
+
+.dndWrapper {
+  position: absolute;
+  display: inline-flex;
+  z-index: 1;
+}
+
+.dataModel {
+  grid-area: dataModel;
+  border-style: solid;
+  border-width: 2px 0 0 0;
+  border-image: linear-gradient(to right,
+      transparent,
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      transparent) 1 1 100%;
+}
+
+.sequencModel {
+  grid-area: seqModel;
+  min-height: 0;
+  overflow: hidden;
+  border-image: linear-gradient(to right,
+      transparent,
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      transparent) 1 1 100%;
+  border-style: solid;
+  border-width: 0 0 2px 0;
+}
+
+.flowChart {
+  overflow: auto;
+  padding: 1em;
+  display: block;
+  width: 100%;
+}
+
+.sequenceTable {
+  min-height: 0;
+  grid-area: seqTabel;
+  border-style: solid;
+  border-width: 0 0 0 2px;
+  border-image: linear-gradient(to bottom,
+      transparent,
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      transparent) 0 100%;
+  padding: 2px;
+  overflow: hidden;
+}
+
+.fullscreen {
+  max-height: 100vh;
+  max-width: 100%;
+  overflow: auto;
+}
+
+.dataSVGArea {
+  grid-area: dataModel;
+  overflow: "visible";
+  stroke: "black";
+  position: "absolute";
+  width: 100%;
+  height: 100%;
+}
+
+.componentSVGArea {
+  grid-area: compModel;
+  overflow: "visible";
+  stroke: "black";
+  position: "absolute";
+  width: 100%;
+  height: 100%;
+}
+
+.controllPanelView {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.controllPanelViewChild {
+  margin: 10px;
+}
+
+/* -------------------------------------------- Optionfield -------------------------------------------- */
+
+.optionFieldAround {
+  width: 100%;
+  height: 100%;
+  justify-content: space-around;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.innerOptionFieldSpacer {
+  width: 100%;
+  display: "flex";
+  justify-content: center;
+  align-items: center;
+}
+
+.optionField {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.optionFieldLabel {
+  display: flex;
+  justify-content: center;
+  min-width: 10em;
+  text-align: center;
+  color: var(--carv2-text-color);
+  font-size: 0.8em;
+}
+
+.optionFieldSpacer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 1em;
+}
+
+/* -------------------------------------------- PATH -------------------------------------------- */
+
+.carvPath {
+  stroke: black;
+  stroke-width: 2px;
+  fill: transparent;
+}
+
+.carvStrokeDasharray {
+  stroke-dasharray: 0.5em;
+  stroke-width: 3px;
+}
+
+.carvArrowMarker {
+  fill: black;
+}
+
+/* -------------------------------------------- BUTTON -------------------------------------------- */
+
+#buttonGroupLabel {
+  opacity: 1 !important;
+  color: var(--carv2-text-color);
+}
+
+.carv2label {
+  color: var(--carv2-text-color) !important;
+}
+
+.ButtonGroup {
+  display: flex;
+  flex-direction: column;
+  border-radius: 3em;
+  /* margin: 2px; */
+  margin: 2px 4px 0 2px;
+  align-items: center;
+}
+
+.carv2Button {
+  background-color: transparent;
+  box-shadow: 0 0 0 1px var(--carv2-color-secondary);
+  color: white;
+
+}
+
+.carv2SidePanelButton {
+  background-color: transparent;
+  box-shadow: 0 0 0 1px var(--carv2-color-border);
+  color: white;
+  width: 100%;
+  height: 50px;
+  padding: 1em 0 0 1.1em;
+  margin: 1px;
+  border-radius: 2px;
+  display: flex;
+  transition: background-color var(--animation-time);
+}
+
+.carv2SidePanelButton:hover {
+  box-shadow: 0 0 0 2px var(--carv2-color-secondary);
+  color: white;
+}
+
+.SidePanelButtonActive {
+  color: black;
+  background-color: var(--carv2-color-secondary);
+  box-shadow: 0 0 0 2px var(--carv2-color-secondary);
+  transition: background-color var(--animation-time);
+}
+
+.carv2TableButton {
+  background-color: var(--carv2-background-color) !important;
+  transition: background-color 0.4s !important;
+}
+
+.carv2TableButton:hover {
+  background-color: var(--carv2-background-color-header) !important;
+  transition: background-color 0.4s !important;
+  cursor: pointer;
+}
+
+.Carv2CardMainButton {
+  width: 1.2em;
+  height: 1.2em;
+  padding: 0;
+  margin: 0;
+  box-shadow: 0 0 0 1px var(--carv2-color-border);
+  border: 0.2em solid transparent;
+  color: var(--carv2-color-border);
+  border-radius: 0.2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+}
+
+.Carv2CardMainButton:hover {
+  background-color: var(--carv2-color-secondary);
+  transition: background-color 0.4s;
+  color: black;
+  cursor: pointer;
+}
+
+.disabled:hover {
+  background-color: transparent;
+  transition: background-color 0.4s;
+  color: black;
+  cursor: default;
+}
+
+.Carv2CardButton {
+  box-shadow: 0 0 0 1px var(--carv2-color-border);
+  animation-name: growWidth;
+  animation-duration: var(--animation-time);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 2px var(--carv2-color-secondary);
+  border-radius: 0.2em;
+  width: 2em;
+  height: 2em;
+  margin: 2px;
+  background-color: transparent;
+  border: none;
+}
+
+.activeButton {
+  background-color: var(--carv2-color-secondary);
+}
+
+.Carv2CardButton:hover {
+  background-color: var(--carv2-color-secondary);
+  transition: background-color 0.4s;
+  color: black;
+}
+
+.pLeft1 {
+  padding-left: 0.5em;
+}
+
+/* -------------------------------------------- Sidepanel -------------------------------------------- */
+
+.verticalLabel {
+  writing-mode: tb-rl;
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+  text-align: center;
+  font-size: 3em;
+  font-family: ArialRoundedMTBold, "Arial Rounded MT Bold";
+  margin-left: 13px;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  color: #0060a9;
+}
+
+/* -------------------------------------------- Controllpanel -------------------------------------------- */
+
+.verticalTab {
+  writing-mode: tb-rl;
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+  white-space: nowrap;
+  display: block;
+  bottom: 0;
+  width: 2em;
+  height: 7.8em;
+  background-color: var(--carv2-background-color-slidebar);
+  color: white;
+  margin: 0;
+  text-align: center;
+  border-style: solid;
+  border-width: 0 0 0 2px;
+  border-image: linear-gradient(to bottom,
+      transparent,
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      transparent) 0 100%;
+  animation-duration: var(--animation-time);
+}
+
+.verticalTab:hover {
+  cursor: pointer;
+  background-color: black;
+}
+
+.verticalTablDummy {
+  animation-name: shrinkWidth;
+  animation-duration: var(--animation-time);
+  border-image: linear-gradient(to bottom,
+      transparent,
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      transparent);
+  height: 7.8em;
+}
+
+.slideable-verticaltab {
+  width: 2em;
+}
+
+.slideable {
+  width: 100% !important;
+  transition: width var(--animation-time);
+}
+
+.slideable-hidden {
+  width: 0 !important;
+  transition: width var(--animation-time);
+}
+
+.controllPanelEdit {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  height: 100%;
+
+  animation-duration: var(--animation-time);
+  animation-timing-function: ease-in-out;
+  animation-name: slidein;
+}
+
+.controllPanelEditChild {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.columnDivider {
+  display: flex;
+  border-style: solid;
+  border-width: 0 0 0 2px;
+  border-image: linear-gradient(to bottom, transparent, #e0e1e2, #e0e1e2, #e0e1e2, #e0e1e2, transparent) 0 100%;
+}
+
+#innerCard {
+  width: 100px;
+  height: 30px;
+  margin: 0;
+  padding: 0.3em !important;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* -------------------------------------------- Data -------------------------------------------- */
+
+#dataObject {
+  width: 100px;
+  height: 30px;
+  text-overflow: ellipsis;
+  margin: 0;
+  padding-top: 0px !important;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: var(--carv2-text-color);
+}
+
+/* -------------------------------------------- Flussdiagram -------------------------------------------- */
+
+.STEP {
+  background-color: var(--carv2-background-color-header);
+  color: var(--carv2-text-color);
+  min-height: 2.4em;
+  min-width: 6em;
+  max-width: 15em;
+  border-radius: 0.3em;
+  padding: 6px;
+  text-align: center;
+  box-shadow: 0 0 0 1px var(--carv2-color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
+}
+
+.LINK {
+  background-color: var(--carv2-background-color-header);
+  color: var(--carv2-text-color);
+  min-height: 2.4em;
+  min-width: 6em;
+  max-width: 15em;
+  border-radius: 0.3em;
+  padding: 6px;
+  text-align: center;
+  box-shadow: 0 0 0 1px var(--carv2-color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
+}
+
+.COND {
+  z-index: 2;
+  width: 2em;
+  height: 2em;
+  background-color: var(--carv2-background-color-shadow);
+  transform: translateY(0.8em) rotate(45deg);
+  box-shadow: 0 0 0 1px var(--carv2-color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
+}
+
+.DEC {
+  z-index: 2;
+  width: 2em;
+  height: 2em;
+  background-color: var(--carv2-background-color-shadow);
+  transform: translateY(0.8em) rotate(45deg);
+  box-shadow: 0 0 0 1px var(--carv2-color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
+}
+
+.condLabel {
+  z-index: 1;
+  color: black;
+  background-color: var(--carv2-background-color);
+  transform: translateY(0.8em);
+  padding-left: 3px;
+  padding-right: 3px;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px var(--carv2-color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
+}
+
+.FIN {
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+  background-color: var(--carv2-data-add-color);
+  border: 0.2em solid var(--carv2-background-color);
+  box-shadow: 0 0 0 0.2em var(--carv2-data-add-color), 0 0 6px 6px rgba(0, 0, 0, 0.199);
+  transform: translateY(0.2em);
+}
+
+.IDLE {
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+  background-color: var(--carv2-color-exxcellent-blue);
+  border: 0.2em solid var(--carv2-background-color);
+  box-shadow: 0 0 0 0.2em var(--carv2-color-exxcellent-blue), 0 0 6px 6px rgba(0, 0, 0, 0.199);
+  transform: translateY(0.2em);
+}
+
+.ERROR {
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+  background-color: var(--carv2-data-delete-color);
+  border: 0.2em solid var(--carv2-background-color);
+  box-shadow: 0 0 0 0.2em var(--carv2-data-delete-color), 0 0 6px 6px rgba(0, 0, 0, 0.199);
+  transform: translateY(0.2em);
+}
+
+.ROOT {
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+  background-color: var(--carv2-background-color-header);
+  margin: 0.2em;
+  padding: 0.2em;
+  box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.199);
+}
+
+.flowChartFlex {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+#flowChartCurrentStep {
+  box-shadow: 0 0 6px 2px var(--carv2-color-secondary), 0 0 5px 5px rgba(0, 0, 0, 0.199);
+  animation-duration: 0.5s;
+  animation-name: glow;
+}
+
+/* -------------------------------------------- Component -------------------------------------------- */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--carv2-text-color);
+  border-radius: 0.28571429rem;
+  box-shadow: 0 0 0 1px var(--carv2-color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
+  background-color: var(--carv2-background-color-header);
+  animation-duration: var(--animation-time);
+  animation-name: grow;
+  animation-timing-function: ease-in-out;
+  transition: width var(--animation-time), box-shadow var(--animation-time);
+  cursor: grab;
+}
+
+.activeFilter {
+  box-shadow: 0 0 0 3px var(--carv2-color-secondary);
+  transition: box-shadow var(--animation-time);
+}
+
+.cardHeader {
+  font-size: 0.8sem;
+  font-family: Lato, Helvetica Neue, Arial, Helvetica, sans-serif;
+  text-align: center;
+  padding: 0.5em;
+  display: flex;
+  transition: color var(--animation-time), height var(--animation-time) width var(--animation-time);
+  color: white;
+  height: 2.7em;
+}
+
+carhHeaderText {
+  color: var(--carv2-text-color);
+  height: 2.5em;
+  transition: color var(--animation-time), height var(--animation-time);
+}
+
+.carhHeaderTextInvisible {
+  color: transparent;
+  height: 0.1px;
+}
+
+.cardHeaderButtons {
+  color: transparent;
+  transition: color var(--animation-time), height var(--animation-time);
+  padding: 0.2em;
+  width: 100%;
+  justify-content: end;
+}
+
+.viewFragment {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  text-align: center;
+  border-top: 0.5px solid var(--carv2-text-color);
+}
+
+.appearAnimation {
+  animation-duration: var(--animation-time);
+  animation-name: grow;
+  animation-timing-function: ease-in-out;
+}
+
+.carv2ComponentDataNEW {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--carv2-data-add-color) !important;
+  color: var(--carv2-data-text-color) !important;
+}
+
+.carv2ComponentDataPERSISTENT {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--carv2-data-persistent-color) !important;
+  color: var(--carv2-data-text-color) !important;
+}
+
+.carv2ComponentDataDELETED {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--carv2-data-delete-color) !important;
+  color: var(--carv2-data-text-color) !important;
+}
+
+.carv2ComponentDataADD {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--carv2-background-color-header) !important;
+  color: var(--carv2-text-color) !important;
+  box-shadow: 6px 6px 10px var(--carv2-data-add-color) inset !important;
+}
+
+.carv2ComponentDataCHECK {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--carv2-background-color-header) !important;
+  color: var(--carv2-text-color) !important;
+  box-shadow: 6px 6px 10px var(--carv2-data-persistent-color) inset !important;
+}
+
+.carv2ComponentDataDELETE {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--carv2-background-color-header) !important;
+  color: var(--carv2-text-color) !important;
+  box-shadow: 6px 6px 10px var(--carv2-data-delete-color) inset !important;
+}
+
+.carv2ComponentDataERROR_ADD {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--carv2-data-add-color) !important;
+  color: var(--carv2-text-color) !important;
+  box-shadow: 0px 0px 20px rgb(255, 0, 0);
+}
+
+.carv2ComponentDataERROR_DELETE {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--carv2-data-delete-color) !important;
+  color: var(--carv2-text-color) !important;
+  box-shadow: 0px 0px 20px rgb(255, 0, 0);
+}
+
+/* -------------------------------------------- Table -------------------------------------------- */
+
+td {
+  border-style: solid;
+  border-width: 0 2px 2px 0;
+  border-image: linear-gradient(to bottom,
+      transparent,
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      var(--carv2-color-primary),
+      transparent) 0 100%;
+}
+
+td:last-child {
+  border: none;
+}
+
+tr {
+  color: var(--carv2-text-color);
+  padding: 0 0 0 1em;
+}
+
+tbody {
+  display: block;
+  width: 100%;
+  overflow-y: scroll;
+}
+
+th {
+  text-align: start;
+  padding-left: 1em;
+}
+
+thead,
+tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  /* even columns width , fix width of table too*/
+}
+
+thead {
+  width: calc(100% - 1.2em);
+  /*scrollbar is average 1em/16px width, remove it from thead width */
+  background-color: var(--carv2-background-color-header);
+  color: var(--carv2-text-color);
+  animation-name: appearText;
+  animation-duration: 0.2s;
+  padding-right: 1em;
+}
+
+table {
+  width: 100%;
+}
+
+.carv2Tr {
+  background-color: var(--carv2-data-table-row-color);
+  color: black;
+  height: 2.5em;
+  text-align: start;
+  animation-name: appearText;
+  animation-duration: 0.2s;
+}
+
+.carv2Tr:nth-child(odd) {
+  background-color: var(--carv2-data-table-row-odd-color);
+}
+
+.clickable:hover {
+  background-color: var(--carv2-data-table-row-odd-hover);
+  transition: background-color 0.4s;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.tableBorder {
+  margin: 0.5em;
+  box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.199);
+  border-radius: 5px;
+  border: 2px solid var(--carv2-background-color-header);
+}
+
+.tabs {
+  background-color: var(--carv2-background-color-header);
+  display: flex;
+  justify-content: flex-start;
+  border-bottom: 1px solid black;
+  height: 4.4em;
+}
+
+.tab-group {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 0 1px var(--carv2-color-border);
+  border-radius: 0.28571429rem;
+  animation-duration: var(--animation-time);
+  animation-timing-function: ease-in-out;
+  animation-name: appearTabGroup;
+  overflow: hidden;
+  height: 4.4em;
+}
+
+.tab-aggregator {
+  color: var(--carv2-text-color);
+  padding: 0.5em;
+  text-align: center;
+  animation-duration: var(--animation-time);
+  animation-timing-function: ease-in-out;
+  animation-name: appearTab;
+  overflow: hidden;
+  height: 2.2em;
+}
+
+.tab {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 7em;
+  border-right: 0.5px solid rgba(255, 250, 250, 0.2);
+  background-color: rgba(0, 0, 0, 0.2);
+  color: var(--carv2-text-color);
+  padding: 0.5em;
+  animation-duration: var(--animation-time);
+  animation-timing-function: ease-out;
+  animation-name: appearTab;
+  overflow: hidden;
+  height: 2.2em;
+}
+
+.tab:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+
+.active {
+  background-color: var(--carv2-color-secondary) !important;
+  color: black !important;
+  transition: background-color var(--animation-time), color var(--animation-time);
+}
+
+.carv2TrMarked {
+  height: 2.5em;
+}
+
+.carv2TrTerminalERROR {
+  background-color: var(--carv2-data-delete-color);
+  height: 2.5em;
+}
+
+.carv2TrTerminalFIN {
+  background-color: var(--carv2-data-add-color);
+  height: 2.5em;
+}
+
+.carv2TrTerminalIDLE {
+  background-color: var(--carv2-color-exxcellent-blue);
+  height: 2.5em;
+}
+
+/* ---------------------------- KEY FRAMES ---------------------------- */
+
+@keyframes appearTabGroup {
+  0% {
+    color: transparent;
+    background-color: transparent;
+    box-shadow: 0 0 0 0 transparent;
+    height: 0;
+  }
+
+  5% {
+    color: transparent;
+    background-color: transparent;
+    box-shadow: 0 0 0 0 transparent;
+  }
+
+  5% {
+    color: var(--carv2-text-color);
+    background-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 0 1px var(--carv2-color-border);
+    height: 4.4em;
+  }
+}
+
+
+@keyframes appearTab {
+  0% {
+    color: transparent;
+    background-color: transparent;
+    height: 0;
+    border-right: 0.5px solid transparent;
+  }
+
+  10% {
+    background-color: transparent;
+    color: transparent;
+    border-right: 0.5px solid transparent;
+  }
+
+  100% {
+    color: var(--carv2-text-color);
+    background-color: rgba(0, 0, 0, 0.2);
+    height: 2.2em;
+    border-right: 0.5px solid rgba(255, 250, 250, 0.2);
+  }
+}
+
+@keyframes appearText {
+  0% {
+    color: transparent;
+  }
+
+  100% {
+    color: black;
+  }
+}
+
+@keyframes grow {
+  from {
+    background-color: transparent;
+    box-shadow: 0 0 0 1px transparent, 0 0 5px 5px transparent;
+    color: transparent;
+    height: 0;
+  }
+
+  to {
+    background-color: var(--carv2-background-color-header);
+    box-shadow: 0 0 0 1px var(--carv2-color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
+    color: var(--carv2-text-color);
+    height: 100%;
+  }
+}
+
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 0 0 transparent, 0 0 0 0 transparent;
+  }
+
+  to {
+    box-shadow: 0 0 6px 2px var(--carv2-color-secondary), 0 0 5px 5px rgba(0, 0, 0, 0.199);
+  }
+}
+
+@keyframes slidein {
+  from {
+    margin-bottom: 11em;
+    /* height: 300%; */
+  }
+
+  to {
+    margin-bottom: 0%;
+    /* height: 100%; */
+  }
+}
+
+@keyframes growWidth {
+  0% {
+    width: 0;
+    color: transparent;
+  }
+
+  80% {
+    color: transparent;
+  }
+
+  100% {
+    width: 2em;
+    color: white;
+  }
+}
+
+@keyframes shrinkWidth {
+  0% {
+    width: 2em;
+    background-color: var(--carv2-background-color-slidebar);
+    border-width: 0 0 0 2px;
+  }
+
+  100% {
+    width: 0;
+    background-color: transparent;
+    border-width: 0 0 0 0;
+  }
+}
+
+@keyframes growWidth {
+  0% {
+    width: 0;
+    color: transparent !important;
+    box-shadow: 0 0 0 1px transparent !important;
+    border-color: transparent !important;
+  }
+
+  100% {
+    width: 1.2em;
+    color: white !important;
+    box-shadow: 0 0 0 1px var(--carv2-color-border) !important;
+  }
+}

@@ -1,3 +1,6 @@
 {
-  "language": "english"
+  "language": "english",
+  "null.error": "The object {object} is null or undefind.",
+  "dataAccess.repository.error.notExists": "The object with ID: {objectId} dosn't exist.",
+  "dataAccess.repository.error.hasReference": "The object stil holds a reference on the foreign key: {Fk}."
 }
