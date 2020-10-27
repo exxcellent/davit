@@ -1,79 +1,147 @@
-import { ActionTO } from '../dataAccess/access/to/ActionTO';
-import { DecisionTO } from '../dataAccess/access/to/DecisionTO';
-import { ActionType } from '../dataAccess/access/types/ActionType';
-import { GoTo } from '../dataAccess/access/types/GoToType';
-import { Carv2Util } from '../utils/Carv2Util';
-import { ActorData } from '../viewDataTypes/ActorData';
+import {ActionTO} from '../dataAccess/access/to/ActionTO';
+import {DecisionTO} from '../dataAccess/access/to/DecisionTO';
+import {ActionType} from '../dataAccess/access/types/ActionType';
+import {GoTo} from '../dataAccess/access/types/GoToType';
+import {Carv2Util} from '../utils/Carv2Util';
+import {ActorData} from '../viewDataTypes/ActorData';
+import {ActorDataState} from '../viewDataTypes/ActorDataState';
 
 export interface SequenceActionResult {
   actorDatas: ActorData[];
   errors: ActionTO[];
 }
-
-interface Result {
-  actorData: ActorData | undefined;
-  sendingActorData: ActorData | undefined;
-  errorItem: ActionTO | null;
+export interface SequenceDecisionResult {
+  actorDatas: ActorData[];
+  goto: GoTo;
 }
 
 export const SequenceActionReducer = {
   executeActionsOnActorDatas(actions: ActionTO[], actorDatas: ActorData[]): SequenceActionResult {
-    let newActorDatas: ActorData[] = Carv2Util.deepCopy(actorDatas);
-    let errors: ActionTO[] = [];
+    // copy actorDatas and set all to state PERSISTENT
+    const newActorDatas: ActorData[] = actorDatas
+      .filter((actorData)=>
+        actorData.state !== ActorDataState.DELETED
+        && actorData.state !== ActorDataState.CHECK_FAILED
+        && actorData.state !== ActorDataState.UPDATED_FROM,
+      )
+      .map((actorData)=>{
+        return {...actorData, state: ActorDataState.PERSISTENT};
+      });
+    const errors: ActionTO[] = [];
 
     actions.forEach((action) => {
-      const indexActorToEdit: number = findActorDataIndex(
-        action.receivingActorFk, 
-        action.dataFk, 
-        newActorDatas
+      const indexActorDataToEdit: number = findActorDataIndex(
+        action.receivingActorFk,
+        action.dataFk,
+        newActorDatas,
         );
-      const indexActorSending: number = findActorDataIndex(
+      const indexActorDataSending: number = findActorDataIndex(
         action.sendingActorFk,
         action.dataFk,
-        newActorDatas
+        newActorDatas,
       );
       switch (action.actionType) {
         case ActionType.ADD:
-          indexActorToEdit === -1
-            ? newActorDatas.push({ actorFk: action.receivingActorFk, dataFk: action.dataFk, instanceFk: action.instanceFk })
-            : errors.push(action);
+          if (!actorDataIsPresent(indexActorDataToEdit)) {
+            newActorDatas.push({
+              actorFk: action.receivingActorFk,
+              dataFk: action.dataFk,
+              instanceFk: action.instanceFk,
+              state: ActorDataState.NEW,
+            });
+          } else if (newActorDatas[indexActorDataToEdit].instanceFk !== action.instanceFk) {
+            newActorDatas.push({
+              actorFk: action.receivingActorFk,
+              dataFk: action.dataFk,
+              instanceFk: action.instanceFk,
+              state: ActorDataState.UPDATED_TO,
+            });
+            newActorDatas[indexActorDataToEdit] = {
+              ...newActorDatas[indexActorDataToEdit],
+              state: ActorDataState.UPDATED_FROM,
+            };
+          } else {
+            errors.push(action);
+          }
           break;
         case ActionType.DELETE:
-          indexActorToEdit !== -1 ? newActorDatas.splice(indexActorToEdit, 1) : errors.push(action);
-          break;
-        case ActionType.SEND:
-          indexActorSending !== -1 && indexActorToEdit === -1
-            ? newActorDatas.push({ actorFk: action.receivingActorFk, dataFk: action.dataFk, instanceFk: newActorDatas[indexActorSending].instanceFk })
+          actorDataIsPresent(indexActorDataToEdit)
+            ? newActorDatas[indexActorDataToEdit].state=ActorDataState.DELETED
             : errors.push(action);
           break;
+        case ActionType.SEND:
+          if (actorDataIsPresent(indexActorDataSending)) {
+            const actorData: ActorData= {
+              actorFk: action.receivingActorFk,
+              dataFk: action.dataFk,
+              instanceFk: newActorDatas[indexActorDataSending].instanceFk,
+              state: ActorDataState.SENT,
+            };
+            newActorDatas[indexActorDataSending].state=ActorDataState.SENT;
+            if (actorDataIsPresent(indexActorDataToEdit)) {
+              newActorDatas[indexActorDataToEdit] = {...actorData, state: ActorDataState.UPDATED_TO};
+            } else {
+              newActorDatas.push(actorData);
+            }
+          } else {
+            errors.push(action);
+          }
+          break;
         case ActionType.SEND_AND_DELETE:
-          if (indexActorSending !== -1 && indexActorToEdit === -1) {
-            newActorDatas.push({ actorFk: action.receivingActorFk, dataFk: action.dataFk, instanceFk: newActorDatas[indexActorSending].instanceFk });
-            newActorDatas.splice(indexActorSending, 1);
+          if (actorDataIsPresent(indexActorDataSending)) {
+            const actorData: ActorData={
+              actorFk: action.receivingActorFk,
+              dataFk: action.dataFk,
+              instanceFk: newActorDatas[indexActorDataSending].instanceFk,
+              state: ActorDataState.SENT,
+            };
+            newActorDatas[indexActorDataSending].state=ActorDataState.DELETED;
+            if (actorDataIsPresent(indexActorDataToEdit)) {
+              newActorDatas[indexActorDataToEdit] = {...actorData, state: ActorDataState.UPDATED_TO};
+            } else {
+              newActorDatas.push(actorData);
+            }
           } else {
             errors.push(action);
           }
           break;
       }
     });
-    return { actorDatas: newActorDatas, errors };
+    return {actorDatas: newActorDatas, errors};
   },
 
-  executeDecisionCheck(decision: DecisionTO, actorDatas: ActorData[]): GoTo {
-    const filteredActorData: ActorData[] = actorDatas.filter(
-      (actorData) => actorData.actorFk === decision.actorFk
+  executeDecisionCheck(decision: DecisionTO, actorDatas: ActorData[]): SequenceDecisionResult {
+    const newActorDatas: ActorData[] = actorDatas
+      .filter((actorData)=>actorData.state !== ActorDataState.DELETED && actorData.state !== ActorDataState.CHECK_FAILED)
+      .map((actorData)=>{
+        return {...actorData, state: ActorDataState.PERSISTENT};
+      });
+    const filteredActorData: ActorData[] = newActorDatas.filter(
+      (actorData) => actorData.actorFk === decision.actorFk,
     );
-    let goTo: GoTo | undefined;
-    decision.dataAndInstaceId.forEach((dataFk) => {
-      let isIncluded: boolean = filteredActorData.some((actor) => actor.dataFk === dataFk.dataFk);
-      if (decision.has !== isIncluded) {
+    let goTo = decision.ifGoTo;
+    decision.dataAndInstaceId.forEach((dataAndInstanceId) => {
+      const checkedActorData: ActorData | undefined = filteredActorData
+        .find((actor) => actor.dataFk === dataAndInstanceId.dataFk);
+
+      if (decision.has === dataIsPresentOnActor(checkedActorData)) {
+        checkedActorData!.state=ActorDataState.CHECKED;
+      } else {
+        actorDatas.push({actorFk: decision.actorFk, dataFk: dataAndInstanceId.dataFk, instanceFk: dataAndInstanceId.instanceId, state: ActorDataState.CHECK_FAILED});
         goTo = decision.elseGoTo;
       }
     });
-    return goTo || decision.ifGoTo;
+    return {actorDatas: newActorDatas, goto: goTo};
   },
 };
 
 const findActorDataIndex = (actorId: number, dataId: number, actorDatas: ActorData[]): number => {
   return actorDatas.findIndex((actorData) => actorData.actorFk === actorId && actorData.dataFk === dataId);
+};
+function actorDataIsPresent(indexActorDataToEdit: number) {
+  return indexActorDataToEdit !== -1;
+}
+
+const dataIsPresentOnActor = (actorData: ActorData | undefined) => {
+  return !Carv2Util.isNullOrUndefined(actorData);
 };

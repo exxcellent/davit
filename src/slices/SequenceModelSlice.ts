@@ -1,43 +1,27 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-import { AppThunk, RootState } from '../app/store';
-import { Arrow } from '../components/common/fragments/svg/Arrow';
-import { ChainCTO } from '../dataAccess/access/cto/ChainCTO';
-import { ChainlinkCTO } from '../dataAccess/access/cto/ChainlinkCTO';
-import { DataSetupCTO } from '../dataAccess/access/cto/DataSetupCTO';
-import { GeometricalDataCTO } from '../dataAccess/access/cto/GeometraicalDataCTO';
-import { SequenceCTO } from '../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../dataAccess/access/cto/SequenceStepCTO';
-import { ActionTO } from '../dataAccess/access/to/ActionTO';
-import { ChainDecisionTO } from '../dataAccess/access/to/ChainDecisionTO';
-import { ChainTO } from '../dataAccess/access/to/ChainTO';
-import { Terminal } from '../dataAccess/access/types/GoToType';
-import { DataAccess } from '../dataAccess/DataAccess';
-import { DataAccessResponse } from '../dataAccess/DataAccessResponse';
-import { CalcChain, getRoot, SequenceChainService } from '../services/SequenceChainService';
-import { CalcSequence, CalculatedStep, SequenceService } from '../services/SequenceService';
-import { ActorData } from '../viewDataTypes/ActorData';
-import { Mode } from './EditSlice';
-import { handleError } from './GlobalSlice';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {AppThunk, RootState} from '../app/store';
+import {Arrow} from '../components/common/fragments/svg/Arrow';
+import {ChainCTO} from '../dataAccess/access/cto/ChainCTO';
+import {ChainlinkCTO} from '../dataAccess/access/cto/ChainlinkCTO';
+import {DataSetupCTO} from '../dataAccess/access/cto/DataSetupCTO';
+import {GeometricalDataCTO} from '../dataAccess/access/cto/GeometraicalDataCTO';
+import {SequenceCTO} from '../dataAccess/access/cto/SequenceCTO';
+import {SequenceStepCTO} from '../dataAccess/access/cto/SequenceStepCTO';
+import {ActionTO} from '../dataAccess/access/to/ActionTO';
+import {ChainDecisionTO} from '../dataAccess/access/to/ChainDecisionTO';
+import {ChainTO} from '../dataAccess/access/to/ChainTO';
+import {Terminal} from '../dataAccess/access/types/GoToType';
+import {DataAccess} from '../dataAccess/DataAccess';
+import {DataAccessResponse} from '../dataAccess/DataAccessResponse';
+import {CalcChain, getRoot, SequenceChainService} from '../services/SequenceChainService';
+import {CalcSequence, CalculatedStep, SequenceService} from '../services/SequenceService';
+import {ActorData} from '../viewDataTypes/ActorData';
+import {ActorDataState} from '../viewDataTypes/ActorDataState';
+import {Mode} from './EditSlice';
+import {handleError} from './GlobalSlice';
 
 export interface Filter {
-  type: "ACTOR" | "DATA";
+  type: 'ACTOR' | 'DATA';
   id: number;
 }
 
@@ -69,7 +53,7 @@ const getInitialState: SequenceModelState = {
 };
 
 const SequenceModelSlice = createSlice({
-  name: "sequenceModel",
+  name: 'sequenceModel',
   initialState: getInitialState,
   reducers: {
     setSelectedSequence: (state, action: PayloadAction<SequenceCTO | null>) => {
@@ -92,7 +76,7 @@ const SequenceModelSlice = createSlice({
     },
     setCurrentLinkIndex: (state, action: PayloadAction<number>) => {
       state.currentStepIndex = 0;
-      //on decrement we first set the step index to 0 and only if it is 0 we decrement the link index
+      // on decrement we first set the step index to 0 and only if it is 0 we decrement the link index
       if (state.calcChain && state.calcChain.calcLinks.length > action.payload && action.payload >= 0) {
         state.currentLinkIndex = action.payload;
       } else if (state.calcChain && action.payload < 0) {
@@ -125,20 +109,20 @@ const SequenceModelSlice = createSlice({
       }
     },
     addDataFilter: (state, action: PayloadAction<number>) => {
-      state.activeFilter = [...state.activeFilter, { type: "DATA", id: action.payload }];
+      state.activeFilter = [...state.activeFilter, {type: 'DATA', id: action.payload}];
       state.currentStepIndex = 0;
     },
     removeDataFilter: (state, action: PayloadAction<number>) => {
-      state.activeFilter = state.activeFilter.filter((filt) => !(filt.type === "DATA" && filt.id === action.payload));
+      state.activeFilter = state.activeFilter.filter((filt) => !(filt.type === 'DATA' && filt.id === action.payload));
       state.currentStepIndex = 0;
     },
     addActorFilters: (state, action: PayloadAction<number>) => {
-      state.activeFilter = [...state.activeFilter, { type: "ACTOR", id: action.payload }];
+      state.activeFilter = [...state.activeFilter, {type: 'ACTOR', id: action.payload}];
       state.currentStepIndex = 0;
     },
     removeActorFilter: (state, action: PayloadAction<number>) => {
       state.activeFilter = state.activeFilter.filter(
-        (filt) => !(filt.type === "ACTOR" && filt.id === action.payload)
+        (filt) => !(filt.type === 'ACTOR' && filt.id === action.payload),
       );
       state.currentStepIndex = 0;
     },
@@ -148,7 +132,7 @@ const SequenceModelSlice = createSlice({
         filteredSteps = filterSteps(
           getCurrentCalcSequence(state)?.steps || [],
           state.activeFilter,
-          getCurrentSequenceModel(state)?.sequenceStepCTOs || []
+          getCurrentSequenceModel(state)?.sequenceStepCTOs || [],
         );
       }
       const newStepIndex = action.payload;
@@ -163,12 +147,12 @@ const SequenceModelSlice = createSlice({
           state.currentStepIndex = 0;
         }
       } else if (state.calcChain && newStepIndex === -1) {
-        const newLinkIndex =
-          state.currentLinkIndex > 0 ? state.currentLinkIndex - 1 : state.calcChain.calcLinks.length - 1;
+        const newLinkIndex
+          = state.currentLinkIndex > 0 ? state.currentLinkIndex - 1 : state.calcChain.calcLinks.length - 1;
         const newfilteredSteps = filterSteps(
           state.calcChain.calcLinks[newLinkIndex].sequence.steps || [],
           state.activeFilter,
-          state.calcChain.calcLinks[newLinkIndex].sequence.sequenceModel?.sequenceStepCTOs || []
+          state.calcChain.calcLinks[newLinkIndex].sequence.sequenceModel?.sequenceStepCTOs || [],
         );
         state.currentStepIndex = newfilteredSteps.length - 1;
         state.currentLinkIndex = newLinkIndex;
@@ -200,6 +184,12 @@ function calcSequenceAndSetState(sequenceModel: SequenceCTO, dataSetup: DataSetu
   state.calcSequence = result;
 }
 
+export const getActorDatas = (dataSetup: DataSetupCTO): ActorData[] => {
+  return dataSetup.initDatas.map((initData) => {
+    return {actorFk: initData.actorFk, dataFk: initData.dataFk, instanceFk: initData.instanceFk, state: ActorDataState.PERSISTENT};
+  });
+};
+
 function resetState(state: SequenceModelState) {
   state.errorActions = [];
   state.actorDatas = [];
@@ -209,28 +199,22 @@ function resetState(state: SequenceModelState) {
 
 // =============================================== THUNKS ===============================================
 
-export const getActorDatas = (dataSetup: DataSetupCTO): ActorData[] => {
-  return dataSetup.initDatas.map((initData) => {
-    return { actorFk: initData.actorFk, dataFk: initData.dataFk, instanceFk: initData.instanceFk };
-  });
-};
-
 const calcModelsThunk = (): AppThunk => (dispatch, getState) => {
   if (
-    getState().edit.mode === Mode.VIEW &&
-    getState().sequenceModel.selectedChain !== null &&
-    getRoot(getState().sequenceModel.selectedChain || null)
+    getState().edit.mode === Mode.VIEW
+    && getState().sequenceModel.selectedChain !== null
+    && getRoot(getState().sequenceModel.selectedChain || null)
   ) {
     dispatch(SequenceModelActions.setCurrentChain(getState().sequenceModel.selectedChain!.chain));
     dispatch(
       SequenceModelSlice.actions.setCalcChain(
-        SequenceChainService.calculateChain(getState().sequenceModel.selectedChain)
-      )
+        SequenceChainService.calculateChain(getState().sequenceModel.selectedChain),
+      ),
     );
   } else if (
-    getState().edit.mode === Mode.VIEW &&
-    getState().sequenceModel.selectedSequenceModel !== null &&
-    getState().sequenceModel.selectedDataSetup !== null
+    getState().edit.mode === Mode.VIEW
+    && getState().sequenceModel.selectedSequenceModel !== null
+    && getState().sequenceModel.selectedDataSetup !== null
   ) {
     dispatch(SequenceModelActions.setCurrentSequence(getState().sequenceModel.selectedSequenceModel!.sequenceTO.id));
     dispatch(SequenceModelActions.setCurrentDataSetup(getState().sequenceModel.selectedDataSetup!.dataSetup.id));
@@ -292,13 +276,13 @@ const getSequenceCTOFromBackend = (sequenceId: number): AppThunk => (dispatch) =
 
 const handleActorClickEvent = (actorId: number): AppThunk => (dispatch) => {
   const filter: Filter[] = [];
-  filter.push({ type: "ACTOR", id: actorId });
+  filter.push({type: 'ACTOR', id: actorId});
   dispatch(SequenceModelSlice.actions.setFilter(filter));
 };
 
 const handleDataClickEvent = (dataId: number): AppThunk => (dispatch) => {
   const filter: Filter[] = [];
-  filter.push({ type: "DATA", id: dataId });
+  filter.push({type: 'DATA', id: dataId});
   dispatch(SequenceModelSlice.actions.setFilter(filter));
 };
 
@@ -308,24 +292,24 @@ const filterSteps = (steps: CalculatedStep[], filter: Filter[], modelSteps: Sequ
   }
   return steps.filter((step) =>
     filter.some((currentFilter) => {
-      const actions: ActionTO[] =
-        modelSteps.find((modelStep) => modelStep.squenceStepTO.id === step.stepFk)?.actions || [];
+      const actions: ActionTO[]
+        = modelSteps.find((modelStep) => modelStep.squenceStepTO.id === step.stepFk)?.actions || [];
       switch (currentFilter.type) {
-        case "ACTOR":
+        case 'ACTOR':
           return actions.some((action) => action.receivingActorFk === currentFilter.id);
-        case "DATA":
+        case 'DATA':
           return actions.some((action) => action.dataFk === currentFilter.id);
         default:
           return false;
       }
-    })
+    }),
   );
 };
 
 const getArrowsForStepFk = (
   stepFk: number,
   sequenceStepCTOs: SequenceStepCTO[],
-  rootState: RootState
+  rootState: RootState,
 ): Arrow[] => {
   let arrows: Arrow[] = [];
   let step: SequenceStepCTO | undefined;
@@ -333,9 +317,7 @@ const getArrowsForStepFk = (
     step = sequenceStepCTOs.find((stp) => stp.squenceStepTO.id === stepFk);
   }
   if (step) {
-    
       arrows = mapActionsToArrows(step.actions, rootState);
-    
   }
   return arrows;
 };
@@ -343,37 +325,39 @@ const getArrowsForStepFk = (
 const mapActionsToArrows = (actions: ActionTO[], state: RootState): Arrow[] => {
   const arrows: Arrow[] = [];
 
-  actions.forEach(action => {
-    
+  actions.forEach((action) => {
     const sourceGeometricalData: GeometricalDataCTO | undefined = state.masterData.actors.find(
-      (actor) => actor.actor.id === action.sendingActorFk
+      (actor) => actor.actor.id === action.sendingActorFk,
       )?.geometricalData;
-      
+
       const targetGeometricalData: GeometricalDataCTO | undefined = state.masterData.actors.find(
-        (comp) => comp.actor.id === action.receivingActorFk
+        (comp) => comp.actor.id === action.receivingActorFk,
         )?.geometricalData;
-        
+
         const dataLabels: string[] = [];
-        const dataLabel: string | undefined = state.masterData.datas.find(data => data.data.id === action.dataFk)?.data.name;
-        if(dataLabel){
+        const dataLabel: string | undefined = state.masterData.datas.find((data) => data.data.id === action.dataFk)?.data.name;
+        if (dataLabel) {
           dataLabels.push(dataLabel);
         }
-        
+
         if (sourceGeometricalData && targetGeometricalData) {
+          const existingArrow: Arrow | undefined = arrows
+            .find((arrow) =>
+              arrow.sourceGeometricalData.geometricalData.id === sourceGeometricalData.geometricalData.id
+              && arrow.targetGeometricalData.geometricalData.id === targetGeometricalData.geometricalData.id,
+            );
 
-          const existingArrow: Arrow | undefined = arrows.find(arrow => arrow.sourceGeometricalData.geometricalData.id === sourceGeometricalData.geometricalData.id && arrow.targetGeometricalData.geometricalData.id === targetGeometricalData.geometricalData.id);
-
-          if(existingArrow){
-            existingArrow.dataLabels.push(...dataLabels)
-          }else{
+          if (existingArrow) {
+            existingArrow.dataLabels.push(...dataLabels);
+          } else {
             arrows.push({
               sourceGeometricalData,
               targetGeometricalData,
-              dataLabels
+              dataLabels,
             });
           }
         }
-      })
+      });
       return arrows;
 };
 
@@ -396,7 +380,7 @@ export const sequenceModelSelectors = {
       return filterSteps(
         calcSequence?.steps || [],
         state.sequenceModel.activeFilter,
-        currentSequence?.sequenceStepCTOs || []
+        currentSequence?.sequenceStepCTOs || [],
       );
     } else {
       return [];
@@ -431,19 +415,20 @@ export const sequenceModelSelectors = {
   },
   selectCurrentStepIndex: (state: RootState): number => state.sequenceModel.currentStepIndex,
   selectCurrentStepId: (state: RootState): string => {
-    return getCurrentCalcSequence(state.sequenceModel)?.steps[state.sequenceModel.currentStepIndex]?.stepId || "";
+    return getCurrentCalcSequence(state.sequenceModel)?.steps[state.sequenceModel.currentStepIndex]?.stepId || '';
   },
   selectCurrentLinkIndex: (state: RootState): number => state.sequenceModel.currentLinkIndex,
   selectCurrentLinkId: (state: RootState): string =>
-    state.sequenceModel.calcChain?.calcLinks[state.sequenceModel.currentLinkIndex]?.stepId || "",
+    state.sequenceModel.calcChain?.calcLinks[state.sequenceModel.currentLinkIndex]?.stepId || '',
   selectCurrentArrows: (state: RootState): Arrow[] => {
     const arrows: Arrow[] = [];
     const filteredSteps = getFilteredSteps(state);
     let stepFks: number[] = [];
-    // this hack is because we cannot show more than arrow at the moment. This would calc all arrows if step index === 0. The length hack is because javascript doesnt accept if (false)
+    // this hack is because we cannot show more than arrow at the moment. This would calc all arrows if step index === 0.
+    // The length hack is because javascript doesnt accept if (false)
     if (arrows.length === -1000) {
       /* TODO: reactivate state.sequenceModel.currentStepIndex === 0)*/ stepFks = filteredSteps.map(
-        (step) => step.stepFk
+        (step) => step.stepFk,
       );
     } else {
       const stepFk: number | undefined = filteredSteps[state.sequenceModel.currentStepIndex]?.stepFk;
@@ -451,12 +436,11 @@ export const sequenceModelSelectors = {
         stepFks.push(stepFk);
       }
     }
-    let allArrows: Arrow[] = []
-    stepFks.forEach((stepFk) =>
-    {
-      const arr: Arrow[] = getArrowsForStepFk(stepFk, getCurrentSequenceModel(state.sequenceModel)?.sequenceStepCTOs || [], state)
+    let allArrows: Arrow[] = [];
+    stepFks.forEach((stepFk) => {
+      const arr: Arrow[] = getArrowsForStepFk(stepFk, getCurrentSequenceModel(state.sequenceModel)?.sequenceStepCTOs || [], state);
       allArrows = allArrows.concat(arr);
-    }
+    },
     );
     allArrows.forEach((arrow) => {
       if (arrow) arrows.push(arrow);
@@ -466,8 +450,6 @@ export const sequenceModelSelectors = {
   selectLoopStepStartIndex: (state: RootState): number | null =>
     getCurrentCalcSequence(state.sequenceModel)?.loopStartingStepIndex || null,
 };
-
-
 
 // =============================================== ACTIONS ===============================================
 
@@ -498,7 +480,7 @@ function getFilteredSteps(state: RootState) {
     ? filterSteps(
         getCurrentCalcSequence(state.sequenceModel)?.steps || [],
         state.sequenceModel.activeFilter,
-        getCurrentSequenceModel(state.sequenceModel)?.sequenceStepCTOs || []
+        getCurrentSequenceModel(state.sequenceModel)?.sequenceStepCTOs || [],
       )
     : [];
 }

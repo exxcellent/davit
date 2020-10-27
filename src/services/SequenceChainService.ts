@@ -1,31 +1,12 @@
-import { isNullOrUndefined } from 'util';
-
-import { ChainCTO } from '../dataAccess/access/cto/ChainCTO';
-import { ChainlinkCTO } from '../dataAccess/access/cto/ChainlinkCTO';
-import { DataSetupCTO } from '../dataAccess/access/cto/DataSetupCTO';
-import { ChainDecisionTO } from '../dataAccess/access/to/ChainDecisionTO';
-import { GoToChain, GoToTypesChain, TerminalChain } from '../dataAccess/access/types/GoToTypeChain';
-import { ActorData } from '../viewDataTypes/ActorData';
-import { CalcSequence, SequenceService } from './SequenceService';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import {isNullOrUndefined} from 'util';
+import {ChainCTO} from '../dataAccess/access/cto/ChainCTO';
+import {ChainlinkCTO} from '../dataAccess/access/cto/ChainlinkCTO';
+import {DataSetupCTO} from '../dataAccess/access/cto/DataSetupCTO';
+import {ChainDecisionTO} from '../dataAccess/access/to/ChainDecisionTO';
+import {GoToChain, GoToTypesChain, TerminalChain} from '../dataAccess/access/types/GoToTypeChain';
+import {ActorData} from '../viewDataTypes/ActorData';
+import {ActorDataState} from '../viewDataTypes/ActorDataState';
+import {CalcSequence, SequenceService} from './SequenceService';
 
 export interface CalcChainLink {
   name: string;
@@ -50,7 +31,7 @@ interface MergedActorDatas {
 
 export const SequenceChainService = {
   calculateChain: (sequenceChain: ChainCTO | null): CalcChain => {
-    let calcSequenceChain: CalcChain = { calcLinks: [], linkIds: [], terminal: { type: GoToTypesChain.ERROR } };
+    const calcSequenceChain: CalcChain = {calcLinks: [], linkIds: [], terminal: {type: GoToTypesChain.ERROR}};
     let loopStartingStep: number = -1;
     let actorDatas: ActorData[] = [];
 
@@ -60,7 +41,7 @@ export const SequenceChainService = {
       if (root) {
         let step: ChainlinkCTO | ChainDecisionTO | TerminalChain = root;
         let type = getType(step);
-        let stepId: string = "";
+        let stepId: string = '';
 
         while (!isLooping(loopStartingStep) && (type === GoToTypesChain.LINK || type === GoToTypesChain.DEC)) {
           if (type === GoToTypesChain.LINK) {
@@ -71,14 +52,14 @@ export const SequenceChainService = {
 
             const result: CalcSequence = SequenceService.calculateSequence(
               link.sequence,
-              mergedActorDatas.actorDatas
+              mergedActorDatas.actorDatas,
             );
 
             actorDatas = result.steps.length > 0 ? result.steps[result.steps.length - 1].actorDatas : [];
 
             // STEP ID
-            const newLinkId = "_LINK_" + link.chainLink.id;
-            stepId = stepId === "" ? link.chainLink.id.toString() : stepId + newLinkId;
+            const newLinkId = '_LINK_' + link.chainLink.id;
+            stepId = stepId === '' ? link.chainLink.id.toString() : stepId + newLinkId;
             calcSequenceChain.linkIds.push(stepId);
 
             calcSequenceChain.calcLinks.push({
@@ -104,28 +85,28 @@ export const SequenceChainService = {
             step = getNext(goTo, sequenceChain);
             type = getType(step);
 
-            const newCondID = "_COND_" + decision.id;
-            stepId = stepId === "" ? "root" : stepId + newCondID;
+            const newCondID = '_COND_' + decision.id;
+            stepId = stepId === '' ? 'root' : stepId + newCondID;
           }
         }
         if (!isLooping(loopStartingStep)) {
           calcSequenceChain.terminal = step as TerminalChain;
-          calcSequenceChain.linkIds.push(stepId + "_" + (step as TerminalChain).type);
+          calcSequenceChain.linkIds.push(stepId + '_' + (step as TerminalChain).type);
         }
       }
     }
-    return { ...calcSequenceChain, loopStartingIndex: isLooping(loopStartingStep) ? loopStartingStep : undefined };
+    return {...calcSequenceChain, loopStartingIndex: isLooping(loopStartingStep) ? loopStartingStep : undefined};
   },
 };
 
 const executeDecisionCheck = (decision: ChainDecisionTO, actorDatas: ActorData[]): GoToChain => {
   const filteredCompData: ActorData[] = actorDatas.filter(
-    (actorData) => actorData.actorFk === decision.actorFk
+    (actorData) => actorData.actorFk === decision.actorFk,
   );
   let goTo: GoToChain | undefined;
-  if(decision.dataAndInstaceIds !== undefined){
+  if (decision.dataAndInstaceIds !== undefined) {
     decision.dataAndInstaceIds.forEach((dataAndInstaceId) => {
-      let isIncluded: boolean = filteredCompData.some((cd) => cd.dataFk === dataAndInstaceId.dataFk);
+      const isIncluded: boolean = filteredCompData.some((cd) => cd.dataFk === dataAndInstaceId.dataFk);
       if (decision.has !== isIncluded) {
         goTo = decision.elseGoTo;
       }
@@ -151,16 +132,16 @@ export const getRoot = (chain: ChainCTO | null): ChainlinkCTO | null => {
 };
 
 const getNext = (goTo: GoToChain, chain: ChainCTO): ChainlinkCTO | ChainDecisionTO | TerminalChain => {
-  let nextStepOrDecisionOrTerminal: ChainlinkCTO | ChainDecisionTO | TerminalChain = { type: GoToTypesChain.ERROR };
+  let nextStepOrDecisionOrTerminal: ChainlinkCTO | ChainDecisionTO | TerminalChain = {type: GoToTypesChain.ERROR};
   switch (goTo.type) {
     case GoToTypesChain.LINK:
-      nextStepOrDecisionOrTerminal = getLinkFromChain(goTo.id, chain) || { type: GoToTypesChain.ERROR };
+      nextStepOrDecisionOrTerminal = getLinkFromChain(goTo.id, chain) || {type: GoToTypesChain.ERROR};
       break;
     case GoToTypesChain.DEC:
-      nextStepOrDecisionOrTerminal = getDecisionFromChain(goTo.id, chain) || { type: GoToTypesChain.ERROR };
+      nextStepOrDecisionOrTerminal = getDecisionFromChain(goTo.id, chain) || {type: GoToTypesChain.ERROR};
       break;
     case GoToTypesChain.FIN:
-      nextStepOrDecisionOrTerminal = { type: GoToTypesChain.FIN };
+      nextStepOrDecisionOrTerminal = {type: GoToTypesChain.FIN};
   }
   return nextStepOrDecisionOrTerminal;
 };
@@ -173,23 +154,23 @@ const getType = (step: ChainlinkCTO | ChainDecisionTO | TerminalChain): GoToType
   } else if ((step as TerminalChain).type) {
     return (step as TerminalChain).type;
   } else {
-    throw Error("Illegal Type in Sequence");
+    throw Error('Illegal Type in Sequence');
   }
 };
 
 const checkForLoop = (
   calcSequenceChain: CalcChain,
   step: ChainlinkCTO,
-  mergedActorData: MergedActorDatas
+  mergedActorData: MergedActorDatas,
 ): number => {
   return calcSequenceChain.calcLinks.findIndex(
     (calcLink) =>
-      calcLink.chainLinkId === step.chainLink.id &&
-      calcLink.sequence.steps[0].actorDatas.length === mergedActorData.actorDatas.length &&
-      !calcLink.sequence.steps[0].actorDatas.some(
+      calcLink.chainLinkId === step.chainLink.id
+      && calcLink.sequence.steps[0].actorDatas.length === mergedActorData.actorDatas.length
+      && !calcLink.sequence.steps[0].actorDatas.some(
         (cp) =>
-          !mergedActorData.actorDatas.some((rcp) => rcp.actorFk === cp.actorFk && rcp.dataFk === cp.dataFk)
-      )
+          !mergedActorData.actorDatas.some((rcp) => rcp.actorFk === cp.actorFk && rcp.dataFk === cp.dataFk),
+      ),
   );
 };
 
@@ -200,7 +181,7 @@ const isLooping = (loopStartingStep: number) => {
 const mergeActorDatas = (actorDatas: ActorData[], dataSetup: DataSetupCTO): MergedActorDatas => {
   const errorCompDatas: ActorData[] = [];
   const dataSetupActorData: ActorData[] = dataSetup.initDatas.map((initData) => {
-    return { actorFk: initData.actorFk, dataFk: initData.dataFk, instanceFk: initData.instanceFk };
+    return {actorFk: initData.actorFk, dataFk: initData.dataFk, instanceFk: initData.instanceFk, state: ActorDataState.PERSISTENT};
   });
   dataSetupActorData.forEach((actorData) => {
     if (actorDatas.some((cp) => isCompDataEqual(cp, actorData))) {
@@ -209,7 +190,7 @@ const mergeActorDatas = (actorDatas: ActorData[], dataSetup: DataSetupCTO): Merg
       actorDatas.push(actorData);
     }
   });
-  return { actorDatas: actorDatas, errors: errorCompDatas };
+  return {actorDatas: actorDatas, errors: errorCompDatas};
 };
 
 const isCompDataEqual = (actorData1: ActorData, actorData2: ActorData): boolean => {
