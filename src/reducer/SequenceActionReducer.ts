@@ -79,6 +79,12 @@ export const SequenceActionReducer = {
             };
             newActorDatas[indexActorDataSending].state=ActorDataState.SENT;
             if (actorDataIsPresent(indexActorDataToEdit)) {
+              newActorDatas.push({
+              actorFk: action.receivingActorFk,
+              dataFk: action.dataFk,
+              instanceFk: newActorDatas[indexActorDataToEdit].instanceFk,
+              state: ActorDataState.UPDATED_FROM,
+              });
               newActorDatas[indexActorDataToEdit] = {...actorData, state: ActorDataState.UPDATED_TO};
             } else {
               newActorDatas.push(actorData);
