@@ -9,10 +9,10 @@
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
     "[typescriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
     "editor.formatOnPaste": true,
     "javascript.format.semicolons": "insert",
     "typescript.format.semicolons": "insert",
-    "typescriptHero.imports.organizeOnSave": true
+    // "typescriptHero.imports.organizeOnSave": true
 }
