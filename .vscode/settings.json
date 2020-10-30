@@ -6,9 +6,15 @@
         "source.fixAll": true
     },
     "[typescript]": {
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        },
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
     "[typescriptreact]": {
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        },
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
     "editor.formatOnPaste": true,
