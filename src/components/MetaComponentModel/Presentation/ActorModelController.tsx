@@ -82,7 +82,10 @@ const useViewModel = () => {
     const actorDatas: ViewFragmentProps[] = [];
     const actorDatasFromErros: ViewFragmentProps[] = errors.map(mapErrorToActorDatas);
 
-    const actorDatasFromCompDatas: ViewFragmentProps[] = currentActorDatas.map(mapActorDataToViewFramgent);
+
+    const actorDatasFromCompDatas: ViewFragmentProps[] = currentActorDatas.map(mapActorDataToViewFramgent).sort((a, b) => {
+        return a.name! < b.name! ? -1 : a.name! > b.name! ? 1 : 0;
+      });
     actorDatas.push(...actorDatasFromErros);
 
     actorDatas.push(

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActorDataState } from './ActorDataState';
+import {ActorDataState} from './ActorDataState';
 
 
 export interface ViewFragmentProps {
