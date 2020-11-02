@@ -672,7 +672,7 @@ carhHeaderText {
   width: 100%;
   height: 100%;
   background-color: var(--carv2-color-exxcellent-blue) !important;
-  color: var(--carv2-data-text-color) !important;
+  color: var(--carv2-text-color) !important;
 }
 
 .carv2ActorDataUPDATED_TO {
@@ -692,7 +692,7 @@ carhHeaderText {
   width: 100%;
   height: 100%;
   background-color: var(--carv2-color-dark-purple) !important;
-  color: var(--carv2-text-color) !important;
+  color: var(--carv2-data-persistent-color) !important;
 }
 
 .carv2ActorDataDELETED {
@@ -702,7 +702,7 @@ carhHeaderText {
   width: 100%;
   height: 100%;
   background-color: var(--carv2-data-delete-color) !important;
-  color: var(--carv2-data-text-color) !important;
+  color: var(--carv2-text-color) !important;
 }
 
 .carv2ActorDataADD {
@@ -722,7 +722,7 @@ carhHeaderText {
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: var(--carv2-background-color) !important;
+  background-color: var(--carv2-data-persistent-color) !important;
   color: black !important;
   box-shadow: 6px 6px 10px var(--carv2-data-add-color) inset !important;
 }
@@ -732,7 +732,7 @@ carhHeaderText {
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: var(--carv2-background-color-header) !important;
+  background-color: var(--carv2-data-persistent-color) !important;
   color: var(--carv2-text-color) !important;
   box-shadow: 0px 0px 20px rgb(255, 0, 0);
 }

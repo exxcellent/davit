@@ -7,7 +7,8 @@ import {SequenceActionReducer, SequenceActionResult, SequenceDecisionResult} fro
 import {ActorData} from '../viewDataTypes/ActorData';
 
 export interface CalculatedStep {
-  stepFk: number;
+  type: 'STEP' | 'DECISION' | 'INIT';
+  modelElementFk?: number;
   stepId: string;
   actorDatas: ActorData[];
   errors: ActionTO[];
@@ -61,7 +62,8 @@ export const SequenceService = {
               stepId: stepId,
               actorDatas: actorDatas,
               errors: result.errors,
-              stepFk: step.squenceStepTO.id,
+              modelElementFk: step.squenceStepTO.id,
+              type: 'STEP',
             });
 
             if (!isLooping(loopStartingStep)) {
@@ -89,7 +91,8 @@ export const SequenceService = {
               stepId: stepId,
               actorDatas: actorDatas,
               errors: [],
-              stepFk: decision.id,
+              modelElementFk: decision.id,
+              type: 'DECISION',
             });
           }
         }
@@ -108,7 +111,7 @@ export const SequenceService = {
 };
 
 const getInitStep = (actorDatas: ActorData[]): CalculatedStep => {
-  return {stepId: 'root', actorDatas: actorDatas, stepFk: 0, errors: []};
+  return {stepId: 'root', actorDatas: actorDatas, type: 'INIT', errors: []};
 };
 
 const getStepFromSequence = (stepId: number, sequence: SequenceCTO): SequenceStepCTO | undefined => {
@@ -165,7 +168,7 @@ const getType = (stepOrDecisionOrTerminal: SequenceStepCTO | DecisionTO | Termin
 const checkForLoop = (calcSequence: CalcSequence, step: SequenceStepCTO, result: SequenceActionResult): number => {
   return calcSequence.steps.findIndex(
     (calcStep) =>
-      calcStep.stepFk === step.squenceStepTO.id
+      calcStep.modelElementFk === step.squenceStepTO.id
       && calcStep.actorDatas.length === result.actorDatas.length
       && !calcStep.actorDatas.some(
         (cp) => !result.actorDatas.some((rcp) => rcp.actorFk === cp.actorFk && rcp.dataFk === cp.dataFk),

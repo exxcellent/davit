@@ -88,8 +88,6 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
   ];
   const sequenceStepTableHead = [
     'NAME',
-    'SENDER',
-    'RECEIVER',
     'GOTO',
     'ACTIONS',
     'ROOT',
@@ -104,8 +102,7 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
   const calcSequenceTableHead = [
     'INDEX',
     'NAME',
-    'SENDER',
-    'RECEIVER',
+    'TYPE',
     'ACTION-ERROR',
   ];
   const seqeunceModelTableHead = ['NAME', 'ACTIONS'];
@@ -306,6 +303,23 @@ const useSequenceTableViewModel = () => {
     }
   }, [mode, selectedChain]);
 
+  function getModelElementName(step: CalculatedStep, selectSequence: SequenceCTO | null) {
+    switch (step.type) {
+      case 'STEP':
+        return selectSequence?.sequenceStepCTOs.find(
+          (item) => item.squenceStepTO.id === step.modelElementFk
+          )?.squenceStepTO.name || 'Step not found!';
+      case 'DECISION':
+        return selectSequence?.decisions.find(
+          (item) => item.id === step.modelElementFk
+          )?.name || 'Decision not found!';
+      case 'INIT':
+        return 'Initial step';
+      default:
+        return `ModelElement type has type ${step.type} which is not known`;
+    }
+  }
+
   const createCalcSequenceStepColumn = (
     step: CalculatedStep,
     index: number,
@@ -322,32 +336,7 @@ const useSequenceTableViewModel = () => {
       trClass = 'carv2TrMarked';
       scrollToRef(myRef);
     }
-    const modelStep:
-      | SequenceStepCTO
-      | undefined = selectSequence?.sequenceStepCTOs.find(
-      (item) => item.squenceStepTO.id === step.stepFk
-    );
 
-    const name
-      = index === 0 && !modelStep
-        ? 'Initial'
-        : modelStep?.squenceStepTO.name || 'Step not found';
-
-    // TODO: this have to move to a new table 'actions'
-    const source = '';
-    // index === 0 && !modelStep
-    // ? ""
-    // : modelStep
-    // ? getComponentNameById(modelStep.squenceStepTO.sourceComponentFk)
-    // : "Source not found";
-
-    // TODO: this have to move to a new table 'actions'
-    const target = '';
-    // index === 0 && !modelStep
-    //   ? ""
-    //   : modelStep
-    //   ? getComponentNameById(modelStep.squenceStepTO.targetComponentFk)
-    //   : "Target not found";
     const hasError = step.errors.length > 0 ? true : false;
 
     return (
@@ -358,9 +347,8 @@ const useSequenceTableViewModel = () => {
         ref={myRef}
       >
         <td>{index}</td>
-        <td>{name}</td>
-        <td>{source}</td>
-        <td>{target}</td>
+        <td>{getModelElementName(step, selectSequence)}</td>
+        <td>{step.type}</td>
         <td>{hasError && <Icon name="warning sign" color="red" />}</td>
       </tr>
     );
@@ -371,11 +359,6 @@ const useSequenceTableViewModel = () => {
     index: number,
   ): JSX.Element => {
     const name = step.squenceStepTO.name;
-    // TODO: this have to be moved in a new table 'actions'
-    // const source = getComponentNameById(step.squenceStepTO.sourceComponentFk);
-    // const target = getComponentNameById(step.squenceStepTO.targetComponentFk);
-    const source = '';
-    const target = '';
     const gotoName: string = getGotoName(
       step.squenceStepTO.goto,
       selectSequence?.sequenceStepCTOs || [],
@@ -388,8 +371,6 @@ const useSequenceTableViewModel = () => {
     return (
       <tr key={index} className={trClass}>
         <td>{name}</td>
-        <td>{source}</td>
-        <td>{target}</td>
         <td>{gotoName}</td>
         <td>
           <Carv2TableButton
@@ -612,7 +593,6 @@ const useSequenceTableViewModel = () => {
       <tr key={'Terminal'} className={className}>
         <td> </td>
         <td>{terminal.type}</td>
-        <td> </td>
         <td> </td>
         <td> </td>
       </tr>

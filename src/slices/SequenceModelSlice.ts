@@ -293,7 +293,7 @@ const filterSteps = (steps: CalculatedStep[], filter: Filter[], modelSteps: Sequ
   return steps.filter((step) =>
     filter.some((currentFilter) => {
       const actions: ActionTO[]
-        = modelSteps.find((modelStep) => modelStep.squenceStepTO.id === step.stepFk)?.actions || [];
+        = modelSteps.find((modelStep) => modelStep.squenceStepTO.id === step.modelElementFk)?.actions || [];
       switch (currentFilter.type) {
         case 'ACTOR':
           return actions.some((action) => action.receivingActorFk === currentFilter.id);
@@ -407,7 +407,7 @@ export const sequenceModelSelectors = {
   },
   selectActions: (state: RootState): ActionTO[] => {
     const filteredSteps = getFilteredSteps(state);
-    const stepId: number | undefined = filteredSteps[state.sequenceModel.currentStepIndex]?.stepFk;
+    const stepId: number | undefined = filteredSteps[state.sequenceModel.currentStepIndex]?.modelElementFk;
     return stepId
       ? getCurrentSequenceModel(state.sequenceModel)?.sequenceStepCTOs.find((step) => step.squenceStepTO.id === stepId)
           ?.actions || []
@@ -423,20 +423,15 @@ export const sequenceModelSelectors = {
   selectCurrentArrows: (state: RootState): Arrow[] => {
     const arrows: Arrow[] = [];
     const filteredSteps = getFilteredSteps(state);
-    let stepFks: number[] = [];
-    // this hack is because we cannot show more than arrow at the moment. This would calc all arrows if step index === 0.
-    // The length hack is because javascript doesnt accept if (false)
-    if (arrows.length === -1000) {
-      /* TODO: reactivate state.sequenceModel.currentStepIndex === 0)*/ stepFks = filteredSteps.map(
-        (step) => step.stepFk,
-      );
-    } else {
-      const stepFk: number | undefined = filteredSteps[state.sequenceModel.currentStepIndex]?.stepFk;
+    const stepFks: number[] = [];
+
+    const stepFk: number | undefined = filteredSteps[state.sequenceModel.currentStepIndex]?.type === 'STEP'
+      ? filteredSteps[state.sequenceModel.currentStepIndex]?.modelElementFk
+      : undefined;
       if (stepFk) {
         stepFks.push(stepFk);
       }
-    }
-    let allArrows: Arrow[] = [];
+        let allArrows: Arrow[] = [];
     stepFks.forEach((stepFk) => {
       const arr: Arrow[] = getArrowsForStepFk(stepFk, getCurrentSequenceModel(state.sequenceModel)?.sequenceStepCTOs || [], state);
       allArrows = allArrows.concat(arr);
