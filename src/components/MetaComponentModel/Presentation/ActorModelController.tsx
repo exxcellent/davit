@@ -87,9 +87,9 @@ const useViewModel = () => {
     actorDatas.push(...actorDatasFromErros);
 
     actorDatas.push(
-      ...actorDatasFromCompDatas.filter(
-        (actorDataFromActorData) => !actorDatas.some((cp) => actorDataExists(cp, actorDataFromActorData)),
-      ),
+        ...actorDatasFromCompDatas.filter(
+            (actorDataFromActorData) => !actorDatas.some((cp) => actorDataExists(cp, actorDataFromActorData)),
+        ),
     );
     return actorDatas;
   };
@@ -164,7 +164,7 @@ const useViewModel = () => {
           return {
             parentId: decision.actorFk,
             name: getDataNameById(data.dataFk, data.instanceId),
-            state: decision.has ? ActorDataState.CHECKED : ActorDataState.DELETED,
+            state: ActorDataState.CHECKED,
           };
         });
       }
@@ -246,14 +246,14 @@ const useViewModel = () => {
   const toDnDElements = (actors: ActorCTO[]): { card: Carv2CardProps; position: PositionTO }[] => {
     let cards: { card: Carv2CardProps; position: PositionTO }[] = [];
     cards = actors
-      .filter((actor) => !(actorCTOToEdit && actorCTOToEdit.actor.id === actor.actor.id))
-      .map((actorr) => {
-        return {
-          card: actorToCard(actorr),
-          position: actorr.geometricalData.position,
-        };
-      })
-      .filter((item) => item !== undefined);
+        .filter((actor) => !(actorCTOToEdit && actorCTOToEdit.actor.id === actor.actor.id))
+        .map((actorr) => {
+          return {
+            card: actorToCard(actorr),
+            position: actorr.geometricalData.position,
+          };
+        })
+        .filter((item) => item !== undefined);
     // add actor to edit
     if (actorCTOToEdit) {
       cards.push({
@@ -271,8 +271,8 @@ const useViewModel = () => {
       initWidth: actor.geometricalData.geometricalData.width,
       initHeigth: actor.geometricalData.geometricalData.height,
       dataFragments: getActorDatas().filter(
-        (act) =>
-          act.parentId === actor.actor.id
+          (act) =>
+            act.parentId === actor.actor.id
           || (act.parentId as { dataId: number; instanceId: number }).dataId === actor.actor.id,
       ),
       zoomFactor: 1,

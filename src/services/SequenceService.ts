@@ -167,11 +167,11 @@ const getType = (stepOrDecisionOrTerminal: SequenceStepCTO | DecisionTO | Termin
 
 const checkForLoop = (calcSequence: CalcSequence, step: SequenceStepCTO, result: SequenceActionResult): number => {
   return calcSequence.steps.findIndex(
-    (calcStep) =>
-      calcStep.modelElementFk === step.squenceStepTO.id
+      (calcStep) =>
+        calcStep.modelElementFk === step.squenceStepTO.id
       && calcStep.actorDatas.length === result.actorDatas.length
       && !calcStep.actorDatas.some(
-        (cp) => !result.actorDatas.some((rcp) => rcp.actorFk === cp.actorFk && rcp.dataFk === cp.dataFk),
+          (cp) => !result.actorDatas.some((rcp) => rcp.actorFk === cp.actorFk && rcp.dataFk === cp.dataFk),
       ),
   );
 };

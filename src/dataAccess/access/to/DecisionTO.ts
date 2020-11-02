@@ -7,7 +7,6 @@ export class DecisionTO extends AbstractTO {
     public name: string = '',
     public sequenceFk: number = -1,
     public actorFk: number = -1,
-    public has: boolean = true,
     public dataAndInstaceId: DataAndInstanceId[] = [],
     public ifGoTo: GoTo = {type: GoToTypes.FIN},
     public elseGoTo: GoTo = {type: GoToTypes.ERROR},

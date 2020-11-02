@@ -40,7 +40,7 @@ enum ActiveTab {
 }
 
 export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (
-  props,
+    props,
 ) => {
   const {fullScreen} = props;
   const {
@@ -233,38 +233,38 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
 const useSequenceTableViewModel = () => {
   const dispatch = useDispatch();
   const selectSequence: SequenceCTO | null = useSelector(
-    sequenceModelSelectors.selectSequence,
+      sequenceModelSelectors.selectSequence,
   );
   const stepIndex: number | null = useSelector(
-    sequenceModelSelectors.selectCurrentStepIndex,
+      sequenceModelSelectors.selectCurrentStepIndex,
   );
   const chainIndex: number | null = useSelector(
-    sequenceModelSelectors.selectCurrentLinkIndex,
+      sequenceModelSelectors.selectCurrentLinkIndex,
   );
   const calcSteps: CalculatedStep[] = useSelector(
-    sequenceModelSelectors.selectCalcSteps,
+      sequenceModelSelectors.selectCalcSteps,
   );
   const terminalStep: Terminal | null = useSelector(
-    sequenceModelSelectors.selectTerminalStep,
+      sequenceModelSelectors.selectTerminalStep,
   );
   const loopStepStartIndex: number | null = useSelector(
-    sequenceModelSelectors.selectLoopStepStartIndex,
+      sequenceModelSelectors.selectLoopStepStartIndex,
   );
   const calcChain: CalcChain | null = useSelector(
-    sequenceModelSelectors.selectCalcChain,
+      sequenceModelSelectors.selectCalcChain,
   );
   const sequences: SequenceTO[] = useSelector(masterDataSelectors.sequences);
   const dataSetups: DataSetupTO[] = useSelector(masterDataSelectors.dataSetup);
   const selectedChain: ChainTO | null = useSelector(
-    sequenceModelSelectors.selectChain,
+      sequenceModelSelectors.selectChain,
   );
   const chainModles: ChainTO[] = useSelector(masterDataSelectors.chains);
   const mode: Mode = useSelector(editSelectors.mode);
   const selectedChainlinks: ChainlinkCTO[] = useSelector(
-    sequenceModelSelectors.selectCurrentChainLinks,
+      sequenceModelSelectors.selectCurrentChainLinks,
   );
   const selectedChainDecisions: ChainDecisionTO[] = useSelector(
-    sequenceModelSelectors.selectCurrentChainDecisions,
+      sequenceModelSelectors.selectCurrentChainDecisions,
   );
 
   const [activeTab, setActiveTab] = useState<ActiveTab>(ActiveTab.sequence);
@@ -321,8 +321,8 @@ const useSequenceTableViewModel = () => {
   }
 
   const createCalcSequenceStepColumn = (
-    step: CalculatedStep,
-    index: number,
+      step: CalculatedStep,
+      index: number,
   ): JSX.Element => {
     let trClass: string
       = loopStepStartIndex && loopStepStartIndex <= index
@@ -355,12 +355,12 @@ const useSequenceTableViewModel = () => {
   };
 
   const createModelStepColumn = (
-    step: SequenceStepCTO,
-    index: number,
+      step: SequenceStepCTO,
+      index: number,
   ): JSX.Element => {
     const name = step.squenceStepTO.name;
     const gotoName: string = getGotoName(
-      step.squenceStepTO.goto,
+        step.squenceStepTO.goto,
       selectSequence?.sequenceStepCTOs || [],
       selectSequence?.decisions || [],
     );
@@ -383,8 +383,8 @@ const useSequenceTableViewModel = () => {
     );
   };
   const createSequenceModelColumn = (
-    sequence: SequenceTO,
-    index: number,
+      sequence: SequenceTO,
+      index: number,
   ): JSX.Element => {
     const name = sequence.name;
     const trClass = 'carv2Tr';
@@ -410,8 +410,8 @@ const useSequenceTableViewModel = () => {
     );
   };
   const createChainModelColumn = (
-    chain: ChainTO,
-    index: number,
+      chain: ChainTO,
+      index: number,
   ): JSX.Element => {
     const name = chain.name;
     const trClass = 'carv2Tr';
@@ -436,8 +436,8 @@ const useSequenceTableViewModel = () => {
   };
 
   const createCalcLinkColumn = (
-    link: CalcChainLink,
-    index: number,
+      link: CalcChainLink,
+      index: number,
   ): JSX.Element => {
     const name: string = link.name || 'Link name not found!';
     const sequenceName: string
@@ -464,17 +464,17 @@ const useSequenceTableViewModel = () => {
   };
 
   const createDecisionColumn = (
-    decision: DecisionTO,
-    index: number,
+      decision: DecisionTO,
+      index: number,
   ): JSX.Element => {
     const name = decision.name;
     const ifgotoName: string = getGotoName(
-      decision.ifGoTo,
+        decision.ifGoTo,
       selectSequence?.sequenceStepCTOs || [],
       selectSequence?.decisions || [],
     );
     const elsegotoName: string = getGotoName(
-      decision.elseGoTo,
+        decision.elseGoTo,
       selectSequence?.sequenceStepCTOs || [],
       selectSequence?.decisions || [],
     );
@@ -501,9 +501,9 @@ const useSequenceTableViewModel = () => {
     const sequenceName: string = link.sequence.sequenceTO.name;
     const dataSetupName: string = link.dataSetup.dataSetup.name;
     const gotoName: string = getChainGotoName(
-      link.chainLink.goto,
-      selectedChainlinks,
-      selectedChainDecisions,
+        link.chainLink.goto,
+        selectedChainlinks,
+        selectedChainDecisions,
     );
     const root: string = link.chainLink.root ? 'root' : '';
     const trClass = 'carv2Tr';
@@ -527,19 +527,19 @@ const useSequenceTableViewModel = () => {
   };
 
   const createChainDecisionColumn = (
-    decision: ChainDecisionTO,
-    index: number,
+      decision: ChainDecisionTO,
+      index: number,
   ): JSX.Element => {
     const name: string = decision.name;
     const ifgoto: string = getChainGotoName(
-      decision.ifGoTo,
-      selectedChainlinks,
-      selectedChainDecisions,
+        decision.ifGoTo,
+        selectedChainlinks,
+        selectedChainDecisions,
     );
     const elsegoto: string = getChainGotoName(
-      decision.elseGoTo,
-      selectedChainlinks,
-      selectedChainDecisions,
+        decision.elseGoTo,
+        selectedChainlinks,
+        selectedChainDecisions,
     );
     const trClass = 'carv2Tr';
     return (
@@ -560,8 +560,8 @@ const useSequenceTableViewModel = () => {
   };
 
   const createDataSetupColumn = (
-    dataSetup: DataSetupTO,
-    index: number,
+      dataSetup: DataSetupTO,
+      index: number,
   ): JSX.Element => {
     const name: string = dataSetup.name;
     const trClass = 'carv2Tr';
@@ -705,9 +705,9 @@ const useSequenceTableViewModel = () => {
   };
 
   const createEmptyRow = (
-    key: string,
-    numberOfElements: number,
-    className?: string,
+      key: string,
+      numberOfElements: number,
+      className?: string,
   ): JSX.Element => {
     return (
       <tr key={key} className={className}>
@@ -749,9 +749,9 @@ const useSequenceTableViewModel = () => {
 };
 
 function getChainGotoName(
-  goto: GoToChain,
-  selectedChainlinks: ChainlinkCTO[],
-  selectedChainDecisions: ChainDecisionTO[],
+    goto: GoToChain,
+    selectedChainlinks: ChainlinkCTO[],
+    selectedChainDecisions: ChainDecisionTO[],
 ) {
   let gotoName: string = 'could not find goto';
   switch (goto.type) {
@@ -762,13 +762,13 @@ function getChainGotoName(
     case GoToTypesChain.LINK:
       gotoName
         = selectedChainlinks.find(
-          (link) => link.chainLink.id === (goto as IntermediateChain).id,
+            (link) => link.chainLink.id === (goto as IntermediateChain).id,
         )?.chainLink.name || gotoName;
       break;
     case GoToTypesChain.DEC:
       gotoName
         = selectedChainDecisions.find(
-          (dec) => dec.id === (goto as IntermediateChain).id,
+            (dec) => dec.id === (goto as IntermediateChain).id,
         )?.name || gotoName;
       break;
   }
@@ -776,9 +776,9 @@ function getChainGotoName(
 }
 
 function getGotoName(
-  goto: GoTo,
-  steps: SequenceStepCTO[],
-  decisions: DecisionTO[],
+    goto: GoTo,
+    steps: SequenceStepCTO[],
+    decisions: DecisionTO[],
 ) {
   let gotoName: string = 'could not find goto';
   switch (goto.type) {
@@ -790,7 +790,7 @@ function getGotoName(
     case GoToTypes.STEP:
       gotoName
         = steps.find(
-          (step) => step.squenceStepTO.id === (goto as Intermediate).id,
+            (step) => step.squenceStepTO.id === (goto as Intermediate).id,
         )?.squenceStepTO.name || gotoName;
       break;
     case GoToTypes.DEC:
@@ -803,13 +803,13 @@ function getGotoName(
 }
 
 function fillWithEmptyRows(
-  list: JSX.Element[],
-  createEmptyRow: (
+    list: JSX.Element[],
+    createEmptyRow: (
     key: string,
     numberOfElements: number,
     className?: string | undefined
   ) => JSX.Element,
-  numberOfColumns: number,
+    numberOfColumns: number,
 ) {
   let key: number = list.length;
   while (list.length < 10) {

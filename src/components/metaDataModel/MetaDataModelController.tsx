@@ -1,21 +1,21 @@
-import React, { FunctionComponent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { ActorCTO } from '../../dataAccess/access/cto/ActorCTO';
-import { DataCTO } from '../../dataAccess/access/cto/DataCTO';
-import { DataSetupCTO } from '../../dataAccess/access/cto/DataSetupCTO';
-import { SequenceStepCTO } from '../../dataAccess/access/cto/SequenceStepCTO';
-import { ActionTO } from '../../dataAccess/access/to/ActionTO';
-import { DataRelationTO } from '../../dataAccess/access/to/DataRelationTO';
-import { DecisionTO } from '../../dataAccess/access/to/DecisionTO';
-import { InitDataTO } from '../../dataAccess/access/to/InitDataTO';
-import { ActionType } from '../../dataAccess/access/types/ActionType';
-import { EditActions, editSelectors } from '../../slices/EditSlice';
-import { MasterDataActions, masterDataSelectors } from '../../slices/MasterDataSlice';
-import { SequenceModelActions, sequenceModelSelectors } from '../../slices/SequenceModelSlice';
-import { ActorData } from '../../viewDataTypes/ActorData';
-import { ActorDataState } from '../../viewDataTypes/ActorDataState';
-import { ViewFragmentProps } from '../../viewDataTypes/ViewFragment';
-import { MetaDataDnDBox } from './fragments/MetaDataDnDBox';
+import React, {FunctionComponent} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {ActorCTO} from '../../dataAccess/access/cto/ActorCTO';
+import {DataCTO} from '../../dataAccess/access/cto/DataCTO';
+import {DataSetupCTO} from '../../dataAccess/access/cto/DataSetupCTO';
+import {SequenceStepCTO} from '../../dataAccess/access/cto/SequenceStepCTO';
+import {ActionTO} from '../../dataAccess/access/to/ActionTO';
+import {DataRelationTO} from '../../dataAccess/access/to/DataRelationTO';
+import {DecisionTO} from '../../dataAccess/access/to/DecisionTO';
+import {InitDataTO} from '../../dataAccess/access/to/InitDataTO';
+import {ActionType} from '../../dataAccess/access/types/ActionType';
+import {EditActions, editSelectors} from '../../slices/EditSlice';
+import {MasterDataActions, masterDataSelectors} from '../../slices/MasterDataSlice';
+import {SequenceModelActions, sequenceModelSelectors} from '../../slices/SequenceModelSlice';
+import {ActorData} from '../../viewDataTypes/ActorData';
+import {ActorDataState} from '../../viewDataTypes/ActorDataState';
+import {ViewFragmentProps} from '../../viewDataTypes/ViewFragment';
+import {MetaDataDnDBox} from './fragments/MetaDataDnDBox';
 
 interface MetaDataModelControllerProps {
   fullScreen?: boolean;
@@ -106,14 +106,14 @@ const useMetaDataModelViewModel = () => {
     const actorDatasFromCompDatas: ViewFragmentProps[] = currentActorDatas.map(mapActorDataToActorData);
     actorDatas.push(...actorDatasFromErros);
     actorDatas.push(
-      ...actorDatasFromActions.filter(
-        (actorDataFromAction) => !actorDatas.some((cp) => actorDataExists(cp, actorDataFromAction)),
-      ),
+        ...actorDatasFromActions.filter(
+            (actorDataFromAction) => !actorDatas.some((cp) => actorDataExists(cp, actorDataFromAction)),
+        ),
     );
     actorDatas.push(
-      ...actorDatasFromCompDatas.filter(
-        (actorDataFromCompData) => !actorDatas.some((cp) => actorDataExists(cp, actorDataFromCompData)),
-      ),
+        ...actorDatasFromCompDatas.filter(
+            (actorDataFromCompData) => !actorDatas.some((cp) => actorDataExists(cp, actorDataFromCompData)),
+        ),
     );
     return actorDatas;
   };
@@ -168,10 +168,9 @@ const useMetaDataModelViewModel = () => {
       if (decision.dataAndInstaceId !== undefined && decision.dataAndInstaceId.length > 0) {
         props = decision.dataAndInstaceId.map((data) => {
           return {
-            // parentId: data > DATA_INSTANCE_ID_FACTOR ? getDataAndInstanceIds(data) : data,
             parentId: {dataId: data.dataFk, instanceId: data.instanceId},
             name: getActorNameById(decision.actorFk),
-            state: decision.has ? ActorDataState.CHECKED : ActorDataState.DELETED,
+            state: ActorDataState.CHECKED,
           };
         });
       }

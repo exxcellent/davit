@@ -226,6 +226,10 @@
   color: var(--carv2-text-color);
 }
 
+.davitMenuLabel{
+  padding-bottom: 1.5em;
+}
+
 .carv2label {
   color: var(--carv2-text-color) !important;
 }

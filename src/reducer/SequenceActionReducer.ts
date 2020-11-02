@@ -19,26 +19,26 @@ export const SequenceActionReducer = {
   executeActionsOnActorDatas(actions: ActionTO[], actorDatas: ActorData[]): SequenceActionResult {
     // copy actorDatas and set all to state PERSISTENT
     const newActorDatas: ActorData[] = actorDatas
-      .filter((actorData)=>
-        actorData.state !== ActorDataState.DELETED
+        .filter((actorData)=>
+          actorData.state !== ActorDataState.DELETED
         && actorData.state !== ActorDataState.CHECK_FAILED
         && actorData.state !== ActorDataState.UPDATED_FROM,
-      )
-      .map((actorData)=>{
-        return {...actorData, state: ActorDataState.PERSISTENT};
-      });
+        )
+        .map((actorData)=>{
+          return {...actorData, state: ActorDataState.PERSISTENT};
+        });
     const errors: ActionTO[] = [];
 
     actions.forEach((action) => {
       const indexActorDataToEdit: number = findActorDataIndex(
-        action.receivingActorFk,
-        action.dataFk,
-        newActorDatas,
-        );
+          action.receivingActorFk,
+          action.dataFk,
+          newActorDatas,
+      );
       const indexActorDataSending: number = findActorDataIndex(
-        action.sendingActorFk,
-        action.dataFk,
-        newActorDatas,
+          action.sendingActorFk,
+          action.dataFk,
+          newActorDatas,
       );
       switch (action.actionType) {
         case ActionType.ADD:
@@ -80,10 +80,10 @@ export const SequenceActionReducer = {
             newActorDatas[indexActorDataSending].state=ActorDataState.SENT;
             if (actorDataIsPresent(indexActorDataToEdit)) {
               newActorDatas.push({
-              actorFk: action.receivingActorFk,
-              dataFk: action.dataFk,
-              instanceFk: newActorDatas[indexActorDataToEdit].instanceFk,
-              state: ActorDataState.UPDATED_FROM,
+                actorFk: action.receivingActorFk,
+                dataFk: action.dataFk,
+                instanceFk: newActorDatas[indexActorDataToEdit].instanceFk,
+                state: ActorDataState.UPDATED_FROM,
               });
               newActorDatas[indexActorDataToEdit] = {...actorData, state: ActorDataState.UPDATED_TO};
             } else {
@@ -118,19 +118,19 @@ export const SequenceActionReducer = {
 
   executeDecisionCheck(decision: DecisionTO, actorDatas: ActorData[]): SequenceDecisionResult {
     const newActorDatas: ActorData[] = actorDatas
-      .filter((actorData)=>actorData.state !== ActorDataState.DELETED && actorData.state !== ActorDataState.CHECK_FAILED)
-      .map((actorData)=>{
-        return {...actorData, state: ActorDataState.PERSISTENT};
-      });
+        .filter((actorData)=>actorData.state !== ActorDataState.DELETED && actorData.state !== ActorDataState.CHECK_FAILED)
+        .map((actorData)=>{
+          return {...actorData, state: ActorDataState.PERSISTENT};
+        });
     const filteredActorData: ActorData[] = newActorDatas.filter(
-      (actorData) => actorData.actorFk === decision.actorFk,
+        (actorData) => actorData.actorFk === decision.actorFk,
     );
     let goTo = decision.ifGoTo;
     decision.dataAndInstaceId.forEach((dataAndInstanceId) => {
       const checkedActorData: ActorData | undefined = filteredActorData
-        .find((actor) => actor.dataFk === dataAndInstanceId.dataFk);
+          .find((actor) => actor.dataFk === dataAndInstanceId.dataFk && actor.instanceFk === dataAndInstanceId.instanceId);
 
-      if (decision.has === dataIsPresentOnActor(checkedActorData)) {
+      if (dataIsPresentOnActor(checkedActorData)) {
         checkedActorData!.state=ActorDataState.CHECKED;
       } else {
         actorDatas.push({actorFk: decision.actorFk, dataFk: dataAndInstanceId.dataFk, instanceFk: dataAndInstanceId.instanceId, state: ActorDataState.CHECK_FAILED});
