@@ -226,6 +226,10 @@
   color: var(--carv2-text-color);
 }
 
+.davitMenuLabel{
+  padding-bottom: 1.5em;
+}
+
 .carv2label {
   color: var(--carv2-text-color) !important;
 }
@@ -665,6 +669,36 @@ carhHeaderText {
   color: var(--carv2-data-text-color) !important;
 }
 
+.carv2ActorDataSENT {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--carv2-color-exxcellent-blue) !important;
+  color: var(--carv2-text-color) !important;
+}
+
+.carv2ActorDataUPDATED_TO {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--carv2-color-pink) !important;
+  color: var(--carv2-text-color) !important;
+}
+
+.carv2ActorDataUPDATED_FROM {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--carv2-color-dark-purple) !important;
+  color: var(--carv2-data-persistent-color) !important;
+}
+
 .carv2ActorDataDELETED {
   display: flex;
   justify-content: center;
@@ -672,7 +706,7 @@ carhHeaderText {
   width: 100%;
   height: 100%;
   background-color: var(--carv2-data-delete-color) !important;
-  color: var(--carv2-data-text-color) !important;
+  color: var(--carv2-text-color) !important;
 }
 
 .carv2ActorDataADD {
@@ -686,15 +720,25 @@ carhHeaderText {
   box-shadow: 6px 6px 10px var(--carv2-data-add-color) inset !important;
 }
 
-.carv2ActorDataCHECK {
+.carv2ActorDataCHECKED {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: var(--carv2-background-color-header) !important;
+  background-color: var(--carv2-data-persistent-color) !important;
+  color: black !important;
+  box-shadow: 6px 6px 10px var(--carv2-data-add-color) inset !important;
+}
+.carv2ActorDataCHECK_FAILED {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--carv2-data-persistent-color) !important;
   color: var(--carv2-text-color) !important;
-  box-shadow: 6px 6px 10px var(--carv2-data-persistent-color) inset !important;
+  box-shadow: 0px 0px 20px rgb(255, 0, 0);
 }
 
 .carv2ActorDataDELETE {
@@ -917,7 +961,6 @@ table {
   }
 }
 
-
 @keyframes appearTab {
   0% {
     color: transparent;
@@ -965,7 +1008,6 @@ table {
     height: 100%;
   }
 }
-
 
 @keyframes glow {
   from {

@@ -1,29 +1,28 @@
-import React, { FunctionComponent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { ActorCTO } from '../../dataAccess/access/cto/ActorCTO';
-import { DataCTO } from '../../dataAccess/access/cto/DataCTO';
-import { DataSetupCTO } from '../../dataAccess/access/cto/DataSetupCTO';
-import { SequenceStepCTO } from '../../dataAccess/access/cto/SequenceStepCTO';
-import { ActionTO } from '../../dataAccess/access/to/ActionTO';
-import { DataRelationTO } from '../../dataAccess/access/to/DataRelationTO';
-import { DecisionTO } from '../../dataAccess/access/to/DecisionTO';
-import { InitDataTO } from '../../dataAccess/access/to/InitDataTO';
-import { ActionType } from '../../dataAccess/access/types/ActionType';
-import { EditActions, editSelectors } from '../../slices/EditSlice';
-import { MasterDataActions, masterDataSelectors } from '../../slices/MasterDataSlice';
-import { SequenceModelActions, sequenceModelSelectors } from '../../slices/SequenceModelSlice';
-import { ActorData } from '../../viewDataTypes/ActorData';
-import { ViewFragmentProps } from '../../viewDataTypes/ViewFragment';
-import { ViewFragmentState } from '../../viewDataTypes/ViewFragmentState';
-import { MetaDataDnDBox } from './fragments/MetaDataDnDBox';
+import React, {FunctionComponent} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {ActorCTO} from '../../dataAccess/access/cto/ActorCTO';
+import {DataCTO} from '../../dataAccess/access/cto/DataCTO';
+import {DataSetupCTO} from '../../dataAccess/access/cto/DataSetupCTO';
+import {SequenceStepCTO} from '../../dataAccess/access/cto/SequenceStepCTO';
+import {ActionTO} from '../../dataAccess/access/to/ActionTO';
+import {DataRelationTO} from '../../dataAccess/access/to/DataRelationTO';
+import {DecisionTO} from '../../dataAccess/access/to/DecisionTO';
+import {InitDataTO} from '../../dataAccess/access/to/InitDataTO';
+import {ActionType} from '../../dataAccess/access/types/ActionType';
+import {EditActions, editSelectors} from '../../slices/EditSlice';
+import {MasterDataActions, masterDataSelectors} from '../../slices/MasterDataSlice';
+import {SequenceModelActions, sequenceModelSelectors} from '../../slices/SequenceModelSlice';
+import {ActorData} from '../../viewDataTypes/ActorData';
+import {ActorDataState} from '../../viewDataTypes/ActorDataState';
+import {ViewFragmentProps} from '../../viewDataTypes/ViewFragment';
+import {MetaDataDnDBox} from './fragments/MetaDataDnDBox';
 
 interface MetaDataModelControllerProps {
   fullScreen?: boolean;
 }
 
 export const MetaDataModelController: FunctionComponent<MetaDataModelControllerProps> = (props) => {
-  const { fullScreen } = props;
+  const {fullScreen} = props;
 
   const {
     datas,
@@ -89,38 +88,38 @@ const useMetaDataModelViewModel = () => {
   };
 
   const getActorNameById = (actorId: number): string => {
-    return actors.find((actor) => actor.actor.id === actorId)?.actor.name || "Could not find Actor";
+    return actors.find((actor) => actor.actor.id === actorId)?.actor.name || 'Could not find Actor';
   };
 
   const getActorDatas = () => {
-    let actorDatas: ViewFragmentProps[] = [];
+    const actorDatas: ViewFragmentProps[] = [];
     actorDatas.push(...getActorDatasFromView());
     actorDatas.push(...getActorDatasFromEdit());
     return actorDatas;
   };
 
   const getActorDatasFromView = (): ViewFragmentProps[] => {
-    let actorDatas: ViewFragmentProps[] = [];
+    const actorDatas: ViewFragmentProps[] = [];
     const actorDatasFromErros: ViewFragmentProps[] = errors.map(mapActionToActorDatas);
     const actorDatasFromActions: ViewFragmentProps[] = actions.map(mapActionToActorDatas);
 
     const actorDatasFromCompDatas: ViewFragmentProps[] = currentActorDatas.map(mapActorDataToActorData);
     actorDatas.push(...actorDatasFromErros);
     actorDatas.push(
-      ...actorDatasFromActions.filter(
-        (actorDataFromAction) => !actorDatas.some((cp) => actorDataExists(cp, actorDataFromAction))
-      )
+        ...actorDatasFromActions.filter(
+            (actorDataFromAction) => !actorDatas.some((cp) => actorDataExists(cp, actorDataFromAction)),
+        ),
     );
     actorDatas.push(
-      ...actorDatasFromCompDatas.filter(
-        (actorDataFromCompData) => !actorDatas.some((cp) => actorDataExists(cp, actorDataFromCompData))
-      )
+        ...actorDatasFromCompDatas.filter(
+            (actorDataFromCompData) => !actorDatas.some((cp) => actorDataExists(cp, actorDataFromCompData)),
+        ),
     );
     return actorDatas;
   };
 
   const getActorDatasFromEdit = (): ViewFragmentProps[] => {
-    let actorDatas: ViewFragmentProps[] = [];
+    const actorDatas: ViewFragmentProps[] = [];
     const actorDatasFromStepToEdit: ViewFragmentProps[] = stepToEdit?.actions.map(mapActionToActorDatas) || [];
     const actorDataFromActionToEdit: ViewFragmentProps | undefined = actionToEdit
       ? mapActionToActorDatas(actionToEdit)
@@ -145,7 +144,7 @@ const useMetaDataModelViewModel = () => {
   };
 
   function mapActionToActorDatas(actionItem: ActionTO): ViewFragmentProps {
-    const state: ViewFragmentState = mapActionTypeToViewFragmentState(actionItem.actionType);
+    const state: ActorDataState = mapActionTypeToViewFragmentState(actionItem.actionType);
     // const parentId = getDataAndInstanceIds(actionItem.dataFk);
     const parentId = actionItem.dataFk;
     return {
@@ -158,8 +157,8 @@ const useMetaDataModelViewModel = () => {
   const mapActorDataToActorData = (actorData: ActorData): ViewFragmentProps => {
     return {
       name: getActorNameById(actorData.actorFk),
-      parentId: { dataId: actorData.dataFk, instanceId: actorData.instanceFk },
-      state: ViewFragmentState.PERSISTENT,
+      parentId: {dataId: actorData.dataFk, instanceId: actorData.instanceFk},
+      state: ActorDataState.PERSISTENT,
     };
   };
 
@@ -169,10 +168,9 @@ const useMetaDataModelViewModel = () => {
       if (decision.dataAndInstaceId !== undefined && decision.dataAndInstaceId.length > 0) {
         props = decision.dataAndInstaceId.map((data) => {
           return {
-            // parentId: data > DATA_INSTANCE_ID_FACTOR ? getDataAndInstanceIds(data) : data,
-            parentId: { dataId: data.dataFk, instanceId: data.instanceId },
+            parentId: {dataId: data.dataFk, instanceId: data.instanceId},
             name: getActorNameById(decision.actorFk),
-            state: decision.has ? ViewFragmentState.CHECKED : ViewFragmentState.DELETED,
+            state: ActorDataState.CHECKED,
           };
         });
       }
@@ -183,9 +181,9 @@ const useMetaDataModelViewModel = () => {
   const mapInitDataToCompData = (initData: InitDataTO): ViewFragmentProps => {
     return {
       parentId:
-        initData.instanceFk > 1 ? { dataId: initData.dataFk, instanceId: initData.instanceFk } : initData.dataFk,
+        initData.instanceFk > 1 ? {dataId: initData.dataFk, instanceId: initData.instanceFk} : initData.dataFk,
       name: getActorNameById(initData.actorFk),
-      state: ViewFragmentState.NEW,
+      state: ActorDataState.NEW,
     };
   };
 
@@ -201,26 +199,26 @@ const useMetaDataModelViewModel = () => {
       instanceId: number;
     }).instanceId;
     return (
-      (dataId1 === dataId2 || propOne.parentId === propTwo.parentId) &&
-      propOne.name === propTwo.name &&
-      (!(instanceId1 || instanceId2) || instanceId1 === instanceId2)
+      (dataId1 === dataId2 || propOne.parentId === propTwo.parentId)
+      && propOne.name === propTwo.name
+      && (!(instanceId1 || instanceId2) || instanceId1 === instanceId2)
     );
   };
 
-  const mapActionTypeToViewFragmentState = (actionType: ActionType): ViewFragmentState => {
-    let cdState: ViewFragmentState;
+  const mapActionTypeToViewFragmentState = (actionType: ActionType): ActorDataState => {
+    let cdState: ActorDataState;
     switch (actionType) {
       case ActionType.ADD:
-        cdState = ViewFragmentState.NEW;
+        cdState = ActorDataState.NEW;
         break;
       case ActionType.DELETE:
-        cdState = ViewFragmentState.DELETED;
+        cdState = ActorDataState.DELETED;
         break;
       case ActionType.SEND:
-        cdState = ViewFragmentState.NEW;
+        cdState = ActorDataState.NEW;
         break;
       case ActionType.SEND_AND_DELETE:
-        cdState = ViewFragmentState.NEW;
+        cdState = ActorDataState.NEW;
         break;
     }
     return cdState;

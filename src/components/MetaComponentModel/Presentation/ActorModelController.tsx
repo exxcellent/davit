@@ -1,34 +1,33 @@
-import React, { FunctionComponent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { ActorCTO } from '../../../dataAccess/access/cto/ActorCTO';
-import { DataCTO } from '../../../dataAccess/access/cto/DataCTO';
-import { DataSetupCTO } from '../../../dataAccess/access/cto/DataSetupCTO';
-import { SequenceStepCTO } from '../../../dataAccess/access/cto/SequenceStepCTO';
-import { ActionTO } from '../../../dataAccess/access/to/ActionTO';
-import { DecisionTO } from '../../../dataAccess/access/to/DecisionTO';
-import { InitDataTO } from '../../../dataAccess/access/to/InitDataTO';
-import { PositionTO } from '../../../dataAccess/access/to/PositionTO';
-import { ActionType } from '../../../dataAccess/access/types/ActionType';
-import { EditActions, editSelectors } from '../../../slices/EditSlice';
-import { MasterDataActions, masterDataSelectors } from '../../../slices/MasterDataSlice';
-import { sequenceModelSelectors } from '../../../slices/SequenceModelSlice';
-import { Carv2Util } from '../../../utils/Carv2Util';
-import { ActorData } from '../../../viewDataTypes/ActorData';
-import { ViewFragmentProps } from '../../../viewDataTypes/ViewFragment';
-import { ViewFragmentState } from '../../../viewDataTypes/ViewFragmentState';
-import { Arrow } from '../../common/fragments/svg/Arrow';
-import { ActorDnDBox } from './fragments/ActorDnDBox';
-import { Carv2Card, Carv2CardProps } from './fragments/Carv2Card';
+import React, {FunctionComponent} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {ActorCTO} from '../../../dataAccess/access/cto/ActorCTO';
+import {DataCTO} from '../../../dataAccess/access/cto/DataCTO';
+import {DataSetupCTO} from '../../../dataAccess/access/cto/DataSetupCTO';
+import {SequenceStepCTO} from '../../../dataAccess/access/cto/SequenceStepCTO';
+import {ActionTO} from '../../../dataAccess/access/to/ActionTO';
+import {DecisionTO} from '../../../dataAccess/access/to/DecisionTO';
+import {InitDataTO} from '../../../dataAccess/access/to/InitDataTO';
+import {PositionTO} from '../../../dataAccess/access/to/PositionTO';
+import {ActionType} from '../../../dataAccess/access/types/ActionType';
+import {EditActions, editSelectors} from '../../../slices/EditSlice';
+import {MasterDataActions, masterDataSelectors} from '../../../slices/MasterDataSlice';
+import {sequenceModelSelectors} from '../../../slices/SequenceModelSlice';
+import {Carv2Util} from '../../../utils/Carv2Util';
+import {ActorData} from '../../../viewDataTypes/ActorData';
+import {ActorDataState} from '../../../viewDataTypes/ActorDataState';
+import {ViewFragmentProps} from '../../../viewDataTypes/ViewFragment';
+import {Arrow} from '../../common/fragments/svg/Arrow';
+import {ActorDnDBox} from './fragments/ActorDnDBox';
+import {Carv2Card, Carv2CardProps} from './fragments/Carv2Card';
 
 interface ActorModelControllerProps {
   fullScreen?: boolean;
 }
 
 export const ActorModelController: FunctionComponent<ActorModelControllerProps> = (props) => {
-  const { fullScreen } = props;
+  const {fullScreen} = props;
 
-  const { onPositionUpdate, getArrows, toDnDElements } = useViewModel();
+  const {onPositionUpdate, getArrows, toDnDElements} = useViewModel();
 
   const mapCardToJSX = (card: Carv2CardProps): JSX.Element => {
     return <Carv2Card {...card} />;
@@ -39,7 +38,7 @@ export const ActorModelController: FunctionComponent<ActorModelControllerProps> 
       onPositionUpdate={onPositionUpdate}
       arrows={getArrows()}
       toDnDElements={toDnDElements.map((el) => {
-        return { ...el, element: mapCardToJSX(el.card) };
+        return {...el, element: mapCardToJSX(el.card)};
       })}
       fullScreen={fullScreen}
     />
@@ -64,7 +63,7 @@ const useViewModel = () => {
   const arrows: Arrow[] = useSelector(sequenceModelSelectors.selectCurrentArrows);
   const currentActorDatas: ActorData[] = useSelector(sequenceModelSelectors.selectActorData);
   const errors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
-  const actions: ActionTO[] = useSelector(sequenceModelSelectors.selectActions);
+  // const actions: ActionTO[] = useSelector(sequenceModelSelectors.selectActions);
   const dataSetup: DataSetupCTO | null = useSelector(sequenceModelSelectors.selectDataSetup);
 
   React.useEffect(() => {
@@ -73,35 +72,30 @@ const useViewModel = () => {
   }, [dispatch]);
 
   const getActorDatas = () => {
-    let actorDatas: ViewFragmentProps[] = [];
+    const actorDatas: ViewFragmentProps[] = [];
     actorDatas.push(...getActorDatasFromView());
     actorDatas.push(...getComponentDatasFromEdit());
     return actorDatas;
   };
 
   const getActorDatasFromView = (): ViewFragmentProps[] => {
-    let actorDatas: ViewFragmentProps[] = [];
+    const actorDatas: ViewFragmentProps[] = [];
     const actorDatasFromErros: ViewFragmentProps[] = errors.map(mapErrorToActorDatas);
 
-    const actorDatasFromActions: ViewFragmentProps[] = mapActionsToActorDatas(actions, currentActorDatas);
 
-    const actorDatasFromCompDatas: ViewFragmentProps[] = currentActorDatas.map(mapActorDataToViewFramgent);
+    const actorDatasFromCompDatas: ViewFragmentProps[] = currentActorDatas.map(mapActorDataToViewFramgent).sort((a, b) => a.name.localeCompare(b.name));
     actorDatas.push(...actorDatasFromErros);
+
     actorDatas.push(
-      ...actorDatasFromActions.filter(
-        (actorDataFromAction) => !actorDatas.some((cp) => actorDataExists(cp, actorDataFromAction))
-      )
-    );
-    actorDatas.push(
-      ...actorDatasFromCompDatas.filter(
-        (actorDataFromActorData) => !actorDatas.some((cp) => actorDataExists(cp, actorDataFromActorData))
-      )
+        ...actorDatasFromCompDatas.filter(
+            (actorDataFromActorData) => !actorDatas.some((cp) => actorDataExists(cp, actorDataFromActorData)),
+        ),
     );
     return actorDatas;
   };
 
   const getComponentDatasFromEdit = (): ViewFragmentProps[] => {
-    let actorDatas: ViewFragmentProps[] = [];
+    const actorDatas: ViewFragmentProps[] = [];
     const actorDatasFromStepToEdit: ViewFragmentProps[] = stepToEdit?.actions.map(mapActionToActorDatas) || [];
     const actorDataFromActionToEdit: ViewFragmentProps | undefined = actionToEdit
       ? mapActionToActorDatas(actionToEdit)
@@ -135,30 +129,8 @@ const useViewModel = () => {
     return propOne.parentId === propTwo.parentId && propOne.name === propTwo.name;
   };
 
-  const mapActionsToActorDatas = (actions: ActionTO[], actorDatas: ActorData[]): ViewFragmentProps[] => {
-    const viewProps: ViewFragmentProps[] = [];
-
-    actions.forEach((action) => {
-      const instanceId: number | undefined = actorDatas.find(
-        (cd) => cd.dataFk === action.dataFk && cd.actorFk === action.receivingActorFk
-      )?.instanceFk;
-
-      viewProps.push(mapActionToActorDatas(action, instanceId));
-
-      if (action.actionType === ActionType.SEND_AND_DELETE) {
-        viewProps.push({
-          name: getDataNameById(action.dataFk, action.instanceFk),
-          state: ViewFragmentState.DELETED,
-          parentId: action.sendingActorFk,
-        });
-      }
-    });
-
-    return viewProps;
-  };
-
   const mapActionToActorDatas = (actionItem: ActionTO, instanceId?: number): ViewFragmentProps => {
-    const state: ViewFragmentState = mapActionTypeToViewFragmentState(actionItem.actionType);
+    const state: ActorDataState = mapActionTypeToViewFragmentState(actionItem.actionType);
     return {
       name: getDataNameById(actionItem.dataFk, instanceId || actionItem.instanceFk),
       state: state,
@@ -167,7 +139,7 @@ const useViewModel = () => {
   };
 
   const mapErrorToActorDatas = (errorItem: ActionTO): ViewFragmentProps => {
-    const state: ViewFragmentState = mapErrorTypeToViewFragmentState(errorItem.actionType);
+    const state: ActorDataState = mapErrorTypeToViewFragmentState(errorItem.actionType);
 
     return {
       name: getDataNameById(errorItem.dataFk, errorItem.instanceFk),
@@ -180,7 +152,7 @@ const useViewModel = () => {
     return {
       name: getDataNameById(actorData.dataFk, actorData.instanceFk),
       parentId: actorData.actorFk,
-      state: ViewFragmentState.PERSISTENT,
+      state: actorData.state,
     };
   };
 
@@ -192,7 +164,7 @@ const useViewModel = () => {
           return {
             parentId: decision.actorFk,
             name: getDataNameById(data.dataFk, data.instanceId),
-            state: decision.has ? ViewFragmentState.CHECKED : ViewFragmentState.DELETED,
+            state: ActorDataState.CHECKED,
           };
         });
       }
@@ -204,58 +176,58 @@ const useViewModel = () => {
     return {
       parentId: initData.actorFk,
       name: getDataNameById(initData.dataFk, initData.instanceFk),
-      state: ViewFragmentState.NEW,
+      state: ActorDataState.NEW,
     };
   };
 
   const getDataNameById = (dataId: number, instanceId?: number): string => {
     const defaultInstanceId: number = 1;
-    let dataName: string = "Could not find Data";
+    let dataName: string = 'Could not find Data';
     const data: DataCTO | undefined = datas.find((data) => data.data.id === dataId);
     if (data) {
       dataName = data.data.name;
       if (instanceId && instanceId > defaultInstanceId) {
-        dataName =
-          dataName + " - " + data.data.instances.find((inst) => inst.id === instanceId)?.name ||
-          "Could not find instance Name";
+        dataName
+          = dataName + ' - ' + data.data.instances.find((inst) => inst.id === instanceId)?.name
+          || 'Could not find instance Name';
       }
     }
     return dataName;
   };
 
-  const mapActionTypeToViewFragmentState = (actionType: ActionType): ViewFragmentState => {
-    let cdState: ViewFragmentState;
+  const mapActionTypeToViewFragmentState = (actionType: ActionType): ActorDataState => {
+    let cdState: ActorDataState;
     switch (actionType) {
       case ActionType.ADD:
-        cdState = ViewFragmentState.NEW;
+        cdState = ActorDataState.NEW;
         break;
       case ActionType.DELETE:
-        cdState = ViewFragmentState.DELETED;
+        cdState = ActorDataState.DELETED;
         break;
       case ActionType.SEND:
-        cdState = ViewFragmentState.NEW;
+        cdState = ActorDataState.NEW;
         break;
       case ActionType.SEND_AND_DELETE:
-        cdState = ViewFragmentState.NEW;
+        cdState = ActorDataState.NEW;
         break;
     }
     return cdState;
   };
 
-  const mapErrorTypeToViewFragmentState = (actionType: ActionType): ViewFragmentState => {
-    let cdState: ViewFragmentState;
+  const mapErrorTypeToViewFragmentState = (actionType: ActionType): ActorDataState => {
+    let cdState: ActorDataState;
     switch (actionType) {
       case ActionType.ADD:
-        cdState = ViewFragmentState.ERROR_ADD;
+        cdState = ActorDataState.ERROR_ADD;
         break;
       case ActionType.DELETE:
-        cdState = ViewFragmentState.ERROR_DELETE;
+        cdState = ActorDataState.ERROR_DELETE;
         break;
       case ActionType.SEND:
-        cdState = ViewFragmentState.ERROR_ADD;
+        cdState = ActorDataState.ERROR_ADD;
         break;
       case ActionType.SEND_AND_DELETE:
-        cdState = ViewFragmentState.ERROR_ADD;
+        cdState = ActorDataState.ERROR_ADD;
         break;
     }
     return cdState;
@@ -264,7 +236,7 @@ const useViewModel = () => {
   const onPositionUpdate = (x: number, y: number, positionId: number) => {
     const actorCTO = actors.find((actorCTO) => actorCTO.geometricalData.position.id === positionId);
     if (actorCTO) {
-      let copyActorCTO: ActorCTO = Carv2Util.deepCopy(actorCTO);
+      const copyActorCTO: ActorCTO = Carv2Util.deepCopy(actorCTO);
       copyActorCTO.geometricalData.position.x = x;
       copyActorCTO.geometricalData.position.y = y;
       dispatch(EditActions.actor.save(copyActorCTO));
@@ -274,14 +246,14 @@ const useViewModel = () => {
   const toDnDElements = (actors: ActorCTO[]): { card: Carv2CardProps; position: PositionTO }[] => {
     let cards: { card: Carv2CardProps; position: PositionTO }[] = [];
     cards = actors
-      .filter((actor) => !(actorCTOToEdit && actorCTOToEdit.actor.id === actor.actor.id))
-      .map((actorr) => {
-        return {
-          card: actorToCard(actorr),
-          position: actorr.geometricalData.position,
-        };
-      })
-      .filter((item) => item !== undefined);
+        .filter((actor) => !(actorCTOToEdit && actorCTOToEdit.actor.id === actor.actor.id))
+        .map((actorr) => {
+          return {
+            card: actorToCard(actorr),
+            position: actorr.geometricalData.position,
+          };
+        })
+        .filter((item) => item !== undefined);
     // add actor to edit
     if (actorCTOToEdit) {
       cards.push({
@@ -299,12 +271,12 @@ const useViewModel = () => {
       initWidth: actor.geometricalData.geometricalData.width,
       initHeigth: actor.geometricalData.geometricalData.height,
       dataFragments: getActorDatas().filter(
-        (act) =>
-          act.parentId === actor.actor.id ||
-          (act.parentId as { dataId: number; instanceId: number }).dataId === actor.actor.id
+          (act) =>
+            act.parentId === actor.actor.id
+          || (act.parentId as { dataId: number; instanceId: number }).dataId === actor.actor.id,
       ),
       zoomFactor: 1,
-      type: "ACTOR",
+      type: 'ACTOR',
     };
   };
 
@@ -312,7 +284,7 @@ const useViewModel = () => {
     let ar: Arrow[] = [];
     ar = arrows;
     if (editArrow) {
-      console.info("edit arrows: ", editArrow);
+      console.info('edit arrows: ', editArrow);
       ar.push(editArrow);
     }
     ar.push(...editStepArrows);

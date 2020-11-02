@@ -1,13 +1,14 @@
-import { SequenceCTO } from '../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../dataAccess/access/cto/SequenceStepCTO';
-import { ActionTO } from '../dataAccess/access/to/ActionTO';
-import { DecisionTO } from '../dataAccess/access/to/DecisionTO';
-import { GoTo, GoToTypes, Terminal } from '../dataAccess/access/types/GoToType';
-import { SequenceActionReducer, SequenceActionResult } from '../reducer/SequenceActionReducer';
-import { ActorData } from '../viewDataTypes/ActorData';
+import {SequenceCTO} from '../dataAccess/access/cto/SequenceCTO';
+import {SequenceStepCTO} from '../dataAccess/access/cto/SequenceStepCTO';
+import {ActionTO} from '../dataAccess/access/to/ActionTO';
+import {DecisionTO} from '../dataAccess/access/to/DecisionTO';
+import {GoTo, GoToTypes, Terminal} from '../dataAccess/access/types/GoToType';
+import {SequenceActionReducer, SequenceActionResult, SequenceDecisionResult} from '../reducer/SequenceActionReducer';
+import {ActorData} from '../viewDataTypes/ActorData';
 
 export interface CalculatedStep {
-  stepFk: number;
+  type: 'STEP' | 'DECISION' | 'INIT';
+  modelElementFk?: number;
   stepId: string;
   actorDatas: ActorData[];
   errors: ActionTO[];
@@ -23,13 +24,13 @@ export interface CalcSequence {
 
 export const SequenceService = {
   calculateSequence: (sequence: SequenceCTO | null, dataSetup: ActorData[]): CalcSequence => {
-    let calcSequence: CalcSequence = {
+    const calcSequence: CalcSequence = {
       sequenceModel: sequence,
       stepIds: [],
       steps: [],
-      terminal: { type: GoToTypes.ERROR },
+      terminal: {type: GoToTypes.ERROR},
     };
-    let stepIds: string[] = [];
+    const stepIds: string[] = [];
     let loopStartingStep: number = -1;
 
     if (sequence && dataSetup) {
@@ -41,7 +42,7 @@ export const SequenceService = {
       if (root !== undefined) {
         let stepOrDecision: SequenceStepCTO | DecisionTO | Terminal = root;
         let type = getType(stepOrDecision);
-        let stepId: string = "root";
+        let stepId: string = 'root';
 
         // calc next step or decision if not looping.
         while (!isLooping(loopStartingStep) && (type === GoToTypes.STEP || type === GoToTypes.DEC)) {
@@ -53,7 +54,7 @@ export const SequenceService = {
 
             loopStartingStep = checkForLoop(calcSequence, step, result);
 
-            const newStepId = "_STEP_" + step.squenceStepTO.id;
+            const newStepId = '_STEP_' + step.squenceStepTO.id;
             stepId = stepId + newStepId;
             stepIds.push(stepId);
 
@@ -61,7 +62,8 @@ export const SequenceService = {
               stepId: stepId,
               actorDatas: actorDatas,
               errors: result.errors,
-              stepFk: step.squenceStepTO.id,
+              modelElementFk: step.squenceStepTO.id,
+              type: 'STEP',
             });
 
             if (!isLooping(loopStartingStep)) {
@@ -75,18 +77,28 @@ export const SequenceService = {
           if (type === GoToTypes.DEC) {
             const decision: DecisionTO = stepOrDecision as DecisionTO;
 
-            const goTo: GoTo = SequenceActionReducer.executeDecisionCheck(decision, actorDatas);
-            stepOrDecision = getNext(goTo, sequence);
+            const result: SequenceDecisionResult = SequenceActionReducer.executeDecisionCheck(decision, actorDatas);
+            actorDatas = result.actorDatas;
+
+            stepOrDecision = getNext(result.goto, sequence);
             type = getType(stepOrDecision);
 
-            const newCondID = "_COND_" + decision.id;
+            const newCondID = '_COND_' + decision.id;
             stepId = stepId + newCondID;
             stepIds.push(stepId);
+
+            calcSequence.steps.push({
+              stepId: stepId,
+              actorDatas: actorDatas,
+              errors: [],
+              modelElementFk: decision.id,
+              type: 'DECISION',
+            });
           }
         }
         if (!isLooping(loopStartingStep)) {
           calcSequence.terminal = stepOrDecision as Terminal;
-          stepIds.push(stepId + "_" + (stepOrDecision as Terminal).type);
+          stepIds.push(stepId + '_' + (stepOrDecision as Terminal).type);
         }
       }
     }
@@ -99,7 +111,7 @@ export const SequenceService = {
 };
 
 const getInitStep = (actorDatas: ActorData[]): CalculatedStep => {
-  return { stepId: "root", actorDatas: actorDatas, stepFk: 0, errors: [] };
+  return {stepId: 'root', actorDatas: actorDatas, type: 'INIT', errors: []};
 };
 
 const getStepFromSequence = (stepId: number, sequence: SequenceCTO): SequenceStepCTO | undefined => {
@@ -117,22 +129,22 @@ const getRoot = (sequence: SequenceCTO): SequenceStepCTO | DecisionTO | undefine
 };
 
 const getNext = (goTo: GoTo, sequence: SequenceCTO): SequenceStepCTO | DecisionTO | Terminal => {
-  let nextStepOrDecisionOrTerminal: SequenceStepCTO | DecisionTO | Terminal = { type: GoToTypes.ERROR };
+  let nextStepOrDecisionOrTerminal: SequenceStepCTO | DecisionTO | Terminal = {type: GoToTypes.ERROR};
   switch (goTo.type) {
     case GoToTypes.STEP:
-      nextStepOrDecisionOrTerminal = getStepFromSequence(goTo.id, sequence) || { type: GoToTypes.ERROR };
+      nextStepOrDecisionOrTerminal = getStepFromSequence(goTo.id, sequence) || {type: GoToTypes.ERROR};
       break;
     case GoToTypes.DEC:
-      nextStepOrDecisionOrTerminal = getDecisionFromSequence(goTo.id, sequence) || { type: GoToTypes.ERROR };
+      nextStepOrDecisionOrTerminal = getDecisionFromSequence(goTo.id, sequence) || {type: GoToTypes.ERROR};
       break;
     case GoToTypes.FIN:
-      nextStepOrDecisionOrTerminal = { type: GoToTypes.FIN };
+      nextStepOrDecisionOrTerminal = {type: GoToTypes.FIN};
       break;
     case GoToTypes.IDLE:
-      nextStepOrDecisionOrTerminal = { type: GoToTypes.IDLE };
+      nextStepOrDecisionOrTerminal = {type: GoToTypes.IDLE};
       break;
     default:
-      nextStepOrDecisionOrTerminal = { type: GoToTypes.ERROR };
+      nextStepOrDecisionOrTerminal = {type: GoToTypes.ERROR};
   }
   return nextStepOrDecisionOrTerminal;
 };
@@ -149,18 +161,18 @@ const getType = (stepOrDecisionOrTerminal: SequenceStepCTO | DecisionTO | Termin
   } else if ((stepOrDecisionOrTerminal as Terminal).type) {
     return (stepOrDecisionOrTerminal as Terminal).type;
   } else {
-    throw Error("Illegal Type in Sequence");
+    throw Error('Illegal Type in Sequence');
   }
 };
 
 const checkForLoop = (calcSequence: CalcSequence, step: SequenceStepCTO, result: SequenceActionResult): number => {
   return calcSequence.steps.findIndex(
-    (calcStep) =>
-      calcStep.stepFk === step.squenceStepTO.id &&
-      calcStep.actorDatas.length === result.actorDatas.length &&
-      !calcStep.actorDatas.some(
-        (cp) => !result.actorDatas.some((rcp) => rcp.actorFk === cp.actorFk && rcp.dataFk === cp.dataFk)
-      )
+      (calcStep) =>
+        calcStep.modelElementFk === step.squenceStepTO.id
+      && calcStep.actorDatas.length === result.actorDatas.length
+      && !calcStep.actorDatas.some(
+          (cp) => !result.actorDatas.some((rcp) => rcp.actorFk === cp.actorFk && rcp.dataFk === cp.dataFk),
+      ),
   );
 };
 
