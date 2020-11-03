@@ -2,18 +2,18 @@ import React, {FunctionComponent, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Dropdown} from 'semantic-ui-react';
 import {isNullOrUndefined} from 'util';
-
 import {ChainDecisionTO} from '../../../../../../dataAccess/access/to/ChainDecisionTO';
 import {ChainTO} from '../../../../../../dataAccess/access/to/ChainTO';
 import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
 import {sequenceModelSelectors} from '../../../../../../slices/SequenceModelSlice';
 import {Carv2Util} from '../../../../../../utils/Carv2Util';
-import {Carv2ButtonIcon} from '../../../../../common/fragments/buttons/Carv2Button';
+import {DavitButtonIcon} from '../../../../../common/fragments/buttons/DavitButton';
 import {ActorDropDown} from '../../../../../common/fragments/dropdowns/ActorDropDown';
 import {DataAndInstanceId, InstanceDropDownMultiselect} from '../../../../../common/fragments/dropdowns/InstanceDropDown';
 import {ControllPanelEditSub} from '../common/ControllPanelEditSub';
 import {OptionField} from '../common/OptionField';
+
 
 export interface ControllPanelEditChainConditionProps {
   hidden: boolean;
@@ -76,7 +76,7 @@ export const ControllPanelEditChainCondition: FunctionComponent<ControllPanelEdi
       </div>
       <div className="columnDivider optionFieldSpacer">
         <OptionField label="Navigation">
-          <Carv2ButtonIcon onClick={setMode} icon="reply" />
+          <DavitButtonIcon onClick={setMode} icon="reply" />
         </OptionField>
       </div>
     </ControllPanelEditSub>

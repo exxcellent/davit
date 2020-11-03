@@ -1,25 +1,25 @@
 import React, {FunctionComponent} from 'react';
 import {Button} from 'semantic-ui-react';
 
-interface Carv2ButtonIconProps {
+interface DavitButtonIconProps {
   onClick: () => void;
   icon?: string;
   disable?: boolean;
 }
 
-interface Carv2ButtonLabelProps {
+interface DavitButtonLabelProps {
   onClick: () => void;
   label: string;
   disable?: boolean;
 }
 
-export const Carv2ButtonIcon: FunctionComponent<Carv2ButtonIconProps> = (props) => {
+export const DavitButtonIcon: FunctionComponent<DavitButtonIconProps> = (props) => {
   const {onClick, icon, disable} = props;
 
   return <Button icon={icon} onClick={onClick} className="carv2Button" inverted color="orange" disabled={disable} />;
 };
 
-export const Carv2ButtonLabel: FunctionComponent<Carv2ButtonLabelProps> = (props) => {
+export const DavitButtonLabel: FunctionComponent<DavitButtonLabelProps> = (props) => {
   const {onClick, label, disable} = props;
 
   return (

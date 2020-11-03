@@ -10,8 +10,8 @@ import {EditActions} from '../../../../../../slices/EditSlice';
 import {masterDataSelectors} from '../../../../../../slices/MasterDataSlice';
 import {sequenceModelSelectors} from '../../../../../../slices/SequenceModelSlice';
 import {Carv2Util} from '../../../../../../utils/Carv2Util';
-import {Carv2ButtonIcon, Carv2ButtonLabel} from '../../../../../common/fragments/buttons/Carv2Button';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
+import {DavitButtonIcon, DavitButtonLabel} from '../../../../../common/fragments/buttons/DavitButton';
 import {ChainDecisionDropDownButton} from '../../../../../common/fragments/dropdowns/ChainDecisionDropDown';
 import {ChainLinkDropDownButton} from '../../../../../common/fragments/dropdowns/ChainLinkDropDown';
 import {ControllPanelEditSub} from '../common/ControllPanelEditSub';
@@ -77,8 +77,8 @@ export const ControllPanelEditChain: FunctionComponent<ControllPanelEditChainPro
       <div className="columnDivider controllPanelEditChild">
         <div>
           <OptionField label="Navigation">
-            <Carv2ButtonLabel onClick={createAnother} label="Create another" />
-            <Carv2ButtonIcon onClick={saveChain} icon="reply" />
+            <DavitButtonLabel onClick={createAnother} label="Create another" />
+            <DavitButtonIcon onClick={saveChain} icon="reply" />
           </OptionField>
         </div>
         <div className="optionFieldSpacer">

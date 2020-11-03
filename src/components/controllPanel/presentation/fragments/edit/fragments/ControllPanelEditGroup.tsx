@@ -6,8 +6,8 @@ import {GroupTO} from '../../../../../../dataAccess/access/to/GroupTO';
 import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
 import {Carv2Util} from '../../../../../../utils/Carv2Util';
-import {Carv2ButtonLabel} from '../../../../../common/fragments/buttons/Carv2Button';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
+import {DavitButtonLabel} from '../../../../../common/fragments/buttons/DavitButton';
 import {ColorDropDown} from '../../../../../common/fragments/dropdowns/ColorDropDown';
 import {ControllPanelEditSub} from '../common/ControllPanelEditSub';
 import {Carv2LabelTextfield} from '../common/fragments/Carv2LabelTextfield';
@@ -50,8 +50,8 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
         />
       </div>
       <div className="columnDivider controllPanelEditChild">
-        <Carv2ButtonLabel onClick={createAnother} label="Create another" />
-        <Carv2ButtonLabel onClick={saveGroup} label="OK" />
+        <DavitButtonLabel onClick={createAnother} label="Create another" />
+        <DavitButtonLabel onClick={saveGroup} label="OK" />
       </div>
       <div className="columnDivider controllPanelEditChild">
         <Carv2DeleteButton onClick={deleteGroup} />

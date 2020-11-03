@@ -1,7 +1,6 @@
 import React, {FunctionComponent, useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Button, Input} from 'semantic-ui-react';
-
 import {SequenceCTO} from '../../../../../../dataAccess/access/cto/SequenceCTO';
 import {SequenceStepCTO} from '../../../../../../dataAccess/access/cto/SequenceStepCTO';
 import {ActionTO} from '../../../../../../dataAccess/access/to/ActionTO';
@@ -11,8 +10,9 @@ import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
 import {SequenceModelActions, sequenceModelSelectors} from '../../../../../../slices/SequenceModelSlice';
 import {Carv2Util} from '../../../../../../utils/Carv2Util';
-import {Carv2ButtonIcon, Carv2ButtonLabel} from '../../../../../common/fragments/buttons/Carv2Button';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
+import {DavitButtonIcon} from '../../../../../common/fragments/buttons/DavitButton';
+import {DavitRootButton} from '../../../../../common/fragments/buttons/DavitRootButton';
 import {ActionDropDown} from '../../../../../common/fragments/dropdowns/ActionDropDown';
 import {DecisionDropDown} from '../../../../../common/fragments/dropdowns/DecisionDropDown';
 import {GoToOptionDropDown} from '../../../../../common/fragments/dropdowns/GoToOptionDropDown';
@@ -20,6 +20,7 @@ import {StepDropDown} from '../../../../../common/fragments/dropdowns/StepDropDo
 import {ControllPanelEditSub} from '../common/ControllPanelEditSub';
 import {Carv2LabelTextfield} from '../common/fragments/Carv2LabelTextfield';
 import {OptionField} from '../common/OptionField';
+
 
 export interface ControllPanelEditStepProps {
   hidden: boolean;
@@ -110,7 +111,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
           </OptionField>
           {goTo!.type === GoToTypes.STEP && (
             <OptionField label="Create or Select next step">
-              <Carv2ButtonIcon icon="add" onClick={createGoToStep} />
+              <DavitButtonIcon icon="add" onClick={createGoToStep} />
               <StepDropDown
                 onSelect={setGoToTypeStep}
                 value={goTo?.type === GoToTypes.STEP ? goTo.id : 1}
@@ -120,7 +121,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
           )}
           {goTo!.type === GoToTypes.DEC && (
             <OptionField label="Create or Select next decision">
-              <Carv2ButtonIcon icon="add" onClick={createGoToDecision} />
+              <DavitButtonIcon icon="add" onClick={createGoToDecision} />
               <DecisionDropDown
                 onSelect={setGoToTypeDecision}
                 value={goTo?.type === GoToTypes.DEC ? goTo.id : 1}
@@ -132,16 +133,15 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
       <div className="columnDivider controllPanelEditChild">
         <div>
           <OptionField label="Navigation">
-            <Carv2ButtonIcon onClick={saveSequenceStep} icon="reply" />
+            <DavitButtonIcon onClick={saveSequenceStep} icon="reply" />
           </OptionField>
         </div>
         <div className="controllPanelEditChild">
           <div>
             <OptionField label="Sequence - Options">
-              <Carv2ButtonLabel
+              <DavitRootButton
                 onClick={setRoot}
-                label={isRoot ? 'Root' : 'Set as Root'}
-                disable={isRoot}
+                isRoot={isRoot}
               />
               <div>
                 <Carv2DeleteButton onClick={deleteSequenceStep} />

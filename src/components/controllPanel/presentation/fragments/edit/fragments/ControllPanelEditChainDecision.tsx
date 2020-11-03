@@ -10,8 +10,8 @@ import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
 import {sequenceModelSelectors} from '../../../../../../slices/SequenceModelSlice';
 import {Carv2Util} from '../../../../../../utils/Carv2Util';
-import {Carv2ButtonIcon} from '../../../../../common/fragments/buttons/Carv2Button';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
+import {DavitButtonIcon} from '../../../../../common/fragments/buttons/DavitButton';
 import {ChainDecisionDropDown} from '../../../../../common/fragments/dropdowns/ChainDecisionDropDown';
 import {ChainLinkDropDown} from '../../../../../common/fragments/dropdowns/ChainLinkDropDown';
 import {GoToChainOptionDropDown} from '../../../../../common/fragments/dropdowns/GoToChainOptionDropDown';
@@ -82,7 +82,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
           </OptionField>
           {ifGoTo!.type === GoToTypesChain.LINK && (
             <OptionField label="Create or Select next link">
-              <Carv2ButtonIcon icon="add" onClick={() => createGoToStep(true)} />
+              <DavitButtonIcon icon="add" onClick={() => createGoToStep(true)} />
               <ChainLinkDropDown
                 onSelect={(link) => setGoToTypeStep(true, link)}
                 value={ifGoTo?.type === GoToTypesChain.LINK ? ifGoTo.id : 1}
@@ -92,7 +92,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
           )}
           {ifGoTo!.type === GoToTypesChain.DEC && (
             <OptionField label="Create or Select next decision">
-              <Carv2ButtonIcon icon="add" onClick={() => createGoToDecision(true)} />
+              <DavitButtonIcon icon="add" onClick={() => createGoToDecision(true)} />
               <ChainDecisionDropDown
                 onSelect={(cond) => setGoToTypeDecision(true, cond)}
                 value={ifGoTo?.type === GoToTypesChain.DEC ? ifGoTo.id : 1}
@@ -113,7 +113,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
           </OptionField>
           {elseGoTo!.type === GoToTypesChain.LINK && (
             <OptionField label="Select type of the next element">
-              <Carv2ButtonIcon icon="add" onClick={() => createGoToStep(false)} />
+              <DavitButtonIcon icon="add" onClick={() => createGoToStep(false)} />
               <ChainLinkDropDown
                 onSelect={(link) => setGoToTypeStep(false, link)}
                 value={elseGoTo?.type === GoToTypesChain.LINK ? elseGoTo.id : 1}
@@ -123,7 +123,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
           )}
           {elseGoTo!.type === GoToTypesChain.DEC && (
             <OptionField label="Create or Select next condition">
-              <Carv2ButtonIcon icon="add" onClick={() => createGoToDecision(false)} />
+              <DavitButtonIcon icon="add" onClick={() => createGoToDecision(false)} />
               <ChainDecisionDropDown
                 onSelect={(cond) => setGoToTypeDecision(false, cond)}
                 value={elseGoTo?.type === GoToTypesChain.DEC ? elseGoTo.id : 1}
@@ -137,7 +137,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
       <div className="columnDivider controllPanelEditChild">
         <div className="optionFieldSpacer">
           <OptionField label="Navigation">
-            <Carv2ButtonIcon onClick={saveDecision} icon="reply" />
+            <DavitButtonIcon onClick={saveDecision} icon="reply" />
           </OptionField>
         </div>
         <div className="optionFieldSpacer">

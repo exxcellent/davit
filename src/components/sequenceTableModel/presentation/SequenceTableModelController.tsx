@@ -84,20 +84,20 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
     'DATASETUP',
     'GOTO',
     'ACTIONS',
-    'ROOT',
+    'START',
   ];
   const sequenceStepTableHead = [
     'NAME',
     'GOTO',
     'ACTIONS',
-    'ROOT',
+    'START',
   ];
   const seqeunceDcisionsTableHead = [
     'NAME',
     'IF GOTO',
     'ELSE GOTO',
     'ACTIONS',
-    'ROOT',
+    'START',
   ];
   const calcSequenceTableHead = [
     'INDEX',
@@ -364,7 +364,7 @@ const useSequenceTableViewModel = () => {
       selectSequence?.sequenceStepCTOs || [],
       selectSequence?.decisions || [],
     );
-    const root: string = step.squenceStepTO.root ? 'root' : '';
+    const root: string = step.squenceStepTO.root ? 'start' : '';
 
     const trClass = 'carv2Tr';
 
@@ -478,7 +478,7 @@ const useSequenceTableViewModel = () => {
       selectSequence?.sequenceStepCTOs || [],
       selectSequence?.decisions || [],
     );
-    const root: string = decision.root ? 'root' : '';
+    const root: string = decision.root ? 'start' : '';
     const trClass = 'carv2Tr';
     return (
       <tr key={index} className={trClass}>
@@ -505,7 +505,7 @@ const useSequenceTableViewModel = () => {
         selectedChainlinks,
         selectedChainDecisions,
     );
-    const root: string = link.chainLink.root ? 'root' : '';
+    const root: string = link.chainLink.root ? 'start' : '';
     const trClass = 'carv2Tr';
     return (
       <tr key={index} className={trClass}>

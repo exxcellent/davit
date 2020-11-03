@@ -10,8 +10,9 @@ import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
 import {SequenceModelActions, sequenceModelSelectors} from '../../../../../../slices/SequenceModelSlice';
 import {Carv2Util} from '../../../../../../utils/Carv2Util';
-import {Carv2ButtonIcon, Carv2ButtonLabel} from '../../../../../common/fragments/buttons/Carv2Button';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
+import {DavitButtonIcon} from '../../../../../common/fragments/buttons/DavitButton';
+import {DavitRootButton} from '../../../../../common/fragments/buttons/DavitRootButton';
 import {DecisionDropDown} from '../../../../../common/fragments/dropdowns/DecisionDropDown';
 import {GoToOptionDropDown} from '../../../../../common/fragments/dropdowns/GoToOptionDropDown';
 import {StepDropDown} from '../../../../../common/fragments/dropdowns/StepDropDown';
@@ -80,7 +81,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
           </OptionField>
           {ifGoTo!.type === GoToTypes.STEP && (
             <OptionField label="Create or Select next step">
-              <Carv2ButtonIcon icon="add" onClick={() => createGoToStep(true)} />
+              <DavitButtonIcon icon="add" onClick={() => createGoToStep(true)} />
               <StepDropDown
                 onSelect={(step) => setGoToTypeStep(true, step)}
                 value={ifGoTo?.type === GoToTypes.STEP ? ifGoTo.id : 1}
@@ -89,7 +90,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
           )}
           {ifGoTo!.type === GoToTypes.DEC && (
             <OptionField label="Create or Select next condition">
-              <Carv2ButtonIcon icon="add" onClick={() => createGoToDecision(true)} />
+              <DavitButtonIcon icon="add" onClick={() => createGoToDecision(true)} />
               <DecisionDropDown
                 onSelect={(cond) => setGoToTypeDecision(true, cond)}
                 value={ifGoTo?.type === GoToTypes.DEC ? ifGoTo.id : 1}
@@ -109,7 +110,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
           </OptionField>
           {elseGoTo!.type === GoToTypes.STEP && (
             <OptionField label="Select type of the next element">
-              <Carv2ButtonIcon icon="add" onClick={() => createGoToStep(false)} />
+              <DavitButtonIcon icon="add" onClick={() => createGoToStep(false)} />
               <StepDropDown
                 onSelect={(step) => setGoToTypeStep(false, step)}
                 value={elseGoTo?.type === GoToTypes.STEP ? elseGoTo.id : 1}
@@ -118,7 +119,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
           )}
           {elseGoTo!.type === GoToTypes.DEC && (
             <OptionField label="Create or Select next condition">
-              <Carv2ButtonIcon icon="add" onClick={() => createGoToDecision(false)} />
+              <DavitButtonIcon icon="add" onClick={() => createGoToDecision(false)} />
               <DecisionDropDown
                 onSelect={(cond) => setGoToTypeDecision(false, cond)}
                 value={elseGoTo?.type === GoToTypes.DEC ? elseGoTo.id : 1}
@@ -131,13 +132,13 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
       <div className="columnDivider controllPanelEditChild">
         <div>
           <OptionField label="Navigation">
-            <Carv2ButtonIcon onClick={saveDecision} icon="reply" />
+            <DavitButtonIcon onClick={saveDecision} icon="reply" />
           </OptionField>
         </div>
         <div className="controllPanelEditChild">
           <div>
             <OptionField label="Sequence - Options">
-              <Carv2ButtonLabel onClick={setRoot} label={isRoot ? 'Root' : 'Set as Root'} disable={isRoot} />
+              <DavitRootButton onClick={setRoot} isRoot={isRoot}/>
               <div>
                 <Carv2DeleteButton onClick={deleteDecision} />
               </div>

@@ -12,8 +12,9 @@ import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
 import {sequenceModelSelectors} from '../../../../../../slices/SequenceModelSlice';
 import {Carv2Util} from '../../../../../../utils/Carv2Util';
-import {Carv2ButtonIcon, Carv2ButtonLabel} from '../../../../../common/fragments/buttons/Carv2Button';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
+import {DavitButtonIcon} from '../../../../../common/fragments/buttons/DavitButton';
+import {DavitRootButton} from '../../../../../common/fragments/buttons/DavitRootButton';
 import {ChainDecisionDropDown} from '../../../../../common/fragments/dropdowns/ChainDecisionDropDown';
 import {ChainLinkDropDown} from '../../../../../common/fragments/dropdowns/ChainLinkDropDown';
 import {DataSetupDropDown} from '../../../../../common/fragments/dropdowns/DataSetupDropDown';
@@ -89,7 +90,7 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
           </OptionField>
           {goTo!.type === GoToTypesChain.LINK && (
             <OptionField label="Create or Select next link">
-              <Carv2ButtonIcon icon="add" onClick={createNewChainLink} />
+              <DavitButtonIcon icon="add" onClick={createNewChainLink} />
               <ChainLinkDropDown
                 onSelect={setNextLink}
                 value={goTo?.type === GoToTypesChain.LINK ? goTo.id : 1}
@@ -101,7 +102,7 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
 
           {goTo!.type === GoToTypesChain.DEC && (
             <OptionField label="Create or Select next decision">
-              <Carv2ButtonIcon icon="add" onClick={createGoToDecision} />
+              <DavitButtonIcon icon="add" onClick={createGoToDecision} />
               <ChainDecisionDropDown
                 onSelect={(cond) => setNextDecision(cond)}
                 value={goTo?.type === GoToTypesChain.DEC ? goTo.id : 1}
@@ -114,13 +115,13 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
       <div className="columnDivider controllPanelEditChild">
         <div>
           <OptionField label="Navigation">
-            <Carv2ButtonIcon onClick={saveChainLink} icon="reply" />
+            <DavitButtonIcon onClick={saveChainLink} icon="reply" />
           </OptionField>
         </div>
         <div className="controllPanelEditChild">
           <div>
             <OptionField label="Sequence - Options">
-              <Carv2ButtonLabel onClick={setRoot} label={isRoot ? 'Root' : 'Set as Root'} disable={isRoot} />
+              <DavitRootButton onClick={setRoot} isRoot={isRoot}/>
               <div>
                 <Carv2DeleteButton onClick={deleteChainLink} disable={isRoot} />
               </div>

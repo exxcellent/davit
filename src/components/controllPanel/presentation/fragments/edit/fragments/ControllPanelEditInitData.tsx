@@ -1,6 +1,5 @@
 import React, {FunctionComponent, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-
 import {DataCTO} from '../../../../../../dataAccess/access/cto/DataCTO';
 import {DataInstanceTO} from '../../../../../../dataAccess/access/to/DataInstanceTO';
 import {DataSetupTO} from '../../../../../../dataAccess/access/to/DataSetupTO';
@@ -9,12 +8,13 @@ import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
 import {masterDataSelectors} from '../../../../../../slices/MasterDataSlice';
 import {Carv2Util} from '../../../../../../utils/Carv2Util';
-import {Carv2ButtonIcon, Carv2ButtonLabel} from '../../../../../common/fragments/buttons/Carv2Button';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
+import {DavitButtonIcon, DavitButtonLabel} from '../../../../../common/fragments/buttons/DavitButton';
 import {ActorDropDown} from '../../../../../common/fragments/dropdowns/ActorDropDown';
 import {DataAndInstanceId, InstanceDropDown} from '../../../../../common/fragments/dropdowns/InstanceDropDown';
 import {ControllPanelEditSub} from '../common/ControllPanelEditSub';
 import {OptionField} from '../common/OptionField';
+
 
 export interface ControllPanelEditInitDataProps {
   hidden: boolean;
@@ -55,8 +55,8 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
       <div className="columnDivider controllPanelEditChild" style={{paddingLeft: '10px', paddingRight: '10px'}}>
         <div>
           <OptionField label="Navigation">
-            <Carv2ButtonLabel onClick={createAnother} label="Create another" />
-            <Carv2ButtonIcon onClick={saveInitData} icon="reply" />
+            <DavitButtonLabel onClick={createAnother} label="Create another" />
+            <DavitButtonIcon onClick={saveInitData} icon="reply" />
           </OptionField>
         </div>
       </div>

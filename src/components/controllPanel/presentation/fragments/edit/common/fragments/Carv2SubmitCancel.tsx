@@ -1,5 +1,5 @@
 import React, {FunctionComponent, useEffect, useState} from 'react';
-import {Carv2ButtonIcon} from '../../../../../../common/fragments/buttons/Carv2Button';
+import {DavitButtonIcon} from '../../../../../../common/fragments/buttons/DavitButton';
 import {Carv2Checkbox} from '../../../../../../common/fragments/Carv2Checkbox';
 
 interface Carv2SubmitCancelCheckBoxProps {
@@ -36,8 +36,8 @@ export const Carv2SubmitCancelCheckBox: FunctionComponent<Carv2SubmitCancelCheck
 
   return (
     <div className="controllPanelEditChild">
-      <Carv2ButtonIcon icon="check" onClick={onSubmit} disable={disable} />
-      <Carv2ButtonIcon icon="times" onClick={onCancel} />
+      <DavitButtonIcon icon="check" onClick={onSubmit} disable={disable} />
+      <DavitButtonIcon icon="times" onClick={onCancel} />
       <Carv2Checkbox label={label} onChange={onChange} checked={checked} />
     </div>
   );
@@ -58,8 +58,8 @@ export const Carv2SubmitCancel: FunctionComponent<Carv2SubmitCancelProps> = (pro
 
   return (
     <div className="controllPanelEditChild">
-      <Carv2ButtonIcon icon="check" onClick={onSubmit} disable={disable} />
-      <Carv2ButtonIcon icon="times" onClick={onCancel} />
+      <DavitButtonIcon icon="check" onClick={onSubmit} disable={disable} />
+      <DavitButtonIcon icon="times" onClick={onCancel} />
     </div>
   );
 };

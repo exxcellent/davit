@@ -2,17 +2,17 @@ import React, {FunctionComponent, useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Input} from 'semantic-ui-react';
 import {isNullOrUndefined} from 'util';
-
 import {ActorCTO} from '../../../../../../dataAccess/access/cto/ActorCTO';
 import {GroupTO} from '../../../../../../dataAccess/access/to/GroupTO';
 import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
 import {Carv2Util} from '../../../../../../utils/Carv2Util';
-import {Carv2ButtonIcon, Carv2ButtonLabel} from '../../../../../common/fragments/buttons/Carv2Button';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
+import {DavitButtonIcon, DavitButtonLabel} from '../../../../../common/fragments/buttons/DavitButton';
 import {ControllPanelEditSub} from '../common/ControllPanelEditSub';
 import {Carv2LabelTextfield} from '../common/fragments/Carv2LabelTextfield';
 import {OptionField} from '../common/OptionField';
+
 
 export interface ControllPanelEditComponentProps {
   hidden: boolean;
@@ -54,8 +54,8 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
       <div className="columnDivider controllPanelEditChild">
         <div>
           <OptionField label="Navigation">
-            <Carv2ButtonLabel onClick={createAnother} label="Create another" />
-            <Carv2ButtonIcon onClick={saveComponent} icon="reply" />
+            <DavitButtonLabel onClick={createAnother} label="Create another" />
+            <DavitButtonIcon onClick={saveComponent} icon="reply" />
           </OptionField>
         </div>
       </div>

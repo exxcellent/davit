@@ -1,7 +1,7 @@
 import React, {FunctionComponent, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {GlobalActions} from '../../../../../slices/GlobalSlice';
-import {Carv2ButtonLabel} from '../../../../common/fragments/buttons/Carv2Button';
+import {DavitButtonLabel} from '../../../../common/fragments/buttons/DavitButton';
 import {ControllPanelEditSub} from '../edit/common/ControllPanelEditSub';
 import {Carv2LabelTextfield} from '../edit/common/fragments/Carv2LabelTextfield';
 import {ControllPanelFileOptions} from './fragments/ControllPanelFileOptions';
@@ -38,7 +38,7 @@ export const ControllPanelFileController: FunctionComponent<ControllPanelFileCon
         )}
       </div>
       <div className="columnDivider controllPanelEditChild">
-        {showExportFile && <Carv2ButtonLabel label="Export File" onClick={downloadData}></Carv2ButtonLabel>}
+        {showExportFile && <DavitButtonLabel label="Export File" onClick={downloadData}></DavitButtonLabel>}
       </div>
       <div className="columnDivider controllPanelEditChild"></div>
     </ControllPanelEditSub>
