@@ -6,7 +6,7 @@ import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
 import {sequenceModelSelectors} from '../../../../../../slices/SequenceModelSlice';
 import {Carv2Util} from '../../../../../../utils/Carv2Util';
-import {Carv2ButtonIcon} from '../../../../../common/fragments/buttons/Carv2Button';
+import {DavitButtonIcon} from '../../../../../common/fragments/buttons/DavitButton';
 import {DavitMenuLabel} from '../../../../../common/fragments/DavitMenuLabel';
 import {ActorDropDown} from '../../../../../common/fragments/dropdowns/ActorDropDown';
 import {
@@ -53,7 +53,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
       </div>
       <div className="columnDivider optionFieldSpacer">
         <OptionField label="Navigation">
-          <Carv2ButtonIcon onClick={setMode} icon="reply" />
+          <DavitButtonIcon onClick={setMode} icon="reply" />
         </OptionField>
       </div>
     </ControllPanelEditSub>

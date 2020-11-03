@@ -1,11 +1,11 @@
 import React, {FunctionComponent} from 'react';
 import {useDispatch} from 'react-redux';
 import {ButtonGroup} from 'semantic-ui-react';
-
 import {EditActions} from '../../../../../../slices/EditSlice';
 import {GlobalActions} from '../../../../../../slices/GlobalSlice';
-import {Carv2ButtonIcon} from '../../../../../common/fragments/buttons/Carv2Button';
 import {Carv2FileInput} from '../../../../../common/fragments/buttons/Carv2FileInput';
+import {DavitButtonIcon} from '../../../../../common/fragments/buttons/DavitButton';
+
 
 export interface ControllPanelFileOptionsProps {
   showDownloadFile: () => void;
@@ -22,8 +22,8 @@ export const ControllPanelFileOptions: FunctionComponent<ControllPanelFileOption
       <div className="optionField">
         <ButtonGroup>
           <Carv2FileInput />
-          <Carv2ButtonIcon icon="download" onClick={showDownloadFile} />
-          <Carv2ButtonIcon
+          <DavitButtonIcon icon="download" onClick={showDownloadFile} />
+          <DavitButtonIcon
             icon="trash alternate"
             onClick={deleteLocalStorage}
           />

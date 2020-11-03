@@ -8,8 +8,8 @@ import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
 import {masterDataSelectors} from '../../../../../../slices/MasterDataSlice';
 import {Carv2Util} from '../../../../../../utils/Carv2Util';
-import {Carv2ButtonIcon, Carv2ButtonLabel} from '../../../../../common/fragments/buttons/Carv2Button';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
+import {DavitButtonIcon, DavitButtonLabel} from '../../../../../common/fragments/buttons/DavitButton';
 import {ControllPanelEditSub} from '../common/ControllPanelEditSub';
 import {OptionField} from '../common/OptionField';
 
@@ -112,8 +112,8 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
       <div className="columnDivider controllPanelEditChild">
         <div>
           <OptionField label="Navigation">
-            <Carv2ButtonLabel onClick={createAnother} label="Create another" />
-            <Carv2ButtonIcon onClick={saveRelation} icon="reply" />
+            <DavitButtonLabel onClick={createAnother} label="Create another" />
+            <DavitButtonIcon onClick={saveRelation} icon="reply" />
           </OptionField>
         </div>
       </div>

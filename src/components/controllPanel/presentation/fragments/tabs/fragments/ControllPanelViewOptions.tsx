@@ -1,8 +1,8 @@
 import React, {FunctionComponent} from 'react';
 import {ButtonGroup} from 'semantic-ui-react';
-
 import {ModuleRoutes} from '../../../../../../app/Carv2';
-import {Carv2ButtonIcon} from '../../../../../common/fragments/buttons/Carv2Button';
+import {DavitButtonIcon} from '../../../../../common/fragments/buttons/DavitButton';
+
 
 export interface ControllPanelViewOptionsProps {}
 
@@ -13,10 +13,10 @@ export const ControllPanelViewOptions: FunctionComponent<ControllPanelViewOption
     <div>
       <div className="optionField">
         <ButtonGroup>
-          <Carv2ButtonIcon icon="share" onClick={showActorPage} />
-          <Carv2ButtonIcon icon="sitemap" onClick={showDataPage} />
-          <Carv2ButtonIcon icon="table" onClick={showTablePage} />
-          <Carv2ButtonIcon icon="code branch" onClick={showFlowChartPage} />
+          <DavitButtonIcon icon="share" onClick={showActorPage} />
+          <DavitButtonIcon icon="sitemap" onClick={showDataPage} />
+          <DavitButtonIcon icon="table" onClick={showTablePage} />
+          <DavitButtonIcon icon="code branch" onClick={showFlowChartPage} />
         </ButtonGroup>
       </div>
       <div style={{textAlign: 'center', color: 'white'}}>{'Open in new window'.toUpperCase()}</div>
