@@ -1,8 +1,8 @@
-import { Carv2Util } from "../../utils/Carv2Util";
-import { InitDataTO } from "../access/to/InitDataTO";
-import dataStore from "../DataStore";
-import { CheckHelper } from "../util/CheckHelper";
-import { DataAccessUtil } from "../util/DataAccessUtil";
+import {Carv2Util} from '../../utils/Carv2Util';
+import {InitDataTO} from '../access/to/InitDataTO';
+import dataStore from '../DataStore';
+import {CheckHelper} from '../util/CheckHelper';
+import {DataAccessUtil} from '../util/DataAccessUtil';
 
 export const InitDataRepository = {
   find(initDataId: number): InitDataTO | undefined {
@@ -19,7 +19,7 @@ export const InitDataRepository = {
   },
 
   save(initData: InitDataTO) {
-    CheckHelper.nullCheck(initData, "initData");
+    CheckHelper.nullCheck(initData, 'initData');
     let initDataTO: InitDataTO;
     if (initData.id === -1) {
       initDataTO = {
@@ -27,7 +27,7 @@ export const InitDataRepository = {
         id: DataAccessUtil.determineNewId(this.findAll()),
       };
     } else {
-      initDataTO = { ...initData };
+      initDataTO = {...initData};
     }
     dataStore.getDataStore().initDatas.set(initDataTO.id!, initDataTO);
     return initDataTO;
@@ -36,11 +36,11 @@ export const InitDataRepository = {
   delete(id: number): InitDataTO {
     const deletedInitData: InitDataTO | undefined = this.find(id);
     if (!deletedInitData) {
-      throw new Error("Can't delete InitData. There is no Object with id: " + id);
+      throw new Error('Can\'t delete InitData. There is no Object with id: ' + id);
     } else {
-      let success = dataStore.getDataStore().initDatas.delete(id);
+      const success = dataStore.getDataStore().initDatas.delete(id);
       if (!success) {
-        throw new Error("dataAccess.repository.error.notExists");
+        throw new Error('dataAccess.repository.error.notExists');
       }
       return deletedInitData;
     }

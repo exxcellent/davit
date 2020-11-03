@@ -1,7 +1,7 @@
-import { DataSetupTO } from "../access/to/DataSetupTO";
-import dataStore from "../DataStore";
-import { CheckHelper } from "../util/CheckHelper";
-import { DataAccessUtil } from "../util/DataAccessUtil";
+import {DataSetupTO} from '../access/to/DataSetupTO';
+import dataStore from '../DataStore';
+import {CheckHelper} from '../util/CheckHelper';
+import {DataAccessUtil} from '../util/DataAccessUtil';
 
 export const DataSetupRepository = {
   find(dataSetupId: number): DataSetupTO | undefined {
@@ -12,7 +12,7 @@ export const DataSetupRepository = {
   },
 
   save(dataSetup: DataSetupTO) {
-    CheckHelper.nullCheck(dataSetup, "dataSetup");
+    CheckHelper.nullCheck(dataSetup, 'dataSetup');
     let dataSetupTO: DataSetupTO;
     if (dataSetup.id === -1) {
       dataSetupTO = {
@@ -20,7 +20,7 @@ export const DataSetupRepository = {
         id: DataAccessUtil.determineNewId(this.findAll()),
       };
     } else {
-      dataSetupTO = { ...dataSetup };
+      dataSetupTO = {...dataSetup};
     }
     dataStore.getDataStore().dataSetups.set(dataSetupTO.id!, dataSetupTO);
     return dataSetupTO;
@@ -28,9 +28,9 @@ export const DataSetupRepository = {
 
   delete(dataSetup: DataSetupTO): DataSetupTO {
     // TODO: add constraint helper.
-    let success = dataStore.getDataStore().dataSetups.delete(dataSetup.id!);
+    const success = dataStore.getDataStore().dataSetups.delete(dataSetup.id!);
     if (!success) {
-      throw new Error("dataAccess.repository.error.notExists");
+      throw new Error('dataAccess.repository.error.notExists');
     }
     return dataSetup;
   },

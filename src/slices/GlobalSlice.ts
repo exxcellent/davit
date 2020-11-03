@@ -1,7 +1,7 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk, RootState } from "../app/store";
-import { DataAccess } from "../dataAccess/DataAccess";
-import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {AppThunk, RootState} from '../app/store';
+import {DataAccess} from '../dataAccess/DataAccess';
+import {DataAccessResponse} from '../dataAccess/DataAccessResponse';
 
 interface GlobalState {
   errors: string[];
@@ -13,7 +13,7 @@ const getInitialState = (): GlobalState => {
 };
 
 export const globalSlice = createSlice({
-  name: "global",
+  name: 'global',
   initialState: getInitialState(),
   reducers: {
     handleError: (state, action: PayloadAction<string>) => {
@@ -47,7 +47,7 @@ export const GlobalActions = {
   downloadData,
 };
 
-export const { handleError } = globalSlice.actions;
+export const {handleError} = globalSlice.actions;
 
 export const globalReducer = globalSlice.reducer;
 

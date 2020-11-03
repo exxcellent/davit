@@ -1,12 +1,12 @@
-import { Carv2Util } from "../../utils/Carv2Util";
-import { GeometricalDataCTO } from "../access/cto/GeometraicalDataCTO";
-import { DesignTO } from "../access/to/DesignTO";
-import { GeometricalDataTO } from "../access/to/GeometricalDataTO";
-import { PositionTO } from "../access/to/PositionTO";
-import { DesignRepository } from "../repositories/DesignRepository";
-import { GeometricalDataRepository } from "../repositories/GeometricalDataRepository";
-import { PositionRepository } from "../repositories/PositionRepository";
-import { CheckHelper } from "../util/CheckHelper";
+import {Carv2Util} from '../../utils/Carv2Util';
+import {GeometricalDataCTO} from '../access/cto/GeometraicalDataCTO';
+import {DesignTO} from '../access/to/DesignTO';
+import {GeometricalDataTO} from '../access/to/GeometricalDataTO';
+import {PositionTO} from '../access/to/PositionTO';
+import {DesignRepository} from '../repositories/DesignRepository';
+import {GeometricalDataRepository} from '../repositories/GeometricalDataRepository';
+import {PositionRepository} from '../repositories/PositionRepository';
+import {CheckHelper} from '../util/CheckHelper';
 
 export const TechnicalDataAccessService = {
   findPosition(id: number): PositionTO | undefined {
@@ -15,10 +15,10 @@ export const TechnicalDataAccessService = {
 
   findGeometricalDataCTO(id: number): GeometricalDataCTO | undefined {
     const geometricalData = GeometricalDataRepository.find(id);
-    CheckHelper.nullCheck(geometricalData, "geometricalData");
+    CheckHelper.nullCheck(geometricalData, 'geometricalData');
     const position = PositionRepository.find(geometricalData!.positionFk!);
-    CheckHelper.nullCheck(position, "position");
-    return { geometricalData: geometricalData!, position: position! };
+    CheckHelper.nullCheck(position, 'position');
+    return {geometricalData: geometricalData!, position: position!};
   },
 
   findGeometricalData(id: number): GeometricalDataTO | undefined {
@@ -30,8 +30,8 @@ export const TechnicalDataAccessService = {
   },
 
   saveGeometricalData(geometricalDataCTO: GeometricalDataCTO): GeometricalDataCTO {
-    CheckHelper.nullCheck(geometricalDataCTO, "geometricalDataCTO");
-    CheckHelper.nullCheck(geometricalDataCTO.position, "position");
+    CheckHelper.nullCheck(geometricalDataCTO, 'geometricalDataCTO');
+    CheckHelper.nullCheck(geometricalDataCTO.position, 'position');
     const savedPosition = PositionRepository.save(geometricalDataCTO.position);
     const copyGeometricalDataCTO: GeometricalDataCTO = Carv2Util.deepCopy(geometricalDataCTO);
     copyGeometricalDataCTO.geometricalData.positionFk = savedPosition.id;
@@ -43,16 +43,16 @@ export const TechnicalDataAccessService = {
   },
 
   saveDesign(design: DesignTO): DesignTO {
-    CheckHelper.nullCheck(design, "design");
+    CheckHelper.nullCheck(design, 'design');
     return DesignRepository.save(design);
   },
 
   deleteGeometricalDataCTO(geometricalDataCTO: GeometricalDataCTO): GeometricalDataCTO {
-    CheckHelper.nullCheck(geometricalDataCTO, "geometricalDataCTO");
+    CheckHelper.nullCheck(geometricalDataCTO, 'geometricalDataCTO');
     const isDeletedGeoData = GeometricalDataRepository.delete(geometricalDataCTO.geometricalData);
     const isdeletedPosition = PositionRepository.delete(geometricalDataCTO.position);
     if (!(isdeletedPosition && isDeletedGeoData)) {
-      throw new Error("Couldn't delete");
+      throw new Error('Couldn\'t delete');
     }
     return geometricalDataCTO;
   },
@@ -60,7 +60,7 @@ export const TechnicalDataAccessService = {
   deleteDesign(design: DesignTO): DesignTO {
     const isDeleted = DesignRepository.delete(design);
     if (!isDeleted) {
-      throw new Error("Couldn't delete");
+      throw new Error('Couldn\'t delete');
     }
     return design;
   },

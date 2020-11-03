@@ -1,7 +1,7 @@
-import { GeometricalDataTO } from "../access/to/GeometricalDataTO";
-import { ConstraintsHelper } from "../ConstraintsHelper";
-import dataStore from "../DataStore";
-import { DataAccessUtil } from "../util/DataAccessUtil";
+import {GeometricalDataTO} from '../access/to/GeometricalDataTO';
+import {ConstraintsHelper} from '../ConstraintsHelper';
+import dataStore from '../DataStore';
+import {DataAccessUtil} from '../util/DataAccessUtil';
 
 export const GeometricalDataRepository = {
   find(id: number): GeometricalDataTO | undefined {
@@ -14,9 +14,9 @@ export const GeometricalDataRepository = {
 
   delete(geometricalData: GeometricalDataTO): boolean {
     ConstraintsHelper.deleteGeometricalDataConstraintCheck(geometricalData.id, dataStore.getDataStore());
-    let success = dataStore.getDataStore().geometricalDatas.delete(geometricalData.id!);
+    const success = dataStore.getDataStore().geometricalDatas.delete(geometricalData.id!);
     if (!success) {
-      throw new Error("dataAccess.repository.error.notExists");
+      throw new Error('dataAccess.repository.error.notExists');
     }
     return success;
   },
@@ -29,7 +29,7 @@ export const GeometricalDataRepository = {
         id: DataAccessUtil.determineNewId(this.findAll()),
       };
     } else {
-      geometricalDataTO = { ...geometricalData };
+      geometricalDataTO = {...geometricalData};
     }
     dataStore.getDataStore().geometricalDatas.set(geometricalDataTO.id!, geometricalDataTO);
     return geometricalDataTO;

@@ -1,7 +1,7 @@
-import { DataStoreCTO } from './access/cto/DataStoreCTO';
-import { StoreTO } from './access/to/StoreTO';
+import {DataStoreCTO} from './access/cto/DataStoreCTO';
+import {StoreTO} from './access/to/StoreTO';
 
-const STORE_ID = "carv2";
+const STORE_ID = 'carv2';
 
 class DataStore {
   static instance: DataStore;
@@ -75,22 +75,22 @@ class DataStore {
     };
   }
 
-  public storeFileData = (fileData: string) => {
-    console.log("Writing to storage:");
+  public storeFileData(fileData: string) {
+    console.log('Writing to storage:');
     console.log(fileData);
     const objectStore: StoreTO = JSON.parse(fileData);
     this.readData(objectStore);
     localStorage.setItem(STORE_ID, fileData);
-  };
+  }
 
-  public downloadData = (projectName: string) => {
-    let dataStr = JSON.stringify(this.getDataStoreObject());
-    let dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
-    let linkElement = document.createElement("a");
-    linkElement.setAttribute("href", dataUri);
-    linkElement.setAttribute("download", projectName + ".json");
+  public downloadData(projectName: string) {
+    const dataStr = JSON.stringify(this.getDataStoreObject());
+    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', projectName + '.json');
     linkElement.click();
-  };
+  }
 
   public commitChanges(): void {
     this.saveData();
@@ -98,7 +98,7 @@ class DataStore {
   }
 
   public roleBack(): void {
-    console.warn("Data Store: role back.");
+    console.warn('Data Store: role back.');
     this.readDataFromStorage();
   }
 

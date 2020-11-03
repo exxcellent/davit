@@ -3,8 +3,8 @@ export type IntermediateChain = { type: GoToTypesChain.LINK | GoToTypesChain.DEC
 export type TerminalChain = { type: GoToTypesChain.FIN | GoToTypesChain.ERROR };
 
 export enum GoToTypesChain {
-  FIN = "FIN",
-  ERROR = "ERROR",
-  LINK = "LINK",
-  DEC = "DEC",
+  FIN = 'FIN',
+  ERROR = 'ERROR',
+  LINK = 'LINK',
+  DEC = 'DEC',
 }
