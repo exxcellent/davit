@@ -1,13 +1,13 @@
-import React from 'react';
 import {render} from '@testing-library/react';
+import React from 'react';
 import {Provider} from 'react-redux';
+import {Davit} from './Davit';
 import {store} from './store';
-import {Carv2} from './Carv2';
 
 test('renders learn react link', () => {
   const {getByText} = render(
       <Provider store={store}>
-        <Carv2 />
+        <Davit />
       </Provider>,
   );
 
