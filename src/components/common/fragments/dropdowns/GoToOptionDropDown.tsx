@@ -1,6 +1,6 @@
-import React, { FunctionComponent } from "react";
-import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { GoToTypes } from "../../../../dataAccess/access/types/GoToType";
+import React, {FunctionComponent} from 'react';
+import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
+import {GoToTypes} from '../../../../dataAccess/access/types/GoToType';
 
 interface GoToOptionDropDownProps extends DropdownProps {
   onSelect: (gotoType: GoToTypes | undefined) => void;
@@ -8,7 +8,7 @@ interface GoToOptionDropDownProps extends DropdownProps {
 }
 
 export const GoToOptionDropDown: FunctionComponent<GoToOptionDropDownProps> = (props) => {
-  const { onSelect, value } = props;
+  const {onSelect, value} = props;
 
   const getOptions = (): DropdownItemProps[] => {
     return Object.values(GoToTypes).map(goToToOption);

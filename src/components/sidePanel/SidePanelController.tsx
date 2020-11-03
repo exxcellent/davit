@@ -1,14 +1,14 @@
-import React, { FunctionComponent } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import logo from "../../icons/logo200.png";
-import { EditActions, editSelectors, Mode } from "../../slices/EditSlice";
-import { Carv2ButtonGroup } from "../common/fragments/buttons/Carv2ButtonGroup";
-import { Carv2SidePanelButton } from "../common/fragments/buttons/Carv2SidePanelButton";
+import React, {FunctionComponent} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import logo from '../../icons/logo200.png';
+import {EditActions, editSelectors, Mode} from '../../slices/EditSlice';
+import {Carv2ButtonGroup} from '../common/fragments/buttons/Carv2ButtonGroup';
+import {Carv2SidePanelButton} from '../common/fragments/buttons/Carv2SidePanelButton';
 
 export interface SidePanelProps { }
 
 export const SidePanelController: FunctionComponent<SidePanelProps> = (props) => {
-  const { setModeToEdit, setModeToFile, setModeToView, setModeToTab, mode } = useSidePanelViewModel();
+  const {setModeToEdit, setModeToFile, setModeToView, setModeToTab, mode} = useSidePanelViewModel();
 
   return (
     <div className="leftPanel">
@@ -25,7 +25,7 @@ export const SidePanelController: FunctionComponent<SidePanelProps> = (props) =>
         <Button inverted color="orange" icon="file" onClick={setModeToFile} />
         <Button inverted color="orange" icon="external alternate" onClick={setModeToTab} />
       </Button.Group> */}
-      <div style={{ position: "absolute", bottom: "1em" }}>
+      <div style={{position: 'absolute', bottom: '1em'}}>
         <img src={logo} alt="fireSpot" />
         <div
           className="verticalLabel"

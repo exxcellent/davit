@@ -1,7 +1,7 @@
-import { motion, Point } from 'framer-motion';
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import {motion, Point} from 'framer-motion';
+import React, {FunctionComponent, useEffect, useState} from 'react';
 
-import { GeometricalDataCTO } from '../../../../dataAccess/access/cto/GeometraicalDataCTO';
+import {GeometricalDataCTO} from '../../../../dataAccess/access/cto/GeometraicalDataCTO';
 
 export interface ArrowProps {
   xSource: number;
@@ -24,8 +24,8 @@ export interface Arrow {
 }
 
 enum ArrowType {
-  CURVE = "Curve",
-  CORNER = "CORNER",
+  CURVE = 'Curve',
+  CORNER = 'CORNER',
 }
 
 const Arrow: FunctionComponent<ArrowProps> = (props) => {
@@ -43,16 +43,16 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
   } = props;
 
   const [initXSource, setInitXSource] = useState<number>(
-    xSource * (parentRef.current.offsetWidth / 100)
+      xSource * (parentRef.current.offsetWidth / 100),
   );
   const [initYSource, setInitYSource] = useState<number>(
-    ySource * (parentRef.current.offsetHeight / 100)
+      ySource * (parentRef.current.offsetHeight / 100),
   );
   const [initXTarget, setInitXTarget] = useState<number>(
-    xTarget * (parentRef.current.offsetWidth / 100)
+      xTarget * (parentRef.current.offsetWidth / 100),
   );
   const [initYTarget, setInitYTarget] = useState<number>(
-    yTarget * (parentRef.current.offsetHeight / 100)
+      yTarget * (parentRef.current.offsetHeight / 100),
   );
 
   useEffect(() => {
@@ -64,13 +64,13 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
     }
   }, [ySource, xSource, yTarget, xTarget, parentRef]);
 
-  const INTERFACE_INPUT: Point = { x: 0, y: targetHeight / 2 };
-  const INTERFACE_OUTPUT: Point = { x: sourceWidth, y: sourceHeight / 2 };
+  const INTERFACE_INPUT: Point = {x: 0, y: targetHeight / 2};
+  const INTERFACE_OUTPUT: Point = {x: sourceWidth, y: sourceHeight / 2};
   const OFFSET: number = 10;
 
   const createCurve = (x1: number, y1: number, x2: number, y2: number) => {
-    let startPoint: Point = { x: x1, y: y1 };
-    let endPoint: Point = { x: x2, y: y2 };
+    let startPoint: Point = {x: x1, y: y1};
+    let endPoint: Point = {x: x2, y: y2};
     // set interfaces
     startPoint = plusPoint(startPoint, INTERFACE_OUTPUT);
     endPoint = plusPoint(endPoint, INTERFACE_INPUT);
@@ -108,8 +108,8 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
   };
 
   const createCornerLine = (x1: number, y1: number, x2: number, y2: number) => {
-    let startPoint: Point = { x: x1, y: y1 };
-    let endPoint: Point = { x: x2, y: y2 };
+    let startPoint: Point = {x: x1, y: y1};
+    let endPoint: Point = {x: x2, y: y2};
     // set interfaces
     startPoint = plusPoint(startPoint, INTERFACE_OUTPUT);
     endPoint = plusPoint(endPoint, INTERFACE_INPUT);
@@ -130,20 +130,20 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
   };
 
   const getMiddleValue = (val1: number, val2: number): number => {
-    let middleValue = (val2 - val1) / 2 + val1;
+    const middleValue = (val2 - val1) / 2 + val1;
     return middleValue;
   };
 
   const setOutPutOffset = (point: Point, offset: number): Point => {
-    return { x: point.x + offset, y: point.y };
+    return {x: point.x + offset, y: point.y};
   };
 
   const setInputPutOffset = (point: Point, offset: number): Point => {
-    return { x: point.x - offset, y: point.y };
+    return {x: point.x - offset, y: point.y};
   };
 
   const plusPoint = (point1: Point, point2: Point): Point => {
-    return { x: point1.x + point2.x, y: point1.y + point2.y };
+    return {x: point1.x + point2.x, y: point1.y + point2.y};
   };
 
   const getMiddlePoint = (startPoint: Point, endPoint: Point): Point => {
@@ -154,8 +154,8 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
   };
 
   const getCurvRefPoint = (
-    curveStartPoint: Point,
-    curveEndPoint: Point
+      curveStartPoint: Point,
+      curveEndPoint: Point,
   ): Point => {
     return {
       x: getMiddleValue(curveStartPoint.x, curveEndPoint.x),
@@ -178,20 +178,20 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
           <path d="M0,0 L0,6 L9,3 z" className="carvArrowMarker" />
         </marker>
       </defs>
-      {type === ArrowType.CURVE &&
-        createCurve(initXSource, initYSource, initXTarget, initYTarget)}
-      {type === ArrowType.CORNER &&
-        createCornerLine(initXSource, initYSource, initXTarget, initYTarget)}
+      {type === ArrowType.CURVE
+        && createCurve(initXSource, initYSource, initXTarget, initYTarget)}
+      {type === ArrowType.CORNER
+        && createCornerLine(initXSource, initYSource, initXTarget, initYTarget)}
     </motion.svg>
   );
 };
 
 export const createCurveArrow = (
-  source: GeometricalDataCTO | undefined,
-  target: GeometricalDataCTO | undefined,
-  dataLabels: string[],
-  key: number,
-  parentRef: any
+    source: GeometricalDataCTO | undefined,
+    target: GeometricalDataCTO | undefined,
+    dataLabels: string[],
+    key: number,
+    parentRef: any,
 ) => {
   if (source && target) {
     return (
@@ -214,10 +214,10 @@ export const createCurveArrow = (
 };
 
 export const createCornerArrow = (
-  source: GeometricalDataCTO | undefined,
-  target: GeometricalDataCTO | undefined,
-  key: number,
-  parentRef: any
+    source: GeometricalDataCTO | undefined,
+    target: GeometricalDataCTO | undefined,
+    key: number,
+    parentRef: any,
 ) => {
   if (source && target) {
     return (

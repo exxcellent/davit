@@ -1,5 +1,5 @@
-import { ActionType } from '../types/ActionType';
-import { AbstractTO } from './AbstractTO';
+import {ActionType} from '../types/ActionType';
+import {AbstractTO} from './AbstractTO';
 
 export class ActionTO extends AbstractTO {
   constructor(

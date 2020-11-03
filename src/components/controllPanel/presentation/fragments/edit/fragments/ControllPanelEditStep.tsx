@@ -1,34 +1,34 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, Input } from 'semantic-ui-react';
+import React, {FunctionComponent, useEffect, useRef, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Button, Input} from 'semantic-ui-react';
 
-import { SequenceCTO } from '../../../../../../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../../../../../../dataAccess/access/cto/SequenceStepCTO';
-import { ActionTO } from '../../../../../../dataAccess/access/to/ActionTO';
-import { DecisionTO } from '../../../../../../dataAccess/access/to/DecisionTO';
-import { GoTo, GoToTypes } from '../../../../../../dataAccess/access/types/GoToType';
-import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
-import { handleError } from '../../../../../../slices/GlobalSlice';
-import { SequenceModelActions, sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
-import { Carv2Util } from '../../../../../../utils/Carv2Util';
-import { Carv2ButtonIcon, Carv2ButtonLabel } from '../../../../../common/fragments/buttons/Carv2Button';
-import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
-import { ActionDropDown } from '../../../../../common/fragments/dropdowns/ActionDropDown';
-import { DecisionDropDown } from '../../../../../common/fragments/dropdowns/DecisionDropDown';
-import { GoToOptionDropDown } from '../../../../../common/fragments/dropdowns/GoToOptionDropDown';
-import { StepDropDown } from '../../../../../common/fragments/dropdowns/StepDropDown';
-import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { Carv2LabelTextfield } from '../common/fragments/Carv2LabelTextfield';
-import { OptionField } from '../common/OptionField';
+import {SequenceCTO} from '../../../../../../dataAccess/access/cto/SequenceCTO';
+import {SequenceStepCTO} from '../../../../../../dataAccess/access/cto/SequenceStepCTO';
+import {ActionTO} from '../../../../../../dataAccess/access/to/ActionTO';
+import {DecisionTO} from '../../../../../../dataAccess/access/to/DecisionTO';
+import {GoTo, GoToTypes} from '../../../../../../dataAccess/access/types/GoToType';
+import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
+import {handleError} from '../../../../../../slices/GlobalSlice';
+import {SequenceModelActions, sequenceModelSelectors} from '../../../../../../slices/SequenceModelSlice';
+import {Carv2Util} from '../../../../../../utils/Carv2Util';
+import {Carv2ButtonIcon, Carv2ButtonLabel} from '../../../../../common/fragments/buttons/Carv2Button';
+import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
+import {ActionDropDown} from '../../../../../common/fragments/dropdowns/ActionDropDown';
+import {DecisionDropDown} from '../../../../../common/fragments/dropdowns/DecisionDropDown';
+import {GoToOptionDropDown} from '../../../../../common/fragments/dropdowns/GoToOptionDropDown';
+import {StepDropDown} from '../../../../../common/fragments/dropdowns/StepDropDown';
+import {ControllPanelEditSub} from '../common/ControllPanelEditSub';
+import {Carv2LabelTextfield} from '../common/fragments/Carv2LabelTextfield';
+import {OptionField} from '../common/OptionField';
 
 export interface ControllPanelEditStepProps {
   hidden: boolean;
 }
 
 export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps> = (
-  props
+    props,
 ) => {
-  const { hidden } = props;
+  const {hidden} = props;
   const {
     label,
     name,
@@ -94,7 +94,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
                   editOrAddAction(action);
                   updateStep();
                 }}
-                icon={"wrench"}
+                icon={'wrench'}
               />
             </Button.Group>
           </OptionField>
@@ -140,7 +140,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
             <OptionField label="Sequence - Options">
               <Carv2ButtonLabel
                 onClick={setRoot}
-                label={isRoot ? "Root" : "Set as Root"}
+                label={isRoot ? 'Root' : 'Set as Root'}
                 disable={isRoot}
               />
               <div>
@@ -156,10 +156,10 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
 
 const useControllPanelEditSequenceStepViewModel = () => {
   const stepToEdit: SequenceStepCTO | null = useSelector(
-    editSelectors.stepToEdit
+      editSelectors.stepToEdit,
   );
   const selectedSequence: SequenceCTO | null = useSelector(
-    sequenceModelSelectors.selectSequence
+      sequenceModelSelectors.selectSequence,
   );
   const dispatch = useDispatch();
   const textInput = useRef<Input>(null);
@@ -172,7 +172,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
   useEffect(() => {
     if (stepToEdit === undefined || null) {
       handleError(
-        "Tried to go to edit sequence step without sequenceStepToEdit specified"
+          'Tried to go to edit sequence step without sequenceStepToEdit specified',
       );
       dispatch(EditActions.setMode.edit());
     }
@@ -190,28 +190,28 @@ const useControllPanelEditSequenceStepViewModel = () => {
       dispatch(EditActions.setMode.editStep(copySequenceStep));
       dispatch(EditActions.step.save(copySequenceStep));
       dispatch(
-        SequenceModelActions.setCurrentSequence(
-          copySequenceStep.squenceStepTO.sequenceFk
-        )
+          SequenceModelActions.setCurrentSequence(
+              copySequenceStep.squenceStepTO.sequenceFk,
+          ),
       );
     }
   };
 
   const saveSequenceStep = (newMode?: string) => {
     if (
-      !Carv2Util.isNullOrUndefined(stepToEdit) &&
-      !Carv2Util.isNullOrUndefined(selectedSequence)
+      !Carv2Util.isNullOrUndefined(stepToEdit)
+      && !Carv2Util.isNullOrUndefined(selectedSequence)
     ) {
-      if (stepToEdit!.squenceStepTO.name !== "") {
+      if (stepToEdit!.squenceStepTO.name !== '') {
         dispatch(EditActions.step.save(stepToEdit!));
       } else {
         dispatch(EditActions.step.delete(stepToEdit!, selectedSequence!));
       }
-      if (newMode && newMode === "EDIT") {
+      if (newMode && newMode === 'EDIT') {
         dispatch(EditActions.setMode.edit());
       } else {
         dispatch(
-          EditActions.setMode.editSequence(stepToEdit!.squenceStepTO.sequenceFk)
+            EditActions.setMode.editSequence(stepToEdit!.squenceStepTO.sequenceFk),
         );
       }
     }
@@ -219,12 +219,12 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
   const deleteSequenceStep = () => {
     if (
-      !Carv2Util.isNullOrUndefined(stepToEdit) &&
-      !Carv2Util.isNullOrUndefined(selectedSequence)
+      !Carv2Util.isNullOrUndefined(stepToEdit)
+      && !Carv2Util.isNullOrUndefined(selectedSequence)
     ) {
       dispatch(EditActions.step.delete(stepToEdit!, selectedSequence!));
       dispatch(
-        EditActions.setMode.editSequence(stepToEdit!.squenceStepTO.sequenceFk)
+          EditActions.setMode.editSequence(stepToEdit!.squenceStepTO.sequenceFk),
       );
     }
   };
@@ -252,7 +252,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
   const validStep = (): boolean => {
     let valid: boolean = false;
     if (!Carv2Util.isNullOrUndefined(stepToEdit)) {
-      if (stepToEdit!.squenceStepTO.name !== "") {
+      if (stepToEdit!.squenceStepTO.name !== '') {
         valid = true;
       }
     }
@@ -266,16 +266,16 @@ const useControllPanelEditSequenceStepViewModel = () => {
       dispatch(EditActions.step.update(copySequenceStep));
       dispatch(EditActions.step.save(copySequenceStep));
       dispatch(
-        SequenceModelActions.setCurrentSequence(
-          copySequenceStep.squenceStepTO.sequenceFk
-        )
+          SequenceModelActions.setCurrentSequence(
+              copySequenceStep.squenceStepTO.sequenceFk,
+          ),
       );
     }
   };
 
   const handleType = (newGoToType?: string) => {
     if (newGoToType !== undefined) {
-      const gType = { type: (GoToTypes as any)[newGoToType] };
+      const gType = {type: (GoToTypes as any)[newGoToType]};
       setCurrentGoTo(gType);
       switch (newGoToType) {
         case GoToTypes.ERROR:
@@ -292,36 +292,36 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
   const setGoToTypeStep = (step?: SequenceStepCTO) => {
     if (step) {
-      let newGoTo: GoTo = { type: GoToTypes.STEP, id: step.squenceStepTO.id };
+      const newGoTo: GoTo = {type: GoToTypes.STEP, id: step.squenceStepTO.id};
       saveGoToType(newGoTo);
     }
   };
 
   const setGoToTypeDecision = (decision?: DecisionTO) => {
     if (decision) {
-      let newGoTo: GoTo = { type: GoToTypes.DEC, id: decision.id };
+      const newGoTo: GoTo = {type: GoToTypes.DEC, id: decision.id};
       saveGoToType(newGoTo);
     }
   };
 
   const createGoToStep = () => {
     if (!Carv2Util.isNullOrUndefined(stepToEdit)) {
-      let goToStep: SequenceStepCTO = new SequenceStepCTO();
+      const goToStep: SequenceStepCTO = new SequenceStepCTO();
       goToStep.squenceStepTO.sequenceFk = stepToEdit!.squenceStepTO.sequenceFk;
       const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
       setKey(key + 1);
       dispatch(EditActions.setMode.editStep(goToStep, copyStepToEdit));
       dispatch(
-        SequenceModelActions.setCurrentSequence(
-          goToStep.squenceStepTO.sequenceFk
-        )
+          SequenceModelActions.setCurrentSequence(
+              goToStep.squenceStepTO.sequenceFk,
+          ),
       );
     }
   };
 
   const createGoToDecision = () => {
     if (!Carv2Util.isNullOrUndefined(stepToEdit)) {
-      let goToDecision: DecisionTO = new DecisionTO();
+      const goToDecision: DecisionTO = new DecisionTO();
       goToDecision.sequenceFk = stepToEdit!.squenceStepTO.sequenceFk;
       const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
       dispatch(EditActions.setMode.editDecision(goToDecision, copyStepToEdit));
@@ -330,31 +330,31 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
   const setRoot = () => {
     if (
-      !Carv2Util.isNullOrUndefined(stepToEdit) &&
-      !Carv2Util.isNullOrUndefined(selectedSequence)
+      !Carv2Util.isNullOrUndefined(stepToEdit)
+      && !Carv2Util.isNullOrUndefined(selectedSequence)
     ) {
       dispatch(
-        EditActions.sequence.setRoot(
+          EditActions.sequence.setRoot(
           stepToEdit!.squenceStepTO.sequenceFk,
           stepToEdit!.squenceStepTO.id,
-          false
-        )
+          false,
+          ),
       );
       dispatch(
-        EditActions.setMode.editStep(
-          EditActions.step.find(stepToEdit!.squenceStepTO.id)
-        )
+          EditActions.setMode.editStep(
+              EditActions.step.find(stepToEdit!.squenceStepTO.id),
+          ),
       );
     }
   };
 
   return {
     label:
-      "EDIT * " +
-      (selectedSequence?.sequenceTO.name || "") +
-      " * " +
-      (stepToEdit?.squenceStepTO.name || ""),
-    name: stepToEdit ? stepToEdit!.squenceStepTO.name : "",
+      'EDIT * '
+      + (selectedSequence?.sequenceTO.name || '')
+      + ' * '
+      + (stepToEdit?.squenceStepTO.name || ''),
+    name: stepToEdit ? stepToEdit!.squenceStepTO.name : '',
     changeName,
     saveSequenceStep,
     deleteSequenceStep,

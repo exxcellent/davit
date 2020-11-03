@@ -1,12 +1,12 @@
-import { Carv2Util } from '../../utils/Carv2Util';
-import { DataCTO } from '../access/cto/DataCTO';
-import { GeometricalDataCTO } from '../access/cto/GeometraicalDataCTO';
-import { DataRelationTO } from '../access/to/DataRelationTO';
-import { DataTO } from '../access/to/DataTO';
-import { DataConnectionRepository } from '../repositories/DataConnectionRepository';
-import { DataRepository } from '../repositories/DataRepository';
-import { CheckHelper } from '../util/CheckHelper';
-import { TechnicalDataAccessService } from './TechnicalDataAccessService';
+import {Carv2Util} from '../../utils/Carv2Util';
+import {DataCTO} from '../access/cto/DataCTO';
+import {GeometricalDataCTO} from '../access/cto/GeometraicalDataCTO';
+import {DataRelationTO} from '../access/to/DataRelationTO';
+import {DataTO} from '../access/to/DataTO';
+import {DataConnectionRepository} from '../repositories/DataConnectionRepository';
+import {DataRepository} from '../repositories/DataRepository';
+import {CheckHelper} from '../util/CheckHelper';
+import {TechnicalDataAccessService} from './TechnicalDataAccessService';
 
 export const DataDataAccessService = {
   findData(id: number): DataTO | undefined {
@@ -22,7 +22,7 @@ export const DataDataAccessService = {
   },
 
   saveDataCTO(dataCTO: DataCTO): DataCTO {
-    CheckHelper.nullCheck(dataCTO, "dataCTO");
+    CheckHelper.nullCheck(dataCTO, 'dataCTO');
     const savedGeometricalData = TechnicalDataAccessService.saveGeometricalData(dataCTO.geometricalData);
     const copyDataCTO: DataCTO = Carv2Util.deepCopy(dataCTO);
     copyDataCTO.data.geometricalDataFk = savedGeometricalData.geometricalData.id;
@@ -42,17 +42,17 @@ export const DataDataAccessService = {
   },
 
   saveDataRelation(dataRelation: DataRelationTO): DataRelationTO {
-    CheckHelper.nullCheck(dataRelation, "dataRelation");
+    CheckHelper.nullCheck(dataRelation, 'dataRelation');
     const saveDataConnection = DataConnectionRepository.save(dataRelation);
     return saveDataConnection;
   },
 
   deleteDataCTO(dataCTO: DataCTO): DataCTO {
-    CheckHelper.nullCheck(dataCTO.geometricalData, "GeometricalDataCTO");
-    CheckHelper.nullCheck(dataCTO.data, "DataTO");
-    let relations: DataRelationTO[] = this.findAllDataRelationCTOs();
+    CheckHelper.nullCheck(dataCTO.geometricalData, 'GeometricalDataCTO');
+    CheckHelper.nullCheck(dataCTO.data, 'DataTO');
+    const relations: DataRelationTO[] = this.findAllDataRelationCTOs();
     const relationsToDelete: DataRelationTO[] | undefined = relations.filter(
-      (relation) => relation.data1Fk === dataCTO.data.id || relation.data2Fk === dataCTO.data.id
+        (relation) => relation.data1Fk === dataCTO.data.id || relation.data2Fk === dataCTO.data.id,
     );
     relationsToDelete.forEach((relation) => this.deleteDataRelationCTO(relation));
     DataRepository.delete(dataCTO.data);
@@ -61,27 +61,27 @@ export const DataDataAccessService = {
   },
 
   deleteDataRelationCTO(dataRelationTO: DataRelationTO): DataRelationTO {
-    CheckHelper.nullCheck(dataRelationTO, "dataRelationCTO");
+    CheckHelper.nullCheck(dataRelationTO, 'dataRelationCTO');
     DataConnectionRepository.delete(dataRelationTO);
     return dataRelationTO;
   },
 };
 
 const createDataRelationCTO = (dataRelationTO: DataRelationTO): DataRelationTO => {
-  CheckHelper.nullCheck(dataRelationTO, "DataRelationTO");
+  CheckHelper.nullCheck(dataRelationTO, 'DataRelationTO');
   const dataCTO1: DataCTO | undefined = createDataCTO(DataDataAccessService.findData(dataRelationTO.data1Fk));
-  CheckHelper.nullCheck(dataCTO1, "dataTO1");
+  CheckHelper.nullCheck(dataCTO1, 'dataTO1');
   const dataCTO2: DataCTO | undefined = createDataCTO(DataDataAccessService.findData(dataRelationTO.data2Fk));
-  CheckHelper.nullCheck(dataCTO2, "dataTO2");
+  CheckHelper.nullCheck(dataCTO2, 'dataTO2');
   return dataRelationTO;
 };
 
 const createDataCTO = (data: DataTO | undefined): DataCTO => {
-  CheckHelper.nullCheck(data, "data");
+  CheckHelper.nullCheck(data, 'data');
   const geometricalData: GeometricalDataCTO | undefined = TechnicalDataAccessService.findGeometricalDataCTO(
-    data!.geometricalDataFk!
+    data!.geometricalDataFk!,
   );
-  CheckHelper.nullCheck(geometricalData, "geometricalData");
+  CheckHelper.nullCheck(geometricalData, 'geometricalData');
   return {
     data: data!,
     geometricalData: geometricalData!,

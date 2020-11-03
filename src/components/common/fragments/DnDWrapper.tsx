@@ -1,8 +1,8 @@
-import { motion, useInvertedScale, useMotionValue } from 'framer-motion';
-import React, { FunctionComponent, useEffect } from 'react';
+import {motion, useInvertedScale, useMotionValue} from 'framer-motion';
+import React, {FunctionComponent, useEffect} from 'react';
 
-import { WINDOW_FACTOR } from '../../../app/Carv2Constants';
-import { PositionTO } from '../../../dataAccess/access/to/PositionTO';
+import {WINDOW_FACTOR} from '../../../app/Carv2Constants';
+import {PositionTO} from '../../../dataAccess/access/to/PositionTO';
 
 export interface DnDWrapperProps {
   dragConstraintsRef: any;
@@ -25,7 +25,7 @@ export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
 
   const x = useMotionValue(initX);
   const y = useMotionValue(initY);
-  const { scaleX, scaleY } = useInvertedScale();
+  const {scaleX, scaleY} = useInvertedScale();
 
   useEffect(() => {
     x.set(initX * (dragConstraintsRef.current.offsetWidth / 100));
@@ -40,20 +40,20 @@ export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
       dragElastic={0}
       onDragEnd={(event, info) => {
         onPositionUpdate(
-          /* 
-          keine Nachkommastellen 
+            /*
+          keine Nachkommastellen
           Positioniert das DnD Element entsprechend der Fenster größe.
           */
-          Number(info.point.x.toFixed(0)) /
-            (dragConstraintsRef.current.offsetWidth / WINDOW_FACTOR),
-          Number(info.point.y.toFixed(0)) /
-            (dragConstraintsRef.current.offsetHeight / WINDOW_FACTOR),
-          positionId
+            Number(info.point.x.toFixed(0))
+            / (dragConstraintsRef.current.offsetWidth / WINDOW_FACTOR),
+            Number(info.point.y.toFixed(0))
+            / (dragConstraintsRef.current.offsetHeight / WINDOW_FACTOR),
+            positionId,
         );
       }}
       className="dndWrapper"
       style={{
-        boxShadow: shadow ? "3px 3px 3px " + shadow : "",
+        boxShadow: shadow ? '3px 3px 3px ' + shadow : '',
         x,
         y,
         scaleX,
@@ -66,11 +66,11 @@ export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
 };
 
 export const createDnDItem = (
-  position: PositionTO,
-  onPositionUpdateCallBack: (x: number, y: number, positionId: number) => void,
-  dragConstraintsRef: any,
-  children: React.ReactNode,
-  shadow?: string
+    position: PositionTO,
+    onPositionUpdateCallBack: (x: number, y: number, positionId: number) => void,
+    dragConstraintsRef: any,
+    children: React.ReactNode,
+    shadow?: string,
 ) => {
   return (
     <DnDWrapper

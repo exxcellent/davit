@@ -1,6 +1,6 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
-import { Carv2ButtonIcon } from "../../../../../../common/fragments/buttons/Carv2Button";
-import { Carv2Checkbox } from "../../../../../../common/fragments/Carv2Checkbox";
+import React, {FunctionComponent, useEffect, useState} from 'react';
+import {Carv2ButtonIcon} from '../../../../../../common/fragments/buttons/Carv2Button';
+import {Carv2Checkbox} from '../../../../../../common/fragments/Carv2Checkbox';
 
 interface Carv2SubmitCancelCheckBoxProps {
   onSubmit: () => void;
@@ -18,10 +18,10 @@ interface Carv2SubmitCancelProps {
 }
 
 export const Carv2SubmitCancelCheckBox: FunctionComponent<Carv2SubmitCancelCheckBoxProps> = (props) => {
-  const { onCancel, onChange, onSubmit, submitCondition, toggleLabel, checked } = props;
+  const {onCancel, onChange, onSubmit, submitCondition, toggleLabel, checked} = props;
 
   const [disable, setDisable] = useState<boolean>(false);
-  const [label, setToggleLabel] = useState<string>("Create another");
+  const [label, setToggleLabel] = useState<string>('Create another');
 
   useEffect(() => {
     if (submitCondition === undefined) {
@@ -44,7 +44,7 @@ export const Carv2SubmitCancelCheckBox: FunctionComponent<Carv2SubmitCancelCheck
 };
 
 export const Carv2SubmitCancel: FunctionComponent<Carv2SubmitCancelProps> = (props) => {
-  const { onCancel, onSubmit, submitCondition } = props;
+  const {onCancel, onSubmit, submitCondition} = props;
 
   const [disable, setDisable] = useState<boolean>(false);
 

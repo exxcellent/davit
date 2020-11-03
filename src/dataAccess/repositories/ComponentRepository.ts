@@ -1,8 +1,8 @@
-import { ActorTO } from '../access/to/ActorTO';
-import { ConstraintsHelper } from '../ConstraintsHelper';
+import {ActorTO} from '../access/to/ActorTO';
+import {ConstraintsHelper} from '../ConstraintsHelper';
 import dataStore from '../DataStore';
-import { CheckHelper } from '../util/CheckHelper';
-import { DataAccessUtil } from '../util/DataAccessUtil';
+import {CheckHelper} from '../util/CheckHelper';
+import {DataAccessUtil} from '../util/DataAccessUtil';
 
 export const ActorRepository = {
   find(id: number): ActorTO | undefined {
@@ -15,24 +15,24 @@ export const ActorRepository = {
 
   delete(actor: ActorTO): ActorTO {
     ConstraintsHelper.deleteActorConstraintCheck(actor.id, dataStore.getDataStore());
-    let success = dataStore.getDataStore().actors.delete(actor.id!);
+    const success = dataStore.getDataStore().actors.delete(actor.id!);
     if (!success) {
-      throw new Error("dataAccess.repository.error.notExists");
+      throw new Error('dataAccess.repository.error.notExists');
     }
     return actor;
   },
 
   save(actor: ActorTO): ActorTO {
-    CheckHelper.nullCheck(actor, "actor");
+    CheckHelper.nullCheck(actor, 'actor');
     let actorTO: ActorTO;
     if (actor.id === -1) {
       actorTO = {
         ...actor,
         id: DataAccessUtil.determineNewId(this.findAll()),
       };
-      console.info("set new actor id: " + actorTO.id);
+      console.info('set new actor id: ' + actorTO.id);
     } else {
-      actorTO = { ...actor };
+      actorTO = {...actor};
     }
     dataStore.getDataStore().actors.set(actorTO.id!, actorTO);
     return actorTO;

@@ -1,25 +1,25 @@
-import React, { FunctionComponent, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Input } from 'semantic-ui-react';
-import { isNullOrUndefined } from 'util';
+import React, {FunctionComponent, useEffect, useRef} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Input} from 'semantic-ui-react';
+import {isNullOrUndefined} from 'util';
 
-import { ActorCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
-import { GroupTO } from '../../../../../../dataAccess/access/to/GroupTO';
-import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
-import { handleError } from '../../../../../../slices/GlobalSlice';
-import { Carv2Util } from '../../../../../../utils/Carv2Util';
-import { Carv2ButtonIcon, Carv2ButtonLabel } from '../../../../../common/fragments/buttons/Carv2Button';
-import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
-import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { Carv2LabelTextfield } from '../common/fragments/Carv2LabelTextfield';
-import { OptionField } from '../common/OptionField';
+import {ActorCTO} from '../../../../../../dataAccess/access/cto/ActorCTO';
+import {GroupTO} from '../../../../../../dataAccess/access/to/GroupTO';
+import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
+import {handleError} from '../../../../../../slices/GlobalSlice';
+import {Carv2Util} from '../../../../../../utils/Carv2Util';
+import {Carv2ButtonIcon, Carv2ButtonLabel} from '../../../../../common/fragments/buttons/Carv2Button';
+import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
+import {ControllPanelEditSub} from '../common/ControllPanelEditSub';
+import {Carv2LabelTextfield} from '../common/fragments/Carv2LabelTextfield';
+import {OptionField} from '../common/OptionField';
 
 export interface ControllPanelEditComponentProps {
   hidden: boolean;
 }
 
 export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComponentProps> = (props) => {
-  const { hidden } = props;
+  const {hidden} = props;
   const {
     label,
     name,
@@ -76,7 +76,7 @@ const useControllPanelEditComponentViewModel = () => {
   useEffect(() => {
     // check if component to edit is really set or gos back to edit mode
     if (isNullOrUndefined(componentToEdit)) {
-      handleError("Tried to go to edit component without componentToedit specified");
+      handleError('Tried to go to edit component without componentToedit specified');
       EditActions.setMode.edit();
     }
     // used to focus the textfield on create another
@@ -84,19 +84,19 @@ const useControllPanelEditComponentViewModel = () => {
   }, [componentToEdit]);
 
   const changeName = (name: string) => {
-    let copyComponentToEdit: ActorCTO = Carv2Util.deepCopy(componentToEdit);
+    const copyComponentToEdit: ActorCTO = Carv2Util.deepCopy(componentToEdit);
     copyComponentToEdit.actor.name = name;
     dispatch(EditActions.setMode.editActor(copyComponentToEdit));
   };
 
   const updateComponent = () => {
-    let copyComponentToEdit: ActorCTO = Carv2Util.deepCopy(componentToEdit);
+    const copyComponentToEdit: ActorCTO = Carv2Util.deepCopy(componentToEdit);
     dispatch(EditActions.actor.save(copyComponentToEdit));
   };
 
   const saveComponent = (newMode?: string) => {
     if (!isNullOrUndefined(componentToEdit)) {
-      if (componentToEdit?.actor.name !== "") {
+      if (componentToEdit?.actor.name !== '') {
         dispatch(EditActions.actor.save(componentToEdit!));
       } else {
         deleteComponent();
@@ -116,7 +116,7 @@ const useControllPanelEditComponentViewModel = () => {
 
   const setGroup = (group: GroupTO | undefined) => {
     if (!isNullOrUndefined(componentToEdit)) {
-      let copyComponentToEdit: ActorCTO = Carv2Util.deepCopy(componentToEdit);
+      const copyComponentToEdit: ActorCTO = Carv2Util.deepCopy(componentToEdit);
       if (group !== undefined) {
         copyComponentToEdit.actor.groupFks = group.id;
       } else {
@@ -127,7 +127,7 @@ const useControllPanelEditComponentViewModel = () => {
   };
 
   return {
-    label: "EDIT * " + (componentToEdit?.actor.name || ""),
+    label: 'EDIT * ' + (componentToEdit?.actor.name || ''),
     name: componentToEdit?.actor.name,
     changeName,
     saveComponent,

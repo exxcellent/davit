@@ -1,9 +1,9 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { ChainTO } from "../../../../dataAccess/access/to/ChainTO";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import React, {FunctionComponent} from 'react';
+import {useSelector} from 'react-redux';
+import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
+import {isNullOrUndefined} from 'util';
+import {ChainTO} from '../../../../dataAccess/access/to/ChainTO';
+import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
 
 interface ChainDropDownProps extends DropdownProps {
   onSelect: (chain: ChainTO | undefined) => void;
@@ -17,13 +17,13 @@ interface ChainDropDownPropsButton extends DropdownProps {
 }
 
 export const ChainDropDown: FunctionComponent<ChainDropDownProps> = (props) => {
-  const { onSelect, placeholder, value } = props;
-  const { chainToOption, chains, selectChain } = useChainDropDownViewModel();
+  const {onSelect, placeholder, value} = props;
+  const {chainToOption, chains, selectChain} = useChainDropDownViewModel();
 
   return (
     <Dropdown
       options={chains.map(chainToOption)}
-      placeholder={placeholder || "Select Chain ..."}
+      placeholder={placeholder || 'Select Chain ...'}
       onChange={(event, sequence) => onSelect(selectChain(Number(sequence.value)))}
       floating
       selectOnBlur={false}
@@ -37,13 +37,13 @@ export const ChainDropDown: FunctionComponent<ChainDropDownProps> = (props) => {
 };
 
 export const ChainDropDownButton: FunctionComponent<ChainDropDownPropsButton> = (props) => {
-  const { onSelect, icon } = props;
-  const { selectChain, chainToOption, chains } = useChainDropDownViewModel();
+  const {onSelect, icon} = props;
+  const {selectChain, chainToOption, chains} = useChainDropDownViewModel();
 
   return (
     <Dropdown
       options={chains.map(chainToOption)}
-      icon={chains.length > 0 ? icon : ""}
+      icon={chains.length > 0 ? icon : ''}
       onChange={(event, sequence) => onSelect(selectChain(Number(sequence.value)))}
       className="button icon"
       inverted="true"
@@ -75,5 +75,5 @@ const useChainDropDownViewModel = () => {
     };
   };
 
-  return { chainToOption, selectChain, chains };
+  return {chainToOption, selectChain, chains};
 };

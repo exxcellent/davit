@@ -1,27 +1,27 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, Input } from 'semantic-ui-react';
-import { isNullOrUndefined } from 'util';
+import React, {FunctionComponent, useEffect, useRef, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Button, Input} from 'semantic-ui-react';
+import {isNullOrUndefined} from 'util';
 
-import { ActorCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
-import { DataSetupCTO } from '../../../../../../dataAccess/access/cto/DataSetupCTO';
-import { InitDataTO } from '../../../../../../dataAccess/access/to/InitDataTO';
-import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
-import { handleError } from '../../../../../../slices/GlobalSlice';
-import { Carv2Util } from '../../../../../../utils/Carv2Util';
-import { Carv2ButtonIcon, Carv2ButtonLabel } from '../../../../../common/fragments/buttons/Carv2Button';
-import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
-import { InitDataDropDownButton } from '../../../../../common/fragments/dropdowns/InitDataDropDown';
-import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { Carv2LabelTextfield } from '../common/fragments/Carv2LabelTextfield';
-import { OptionField } from '../common/OptionField';
+import {ActorCTO} from '../../../../../../dataAccess/access/cto/ActorCTO';
+import {DataSetupCTO} from '../../../../../../dataAccess/access/cto/DataSetupCTO';
+import {InitDataTO} from '../../../../../../dataAccess/access/to/InitDataTO';
+import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
+import {handleError} from '../../../../../../slices/GlobalSlice';
+import {Carv2Util} from '../../../../../../utils/Carv2Util';
+import {Carv2ButtonIcon, Carv2ButtonLabel} from '../../../../../common/fragments/buttons/Carv2Button';
+import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
+import {InitDataDropDownButton} from '../../../../../common/fragments/dropdowns/InitDataDropDown';
+import {ControllPanelEditSub} from '../common/ControllPanelEditSub';
+import {Carv2LabelTextfield} from '../common/fragments/Carv2LabelTextfield';
+import {OptionField} from '../common/OptionField';
 
 export interface ControllPanelEditDataSetupProps {
   hidden: boolean;
 }
 
 export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditDataSetupProps> = (props) => {
-  const { hidden } = props;
+  const {hidden} = props;
   const {
     label,
     name,
@@ -89,7 +89,7 @@ const useControllPanelEditDataSetupViewModel = () => {
   useEffect(() => {
     // check if sequence to edit is really set or gos back to edit mode
     if (isNullOrUndefined(dataSetupToEdit)) {
-      handleError("Tried to go to edit dataSetup without dataSetupToedit specified");
+      handleError('Tried to go to edit dataSetup without dataSetupToedit specified');
       dispatch(EditActions.setMode.edit());
     }
     // used to focus the textfield on create another
@@ -98,14 +98,14 @@ const useControllPanelEditDataSetupViewModel = () => {
 
   const changeName = (name: string) => {
     if (!isNullOrUndefined(dataSetupToEdit)) {
-      let copyDataSetupToEdit: DataSetupCTO = Carv2Util.deepCopy(dataSetupToEdit);
+      const copyDataSetupToEdit: DataSetupCTO = Carv2Util.deepCopy(dataSetupToEdit);
       copyDataSetupToEdit.dataSetup.name = name;
       dispatch(EditActions.dataSetup.update(copyDataSetupToEdit));
     }
   };
 
   const saveDataSetup = () => {
-    if (dataSetupToEdit?.dataSetup.name !== "") {
+    if (dataSetupToEdit?.dataSetup.name !== '') {
       dispatch(EditActions.dataSetup.save(dataSetupToEdit!));
     } else {
       deleteDataSetup();
@@ -128,8 +128,8 @@ const useControllPanelEditDataSetupViewModel = () => {
   };
 
   const copyDataSetup = () => {
-    let copyDataSetup: DataSetupCTO = Carv2Util.deepCopy(dataSetupToEdit);
-    copyDataSetup.dataSetup.name = dataSetupToEdit?.dataSetup.name + "-copy";
+    const copyDataSetup: DataSetupCTO = Carv2Util.deepCopy(dataSetupToEdit);
+    copyDataSetup.dataSetup.name = dataSetupToEdit?.dataSetup.name + '-copy';
     copyDataSetup.dataSetup.id = -1;
     copyDataSetup.initDatas.forEach((initData) => {
       initData.id = -1;
@@ -139,11 +139,11 @@ const useControllPanelEditDataSetupViewModel = () => {
   };
 
   const getDatas = (): number[] => {
-    let dataIds: number[] = [];
+    const dataIds: number[] = [];
     if (!isNullOrUndefined(dataSetupToEdit) && !isNullOrUndefined(actorToEdit)) {
       dataSetupToEdit.initDatas
-        .filter((initData) => initData.actorFk === actorToEdit.actor.id)
-        .forEach((initData) => dataIds.push(initData.dataFk));
+          .filter((initData) => initData.actorFk === actorToEdit.actor.id)
+          .forEach((initData) => dataIds.push(initData.dataFk));
     }
     return dataIds;
   };
@@ -163,7 +163,7 @@ const useControllPanelEditDataSetupViewModel = () => {
   };
 
   return {
-    label: "EDIT * " + (dataSetupToEdit?.dataSetup.name || ""),
+    label: 'EDIT * ' + (dataSetupToEdit?.dataSetup.name || ''),
     name: dataSetupToEdit?.dataSetup.name,
     changeName,
     saveDataSetup,

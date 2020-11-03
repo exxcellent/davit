@@ -1,9 +1,9 @@
-import {isNullOrUndefined} from 'util';
 import {ChainCTO} from '../dataAccess/access/cto/ChainCTO';
 import {ChainlinkCTO} from '../dataAccess/access/cto/ChainlinkCTO';
 import {DataSetupCTO} from '../dataAccess/access/cto/DataSetupCTO';
 import {ChainDecisionTO} from '../dataAccess/access/to/ChainDecisionTO';
 import {GoToChain, GoToTypesChain, TerminalChain} from '../dataAccess/access/types/GoToTypeChain';
+import {Carv2Util} from '../utils/Carv2Util';
 import {ActorData} from '../viewDataTypes/ActorData';
 import {ActorDataState} from '../viewDataTypes/ActorDataState';
 import {CalcSequence, SequenceService} from './SequenceService';
@@ -51,8 +51,8 @@ export const SequenceChainService = {
             loopStartingStep = checkForLoop(calcSequenceChain, link, mergedActorDatas);
 
             const result: CalcSequence = SequenceService.calculateSequence(
-              link.sequence,
-              mergedActorDatas.actorDatas,
+                link.sequence,
+                mergedActorDatas.actorDatas,
             );
 
             actorDatas = result.steps.length > 0 ? result.steps[result.steps.length - 1].actorDatas : [];
@@ -101,7 +101,7 @@ export const SequenceChainService = {
 
 const executeDecisionCheck = (decision: ChainDecisionTO, actorDatas: ActorData[]): GoToChain => {
   const filteredCompData: ActorData[] = actorDatas.filter(
-    (actorData) => actorData.actorFk === decision.actorFk,
+      (actorData) => actorData.actorFk === decision.actorFk,
   );
   let goTo: GoToChain | undefined;
   if (decision.dataAndInstaceIds !== undefined) {
@@ -125,8 +125,8 @@ const getDecisionFromChain = (id: number, chain: ChainCTO): ChainDecisionTO | un
 
 export const getRoot = (chain: ChainCTO | null): ChainlinkCTO | null => {
   let rootLink: ChainlinkCTO | null = null;
-  if (!isNullOrUndefined(chain)) {
-    rootLink = chain.links.find((link) => link.chainLink.root === true) || null;
+  if (!Carv2Util.isNullOrUndefined(chain)) {
+    rootLink = chain!.links.find((link) => link.chainLink.root === true) || null;
   }
   return rootLink;
 };
@@ -159,17 +159,17 @@ const getType = (step: ChainlinkCTO | ChainDecisionTO | TerminalChain): GoToType
 };
 
 const checkForLoop = (
-  calcSequenceChain: CalcChain,
-  step: ChainlinkCTO,
-  mergedActorData: MergedActorDatas,
+    calcSequenceChain: CalcChain,
+    step: ChainlinkCTO,
+    mergedActorData: MergedActorDatas,
 ): number => {
   return calcSequenceChain.calcLinks.findIndex(
-    (calcLink) =>
-      calcLink.chainLinkId === step.chainLink.id
+      (calcLink) =>
+        calcLink.chainLinkId === step.chainLink.id
       && calcLink.sequence.steps[0].actorDatas.length === mergedActorData.actorDatas.length
       && !calcLink.sequence.steps[0].actorDatas.some(
-        (cp) =>
-          !mergedActorData.actorDatas.some((rcp) => rcp.actorFk === cp.actorFk && rcp.dataFk === cp.dataFk),
+          (cp) =>
+            !mergedActorData.actorDatas.some((rcp) => rcp.actorFk === cp.actorFk && rcp.dataFk === cp.dataFk),
       ),
   );
 };

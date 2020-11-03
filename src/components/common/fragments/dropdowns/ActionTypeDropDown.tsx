@@ -13,23 +13,23 @@ export const ActionTypeDropDown: FunctionComponent<ActionTypeDropDownnProps> = (
   const actions: ActionType[] = Object.values(ActionType);
 
   const getActionTypeLabel = (type: ActionType) : string => {
-  let label: string = '';
-  switch (type) {
-    case ActionType.ADD:
-      label = 'Add or Update';
-      break;
-    case ActionType.DELETE:
-      label = 'Delete';
-      break;
-    case ActionType.SEND:
-      label = 'Send';
-      break;
-    case ActionType.SEND_AND_DELETE:
-      label = 'Send and delete';
-      break;
-  }
-  return label;
-};
+    let label: string = '';
+    switch (type) {
+      case ActionType.ADD:
+        label = 'Add or Update';
+        break;
+      case ActionType.DELETE:
+        label = 'Delete';
+        break;
+      case ActionType.SEND:
+        label = 'Send';
+        break;
+      case ActionType.SEND_AND_DELETE:
+        label = 'Send and delete';
+        break;
+    }
+    return label;
+  };
 
   const actionTypeToOption = (actionType: ActionType): DropdownItemProps => {
     return {

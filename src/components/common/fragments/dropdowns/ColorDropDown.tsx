@@ -1,5 +1,5 @@
-import React, { FunctionComponent } from "react";
-import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
+import React, {FunctionComponent} from 'react';
+import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
 
 interface ColorDropDownProps extends DropdownProps {
   onSelect: (color: string | undefined) => void;
@@ -8,7 +8,7 @@ interface ColorDropDownProps extends DropdownProps {
 }
 
 export const ColorDropDown: FunctionComponent<ColorDropDownProps> = (props) => {
-  const { onSelect, placeholder, colors } = props;
+  const {onSelect, placeholder, colors} = props;
 
   const colorToOption = (color: string): DropdownItemProps => {
     return {

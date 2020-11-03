@@ -1,5 +1,5 @@
-import React, { FunctionComponent, useState } from "react";
-import { Button } from "semantic-ui-react";
+import React, {FunctionComponent, useState} from 'react';
+import {Button} from 'semantic-ui-react';
 
 interface Carv2DeleteButtonProps {
   onClick: () => void;
@@ -7,7 +7,7 @@ interface Carv2DeleteButtonProps {
 }
 
 export const Carv2DeleteButton: FunctionComponent<Carv2DeleteButtonProps> = (props) => {
-  const { onClick, disable } = props;
+  const {onClick, disable} = props;
 
   const [fluid, setFluid] = useState<boolean>(false);
 
@@ -18,14 +18,14 @@ export const Carv2DeleteButton: FunctionComponent<Carv2DeleteButtonProps> = (pro
   return (
     <div
       style={{
-        display: "flex",
-        width: "100%",
-        justifyContent: "center",
+        display: 'flex',
+        width: '100%',
+        justifyContent: 'center',
       }}
     >
       {!fluid && (
         <Button
-          icon={disable ? "" : "trash alternate"}
+          icon={disable ? '' : 'trash alternate'}
           onClick={onButtonClick}
           className="carv2Button"
           inverted
