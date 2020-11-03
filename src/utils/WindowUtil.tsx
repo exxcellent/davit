@@ -60,26 +60,26 @@ export const useCurrentHeight = () => {
 };
 
 export const useZoomDisable = (zoomCallBacks?: { zoomInCallBack: () => void; zoomOutCallBack: () => void }) => {
-  const handleKeyDown = (event: WheelEvent) => {
-    if (event.ctrlKey === true) {
-      event.preventDefault();
+  const handleKeyDown = (wheelEvent: WheelEvent) => {
+    if (wheelEvent.ctrlKey === true) {
+      wheelEvent.preventDefault();
       if (zoomCallBacks) {
-        event.deltaY < 0 && zoomCallBacks.zoomInCallBack();
-        event.deltaY > 0 && zoomCallBacks.zoomOutCallBack();
+        wheelEvent.deltaY < 0 && zoomCallBacks.zoomInCallBack();
+        wheelEvent.deltaY > 0 && zoomCallBacks.zoomOutCallBack();
       }
     }
   };
 
   const checkZoom = (event: KeyboardEvent) => {
     if (event.ctrlKey === true) {
-      if (event.keyCode === 171 || event.keyCode === 173) {
+      if (event.key === '+' || event.key === '-') {
         event.preventDefault();
       }
     }
   };
 
   useEffect(() => {
-    document.addEventListener('wheel', handleKeyDown);
+    document.addEventListener('wheel', handleKeyDown, {passive: false});
     document.addEventListener('keydown', checkZoom);
 
     return () => {
