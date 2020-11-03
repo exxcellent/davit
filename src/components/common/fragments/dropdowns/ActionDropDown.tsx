@@ -82,8 +82,8 @@ const useActionDropDownViewModel = () => {
 
   const actionToOption = (action: ActionTO): DropdownItemProps => {
     const text: string = `${getActorName(action.receivingActorFk, actors)} - ${getActionTypeLabel(action.actionType)} - ${getDataName(
-      action.dataFk,
-      datas,
+        action.dataFk,
+        datas,
     )}`;
     return {
       key: action.id,

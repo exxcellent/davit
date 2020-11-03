@@ -1,10 +1,10 @@
-import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
-import { Dropdown, DropdownItemProps, DropdownProps } from 'semantic-ui-react';
-import { isNullOrUndefined } from 'util';
+import React, {FunctionComponent} from 'react';
+import {useSelector} from 'react-redux';
+import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
+import {isNullOrUndefined} from 'util';
 
-import { ActorCTO } from '../../../../dataAccess/access/cto/ActorCTO';
-import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
+import {ActorCTO} from '../../../../dataAccess/access/cto/ActorCTO';
+import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
 
 interface ActorDropDownProps extends DropdownProps {
   onSelect: (actor: ActorCTO | undefined) => void;
@@ -18,8 +18,8 @@ interface ActorDropDownButtonProps extends DropdownProps {
 }
 
 export const ActorDropDown: FunctionComponent<ActorDropDownProps> = (props) => {
-  const { onSelect, placeholder, value } = props;
-  const { actors, actorToOption, selectActor } = useActorDropDownViewModel();
+  const {onSelect, placeholder, value} = props;
+  const {actors, actorToOption, selectActor} = useActorDropDownViewModel();
 
   return (
     <Dropdown
@@ -28,7 +28,7 @@ export const ActorDropDown: FunctionComponent<ActorDropDownProps> = (props) => {
       })}
       selection
       selectOnBlur={false}
-      placeholder={placeholder || "Select Actor ..."}
+      placeholder={placeholder || 'Select Actor ...'}
       onChange={(event, data) => onSelect(selectActor(Number(data.value), actors))}
       scrolling
       value={value === -1 ? undefined : value}
@@ -38,15 +38,15 @@ export const ActorDropDown: FunctionComponent<ActorDropDownProps> = (props) => {
 };
 
 export const ActorDropDownButton: FunctionComponent<ActorDropDownButtonProps> = (props) => {
-  const { onSelect, icon } = props;
-  const { actorToOption, actors, selectActor } = useActorDropDownViewModel();
+  const {onSelect, icon} = props;
+  const {actorToOption, actors, selectActor} = useActorDropDownViewModel();
 
   return (
     <Dropdown
       options={actors.map(actorToOption).sort((a, b) => {
         return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
       })}
-      icon={actors.length > 0 ? icon : ""}
+      icon={actors.length > 0 ? icon : ''}
       selectOnBlur={false}
       onChange={(event, data) => onSelect(selectActor(Number(data.value), actors))}
       className="button icon"
@@ -75,5 +75,5 @@ const useActorDropDownViewModel = () => {
     return undefined;
   };
 
-  return { actors, actorToOption, selectActor };
+  return {actors, actorToOption, selectActor};
 };

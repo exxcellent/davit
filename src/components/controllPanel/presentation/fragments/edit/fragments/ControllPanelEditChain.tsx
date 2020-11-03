@@ -1,29 +1,29 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Input } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { ChainDecisionTO } from "../../../../../../dataAccess/access/to/ChainDecisionTO";
-import { ChainlinkTO } from "../../../../../../dataAccess/access/to/ChainlinkTO";
-import { ChainTO } from "../../../../../../dataAccess/access/to/ChainTO";
-import { SequenceTO } from "../../../../../../dataAccess/access/to/SequenceTO";
-import { EditActions } from "../../../../../../slices/EditSlice";
-import { masterDataSelectors } from "../../../../../../slices/MasterDataSlice";
-import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
-import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
-import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
-import { ChainDecisionDropDownButton } from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
-import { ChainLinkDropDownButton } from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
-import { OptionField } from "../common/OptionField";
+import React, {FunctionComponent, useEffect, useRef, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Button, Input} from 'semantic-ui-react';
+import {isNullOrUndefined} from 'util';
+import {ChainDecisionTO} from '../../../../../../dataAccess/access/to/ChainDecisionTO';
+import {ChainlinkTO} from '../../../../../../dataAccess/access/to/ChainlinkTO';
+import {ChainTO} from '../../../../../../dataAccess/access/to/ChainTO';
+import {SequenceTO} from '../../../../../../dataAccess/access/to/SequenceTO';
+import {EditActions} from '../../../../../../slices/EditSlice';
+import {masterDataSelectors} from '../../../../../../slices/MasterDataSlice';
+import {sequenceModelSelectors} from '../../../../../../slices/SequenceModelSlice';
+import {Carv2Util} from '../../../../../../utils/Carv2Util';
+import {Carv2ButtonIcon, Carv2ButtonLabel} from '../../../../../common/fragments/buttons/Carv2Button';
+import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
+import {ChainDecisionDropDownButton} from '../../../../../common/fragments/dropdowns/ChainDecisionDropDown';
+import {ChainLinkDropDownButton} from '../../../../../common/fragments/dropdowns/ChainLinkDropDown';
+import {ControllPanelEditSub} from '../common/ControllPanelEditSub';
+import {Carv2LabelTextfield} from '../common/fragments/Carv2LabelTextfield';
+import {OptionField} from '../common/OptionField';
 
 export interface ControllPanelEditChainProps {
   hidden: boolean;
 }
 
 export const ControllPanelEditChain: FunctionComponent<ControllPanelEditChainProps> = (props) => {
-  const { hidden } = props;
+  const {hidden} = props;
   const {
     label,
     name,
@@ -103,7 +103,7 @@ const useControllPanelEditChainViewModel = () => {
   useEffect(() => {
     // check if sequence to edit is really set or gos back to edit mode
     if (isNullOrUndefined(selectedChain)) {
-      console.warn("Tried to go to edit sequence without chain specified" + selectedChain);
+      console.warn('Tried to go to edit sequence without chain specified' + selectedChain);
       dispatch(EditActions.setMode.edit());
     }
     if (selectedChain?.id !== -1) {
@@ -115,7 +115,7 @@ const useControllPanelEditChainViewModel = () => {
 
   const changeName = (name: string) => {
     if (!isNullOrUndefined(selectedChain)) {
-      let copyChainToEdit: ChainTO = Carv2Util.deepCopy(selectedChain);
+      const copyChainToEdit: ChainTO = Carv2Util.deepCopy(selectedChain);
       copyChainToEdit.name = name;
       dispatch(EditActions.chain.save(copyChainToEdit));
     }
@@ -123,7 +123,7 @@ const useControllPanelEditChainViewModel = () => {
 
   const saveChain = (newMode?: string) => {
     if (!isNullOrUndefined(selectedChain)) {
-      if (selectedChain.name !== "") {
+      if (selectedChain.name !== '') {
         dispatch(EditActions.chain.save(selectedChain));
       } else {
         dispatch(EditActions.chain.delete(selectedChain));
@@ -175,12 +175,12 @@ const useControllPanelEditChainViewModel = () => {
   };
 
   const updateSequence = () => {
-    let copySequence: SequenceTO = Carv2Util.deepCopy(selectedChain);
+    const copySequence: SequenceTO = Carv2Util.deepCopy(selectedChain);
     dispatch(EditActions.sequence.save(copySequence));
   };
 
   return {
-    label: "EDIT * " + (selectedChain?.name || ""),
+    label: 'EDIT * ' + (selectedChain?.name || ''),
     name: selectedChain?.name,
     id: selectedChain?.id ? selectedChain.id : -1,
     changeName,

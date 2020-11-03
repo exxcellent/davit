@@ -1,7 +1,7 @@
-import React, { FunctionComponent } from 'react';
+import React, {FunctionComponent} from 'react';
 
-import { DataInstanceTO } from '../../../dataAccess/access/to/DataInstanceTO';
-import { ViewFragmentProps } from '../../../viewDataTypes/ViewFragment';
+import {DataInstanceTO} from '../../../dataAccess/access/to/DataInstanceTO';
+import {ViewFragmentProps} from '../../../viewDataTypes/ViewFragment';
 
 export interface MetaDataFragmentProps {
   id: number;
@@ -14,7 +14,7 @@ export interface MetaDataFragmentProps {
 }
 
 const MetaDataFragment: FunctionComponent<MetaDataFragmentProps> = (props) => {
-  const { initName, actorFragments, initWidth, initHeigth, instances } = props;
+  const {initName, actorFragments, initWidth, initHeigth, instances} = props;
 
   return <div />;
 };

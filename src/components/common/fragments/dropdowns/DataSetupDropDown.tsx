@@ -1,9 +1,9 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { DataSetupTO } from "../../../../dataAccess/access/to/DataSetupTO";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import React, {FunctionComponent} from 'react';
+import {useSelector} from 'react-redux';
+import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
+import {isNullOrUndefined} from 'util';
+import {DataSetupTO} from '../../../../dataAccess/access/to/DataSetupTO';
+import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
 
 interface DataSetupDropDownProps extends DropdownProps {
   onSelect: (dataSetup: DataSetupTO | undefined) => void;
@@ -17,8 +17,8 @@ interface DataSetupDropDownPropsButton extends DropdownProps {
 }
 
 export const DataSetupDropDown: FunctionComponent<DataSetupDropDownProps> = (props) => {
-  const { onSelect, placeholder, value } = props;
-  const { dataSetups, selectDataSetup, dataSetupToOption } = useDataSetupDropDownViewModel();
+  const {onSelect, placeholder, value} = props;
+  const {dataSetups, selectDataSetup, dataSetupToOption} = useDataSetupDropDownViewModel();
 
   return (
     <Dropdown
@@ -27,7 +27,7 @@ export const DataSetupDropDown: FunctionComponent<DataSetupDropDownProps> = (pro
       })}
       selection
       selectOnBlur={false}
-      placeholder={placeholder || "Select Data ..."}
+      placeholder={placeholder || 'Select Data ...'}
       onChange={(event, data) => onSelect(selectDataSetup(Number(data.value), dataSetups))}
       scrolling
       clearable={true}
@@ -38,15 +38,15 @@ export const DataSetupDropDown: FunctionComponent<DataSetupDropDownProps> = (pro
 };
 
 export const DataSetupDropDownButton: FunctionComponent<DataSetupDropDownPropsButton> = (props) => {
-  const { onSelect, icon } = props;
-  const { dataSetups, selectDataSetup, dataSetupToOption } = useDataSetupDropDownViewModel();
+  const {onSelect, icon} = props;
+  const {dataSetups, selectDataSetup, dataSetupToOption} = useDataSetupDropDownViewModel();
 
   return (
     <Dropdown
       options={dataSetups.map(dataSetupToOption).sort((a, b) => {
         return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
       })}
-      icon={dataSetups.length > 0 ? icon : ""}
+      icon={dataSetups.length > 0 ? icon : ''}
       selectOnBlur={false}
       onChange={(event, data) => onSelect(selectDataSetup(Number(data.value), dataSetups))}
       className="button icon"
@@ -75,5 +75,5 @@ const useDataSetupDropDownViewModel = () => {
     return undefined;
   };
 
-  return { dataSetups, dataSetupToOption, selectDataSetup };
+  return {dataSetups, dataSetupToOption, selectDataSetup};
 };

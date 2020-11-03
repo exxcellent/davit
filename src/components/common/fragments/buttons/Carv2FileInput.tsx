@@ -1,7 +1,7 @@
-import React, { createRef, FunctionComponent } from "react";
-import { useDispatch } from "react-redux";
-import { GlobalActions } from "../../../../slices/GlobalSlice";
-import { Carv2ButtonIcon } from "./Carv2Button";
+import React, {createRef, FunctionComponent} from 'react';
+import {useDispatch} from 'react-redux';
+import {GlobalActions} from '../../../../slices/GlobalSlice';
+import {Carv2ButtonIcon} from './Carv2Button';
 
 export interface Carv2FileInputProps {}
 

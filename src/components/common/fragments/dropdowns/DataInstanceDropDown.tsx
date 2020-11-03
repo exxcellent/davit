@@ -1,7 +1,7 @@
-import React, { FunctionComponent } from 'react';
-import { Dropdown, DropdownItemProps, DropdownProps } from 'semantic-ui-react';
+import React, {FunctionComponent} from 'react';
+import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
 
-import { DataInstanceTO } from '../../../../dataAccess/access/to/DataInstanceTO';
+import {DataInstanceTO} from '../../../../dataAccess/access/to/DataInstanceTO';
 
 interface DataInstanceDropDownProps extends DropdownProps {
   onSelect: (id: number | undefined) => void;
@@ -20,15 +20,15 @@ interface DataInstanceDropDownButtonProps extends DropdownProps {
  * List's all instances of a data object.
  */
 export const DataInstanceDropDown: FunctionComponent<DataInstanceDropDownProps> = (
-  props
+    props,
 ) => {
-  const { onSelect, placeholder, value, instances } = props;
-  const { dataInstacesToOption } = useDataInstanceDropDownViewModel();
+  const {onSelect, placeholder, value, instances} = props;
+  const {dataInstacesToOption} = useDataInstanceDropDownViewModel();
 
   return (
     <Dropdown
       options={dataInstacesToOption(instances)}
-      placeholder={placeholder || "Select Data Instance ..."}
+      placeholder={placeholder || 'Select Data Instance ...'}
       onChange={(event, data) => onSelect(Number(data.value))}
       selectOnBlur={false}
       scrolling
@@ -40,15 +40,15 @@ export const DataInstanceDropDown: FunctionComponent<DataInstanceDropDownProps> 
 };
 
 export const DataInstanceDropDownButton: FunctionComponent<DataInstanceDropDownButtonProps> = (
-  props
+    props,
 ) => {
-  const { onSelect, instances, icon } = props;
-  const { dataInstacesToOption } = useDataInstanceDropDownViewModel();
+  const {onSelect, instances, icon} = props;
+  const {dataInstacesToOption} = useDataInstanceDropDownViewModel();
 
   return (
     <Dropdown
       options={dataInstacesToOption(instances)}
-      icon={dataInstacesToOption(instances).length > 0 ? icon : ""}
+      icon={dataInstacesToOption(instances).length > 0 ? icon : ''}
       onChange={(event, data) => onSelect(Number(data.value))}
       className="button icon"
       inverted="true"
@@ -64,20 +64,20 @@ export const DataInstanceDropDownButton: FunctionComponent<DataInstanceDropDownB
 
 const useDataInstanceDropDownViewModel = () => {
   const dataInstacesToOption = (
-    instances: DataInstanceTO[]
+      instances: DataInstanceTO[],
   ): DropdownItemProps[] => {
     const dropdownItemProps: DropdownItemProps[] = [];
     instances
-      .filter((inst) => inst.defaultInstance === false)
-      .forEach((instanc) =>
-        dropdownItemProps.push({
-          key: instanc.id,
-          value: instanc.id,
-          text: instanc.name,
-        })
-      );
+        .filter((inst) => inst.defaultInstance === false)
+        .forEach((instanc) =>
+          dropdownItemProps.push({
+            key: instanc.id,
+            value: instanc.id,
+            text: instanc.name,
+          }),
+        );
     return dropdownItemProps;
   };
 
-  return { dataInstacesToOption };
+  return {dataInstacesToOption};
 };

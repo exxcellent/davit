@@ -1,16 +1,16 @@
-import { motion } from 'framer-motion';
-import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
+import {motion} from 'framer-motion';
+import React, {FunctionComponent, useEffect, useRef, useState} from 'react';
 
-import { ASPECT_RATIO, WINDOW_FACTOR } from '../../../app/Carv2Constants';
-import { DataCTO } from '../../../dataAccess/access/cto/DataCTO';
-import { GeometricalDataCTO } from '../../../dataAccess/access/cto/GeometraicalDataCTO';
-import { DataRelationTO } from '../../../dataAccess/access/to/DataRelationTO';
-import { Carv2Util } from '../../../utils/Carv2Util';
-import { useCurrentHeight, useCurrentWitdh } from '../../../utils/WindowUtil';
-import { ViewFragmentProps } from '../../../viewDataTypes/ViewFragment';
-import { createDnDItem } from '../../common/fragments/DnDWrapper';
-import { createCornerConnection } from '../../common/fragments/svg/Carv2Path';
-import { Carv2Card } from '../../metaComponentModel/presentation/fragments/Carv2Card';
+import {ASPECT_RATIO, WINDOW_FACTOR} from '../../../app/Carv2Constants';
+import {DataCTO} from '../../../dataAccess/access/cto/DataCTO';
+import {GeometricalDataCTO} from '../../../dataAccess/access/cto/GeometraicalDataCTO';
+import {DataRelationTO} from '../../../dataAccess/access/to/DataRelationTO';
+import {Carv2Util} from '../../../utils/Carv2Util';
+import {useCurrentHeight, useCurrentWitdh} from '../../../utils/WindowUtil';
+import {ViewFragmentProps} from '../../../viewDataTypes/ViewFragment';
+import {createDnDItem} from '../../common/fragments/DnDWrapper';
+import {createCornerConnection} from '../../common/fragments/svg/Carv2Path';
+import {Carv2Card} from '../../metaComponentModel/presentation/fragments/Carv2Card';
 
 interface MetaDataDnDBox {
   dataCTOs: DataCTO[];
@@ -24,7 +24,7 @@ interface MetaDataDnDBox {
 }
 
 export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
-  const { dataCTOs, dataCTOToEdit, onSaveCallBack, dataRelations, dataRelationToEdit, actorDatas, fullScreen } = props;
+  const {dataCTOs, dataCTOToEdit, onSaveCallBack, dataRelations, dataRelationToEdit, actorDatas, fullScreen} = props;
 
   const constraintsRef = useRef(null);
 
@@ -35,10 +35,10 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
   };
 
   useEffect(() => {
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   });
 
@@ -51,7 +51,7 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
   const onPositionUpdate = (x: number, y: number, positionId: number) => {
     const dataCTO = dataCTOs.find((dataCTO) => dataCTO.geometricalData.position.id === positionId);
     if (dataCTO) {
-      let copyDataCTO: DataCTO = Carv2Util.deepCopy(dataCTO);
+      const copyDataCTO: DataCTO = Carv2Util.deepCopy(dataCTO);
       copyDataCTO.geometricalData.position.x = x;
       copyDataCTO.geometricalData.position.y = y;
       onSaveCallBack(copyDataCTO);
@@ -77,16 +77,16 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
   };
 
   const createDnDMetaDataFragment = (dataCTO: DataCTO) => {
-    let metaDataFragment: JSX.Element = (
+    const metaDataFragment: JSX.Element = (
       <Carv2Card
         id={dataCTO.data.id}
         initName={dataCTO.data.name}
         initWidth={dataCTO.geometricalData.geometricalData.width}
         initHeigth={dataCTO.geometricalData.geometricalData.height}
         dataFragments={actorDatas.filter(
-          (actor) =>
-            actor.parentId === dataCTO.data.id ||
-            (actor.parentId as { dataId: number; instanceId: number }).dataId === dataCTO.data.id
+            (actor) =>
+              actor.parentId === dataCTO.data.id
+            || (actor.parentId as { dataId: number; instanceId: number }).dataId === dataCTO.data.id,
         )}
         instances={dataCTO.data.instances}
         zoomFactor={1}
@@ -100,12 +100,12 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
     const geoData1: GeometricalDataCTO | null = getGeometriaclDataByDataId(dataRelation.data1Fk);
     const geoData2: GeometricalDataCTO | null = getGeometriaclDataByDataId(dataRelation.data2Fk);
     if (
-      dataRelation.data1Fk !== -1 &&
-      dataRelation.data2Fk !== -1 &&
-      dataRelation.direction1 &&
-      dataRelation.direction2 &&
-      geoData1 &&
-      geoData2
+      dataRelation.data1Fk !== -1
+      && dataRelation.data2Fk !== -1
+      && dataRelation.direction1
+      && dataRelation.direction2
+      && geoData1
+      && geoData2
     ) {
       return createCornerConnection(geoData1, geoData2, dataRelation, dataRelation.id, constraintsRef, true);
     }
@@ -123,8 +123,8 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
     <motion.div
       id="datadndBox"
       ref={constraintsRef}
-      style={fullScreen ? { height: newHeight, maxWidth: newWidth } : {}}
-      className={fullScreen ? "dataModelFullscreen" : "dataModel"}
+      style={fullScreen ? {height: newHeight, maxWidth: newWidth} : {}}
+      className={fullScreen ? 'dataModelFullscreen' : 'dataModel'}
       key={key}
     >
       {dataCTOs.map(createDnDMetaDataFragmentIfNotinEdit)}

@@ -1,7 +1,7 @@
-import React, { FunctionComponent } from "react";
-import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { GoToTypes } from "../../../../dataAccess/access/types/GoToType";
-import { GoToTypesChain } from "../../../../dataAccess/access/types/GoToTypeChain";
+import React, {FunctionComponent} from 'react';
+import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
+import {GoToTypes} from '../../../../dataAccess/access/types/GoToType';
+import {GoToTypesChain} from '../../../../dataAccess/access/types/GoToTypeChain';
 
 interface GoToChainOptionDropDownProps extends DropdownProps {
   onSelect: (gotoType: GoToTypesChain | undefined) => void;
@@ -9,7 +9,7 @@ interface GoToChainOptionDropDownProps extends DropdownProps {
 }
 
 export const GoToChainOptionDropDown: FunctionComponent<GoToChainOptionDropDownProps> = (props) => {
-  const { onSelect, value } = props;
+  const {onSelect, value} = props;
 
   const getOptions = (): DropdownItemProps[] => {
     return Object.values(GoToTypesChain).map(goToToOption);

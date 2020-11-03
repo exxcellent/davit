@@ -1,8 +1,8 @@
-import { Point } from 'framer-motion';
-import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
+import {Point} from 'framer-motion';
+import React, {FunctionComponent, useEffect, useRef, useState} from 'react';
 
-import { GeometricalDataCTO } from '../../../../dataAccess/access/cto/GeometraicalDataCTO';
-import { DataRelationTO, Direction, RelationType } from '../../../../dataAccess/access/to/DataRelationTO';
+import {GeometricalDataCTO} from '../../../../dataAccess/access/cto/GeometraicalDataCTO';
+import {DataRelationTO, Direction, RelationType} from '../../../../dataAccess/access/to/DataRelationTO';
 
 export interface Carv2PathProps {
   xSource: number;
@@ -56,17 +56,17 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
   }, [ySource, xSource, yTarget, xTarget, parentRef]);
 
   const createCornerLine = () => {
-    let startPoint: Point = getDirectionPoint(
-      { x: initXSource, y: initYSource },
-      direction1,
-      sourceWidth,
-      sourceHeight
+    const startPoint: Point = getDirectionPoint(
+        {x: initXSource, y: initYSource},
+        direction1,
+        sourceWidth,
+        sourceHeight,
     );
-    let endPoint: Point = getDirectionPoint(
-      { x: initXTarget, y: initYTarget },
-      direction2,
-      targetWidth,
-      targetHeight
+    const endPoint: Point = getDirectionPoint(
+        {x: initXTarget, y: initYTarget},
+        direction2,
+        targetWidth,
+        targetHeight,
     );
     // set interfaces
     const offset1 = getDirectionOffset(direction1);
@@ -75,7 +75,7 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
     const offsetPoint1 = plusPoint(startPoint, offset1);
     const offsetPoint2 = plusPoint(endPoint, offset2);
 
-    const className = stroked ? "carvPath carvStrokeDasharray" : "carvPath";
+    const className = stroked ? 'carvPath carvStrokeDasharray' : 'carvPath';
 
     return (
       <path
@@ -92,10 +92,10 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
   };
 
   const getDirectionPoint = (
-    point: Point,
-    direction: Direction,
-    width: number,
-    height: number
+      point: Point,
+      direction: Direction,
+      width: number,
+      height: number,
   ): Point => {
     // TODO: remove this constanse
     const PADDING: number = 10;
@@ -122,18 +122,18 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
     const offset = 25;
     switch (direction) {
       case Direction.TOP:
-        return { x: 0, y: -offset };
+        return {x: 0, y: -offset};
       case Direction.LEFT:
-        return { x: -offset, y: 0 };
+        return {x: -offset, y: 0};
       case Direction.RIGHT:
-        return { x: offset, y: 0 };
+        return {x: offset, y: 0};
       case Direction.BOTTOM:
-        return { x: 0, y: offset };
+        return {x: 0, y: offset};
     }
   };
 
   const plusPoint = (point1: Point, point2: Point): Point => {
-    return { x: point1.x + point2.x, y: point1.y + point2.y };
+    return {x: point1.x + point2.x, y: point1.y + point2.y};
   };
 
   const pathRef = useRef<SVGPathElement>(null);
@@ -142,12 +142,12 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
 };
 
 export const createCornerConnection = (
-  source: GeometricalDataCTO | undefined,
-  target: GeometricalDataCTO | undefined,
-  dataRelation: DataRelationTO,
-  key: number,
-  parentRef: any,
-  stroked?: boolean
+    source: GeometricalDataCTO | undefined,
+    target: GeometricalDataCTO | undefined,
+    dataRelation: DataRelationTO,
+    key: number,
+    parentRef: any,
+    stroked?: boolean,
 ) => {
   if (source && target) {
     return (

@@ -1,10 +1,10 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
-import { DataRelationTO } from "../../../../dataAccess/access/to/DataRelationTO";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import React, {FunctionComponent} from 'react';
+import {useSelector} from 'react-redux';
+import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
+import {isNullOrUndefined} from 'util';
+import {DataCTO} from '../../../../dataAccess/access/cto/DataCTO';
+import {DataRelationTO} from '../../../../dataAccess/access/to/DataRelationTO';
+import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
 
 interface RelationDropDownProps extends DropdownProps {
   onSelect: (relation: DataRelationTO | undefined) => void;
@@ -17,8 +17,8 @@ interface RelationDropDownPropsButton extends DropdownProps {
 }
 
 export const RelationDropDown: FunctionComponent<RelationDropDownProps> = (props) => {
-  const { onSelect, placeholder } = props;
-  const { relations, selectDataRelation, relationToOption } = useRelationDropDownViewModel();
+  const {onSelect, placeholder} = props;
+  const {relations, selectDataRelation, relationToOption} = useRelationDropDownViewModel();
 
   return (
     <Dropdown
@@ -34,13 +34,13 @@ export const RelationDropDown: FunctionComponent<RelationDropDownProps> = (props
 };
 
 export const RelationDropDownButton: FunctionComponent<RelationDropDownPropsButton> = (props) => {
-  const { onSelect, icon } = props;
-  const { relations, selectDataRelation, relationToOption } = useRelationDropDownViewModel();
+  const {onSelect, icon} = props;
+  const {relations, selectDataRelation, relationToOption} = useRelationDropDownViewModel();
 
   return (
     <Dropdown
       options={relations.map(relationToOption)}
-      icon={relations.length > 0 ? icon : ""}
+      icon={relations.length > 0 ? icon : ''}
       onChange={(event, data) => onSelect(selectDataRelation(Number(data.value), relations))}
       className="button icon"
       inverted="true"
@@ -59,7 +59,7 @@ const useRelationDropDownViewModel = () => {
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
 
   const getDataName = (dataId: number, datas: DataCTO[]): string => {
-    return datas.find((data) => data.data.id === dataId)?.data.name || "";
+    return datas.find((data) => data.data.id === dataId)?.data.name || '';
   };
 
   const selectDataRelation = (relationId: number, relations: DataRelationTO[]): DataRelationTO | undefined => {
@@ -70,7 +70,7 @@ const useRelationDropDownViewModel = () => {
   };
 
   const relationToOption = (relation: DataRelationTO): DropdownItemProps => {
-    const text: string = getDataName(relation.data1Fk, datas) + " - " + getDataName(relation.data2Fk, datas);
+    const text: string = getDataName(relation.data1Fk, datas) + ' - ' + getDataName(relation.data2Fk, datas);
     return {
       key: relation.id,
       value: relation.id,
@@ -78,5 +78,5 @@ const useRelationDropDownViewModel = () => {
     };
   };
 
-  return { relations, selectDataRelation, relationToOption };
+  return {relations, selectDataRelation, relationToOption};
 };

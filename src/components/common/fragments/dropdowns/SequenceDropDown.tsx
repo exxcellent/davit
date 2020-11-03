@@ -1,9 +1,9 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { SequenceTO } from "../../../../dataAccess/access/to/SequenceTO";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import React, {FunctionComponent} from 'react';
+import {useSelector} from 'react-redux';
+import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
+import {isNullOrUndefined} from 'util';
+import {SequenceTO} from '../../../../dataAccess/access/to/SequenceTO';
+import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
 
 interface SequenceDropDownProps extends DropdownProps {
   onSelect: (sequence: SequenceTO | undefined) => void;
@@ -17,13 +17,13 @@ interface SequenceDropDownPropsButton extends DropdownProps {
 }
 
 export const SequenceDropDown: FunctionComponent<SequenceDropDownProps> = (props) => {
-  const { onSelect, placeholder, value } = props;
-  const { sequences, selectSequence, sequenceToOption } = useSequenceDropDownViewModel();
+  const {onSelect, placeholder, value} = props;
+  const {sequences, selectSequence, sequenceToOption} = useSequenceDropDownViewModel();
 
   return (
     <Dropdown
       options={sequences.map(sequenceToOption)}
-      placeholder={placeholder || "Select Sequence ..."}
+      placeholder={placeholder || 'Select Sequence ...'}
       onChange={(event, sequence) => onSelect(selectSequence(Number(sequence.value), sequences))}
       floating
       selectOnBlur={false}
@@ -37,13 +37,13 @@ export const SequenceDropDown: FunctionComponent<SequenceDropDownProps> = (props
 };
 
 export const SequenceDropDownButton: FunctionComponent<SequenceDropDownPropsButton> = (props) => {
-  const { onSelect, icon } = props;
-  const { sequences, selectSequence, sequenceToOption } = useSequenceDropDownViewModel();
+  const {onSelect, icon} = props;
+  const {sequences, selectSequence, sequenceToOption} = useSequenceDropDownViewModel();
 
   return (
     <Dropdown
       options={sequences.map(sequenceToOption)}
-      icon={sequences.length > 0 ? icon : ""}
+      icon={sequences.length > 0 ? icon : ''}
       onChange={(event, sequence) => onSelect(selectSequence(Number(sequence.value), sequences))}
       className="button icon"
       inverted="true"
@@ -75,5 +75,5 @@ const useSequenceDropDownViewModel = () => {
     };
   };
 
-  return { sequences, selectSequence, sequenceToOption };
+  return {sequences, selectSequence, sequenceToOption};
 };

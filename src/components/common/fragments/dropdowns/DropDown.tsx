@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, {PropsWithChildren} from 'react';
 
 interface Option<T> {
   value: T;
@@ -10,8 +10,8 @@ interface DropDownProps<T> {
   onSelect: (value: T) => void;
 }
 
-export const DropDown = <T,>(props: PropsWithChildren<DropDownProps<T>>) => {
-  const { options, onSelect } = props;
+export const DropDown = <T, >(props: PropsWithChildren<DropDownProps<T>>) => {
+  const {options, onSelect} = props;
 
   return (
     <select className="carv2DropDown">

@@ -1,9 +1,9 @@
-import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
-import { Dropdown, DropdownItemProps, DropdownProps } from 'semantic-ui-react';
+import React, {FunctionComponent} from 'react';
+import {useSelector} from 'react-redux';
+import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
 
-import { SequenceCTO } from '../../../../dataAccess/access/cto/SequenceCTO';
-import { sequenceModelSelectors } from '../../../../slices/SequenceModelSlice';
+import {SequenceCTO} from '../../../../dataAccess/access/cto/SequenceCTO';
+import {sequenceModelSelectors} from '../../../../slices/SequenceModelSlice';
 
 interface StepIndexDropDownProps extends DropdownProps {
   onSelect: (index: number | undefined) => void;
@@ -12,15 +12,15 @@ interface StepIndexDropDownProps extends DropdownProps {
 }
 
 export const StepIndexDropDown: FunctionComponent<StepIndexDropDownProps> = (props) => {
-  const { onSelect, placeholder, value } = props;
-  const { getSteps, indexToOptions } = useStepIndexDropDownViewModel();
+  const {onSelect, placeholder, value} = props;
+  const {getSteps, indexToOptions} = useStepIndexDropDownViewModel();
 
   return (
     <Dropdown
       options={getSteps().map(indexToOptions)}
       selection
       selectOnBlur={false}
-      placeholder={placeholder || "Select Actor ..."}
+      placeholder={placeholder || 'Select Actor ...'}
       onChange={(event, data) => onSelect(Number(data.value))}
       scrolling
       value={value}
@@ -35,7 +35,7 @@ const useStepIndexDropDownViewModel = () => {
   const getSteps = (): number[] => {
     let indexes: number[] = [];
     if (selectedSequence) {
-      let length: number = selectedSequence.sequenceStepCTOs.length + 1;
+      const length: number = selectedSequence.sequenceStepCTOs.length + 1;
       indexes = Array.from(Array(length).keys());
       indexes = indexes.map((index) => (index = index + 1));
     }
@@ -50,5 +50,5 @@ const useStepIndexDropDownViewModel = () => {
     };
   };
 
-  return { getSteps, indexToOptions };
+  return {getSteps, indexToOptions};
 };

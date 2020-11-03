@@ -1,11 +1,11 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
-import { sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
-import { Carv2Util } from "../../../../utils/Carv2Util";
+import React, {FunctionComponent} from 'react';
+import {useSelector} from 'react-redux';
+import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
+import {isNullOrUndefined} from 'util';
+import {SequenceCTO} from '../../../../dataAccess/access/cto/SequenceCTO';
+import {SequenceStepCTO} from '../../../../dataAccess/access/cto/SequenceStepCTO';
+import {sequenceModelSelectors} from '../../../../slices/SequenceModelSlice';
+import {Carv2Util} from '../../../../utils/Carv2Util';
 
 interface StepDropDownButtonProps extends DropdownProps {
   onSelect: (step: SequenceStepCTO | undefined) => void;
@@ -20,13 +20,13 @@ interface StepDropDownProps extends DropdownProps {
 }
 
 export const StepDropDownButton: FunctionComponent<StepDropDownButtonProps> = (props) => {
-  const { onSelect, icon } = props;
-  const { sequence, stepOptions, selectSequenceStep } = useStepDropDownViewModel();
+  const {onSelect, icon} = props;
+  const {sequence, stepOptions, selectSequenceStep} = useStepDropDownViewModel();
 
   return (
     <Dropdown
       options={stepOptions()}
-      icon={sequence ? (sequence?.sequenceStepCTOs.length > 0 ? icon : "") : ""}
+      icon={sequence ? (sequence?.sequenceStepCTOs.length > 0 ? icon : '') : ''}
       onChange={(event, data) => onSelect(selectSequenceStep(Number(data.value), sequence))}
       className="button icon"
       floating
@@ -39,15 +39,15 @@ export const StepDropDownButton: FunctionComponent<StepDropDownButtonProps> = (p
 };
 
 export const StepDropDown: FunctionComponent<StepDropDownProps> = (props) => {
-  const { onSelect, placeholder, value, exclude } = props;
-  const { sequence, stepOptions, selectSequenceStep } = useStepDropDownViewModel(exclude);
+  const {onSelect, placeholder, value, exclude} = props;
+  const {sequence, stepOptions, selectSequenceStep} = useStepDropDownViewModel(exclude);
 
   return (
     <Dropdown
       options={stepOptions()}
       selection
       selectOnBlur={false}
-      placeholder={placeholder || "Select step ..."}
+      placeholder={placeholder || 'Select step ...'}
       onChange={(event, data) => onSelect(selectSequenceStep(Number(data.value), sequence))}
       scrolling
       value={value === -1 ? undefined : value}
@@ -85,5 +85,5 @@ const useStepDropDownViewModel = (exclude?: number) => {
     return undefined;
   };
 
-  return { sequence: sequenceToEdit, stepOptions, selectSequenceStep };
+  return {sequence: sequenceToEdit, stepOptions, selectSequenceStep};
 };

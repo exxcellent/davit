@@ -1,10 +1,10 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { ChainDecisionTO } from "../../../../dataAccess/access/to/ChainDecisionTO";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
-import { Carv2Util } from "../../../../utils/Carv2Util";
+import React, {FunctionComponent} from 'react';
+import {useSelector} from 'react-redux';
+import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
+import {isNullOrUndefined} from 'util';
+import {ChainDecisionTO} from '../../../../dataAccess/access/to/ChainDecisionTO';
+import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
+import {Carv2Util} from '../../../../utils/Carv2Util';
 
 interface ChainDecisionDropDownButtonProps extends DropdownProps {
   onSelect: (link: ChainDecisionTO | undefined) => void;
@@ -22,13 +22,13 @@ interface ChainDecisionDropDownProps extends DropdownProps {
 }
 
 export const ChainDecisionDropDownButton: FunctionComponent<ChainDecisionDropDownButtonProps> = (props) => {
-  const { onSelect, icon, chainId, exclude } = props;
-  const { createDecisionOptions, selectChainDecision } = useChainDecisionDropDownViewModel(chainId, exclude);
+  const {onSelect, icon, chainId, exclude} = props;
+  const {createDecisionOptions, selectChainDecision} = useChainDecisionDropDownViewModel(chainId, exclude);
 
   return (
     <Dropdown
       options={createDecisionOptions()}
-      icon={createDecisionOptions().length === 0 ? "" : icon}
+      icon={createDecisionOptions().length === 0 ? '' : icon}
       onChange={(event, data) => onSelect(selectChainDecision(Number(data.value)))}
       className="button icon"
       floating
@@ -41,15 +41,15 @@ export const ChainDecisionDropDownButton: FunctionComponent<ChainDecisionDropDow
 };
 
 export const ChainDecisionDropDown: FunctionComponent<ChainDecisionDropDownProps> = (props) => {
-  const { onSelect, placeholder, value, chainId, exclude } = props;
-  const { createDecisionOptions, selectChainDecision } = useChainDecisionDropDownViewModel(chainId, exclude);
+  const {onSelect, placeholder, value, chainId, exclude} = props;
+  const {createDecisionOptions, selectChainDecision} = useChainDecisionDropDownViewModel(chainId, exclude);
 
   return (
     <Dropdown
       options={createDecisionOptions()}
       selection
       selectOnBlur={false}
-      placeholder={placeholder || "Select link ..."}
+      placeholder={placeholder || 'Select link ...'}
       onChange={(event, data) => onSelect(selectChainDecision(Number(data.value)))}
       scrolling
       value={value === -1 ? undefined : value}
@@ -88,5 +88,5 @@ const useChainDecisionDropDownViewModel = (chainId: number, exclude?: number) =>
     return undefined;
   };
 
-  return { createDecisionOptions, selectChainDecision };
+  return {createDecisionOptions, selectChainDecision};
 };
