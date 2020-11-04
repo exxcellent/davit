@@ -65,14 +65,6 @@ export const ControllPanelEditChainCondition: FunctionComponent<ControllPanelEdi
             selected={dataFks || []}
           />
         </OptionField>
-        {/* <OptionField label="Select data for actor">
-          <MultiselectDataDropDown
-            onSelect={(data) => {
-              setData(data);
-            }}
-            selected={dataFks || []}
-          />
-        </OptionField> */}
       </div>
       <div className="columnDivider optionFieldSpacer">
         <OptionField label="Navigation">
@@ -89,28 +81,28 @@ const useControllPanelEditConditionViewModel = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isNullOrUndefined(decisionToEdit)) {
+    if (Carv2Util.isNullOrUndefined(decisionToEdit)) {
       dispatch(handleError('Tried to go to edit chain decision without decisionToEdit specified'));
       dispatch(EditActions.setMode.edit());
     }
   }, [dispatch, decisionToEdit]);
 
   const setData = (dataAndInstanceIds: DataAndInstanceId[] | undefined) => {
-    if (!isNullOrUndefined(decisionToEdit)) {
+    if (!Carv2Util.isNullOrUndefined(decisionToEdit)) {
       const copyDecisionToEdit: ChainDecisionTO = Carv2Util.deepCopy(decisionToEdit);
-      copyDecisionToEdit.dataAndInstaceIds = dataAndInstanceIds || [];
+      copyDecisionToEdit.dataAndInstanceIds = dataAndInstanceIds || [];
       dispatch(EditActions.chainDecision.create(copyDecisionToEdit));
     }
   };
 
   const setMode = (newMode?: string) => {
-    if (!isNullOrUndefined(decisionToEdit)) {
+    if (!Carv2Util.isNullOrUndefined(decisionToEdit)) {
       if (newMode && newMode === 'EDIT') {
         dispatch(EditActions.setMode.edit());
       } else if (newMode && newMode === 'CHAIN') {
         dispatch(EditActions.setMode.editChain(chain || undefined));
       } else {
-        dispatch(EditActions.setMode.editChainDecision(decisionToEdit));
+        dispatch(EditActions.setMode.editChainDecision(decisionToEdit!));
       }
     } else {
       console.info('decisionToEdit is null!');
@@ -118,7 +110,7 @@ const useControllPanelEditConditionViewModel = () => {
   };
 
   const setActorFk = (actorId: number) => {
-    if (!isNullOrUndefined(decisionToEdit)) {
+    if (!Carv2Util.isNullOrUndefined(decisionToEdit)) {
       const copyDecisionToEdit: ChainDecisionTO = Carv2Util.deepCopy(decisionToEdit);
       copyDecisionToEdit.actorFk = actorId;
       dispatch(EditActions.chainDecision.create(copyDecisionToEdit));
@@ -128,14 +120,14 @@ const useControllPanelEditConditionViewModel = () => {
   // This is workaround sins redux seams to have a problem to save boolean values.
   const getDecision = (): number => {
     let hasNumber: number = 2;
-    if (!isNullOrUndefined(decisionToEdit)) {
-      hasNumber = decisionToEdit.has ? 1 : 2;
+    if (!Carv2Util.isNullOrUndefined(decisionToEdit)) {
+      hasNumber = decisionToEdit!.has ? 1 : 2;
     }
     return hasNumber;
   };
 
   const setHas = (setHas: number | undefined) => {
-    if (!isNullOrUndefined(decisionToEdit) && !isNullOrUndefined(setHas)) {
+    if (!Carv2Util.isNullOrUndefined(decisionToEdit) && !isNullOrUndefined(setHas)) {
       const copyDecisionToEdit: ChainDecisionTO = Carv2Util.deepCopy(decisionToEdit);
       copyDecisionToEdit.has = setHas === 1 ? true : false;
       dispatch(EditActions.chainDecision.create(copyDecisionToEdit));
@@ -150,6 +142,6 @@ const useControllPanelEditConditionViewModel = () => {
     getDecision,
     setHas,
     setData,
-    dataFks: decisionToEdit?.dataAndInstaceIds,
+    dataFks: decisionToEdit?.dataAndInstanceIds,
   };
 };
