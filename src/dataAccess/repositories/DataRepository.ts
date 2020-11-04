@@ -1,4 +1,3 @@
-import {DataInstanceTO} from '../access/to/DataInstanceTO';
 import {DataTO} from '../access/to/DataTO';
 import {ConstraintsHelper} from '../ConstraintsHelper';
 import dataStore from '../DataStore';
@@ -9,6 +8,7 @@ export const DataRepository = {
   find(dataId: number): DataTO | undefined {
     return dataStore.getDataStore().datas.get(dataId);
   },
+
   findAll(): DataTO[] {
     return Array.from(dataStore.getDataStore().datas.values());
   },
@@ -24,21 +24,18 @@ export const DataRepository = {
     } else {
       dataTO = {...data};
     }
-    // check default instance
-    if (dataTO.instances.find((inst) => inst.defaultInstance === true)) {
-      dataTO.instances.find((inst) => inst.defaultInstance === true)!.name = dataTO.name;
-    } else {
-      // create missing default instance
-      const defaultInstance: DataInstanceTO = new DataInstanceTO(dataTO.name, true);
-      defaultInstance.id = DataAccessUtil.determineNewId(dataTO.instances);
-      dataTO.instances.push(defaultInstance);
+
+    if (data.instances.length <= 0) {
+      throw new Error(`dataTO with id: ${data.id} has no instances!`);
     }
+
     dataStore.getDataStore().datas.set(dataTO.id!, dataTO);
     return dataTO;
   },
 
   delete(dataTO: DataTO): DataTO {
     ConstraintsHelper.deleteDataConstraintCheck(dataTO.id, dataStore.getDataStore());
+    dataTO.instances.forEach((instance) => ConstraintsHelper.deleteDataInstanceConstraintCheck(instance.id, dataStore.getDataStore()));
     const success = dataStore.getDataStore().datas.delete(dataTO.id!);
     if (!success) {
       throw new Error('dataAccess.repository.error.notExists');

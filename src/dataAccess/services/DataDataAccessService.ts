@@ -9,6 +9,9 @@ import {CheckHelper} from '../util/CheckHelper';
 import {TechnicalDataAccessService} from './TechnicalDataAccessService';
 
 export const DataDataAccessService = {
+
+  // ====================================================== DATA ======================================================
+
   findData(id: number): DataTO | undefined {
     return DataRepository.find(id);
   },
@@ -33,6 +36,21 @@ export const DataDataAccessService = {
     };
   },
 
+  deleteDataCTO(dataCTO: DataCTO): DataCTO {
+    CheckHelper.nullCheck(dataCTO.geometricalData, 'GeometricalDataCTO');
+    CheckHelper.nullCheck(dataCTO.data, 'DataTO');
+    const relations: DataRelationTO[] = this.findAllDataRelationCTOs();
+    const relationsToDelete: DataRelationTO[] | undefined = relations.filter(
+        (relation) => relation.data1Fk === dataCTO.data.id || relation.data2Fk === dataCTO.data.id,
+    );
+    relationsToDelete.forEach((relation) => this.deleteDataRelationCTO(relation));
+    DataRepository.delete(dataCTO.data);
+    TechnicalDataAccessService.deleteGeometricalDataCTO(dataCTO.geometricalData);
+    return dataCTO;
+  },
+
+  // ====================================================== RELATIONS ======================================================
+
   findAllDataRelationTOs(): DataRelationTO[] {
     return DataConnectionRepository.findAll();
   },
@@ -47,25 +65,14 @@ export const DataDataAccessService = {
     return saveDataConnection;
   },
 
-  deleteDataCTO(dataCTO: DataCTO): DataCTO {
-    CheckHelper.nullCheck(dataCTO.geometricalData, 'GeometricalDataCTO');
-    CheckHelper.nullCheck(dataCTO.data, 'DataTO');
-    const relations: DataRelationTO[] = this.findAllDataRelationCTOs();
-    const relationsToDelete: DataRelationTO[] | undefined = relations.filter(
-        (relation) => relation.data1Fk === dataCTO.data.id || relation.data2Fk === dataCTO.data.id,
-    );
-    relationsToDelete.forEach((relation) => this.deleteDataRelationCTO(relation));
-    DataRepository.delete(dataCTO.data);
-    TechnicalDataAccessService.deleteGeometricalDataCTO(dataCTO.geometricalData);
-    return dataCTO;
-  },
-
   deleteDataRelationCTO(dataRelationTO: DataRelationTO): DataRelationTO {
     CheckHelper.nullCheck(dataRelationTO, 'dataRelationCTO');
     DataConnectionRepository.delete(dataRelationTO);
     return dataRelationTO;
   },
 };
+
+// ====================================================== PRIVATE ======================================================
 
 const createDataRelationCTO = (dataRelationTO: DataRelationTO): DataRelationTO => {
   CheckHelper.nullCheck(dataRelationTO, 'DataRelationTO');
