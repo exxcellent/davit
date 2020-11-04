@@ -10,8 +10,7 @@ import {DavitButtonIcon} from '../../../../../common/fragments/buttons/DavitButt
 import {DavitMenuLabel} from '../../../../../common/fragments/DavitMenuLabel';
 import {ActorDropDown} from '../../../../../common/fragments/dropdowns/ActorDropDown';
 import {
-  DataAndInstanceId,
-  InstanceDropDownMultiselect,
+  DataAndInstanceId, InstanceDropDownMultiselect,
 } from '../../../../../common/fragments/dropdowns/InstanceDropDown';
 import {ControllPanelEditSub} from '../common/ControllPanelEditSub';
 import {OptionField} from '../common/OptionField';
