@@ -1,9 +1,9 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { GroupTO } from "../../../../dataAccess/access/to/GroupTO";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import React, {FunctionComponent} from 'react';
+import {useSelector} from 'react-redux';
+import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
+import {isNullOrUndefined} from 'util';
+import {GroupTO} from '../../../../dataAccess/access/to/GroupTO';
+import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
 
 interface GroupDropDownProps extends DropdownProps {
   onSelect: (group: GroupTO | undefined) => void;
@@ -17,8 +17,8 @@ interface GroupDropDownPropsButton extends DropdownProps {
 }
 
 export const GroupDropDown: FunctionComponent<GroupDropDownProps> = (props) => {
-  const { onSelect, placeholder, value } = props;
-  const { groups, groupToOption, selectGroup } = useGroupDropDownViewModel();
+  const {onSelect, placeholder, value} = props;
+  const {groups, groupToOption, selectGroup} = useGroupDropDownViewModel();
 
   return (
     <Dropdown
@@ -27,7 +27,7 @@ export const GroupDropDown: FunctionComponent<GroupDropDownProps> = (props) => {
       })}
       selection
       selectOnBlur={false}
-      placeholder={placeholder || "Select Group ..."}
+      placeholder={placeholder || 'Select Group ...'}
       onChange={(event, data) => onSelect(selectGroup(Number(data.value), groups))}
       scrolling
       clearable
@@ -38,15 +38,15 @@ export const GroupDropDown: FunctionComponent<GroupDropDownProps> = (props) => {
 };
 
 export const GroupDropDownButton: FunctionComponent<GroupDropDownPropsButton> = (props) => {
-  const { onSelect, icon } = props;
-  const { groups, groupToOption, selectGroup } = useGroupDropDownViewModel();
+  const {onSelect, icon} = props;
+  const {groups, groupToOption, selectGroup} = useGroupDropDownViewModel();
 
   return (
     <Dropdown
       options={groups.map(groupToOption).sort((a, b) => {
         return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
       })}
-      icon={groups.length > 0 ? icon : ""}
+      icon={groups.length > 0 ? icon : ''}
       selectOnBlur={false}
       onChange={(event, data) => onSelect(selectGroup(Number(data.value), groups))}
       className="button icon"
@@ -76,5 +76,5 @@ const useGroupDropDownViewModel = () => {
     return undefined;
   };
 
-  return { groups, groupToOption, selectGroup };
+  return {groups, groupToOption, selectGroup};
 };

@@ -1,14 +1,14 @@
-import React, { FunctionComponent } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Message, Transition } from "semantic-ui-react";
-import { globalSlice, selectGlobalErrorState } from "../../../slices/GlobalSlice";
+import React, {FunctionComponent} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Button, Message, Transition} from 'semantic-ui-react';
+import {globalSlice, selectGlobalErrorState} from '../../../slices/GlobalSlice';
 
 export interface ErrorNotificationProps {}
 
 export const ErrorNotification: FunctionComponent<ErrorNotificationProps> = (props) => {
   const errorMessages: string[] = useSelector(selectGlobalErrorState);
   const dispatch = useDispatch();
-  const { clearErrors } = globalSlice.actions;
+  const {clearErrors} = globalSlice.actions;
 
   return (
     <div className="notificationPanel">

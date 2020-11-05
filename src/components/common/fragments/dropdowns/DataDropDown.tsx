@@ -1,9 +1,9 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import React, {FunctionComponent} from 'react';
+import {useSelector} from 'react-redux';
+import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
+import {isNullOrUndefined} from 'util';
+import {DataCTO} from '../../../../dataAccess/access/cto/DataCTO';
+import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
 
 interface DataDropDownProps extends DropdownProps {
   onSelect: (data: DataCTO | undefined) => void;
@@ -17,15 +17,15 @@ interface DataDropDownButtonProps extends DropdownProps {
 }
 
 export const DataDropDown: FunctionComponent<DataDropDownProps> = (props) => {
-  const { onSelect, placeholder, value } = props;
-  const { datas, selectData, dataToOption } = useDataDropDownViewModel();
+  const {onSelect, placeholder, value} = props;
+  const {datas, selectData, dataToOption} = useDataDropDownViewModel();
 
   return (
     <Dropdown
       options={datas.map(dataToOption).sort((a, b) => {
         return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
       })}
-      placeholder={placeholder || "Select Data ..."}
+      placeholder={placeholder || 'Select Data ...'}
       onChange={(event, data) => onSelect(selectData(Number(data.value), datas))}
       selectOnBlur={false}
       scrolling
@@ -37,15 +37,15 @@ export const DataDropDown: FunctionComponent<DataDropDownProps> = (props) => {
 };
 
 export const DataDropDownButton: FunctionComponent<DataDropDownButtonProps> = (props) => {
-  const { onSelect, icon } = props;
-  const { datas, selectData, dataToOption } = useDataDropDownViewModel();
+  const {onSelect, icon} = props;
+  const {datas, selectData, dataToOption} = useDataDropDownViewModel();
 
   return (
     <Dropdown
       options={datas.map(dataToOption).sort((a, b) => {
         return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
       })}
-      icon={datas.length > 0 ? icon : ""}
+      icon={datas.length > 0 ? icon : ''}
       onChange={(event, data) => onSelect(selectData(Number(data.value), datas))}
       className="button icon"
       inverted="true"
@@ -77,5 +77,5 @@ const useDataDropDownViewModel = () => {
     };
   };
 
-  return { datas, selectData, dataToOption };
+  return {datas, selectData, dataToOption};
 };

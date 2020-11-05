@@ -1,8 +1,8 @@
-import React, { FunctionComponent } from 'react';
-import { Card } from 'semantic-ui-react';
+import React, {FunctionComponent} from 'react';
+import {Card} from 'semantic-ui-react';
 
-import { ActorCTO } from '../../../../dataAccess/access/cto/ActorCTO';
-import { createViewFragment, ViewFragmentProps } from '../../../../viewDataTypes/ViewFragment';
+import {ActorCTO} from '../../../../dataAccess/access/cto/ActorCTO';
+import {createViewFragment, ViewFragmentProps} from '../../../../viewDataTypes/ViewFragment';
 
 export interface MetaActorFragmentProps {
   id: number;
@@ -15,12 +15,12 @@ export interface MetaActorFragmentProps {
 }
 
 export const MetaActorFragment: FunctionComponent<MetaActorFragmentProps> = (props) => {
-  const { initName, dataFragments, initWidth, initHeigth } = props;
+  const {initName, dataFragments, initWidth, initHeigth} = props;
 
   return (
     <Card
       raised
-      style={{ width: initWidth, height: initHeigth, fontSize: "0.7em" }}
+      style={{width: initWidth, height: initHeigth, fontSize: '0.7em'}}
       onClick={props.onClick ? () => props.onClick!(props.id) : undefined}
     >
       <Card.Content header={initName}></Card.Content>
@@ -30,9 +30,9 @@ export const MetaActorFragment: FunctionComponent<MetaActorFragmentProps> = (pro
 };
 
 export const createMetaActorFragment = (
-  actorCTO: ActorCTO,
-  actorDatas: ViewFragmentProps[],
-  onClick?: (id: number) => void
+    actorCTO: ActorCTO,
+    actorDatas: ViewFragmentProps[],
+    onClick?: (id: number) => void,
 ) => {
   return (
     <MetaActorFragment

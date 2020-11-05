@@ -1,78 +1,59 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-import { AppThunk, RootState } from '../app/store';
-import { Arrow } from '../components/common/fragments/svg/Arrow';
-import { ActorCTO } from '../dataAccess/access/cto/ActorCTO';
-import { ChainCTO } from '../dataAccess/access/cto/ChainCTO';
-import { DataCTO } from '../dataAccess/access/cto/DataCTO';
-import { DataSetupCTO } from '../dataAccess/access/cto/DataSetupCTO';
-import { GeometricalDataCTO } from '../dataAccess/access/cto/GeometraicalDataCTO';
-import { SequenceCTO } from '../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../dataAccess/access/cto/SequenceStepCTO';
-import { ActionTO } from '../dataAccess/access/to/ActionTO';
-import { ChainDecisionTO } from '../dataAccess/access/to/ChainDecisionTO';
-import { ChainlinkTO } from '../dataAccess/access/to/ChainlinkTO';
-import { ChainTO } from '../dataAccess/access/to/ChainTO';
-import { DataInstanceTO } from '../dataAccess/access/to/DataInstanceTO';
-import { DataRelationTO } from '../dataAccess/access/to/DataRelationTO';
-import { DecisionTO } from '../dataAccess/access/to/DecisionTO';
-import { GroupTO } from '../dataAccess/access/to/GroupTO';
-import { InitDataTO } from '../dataAccess/access/to/InitDataTO';
-import { SequenceStepTO } from '../dataAccess/access/to/SequenceStepTO';
-import { SequenceTO } from '../dataAccess/access/to/SequenceTO';
-import { GoToTypes } from '../dataAccess/access/types/GoToType';
-import { GoToTypesChain } from '../dataAccess/access/types/GoToTypeChain';
-import { DataAccess } from '../dataAccess/DataAccess';
-import { DataAccessResponse } from '../dataAccess/DataAccessResponse';
-import { DataAccessUtil } from '../dataAccess/util/DataAccessUtil';
-import { Carv2Util } from '../utils/Carv2Util';
-import { handleError } from './GlobalSlice';
-import { MasterDataActions, masterDataSelectors } from './MasterDataSlice';
-import { SequenceModelActions } from './SequenceModelSlice';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {AppThunk, RootState} from '../app/store';
+import {Arrow} from '../components/common/fragments/svg/Arrow';
+import {ActorCTO} from '../dataAccess/access/cto/ActorCTO';
+import {ChainCTO} from '../dataAccess/access/cto/ChainCTO';
+import {DataCTO} from '../dataAccess/access/cto/DataCTO';
+import {DataSetupCTO} from '../dataAccess/access/cto/DataSetupCTO';
+import {GeometricalDataCTO} from '../dataAccess/access/cto/GeometraicalDataCTO';
+import {SequenceCTO} from '../dataAccess/access/cto/SequenceCTO';
+import {SequenceStepCTO} from '../dataAccess/access/cto/SequenceStepCTO';
+import {ActionTO} from '../dataAccess/access/to/ActionTO';
+import {ChainDecisionTO} from '../dataAccess/access/to/ChainDecisionTO';
+import {ChainlinkTO} from '../dataAccess/access/to/ChainlinkTO';
+import {ChainTO} from '../dataAccess/access/to/ChainTO';
+import {DataInstanceTO} from '../dataAccess/access/to/DataInstanceTO';
+import {DataRelationTO} from '../dataAccess/access/to/DataRelationTO';
+import {DecisionTO} from '../dataAccess/access/to/DecisionTO';
+import {GroupTO} from '../dataAccess/access/to/GroupTO';
+import {InitDataTO} from '../dataAccess/access/to/InitDataTO';
+import {SequenceStepTO} from '../dataAccess/access/to/SequenceStepTO';
+import {SequenceTO} from '../dataAccess/access/to/SequenceTO';
+import {GoToTypes} from '../dataAccess/access/types/GoToType';
+import {GoToTypesChain} from '../dataAccess/access/types/GoToTypeChain';
+import {DataAccess} from '../dataAccess/DataAccess';
+import {DataAccessResponse} from '../dataAccess/DataAccessResponse';
+import {DataAccessUtil} from '../dataAccess/util/DataAccessUtil';
+import {Carv2Util} from '../utils/Carv2Util';
+import {handleError} from './GlobalSlice';
+import {MasterDataActions, masterDataSelectors} from './MasterDataSlice';
+import {SequenceModelActions} from './SequenceModelSlice';
 
 
 export enum Mode {
-  TAB = "TAB",
-  FILE = "FILE",
-  VIEW = "VIEW",
-  EDIT = "EDIT",
-  EDIT_ACTOR = "EDIT_ACTOR",
-  EDIT_GROUP = "EDIT_GROUP",
-  EDIT_DATA = "EDIT_DATA",
-  EDIT_DATA_INSTANCE = "EDIT_DATA_INSTANCE",
-  EDIT_RELATION = "EDIT_RELATION",
-  EDIT_DATASETUP = "EDIT_DATASETUP",
-  EDIT_DATASETUP_INITDATA = "EDIT_DATASETUP_INIT DATA",
-  EDIT_CHAIN = "EDIT_CHAIN",
-  EDIT_CHAIN_DECISION = "EDIT_CHAIN_DECISION",
-  EDIT_CHAIN_DECISION_CONDITION = "EDIT_CHAIN_DECISION_CONDITION",
-  EDIT_CHAIN_LINK = "EDIT_CHAIN_LINK",
-  EDIT_SEQUENCE = "EDIT_SEQUENCE",
-  EDIT_SEQUENCE_DECISION = "EDIT_SEQUENCE_DECISION",
-  EDIT_SEQUENCE_DECISION_CONDITION = "EDIT_SEQUENCE_DECISION_CONDITION",
-  EDIT_SEQUENCE_STEP = "EDIT_SEQUENCE_STEP",
-  EDIT_SEQUENCE_STEP_ACTION = "EDIT_SEQUENCE_STEP_ACTION",
+  TAB = 'TAB',
+  FILE = 'FILE',
+  VIEW = 'VIEW',
+  EDIT = 'EDIT',
+  EDIT_ACTOR = 'EDIT_ACTOR',
+  EDIT_GROUP = 'EDIT_GROUP',
+  EDIT_DATA = 'EDIT_DATA',
+  EDIT_DATA_INSTANCE = 'EDIT_DATA_INSTANCE',
+  EDIT_RELATION = 'EDIT_RELATION',
+  EDIT_DATASETUP = 'EDIT_DATASETUP',
+  EDIT_DATASETUP_INITDATA = 'EDIT_DATASETUP_INIT DATA',
+  EDIT_CHAIN = 'EDIT_CHAIN',
+  EDIT_CHAIN_DECISION = 'EDIT_CHAIN_DECISION',
+  EDIT_CHAIN_DECISION_CONDITION = 'EDIT_CHAIN_DECISION_CONDITION',
+  EDIT_CHAIN_LINK = 'EDIT_CHAIN_LINK',
+  EDIT_SEQUENCE = 'EDIT_SEQUENCE',
+  EDIT_SEQUENCE_DECISION = 'EDIT_SEQUENCE_DECISION',
+  EDIT_SEQUENCE_DECISION_CONDITION = 'EDIT_SEQUENCE_DECISION_CONDITION',
+  EDIT_SEQUENCE_STEP = 'EDIT_SEQUENCE_STEP',
+  EDIT_SEQUENCE_STEP_ACTION = 'EDIT_SEQUENCE_STEP_ACTION',
 }
 
-const MODE_LOCAL_STORAGE = "MODE";
+const MODE_LOCAL_STORAGE = 'MODE';
 
 export interface StepAction {
   step: SequenceStepCTO;
@@ -104,14 +85,14 @@ const getInitialState: EditState = {
 };
 
 const EditSlice = createSlice({
-  name: "edit",
+  name: 'edit',
   initialState: getInitialState,
   reducers: {
     setChainLinkToEdit: (state, action: PayloadAction<ChainlinkTO>) => {
       if (state.mode === Mode.EDIT_CHAIN_LINK) {
         state.objectToEdit = action.payload;
       } else {
-        console.warn("Try to set chain step to edit in mode: " + state.mode);
+        console.warn('Try to set chain step to edit in mode: ' + state.mode);
       }
     },
     setInstanceId: (state, action: PayloadAction<number>) => {
@@ -121,84 +102,84 @@ const EditSlice = createSlice({
       if (state.mode === Mode.EDIT_CHAIN_DECISION || state.mode === Mode.EDIT_CHAIN_DECISION_CONDITION) {
         state.objectToEdit = action.payload;
       } else {
-        handleError("Try to set chain step to edit in mode: " + state.mode);
+        handleError('Try to set chain step to edit in mode: ' + state.mode);
       }
     },
     setActorToEdit: (state, action: PayloadAction<ActorCTO>) => {
       if (state.mode === Mode.EDIT_ACTOR) {
         state.objectToEdit = action.payload;
       } else {
-        handleError("Try to set actor to edit in mode: " + state.mode);
+        handleError('Try to set actor to edit in mode: ' + state.mode);
       }
     },
     setDataToEdit: (state, action: PayloadAction<DataCTO>) => {
       if (state.mode === Mode.EDIT_DATA || state.mode === Mode.EDIT_DATA_INSTANCE) {
         state.objectToEdit = action.payload;
       } else {
-        handleError("Try to set data to edit in mode: " + state.mode);
+        handleError('Try to set data to edit in mode: ' + state.mode);
       }
     },
     setInstanceToEdit: (state, action: PayloadAction<DataInstanceTO>) => {
       if (state.mode === Mode.EDIT_DATA_INSTANCE) {
         state.objectToEdit = action.payload;
       } else {
-        handleError("Try to set data to edit in mode: " + state.mode);
+        handleError('Try to set data to edit in mode: ' + state.mode);
       }
     },
     setRelationToEdit: (state, action: PayloadAction<DataRelationTO>) => {
       if (state.mode === Mode.EDIT_RELATION) {
         state.objectToEdit = action.payload;
       } else {
-        handleError("Try to set relation to edit in mode: " + state.mode);
+        handleError('Try to set relation to edit in mode: ' + state.mode);
       }
     },
     setSequenceToEdit: (state, action: PayloadAction<SequenceTO>) => {
       if (state.mode === Mode.EDIT_SEQUENCE) {
         state.objectToEdit = action.payload;
       } else {
-        handleError("Try to set sequence to edit in mode: " + state.mode);
+        handleError('Try to set sequence to edit in mode: ' + state.mode);
       }
     },
     setStepToEdit: (state, action: PayloadAction<SequenceStepCTO>) => {
       if (state.mode.startsWith(Mode.EDIT_SEQUENCE_STEP)) {
         state.objectToEdit = action.payload;
       } else {
-        handleError("Try to set step to edit in mode: " + state.mode);
+        handleError('Try to set step to edit in mode: ' + state.mode);
       }
     },
     setActionToEdit: (state, action: PayloadAction<ActionTO>) => {
       if (state.mode === Mode.EDIT_SEQUENCE_STEP_ACTION) {
         state.objectToEdit = action.payload;
       } else {
-        handleError("Try to set action to edit in mode: " + state.mode);
+        handleError('Try to set action to edit in mode: ' + state.mode);
       }
     },
     setDataSetupToEdit: (state, action: PayloadAction<DataSetupCTO>) => {
       if (state.mode === Mode.EDIT_DATASETUP) {
         state.objectToEdit = action.payload;
       } else {
-        handleError("Try to set dataSetup to edit in mode: " + state.mode);
+        handleError('Try to set dataSetup to edit in mode: ' + state.mode);
       }
     },
     setInitDataToEdit: (state, action: PayloadAction<InitDataTO>) => {
       if (state.mode === Mode.EDIT_DATASETUP_INITDATA) {
         state.objectToEdit = action.payload;
       } else {
-        handleError("Try to set initData to edit in mode: " + state.mode);
+        handleError('Try to set initData to edit in mode: ' + state.mode);
       }
     },
     setGroupToEdit: (state, action: PayloadAction<GroupTO>) => {
       if (state.mode === Mode.EDIT_GROUP) {
         state.objectToEdit = action.payload;
       } else {
-        handleError("Try to set group to edit in mode: " + state.mode);
+        handleError('Try to set group to edit in mode: ' + state.mode);
       }
     },
     setDecisionToEdit: (state, action: PayloadAction<DecisionTO>) => {
       if (state.mode === Mode.EDIT_SEQUENCE_DECISION || Mode.EDIT_SEQUENCE_DECISION_CONDITION) {
         state.objectToEdit = action.payload;
       } else {
-        handleError("Try to set decision to edit in mode: " + state.mode);
+        handleError('Try to set decision to edit in mode: ' + state.mode);
       }
     },
     clearObjectToEdit: (state) => {
@@ -266,7 +247,7 @@ const setModeToEditActor = (actor?: ActorCTO): AppThunk => (dispatch) => {
 
 const setModeToEditActorById = (id: number): AppThunk => (dispatch, getState) => {
   const actor: ActorCTO | undefined = getState().masterData.actors.find(
-    (act) => act.actor.id === id
+      (act) => act.actor.id === id,
   );
   if (actor) {
     dispatch(setModeWithStorage(Mode.EDIT_ACTOR));
@@ -282,10 +263,10 @@ const setModeToEditDataById = (id: number): AppThunk => (dispatch, getState) => 
 };
 
 const editDataInstanceById = (id: number): AppThunk => (dispatch, getState) => {
-  if((getState().edit.objectToEdit as DataCTO).data){
-      dispatch(setModeWithStorage(Mode.EDIT_DATA_INSTANCE));
-      dispatch(EditSlice.actions.setInstanceId(id));
-  }else{
+  if ((getState().edit.objectToEdit as DataCTO).data) {
+    dispatch(setModeWithStorage(Mode.EDIT_DATA_INSTANCE));
+    dispatch(EditSlice.actions.setInstanceId(id));
+  } else {
     dispatch(setModeWithStorage(Mode.EDIT));
   }
 };
@@ -300,9 +281,9 @@ const setModeToEditData = (data?: DataCTO): AppThunk => (dispatch) => {
 };
 
 const setModeToEditDataInstance = (id?: number): AppThunk => (dispatch, getState) => {
-  if((getState().edit.objectToEdit as DataCTO).data){
-    if(!id){
-      let copyData: DataCTO = Carv2Util.deepCopy(getState().edit.objectToEdit as DataCTO);
+  if ((getState().edit.objectToEdit as DataCTO).data) {
+    if (!id) {
+      const copyData: DataCTO = Carv2Util.deepCopy(getState().edit.objectToEdit as DataCTO);
       const newInstance: DataInstanceTO = new DataInstanceTO();
       newInstance.id = DataAccessUtil.determineNewId(copyData.data.instances);
       copyData.data.instances.push(newInstance);
@@ -328,7 +309,7 @@ const setModeToEditSequence = (sequenceId?: number): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE));
   if (sequenceId) {
     // TODO: change CTO to TO.
-    let response: DataAccessResponse<SequenceCTO> = DataAccess.findSequenceCTO(sequenceId);
+    const response: DataAccessResponse<SequenceCTO> = DataAccess.findSequenceCTO(sequenceId);
     if (response.code === 200) {
       dispatch(EditSlice.actions.setSequenceToEdit(Carv2Util.deepCopy(response.object.sequenceTO)));
       dispatch(SequenceModelActions.setCurrentSequence(sequenceId));
@@ -350,35 +331,35 @@ const setModeToEditChain = (chain?: ChainTO): AppThunk => (dispatch) => {
 };
 
 const setModeToEditChainlink = (
-  chainlink: ChainlinkTO,
-  from?: ChainlinkTO | ChainDecisionTO,
-  ifGoTo?: boolean
+    chainlink: ChainlinkTO,
+    from?: ChainlinkTO | ChainDecisionTO,
+    ifGoTo?: boolean,
 ): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_CHAIN_LINK));
   dispatch(EditActions.chainLink.create(chainlink, from, ifGoTo));
 };
 
 const setModeEditChainDecision = (
-  chainDecision: ChainDecisionTO,
-  from?: ChainDecisionTO | ChainlinkTO,
-  ifGoTO?: boolean
+    chainDecision: ChainDecisionTO,
+    from?: ChainDecisionTO | ChainlinkTO,
+    ifGoTO?: boolean,
 ): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_CHAIN_DECISION));
   dispatch(EditActions.chainDecision.create(chainDecision, from, ifGoTO));
 };
 
 const setModeToEditChainCondition = (decision: ChainDecisionTO): AppThunk => (dispatch) => {
-  if (decision !== null && decision !==  undefined) {
+  if (decision !== null && decision !== undefined) {
     dispatch(setModeWithStorage(Mode.EDIT_CHAIN_DECISION_CONDITION));
   } else {
-    handleError("Edit Condition: 'Decision is null or undefined'.");
+    handleError('Edit Condition: \'Decision is null or undefined\'.');
   }
 };
 
 const setModeToEditStep = (
-  stepCTO: SequenceStepCTO,
-  from?: SequenceStepCTO | DecisionTO,
-  ifGoTo?: boolean
+    stepCTO: SequenceStepCTO,
+    from?: SequenceStepCTO | DecisionTO,
+    ifGoTo?: boolean,
 ): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_STEP));
   dispatch(EditActions.step.create(stepCTO, from, ifGoTo));
@@ -401,7 +382,7 @@ const setModeToEditGroup = (group?: GroupTO): AppThunk => (dispatch) => {
 const setModeToEditInitData = (initData: InitDataTO): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_DATASETUP_INITDATA));
   if (initData.id !== -1) {
-    let response: DataAccessResponse<InitDataTO> = DataAccess.findInitData(initData.id);
+    const response: DataAccessResponse<InitDataTO> = DataAccess.findInitData(initData.id);
     if (response.code === 200) {
       dispatch(EditSlice.actions.setInitDataToEdit(Carv2Util.deepCopy(response.object)));
     } else {
@@ -415,7 +396,7 @@ const setModeToEditInitData = (initData: InitDataTO): AppThunk => (dispatch) => 
 const setModeToEditDataSetup = (id?: number): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_DATASETUP));
   if (id) {
-    let response: DataAccessResponse<DataSetupCTO> = DataAccess.findDataSetupCTO(id);
+    const response: DataAccessResponse<DataSetupCTO> = DataAccess.findDataSetupCTO(id);
     if (response.code === 200) {
       dispatch(EditSlice.actions.setDataSetupToEdit(Carv2Util.deepCopy(response.object)));
     } else {
@@ -427,27 +408,27 @@ const setModeToEditDataSetup = (id?: number): AppThunk => (dispatch) => {
 };
 
 const setModeToEditDecision = (
-  decision: DecisionTO,
-  from?: SequenceStepCTO | DecisionTO,
-  ifGoTo?: Boolean
+    decision: DecisionTO,
+    from?: SequenceStepCTO | DecisionTO,
+    ifGoTo?: Boolean,
 ): AppThunk => (dispatch) => {
   dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_DECISION));
   dispatch(EditActions.decision.create(decision, from, ifGoTo));
 };
 
 const setModeToEditCondition = (decision: DecisionTO): AppThunk => (dispatch) => {
-  if (decision !== null && decision !==  undefined) {
+  if (decision !== null && decision !== undefined) {
     dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_DECISION_CONDITION));
     // dispatch(EditSlice.actions.setDecisionToEdit(decision));
   } else {
-    handleError("Edit Condition: 'Decision is null or undefined'.");
+    handleError('Edit Condition: \'Decision is null or undefined\'.');
   }
 };
 
 // ----------------------------------------------- ACTOR -----------------------------------------------
 
 const createActorThunk = (): AppThunk => (dispatch) => {
-  let actor: ActorCTO = new ActorCTO();
+  const actor: ActorCTO = new ActorCTO();
   const response: DataAccessResponse<ActorCTO> = DataAccess.saveActorCTO(actor);
   console.log(response);
   if (response.code !== 200) {
@@ -478,7 +459,7 @@ const deleteActorThunk = (actor: ActorCTO): AppThunk => async (dispatch) => {
 // ----------------------------------------------- GROUP -----------------------------------------------
 
 const createGroupThunk = (): AppThunk => (dispatch) => {
-  let group: GroupTO = new GroupTO();
+  const group: GroupTO = new GroupTO();
   const response: DataAccessResponse<GroupTO> = DataAccess.saveGroup(group);
   console.log(response);
   if (response.code !== 200) {
@@ -510,8 +491,8 @@ const deleteGroupThunk = (group: GroupTO): AppThunk => async (dispatch) => {
 // ----------------------------------------------- DATA -----------------------------------------------
 
 const createDataThunk = (): AppThunk => (dispatch) => {
-  let data: DataCTO = new DataCTO();
-  let response: DataAccessResponse<DataCTO> = DataAccess.saveDataCTO(data);
+  const data: DataCTO = new DataCTO();
+  const response: DataAccessResponse<DataCTO> = DataAccess.saveDataCTO(data);
   console.log(response);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
@@ -542,7 +523,7 @@ const deleteDataThunk = (data: DataCTO): AppThunk => (dispatch) => {
 // ----------------------------------------------- RELATION -----------------------------------------------
 
 const createRelationThunk = (): AppThunk => (dispatch) => {
-  let relation: DataRelationTO = new DataRelationTO();
+  const relation: DataRelationTO = new DataRelationTO();
   const response: DataAccessResponse<DataRelationTO> = DataAccess.saveDataRelationCTO(relation);
   console.log(response);
   if (response.code !== 200) {
@@ -573,7 +554,7 @@ const deleteRelationThunk = (relation: DataRelationTO): AppThunk => async (dispa
 // ----------------------------------------------- DATA SETUP -----------------------------------------------
 
 const createDataSetupThunk = (): AppThunk => (dispatch) => {
-  let dataSetup: DataSetupCTO = new DataSetupCTO();
+  const dataSetup: DataSetupCTO = new DataSetupCTO();
   const response: DataAccessResponse<DataSetupCTO> = DataAccess.saveDataSetupCTO(dataSetup);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
@@ -619,7 +600,7 @@ const deleteInitDataThunk = (initDataId: number): AppThunk => (dispatch) => {
 // ----------------------------------------------- CHAIN -----------------------------------------------
 
 const createChainThunk = (): AppThunk => (dispatch) => {
-  let chain: ChainTO = new ChainTO();
+  const chain: ChainTO = new ChainTO();
   const response: DataAccessResponse<ChainTO> = DataAccess.saveChainTO(chain);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
@@ -657,7 +638,7 @@ const deleteChainThunk = (chain: ChainTO): AppThunk => (dispatch) => {
 };
 
 const createChainLinkThunk = (link: ChainlinkTO, from?: ChainlinkTO | ChainDecisionTO, ifGoTO?: boolean): AppThunk => (
-  dispatch
+    dispatch,
 ) => {
   const response: DataAccessResponse<ChainlinkTO> = DataAccess.saveChainlink(link);
   if (response.code !== 200) {
@@ -665,14 +646,14 @@ const createChainLinkThunk = (link: ChainlinkTO, from?: ChainlinkTO | ChainDecis
   } else {
     if (from !== undefined) {
       if ((from as ChainlinkTO).dataSetupFk !== undefined) {
-        (from as ChainlinkTO).goto = { type: GoToTypesChain.LINK, id: response.object.id };
+        (from as ChainlinkTO).goto = {type: GoToTypesChain.LINK, id: response.object.id};
         dispatch(EditActions.chainLink.save(from as ChainlinkTO));
       }
       if ((from as ChainDecisionTO).ifGoTo !== undefined) {
         if (ifGoTO) {
-          (from as ChainDecisionTO).ifGoTo = { type: GoToTypesChain.LINK, id: response.object.id };
+          (from as ChainDecisionTO).ifGoTo = {type: GoToTypesChain.LINK, id: response.object.id};
         } else {
-          (from as ChainDecisionTO).elseGoTo = { type: GoToTypesChain.LINK, id: response.object.id };
+          (from as ChainDecisionTO).elseGoTo = {type: GoToTypesChain.LINK, id: response.object.id};
         }
         dispatch(EditActions.chainDecision.save(from as ChainDecisionTO));
       }
@@ -698,9 +679,9 @@ const deleteChainLinkThunk = (step: ChainlinkTO): AppThunk => (dispatch) => {
 };
 
 const createChainDecisionThunk = (
-  decision: ChainDecisionTO,
-  from?: ChainDecisionTO | ChainlinkTO,
-  ifGoTO?: boolean
+    decision: ChainDecisionTO,
+    from?: ChainDecisionTO | ChainlinkTO,
+    ifGoTO?: boolean,
 ): AppThunk => (dispatch) => {
   const response: DataAccessResponse<ChainDecisionTO> = DataAccess.saveChaindecision(decision);
   if (response.code !== 200) {
@@ -708,14 +689,14 @@ const createChainDecisionThunk = (
   } else {
     if (from !== undefined) {
       if ((from as ChainlinkTO).dataSetupFk !== undefined) {
-        (from as ChainlinkTO).goto = { type: GoToTypesChain.DEC, id: response.object.id };
+        (from as ChainlinkTO).goto = {type: GoToTypesChain.DEC, id: response.object.id};
         dispatch(EditActions.chainLink.save(from as ChainlinkTO));
       }
       if ((from as ChainDecisionTO).elseGoTo !== undefined) {
         if (ifGoTO) {
-          (from as ChainDecisionTO).ifGoTo = { type: GoToTypesChain.DEC, id: response.object.id };
+          (from as ChainDecisionTO).ifGoTo = {type: GoToTypesChain.DEC, id: response.object.id};
         } else {
-          (from as ChainDecisionTO).elseGoTo = { type: GoToTypesChain.DEC, id: response.object.id };
+          (from as ChainDecisionTO).elseGoTo = {type: GoToTypesChain.DEC, id: response.object.id};
         }
         dispatch(EditActions.chainDecision.save(from as ChainDecisionTO));
       }
@@ -742,9 +723,9 @@ const deleteChainDecisionThunk = (decision: ChainDecisionTO): AppThunk => (dispa
 
 const setChainRootThunk = (chainId: number, rootId: number, isDecision: boolean): AppThunk => (dispatch) => {
   const response: DataAccessResponse<ChainlinkTO | ChainDecisionTO> = DataAccess.setChainRoot(
-    chainId,
-    rootId,
-    isDecision
+      chainId,
+      rootId,
+      isDecision,
   );
   if (response.code !== 200) {
     dispatch(handleError(response.message));
@@ -773,7 +754,7 @@ const findChainLinkThunk = (id: number): ChainlinkTO => {
 // ----------------------------------------------- SEQUENCE -----------------------------------------------
 
 const createSequenceThunk = (): AppThunk => (dispatch) => {
-  let sequence: SequenceTO = new SequenceTO();
+  const sequence: SequenceTO = new SequenceTO();
   const response: DataAccessResponse<SequenceTO> = DataAccess.saveSequenceTO(sequence);
   if (response.code !== 200) {
     dispatch(handleError(response.message));
@@ -819,9 +800,9 @@ const setRootThunk = (sequenceId: number, rootId: number, isDecision: boolean): 
 
 // ----------------------------------------------- SEQUENCE STEP -----------------------------------------------
 const createSequenceStepThunk = (
-  step: SequenceStepCTO,
-  from?: SequenceStepCTO | DecisionTO,
-  ifGoTO?: Boolean
+    step: SequenceStepCTO,
+    from?: SequenceStepCTO | DecisionTO,
+    ifGoTO?: Boolean,
 ): AppThunk => (dispatch) => {
   const response: DataAccessResponse<SequenceStepCTO> = DataAccess.saveSequenceStepCTO(step);
   if (response.code !== 200) {
@@ -829,14 +810,14 @@ const createSequenceStepThunk = (
   } else {
     if (from !== undefined) {
       if ((from as SequenceStepCTO).squenceStepTO !== undefined) {
-        (from as SequenceStepCTO).squenceStepTO.goto = { type: GoToTypes.STEP, id: response.object.squenceStepTO.id };
+        (from as SequenceStepCTO).squenceStepTO.goto = {type: GoToTypes.STEP, id: response.object.squenceStepTO.id};
         dispatch(EditActions.step.save(from as SequenceStepCTO));
       }
       if ((from as DecisionTO).elseGoTo !== undefined) {
         if (ifGoTO) {
-          (from as DecisionTO).ifGoTo = { type: GoToTypes.STEP, id: response.object.squenceStepTO.id };
+          (from as DecisionTO).ifGoTo = {type: GoToTypes.STEP, id: response.object.squenceStepTO.id};
         } else {
-          (from as DecisionTO).elseGoTo = { type: GoToTypes.STEP, id: response.object.squenceStepTO.id };
+          (from as DecisionTO).elseGoTo = {type: GoToTypes.STEP, id: response.object.squenceStepTO.id};
         }
         dispatch(EditActions.decision.save(from as DecisionTO));
       }
@@ -852,18 +833,18 @@ const deleteSequenceStepThunk = (step: SequenceStepCTO, sequenceCTO?: SequenceCT
     // update steps
     copySequence.sequenceStepCTOs.forEach((item) => {
       if (item.squenceStepTO.goto.type === GoToTypes.STEP && item.squenceStepTO.goto.id === step.squenceStepTO.id) {
-        item.squenceStepTO.goto = { type: GoToTypes.ERROR };
+        item.squenceStepTO.goto = {type: GoToTypes.ERROR};
         dispatch(EditActions.step.save(item));
       }
     });
     // update decision
     copySequence.decisions.forEach((cond) => {
       if (cond.ifGoTo.type === GoToTypes.STEP && cond.ifGoTo.id === step.squenceStepTO.id) {
-        cond.ifGoTo = { type: GoToTypes.ERROR };
+        cond.ifGoTo = {type: GoToTypes.ERROR};
         dispatch(EditActions.decision.save(cond));
       }
       if (cond.elseGoTo.type === GoToTypes.STEP && cond.elseGoTo.id === step.squenceStepTO.id) {
-        cond.elseGoTo = { type: GoToTypes.ERROR };
+        cond.elseGoTo = {type: GoToTypes.ERROR};
         dispatch(EditActions.decision.save(cond));
       }
     });
@@ -917,7 +898,7 @@ const deleteActionThunk = (action: ActionTO): AppThunk => async (dispatch) => {
 // ----------------------------------------------- DECISION -----------------------------------------------
 
 const createDecisionThunk = (decision: DecisionTO, from?: SequenceStepCTO | DecisionTO, ifGoTo?: Boolean): AppThunk => (
-  dispatch
+    dispatch,
 ) => {
   const response: DataAccessResponse<DecisionTO> = DataAccess.saveDecision(decision);
   if (response.code !== 200) {
@@ -925,14 +906,14 @@ const createDecisionThunk = (decision: DecisionTO, from?: SequenceStepCTO | Deci
   } else {
     if (from) {
       if ((from as SequenceStepCTO).squenceStepTO !== undefined) {
-        (from as SequenceStepCTO).squenceStepTO.goto = { type: GoToTypes.DEC, id: response.object.id };
+        (from as SequenceStepCTO).squenceStepTO.goto = {type: GoToTypes.DEC, id: response.object.id};
         dispatch(EditActions.step.save(from as SequenceStepCTO));
       }
       if ((from as DecisionTO).elseGoTo !== undefined) {
         if (ifGoTo) {
-          (from as DecisionTO).ifGoTo = { type: GoToTypes.DEC, id: response.object.id };
+          (from as DecisionTO).ifGoTo = {type: GoToTypes.DEC, id: response.object.id};
         } else {
-          (from as DecisionTO).elseGoTo = { type: GoToTypes.DEC, id: response.object.id };
+          (from as DecisionTO).elseGoTo = {type: GoToTypes.DEC, id: response.object.id};
         }
         dispatch(EditActions.decision.save(from as DecisionTO));
       }
@@ -955,18 +936,18 @@ const deleteDecisionThunk = (decision: DecisionTO, sequenceCTO?: SequenceCTO): A
     // update steps
     copySequence.sequenceStepCTOs.forEach((step) => {
       if (step.squenceStepTO.goto.type === GoToTypes.DEC && step.squenceStepTO.goto.id === decision.id) {
-        step.squenceStepTO.goto = { type: GoToTypes.ERROR };
+        step.squenceStepTO.goto = {type: GoToTypes.ERROR};
         dispatch(EditActions.step.save(step));
       }
     });
     // update decisions
     copySequence.decisions.forEach((cond) => {
       if (cond.ifGoTo.type === GoToTypes.DEC && cond.ifGoTo.id === decision.id) {
-        cond.ifGoTo = { type: GoToTypes.ERROR };
+        cond.ifGoTo = {type: GoToTypes.ERROR};
         dispatch(EditActions.decision.save(cond));
       }
       if (cond.elseGoTo.type === GoToTypes.DEC && cond.elseGoTo.id === decision.id) {
-        cond.elseGoTo = { type: GoToTypes.ERROR };
+        cond.elseGoTo = {type: GoToTypes.ERROR};
         dispatch(EditActions.decision.save(cond));
       }
     });
@@ -989,11 +970,11 @@ const findDecisionTOThunk = (decisionId: number): DecisionTO => {
 
 // TODO: this method is copied from sequencemodelslice! remove one and mage the other reachable in both slices
 const getArrowsForStepFk = (
-  sequenceStepCTO: SequenceStepCTO,
-  rootState: RootState
+    sequenceStepCTO: SequenceStepCTO,
+    rootState: RootState,
 ): Arrow[] => {
   let arrows: Arrow[] = [];
-      arrows = mapActionsToArrows(sequenceStepCTO.actions, rootState);
+  arrows = mapActionsToArrows(sequenceStepCTO.actions, rootState);
   return arrows;
 };
 
@@ -1001,38 +982,38 @@ const getArrowsForStepFk = (
 const mapActionsToArrows = (actions: ActionTO[], state: RootState): Arrow[] => {
   const arrows: Arrow[] = [];
 
-  actions.forEach(action => {
-    
+  actions.forEach((action) => {
     const sourceGeometricalData: GeometricalDataCTO | undefined = state.masterData.actors.find(
-      (comp) => comp.actor.id === action.sendingActorFk
-      )?.geometricalData;
-      
-      const targetGeometricalData: GeometricalDataCTO | undefined = state.masterData.actors.find(
-        (comp) => comp.actor.id === action.receivingActorFk
-        )?.geometricalData;
-        
-        const dataLabels: string[] = [];
-        const dataLabel: string | undefined = state.masterData.datas.find(data => data.data.id === action.dataFk)?.data.name;
-        if(dataLabel){
-          dataLabels.push(dataLabel);
-        }
-        
-        if (sourceGeometricalData && targetGeometricalData) {
+        (comp) => comp.actor.id === action.sendingActorFk,
+    )?.geometricalData;
 
-          const existingArrow: Arrow | undefined = arrows.find(arrow => arrow.sourceGeometricalData.geometricalData.id === sourceGeometricalData.geometricalData.id && arrow.targetGeometricalData.geometricalData.id === targetGeometricalData.geometricalData.id);
+    const targetGeometricalData: GeometricalDataCTO | undefined = state.masterData.actors.find(
+        (comp) => comp.actor.id === action.receivingActorFk,
+    )?.geometricalData;
 
-          if(existingArrow){
-            existingArrow.dataLabels.push(...dataLabels)
-          }else{
-            arrows.push({
-              sourceGeometricalData,
-              targetGeometricalData,
-              dataLabels
-            });
-          }
-        }
-      })
-      return arrows;
+    const dataLabels: string[] = [];
+    const dataLabel: string | undefined = state.masterData.datas.find((data) => data.data.id === action.dataFk)?.data.name;
+    if (dataLabel) {
+      dataLabels.push(dataLabel);
+    }
+
+    if (sourceGeometricalData && targetGeometricalData) {
+      const existingArrow: Arrow | undefined = arrows
+          .find((arrow) => arrow.sourceGeometricalData.geometricalData.id === sourceGeometricalData.geometricalData.id
+          && arrow.targetGeometricalData.geometricalData.id === targetGeometricalData.geometricalData.id);
+
+      if (existingArrow) {
+        existingArrow.dataLabels.push(...dataLabels);
+      } else {
+        arrows.push({
+          sourceGeometricalData,
+          targetGeometricalData,
+          dataLabels,
+        });
+      }
+    }
+  });
+  return arrows;
 };
 
 
@@ -1055,8 +1036,8 @@ export const editSelectors = {
       : null;
   },
   chainDecisionToEdit: (state: RootState): ChainDecisionTO | null => {
-    return state.edit.mode === Mode.EDIT_CHAIN_DECISION ||
-      (state.edit.mode === Mode.EDIT_CHAIN_DECISION_CONDITION && (state.edit.objectToEdit as ChainDecisionTO).elseGoTo)
+    return state.edit.mode === Mode.EDIT_CHAIN_DECISION
+      || (state.edit.mode === Mode.EDIT_CHAIN_DECISION_CONDITION && (state.edit.objectToEdit as ChainDecisionTO).elseGoTo)
       ? (state.edit.objectToEdit as ChainDecisionTO)
       : null;
   },
@@ -1082,19 +1063,18 @@ export const editSelectors = {
   },
   editActionArrow: (state: RootState): Arrow | null => {
     if (state.edit.mode === Mode.EDIT_SEQUENCE_STEP_ACTION && (state.edit.objectToEdit as ActionTO).receivingActorFk) {
-
       const sourceComp: ActorCTO | undefined = state.masterData.actors.find(
-        (comp) => comp.actor.id === (state.edit.objectToEdit as ActionTO).sendingActorFk
+          (comp) => comp.actor.id === (state.edit.objectToEdit as ActionTO).sendingActorFk,
       );
 
       const targetComp: ActorCTO | undefined = state.masterData.actors.find(
-        (comp) => comp.actor.id === (state.edit.objectToEdit as ActionTO).receivingActorFk
+          (comp) => comp.actor.id === (state.edit.objectToEdit as ActionTO).receivingActorFk,
       );
 
-      const dataLabel: string = masterDataSelectors.getDataCTOById((state.edit.objectToEdit as ActionTO).dataFk)(state)?.data.name || "Could not find data";
+      const dataLabel: string = masterDataSelectors.getDataCTOById((state.edit.objectToEdit as ActionTO).dataFk)(state)?.data.name || 'Could not find data';
 
       if (sourceComp && targetComp) {
-        return { sourceGeometricalData: sourceComp.geometricalData, targetGeometricalData: targetComp.geometricalData, dataLabels: [dataLabel]};
+        return {sourceGeometricalData: sourceComp.geometricalData, targetGeometricalData: targetComp.geometricalData, dataLabels: [dataLabel]};
       } else {
         return null;
       }
@@ -1103,8 +1083,7 @@ export const editSelectors = {
     }
   },
   editStepArrows: (state: RootState): Arrow[] => {
-
-    let arrows: Arrow[] = []
+    let arrows: Arrow[] = [];
 
     if (state.edit.mode === Mode.EDIT_SEQUENCE_STEP && (state.edit.objectToEdit as SequenceStepCTO).squenceStepTO) {
       arrows = getArrowsForStepFk((state.edit.objectToEdit as SequenceStepCTO), state);
@@ -1139,8 +1118,8 @@ export const editSelectors = {
       : null;
   },
   decisionToEdit: (state: RootState): DecisionTO | null => {
-    return (state.edit.mode === Mode.EDIT_SEQUENCE_DECISION || Mode.EDIT_SEQUENCE_DECISION_CONDITION) &&
-      (state.edit.objectToEdit as DecisionTO).elseGoTo
+    return (state.edit.mode === Mode.EDIT_SEQUENCE_DECISION || Mode.EDIT_SEQUENCE_DECISION_CONDITION)
+      && (state.edit.objectToEdit as DecisionTO).elseGoTo
       ? (state.edit.objectToEdit as DecisionTO)
       : null;
   },

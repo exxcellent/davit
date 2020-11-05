@@ -1,7 +1,7 @@
 
 export const Carv2Util = {
-  
-  isNullOrUndefined(object: any): boolean{
+
+  isNullOrUndefined(object: any): boolean {
     return object === null || object === undefined;
   },
 

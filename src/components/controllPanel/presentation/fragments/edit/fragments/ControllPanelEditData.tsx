@@ -1,26 +1,26 @@
-import React, { FunctionComponent, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, Input } from 'semantic-ui-react';
+import React, {FunctionComponent, useEffect, useRef} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Button, Input} from 'semantic-ui-react';
+import {DataCTO} from '../../../../../../dataAccess/access/cto/DataCTO';
+import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
+import {handleError} from '../../../../../../slices/GlobalSlice';
+import {Carv2Util} from '../../../../../../utils/Carv2Util';
+import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
+import {DavitButtonIcon, DavitButtonLabel} from '../../../../../common/fragments/buttons/DavitButton';
+import {DataInstanceDropDownButton} from '../../../../../common/fragments/dropdowns/DataInstanceDropDown';
+import {ControllPanelEditSub} from '../common/ControllPanelEditSub';
+import {Carv2LabelTextfield} from '../common/fragments/Carv2LabelTextfield';
+import {OptionField} from '../common/OptionField';
 
-import { DataCTO } from '../../../../../../dataAccess/access/cto/DataCTO';
-import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
-import { handleError } from '../../../../../../slices/GlobalSlice';
-import { Carv2Util } from '../../../../../../utils/Carv2Util';
-import { Carv2ButtonIcon, Carv2ButtonLabel } from '../../../../../common/fragments/buttons/Carv2Button';
-import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
-import { DataInstanceDropDownButton } from '../../../../../common/fragments/dropdowns/DataInstanceDropDown';
-import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { Carv2LabelTextfield } from '../common/fragments/Carv2LabelTextfield';
-import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditDataProps {
   hidden: boolean;
 }
 
 export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps> = (
-  props
+    props,
 ) => {
-  const { hidden } = props;
+  const {hidden} = props;
   const {
     label,
     textInput,
@@ -70,7 +70,7 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
             </Button>
             <DataInstanceDropDownButton
               onSelect={(id) => editOrAddInstance(id)}
-              icon={"wrench"}
+              icon={'wrench'}
               instances={instances}
             />
           </Button.Group>
@@ -79,8 +79,8 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
       <div className="columnDivider controllPanelEditChild">
         <div>
           <OptionField label="Navigation">
-            <Carv2ButtonLabel onClick={createAnother} label="Create another" />
-            <Carv2ButtonIcon onClick={saveData} icon="reply" />
+            <DavitButtonLabel onClick={createAnother} label="Create another" />
+            <DavitButtonIcon onClick={saveData} icon="reply" />
           </OptionField>
         </div>
       </div>
@@ -106,24 +106,24 @@ const useControllPanelEditDataViewModel = () => {
   useEffect(() => {
     // check if component to edit is really set or gso back to edit mode
     if (dataToEdit === null || dataToEdit === undefined) {
-      handleError("Tried to go to edit data without dataToedit specified");
+      handleError('Tried to go to edit data without dataToedit specified');
       dispatch(EditActions.setMode.edit());
     }
   });
 
   const changeName = (name: string) => {
-    let copyDataToEdit: DataCTO = Carv2Util.deepCopy(dataToEdit);
+    const copyDataToEdit: DataCTO = Carv2Util.deepCopy(dataToEdit);
     copyDataToEdit.data.name = name;
     dispatch(EditActions.setMode.editData(copyDataToEdit));
   };
 
   const updateData = () => {
-    let copyDataToEdit: DataCTO = Carv2Util.deepCopy(dataToEdit);
+    const copyDataToEdit: DataCTO = Carv2Util.deepCopy(dataToEdit);
     dispatch(EditActions.data.save(copyDataToEdit));
   };
 
   const saveData = () => {
-    if (dataToEdit?.data.name !== "") {
+    if (dataToEdit?.data.name !== '') {
       dispatch(EditActions.data.save(dataToEdit!));
     } else {
       deleteData();
@@ -142,13 +142,13 @@ const useControllPanelEditDataViewModel = () => {
 
   const editOrAddInstance = (id?: number) => {
     if (dataToEdit !== null) {
-      console.info("id: ", id);
+      console.info('id: ', id);
       dispatch(EditActions.setMode.editDataInstance(id));
     }
   };
 
   return {
-    label: "EDIT * " + (dataToEdit?.data.name || ""),
+    label: 'EDIT * ' + (dataToEdit?.data.name || ''),
     name: dataToEdit?.data.name,
     changeName,
     saveData,

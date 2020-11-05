@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, {FunctionComponent} from 'react';
 
 interface TabFragmentProps {
     label: string;
@@ -7,12 +7,12 @@ interface TabFragmentProps {
 }
 
 export const TabFragment: FunctionComponent<TabFragmentProps> = (props) => {
-    const { label, isActive, onClick } = props;
-    return (
+  const {label, isActive, onClick} = props;
+  return (
 
-        <div className={isActive ? "tab active" : "tab"} onClick={onClick}>
-            {label}
-        </div>
+    <div className={isActive ? 'tab active' : 'tab'} onClick={onClick}>
+      {label}
+    </div>
 
-    )
-}
+  );
+};

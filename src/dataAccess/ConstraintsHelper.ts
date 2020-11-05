@@ -1,12 +1,12 @@
-import { DataStoreCTO } from './access/cto/DataStoreCTO';
+import {DataStoreCTO} from './access/cto/DataStoreCTO';
 
 export const ConstraintsHelper = {
   deleteDataConstraintCheck(dataId: number, dataStore: DataStoreCTO) {
     const dataRelationExists: boolean = Array.from(dataStore.dataConnections.values()).some(
-      (relation) => relation.data1Fk === dataId || relation.data2Fk === dataId
+        (relation) => relation.data1Fk === dataId || relation.data2Fk === dataId,
     );
     const actorDataExist: boolean = Array.from(dataStore.actions.values()).some(
-      (actorData) => actorData.dataFk === dataId
+        (actorData) => actorData.dataFk === dataId,
     );
     if (dataRelationExists || actorDataExist) {
       throw new Error(`delete.error! data with id: ${dataId} is still connected to Object(s)!`);
@@ -15,10 +15,10 @@ export const ConstraintsHelper = {
 
   deleteActorConstraintCheck(actorId: number, dataStore: DataStoreCTO) {
     const actorDataExists: boolean = Array.from(dataStore.actions.values()).some(
-      (actorData) => actorData.receivingActorFk === actorId
+        (actorData) => actorData.receivingActorFk === actorId,
     );
     const stepContainsActor: boolean = Array.from(dataStore.actions.values()).some(
-      (action) => action.sendingActorFk === actorId || action.receivingActorFk === actorId
+        (action) => action.sendingActorFk === actorId || action.receivingActorFk === actorId,
     );
 
     if (actorDataExists || stepContainsActor) {
@@ -28,7 +28,7 @@ export const ConstraintsHelper = {
 
   deleteStepConstraintCheck(stepId: number, dataStore: DataStoreCTO) {
     const actorDataExists: boolean = Array.from(dataStore.actions.values()).some(
-      (actorData) => actorData.sequenceStepFk === stepId
+        (actorData) => actorData.sequenceStepFk === stepId,
     );
     if (actorDataExists) {
       throw new Error(`delete.error! step: ${stepId} is still connected to actordata(s)!`);
@@ -38,7 +38,7 @@ export const ConstraintsHelper = {
   deleteSequenceConstraintCheck(sequenceId: number, dataStore: DataStoreCTO) {
     const stepExists: boolean = Array.from(dataStore.steps.values()).some((step) => step.sequenceFk === sequenceId);
     const decisionExists: boolean = Array.from(dataStore.decisions.values()).some(
-      (dec) => dec.sequenceFk === sequenceId
+        (dec) => dec.sequenceFk === sequenceId,
     );
     if (stepExists || decisionExists) {
       throw new Error(`delete.error! sequence: ${sequenceId} is still connected to step(s) or decision(s)!`);
@@ -56,10 +56,10 @@ export const ConstraintsHelper = {
 
   deleteGeometricalDataConstraintCheck(geometDataId: number, dataStore: DataStoreCTO) {
     const actorExists: boolean = Array.from(dataStore.actors.values()).some(
-      (actor) => actor.geometricalDataFk === geometDataId
+        (actor) => actor.geometricalDataFk === geometDataId,
     );
     const dataExists: boolean = Array.from(dataStore.datas.values()).some(
-      (data) => data.geometricalDataFk === geometDataId
+        (data) => data.geometricalDataFk === geometDataId,
     );
     if (actorExists || dataExists) {
       throw new Error(`delete.error! geometrical data with id: ${geometDataId} is still connected to Object(s)!`);
@@ -68,7 +68,7 @@ export const ConstraintsHelper = {
 
   deletePositionConstraintCheck(positionId: number, dataStore: DataStoreCTO) {
     const geometDataExists: boolean = Array.from(dataStore.geometricalDatas.values()).some(
-      (geoData) => geoData.positionFk === positionId
+        (geoData) => geoData.positionFk === positionId,
     );
     if (geometDataExists) {
       throw new Error(`delete.error! position with id: ${positionId} is still connected to GeometricalData(s)!`);
@@ -77,7 +77,7 @@ export const ConstraintsHelper = {
 
   deleteDesignConstraintCheck(designId: number, dataStore: DataStoreCTO) {
     const actorExists: boolean = Array.from(dataStore.actors.values()).some(
-      (actor) => actor.designFk === designId
+        (actor) => actor.designFk === designId,
     );
     if (actorExists) {
       throw new Error(`delete.error! design with id: ${designId} is still connected to Actor(s)!`);
@@ -86,7 +86,7 @@ export const ConstraintsHelper = {
 
   deleteGroupConstraintCheck(groupId: number, dataStore: DataStoreCTO) {
     const actorExists: boolean = Array.from(dataStore.actors.values()).some(
-      (actor) => actor.groupFks === groupId
+        (actor) => actor.groupFks === groupId,
     );
     if (actorExists) {
       throw new Error(`delete.error! group with id: ${groupId} is still connected to Actor(s)!`);

@@ -1,30 +1,30 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Input } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { ChainDecisionTO } from "../../../../../../dataAccess/access/to/ChainDecisionTO";
-import { ChainlinkTO } from "../../../../../../dataAccess/access/to/ChainlinkTO";
-import { ChainTO } from "../../../../../../dataAccess/access/to/ChainTO";
-import { GoToChain, GoToTypesChain } from "../../../../../../dataAccess/access/types/GoToTypeChain";
-import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
-import { handleError } from "../../../../../../slices/GlobalSlice";
-import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
-import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonIcon } from "../../../../../common/fragments/buttons/Carv2Button";
-import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
-import { ChainDecisionDropDown } from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
-import { ChainLinkDropDown } from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
-import { GoToChainOptionDropDown } from "../../../../../common/fragments/dropdowns/GoToChainOptionDropDown";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { Carv2LabelTextfield } from "../common/fragments/Carv2LabelTextfield";
-import { OptionField } from "../common/OptionField";
+import React, {FunctionComponent, useEffect, useRef, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Button, Input} from 'semantic-ui-react';
+import {isNullOrUndefined} from 'util';
+import {ChainDecisionTO} from '../../../../../../dataAccess/access/to/ChainDecisionTO';
+import {ChainlinkTO} from '../../../../../../dataAccess/access/to/ChainlinkTO';
+import {ChainTO} from '../../../../../../dataAccess/access/to/ChainTO';
+import {GoToChain, GoToTypesChain} from '../../../../../../dataAccess/access/types/GoToTypeChain';
+import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
+import {handleError} from '../../../../../../slices/GlobalSlice';
+import {sequenceModelSelectors} from '../../../../../../slices/SequenceModelSlice';
+import {Carv2Util} from '../../../../../../utils/Carv2Util';
+import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
+import {DavitButtonIcon} from '../../../../../common/fragments/buttons/DavitButton';
+import {ChainDecisionDropDown} from '../../../../../common/fragments/dropdowns/ChainDecisionDropDown';
+import {ChainLinkDropDown} from '../../../../../common/fragments/dropdowns/ChainLinkDropDown';
+import {GoToChainOptionDropDown} from '../../../../../common/fragments/dropdowns/GoToChainOptionDropDown';
+import {ControllPanelEditSub} from '../common/ControllPanelEditSub';
+import {Carv2LabelTextfield} from '../common/fragments/Carv2LabelTextfield';
+import {OptionField} from '../common/OptionField';
 
 export interface ControllPanelEditChainDecisionProps {
   hidden: boolean;
 }
 
 export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEditChainDecisionProps> = (props) => {
-  const { hidden } = props;
+  const {hidden} = props;
   const {
     label,
     name,
@@ -71,7 +71,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
         </div>
       </div>
       <div className="columnDivider optionFieldSpacer">
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
           <OptionField label="Type condition true">
             <GoToChainOptionDropDown
               onSelect={(gt) => {
@@ -82,7 +82,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
           </OptionField>
           {ifGoTo!.type === GoToTypesChain.LINK && (
             <OptionField label="Create or Select next link">
-              <Carv2ButtonIcon icon="add" onClick={() => createGoToStep(true)} />
+              <DavitButtonIcon icon="add" onClick={() => createGoToStep(true)} />
               <ChainLinkDropDown
                 onSelect={(link) => setGoToTypeStep(true, link)}
                 value={ifGoTo?.type === GoToTypesChain.LINK ? ifGoTo.id : 1}
@@ -92,7 +92,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
           )}
           {ifGoTo!.type === GoToTypesChain.DEC && (
             <OptionField label="Create or Select next decision">
-              <Carv2ButtonIcon icon="add" onClick={() => createGoToDecision(true)} />
+              <DavitButtonIcon icon="add" onClick={() => createGoToDecision(true)} />
               <ChainDecisionDropDown
                 onSelect={(cond) => setGoToTypeDecision(true, cond)}
                 value={ifGoTo?.type === GoToTypesChain.DEC ? ifGoTo.id : 1}
@@ -104,7 +104,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
         </div>
       </div>
       <div className="columnDivider optionFieldSpacer">
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
           <OptionField label="Type condition false">
             <GoToChainOptionDropDown
               onSelect={(gt) => handleType(false, gt)}
@@ -113,7 +113,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
           </OptionField>
           {elseGoTo!.type === GoToTypesChain.LINK && (
             <OptionField label="Select type of the next element">
-              <Carv2ButtonIcon icon="add" onClick={() => createGoToStep(false)} />
+              <DavitButtonIcon icon="add" onClick={() => createGoToStep(false)} />
               <ChainLinkDropDown
                 onSelect={(link) => setGoToTypeStep(false, link)}
                 value={elseGoTo?.type === GoToTypesChain.LINK ? elseGoTo.id : 1}
@@ -123,7 +123,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
           )}
           {elseGoTo!.type === GoToTypesChain.DEC && (
             <OptionField label="Create or Select next condition">
-              <Carv2ButtonIcon icon="add" onClick={() => createGoToDecision(false)} />
+              <DavitButtonIcon icon="add" onClick={() => createGoToDecision(false)} />
               <ChainDecisionDropDown
                 onSelect={(cond) => setGoToTypeDecision(false, cond)}
                 value={elseGoTo?.type === GoToTypesChain.DEC ? elseGoTo.id : 1}
@@ -137,7 +137,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
       <div className="columnDivider controllPanelEditChild">
         <div className="optionFieldSpacer">
           <OptionField label="Navigation">
-            <Carv2ButtonIcon onClick={saveDecision} icon="reply" />
+            <DavitButtonIcon onClick={saveDecision} icon="reply" />
           </OptionField>
         </div>
         <div className="optionFieldSpacer">
@@ -155,17 +155,17 @@ const useControllPanelEditChainConditionViewModel = () => {
   const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
   const dispatch = useDispatch();
   const textInput = useRef<Input>(null);
-  const [currentIfGoTo, setCurrentIfGoTo] = useState<GoToChain>({ type: GoToTypesChain.FIN });
-  const [currentElseGoTo, setCurrentElseGoTo] = useState<GoToChain>({ type: GoToTypesChain.ERROR });
+  const [currentIfGoTo, setCurrentIfGoTo] = useState<GoToChain>({type: GoToTypesChain.FIN});
+  const [currentElseGoTo, setCurrentElseGoTo] = useState<GoToChain>({type: GoToTypesChain.ERROR});
   const [key, setKey] = useState<number>(0);
 
   useEffect(() => {
     if (isNullOrUndefined(decisionToEdit)) {
-      dispatch(handleError("Tried to go to edit condition step without conditionToEdit specified"));
+      dispatch(handleError('Tried to go to edit condition step without conditionToEdit specified'));
       dispatch(EditActions.setMode.edit());
     }
     if (decisionToEdit) {
-      console.warn("set curretn go to type: ", decisionToEdit.ifGoTo);
+      console.warn('set curretn go to type: ', decisionToEdit.ifGoTo);
       setCurrentIfGoTo(decisionToEdit.ifGoTo);
       setCurrentElseGoTo(decisionToEdit.elseGoTo);
     }
@@ -183,12 +183,12 @@ const useControllPanelEditChainConditionViewModel = () => {
 
   const saveDecision = (newMode?: string) => {
     if (!isNullOrUndefined(decisionToEdit) && !isNullOrUndefined(selectedChain)) {
-      if (decisionToEdit.name !== "") {
+      if (decisionToEdit.name !== '') {
         dispatch(EditActions.chainDecision.save(decisionToEdit));
       } else {
         dispatch(EditActions.chainDecision.delete(decisionToEdit));
       }
-      if (newMode && newMode === "EDIT") {
+      if (newMode && newMode === 'EDIT') {
         dispatch(EditActions.setMode.edit());
       } else {
         dispatch(EditActions.setMode.editChain(selectedChain));
@@ -206,7 +206,7 @@ const useControllPanelEditChainConditionViewModel = () => {
   const validStep = (): boolean => {
     let valid: boolean = false;
     if (!isNullOrUndefined(decisionToEdit)) {
-      if (decisionToEdit.name !== "") {
+      if (decisionToEdit.name !== '') {
         valid = true;
       }
     }
@@ -224,7 +224,7 @@ const useControllPanelEditChainConditionViewModel = () => {
 
   const handleType = (ifGoTo: boolean, newGoToType?: string) => {
     if (newGoToType !== undefined) {
-      const gType = { type: (GoToTypesChain as any)[newGoToType] };
+      const gType = {type: (GoToTypesChain as any)[newGoToType]};
       ifGoTo ? setCurrentIfGoTo(gType) : setCurrentElseGoTo(gType);
       switch (newGoToType) {
         case GoToTypesChain.ERROR:
@@ -239,14 +239,14 @@ const useControllPanelEditChainConditionViewModel = () => {
 
   const setGoToTypeStep = (ifGoTo: boolean, link?: ChainlinkTO) => {
     if (link) {
-      let newGoTo: GoToChain = { type: GoToTypesChain.LINK, id: link.id };
+      const newGoTo: GoToChain = {type: GoToTypesChain.LINK, id: link.id};
       saveGoToType(ifGoTo, newGoTo);
     }
   };
 
   const setGoToTypeDecision = (ifGoTo: boolean, decision?: ChainDecisionTO) => {
     if (decision) {
-      let newGoTo: GoToChain = { type: GoToTypesChain.DEC, id: decision.id };
+      const newGoTo: GoToChain = {type: GoToTypesChain.DEC, id: decision.id};
       saveGoToType(ifGoTo, newGoTo);
     }
   };
@@ -254,7 +254,7 @@ const useControllPanelEditChainConditionViewModel = () => {
   const createGoToLink = (ifGoTo: boolean) => {
     if (!isNullOrUndefined(decisionToEdit)) {
       const copyDecision: ChainDecisionTO = Carv2Util.deepCopy(decisionToEdit);
-      let goToLink: ChainlinkTO = new ChainlinkTO();
+      const goToLink: ChainlinkTO = new ChainlinkTO();
       goToLink.chainFk = decisionToEdit.chainFk;
       dispatch(EditActions.setMode.editChainLink(goToLink, copyDecision, ifGoTo));
     }
@@ -262,7 +262,7 @@ const useControllPanelEditChainConditionViewModel = () => {
 
   const createGoToDecision = (ifGoTo: boolean) => {
     if (!isNullOrUndefined(decisionToEdit)) {
-      let goToDecision: ChainDecisionTO = new ChainDecisionTO();
+      const goToDecision: ChainDecisionTO = new ChainDecisionTO();
       goToDecision.chainFk = decisionToEdit.chainFk;
       const copyDecisionToEdit: ChainDecisionTO = Carv2Util.deepCopy(decisionToEdit);
       dispatch(EditActions.setMode.editChainDecision(goToDecision, copyDecisionToEdit, ifGoTo));
@@ -277,7 +277,7 @@ const useControllPanelEditChainConditionViewModel = () => {
   };
 
   return {
-    label: "EDIT * " + (selectedChain?.name || "") + " * " + (decisionToEdit?.name || ""),
+    label: 'EDIT * ' + (selectedChain?.name || '') + ' * ' + (decisionToEdit?.name || ''),
     name: decisionToEdit?.name,
     changeName,
     saveDecision,

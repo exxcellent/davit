@@ -1,24 +1,24 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Dropdown, DropdownItemProps } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
-import { DataRelationTO, Direction, RelationType } from "../../../../../../dataAccess/access/to/DataRelationTO";
-import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
-import { handleError } from "../../../../../../slices/GlobalSlice";
-import { masterDataSelectors } from "../../../../../../slices/MasterDataSlice";
-import { Carv2Util } from "../../../../../../utils/Carv2Util";
-import { Carv2ButtonIcon, Carv2ButtonLabel } from "../../../../../common/fragments/buttons/Carv2Button";
-import { Carv2DeleteButton } from "../../../../../common/fragments/buttons/Carv2DeleteButton";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { OptionField } from "../common/OptionField";
+import React, {FunctionComponent, useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Dropdown, DropdownItemProps} from 'semantic-ui-react';
+import {isNullOrUndefined} from 'util';
+import {DataCTO} from '../../../../../../dataAccess/access/cto/DataCTO';
+import {DataRelationTO, Direction, RelationType} from '../../../../../../dataAccess/access/to/DataRelationTO';
+import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
+import {handleError} from '../../../../../../slices/GlobalSlice';
+import {masterDataSelectors} from '../../../../../../slices/MasterDataSlice';
+import {Carv2Util} from '../../../../../../utils/Carv2Util';
+import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
+import {DavitButtonIcon, DavitButtonLabel} from '../../../../../common/fragments/buttons/DavitButton';
+import {ControllPanelEditSub} from '../common/ControllPanelEditSub';
+import {OptionField} from '../common/OptionField';
 
 export interface ControllPanelEditRelationProps {
   hidden: boolean;
 }
 
 export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelationProps> = (props) => {
-  const { hidden } = props;
+  const {hidden} = props;
   const {
     label,
     data1,
@@ -71,9 +71,9 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
           <OptionField label="Select second relation data">
             <div
               style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
               }}
             >
               <Dropdown
@@ -92,9 +92,9 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
           <OptionField label="Selct line ''in'' direction">
             <div
               style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
               }}
             >
               <Dropdown
@@ -112,8 +112,8 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
       <div className="columnDivider controllPanelEditChild">
         <div>
           <OptionField label="Navigation">
-            <Carv2ButtonLabel onClick={createAnother} label="Create another" />
-            <Carv2ButtonIcon onClick={saveRelation} icon="reply" />
+            <DavitButtonLabel onClick={createAnother} label="Create another" />
+            <DavitButtonIcon onClick={saveRelation} icon="reply" />
           </OptionField>
         </div>
       </div>
@@ -136,7 +136,7 @@ const useControllPanelEditRelationViewModel = () => {
     // check if component to edit is really set or go back to edit mode
     if (isNullOrUndefined(relationToEdit)) {
       dispatch(EditActions.setMode.edit());
-      handleError("Tried to go to edit relation without relationToedit specified");
+      handleError('Tried to go to edit relation without relationToedit specified');
     }
   }, [relationToEdit, dispatch]);
 
@@ -187,7 +187,7 @@ const useControllPanelEditRelationViewModel = () => {
   };
 
   const updateRelation = () => {
-    let copyRelationToEdit: DataRelationTO = Carv2Util.deepCopy(relationToEdit);
+    const copyRelationToEdit: DataRelationTO = Carv2Util.deepCopy(relationToEdit);
     dispatch(EditActions.relation.save(copyRelationToEdit));
   };
 
@@ -217,7 +217,7 @@ const useControllPanelEditRelationViewModel = () => {
   };
 
   return {
-    label: "EDIT * RELATION",
+    label: 'EDIT * RELATION',
     label1: relationToEdit?.label1,
     label2: relationToEdit?.label2,
     data1: relationToEdit?.data1Fk === -1 ? undefined : relationToEdit?.data1Fk,

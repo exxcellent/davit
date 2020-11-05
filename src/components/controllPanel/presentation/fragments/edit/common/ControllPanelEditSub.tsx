@@ -1,6 +1,6 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { editSelectors, Mode } from "../../../../../../slices/EditSlice";
+import React, {FunctionComponent} from 'react';
+import {useSelector} from 'react-redux';
+import {editSelectors, Mode} from '../../../../../../slices/EditSlice';
 
 interface ControllPanelEditProps {
   label: string;
@@ -9,21 +9,21 @@ interface ControllPanelEditProps {
 }
 
 export const ControllPanelEditSub: FunctionComponent<ControllPanelEditProps> = (props) => {
-  const { children, onClickNavItem, hidden } = props;
+  const {children, onClickNavItem, hidden} = props;
 
-  const { mode } = useControllPanelSubViewModel();
+  const {mode} = useControllPanelSubViewModel();
 
   const getModesArray = (mode: string): string[] => {
-    return mode.split("_");
+    return mode.split('_');
   };
 
   const getModesDivs = (mode: Mode, onClickNavItem?: (mode: string) => void): React.ReactNode => {
-    let navDivs = getModesArray(mode).map((spliitedModeItem) => {
+    const navDivs = getModesArray(mode).map((spliitedModeItem) => {
       return (
         <div
           onClick={onClickNavItem && (() => onClickNavItem(spliitedModeItem))}
           key={spliitedModeItem}
-          className={"verticalTab " + (hidden ? "slideable-hidden" : "slideable-verticaltab")}
+          className={'verticalTab ' + (hidden ? 'slideable-hidden' : 'slideable-verticaltab')}
         >
           {spliitedModeItem}
         </div>
@@ -36,9 +36,9 @@ export const ControllPanelEditSub: FunctionComponent<ControllPanelEditProps> = (
   };
 
   return (
-    <div style={{ display: "flex", width: "100%", height: "8em" }}>
+    <div style={{display: 'flex', width: '100%', height: '8em'}}>
       {getModesDivs(mode, onClickNavItem)}
-      <div className={"optionFieldSpacer " + (hidden ? "slideable-hidden" : "slideable")} style={{ padding: "10px" }}>
+      <div className={'optionFieldSpacer ' + (hidden ? 'slideable-hidden' : 'slideable')} style={{padding: '10px'}}>
         <div className="controllPanelEdit">{children}</div>
       </div>
     </div>

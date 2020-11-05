@@ -1,11 +1,11 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
-import { DecisionTO } from "../../../../dataAccess/access/to/DecisionTO";
-import { sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
-import { Carv2Util } from "../../../../utils/Carv2Util";
+import React, {FunctionComponent} from 'react';
+import {useSelector} from 'react-redux';
+import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
+import {isNullOrUndefined} from 'util';
+import {SequenceCTO} from '../../../../dataAccess/access/cto/SequenceCTO';
+import {DecisionTO} from '../../../../dataAccess/access/to/DecisionTO';
+import {sequenceModelSelectors} from '../../../../slices/SequenceModelSlice';
+import {Carv2Util} from '../../../../utils/Carv2Util';
 
 interface DecisionDropDownButtonProps extends DropdownProps {
   onSelect: (decision: DecisionTO | undefined) => void;
@@ -20,13 +20,13 @@ interface DecisionDropDownProps extends DropdownProps {
 }
 
 export const DecisionDropDownButton: FunctionComponent<DecisionDropDownButtonProps> = (props) => {
-  const { onSelect, icon } = props;
-  const { sequenceToEdit, decisionOptions, selectDecision } = useDecisionDropDownViewModel();
+  const {onSelect, icon} = props;
+  const {sequenceToEdit, decisionOptions, selectDecision} = useDecisionDropDownViewModel();
 
   return (
     <Dropdown
       options={decisionOptions()}
-      icon={decisionOptions().length > 0 ? icon : ""}
+      icon={decisionOptions().length > 0 ? icon : ''}
       onChange={(event, data) => onSelect(selectDecision(Number(data.value), sequenceToEdit))}
       className="button icon"
       floating
@@ -39,15 +39,15 @@ export const DecisionDropDownButton: FunctionComponent<DecisionDropDownButtonPro
 };
 
 export const DecisionDropDown: FunctionComponent<DecisionDropDownProps> = (props) => {
-  const { onSelect, placeholder, value, exclude } = props;
-  const { sequenceToEdit, decisionOptions, selectDecision } = useDecisionDropDownViewModel(exclude);
+  const {onSelect, placeholder, value, exclude} = props;
+  const {sequenceToEdit, decisionOptions, selectDecision} = useDecisionDropDownViewModel(exclude);
 
   return (
     <Dropdown
       options={decisionOptions()}
       selection
       selectOnBlur={false}
-      placeholder={placeholder || "Select decision ..."}
+      placeholder={placeholder || 'Select decision ...'}
       onChange={(event, data) => onSelect(selectDecision(Number(data.value), sequenceToEdit))}
       scrolling
       value={value === -1 ? undefined : value}
@@ -85,5 +85,5 @@ const useDecisionDropDownViewModel = (exclude?: number) => {
     return undefined;
   };
 
-  return { sequenceToEdit, decisionOptions, selectDecision };
+  return {sequenceToEdit, decisionOptions, selectDecision};
 };

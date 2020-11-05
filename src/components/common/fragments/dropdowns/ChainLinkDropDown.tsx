@@ -1,10 +1,10 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { ChainlinkTO } from "../../../../dataAccess/access/to/ChainlinkTO";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
-import { Carv2Util } from "../../../../utils/Carv2Util";
+import React, {FunctionComponent} from 'react';
+import {useSelector} from 'react-redux';
+import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
+import {isNullOrUndefined} from 'util';
+import {ChainlinkTO} from '../../../../dataAccess/access/to/ChainlinkTO';
+import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
+import {Carv2Util} from '../../../../utils/Carv2Util';
 
 interface ChainLinkDropDownButtonProps extends DropdownProps {
   onSelect: (link: ChainlinkTO | undefined) => void;
@@ -22,13 +22,13 @@ interface ChainLinkDropDownProps extends DropdownProps {
 }
 
 export const ChainLinkDropDownButton: FunctionComponent<ChainLinkDropDownButtonProps> = (props) => {
-  const { onSelect, icon, chainId, exclude } = props;
-  const { selectChainLink, linkOptions } = useChainStepDropDownViewModel(chainId, exclude);
+  const {onSelect, icon, chainId, exclude} = props;
+  const {selectChainLink, linkOptions} = useChainStepDropDownViewModel(chainId, exclude);
 
   return (
     <Dropdown
       options={linkOptions()}
-      icon={linkOptions().length === 0 ? "" : icon}
+      icon={linkOptions().length === 0 ? '' : icon}
       onChange={(event, data) => onSelect(selectChainLink(Number(data.value)))}
       className="button icon"
       floating
@@ -41,15 +41,15 @@ export const ChainLinkDropDownButton: FunctionComponent<ChainLinkDropDownButtonP
 };
 
 export const ChainLinkDropDown: FunctionComponent<ChainLinkDropDownProps> = (props) => {
-  const { onSelect, placeholder, value, chainId, exclude } = props;
-  const { linkOptions, selectChainLink } = useChainStepDropDownViewModel(chainId, exclude);
+  const {onSelect, placeholder, value, chainId, exclude} = props;
+  const {linkOptions, selectChainLink} = useChainStepDropDownViewModel(chainId, exclude);
 
   return (
     <Dropdown
       options={linkOptions()}
       selection
       selectOnBlur={false}
-      placeholder={placeholder || "Select link ..."}
+      placeholder={placeholder || 'Select link ...'}
       onChange={(event, data) => onSelect(selectChainLink(Number(data.value)))}
       scrolling
       value={value === -1 ? undefined : value}
@@ -88,5 +88,5 @@ const useChainStepDropDownViewModel = (chainId: number, exclude?: number) => {
     return undefined;
   };
 
-  return { linkOptions, selectChainLink };
+  return {linkOptions, selectChainLink};
 };

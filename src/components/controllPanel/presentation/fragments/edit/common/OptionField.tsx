@@ -1,11 +1,11 @@
-import React, { FunctionComponent } from "react";
+import React, {FunctionComponent} from 'react';
 
 export interface OptionFieldProps {
   label?: string;
 }
 
 export const OptionField: FunctionComponent<OptionFieldProps> = (props) => {
-  const { label, children } = props;
+  const {label, children} = props;
 
   return (
     <div className="optionFieldAround">
