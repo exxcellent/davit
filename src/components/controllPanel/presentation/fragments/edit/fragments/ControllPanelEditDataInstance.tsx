@@ -98,7 +98,6 @@ const useControllPanelEditDataInstanceViewModel = () => {
       copyData.data.instances.find(
           (inst) => inst.id === instanceId,
       )!.name = name;
-      // dispatch(EditActions.data.save(copyData));
       dispatch(EditActions.data.update(copyData));
     }
   };
