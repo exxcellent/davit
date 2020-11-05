@@ -28,21 +28,21 @@ export const ConstraintsHelper = {
     }
   },
 
-  deleteDataInstanceConstraintCheck(instanceId: number, dataStore: DataStoreCTO) {
+  deleteDataInstanceConstraintCheck(dataId: number, instanceId: number, dataStore: DataStoreCTO) {
     const actionExists: boolean = Array.from(dataStore.actions.values()).some(
-        (action) => action.instanceFk === instanceId,
+        (action) => action.dataFk === dataId && action.instanceFk === instanceId,
     );
 
     const decisionExists: boolean = Array.from(dataStore.decisions.values()).some(
-        (decision) => decision.dataAndInstaceIds.some((dataAndInstanceId) => dataAndInstanceId.instanceId === instanceId),
+        (decision) => decision.dataAndInstaceIds.some((dataAndInstanceId) => dataAndInstanceId.dataFk === dataId && dataAndInstanceId.instanceId === instanceId),
     );
 
     const chainDecisionExists: boolean = Array.from(dataStore.chaindecisions.values()).some(
-        (chainDecision) => chainDecision.dataAndInstanceIds.some((dataAndInstance) => dataAndInstance.instanceId === instanceId),
+        (chainDecision) => chainDecision.dataAndInstanceIds.some((dataAndInstance) => dataAndInstance.dataFk === dataId && dataAndInstance.instanceId === instanceId),
     );
 
     const initDataExists: boolean = Array.from(dataStore.initDatas.values()).some(
-        (initData) => initData.instanceFk === instanceId,
+        (initData) => initData.dataFk === dataId && initData.instanceFk === instanceId,
     );
 
     if (actionExists || decisionExists || initDataExists || chainDecisionExists) {

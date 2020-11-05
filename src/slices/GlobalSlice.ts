@@ -28,8 +28,7 @@ export const globalSlice = createSlice({
 const storefileData = (fileData: string): AppThunk => async (dispatch) => {
   const response: DataAccessResponse<void> = await DataAccess.storeFileData(fileData);
   if (response.code === 200) {
-    // TODO: workaround, es gibt bestimmt eine bessere Lösung.
-    window.location.reload(true);
+    window.location.reload();
   } else {
     dispatch(handleError(response.message));
   }

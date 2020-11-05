@@ -74,7 +74,7 @@ const useControllPanelEditConditionViewModel = () => {
   const setData = (dataAndInstanceIds: DataAndInstanceId[] | undefined) => {
     if (!Carv2Util.isNullOrUndefined(decisionToEdit)) {
       const copyDecisionToEdit: DecisionTO = Carv2Util.deepCopy(decisionToEdit);
-      copyDecisionToEdit.dataAndInstaceId = dataAndInstanceIds || [];
+      copyDecisionToEdit.dataAndInstaceIds = dataAndInstanceIds || [];
       dispatch(EditActions.decision.save(copyDecisionToEdit));
       dispatch(EditActions.decision.update(copyDecisionToEdit));
     }
@@ -110,6 +110,6 @@ const useControllPanelEditConditionViewModel = () => {
     actorFk: decisionToEdit?.actorFk,
     setActorFk,
     setData,
-    dataFks: decisionToEdit?.dataAndInstaceId,
+    dataFks: decisionToEdit?.dataAndInstaceIds,
   };
 };

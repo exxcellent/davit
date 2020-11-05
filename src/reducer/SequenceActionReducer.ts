@@ -19,9 +19,7 @@ export const SequenceActionReducer = {
     // copy actorDatas and set all to state PERSISTENT
     const newActorDatas: ActorData[] = actorDatas
         .filter((actorData)=>
-          actorData.state !== ActorDataState.DELETED
-        && actorData.state !== ActorDataState.CHECK_FAILED
-        && actorData.state !== ActorDataState.UPDATED_FROM,
+          !isTransiantState(actorData.state),
         )
         .map((actorData)=>{
           return {...actorData, state: ActorDataState.PERSISTENT};
@@ -125,7 +123,7 @@ export const SequenceActionReducer = {
         (actorData) => actorData.actorFk === decision.actorFk,
     );
     let goTo = decision.ifGoTo;
-    decision.dataAndInstaceId.forEach((dataAndInstanceId) => {
+    decision.dataAndInstaceIds.forEach((dataAndInstanceId) => {
       // if data and instance id are defined search exact match. if only data id is defined search for any instance of that data
       const checkedActorDatas: ActorData[] = filteredActorData
           .filter((actor) => actor.dataFk === dataAndInstanceId.dataFk && (!dataAndInstanceId.instanceId || actor.instanceFk === dataAndInstanceId.instanceId));
@@ -142,7 +140,11 @@ export const SequenceActionReducer = {
 };
 
 const findActorDataIndex = (actorId: number, dataId: number, actorDatas: ActorData[]): number => {
-  return actorDatas.findIndex((actorData) => actorData.actorFk === actorId && actorData.dataFk === dataId);
+  return actorDatas.findIndex((actorData) => actorData.actorFk === actorId && actorData.dataFk === dataId && !isTransiantState(actorData.state));
+};
+
+const isTransiantState = (state: ActorDataState) => {
+  return state === ActorDataState.DELETED || state=== ActorDataState.UPDATED_FROM ||state=== ActorDataState.CHECKED ||state=== ActorDataState.CHECK_FAILED;
 };
 function actorDataIsPresent(indexActorDataToEdit: number) {
   return indexActorDataToEdit !== -1;

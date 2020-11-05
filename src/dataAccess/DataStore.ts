@@ -18,19 +18,20 @@ class DataStore {
   }
 
   private readDataFromStorage() {
-    const dataObeject: string | null = localStorage.getItem(STORE_ID);
+    const dataObject: string | null = localStorage.getItem(STORE_ID);
     let objectStore: StoreTO = {} as StoreTO;
-    if (!dataObeject) {
+    if (!dataObject) {
       localStorage.setItem(STORE_ID, JSON.stringify({} as StoreTO));
     } else {
-      objectStore = JSON.parse(localStorage.getItem(STORE_ID)!);
+      // TODO: check here for DAVIT version. If diff. than call migrator.
+      objectStore = JSON.parse(dataObject);
     }
     this.readData(objectStore);
   }
 
   private readData(objectStore: StoreTO) {
     this.data = new DataStoreCTO();
-    Object.entries(objectStore).map(([key, value]) => {
+    Object.entries(objectStore).forEach(([key, value]) => {
       if (value !== undefined) {
         const dataEntry = Object.entries(this.data!).find(([dataKey, dataValue]) => dataKey === key);
         if (dataEntry) {
@@ -44,8 +45,6 @@ class DataStore {
       } else {
         throw new Error(`No value found for key ${key}`);
       }
-      // nur damit eslint ruhig ist...
-      return true;
     });
   }
 

@@ -26,12 +26,12 @@ export const DataDataAccessService = {
 
   saveDataCTO(dataCTO: DataCTO): DataCTO {
     CheckHelper.nullCheck(dataCTO, 'dataCTO');
-    const savedGeometricalData = TechnicalDataAccessService.saveGeometricalData(dataCTO.geometricalData);
     const copyDataCTO: DataCTO = Carv2Util.deepCopy(dataCTO);
+    const savedGeometricalData = TechnicalDataAccessService.saveGeometricalData(dataCTO.geometricalData);
     copyDataCTO.data.geometricalDataFk = savedGeometricalData.geometricalData.id;
-    const savedData = DataRepository.save(copyDataCTO.data);
+    const savedDataTO = DataRepository.save(copyDataCTO.data);
     return {
-      data: savedData,
+      data: savedDataTO,
       geometricalData: savedGeometricalData,
     };
   },

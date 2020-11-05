@@ -6,9 +6,8 @@ export class DataTO extends AbstractTO {
     public name: string = '',
     public geometricalDataFk: number = -1,
     public dataConnectionFks: number[] = [],
-    public instances: DataInstanceTO[] = [],
+    public instances: DataInstanceTO[] = [{id: -1, name: 'default'}],
   ) {
     super();
-    // add default instance
   }
 }

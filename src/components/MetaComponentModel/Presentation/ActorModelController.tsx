@@ -74,7 +74,7 @@ const useViewModel = () => {
   const getActorDatas = () => {
     const actorDatas: ViewFragmentProps[] = [];
     actorDatas.push(...getActorDatasFromView());
-    actorDatas.push(...getComponentDatasFromEdit());
+    actorDatas.push(...getActorDatasFromEdit());
     return actorDatas;
   };
 
@@ -94,12 +94,12 @@ const useViewModel = () => {
     return actorDatas;
   };
 
-  const getComponentDatasFromEdit = (): ViewFragmentProps[] => {
+  const getActorDatasFromEdit = (): ViewFragmentProps[] => {
     const actorDatas: ViewFragmentProps[] = [];
-    const actorDatasFromStepToEdit: ViewFragmentProps[] = stepToEdit?.actions.map(mapActionToActorDatas) || [];
-    const actorDataFromActionToEdit: ViewFragmentProps | undefined = actionToEdit
+    const actorDatasFromStepToEdit: (ViewFragmentProps | undefined)[] = stepToEdit?.actions.map((action) => action? mapActionToActorDatas(action) : []).flat(1) || [];
+    const actorDataFromActionToEdit: ViewFragmentProps[] = actionToEdit
       ? mapActionToActorDatas(actionToEdit)
-      : undefined;
+      : [];
     const actorDataFromDecisionToEdit: ViewFragmentProps[] = mapDecisionToActorData(decisionToEdit);
     const actorDatasFromDataSetupEdit: ViewFragmentProps[] = dataSetupToEdit
       ? dataSetupToEdit.initDatas.map(mapInitDataToActorData)
@@ -110,15 +110,15 @@ const useViewModel = () => {
     const actorDatasFromInitData: ViewFragmentProps | undefined = initDataToEdit
       ? mapInitDataToActorData(initDataToEdit)
       : undefined;
-    actorDatas.push(...actorDatasFromStepToEdit);
+    actorDatasFromStepToEdit.forEach((actorData) => {
+      actorData && actorDatas.push(actorData);
+    });
     actorDatas.push(...actorDataFromDecisionToEdit);
     actorDatas.push(...actorDatasFromDataSetupEdit);
     if (currentActorDatas.length <= 0) {
       actorDatas.push(...actorDatasFromDataSetupView);
     }
-    if (actorDataFromActionToEdit) {
-      actorDatas.push(actorDataFromActionToEdit);
-    }
+    actorDatas.push(...actorDataFromActionToEdit);
     if (actorDatasFromInitData) {
       actorDatas.push(actorDatasFromInitData);
     }
@@ -129,22 +129,37 @@ const useViewModel = () => {
     return propOne.parentId === propTwo.parentId && propOne.name === propTwo.name;
   };
 
-  const mapActionToActorDatas = (actionItem: ActionTO, instanceId?: number): ViewFragmentProps => {
+  const mapActionToActorDatas = (actionItem: ActionTO): ViewFragmentProps[] => {
     const state: ActorDataState = mapActionTypeToViewFragmentState(actionItem.actionType);
-    return {
-      name: getDataNameById(actionItem.dataFk, instanceId || actionItem.instanceFk),
+    const parentId = state === ActorDataState.SENT ? actionItem.sendingActorFk : actionItem.receivingActorFk;
+
+    const viewFragmentProps: ViewFragmentProps[] = [];
+    viewFragmentProps.push({
+      name: getDataNameById(actionItem.dataFk, actionItem.instanceFk),
       state: state,
-      parentId: actionItem.receivingActorFk,
-    };
+      parentId: parentId,
+    });
+
+    if (actionItem.actionType===ActionType.SEND_AND_DELETE) {
+      viewFragmentProps.push({
+        name: getDataNameById(actionItem.dataFk, actionItem.instanceFk),
+        state: ActorDataState.DELETED,
+        parentId: actionItem.sendingActorFk,
+      });
+    }
+
+    return viewFragmentProps;
   };
 
   const mapErrorToActorDatas = (errorItem: ActionTO): ViewFragmentProps => {
     const state: ActorDataState = mapErrorTypeToViewFragmentState(errorItem.actionType);
 
+    const parentId = state === ActorDataState.ERROR_SEND ? errorItem.sendingActorFk : errorItem.receivingActorFk;
+
     return {
       name: getDataNameById(errorItem.dataFk, errorItem.instanceFk),
       state: state,
-      parentId: errorItem.receivingActorFk,
+      parentId: parentId,
     };
   };
 
@@ -159,8 +174,8 @@ const useViewModel = () => {
   const mapDecisionToActorData = (decision: DecisionTO | null): ViewFragmentProps[] => {
     let props: ViewFragmentProps[] = [];
     if (decision) {
-      if (decision.dataAndInstaceId !== undefined && decision.dataAndInstaceId.length > 0) {
-        props = decision.dataAndInstaceId.map((data) => {
+      if (decision.dataAndInstaceIds !== undefined && decision.dataAndInstaceIds.length > 0) {
+        props = decision.dataAndInstaceIds.map((data) => {
           return {
             parentId: decision.actorFk,
             name: getDataNameById(data.dataFk, data.instanceId),
@@ -181,15 +196,14 @@ const useViewModel = () => {
   };
 
   const getDataNameById = (dataId: number, instanceId?: number): string => {
-    const defaultInstanceId: number = 1;
     let dataName: string = 'Could not find Data';
     const data: DataCTO | undefined = datas.find((data) => data.data.id === dataId);
     if (data) {
       dataName = data.data.name;
-      if (instanceId && instanceId > defaultInstanceId) {
+      if (instanceId && instanceId!==-1) {
         dataName
-          = dataName + ' - ' + data.data.instances.find((inst) => inst.id === instanceId)?.name
-          || 'Could not find instance Name';
+          = dataName + ' - ' + (data.data.instances.find((inst) => inst.id === instanceId)?.name
+          || 'Could not find instance Name');
       }
     }
     return dataName;
@@ -205,10 +219,8 @@ const useViewModel = () => {
         cdState = ActorDataState.DELETED;
         break;
       case ActionType.SEND:
-        cdState = ActorDataState.NEW;
-        break;
       case ActionType.SEND_AND_DELETE:
-        cdState = ActorDataState.NEW;
+        cdState = ActorDataState.SENT;
         break;
     }
     return cdState;
@@ -224,10 +236,8 @@ const useViewModel = () => {
         cdState = ActorDataState.ERROR_DELETE;
         break;
       case ActionType.SEND:
-        cdState = ActorDataState.ERROR_ADD;
-        break;
       case ActionType.SEND_AND_DELETE:
-        cdState = ActorDataState.ERROR_ADD;
+        cdState = ActorDataState.ERROR_SEND;
         break;
     }
     return cdState;

@@ -1,6 +1,5 @@
 import React, {FunctionComponent} from 'react';
 import {Button} from 'semantic-ui-react';
-
 import {ActorCTO} from '../../../../../../dataAccess/access/cto/ActorCTO';
 import {DataCTO} from '../../../../../../dataAccess/access/cto/DataCTO';
 import {ChainTO} from '../../../../../../dataAccess/access/to/ChainTO';
@@ -15,6 +14,7 @@ import {RelationDropDownButton} from '../../../../../common/fragments/dropdowns/
 import {SequenceDropDownButton} from '../../../../../common/fragments/dropdowns/SequenceDropDown';
 import {ControllPanelEditSub} from '../common/ControllPanelEditSub';
 import {OptionField} from '../common/OptionField';
+
 
 export interface ControllPanelEditMenuProps {
   editOrAddActor: (actor?: ActorCTO) => void;
