@@ -1,7 +1,6 @@
 /* eslint-disable react/display-name */
-import React, {createRef, FunctionComponent, useEffect, useRef, useState} from 'react';
+import React, {FunctionComponent, useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {Icon} from 'semantic-ui-react';
 import {isNullOrUndefined} from 'util';
 import {Carv2TableButton} from '../../../components/common/fragments/buttons/Carv2TableButton';
 import {ChainlinkCTO} from '../../../dataAccess/access/cto/ChainlinkCTO';
@@ -12,16 +11,19 @@ import {ChainTO} from '../../../dataAccess/access/to/ChainTO';
 import {DataSetupTO} from '../../../dataAccess/access/to/DataSetupTO';
 import {DecisionTO} from '../../../dataAccess/access/to/DecisionTO';
 import {SequenceTO} from '../../../dataAccess/access/to/SequenceTO';
-import {GoTo, GoToTypes, Intermediate, Terminal} from '../../../dataAccess/access/types/GoToType';
+import {GoTo, GoToTypes, Intermediate} from '../../../dataAccess/access/types/GoToType';
 import {GoToChain, GoToTypesChain, IntermediateChain} from '../../../dataAccess/access/types/GoToTypeChain';
 import {CalcChain, CalcChainLink} from '../../../services/SequenceChainService';
 import {CalculatedStep} from '../../../services/SequenceService';
 import {EditActions, editSelectors, Mode} from '../../../slices/EditSlice';
 import {masterDataSelectors} from '../../../slices/MasterDataSlice';
 import {SequenceModelActions, sequenceModelSelectors} from '../../../slices/SequenceModelSlice';
+import {DavitTable} from '../../common/fragments/DavitTable';
 import {TabFragment} from '../fragments/TabFragment';
 import {TabGroupFragment} from '../fragments/TabGroupFragment';
-
+import {useGetCalcSequenceTableData} from '../tables/CalcSequence';
+import {useGetSequenceModelsTableBody} from '../tables/ModelSequence';
+import {useGetStepTableData} from '../tables/ModelSequenceStep';
 
 interface SequenceTableModelControllerProps {
   fullScreen?: boolean;
@@ -44,11 +46,8 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
 ) => {
   const {fullScreen} = props;
   const {
-    getCalcSequenceTableBody,
     getDecisionTableBody,
-    getStepTableBody,
     getChainTableBody,
-    getSequenceModelsTableBody,
     getChainDecisionTableBody,
     getChainLinkTableBody,
     getChainModelsTableBody,
@@ -59,6 +58,10 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
     showCalcSequenceTab,
     activeTab,
     setActiveTab,
+
+    modelSequenceData,
+    modelSequenceStepData,
+    calcSequenceData,
   } = useSequenceTableViewModel();
 
   const createTable = (headerValues: string[], body: JSX.Element[]) => {
@@ -86,12 +89,6 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
     'ACTIONS',
     'START',
   ];
-  const sequenceStepTableHead = [
-    'NAME',
-    'GOTO',
-    'ACTIONS',
-    'START',
-  ];
   const seqeunceDcisionsTableHead = [
     'NAME',
     'IF GOTO',
@@ -99,13 +96,7 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
     'ACTIONS',
     'START',
   ];
-  const calcSequenceTableHead = [
-    'INDEX',
-    'NAME',
-    'TYPE',
-    'ACTION-ERROR',
-  ];
-  const seqeunceModelTableHead = ['NAME', 'ACTIONS'];
+
   const chainModelTableHead = ['NAME', 'ACTIONS'];
   const dataSetupTableHead = ['NAME', 'ACTIONS'];
 
@@ -212,15 +203,15 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
         {activeTab === ActiveTab.chainlinks
           && createTable(chainlinkTableHead, getChainLinkTableBody())}
         {activeTab === ActiveTab.step
-          && createTable(sequenceStepTableHead, getStepTableBody())}
+          && <DavitTable {...modelSequenceStepData} tableHeight={tableHeight}/>}
         {activeTab === ActiveTab.decision
           && createTable(seqeunceDcisionsTableHead, getDecisionTableBody())}
 
         {activeTab === ActiveTab.sequence
-          && createTable(calcSequenceTableHead, getCalcSequenceTableBody())}
+          && <DavitTable {...calcSequenceData} tableHeight={tableHeight}/>}
 
         {activeTab === ActiveTab.sequenceModels
-          && createTable(seqeunceModelTableHead, getSequenceModelsTableBody())}
+          && <DavitTable {...modelSequenceData} tableHeight={tableHeight}/>}
         {activeTab === ActiveTab.chainModel
           && createTable(chainModelTableHead, getChainModelsTableBody())}
         {activeTab === ActiveTab.dataSetup
@@ -235,21 +226,14 @@ const useSequenceTableViewModel = () => {
   const selectSequence: SequenceCTO | null = useSelector(
       sequenceModelSelectors.selectSequence,
   );
-  const stepIndex: number | null = useSelector(
-      sequenceModelSelectors.selectCurrentStepIndex,
-  );
+
   const chainIndex: number | null = useSelector(
       sequenceModelSelectors.selectCurrentLinkIndex,
   );
   const calcSteps: CalculatedStep[] = useSelector(
       sequenceModelSelectors.selectCalcSteps,
   );
-  const terminalStep: Terminal | null = useSelector(
-      sequenceModelSelectors.selectTerminalStep,
-  );
-  const loopStepStartIndex: number | null = useSelector(
-      sequenceModelSelectors.selectLoopStepStartIndex,
-  );
+
   const calcChain: CalcChain | null = useSelector(
       sequenceModelSelectors.selectCalcChain,
   );
@@ -303,112 +287,6 @@ const useSequenceTableViewModel = () => {
     }
   }, [mode, selectedChain]);
 
-  function getModelElementName(step: CalculatedStep, selectSequence: SequenceCTO | null) {
-    switch (step.type) {
-      case 'STEP':
-        return selectSequence?.sequenceStepCTOs.find(
-          (item) => item.squenceStepTO.id === step.modelElementFk
-          )?.squenceStepTO.name || 'Step not found!';
-      case 'DECISION':
-        return selectSequence?.decisions.find(
-          (item) => item.id === step.modelElementFk
-          )?.name || 'Decision not found!';
-      case 'INIT':
-        return 'Initial step';
-      default:
-        return `ModelElement type has type ${step.type} which is not known`;
-    }
-  }
-
-  const createCalcSequenceStepColumn = (
-      step: CalculatedStep,
-      index: number,
-  ): JSX.Element => {
-    let trClass: string
-      = loopStepStartIndex && loopStepStartIndex <= index
-        ? 'carv2TrTerminalError'
-        : 'carv2Tr';
-
-    const myRef = createRef<HTMLTableRowElement>();
-    const scrollToRef = (ref: any) => window.scrollTo(0, ref.offsetTop);
-
-    if (index === stepIndex) {
-      trClass = 'carv2TrMarked';
-      scrollToRef(myRef);
-    }
-
-    const hasError = step.errors.length > 0 ? true : false;
-
-    return (
-      <tr
-        key={index}
-        className={'clickable ' + trClass}
-        onClick={() => handleSequenceTableClickEvent(index)}
-        ref={myRef}
-      >
-        <td>{index}</td>
-        <td>{getModelElementName(step, selectSequence)}</td>
-        <td>{step.type}</td>
-        <td>{hasError && <Icon name="warning sign" color="red" />}</td>
-      </tr>
-    );
-  };
-
-  const createModelStepColumn = (
-      step: SequenceStepCTO,
-      index: number,
-  ): JSX.Element => {
-    const name = step.squenceStepTO.name;
-    const gotoName: string = getGotoName(
-        step.squenceStepTO.goto,
-      selectSequence?.sequenceStepCTOs || [],
-      selectSequence?.decisions || [],
-    );
-    const root: string = step.squenceStepTO.root ? 'start' : '';
-
-    const trClass = 'carv2Tr';
-
-    return (
-      <tr key={index} className={trClass}>
-        <td>{name}</td>
-        <td>{gotoName}</td>
-        <td>
-          <Carv2TableButton
-            icon="wrench"
-            onClick={() => dispatch(EditActions.setMode.editStep(step))}
-          />
-        </td>
-        <td>{root}</td>
-      </tr>
-    );
-  };
-  const createSequenceModelColumn = (
-      sequence: SequenceTO,
-      index: number,
-  ): JSX.Element => {
-    const name = sequence.name;
-    const trClass = 'carv2Tr';
-    return (
-      <tr key={index} className={trClass}>
-        <td>{name}</td>
-        <td>
-          <Carv2TableButton
-            icon="wrench"
-            onClick={() =>
-              dispatch(EditActions.setMode.editSequence(sequence.id))
-            }
-          />
-          <Carv2TableButton
-            icon="hand pointer"
-            onClick={() => {
-              dispatch(SequenceModelActions.setCurrentSequence(sequence.id));
-              dispatch(EditActions.setMode.view());
-            }}
-          />
-        </td>
-      </tr>
-    );
-  };
   const createChainModelColumn = (
       chain: ChainTO,
       index: number,
@@ -587,43 +465,6 @@ const useSequenceTableViewModel = () => {
     );
   };
 
-  const createTerminalColumn = (terminal: Terminal): JSX.Element => {
-    const className = 'carv2TrTerminal' + terminal.type;
-    return (
-      <tr key={'Terminal'} className={className}>
-        <td> </td>
-        <td>{terminal.type}</td>
-        <td> </td>
-        <td> </td>
-      </tr>
-    );
-  };
-
-  const getCalcSequenceTableBody = () => {
-    let list: JSX.Element[] = [];
-    list = calcSteps.map((step, index) =>
-      createCalcSequenceStepColumn(step, index),
-    );
-    if (terminalStep) {
-      list.push(createTerminalColumn(terminalStep));
-    }
-    const numberOfColumns = 5;
-    fillWithEmptyRows(list, createEmptyRow, numberOfColumns);
-    return list;
-  };
-
-  const getSequenceModelsTableBody = () => {
-    let list: JSX.Element[] = [];
-    if (sequences) {
-      list = sequences.map((sequence, index) =>
-        createSequenceModelColumn(sequence, index),
-      );
-    }
-    const numberOfColumns = 1;
-    fillWithEmptyRows(list, createEmptyRow, numberOfColumns);
-    return list;
-  };
-
   const getChainModelsTableBody = () => {
     let list: JSX.Element[] = [];
     if (sequences) {
@@ -632,18 +473,6 @@ const useSequenceTableViewModel = () => {
       );
     }
     const numberOfColumns = 1;
-    fillWithEmptyRows(list, createEmptyRow, numberOfColumns);
-    return list;
-  };
-
-  const getStepTableBody = () => {
-    let list: JSX.Element[] = [];
-    if (selectSequence !== null) {
-      list = selectSequence?.sequenceStepCTOs.map((step, index) =>
-        createModelStepColumn(step, index)
-      );
-    }
-    const numberOfColumns = 4;
     fillWithEmptyRows(list, createEmptyRow, numberOfColumns);
     return list;
   };
@@ -718,10 +547,6 @@ const useSequenceTableViewModel = () => {
     );
   };
 
-  const handleSequenceTableClickEvent = (index: number) => {
-    dispatch(SequenceModelActions.setCurrentStepIndex(index));
-  };
-
   const handleChainTableClickEvent = (index: number) => {
     dispatch(SequenceModelActions.setCurrentLinkIndex(index));
   };
@@ -730,11 +555,8 @@ const useSequenceTableViewModel = () => {
     title: selectSequence
       ? selectSequence.sequenceTO.name
       : 'Select data setup and sequence to calculate ...',
-    getCalcSequenceTableBody,
     getDecisionTableBody,
-    getStepTableBody,
     getChainTableBody,
-    getSequenceModelsTableBody,
     getChainDecisionTableBody,
     getChainLinkTableBody,
     getChainModelsTableBody,
@@ -745,6 +567,10 @@ const useSequenceTableViewModel = () => {
     showCalcSequenceTab: calcSteps.length > 0,
     activeTab,
     setActiveTab,
+
+    modelSequenceData: useGetSequenceModelsTableBody(sequences),
+    modelSequenceStepData: useGetStepTableData(selectSequence),
+    calcSequenceData: useGetCalcSequenceTableData(calcSteps, selectSequence),
   };
 };
 

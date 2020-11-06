@@ -1,10 +1,10 @@
 import React, {FunctionComponent} from 'react';
-import {Button} from 'semantic-ui-react';
+import {Button, IconProps, SemanticShorthandItem} from 'semantic-ui-react';
 
 interface Carv2TableButtonProps {
   onClick: () => void;
   disable?: boolean;
-  icon?: string;
+  icon?: SemanticShorthandItem<IconProps>;
 }
 
 export const Carv2TableButton: FunctionComponent<Carv2TableButtonProps> = (props) => {
