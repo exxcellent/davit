@@ -12,10 +12,21 @@ interface TabPanelProps{
     showCalcSequenceTab: boolean;
 }
 
+interface TabGroupDefinition{
+    label: string;
+    tabs: TabDefinition[];
+    condition?: boolean;
+}
+interface TabDefinition {
+    label: string;
+    identifier: ActiveTab;
+    condition?: boolean;
+}
+
 export const TabPanel: FunctionComponent<TabPanelProps> = (props) => {
   const {activeTab, setActiveTab, showCalcChainTab, showCalcSequenceTab, showChainModelTab, showSequenceModelTabs} = props;
 
-  const tabDefinitions = [
+  const tabDefinitions: TabGroupDefinition[] = [
     {
       label: 'Calculated',
       condition: (showCalcChainTab || showCalcSequenceTab),
@@ -79,7 +90,7 @@ export const TabPanel: FunctionComponent<TabPanelProps> = (props) => {
     },
   ];
 
-  const mapTabGroups = (tabGroup: any) => {
+  const mapTabGroups = (tabGroup: TabGroupDefinition) => {
     return (
       (tabGroup.condition === undefined || tabGroup.condition)) && (
       <TabGroupFragment label={tabGroup.label}>
