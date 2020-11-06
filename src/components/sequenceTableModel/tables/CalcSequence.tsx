@@ -57,7 +57,7 @@ const createCalcSequenceStepColumn = (selectedSequence: SequenceCTO | null, step
   return {
     actions: [],
     data: [index.toString(), getModelElementName(step, selectedSequence), step.type, hasError ? getWarningIcon() : ''],
-    trClass,
+    trClass: 'clickable ' + trClass,
     onClick: clickEvent,
   };
 };
