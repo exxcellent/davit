@@ -23,6 +23,7 @@ export const useGetCalcSequenceTableData = (calcSteps: CalculatedStep[], selecte
 
   const bodyData: DavitTableRowData[] = calcSteps.map((step, index) =>{
     const onClick = ()=> dispatch(SequenceModelActions.setCurrentStepIndex(index));
+
     return createCalcSequenceStepColumn(selectedSequence, step, index, stepIndex, loopStepStartIndex, onClick);
   });
   if (terminalStep) {

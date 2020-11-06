@@ -22,7 +22,7 @@ export const TabPanel: FunctionComponent<TabPanelProps> = (props) => {
       tabs: [
         {
           label: 'Chain',
-          identifier: ActiveTab.sequence,
+          identifier: ActiveTab.chain,
           condition: showCalcChainTab,
         },
         {
