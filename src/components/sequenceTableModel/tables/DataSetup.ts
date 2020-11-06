@@ -39,24 +39,4 @@ const createDataSetupColumn = (
     data: [name],
     actions: [editAction, selectAction],
   };
-  // return (
-  //   <tr key={index} className={trClass}>
-  //     <td>{name}</td>
-  //     <td>
-  //       <Carv2TableButton
-  //         icon="wrench"
-  //         onClick={() =>
-  //           dispatch(EditActions.setMode.editDataSetup(dataSetup.id))
-  //         }
-  //       />
-  //       <Carv2TableButton
-  //         icon="hand pointer"
-  //         onClick={() => {
-  //           dispatch(SequenceModelActions.setCurrentDataSetup(dataSetup.id));
-  //           dispatch(EditActions.setMode.view());
-  //         }}
-  //       />
-  //     </td>
-  //   </tr>
-  // );
 };
