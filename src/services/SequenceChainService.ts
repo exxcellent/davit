@@ -106,8 +106,8 @@ const executeDecisionCheck = (decision: ChainDecisionTO, actorDatas: ActorData[]
   let goTo: GoToChain | undefined;
   if (decision.dataAndInstanceIds !== undefined) {
     decision.dataAndInstanceIds.forEach((dataAndInstaceId) => {
-      const isIncluded: boolean = filteredCompData.some((cd) => cd.dataFk === dataAndInstaceId.dataFk);
-      if (decision.has !== isIncluded) {
+      const isIncluded: boolean = filteredCompData.some((cd) => cd.dataFk === dataAndInstaceId.dataFk && cd.instanceFk === dataAndInstaceId.instanceId);
+      if (!isIncluded) {
         goTo = decision.elseGoTo;
       }
     });
