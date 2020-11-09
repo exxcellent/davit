@@ -36,7 +36,6 @@ export const DavitDropDown: FunctionComponent<DavitDropDownProps> = (props) => {
       selection
       selectOnBlur={false}
       placeholder={placeholder || ''}
-      trigger={<React.Fragment />}
       scrolling
       value={value}
       disabled={dropdownItems.length < 1}

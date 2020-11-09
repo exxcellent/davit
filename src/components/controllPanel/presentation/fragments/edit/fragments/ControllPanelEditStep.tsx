@@ -13,7 +13,7 @@ import {DavitUtil} from '../../../../../../utils/DavitUtil';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import {DavitButtonIcon} from '../../../../../common/fragments/buttons/DavitButton';
 import {DavitRootButton} from '../../../../../common/fragments/buttons/DavitRootButton';
-import {ActionDropDown} from '../../../../../common/fragments/dropdowns/ActionDropDown';
+import {ActionButtonDropDown} from '../../../../../common/fragments/dropdowns/ActionButtonDropDown';
 import {DecisionDropDown} from '../../../../../common/fragments/dropdowns/DecisionDropDown';
 import {GoToOptionDropDown} from '../../../../../common/fragments/dropdowns/GoToOptionDropDown';
 import {StepDropDown} from '../../../../../common/fragments/dropdowns/StepDropDown';
@@ -90,7 +90,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
               <Button id="buttonGroupLabel" disabled inverted color="orange">
                 Action
               </Button>
-              <ActionDropDown
+              <ActionButtonDropDown
                 onSelect={(action) => {
                   editOrAddAction(action);
                   updateStep();
