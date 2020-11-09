@@ -1,10 +1,10 @@
 import React, {FunctionComponent} from 'react';
 import {useSelector} from 'react-redux';
-import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
-import {isNullOrUndefined} from 'util';
+import {DropdownProps} from 'semantic-ui-react';
 import {ChainDecisionTO} from '../../../../dataAccess/access/to/ChainDecisionTO';
 import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
 import {DavitUtil} from '../../../../utils/DavitUtil';
+import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from './DavitDropDown';
 
 interface ChainDecisionDropDownButtonProps extends DropdownProps {
   onSelect: (link: ChainDecisionTO | undefined) => void;
@@ -26,16 +26,10 @@ export const ChainDecisionDropDownButton: FunctionComponent<ChainDecisionDropDow
   const {createDecisionOptions, selectChainDecision} = useChainDecisionDropDownViewModel(chainId, exclude);
 
   return (
-    <Dropdown
-      options={createDecisionOptions()}
-      icon={createDecisionOptions().length === 0 ? '' : icon}
-      onChange={(event, data) => onSelect(selectChainDecision(Number(data.value)))}
-      className="button icon"
-      floating
-      selectOnBlur={false}
-      trigger={<React.Fragment />}
-      scrolling
-      disabled={createDecisionOptions().length === 0}
+    <DavitIconDropDown
+      dropdownItems={createDecisionOptions()}
+      icon={icon}
+      onSelect={(item) => onSelect(selectChainDecision(Number(item.value)))}
     />
   );
 };
@@ -45,15 +39,11 @@ export const ChainDecisionDropDown: FunctionComponent<ChainDecisionDropDownProps
   const {createDecisionOptions, selectChainDecision} = useChainDecisionDropDownViewModel(chainId, exclude);
 
   return (
-    <Dropdown
-      options={createDecisionOptions()}
-      selection
-      selectOnBlur={false}
-      placeholder={placeholder || 'Select link ...'}
-      onChange={(event, data) => onSelect(selectChainDecision(Number(data.value)))}
-      scrolling
-      value={value === -1 ? undefined : value}
-      disabled={createDecisionOptions().length === 0}
+    <DavitDropDown
+      dropdownItems={createDecisionOptions()}
+      onSelect={(item) => onSelect(selectChainDecision(Number(item.value)))}
+      placeholder={placeholder}
+      value={value?.toString()}
     />
   );
 };
@@ -61,16 +51,16 @@ export const ChainDecisionDropDown: FunctionComponent<ChainDecisionDropDownProps
 const useChainDecisionDropDownViewModel = (chainId: number, exclude?: number) => {
   const chainDecisions: ChainDecisionTO[] = useSelector(masterDataSelectors.chainDecisions);
 
-  const chainDecisionToOption = (decision: ChainDecisionTO): DropdownItemProps => {
+  const chainDecisionToOption = (decision: ChainDecisionTO): DavitDropDownItemProps => {
     return {
       key: decision.id,
-      value: decision.id,
+      value: decision.id.toString(),
       text: decision.name,
     };
   };
 
-  const createDecisionOptions = (): DropdownItemProps[] => {
-    if (!isNullOrUndefined(chainDecisions)) {
+  const createDecisionOptions = (): DavitDropDownItemProps[] => {
+    if (!DavitUtil.isNullOrUndefined(chainDecisions)) {
       let copyDecision: ChainDecisionTO[] = DavitUtil.deepCopy(chainDecisions);
       copyDecision = copyDecision.filter((dec) => dec.chainFk === chainId);
       if (exclude) {
@@ -82,7 +72,7 @@ const useChainDecisionDropDownViewModel = (chainId: number, exclude?: number) =>
   };
 
   const selectChainDecision = (id: number): ChainDecisionTO | undefined => {
-    if (!isNullOrUndefined(chainDecisions) && !isNullOrUndefined(id)) {
+    if (!DavitUtil.isNullOrUndefined(chainDecisions) && !DavitUtil.isNullOrUndefined(id)) {
       return chainDecisions.find((step) => step.id === id);
     }
     return undefined;
