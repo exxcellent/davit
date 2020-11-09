@@ -1699,8 +1699,7 @@
             "instances": [
                 {
                     "id": 1,
-                    "name": "Kundenstamm",
-                    "defaultInstance": true
+                    "name": "Kundenstamm"
                 }
             ]
         },
@@ -1712,18 +1711,16 @@
             "instances": [
                 {
                     "id": 1,
-                    "name": "Vertrag",
-                    "defaultInstance": true
+                    "name": "Vertrag"
+                    
                 },
                 {
                     "id": 2,
-                    "name": "In Verhandlung",
-                    "defaultInstance": false
+                    "name": "In Verhandlung"
                 },
                 {
                     "id": 3,
-                    "name": "Vereinbart",
-                    "defaultInstance": false
+                    "name": "Vereinbart"
                 }
             ]
         },
@@ -1735,8 +1732,7 @@
             "instances": [
                 {
                     "id": 1,
-                    "name": "Konditionen",
-                    "defaultInstance": true
+                    "name": "Konditionen"
                 }
             ]
         },
@@ -1748,8 +1744,7 @@
             "instances": [
                 {
                     "id": 1,
-                    "name": "Konfiguration",
-                    "defaultInstance": true
+                    "name": "Konfiguration"
                 }
             ]
         },
@@ -1761,8 +1756,7 @@
             "instances": [
                 {
                     "id": 1,
-                    "name": "Vertrags und Konditonen Report",
-                    "defaultInstance": true
+                    "name": "Vertrags und Konditonen Report"
                 }
             ]
         },
@@ -1774,18 +1768,15 @@
             "instances": [
                 {
                     "id": 1,
-                    "name": "Z Leasinggeber Antwort",
-                    "defaultInstance": true
+                    "name": "Z Leasinggeber Antwort"
                 },
                 {
                     "id": 2,
-                    "name": "OK",
-                    "defaultInstance": false
+                    "name": "OK"
                 },
                 {
                     "id": 3,
-                    "name": "NOK",
-                    "defaultInstance": false
+                    "name": "NOK"
                 }
             ]
         },
@@ -1797,18 +1788,15 @@
             "instances": [
                 {
                     "id": 1,
-                    "name": "Z Autovermieter Antwort",
-                    "defaultInstance": true
+                    "name": "Z Autovermieter Antwort"
                 },
                 {
                     "id": 2,
-                    "name": "OK",
-                    "defaultInstance": false
+                    "name": "OK"
                 },
                 {
                     "id": 3,
-                    "name": "NOK",
-                    "defaultInstance": false
+                    "name": "NOK"
                 }
             ]
         },
@@ -1820,28 +1808,24 @@
             "instances": [
                 {
                     "id": 1,
-                    "name": "Z Daimler Aktionen",
-                    "defaultInstance": true
+                    "name": "Z Daimler Aktionen"
+                    
                 },
                 {
                     "id": 2,
-                    "name": "Vertrag erstellen",
-                    "defaultInstance": false
+                    "name": "Vertrag erstellen"
                 },
                 {
                     "id": 3,
-                    "name": "Vertrag auf vereinbart setzten",
-                    "defaultInstance": false
+                    "name": "Vertrag auf vereinbart setzten"
                 },
                 {
                     "id": 4,
-                    "name": "Monatsvolumen buchen",
-                    "defaultInstance": false
+                    "name": "Monatsvolumen buchen"
                 },
                 {
                     "id": 5,
-                    "name": "Lege Auftrag in IBIS an",
-                    "defaultInstance": false
+                    "name": "Lege Auftrag in IBIS an"
                 }
             ]
         },
@@ -1853,18 +1837,16 @@
             "instances": [
                 {
                     "id": 1,
-                    "name": "Auftrag",
-                    "defaultInstance": true
+                    "name": "Auftrag"
+                    
                 },
                 {
                     "id": 2,
-                    "name": "Gebucht",
-                    "defaultInstance": false
+                    "name": "Gebucht"
                 },
                 {
                     "id": 3,
-                    "name": "Übernommen",
-                    "defaultInstance": false
+                    "name": "Übernommen"
                 }
             ]
         },
@@ -1876,8 +1858,8 @@
             "instances": [
                 {
                     "id": 1,
-                    "name": "Fahrzeug",
-                    "defaultInstance": true
+                    "name": "Fahrzeug"
+                
                 }
             ]
         },
@@ -1889,8 +1871,8 @@
             "instances": [
                 {
                     "id": 1,
-                    "name": "Z Lagereingangsmeldung",
-                    "defaultInstance": true
+                    "name": "Z Lagereingangsmeldung"
+                    
                 }
             ]
         },
@@ -1902,8 +1884,8 @@
             "instances": [
                 {
                     "id": 1,
-                    "name": "Briefdaten",
-                    "defaultInstance": true
+                    "name": "Briefdaten"
+                    
                 }
             ]
         },
@@ -1915,13 +1897,12 @@
             "instances": [
                 {
                     "id": 1,
-                    "name": "Z FLAMS Aktion",
-                    "defaultInstance": true
+                    "name": "Z FLAMS Aktion"
+                    
                 },
                 {
                     "id": 2,
-                    "name": "GO lesen",
-                    "defaultInstance": false
+                    "name": "GO lesen"
                 }
             ]
         },
@@ -1933,8 +1914,8 @@
             "instances": [
                 {
                     "id": 1,
-                    "name": "Fahrzeugbewertung",
-                    "defaultInstance": true
+                    "name": "Fahrzeugbewertung"
+                    
                 }
             ]
         },
@@ -1946,23 +1927,20 @@
             "instances": [
                 {
                     "id": 1,
-                    "name": "Abrechnung",
-                    "defaultInstance": true
+                    "name": "Abrechnung"
+                    
                 },
                 {
                     "id": 2,
-                    "name": "OK",
-                    "defaultInstance": false
+                    "name": "OK"
                 },
                 {
                     "id": 3,
-                    "name": "NOK",
-                    "defaultInstance": false
+                    "name": "NOK"
                 },
                 {
                     "id": 4,
-                    "name": "Berechnet",
-                    "defaultInstance": false
+                    "name": "Berechnet"
                 }
             ]
         },
@@ -1974,8 +1952,8 @@
             "instances": [
                 {
                     "id": 1,
-                    "name": "Z Verkaufsfreigabe",
-                    "defaultInstance": true
+                    "name": "Z Verkaufsfreigabe"
+                
                 }
             ]
         },
@@ -1987,8 +1965,8 @@
             "instances": [
                 {
                     "id": 1,
-                    "name": "Z Verkaufsmeldung",
-                    "defaultInstance": true
+                    "name": "Z Verkaufsmeldung"
+                    
                 }
             ]
         },
@@ -2000,18 +1978,16 @@
             "instances": [
                 {
                     "id": 1,
-                    "name": "Bank Abrechnung",
-                    "defaultInstance": true
+                    "name": "Bank Abrechnung"
+                    
                 },
                 {
                     "id": 2,
-                    "name": "mit UKS",
-                    "defaultInstance": false
+                    "name": "mit UKS"
                 },
                 {
                     "id": 3,
-                    "name": "ohne UKS",
-                    "defaultInstance": false
+                    "name": "ohne UKS"
                 }
             ]
         },
@@ -2023,18 +1999,16 @@
             "instances": [
                 {
                     "id": 1,
-                    "name": "Z AbrechnungsDiff",
-                    "defaultInstance": true
+                    "name": "Z AbrechnungsDiff"
+                    
                 },
                 {
                     "id": 2,
-                    "name": "OK",
-                    "defaultInstance": false
+                    "name": "OK"
                 },
                 {
                     "id": 3,
-                    "name": "Zu groß",
-                    "defaultInstance": false
+                    "name": "Zu groß"
                 }
             ]
         },
@@ -2046,8 +2020,8 @@
             "instances": [
                 {
                     "id": 1,
-                    "name": "Auschreibung",
-                    "defaultInstance": true
+                    "name": "Auschreibung"
+                    
                 }
             ]
         },
@@ -2059,8 +2033,8 @@
             "instances": [
                 {
                     "id": 1,
-                    "name": "Z Zulassung",
-                    "defaultInstance": true
+                    "name": "Z Zulassung"
+                    
                 }
             ]
         },
@@ -2072,13 +2046,12 @@
             "instances": [
                 {
                     "id": 1,
-                    "name": "IBIS Auftrag",
-                    "defaultInstance": true
+                    "name": "IBIS Auftrag"
+                    
                 }
             ]
         }
     ],
-    "instances": [],
     "dataConnections": [
         {
             "id": 1,
@@ -2225,7 +2198,7 @@
             "sequenceFk": 1,
             "actorFk": 1,
             "has": true,
-            "dataAndInstaceId": [
+            "dataAndInstaceIds": [
                 {
                     "dataFk": 2,
                     "instanceId": 1
@@ -2254,7 +2227,7 @@
             "sequenceFk": 1,
             "actorFk": 5,
             "has": true,
-            "dataAndInstaceId": [
+            "dataAndInstaceIds": [
                 {
                     "dataFk": 2,
                     "instanceId": 1
@@ -2283,7 +2256,7 @@
             "sequenceFk": 2,
             "actorFk": 5,
             "has": true,
-            "dataAndInstaceId": [
+            "dataAndInstaceIds": [
                 {
                     "dataFk": 2,
                     "instanceId": 3
@@ -2308,7 +2281,7 @@
             "sequenceFk": 3,
             "actorFk": 2,
             "has": true,
-            "dataAndInstaceId": [
+            "dataAndInstaceIds": [
                 {
                     "dataFk": 10,
                     "instanceId": 1
@@ -2329,7 +2302,7 @@
             "sequenceFk": 3,
             "actorFk": 5,
             "has": true,
-            "dataAndInstaceId": [
+            "dataAndInstaceIds": [
                 {
                     "dataFk": 9,
                     "instanceId": 3
@@ -2354,7 +2327,7 @@
             "sequenceFk": 3,
             "actorFk": 5,
             "has": true,
-            "dataAndInstaceId": [
+            "dataAndInstaceIds": [
                 {
                     "dataFk": 12,
                     "instanceId": 1
@@ -2383,7 +2356,7 @@
             "sequenceFk": 3,
             "actorFk": 13,
             "has": true,
-            "dataAndInstaceId": [
+            "dataAndInstaceIds": [
                 {
                     "dataFk": 19,
                     "instanceId": 2
@@ -2404,7 +2377,7 @@
             "sequenceFk": 5,
             "actorFk": 14,
             "has": true,
-            "dataAndInstaceId": [
+            "dataAndInstaceIds": [
                 {
                     "dataFk": 20,
                     "instanceId": 1
@@ -2425,7 +2398,7 @@
             "sequenceFk": 3,
             "actorFk": 5,
             "has": true,
-            "dataAndInstaceId": [
+            "dataAndInstaceIds": [
                 {
                     "dataFk": 3,
                     "instanceId": 1

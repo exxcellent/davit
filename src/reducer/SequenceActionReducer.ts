@@ -2,7 +2,6 @@ import {ActionTO} from '../dataAccess/access/to/ActionTO';
 import {DecisionTO} from '../dataAccess/access/to/DecisionTO';
 import {ActionType} from '../dataAccess/access/types/ActionType';
 import {GoTo} from '../dataAccess/access/types/GoToType';
-import {Carv2Util} from '../utils/Carv2Util';
 import {ActorData} from '../viewDataTypes/ActorData';
 import {ActorDataState} from '../viewDataTypes/ActorDataState';
 
@@ -20,9 +19,7 @@ export const SequenceActionReducer = {
     // copy actorDatas and set all to state PERSISTENT
     const newActorDatas: ActorData[] = actorDatas
         .filter((actorData)=>
-          actorData.state !== ActorDataState.DELETED
-        && actorData.state !== ActorDataState.CHECK_FAILED
-        && actorData.state !== ActorDataState.UPDATED_FROM,
+          !isTransiantState(actorData.state),
         )
         .map((actorData)=>{
           return {...actorData, state: ActorDataState.PERSISTENT};
@@ -126,12 +123,13 @@ export const SequenceActionReducer = {
         (actorData) => actorData.actorFk === decision.actorFk,
     );
     let goTo = decision.ifGoTo;
-    decision.dataAndInstaceId.forEach((dataAndInstanceId) => {
-      const checkedActorData: ActorData | undefined = filteredActorData
-          .find((actor) => actor.dataFk === dataAndInstanceId.dataFk && actor.instanceFk === dataAndInstanceId.instanceId);
+    decision.dataAndInstaceIds.forEach((dataAndInstanceId) => {
+      // if data and instance id are defined search exact match. if only data id is defined search for any instance of that data
+      const checkedActorDatas: ActorData[] = filteredActorData
+          .filter((actor) => actor.dataFk === dataAndInstanceId.dataFk && (!dataAndInstanceId.instanceId || actor.instanceFk === dataAndInstanceId.instanceId));
 
-      if (dataIsPresentOnActor(checkedActorData)) {
-        checkedActorData!.state=ActorDataState.CHECKED;
+      if (dataIsPresentOnActor(checkedActorDatas)) {
+        checkedActorDatas.forEach((actorData) => actorData.state=ActorDataState.CHECKED);
       } else {
         actorDatas.push({actorFk: decision.actorFk, dataFk: dataAndInstanceId.dataFk, instanceFk: dataAndInstanceId.instanceId, state: ActorDataState.CHECK_FAILED});
         goTo = decision.elseGoTo;
@@ -142,12 +140,16 @@ export const SequenceActionReducer = {
 };
 
 const findActorDataIndex = (actorId: number, dataId: number, actorDatas: ActorData[]): number => {
-  return actorDatas.findIndex((actorData) => actorData.actorFk === actorId && actorData.dataFk === dataId);
+  return actorDatas.findIndex((actorData) => actorData.actorFk === actorId && actorData.dataFk === dataId && !isTransiantState(actorData.state));
+};
+
+const isTransiantState = (state: ActorDataState) => {
+  return state === ActorDataState.DELETED || state=== ActorDataState.UPDATED_FROM ||state=== ActorDataState.CHECKED ||state=== ActorDataState.CHECK_FAILED;
 };
 function actorDataIsPresent(indexActorDataToEdit: number) {
   return indexActorDataToEdit !== -1;
 }
 
-const dataIsPresentOnActor = (actorData: ActorData | undefined) => {
-  return !Carv2Util.isNullOrUndefined(actorData);
+const dataIsPresentOnActor = (actorData: ActorData[]) => {
+  return actorData && actorData.length > 0;
 };

@@ -1,9 +1,6 @@
-import './Carv2.css';
-
 import React, {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import {Route, Switch} from 'react-router-dom';
-
 import {ErrorNotification} from '../components/common/fragments/ErrorNotification';
 import {ControllPanelController} from '../components/controllPanel/presentation/ControllPanelController';
 import {ActorModelController} from '../components/metaComponentModel/presentation/ActorModelController';
@@ -13,6 +10,8 @@ import {SequenceTableModelController} from '../components/sequenceTableModel/pre
 import {SidePanelController} from '../components/sidePanel/SidePanelController';
 import {MasterDataActions} from '../slices/MasterDataSlice';
 import {useZoomDisable} from '../utils/WindowUtil';
+import './Davit.css';
+
 
 export const ModuleRoutes = {
   home: '/',
@@ -23,7 +22,7 @@ export const ModuleRoutes = {
 };
 
 // inital data load from backend.
-export function Carv2() {
+export function Davit() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(MasterDataActions.loadAll());
@@ -33,7 +32,7 @@ export function Carv2() {
   useZoomDisable();
 
   return (
-    <div className="Carv2">
+    <div>
       <Switch>
         <Route exact path={ModuleRoutes.home}>
           <div className="carvGridContainer">

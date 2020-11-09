@@ -2,6 +2,7 @@ import React, {FunctionComponent, useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Input} from 'semantic-ui-react';
 import {DataCTO} from '../../../../../../dataAccess/access/cto/DataCTO';
+import {DataInstanceTO} from '../../../../../../dataAccess/access/to/DataInstanceTO';
 import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
 import {Carv2Util} from '../../../../../../utils/Carv2Util';
@@ -25,10 +26,12 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
     textInput,
     changeName,
     getName,
-    saveDataInstace,
+    goBack,
     deleteDataInstance,
     createAnother,
     key,
+    isDeletButtonDisable,
+    saveOnBlure,
   } = useControllPanelEditDataInstanceViewModel();
 
   return (
@@ -36,7 +39,7 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
       key={key}
       label={label}
       hidden={hidden}
-      onClickNavItem={saveDataInstace}
+      onClickNavItem={goBack}
     >
       <div className="optionFieldSpacer">
         <OptionField label="Instance - Name">
@@ -47,8 +50,8 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
             value={getName()}
             autoFocus
             ref={textInput}
-            // onBlur={() => saveDataInstace()}
             unvisible={hidden}
+            onBlur={saveOnBlure}
           />
         </OptionField>
       </div>
@@ -57,13 +60,13 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
         <div>
           <OptionField label="Navigation">
             <DavitButtonLabel onClick={createAnother} label="Create another" />
-            <DavitButtonIcon onClick={saveDataInstace} icon="reply" />
+            <DavitButtonIcon onClick={goBack} icon="reply" />
           </OptionField>
         </div>
       </div>
       <div className="columnDivider optionFieldSpacer">
         <OptionField label="Data - Options">
-          <Carv2DeleteButton onClick={deleteDataInstance} />
+          <Carv2DeleteButton onClick={deleteDataInstance} disable={isDeletButtonDisable()}/>
         </OptionField>
       </div>
     </ControllPanelEditSub>
@@ -95,22 +98,31 @@ const useControllPanelEditDataInstanceViewModel = () => {
       copyData.data.instances.find(
           (inst) => inst.id === instanceId,
       )!.name = name;
-      dispatch(EditActions.data.save(copyData));
       dispatch(EditActions.data.update(copyData));
     }
   };
 
-  const saveDataInstace = () => {
+  const goBack = () => {
     if (dataToEdit !== null && instanceId !== null) {
       const copyData: DataCTO = Carv2Util.deepCopy(dataToEdit);
-      if (
-        copyData.data.instances.find((inst) => inst.id === instanceId)!.name
-        === ''
-      ) {
-        deleteDataInstance();
+      const instance: DataInstanceTO | undefined = copyData.data.instances.find((inst) => inst.id === instanceId);
+      if (instance && instance.name === '' ) {
+        if (instance.id === -1) {
+          deleteDataInstance();
+        } else {
+          dispatch(EditActions.setMode.editDataById(dataToEdit.data.id));
+        }
       } else {
+        dispatch(EditActions.setMode.editDataById(dataToEdit.data.id));
+      }
+    }
+  };
+
+  const saveOnBlure = () => {
+    if (dataToEdit !== null && instanceId !== null) {
+      const copyData: DataCTO = Carv2Util.deepCopy(dataToEdit);
+      if (copyData.data.instances.find((inst) => inst.id === instanceId)!.name !== '') {
         dispatch(EditActions.data.save(copyData));
-        dispatch(EditActions.setMode.editData(copyData));
       }
     }
   };
@@ -122,7 +134,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
           (inst) => inst.id !== instanceId,
       );
       dispatch(EditActions.data.save(copyData));
-      dispatch(EditActions.setMode.editData(copyData));
+      dispatch(EditActions.setMode.editDataById(dataToEdit.data.id));
     }
   };
 
@@ -145,11 +157,19 @@ const useControllPanelEditDataInstanceViewModel = () => {
     return name;
   };
 
+  const isDeletButtonDisable = (): boolean => {
+    let disable: boolean = true;
+    if (!Carv2Util.isNullOrUndefined(dataToEdit)) {
+      disable = dataToEdit!.data.instances.length < 2;
+    }
+    return disable;
+  };
+
   return {
     label: 'EDIT * DATA * INSTANCE',
     getName,
     changeName,
-    saveDataInstace,
+    goBack,
     textInput,
     deleteDataInstance,
     createAnother,
@@ -157,5 +177,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
       instanceId && dataToEdit
         ? dataToEdit.data.instances.find((inst) => inst.id === instanceId)!.id
         : -1,
+    isDeletButtonDisable,
+    saveOnBlure,
   };
 };

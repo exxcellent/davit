@@ -9,6 +9,9 @@ import {CheckHelper} from '../util/CheckHelper';
 import {TechnicalDataAccessService} from './TechnicalDataAccessService';
 
 export const DataDataAccessService = {
+
+  // ====================================================== DATA ======================================================
+
   findData(id: number): DataTO | undefined {
     return DataRepository.find(id);
   },
@@ -23,28 +26,14 @@ export const DataDataAccessService = {
 
   saveDataCTO(dataCTO: DataCTO): DataCTO {
     CheckHelper.nullCheck(dataCTO, 'dataCTO');
-    const savedGeometricalData = TechnicalDataAccessService.saveGeometricalData(dataCTO.geometricalData);
     const copyDataCTO: DataCTO = Carv2Util.deepCopy(dataCTO);
+    const savedGeometricalData = TechnicalDataAccessService.saveGeometricalData(dataCTO.geometricalData);
     copyDataCTO.data.geometricalDataFk = savedGeometricalData.geometricalData.id;
-    const savedData = DataRepository.save(copyDataCTO.data);
+    const savedDataTO = DataRepository.save(copyDataCTO.data);
     return {
-      data: savedData,
+      data: savedDataTO,
       geometricalData: savedGeometricalData,
     };
-  },
-
-  findAllDataRelationTOs(): DataRelationTO[] {
-    return DataConnectionRepository.findAll();
-  },
-
-  findAllDataRelationCTOs(): DataRelationTO[] {
-    return DataDataAccessService.findAllDataRelationTOs().map(createDataRelationCTO);
-  },
-
-  saveDataRelation(dataRelation: DataRelationTO): DataRelationTO {
-    CheckHelper.nullCheck(dataRelation, 'dataRelation');
-    const saveDataConnection = DataConnectionRepository.save(dataRelation);
-    return saveDataConnection;
   },
 
   deleteDataCTO(dataCTO: DataCTO): DataCTO {
@@ -60,12 +49,30 @@ export const DataDataAccessService = {
     return dataCTO;
   },
 
+  // ====================================================== RELATIONS ======================================================
+
+  findAllDataRelationTOs(): DataRelationTO[] {
+    return DataConnectionRepository.findAll();
+  },
+
+  findAllDataRelationCTOs(): DataRelationTO[] {
+    return DataDataAccessService.findAllDataRelationTOs().map(createDataRelationCTO);
+  },
+
+  saveDataRelation(dataRelation: DataRelationTO): DataRelationTO {
+    CheckHelper.nullCheck(dataRelation, 'dataRelation');
+    const saveDataConnection = DataConnectionRepository.save(dataRelation);
+    return saveDataConnection;
+  },
+
   deleteDataRelationCTO(dataRelationTO: DataRelationTO): DataRelationTO {
     CheckHelper.nullCheck(dataRelationTO, 'dataRelationCTO');
     DataConnectionRepository.delete(dataRelationTO);
     return dataRelationTO;
   },
 };
+
+// ====================================================== PRIVATE ======================================================
 
 const createDataRelationCTO = (dataRelationTO: DataRelationTO): DataRelationTO => {
   CheckHelper.nullCheck(dataRelationTO, 'DataRelationTO');

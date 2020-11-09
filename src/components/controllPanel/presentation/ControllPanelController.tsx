@@ -1,7 +1,7 @@
 import React, {FunctionComponent} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {isNullOrUndefined} from 'util';
 import {EditActions, editSelectors, Mode} from '../../../slices/EditSlice';
+import {Carv2Util} from '../../../utils/Carv2Util';
 import {ControllPanelEditController} from './fragments/edit/ControllPanelEditController';
 import {ControllPanelFileController} from './fragments/file/ControllPanelFileController';
 import {ControllPanelTabController} from './fragments/tabs/ControllPanelTabController';
@@ -12,26 +12,8 @@ export interface ControllPanelProps {}
 export const ControllPanelController: FunctionComponent<ControllPanelProps> = (props) => {
   const {mode} = useControllPanelViewModel();
 
-  // const getModesArray = (mode: string): string[] => {
-  //   return mode.split("_");
-  // };
-
-  // const getModesDivs = (mode: Mode, onClickNavItem: (mode: string) => void): React.ReactNode => {
-  //   let navDivs = getModesArray(mode).map((splitedModeItem) => {
-  //     return (
-  //       <div onClick={() => onClickNavItem(splitedModeItem)} key={splitedModeItem} className="verticalTab">
-  //         {splitedModeItem}
-  //       </div>
-  //     );
-  //   });
-  //   while (navDivs.length < 5) {
-  //     navDivs.push(<div className="verticalTablDummy"></div>);
-  //   }
-  //   return navDivs;
-  // };
-
   const useGetViewByMode = (mode: Mode) => {
-    if (!isNullOrUndefined(mode)) {
+    if (!Carv2Util.isNullOrUndefined(mode)) {
       if (mode.includes('EDIT')) {
         return <ControllPanelEditController />;
       }

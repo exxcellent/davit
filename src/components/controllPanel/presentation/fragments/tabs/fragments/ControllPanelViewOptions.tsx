@@ -1,6 +1,6 @@
 import React, {FunctionComponent} from 'react';
 import {ButtonGroup} from 'semantic-ui-react';
-import {ModuleRoutes} from '../../../../../../app/Carv2';
+import {ModuleRoutes} from '../../../../../../app/Davit';
 import {DavitButtonIcon} from '../../../../../common/fragments/buttons/DavitButton';
 
 

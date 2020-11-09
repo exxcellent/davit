@@ -1,16 +1,15 @@
-import './index.css';
-import 'semantic-ui-css/semantic.min.css';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {IntlProvider} from 'react-intl';
 import {Provider} from 'react-redux';
 import {HashRouter as BrowserRouter} from 'react-router-dom';
-
-import {Carv2} from './app/Carv2';
+import 'semantic-ui-css/semantic.min.css';
+import {Davit} from './app/Davit';
 import {store} from './app/store';
+import './index.css';
 import * as serviceWorker from './serviceWorker';
 import {languages} from './translations/languages';
+
 
 // import { BrowserRouter } from 'react-router-dom';
 // TODO: if we rollout to english countries, this must be redefined (changing the locale "de" to "en" already works)
@@ -27,7 +26,7 @@ ReactDOM.render(
       <IntlProvider locale={locale} messages={localeData}>
         {/* TODO: remove # from url */}
         <BrowserRouter>
-          <Carv2 />
+          <Davit />
         </BrowserRouter>
       </IntlProvider>
     </Provider>,

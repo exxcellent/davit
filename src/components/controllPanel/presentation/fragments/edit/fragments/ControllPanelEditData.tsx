@@ -142,7 +142,6 @@ const useControllPanelEditDataViewModel = () => {
 
   const editOrAddInstance = (id?: number) => {
     if (dataToEdit !== null) {
-      console.info('id: ', id);
       dispatch(EditActions.setMode.editDataInstance(id));
     }
   };

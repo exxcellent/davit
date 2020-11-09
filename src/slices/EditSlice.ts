@@ -23,7 +23,6 @@ import {GoToTypes} from '../dataAccess/access/types/GoToType';
 import {GoToTypesChain} from '../dataAccess/access/types/GoToTypeChain';
 import {DataAccess} from '../dataAccess/DataAccess';
 import {DataAccessResponse} from '../dataAccess/DataAccessResponse';
-import {DataAccessUtil} from '../dataAccess/util/DataAccessUtil';
 import {Carv2Util} from '../utils/Carv2Util';
 import {handleError} from './GlobalSlice';
 import {MasterDataActions, masterDataSelectors} from './MasterDataSlice';
@@ -282,13 +281,11 @@ const setModeToEditData = (data?: DataCTO): AppThunk => (dispatch) => {
 
 const setModeToEditDataInstance = (id?: number): AppThunk => (dispatch, getState) => {
   if ((getState().edit.objectToEdit as DataCTO).data) {
-    if (!id) {
+    if (id === undefined) {
+      id = -1;
       const copyData: DataCTO = Carv2Util.deepCopy(getState().edit.objectToEdit as DataCTO);
       const newInstance: DataInstanceTO = new DataInstanceTO();
-      newInstance.id = DataAccessUtil.determineNewId(copyData.data.instances);
       copyData.data.instances.push(newInstance);
-      id = newInstance.id;
-      dispatch(EditActions.data.save(copyData));
       dispatch(EditSlice.actions.setDataToEdit(copyData));
     }
     dispatch(EditSlice.actions.setInstanceId(id));
@@ -493,8 +490,8 @@ const deleteGroupThunk = (group: GroupTO): AppThunk => async (dispatch) => {
 const createDataThunk = (): AppThunk => (dispatch) => {
   const data: DataCTO = new DataCTO();
   const response: DataAccessResponse<DataCTO> = DataAccess.saveDataCTO(data);
-  console.log(response);
   if (response.code !== 200) {
+    console.log(response);
     dispatch(handleError(response.message));
   }
   dispatch(MasterDataActions.loadDatasFromBackend());
@@ -503,8 +500,8 @@ const createDataThunk = (): AppThunk => (dispatch) => {
 
 const saveDataThunk = (data: DataCTO): AppThunk => (dispatch) => {
   const response: DataAccessResponse<DataCTO> = DataAccess.saveDataCTO(data);
-  console.log(response);
   if (response.code !== 200) {
+    console.log(response);
     dispatch(handleError(response.message));
   }
   dispatch(MasterDataActions.loadDatasFromBackend());
@@ -512,8 +509,8 @@ const saveDataThunk = (data: DataCTO): AppThunk => (dispatch) => {
 
 const deleteDataThunk = (data: DataCTO): AppThunk => (dispatch) => {
   const response: DataAccessResponse<DataCTO> = DataAccess.deleteDataCTO(data);
-  console.log(response);
   if (response.code !== 200) {
+    console.log(response);
     dispatch(handleError(response.message));
   }
   dispatch(MasterDataActions.loadDatasFromBackend());

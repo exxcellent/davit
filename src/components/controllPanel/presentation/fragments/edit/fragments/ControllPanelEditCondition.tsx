@@ -10,8 +10,7 @@ import {DavitButtonIcon} from '../../../../../common/fragments/buttons/DavitButt
 import {DavitMenuLabel} from '../../../../../common/fragments/DavitMenuLabel';
 import {ActorDropDown} from '../../../../../common/fragments/dropdowns/ActorDropDown';
 import {
-  DataAndInstanceId,
-  InstanceDropDownMultiselect,
+  DataAndInstanceId, InstanceDropDownMultiselect,
 } from '../../../../../common/fragments/dropdowns/InstanceDropDown';
 import {ControllPanelEditSub} from '../common/ControllPanelEditSub';
 import {OptionField} from '../common/OptionField';
@@ -75,7 +74,7 @@ const useControllPanelEditConditionViewModel = () => {
   const setData = (dataAndInstanceIds: DataAndInstanceId[] | undefined) => {
     if (!Carv2Util.isNullOrUndefined(decisionToEdit)) {
       const copyDecisionToEdit: DecisionTO = Carv2Util.deepCopy(decisionToEdit);
-      copyDecisionToEdit.dataAndInstaceId = dataAndInstanceIds || [];
+      copyDecisionToEdit.dataAndInstaceIds = dataAndInstanceIds || [];
       dispatch(EditActions.decision.save(copyDecisionToEdit));
       dispatch(EditActions.decision.update(copyDecisionToEdit));
     }
@@ -111,6 +110,6 @@ const useControllPanelEditConditionViewModel = () => {
     actorFk: decisionToEdit?.actorFk,
     setActorFk,
     setData,
-    dataFks: decisionToEdit?.dataAndInstaceId,
+    dataFks: decisionToEdit?.dataAndInstaceIds,
   };
 };

@@ -6,9 +6,8 @@ export class ChainDecisionTO extends AbstractTO {
   constructor(
     public name: string = '',
     public chainFk: number = -1,
-    public has: boolean = true,
     public actorFk: number = -1,
-    public dataAndInstaceIds: DataAndInstanceId[] = [],
+    public dataAndInstanceIds: DataAndInstanceId[] = [],
     public ifGoTo: GoToChain = {type: GoToTypesChain.FIN},
     public elseGoTo: GoToChain = {type: GoToTypesChain.ERROR},
   ) {
