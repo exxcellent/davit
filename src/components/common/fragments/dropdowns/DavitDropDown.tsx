@@ -1,50 +1,49 @@
-import React, { FunctionComponent } from 'react';
-import { Dropdown } from 'semantic-ui-react';
+import React, {FunctionComponent} from 'react';
+import {Dropdown} from 'semantic-ui-react';
 
 export interface DavitDropDownItemProps{
-  key: any,
+  key: number,
   value: string,
   text: string,
 }
 
 export interface DavitDropDownProps {
-  dropdownItems: DavitDropDownItemProps[];
   onSelect: (dropdownItem: DavitDropDownItemProps) => void;
+  dropdownItems: DavitDropDownItemProps[];
+  value?: string;
   placeholder?: string;
-  value?: number;
 }
 
 export interface DavitIconDropDownProps {
-  dropdownItems: DavitDropDownItemProps[];
   onSelect: (dropdownItem: DavitDropDownItemProps) => void;
+  dropdownItems: DavitDropDownItemProps[];
   icon?: string;
 }
 
 export interface DavitMultiselectDropDownProps {
+  onSelect: (items: DavitDropDownItemProps[]) => void;
   dropdownItems: DavitDropDownItemProps[];
-  onSelect: (items: number[] | undefined) => void;
-  selected: number[];
+  selected: DavitDropDownItemProps[];
   placeholder?: string;
 }
 
 export const DavitDropDown: FunctionComponent<DavitDropDownProps> = (props) => {
-  const {dropdownItems, onSelect, placeholder} = props;
+  const {dropdownItems, onSelect, placeholder, value} = props;
 
   return (
     <Dropdown
-      options={dropdownItems.sort((a, b) => {
-        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
-      })}
       selection
       selectOnBlur={false}
       placeholder={placeholder || ''}
-      onChange={(event, data) => onSelect(data)}
       trigger={<React.Fragment />}
       scrolling
-      // TODO: find best type
-      // value={value === -1 ? undefined : value}
-      disabled={dropdownItems.length > 0 ? false : true}
+      value={value}
+      disabled={dropdownItems.length > 0}
       search
+      options={dropdownItems.sort((a, b) => {
+        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
+      })}
+      onChange={(event, data) => onSelect(parsDataToDavitDropDownItemProps(data))}
     />
   );
 };
@@ -54,23 +53,34 @@ export const DavitIconDropDown: FunctionComponent<DavitIconDropDownProps> = (pro
 
   return (
     <Dropdown
-      options={dropdownItems.sort((a, b) => {
-        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
-      })}
       icon={dropdownItems.length > 0 ? icon : ''}
       selectOnBlur={false}
-      onChange={(event, data) => onSelect()}
       className="button icon"
       trigger={<React.Fragment />}
       scrolling
-      disabled={dropdownItems.length > 0 ? false : true}
+      disabled={dropdownItems.length > 0}
       search
+      options={dropdownItems.sort((a, b) => {
+        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
+      })}
+      onChange={(event, data) => onSelect(parsDataToDavitDropDownItemProps(data))}
     />
   );
 };
 
 export const DavitMultiselectDropDown: FunctionComponent<DavitMultiselectDropDownProps> = (props) => {
   const {onSelect, selected, placeholder, dropdownItems} = props;
+
+  function selectedItemsToValuesArray(selected: DavitDropDownItemProps[]): string[] {
+    const valueNumbers: string[] = [];
+    selected.forEach((item) => {
+      valueNumbers.push(item.value);
+    });
+    valueNumbers.sort((a, b) => {
+      return a < b ? -1 : a > b ? 1 : 0;
+    });
+    return valueNumbers;
+  }
 
   return (
     <Dropdown
@@ -79,16 +89,24 @@ export const DavitMultiselectDropDown: FunctionComponent<DavitMultiselectDropDow
       multiple
       selection
       search
-      options={.sort(function(a, b) {
-        return ('' + a.attr).localeCompare(b.attr);
-      })}
-      onChange={(event, data) => {
-        onSelect((data.value as number[]) || undefined);
-      }}
-      value={selected}
+      value={selectedItemsToValuesArray(selected)}
       scrolling
-      disabled={dropdownItems.length > 0 ? false : true}
+      disabled={dropdownItems.length > 0}
       style={{overflow: 'auto'}}
+      options={dropdownItems.sort(function(a, b) {
+        return ('' + a.value).localeCompare(b.value);
+      })}
+      onChange={(event, datas) => {
+        onSelect(datas.map((data: any) => parsDataToDavitDropDownItemProps(data)));
+      }}
     />
   );
 };
+
+function parsDataToDavitDropDownItemProps(data: any): DavitDropDownItemProps {
+  return {
+    key: data.key ? data.key : -1,
+    text: data.text ? data.text : '',
+    value: data.value ? data.value.toString() : '',
+  };
+}
