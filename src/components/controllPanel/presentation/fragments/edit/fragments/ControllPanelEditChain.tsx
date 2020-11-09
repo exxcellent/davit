@@ -9,7 +9,7 @@ import {SequenceTO} from '../../../../../../dataAccess/access/to/SequenceTO';
 import {EditActions} from '../../../../../../slices/EditSlice';
 import {masterDataSelectors} from '../../../../../../slices/MasterDataSlice';
 import {sequenceModelSelectors} from '../../../../../../slices/SequenceModelSlice';
-import {Carv2Util} from '../../../../../../utils/Carv2Util';
+import {DavitUtil} from '../../../../../../utils/DavitUtil';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import {DavitButtonIcon, DavitButtonLabel} from '../../../../../common/fragments/buttons/DavitButton';
 import {ChainDecisionDropDownButton} from '../../../../../common/fragments/dropdowns/ChainDecisionDropDown';
@@ -115,7 +115,7 @@ const useControllPanelEditChainViewModel = () => {
 
   const changeName = (name: string) => {
     if (!isNullOrUndefined(selectedChain)) {
-      const copyChainToEdit: ChainTO = Carv2Util.deepCopy(selectedChain);
+      const copyChainToEdit: ChainTO = DavitUtil.deepCopy(selectedChain);
       copyChainToEdit.name = name;
       dispatch(EditActions.chain.save(copyChainToEdit));
     }
@@ -145,7 +145,7 @@ const useControllPanelEditChainViewModel = () => {
 
   const validateInput = (): boolean => {
     if (!isNullOrUndefined(selectedChain)) {
-      return Carv2Util.isValidName(selectedChain.name);
+      return DavitUtil.isValidName(selectedChain.name);
     } else {
       return false;
     }
@@ -175,7 +175,7 @@ const useControllPanelEditChainViewModel = () => {
   };
 
   const updateSequence = () => {
-    const copySequence: SequenceTO = Carv2Util.deepCopy(selectedChain);
+    const copySequence: SequenceTO = DavitUtil.deepCopy(selectedChain);
     dispatch(EditActions.sequence.save(copySequence));
   };
 

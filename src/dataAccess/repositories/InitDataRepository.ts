@@ -1,4 +1,4 @@
-import {Carv2Util} from '../../utils/Carv2Util';
+import {DavitUtil} from '../../utils/DavitUtil';
 import {InitDataTO} from '../access/to/InitDataTO';
 import dataStore from '../DataStore';
 import {CheckHelper} from '../util/CheckHelper';
@@ -14,7 +14,7 @@ export const InitDataRepository = {
   },
 
   findAllForSetup(dataSetupId: number): InitDataTO[] {
-    const copyAllInitDatas: InitDataTO[] = Carv2Util.deepCopy(this.findAll());
+    const copyAllInitDatas: InitDataTO[] = DavitUtil.deepCopy(this.findAll());
     return copyAllInitDatas.filter((initData) => initData.dataSetupFk === dataSetupId);
   },
 

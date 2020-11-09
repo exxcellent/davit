@@ -12,7 +12,7 @@ import {ActionType} from '../../../dataAccess/access/types/ActionType';
 import {EditActions, editSelectors} from '../../../slices/EditSlice';
 import {MasterDataActions, masterDataSelectors} from '../../../slices/MasterDataSlice';
 import {sequenceModelSelectors} from '../../../slices/SequenceModelSlice';
-import {Carv2Util} from '../../../utils/Carv2Util';
+import {DavitUtil} from '../../../utils/DavitUtil';
 import {ActorData} from '../../../viewDataTypes/ActorData';
 import {ActorDataState} from '../../../viewDataTypes/ActorDataState';
 import {ViewFragmentProps} from '../../../viewDataTypes/ViewFragment';
@@ -246,7 +246,7 @@ const useViewModel = () => {
   const onPositionUpdate = (x: number, y: number, positionId: number) => {
     const actorCTO = actors.find((actorCTO) => actorCTO.geometricalData.position.id === positionId);
     if (actorCTO) {
-      const copyActorCTO: ActorCTO = Carv2Util.deepCopy(actorCTO);
+      const copyActorCTO: ActorCTO = DavitUtil.deepCopy(actorCTO);
       copyActorCTO.geometricalData.position.x = x;
       copyActorCTO.geometricalData.position.y = y;
       dispatch(EditActions.actor.save(copyActorCTO));

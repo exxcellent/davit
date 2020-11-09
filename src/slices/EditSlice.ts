@@ -23,7 +23,7 @@ import {GoToTypes} from '../dataAccess/access/types/GoToType';
 import {GoToTypesChain} from '../dataAccess/access/types/GoToTypeChain';
 import {DataAccess} from '../dataAccess/DataAccess';
 import {DataAccessResponse} from '../dataAccess/DataAccessResponse';
-import {Carv2Util} from '../utils/Carv2Util';
+import {DavitUtil} from '../utils/DavitUtil';
 import {handleError} from './GlobalSlice';
 import {MasterDataActions, masterDataSelectors} from './MasterDataSlice';
 import {SequenceModelActions} from './SequenceModelSlice';
@@ -283,7 +283,7 @@ const setModeToEditDataInstance = (id?: number): AppThunk => (dispatch, getState
   if ((getState().edit.objectToEdit as DataCTO).data) {
     if (id === undefined) {
       id = -1;
-      const copyData: DataCTO = Carv2Util.deepCopy(getState().edit.objectToEdit as DataCTO);
+      const copyData: DataCTO = DavitUtil.deepCopy(getState().edit.objectToEdit as DataCTO);
       const newInstance: DataInstanceTO = new DataInstanceTO();
       copyData.data.instances.push(newInstance);
       dispatch(EditSlice.actions.setDataToEdit(copyData));
@@ -308,7 +308,7 @@ const setModeToEditSequence = (sequenceId?: number): AppThunk => (dispatch) => {
     // TODO: change CTO to TO.
     const response: DataAccessResponse<SequenceCTO> = DataAccess.findSequenceCTO(sequenceId);
     if (response.code === 200) {
-      dispatch(EditSlice.actions.setSequenceToEdit(Carv2Util.deepCopy(response.object.sequenceTO)));
+      dispatch(EditSlice.actions.setSequenceToEdit(DavitUtil.deepCopy(response.object.sequenceTO)));
       dispatch(SequenceModelActions.setCurrentSequence(sequenceId));
     } else {
       handleError(response.message);
@@ -381,7 +381,7 @@ const setModeToEditInitData = (initData: InitDataTO): AppThunk => (dispatch) => 
   if (initData.id !== -1) {
     const response: DataAccessResponse<InitDataTO> = DataAccess.findInitData(initData.id);
     if (response.code === 200) {
-      dispatch(EditSlice.actions.setInitDataToEdit(Carv2Util.deepCopy(response.object)));
+      dispatch(EditSlice.actions.setInitDataToEdit(DavitUtil.deepCopy(response.object)));
     } else {
       handleError(response.message);
     }
@@ -395,7 +395,7 @@ const setModeToEditDataSetup = (id?: number): AppThunk => (dispatch) => {
   if (id) {
     const response: DataAccessResponse<DataSetupCTO> = DataAccess.findDataSetupCTO(id);
     if (response.code === 200) {
-      dispatch(EditSlice.actions.setDataSetupToEdit(Carv2Util.deepCopy(response.object)));
+      dispatch(EditSlice.actions.setDataSetupToEdit(DavitUtil.deepCopy(response.object)));
     } else {
       handleError(response.message);
     }
@@ -826,7 +826,7 @@ const createSequenceStepThunk = (
 const deleteSequenceStepThunk = (step: SequenceStepCTO, sequenceCTO?: SequenceCTO): AppThunk => (dispatch) => {
   // update forent gotos.
   if (sequenceCTO) {
-    const copySequence: SequenceCTO = Carv2Util.deepCopy(sequenceCTO);
+    const copySequence: SequenceCTO = DavitUtil.deepCopy(sequenceCTO);
     // update steps
     copySequence.sequenceStepCTOs.forEach((item) => {
       if (item.squenceStepTO.goto.type === GoToTypes.STEP && item.squenceStepTO.goto.id === step.squenceStepTO.id) {
@@ -929,7 +929,7 @@ const saveDecisionThunk = (decision: DecisionTO): AppThunk => (dispatch) => {
 const deleteDecisionThunk = (decision: DecisionTO, sequenceCTO?: SequenceCTO): AppThunk => (dispatch) => {
   // update forent gotos.
   if (sequenceCTO) {
-    const copySequence: SequenceCTO = Carv2Util.deepCopy(sequenceCTO);
+    const copySequence: SequenceCTO = DavitUtil.deepCopy(sequenceCTO);
     // update steps
     copySequence.sequenceStepCTOs.forEach((step) => {
       if (step.squenceStepTO.goto.type === GoToTypes.DEC && step.squenceStepTO.goto.id === decision.id) {

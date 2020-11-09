@@ -1,16 +1,16 @@
 import {motion} from 'framer-motion';
 import React, {FunctionComponent, useEffect, useRef, useState} from 'react';
-
 import {ASPECT_RATIO, WINDOW_FACTOR} from '../../../app/Carv2Constants';
 import {DataCTO} from '../../../dataAccess/access/cto/DataCTO';
 import {GeometricalDataCTO} from '../../../dataAccess/access/cto/GeometraicalDataCTO';
 import {DataRelationTO} from '../../../dataAccess/access/to/DataRelationTO';
-import {Carv2Util} from '../../../utils/Carv2Util';
+import {DavitUtil} from '../../../utils/DavitUtil';
 import {useCurrentHeight, useCurrentWitdh} from '../../../utils/WindowUtil';
 import {ViewFragmentProps} from '../../../viewDataTypes/ViewFragment';
 import {createDnDItem} from '../../common/fragments/DnDWrapper';
 import {createCornerConnection} from '../../common/fragments/svg/Carv2Path';
 import {Carv2Card} from '../../metaComponentModel/presentation/fragments/Carv2Card';
+
 
 interface MetaDataDnDBox {
   dataCTOs: DataCTO[];
@@ -51,7 +51,7 @@ export const MetaDataDnDBox: FunctionComponent<MetaDataDnDBox> = (props) => {
   const onPositionUpdate = (x: number, y: number, positionId: number) => {
     const dataCTO = dataCTOs.find((dataCTO) => dataCTO.geometricalData.position.id === positionId);
     if (dataCTO) {
-      const copyDataCTO: DataCTO = Carv2Util.deepCopy(dataCTO);
+      const copyDataCTO: DataCTO = DavitUtil.deepCopy(dataCTO);
       copyDataCTO.geometricalData.position.x = x;
       copyDataCTO.geometricalData.position.y = y;
       onSaveCallBack(copyDataCTO);

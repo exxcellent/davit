@@ -7,7 +7,7 @@ import {DataSetupCTO} from '../../../../../../dataAccess/access/cto/DataSetupCTO
 import {InitDataTO} from '../../../../../../dataAccess/access/to/InitDataTO';
 import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
-import {Carv2Util} from '../../../../../../utils/Carv2Util';
+import {DavitUtil} from '../../../../../../utils/DavitUtil';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import {DavitButtonIcon, DavitButtonLabel} from '../../../../../common/fragments/buttons/DavitButton';
 import {InitDataDropDownButton} from '../../../../../common/fragments/dropdowns/InitDataDropDown';
@@ -98,7 +98,7 @@ const useControllPanelEditDataSetupViewModel = () => {
 
   const changeName = (name: string) => {
     if (!isNullOrUndefined(dataSetupToEdit)) {
-      const copyDataSetupToEdit: DataSetupCTO = Carv2Util.deepCopy(dataSetupToEdit);
+      const copyDataSetupToEdit: DataSetupCTO = DavitUtil.deepCopy(dataSetupToEdit);
       copyDataSetupToEdit.dataSetup.name = name;
       dispatch(EditActions.dataSetup.update(copyDataSetupToEdit));
     }
@@ -123,12 +123,12 @@ const useControllPanelEditDataSetupViewModel = () => {
   };
 
   const updateDataSetup = () => {
-    const copyDataSetup: DataSetupCTO = Carv2Util.deepCopy(dataSetupToEdit);
+    const copyDataSetup: DataSetupCTO = DavitUtil.deepCopy(dataSetupToEdit);
     dispatch(EditActions.dataSetup.save(copyDataSetup));
   };
 
   const copyDataSetup = () => {
-    const copyDataSetup: DataSetupCTO = Carv2Util.deepCopy(dataSetupToEdit);
+    const copyDataSetup: DataSetupCTO = DavitUtil.deepCopy(dataSetupToEdit);
     copyDataSetup.dataSetup.name = dataSetupToEdit?.dataSetup.name + '-copy';
     copyDataSetup.dataSetup.id = -1;
     copyDataSetup.initDatas.forEach((initData) => {

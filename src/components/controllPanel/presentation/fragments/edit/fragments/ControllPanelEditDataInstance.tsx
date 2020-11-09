@@ -5,7 +5,7 @@ import {DataCTO} from '../../../../../../dataAccess/access/cto/DataCTO';
 import {DataInstanceTO} from '../../../../../../dataAccess/access/to/DataInstanceTO';
 import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
-import {Carv2Util} from '../../../../../../utils/Carv2Util';
+import {DavitUtil} from '../../../../../../utils/DavitUtil';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import {DavitButtonIcon, DavitButtonLabel} from '../../../../../common/fragments/buttons/DavitButton';
 import {ControllPanelEditSub} from '../common/ControllPanelEditSub';
@@ -94,7 +94,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
 
   const changeName = (name: string) => {
     if (dataToEdit !== null && instanceId !== null) {
-      const copyData: DataCTO = Carv2Util.deepCopy(dataToEdit);
+      const copyData: DataCTO = DavitUtil.deepCopy(dataToEdit);
       copyData.data.instances.find(
           (inst) => inst.id === instanceId,
       )!.name = name;
@@ -104,7 +104,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
 
   const goBack = () => {
     if (dataToEdit !== null && instanceId !== null) {
-      const copyData: DataCTO = Carv2Util.deepCopy(dataToEdit);
+      const copyData: DataCTO = DavitUtil.deepCopy(dataToEdit);
       const instance: DataInstanceTO | undefined = copyData.data.instances.find((inst) => inst.id === instanceId);
       if (instance && instance.name === '' ) {
         if (instance.id === -1) {
@@ -120,7 +120,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
 
   const saveOnBlure = () => {
     if (dataToEdit !== null && instanceId !== null) {
-      const copyData: DataCTO = Carv2Util.deepCopy(dataToEdit);
+      const copyData: DataCTO = DavitUtil.deepCopy(dataToEdit);
       if (copyData.data.instances.find((inst) => inst.id === instanceId)!.name !== '') {
         dispatch(EditActions.data.save(copyData));
       }
@@ -129,7 +129,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
 
   const deleteDataInstance = () => {
     if (dataToEdit !== null && instanceId !== null) {
-      const copyData: DataCTO = Carv2Util.deepCopy(dataToEdit);
+      const copyData: DataCTO = DavitUtil.deepCopy(dataToEdit);
       copyData.data.instances = copyData.data.instances.filter(
           (inst) => inst.id !== instanceId,
       );
@@ -159,7 +159,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
 
   const isDeletButtonDisable = (): boolean => {
     let disable: boolean = true;
-    if (!Carv2Util.isNullOrUndefined(dataToEdit)) {
+    if (!DavitUtil.isNullOrUndefined(dataToEdit)) {
       disable = dataToEdit!.data.instances.length < 2;
     }
     return disable;

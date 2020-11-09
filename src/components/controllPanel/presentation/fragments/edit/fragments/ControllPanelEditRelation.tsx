@@ -7,7 +7,7 @@ import {DataRelationTO, Direction, RelationType} from '../../../../../../dataAcc
 import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
 import {masterDataSelectors} from '../../../../../../slices/MasterDataSlice';
-import {Carv2Util} from '../../../../../../utils/Carv2Util';
+import {DavitUtil} from '../../../../../../utils/DavitUtil';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import {DavitButtonIcon, DavitButtonLabel} from '../../../../../common/fragments/buttons/DavitButton';
 import {ControllPanelEditSub} from '../common/ControllPanelEditSub';
@@ -149,25 +149,25 @@ const useControllPanelEditRelationViewModel = () => {
   };
 
   const setData = (dataId: number, isSnd?: boolean) => {
-    const relationCopy: DataRelationTO = Carv2Util.deepCopy(relationToEdit);
+    const relationCopy: DataRelationTO = DavitUtil.deepCopy(relationToEdit);
     isSnd ? (relationCopy.data2Fk = dataId) : (relationCopy.data1Fk = dataId);
     dispatch(EditActions.setMode.editRelation(relationCopy));
   };
 
   const setLabel = (label: string, isSnd?: boolean) => {
-    const relationCopy: DataRelationTO = Carv2Util.deepCopy(relationToEdit);
+    const relationCopy: DataRelationTO = DavitUtil.deepCopy(relationToEdit);
     isSnd ? (relationCopy.label2 = label) : (relationCopy.label1 = label);
     dispatch(EditActions.setMode.editRelation(relationCopy));
   };
 
   const setDirection = (direction: Direction, isSnd?: boolean) => {
-    const relationCopy: DataRelationTO = Carv2Util.deepCopy(relationToEdit);
+    const relationCopy: DataRelationTO = DavitUtil.deepCopy(relationToEdit);
     isSnd ? (relationCopy.direction2 = direction) : (relationCopy.direction1 = direction);
     dispatch(EditActions.setMode.editRelation(relationCopy));
   };
 
   const setType = (relationType: RelationType, isSnd?: boolean) => {
-    const relationCopy: DataRelationTO = Carv2Util.deepCopy(relationToEdit);
+    const relationCopy: DataRelationTO = DavitUtil.deepCopy(relationToEdit);
     isSnd ? (relationCopy.type2 = relationType) : (relationCopy.type1 = relationType);
     dispatch(EditActions.setMode.editRelation(relationCopy));
   };
@@ -187,7 +187,7 @@ const useControllPanelEditRelationViewModel = () => {
   };
 
   const updateRelation = () => {
-    const copyRelationToEdit: DataRelationTO = Carv2Util.deepCopy(relationToEdit);
+    const copyRelationToEdit: DataRelationTO = DavitUtil.deepCopy(relationToEdit);
     dispatch(EditActions.relation.save(copyRelationToEdit));
   };
 

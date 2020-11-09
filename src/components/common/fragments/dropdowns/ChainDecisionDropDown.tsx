@@ -4,7 +4,7 @@ import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
 import {isNullOrUndefined} from 'util';
 import {ChainDecisionTO} from '../../../../dataAccess/access/to/ChainDecisionTO';
 import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
-import {Carv2Util} from '../../../../utils/Carv2Util';
+import {DavitUtil} from '../../../../utils/DavitUtil';
 
 interface ChainDecisionDropDownButtonProps extends DropdownProps {
   onSelect: (link: ChainDecisionTO | undefined) => void;
@@ -71,7 +71,7 @@ const useChainDecisionDropDownViewModel = (chainId: number, exclude?: number) =>
 
   const createDecisionOptions = (): DropdownItemProps[] => {
     if (!isNullOrUndefined(chainDecisions)) {
-      let copyDecision: ChainDecisionTO[] = Carv2Util.deepCopy(chainDecisions);
+      let copyDecision: ChainDecisionTO[] = DavitUtil.deepCopy(chainDecisions);
       copyDecision = copyDecision.filter((dec) => dec.chainFk === chainId);
       if (exclude) {
         copyDecision = copyDecision.filter((dec) => dec.id !== exclude);

@@ -3,7 +3,7 @@ import {ChainlinkCTO} from '../dataAccess/access/cto/ChainlinkCTO';
 import {DataSetupCTO} from '../dataAccess/access/cto/DataSetupCTO';
 import {ChainDecisionTO} from '../dataAccess/access/to/ChainDecisionTO';
 import {GoToChain, GoToTypesChain, TerminalChain} from '../dataAccess/access/types/GoToTypeChain';
-import {Carv2Util} from '../utils/Carv2Util';
+import {DavitUtil} from '../utils/DavitUtil';
 import {ActorData} from '../viewDataTypes/ActorData';
 import {ActorDataState} from '../viewDataTypes/ActorDataState';
 import {CalcSequence, SequenceService} from './SequenceService';
@@ -125,7 +125,7 @@ const getDecisionFromChain = (id: number, chain: ChainCTO): ChainDecisionTO | un
 
 export const getRoot = (chain: ChainCTO | null): ChainlinkCTO | null => {
   let rootLink: ChainlinkCTO | null = null;
-  if (!Carv2Util.isNullOrUndefined(chain)) {
+  if (!DavitUtil.isNullOrUndefined(chain)) {
     rootLink = chain!.links.find((link) => link.chainLink.root === true) || null;
   }
   return rootLink;

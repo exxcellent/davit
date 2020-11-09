@@ -4,7 +4,7 @@ import {Button, Input} from 'semantic-ui-react';
 import {DataCTO} from '../../../../../../dataAccess/access/cto/DataCTO';
 import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
-import {Carv2Util} from '../../../../../../utils/Carv2Util';
+import {DavitUtil} from '../../../../../../utils/DavitUtil';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import {DavitButtonIcon, DavitButtonLabel} from '../../../../../common/fragments/buttons/DavitButton';
 import {DataInstanceDropDownButton} from '../../../../../common/fragments/dropdowns/DataInstanceDropDown';
@@ -112,13 +112,13 @@ const useControllPanelEditDataViewModel = () => {
   });
 
   const changeName = (name: string) => {
-    const copyDataToEdit: DataCTO = Carv2Util.deepCopy(dataToEdit);
+    const copyDataToEdit: DataCTO = DavitUtil.deepCopy(dataToEdit);
     copyDataToEdit.data.name = name;
     dispatch(EditActions.setMode.editData(copyDataToEdit));
   };
 
   const updateData = () => {
-    const copyDataToEdit: DataCTO = Carv2Util.deepCopy(dataToEdit);
+    const copyDataToEdit: DataCTO = DavitUtil.deepCopy(dataToEdit);
     dispatch(EditActions.data.save(copyDataToEdit));
   };
 

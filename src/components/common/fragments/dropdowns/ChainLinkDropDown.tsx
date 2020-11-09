@@ -4,7 +4,7 @@ import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
 import {isNullOrUndefined} from 'util';
 import {ChainlinkTO} from '../../../../dataAccess/access/to/ChainlinkTO';
 import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
-import {Carv2Util} from '../../../../utils/Carv2Util';
+import {DavitUtil} from '../../../../utils/DavitUtil';
 
 interface ChainLinkDropDownButtonProps extends DropdownProps {
   onSelect: (link: ChainlinkTO | undefined) => void;
@@ -71,7 +71,7 @@ const useChainStepDropDownViewModel = (chainId: number, exclude?: number) => {
 
   const linkOptions = (): DropdownItemProps[] => {
     if (!isNullOrUndefined(chainlinks)) {
-      let copyLinks: ChainlinkTO[] = Carv2Util.deepCopy(chainlinks);
+      let copyLinks: ChainlinkTO[] = DavitUtil.deepCopy(chainlinks);
       copyLinks = copyLinks.filter((link) => link.chainFk === chainId);
       if (exclude) {
         copyLinks = copyLinks.filter((link) => link.id !== exclude);

@@ -9,7 +9,7 @@ import {GoTo, GoToTypes} from '../../../../../../dataAccess/access/types/GoToTyp
 import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
 import {SequenceModelActions, sequenceModelSelectors} from '../../../../../../slices/SequenceModelSlice';
-import {Carv2Util} from '../../../../../../utils/Carv2Util';
+import {DavitUtil} from '../../../../../../utils/DavitUtil';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import {DavitButtonIcon} from '../../../../../common/fragments/buttons/DavitButton';
 import {DavitRootButton} from '../../../../../common/fragments/buttons/DavitRootButton';
@@ -175,7 +175,7 @@ const useControllPanelEditConditionViewModel = () => {
 
   const changeName = (name: string) => {
     if (!isNullOrUndefined(decisionToEdit)) {
-      const copyConditionToEdit: DecisionTO = Carv2Util.deepCopy(decisionToEdit);
+      const copyConditionToEdit: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
       copyConditionToEdit.name = name;
       dispatch(EditActions.setMode.editDecision(copyConditionToEdit));
       dispatch(SequenceModelActions.setCurrentSequence(copyConditionToEdit.sequenceFk));
@@ -205,7 +205,7 @@ const useControllPanelEditConditionViewModel = () => {
   };
 
   const updateDecision = () => {
-    const copyDecision: DecisionTO = Carv2Util.deepCopy(decisionToEdit);
+    const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
     dispatch(EditActions.decision.save(copyDecision));
   };
 
@@ -221,7 +221,7 @@ const useControllPanelEditConditionViewModel = () => {
 
   const saveGoToType = (ifGoTo: Boolean, goTo: GoTo) => {
     if (goTo !== undefined) {
-      const copyDecisionToEdit: DecisionTO = Carv2Util.deepCopy(decisionToEdit);
+      const copyDecisionToEdit: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
       ifGoTo ? (copyDecisionToEdit.ifGoTo = goTo) : (copyDecisionToEdit.elseGoTo = goTo);
       dispatch(EditActions.decision.update(copyDecisionToEdit));
       dispatch(EditActions.decision.save(copyDecisionToEdit));
@@ -265,7 +265,7 @@ const useControllPanelEditConditionViewModel = () => {
     if (!isNullOrUndefined(decisionToEdit)) {
       const goToStep: SequenceStepCTO = new SequenceStepCTO();
       goToStep.squenceStepTO.sequenceFk = decisionToEdit.sequenceFk;
-      const copyDecision: DecisionTO = Carv2Util.deepCopy(decisionToEdit);
+      const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
       dispatch(EditActions.setMode.editStep(goToStep, copyDecision, ifGoTo));
     }
   };
@@ -274,7 +274,7 @@ const useControllPanelEditConditionViewModel = () => {
     if (!isNullOrUndefined(decisionToEdit)) {
       const goToDecision: DecisionTO = new DecisionTO();
       goToDecision.sequenceFk = decisionToEdit.sequenceFk;
-      const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(decisionToEdit);
+      const copyStepToEdit: SequenceStepCTO = DavitUtil.deepCopy(decisionToEdit);
       dispatch(EditActions.setMode.editDecision(goToDecision, copyStepToEdit, ifGoTo));
       setKey(key + 1);
     }

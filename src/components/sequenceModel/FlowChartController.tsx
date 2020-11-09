@@ -13,7 +13,7 @@ import {GoTo, GoToTypes, Terminal} from '../../dataAccess/access/types/GoToType'
 import {GoToChain, GoToTypesChain, TerminalChain} from '../../dataAccess/access/types/GoToTypeChain';
 import {handleError} from '../../slices/GlobalSlice';
 import {sequenceModelSelectors} from '../../slices/SequenceModelSlice';
-import {Carv2Util} from '../../utils/Carv2Util';
+import {DavitUtil} from '../../utils/DavitUtil';
 import {TabFragment} from '../sequenceTableModel/fragments/TabFragment';
 import {TabGroupFragment} from '../sequenceTableModel/fragments/TabGroupFragment';
 
@@ -417,7 +417,7 @@ const useFlowChartViewModel = () => {
   };
 
   const getSteps = (): string[] => {
-    const copyStepIds: string[] = Carv2Util.deepCopy(stepIds);
+    const copyStepIds: string[] = DavitUtil.deepCopy(stepIds);
     return copyStepIds;
   };
 

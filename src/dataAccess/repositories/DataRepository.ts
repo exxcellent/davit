@@ -1,4 +1,4 @@
-import {Carv2Util} from '../../utils/Carv2Util';
+import {DavitUtil} from '../../utils/DavitUtil';
 import {DataStoreCTO} from '../access/cto/DataStoreCTO';
 import {DataInstanceTO} from '../access/to/DataInstanceTO';
 import {DataTO} from '../access/to/DataTO';
@@ -46,7 +46,7 @@ export const DataRepository = {
 };
 
 const checkOrSetNewInstanceId = (instances: DataInstanceTO[], instance: DataInstanceTO): DataInstanceTO => {
-  const copyInstance: DataInstanceTO = Carv2Util.deepCopy(instance);
+  const copyInstance: DataInstanceTO = DavitUtil.deepCopy(instance);
   if (instance.id === -1) {
     copyInstance.id = DataAccessUtil.determineNewId(instances);
   }
@@ -54,7 +54,7 @@ const checkOrSetNewInstanceId = (instances: DataInstanceTO[], instance: DataInst
 };
 
 const checkOrsetNewDataId = (dataTOs: DataTO[], dataTO: DataTO): DataTO => {
-  const copyDataTO: DataTO = Carv2Util.deepCopy(dataTO);
+  const copyDataTO: DataTO = DavitUtil.deepCopy(dataTO);
   if (copyDataTO.id === -1) {
     copyDataTO.id = DataAccessUtil.determineNewId(dataTOs);
   }

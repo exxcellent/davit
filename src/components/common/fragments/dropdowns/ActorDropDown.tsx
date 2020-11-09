@@ -1,10 +1,10 @@
 import React, {FunctionComponent} from 'react';
 import {useSelector} from 'react-redux';
 import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
-import {isNullOrUndefined} from 'util';
-
 import {ActorCTO} from '../../../../dataAccess/access/cto/ActorCTO';
 import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
+import {DavitUtil} from '../../../../utils/DavitUtil';
+
 
 interface ActorDropDownProps extends DropdownProps {
   onSelect: (actor: ActorCTO | undefined) => void;
@@ -69,7 +69,7 @@ const useActorDropDownViewModel = () => {
   };
 
   const selectActor = (actorId: number, actors: ActorCTO[]): ActorCTO | undefined => {
-    if (!isNullOrUndefined(actors) && !isNullOrUndefined(actorId)) {
+    if (!DavitUtil.isNullOrUndefined(actors) && !DavitUtil.isNullOrUndefined(actorId)) {
       return actors.find((actor) => actor.actor.id === actorId);
     }
     return undefined;

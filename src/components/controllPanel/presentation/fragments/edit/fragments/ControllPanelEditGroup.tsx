@@ -5,7 +5,7 @@ import {isNullOrUndefined} from 'util';
 import {GroupTO} from '../../../../../../dataAccess/access/to/GroupTO';
 import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
-import {Carv2Util} from '../../../../../../utils/Carv2Util';
+import {DavitUtil} from '../../../../../../utils/DavitUtil';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import {DavitButtonLabel} from '../../../../../common/fragments/buttons/DavitButton';
 import {ColorDropDown} from '../../../../../common/fragments/dropdowns/ColorDropDown';
@@ -77,14 +77,14 @@ const useControllPanelEditGroupViewModel = () => {
 
   const changeName = (name: string) => {
     if (!isNullOrUndefined(groupToEdit)) {
-      const copyGroupToEdit: GroupTO = Carv2Util.deepCopy(groupToEdit);
+      const copyGroupToEdit: GroupTO = DavitUtil.deepCopy(groupToEdit);
       copyGroupToEdit.name = name;
       dispatch(EditActions.setMode.editGroup(copyGroupToEdit));
     }
   };
 
   const updateGroup = () => {
-    const copyGroup: GroupTO = Carv2Util.deepCopy(groupToEdit);
+    const copyGroup: GroupTO = DavitUtil.deepCopy(groupToEdit);
     dispatch(EditActions.group.save(copyGroup));
   };
 
@@ -112,7 +112,7 @@ const useControllPanelEditGroupViewModel = () => {
 
   const setGroupColor = (color: string | undefined) => {
     if (!isNullOrUndefined(groupToEdit)) {
-      const copyGroupToEdit: GroupTO = Carv2Util.deepCopy(groupToEdit);
+      const copyGroupToEdit: GroupTO = DavitUtil.deepCopy(groupToEdit);
       if (color !== undefined) {
         copyGroupToEdit.color = color;
       }

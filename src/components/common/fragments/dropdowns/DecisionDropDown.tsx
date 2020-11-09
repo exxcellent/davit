@@ -5,7 +5,7 @@ import {isNullOrUndefined} from 'util';
 import {SequenceCTO} from '../../../../dataAccess/access/cto/SequenceCTO';
 import {DecisionTO} from '../../../../dataAccess/access/to/DecisionTO';
 import {sequenceModelSelectors} from '../../../../slices/SequenceModelSlice';
-import {Carv2Util} from '../../../../utils/Carv2Util';
+import {DavitUtil} from '../../../../utils/DavitUtil';
 
 interface DecisionDropDownButtonProps extends DropdownProps {
   onSelect: (decision: DecisionTO | undefined) => void;
@@ -69,7 +69,7 @@ const useDecisionDropDownViewModel = (exclude?: number) => {
 
   const decisionOptions = (): DropdownItemProps[] => {
     if (!isNullOrUndefined(sequenceToEdit)) {
-      let copyDec: DecisionTO[] = Carv2Util.deepCopy(sequenceToEdit.decisions);
+      let copyDec: DecisionTO[] = DavitUtil.deepCopy(sequenceToEdit.decisions);
       if (exclude) {
         copyDec = copyDec.filter((dec) => dec.id !== exclude);
       }

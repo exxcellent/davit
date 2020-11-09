@@ -5,7 +5,7 @@ import {isNullOrUndefined} from 'util';
 import {SequenceCTO} from '../../../../dataAccess/access/cto/SequenceCTO';
 import {SequenceStepCTO} from '../../../../dataAccess/access/cto/SequenceStepCTO';
 import {sequenceModelSelectors} from '../../../../slices/SequenceModelSlice';
-import {Carv2Util} from '../../../../utils/Carv2Util';
+import {DavitUtil} from '../../../../utils/DavitUtil';
 
 interface StepDropDownButtonProps extends DropdownProps {
   onSelect: (step: SequenceStepCTO | undefined) => void;
@@ -69,7 +69,7 @@ const useStepDropDownViewModel = (exclude?: number) => {
 
   const stepOptions = (): DropdownItemProps[] => {
     if (!isNullOrUndefined(sequenceToEdit)) {
-      let copySteps: SequenceStepCTO[] = Carv2Util.deepCopy(sequenceToEdit.sequenceStepCTOs);
+      let copySteps: SequenceStepCTO[] = DavitUtil.deepCopy(sequenceToEdit.sequenceStepCTOs);
       if (exclude) {
         copySteps = copySteps.filter((step) => step.squenceStepTO.id !== exclude);
       }
