@@ -33,7 +33,7 @@ export const ControllPanelEditChainCondition: FunctionComponent<ControllPanelEdi
     <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={setMode}>
       <div className="controllPanelEditChild">
         <OptionField label="Select Actor">
-          <ActorDropDown value={actorFk} onSelect={(actor) => setActorFk(actor?.actor.id || -1)} />
+          <ActorDropDown value={actorFk?.toString()} onSelect={(actor) => setActorFk(actor?.actor.id || -1)} />
         </OptionField>
       </div>
       <div className="columnDivider optionFieldSpacer">

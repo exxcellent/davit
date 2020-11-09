@@ -65,7 +65,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
           <OptionField label={actionType?.includes('SEND') ? 'Select sending Actor' : 'Actor'}>
             <ActorDropDown
               onSelect={(actor) => setActor(actor, actionType?.includes('SEND') ? true : false)}
-              value={actionType?.includes('SEND') ? sendingActorId : receivingActorId}
+              value={actionType?.includes('SEND') ? sendingActorId?.toString() : receivingActorId?.toString()}
             />
           </OptionField>
         </OptionField>
@@ -77,7 +77,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
               TO
             </label>
             <OptionField label="Select receiving Actor">
-              <ActorDropDown onSelect={(actor) => setActor(actor, false)} value={receivingActorId} />
+              <ActorDropDown onSelect={(actor) => setActor(actor, false)} value={receivingActorId?.toString()} />
             </OptionField>
           </OptionField>
         )}

@@ -1,5 +1,6 @@
 import React, {FunctionComponent} from 'react';
 import {Dropdown} from 'semantic-ui-react';
+import '../../../../app/Davit.css';
 
 export interface DavitDropDownItemProps{
   key: number,
@@ -38,7 +39,7 @@ export const DavitDropDown: FunctionComponent<DavitDropDownProps> = (props) => {
       trigger={<React.Fragment />}
       scrolling
       value={value}
-      disabled={dropdownItems.length > 0}
+      disabled={dropdownItems.length < 1}
       search
       options={dropdownItems.sort((a, b) => {
         return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
@@ -58,8 +59,7 @@ export const DavitIconDropDown: FunctionComponent<DavitIconDropDownProps> = (pro
       className="button icon"
       trigger={<React.Fragment />}
       scrolling
-      disabled={dropdownItems.length > 0}
-      search
+      disabled={dropdownItems.length < 1}
       options={dropdownItems.sort((a, b) => {
         return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
       })}
@@ -91,7 +91,7 @@ export const DavitMultiselectDropDown: FunctionComponent<DavitMultiselectDropDow
       search
       value={selectedItemsToValuesArray(selected)}
       scrolling
-      disabled={dropdownItems.length > 0}
+      disabled={dropdownItems.length < 1}
       style={{overflow: 'auto'}}
       options={dropdownItems.sort(function(a, b) {
         return ('' + a.value).localeCompare(b.value);

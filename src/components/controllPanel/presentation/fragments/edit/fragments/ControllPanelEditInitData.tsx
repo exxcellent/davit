@@ -43,7 +43,7 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
             onSelect={(actor) => (actor ? setActorId(actor.actor.id) : setActorId(-1))}
             placeholder="Select Actor..."
             onBlur={() => {}}
-            value={actor}
+            value={actor?.toString()}
           />
         </OptionField>
       </div>
