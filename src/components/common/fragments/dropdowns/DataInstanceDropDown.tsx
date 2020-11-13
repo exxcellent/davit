@@ -1,6 +1,7 @@
 import React, {FunctionComponent} from 'react';
-import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
+import {DropdownProps} from 'semantic-ui-react';
 import {DataInstanceTO} from '../../../../dataAccess/access/to/DataInstanceTO';
+import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from './DavitDropDown';
 
 
 interface DataInstanceDropDownProps extends DropdownProps {
@@ -26,15 +27,11 @@ export const DataInstanceDropDown: FunctionComponent<DataInstanceDropDownProps> 
   const {dataInstacesToOption} = useDataInstanceDropDownViewModel();
 
   return (
-    <Dropdown
-      options={dataInstacesToOption(instances)}
-      placeholder={placeholder || 'Select Data Instance ...'}
-      onChange={(event, data) => onSelect(Number(data.value))}
-      selectOnBlur={false}
-      scrolling
-      selection
-      value={value === -1 ? undefined : value}
-      disabled={dataInstacesToOption(instances).length > 0 ? false : true}
+    <DavitDropDown
+      dropdownItems={dataInstacesToOption(instances)}
+      onSelect={(instance) => onSelect(Number(instance.value))}
+      placeholder={placeholder}
+      value={value?.toString()}
     />
   );
 };
@@ -46,18 +43,10 @@ export const DataInstanceDropDownButton: FunctionComponent<DataInstanceDropDownB
   const {dataInstacesToOption} = useDataInstanceDropDownViewModel();
 
   return (
-    <Dropdown
-      options={dataInstacesToOption(instances)}
-      icon={dataInstacesToOption(instances).length > 0 ? icon : ''}
-      onChange={(event, data) => onSelect(Number(data.value))}
-      className="button icon"
-      inverted="true"
-      color="orange"
-      floating
-      selectOnBlur={false}
-      trigger={<React.Fragment />}
-      scrolling
-      disabled={dataInstacesToOption(instances).length > 0 ? false : true}
+    <DavitIconDropDown
+      dropdownItems={dataInstacesToOption(instances)}
+      onSelect={(instance) => onSelect(Number(instance.value))}
+      icon={icon}
     />
   );
 };
@@ -65,13 +54,13 @@ export const DataInstanceDropDownButton: FunctionComponent<DataInstanceDropDownB
 const useDataInstanceDropDownViewModel = () => {
   const dataInstacesToOption = (
       instances: DataInstanceTO[],
-  ): DropdownItemProps[] => {
-    const dropdownItemProps: DropdownItemProps[] = [];
+  ): DavitDropDownItemProps[] => {
+    const dropdownItemProps: DavitDropDownItemProps[] = [];
     instances
         .forEach((instanc) =>
           dropdownItemProps.push({
             key: instanc.id,
-            value: instanc.id,
+            value: instanc.id.toString(),
             text: instanc.name,
           }),
         );
