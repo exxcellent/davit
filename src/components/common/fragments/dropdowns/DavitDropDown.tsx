@@ -1,5 +1,5 @@
 import React, {FunctionComponent} from 'react';
-import {Dropdown} from 'semantic-ui-react';
+import {Dropdown, DropdownItemProps} from 'semantic-ui-react';
 import '../../../../app/Davit.css';
 
 export interface DavitDropDownItemProps{
@@ -8,29 +8,28 @@ export interface DavitDropDownItemProps{
   text: string,
 }
 
-export interface DavitDropDownProps {
+export interface DavitDropDownProps extends DropdownItemProps {
   onSelect: (dropdownItem: DavitDropDownItemProps) => void;
   dropdownItems: DavitDropDownItemProps[];
   value?: string;
   placeholder?: string;
-  clearable?: boolean;
 }
 
-export interface DavitIconDropDownProps {
+export interface DavitIconDropDownProps extends DropdownItemProps {
   onSelect: (dropdownItem: DavitDropDownItemProps) => void;
   dropdownItems: DavitDropDownItemProps[];
   icon?: string;
 }
 
-export interface DavitMultiselectDropDownProps {
+export interface DavitMultiselectDropDownProps extends DropdownItemProps {
   onSelect: (items: DavitDropDownItemProps[]) => void;
   dropdownItems: DavitDropDownItemProps[];
-  selected: DavitDropDownItemProps[];
+  selection: DavitDropDownItemProps[];
   placeholder?: string;
 }
 
 export const DavitDropDown: FunctionComponent<DavitDropDownProps> = (props) => {
-  const {dropdownItems, onSelect, placeholder, value, clearable} = props;
+  const {dropdownItems, onSelect, placeholder, value, clearable, others} = props;
 
   return (
     <Dropdown
@@ -46,6 +45,7 @@ export const DavitDropDown: FunctionComponent<DavitDropDownProps> = (props) => {
         return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
       })}
       onChange={(event, data) => onSelect(parsDataToDavitDropDownItemProps(data))}
+      {...others}
     />
   );
 };
@@ -70,7 +70,7 @@ export const DavitIconDropDown: FunctionComponent<DavitIconDropDownProps> = (pro
 };
 
 export const DavitMultiselectDropDown: FunctionComponent<DavitMultiselectDropDownProps> = (props) => {
-  const {onSelect, selected, placeholder, dropdownItems} = props;
+  const {onSelect, selection: selected, placeholder, dropdownItems} = props;
 
   function selectedItemsToValuesArray(selected: DavitDropDownItemProps[]): string[] {
     const valueNumbers: string[] = [];
