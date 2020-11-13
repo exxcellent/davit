@@ -1,9 +1,10 @@
 import React, {FunctionComponent} from 'react';
 import {useSelector} from 'react-redux';
-import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
-import {isNullOrUndefined} from 'util';
+import {DropdownProps} from 'semantic-ui-react';
 import {DataSetupTO} from '../../../../dataAccess/access/to/DataSetupTO';
 import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
+import {DavitUtil} from '../../../../utils/DavitUtil';
+import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from './DavitDropDown';
 
 interface DataSetupDropDownProps extends DropdownProps {
   onSelect: (dataSetup: DataSetupTO | undefined) => void;
@@ -21,18 +22,12 @@ export const DataSetupDropDown: FunctionComponent<DataSetupDropDownProps> = (pro
   const {dataSetups, selectDataSetup, dataSetupToOption} = useDataSetupDropDownViewModel();
 
   return (
-    <Dropdown
-      options={dataSetups.map(dataSetupToOption).sort((a, b) => {
-        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
-      })}
-      selection
-      selectOnBlur={false}
-      placeholder={placeholder || 'Select Data ...'}
-      onChange={(event, data) => onSelect(selectDataSetup(Number(data.value), dataSetups))}
-      scrolling
+    <DavitDropDown
+      dropdownItems={dataSetups.map(dataSetupToOption)}
+      value={value?.toString()}
       clearable={true}
-      value={value}
-      disabled={dataSetups.length > 0 ? false : true}
+      onSelect={(setup) => onSelect(selectDataSetup(Number(setup.value), dataSetups))}
+      placeholder={placeholder}
     />
   );
 };
@@ -42,17 +37,10 @@ export const DataSetupDropDownButton: FunctionComponent<DataSetupDropDownPropsBu
   const {dataSetups, selectDataSetup, dataSetupToOption} = useDataSetupDropDownViewModel();
 
   return (
-    <Dropdown
-      options={dataSetups.map(dataSetupToOption).sort((a, b) => {
-        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
-      })}
-      icon={dataSetups.length > 0 ? icon : ''}
-      selectOnBlur={false}
-      onChange={(event, data) => onSelect(selectDataSetup(Number(data.value), dataSetups))}
-      className="button icon"
-      trigger={<React.Fragment />}
-      scrolling
-      disabled={dataSetups.length > 0 ? false : true}
+    <DavitIconDropDown
+      dropdownItems={dataSetups.map(dataSetupToOption)}
+      icon={icon}
+      onSelect={(setup) => onSelect(selectDataSetup(Number(setup.value), dataSetups))}
     />
   );
 };
@@ -60,16 +48,16 @@ export const DataSetupDropDownButton: FunctionComponent<DataSetupDropDownPropsBu
 const useDataSetupDropDownViewModel = () => {
   const dataSetups: DataSetupTO[] = useSelector(masterDataSelectors.dataSetup);
 
-  const dataSetupToOption = (dataSetup: DataSetupTO): DropdownItemProps => {
+  const dataSetupToOption = (dataSetup: DataSetupTO): DavitDropDownItemProps => {
     return {
       key: dataSetup.id,
-      value: dataSetup.id,
+      value: dataSetup.id.toString(),
       text: dataSetup.name,
     };
   };
 
   const selectDataSetup = (dataSetupId: number, dataSetups: DataSetupTO[]): DataSetupTO | undefined => {
-    if (!isNullOrUndefined(dataSetups) && !isNullOrUndefined(dataSetupId)) {
+    if (!DavitUtil.isNullOrUndefined(dataSetups) && !DavitUtil.isNullOrUndefined(dataSetupId)) {
       return dataSetups.find((dataSetup) => dataSetup.id === dataSetupId);
     }
     return undefined;
