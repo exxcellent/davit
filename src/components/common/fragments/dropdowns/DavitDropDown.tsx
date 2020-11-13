@@ -13,6 +13,7 @@ export interface DavitDropDownProps {
   dropdownItems: DavitDropDownItemProps[];
   value?: string;
   placeholder?: string;
+  clearable?: boolean;
 }
 
 export interface DavitIconDropDownProps {
@@ -29,7 +30,7 @@ export interface DavitMultiselectDropDownProps {
 }
 
 export const DavitDropDown: FunctionComponent<DavitDropDownProps> = (props) => {
-  const {dropdownItems, onSelect, placeholder, value} = props;
+  const {dropdownItems, onSelect, placeholder, value, clearable} = props;
 
   return (
     <Dropdown
@@ -40,6 +41,7 @@ export const DavitDropDown: FunctionComponent<DavitDropDownProps> = (props) => {
       value={value}
       disabled={dropdownItems.length < 1}
       search
+      clearable={clearable ? clearable : false}
       options={dropdownItems.sort((a, b) => {
         return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
       })}
