@@ -1,11 +1,11 @@
 import React, {FunctionComponent} from 'react';
 import {useSelector} from 'react-redux';
-import {Dropdown, DropdownProps} from 'semantic-ui-react';
+import {DropdownProps} from 'semantic-ui-react';
 import {SequenceCTO} from '../../../../dataAccess/access/cto/SequenceCTO';
 import {DecisionTO} from '../../../../dataAccess/access/to/DecisionTO';
 import {sequenceModelSelectors} from '../../../../slices/SequenceModelSlice';
 import {DavitUtil} from '../../../../utils/DavitUtil';
-import {DavitDropDown, DavitDropDownItemProps} from './DavitDropDown';
+import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from './DavitDropDown';
 
 interface DecisionDropDownButtonProps extends DropdownProps {
   onSelect: (decision: DecisionTO | undefined) => void;
@@ -24,16 +24,10 @@ export const DecisionDropDownButton: FunctionComponent<DecisionDropDownButtonPro
   const {sequenceToEdit, decisionOptions, selectDecision} = useDecisionDropDownViewModel();
 
   return (
-    <Dropdown
-      options={decisionOptions()}
-      icon={decisionOptions().length > 0 ? icon : ''}
-      onChange={(event, data) => onSelect(selectDecision(Number(data.value), sequenceToEdit))}
-      className="button icon"
-      floating
-      selectOnBlur={false}
-      trigger={<React.Fragment />}
-      scrolling
-      disabled={decisionOptions().length > 0 ? false : true}
+    <DavitIconDropDown
+      dropdownItems={decisionOptions()}
+      onSelect={(decision) => onSelect(selectDecision(Number(decision.value), sequenceToEdit))}
+      icon={icon}
     />
   );
 };
@@ -43,20 +37,11 @@ export const DecisionDropDown: FunctionComponent<DecisionDropDownProps> = (props
   const {sequenceToEdit, decisionOptions, selectDecision} = useDecisionDropDownViewModel(exclude);
 
   return (
-    // <Dropdown
-    //   options={decisionOptions()}
-    //   selection
-    //   selectOnBlur={false}
-    //   placeholder={placeholder || 'Select decision ...'}
-    //   onChange={(event, data) => onSelect(selectDecision(Number(data.value), sequenceToEdit))}
-    //   scrolling
-    //   value={value === -1 ? undefined : value}
-    //   disabled={decisionOptions().length > 0 ? false : true}
-    // />
     <DavitDropDown
       dropdownItems={decisionOptions()}
       placeholder={placeholder}
       onSelect={(decision) => onSelect(selectDecision(Number(decision.value), sequenceToEdit))}
+      value={value?.toString()}
     />
   );
 };
