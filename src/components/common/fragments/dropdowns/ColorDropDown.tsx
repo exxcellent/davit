@@ -1,35 +1,31 @@
 import React, {FunctionComponent} from 'react';
-import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
+import {DropdownProps} from 'semantic-ui-react';
+import {DavitDropDown, DavitDropDownItemProps} from './DavitDropDown';
 
 interface ColorDropDownProps extends DropdownProps {
   onSelect: (color: string | undefined) => void;
   placeholder?: string;
   colors: string[];
+  value?: string;
 }
 
 export const ColorDropDown: FunctionComponent<ColorDropDownProps> = (props) => {
-  const {onSelect, placeholder, colors} = props;
+  const {onSelect, placeholder, colors, value} = props;
 
-  const colorToOption = (color: string): DropdownItemProps => {
+  const colorToOption = (color: string, key: number): DavitDropDownItemProps => {
     return {
-      key: color,
+      key: key,
       value: color,
       text: color,
     };
   };
 
   return (
-    <Dropdown
-      options={colors.map(colorToOption).sort((a, b) => {
-        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
-      })}
-      selection
-      selectOnBlur={false}
-      onChange={(event, data) => onSelect(data.value as string)}
-      scrolling
-      value={placeholder}
-      floating
-      compact
+    <DavitDropDown
+      dropdownItems={colors.map((color, index) => colorToOption(color, index))}
+      onSelect={(color) => onSelect(color.value)}
+      placeholder={placeholder}
+      value={value}
     />
   );
 };
