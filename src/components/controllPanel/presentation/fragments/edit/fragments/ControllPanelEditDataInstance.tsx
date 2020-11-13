@@ -5,6 +5,7 @@ import {DataCTO} from '../../../../../../dataAccess/access/cto/DataCTO';
 import {DataInstanceTO} from '../../../../../../dataAccess/access/to/DataInstanceTO';
 import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
+import {masterDataSelectors} from '../../../../../../slices/MasterDataSlice';
 import {Carv2Util} from '../../../../../../utils/Carv2Util';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import {DavitButtonIcon, DavitButtonLabel} from '../../../../../common/fragments/buttons/DavitButton';
@@ -76,8 +77,11 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
 const useControllPanelEditDataInstanceViewModel = () => {
   const dataToEdit: DataCTO | null = useSelector(editSelectors.dataToEdit);
   const instanceId: number | null = useSelector(editSelectors.instanceIdToEdit);
+  const updatedData: DataCTO | null = useSelector(masterDataSelectors.getDataCTOById(dataToEdit?.data.id || -1));
   const dispatch = useDispatch();
   const textInput = useRef<Input>(null);
+
+  console.info('instanceId: ', instanceId);
 
   useEffect(() => {
     // used to focus the textfield on create another
@@ -139,7 +143,8 @@ const useControllPanelEditDataInstanceViewModel = () => {
   };
 
   const createAnother = () => {
-    if (dataToEdit !== null) {
+    if (dataToEdit !== null && updatedData) {
+      dispatch(EditActions.data.update(updatedData));
       dispatch(EditActions.setMode.editDataInstance());
     }
   };
