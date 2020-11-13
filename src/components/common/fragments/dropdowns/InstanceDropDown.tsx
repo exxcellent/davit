@@ -1,10 +1,10 @@
 import React, {FunctionComponent} from 'react';
 import {useSelector} from 'react-redux';
 import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
-
 import {DataCTO} from '../../../../dataAccess/access/cto/DataCTO';
 import {DataInstanceTO} from '../../../../dataAccess/access/to/DataInstanceTO';
 import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
+
 
 export interface DataAndInstanceId {
   dataFk: number;
@@ -139,13 +139,7 @@ const useInstanceDropDownViewModel = () => {
     if (datas) {
       datas.forEach((data) => {
         data.data.instances.forEach((inst) => {
-          if (data.data.instances.length > 1) {
-            if (inst.id !== 1) {
-              dropdownItemas.push(instanceToOption(inst, data));
-            }
-          } else {
-            dropdownItemas.push(instanceToOption(inst, data));
-          }
+          dropdownItemas.push(instanceToOption(inst, data));
         });
       });
     }
@@ -162,7 +156,7 @@ const useInstanceDropDownViewModel = () => {
     };
     const optionItemString: string = JSON.stringify(optionItem);
     let optionLabel: string = data.data.name;
-    if (instance.id > 1) {
+    if (instance.id !== -1) {
       optionLabel = optionLabel + ' - ' + instance.name;
     }
     return {
