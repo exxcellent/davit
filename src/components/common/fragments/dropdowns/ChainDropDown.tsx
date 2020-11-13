@@ -1,9 +1,9 @@
 import React, {FunctionComponent} from 'react';
 import {useSelector} from 'react-redux';
 import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
-import {isNullOrUndefined} from 'util';
 import {ChainTO} from '../../../../dataAccess/access/to/ChainTO';
 import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
+import {DavitUtil} from '../../../../utils/DavitUtil';
 
 interface ChainDropDownProps extends DropdownProps {
   onSelect: (chain: ChainTO | undefined) => void;
@@ -61,7 +61,7 @@ const useChainDropDownViewModel = () => {
   const chains: ChainTO[] = useSelector(masterDataSelectors.chains);
 
   const selectChain = (id: number): ChainTO | undefined => {
-    if (!isNullOrUndefined(id) && !isNullOrUndefined(chains)) {
+    if (!DavitUtil.isNullOrUndefined(id) && !DavitUtil.isNullOrUndefined(chains)) {
       return chains.find((chain) => chain.id === id);
     }
     return undefined;
