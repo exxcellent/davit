@@ -32,7 +32,7 @@ const createDataSetupColumn = (
   const name: string = dataSetup.name;
   const trClass = 'carv2Tr';
   const editAction = {icon: 'wrench', callback: editCallback};
-  const selectAction = {icon: 'wrench', callback: selectCallback};
+  const selectAction = {icon: 'hand pointer', callback: selectCallback};
 
   return {
     trClass,
