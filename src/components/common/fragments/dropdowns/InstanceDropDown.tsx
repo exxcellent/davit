@@ -7,7 +7,6 @@ import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
 import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from './DavitDropDown';
 
 
-
 export interface DataAndInstanceId {
   dataFk: number;
   instanceId: number;
@@ -73,8 +72,6 @@ export const InstanceDropDownMultiselect: FunctionComponent<InstanceDropDownMult
     });
   }
 
-  console.info('seleted: ', parsDataAndInstanceIdToStringArray(selected));
-
   return (
     <Dropdown
       placeholder={placeholder || 'Select Datas ...'}
@@ -83,18 +80,11 @@ export const InstanceDropDownMultiselect: FunctionComponent<InstanceDropDownMult
       selection
       options={createOptions()}
       onChange={(event, instances) => {
-        console.info('instaces: ', instances.value as string[]);
-        console.info('instaces: ', event);
         onSelect(selectInstances((instances.value as string[]) || undefined));
       }}
       value={selected.map((select) => JSON.stringify(select))}
       scrolling
       disabled={createOptions().length > 0 ? false : true}
-    // <DavitMultiselectDropDown
-    //   dropdownItems={createOptions()}
-    //   placeholder={placeholder}
-    //   onSelect={(instances) => onSelect(selectInstances(instances.map((inst) => inst.value)))}
-    //   // selection={parsDataAndInstanceIdToStringArray(selected)}
     />
   );
 };

@@ -21,13 +21,6 @@ export interface DavitIconDropDownProps extends DropdownItemProps {
   icon?: string;
 }
 
-export interface DavitMultiselectDropDownProps extends DropdownItemProps {
-  onSelect: (items: string[]) => void;
-  dropdownItems: DavitDropDownItemProps[];
-  selection: string[];
-  placeholder?: string;
-}
-
 export const DavitDropDown: FunctionComponent<DavitDropDownProps> = (props) => {
   const {dropdownItems, onSelect, placeholder, value, clearable, others} = props;
 
@@ -65,41 +58,6 @@ export const DavitIconDropDown: FunctionComponent<DavitIconDropDownProps> = (pro
         return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
       })}
       onChange={(event, data) => onSelect(parsDataToDavitDropDownItemProps(data))}
-    />
-  );
-};
-
-export const DavitMultiselectDropDown: FunctionComponent<DavitMultiselectDropDownProps> = (props) => {
-  const {onSelect, selection: selected, placeholder, dropdownItems} = props;
-
-  function selectedItemsToValuesArray(selected: DavitDropDownItemProps[]): string[] {
-    const valueNumbers: string[] = [];
-    selected.forEach((item) => {
-      valueNumbers.push(item.value);
-    });
-    valueNumbers.sort((a, b) => {
-      return a < b ? -1 : a > b ? 1 : 0;
-    });
-    return valueNumbers;
-  }
-
-  return (
-    <Dropdown
-      placeholder={placeholder || ''}
-      fluid
-      multiple
-      selection
-      // value={selectedItemsToValuesArray(selected)}
-      scrolling
-      disabled={dropdownItems.length < 1}
-      // style={{overflow: 'auto'}}
-      options={dropdownItems.sort(function(a, b) {
-        return ('' + a.value).localeCompare(b.value);
-      })}
-      // onChange={(event, datas) => {
-      //   console.info('datas: ', datas);
-      //   onSelect((datas.value as string[])
-      // }}
     />
   );
 };
