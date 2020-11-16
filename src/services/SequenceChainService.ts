@@ -1,11 +1,11 @@
 import {ChainCTO} from '../dataAccess/access/cto/ChainCTO';
 import {ChainlinkCTO} from '../dataAccess/access/cto/ChainlinkCTO';
 import {DataSetupCTO} from '../dataAccess/access/cto/DataSetupCTO';
+import {ActionTO} from '../dataAccess/access/to/ActionTO';
 import {ChainDecisionTO} from '../dataAccess/access/to/ChainDecisionTO';
 import {GoToChain, GoToTypesChain, TerminalChain} from '../dataAccess/access/types/GoToTypeChain';
 import {DavitUtil} from '../utils/DavitUtil';
 import {ActorData} from '../viewDataTypes/ActorData';
-import {ActorDataState} from '../viewDataTypes/ActorDataState';
 import {CalcSequence, SequenceService} from './SequenceService';
 
 export interface CalcChainLink {
@@ -14,7 +14,7 @@ export interface CalcChainLink {
   stepId: string;
   dataSetup: DataSetupCTO;
   sequence: CalcSequence;
-  errors: ActorData[];
+  errors: ActionTO[];
 }
 
 export interface CalcChain {
@@ -46,13 +46,13 @@ export const SequenceChainService = {
         while (!isLooping(loopStartingStep) && (type === GoToTypesChain.LINK || type === GoToTypesChain.DEC)) {
           if (type === GoToTypesChain.LINK) {
             const link: ChainlinkCTO = step as ChainlinkCTO;
-            const mergedActorDatas: MergedActorDatas = mergeActorDatas(actorDatas, link.dataSetup);
 
-            loopStartingStep = checkForLoop(calcSequenceChain, link, mergedActorDatas);
+            loopStartingStep = checkForLoop(calcSequenceChain, link, actorDatas);
 
             const result: CalcSequence = SequenceService.calculateSequence(
                 link.sequence,
-                mergedActorDatas.actorDatas,
+                link.dataSetup,
+                actorDatas,
             );
 
             actorDatas = result.steps.length > 0 ? result.steps[result.steps.length - 1].actorDatas : [];
@@ -68,7 +68,7 @@ export const SequenceChainService = {
               stepId: stepId,
               sequence: result,
               dataSetup: link.dataSetup,
-              errors: mergedActorDatas.errors,
+              errors: result.steps.map((step) => step.errors).flat(1),
             });
 
             if (!isLooping(loopStartingStep)) {
@@ -161,15 +161,15 @@ const getType = (step: ChainlinkCTO | ChainDecisionTO | TerminalChain): GoToType
 const checkForLoop = (
     calcSequenceChain: CalcChain,
     step: ChainlinkCTO,
-    mergedActorData: MergedActorDatas,
+    actorDatas: ActorData[],
 ): number => {
   return calcSequenceChain.calcLinks.findIndex(
       (calcLink) =>
         calcLink.chainLinkId === step.chainLink.id
-      && calcLink.sequence.steps[0].actorDatas.length === mergedActorData.actorDatas.length
+      && calcLink.sequence.steps[0].actorDatas.length === actorDatas.length
       && !calcLink.sequence.steps[0].actorDatas.some(
           (cp) =>
-            !mergedActorData.actorDatas.some((rcp) => rcp.actorFk === cp.actorFk && rcp.dataFk === cp.dataFk),
+            !actorDatas.some((rcp) => rcp.actorFk === cp.actorFk && rcp.dataFk === cp.dataFk),
       ),
   );
 };
@@ -178,21 +178,3 @@ const isLooping = (loopStartingStep: number) => {
   return loopStartingStep > -1;
 };
 
-const mergeActorDatas = (actorDatas: ActorData[], dataSetup: DataSetupCTO): MergedActorDatas => {
-  const errorCompDatas: ActorData[] = [];
-  const dataSetupActorData: ActorData[] = dataSetup.initDatas.map((initData) => {
-    return {actorFk: initData.actorFk, dataFk: initData.dataFk, instanceFk: initData.instanceFk, state: ActorDataState.PERSISTENT};
-  });
-  dataSetupActorData.forEach((actorData) => {
-    if (actorDatas.some((cp) => isCompDataEqual(cp, actorData))) {
-      errorCompDatas.push(actorData);
-    } else {
-      actorDatas.push(actorData);
-    }
-  });
-  return {actorDatas: actorDatas, errors: errorCompDatas};
-};
-
-const isCompDataEqual = (actorData1: ActorData, actorData2: ActorData): boolean => {
-  return actorData1.actorFk === actorData2.actorFk && actorData1.dataFk === actorData2.dataFk ? true : false;
-};

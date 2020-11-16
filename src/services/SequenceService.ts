@@ -1,9 +1,12 @@
+import {DataSetupCTO} from '../dataAccess/access/cto/DataSetupCTO';
 import {SequenceCTO} from '../dataAccess/access/cto/SequenceCTO';
 import {SequenceStepCTO} from '../dataAccess/access/cto/SequenceStepCTO';
 import {ActionTO} from '../dataAccess/access/to/ActionTO';
 import {DecisionTO} from '../dataAccess/access/to/DecisionTO';
+import {ActionType} from '../dataAccess/access/types/ActionType';
 import {GoTo, GoToTypes, Terminal} from '../dataAccess/access/types/GoToType';
 import {SequenceActionReducer, SequenceActionResult, SequenceDecisionResult} from '../reducer/SequenceActionReducer';
+import {DavitUtil} from '../utils/DavitUtil';
 import {ActorData} from '../viewDataTypes/ActorData';
 
 export interface CalculatedStep {
@@ -23,7 +26,7 @@ export interface CalcSequence {
 }
 
 export const SequenceService = {
-  calculateSequence: (sequence: SequenceCTO | null, dataSetup: ActorData[]): CalcSequence => {
+  calculateSequence: (sequence: SequenceCTO | null, dataSetup: DataSetupCTO, persistentDatas?: ActorData[]): CalcSequence => {
     const calcSequence: CalcSequence = {
       sequenceModel: sequence,
       stepIds: [],
@@ -34,9 +37,15 @@ export const SequenceService = {
     let loopStartingStep: number = -1;
 
     if (sequence && dataSetup) {
-      let actorDatas: ActorData[] = dataSetup;
-      calcSequence.steps.push(getInitStep(actorDatas));
+      const dataSetupActions: ActionTO[] = dataSetup.initDatas.map((data) => {
+        return {actionType: ActionType.ADD, receivingActorFk: data.actorFk, dataFk: data.dataFk, instanceFk: data.instanceFk, id: -1, sequenceStepFk: -1, sendingActorFk: -1};
+      });
 
+      const dataSetupResult: SequenceActionResult = SequenceActionReducer.executeActionsOnActorDatas(dataSetupActions, persistentDatas || []);
+
+      calcSequence.steps.push(getInitStep(dataSetupResult));
+
+      let actorDatas: ActorData[] = DavitUtil.deepCopy(dataSetupResult.actorDatas);
       const root: SequenceStepCTO | DecisionTO | undefined = getRoot(sequence);
 
       if (root !== undefined) {
@@ -110,8 +119,8 @@ export const SequenceService = {
   },
 };
 
-const getInitStep = (actorDatas: ActorData[]): CalculatedStep => {
-  return {stepId: 'root', actorDatas: actorDatas, type: 'INIT', errors: []};
+const getInitStep = (result: SequenceActionResult): CalculatedStep => {
+  return {stepId: 'root', actorDatas: result.actorDatas, type: 'INIT', errors: result.errors};
 };
 
 const getStepFromSequence = (stepId: number, sequence: SequenceCTO): SequenceStepCTO | undefined => {

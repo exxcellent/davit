@@ -16,7 +16,6 @@ import {DataAccessResponse} from '../dataAccess/DataAccessResponse';
 import {CalcChain, getRoot, SequenceChainService} from '../services/SequenceChainService';
 import {CalcSequence, CalculatedStep, SequenceService} from '../services/SequenceService';
 import {ActorData} from '../viewDataTypes/ActorData';
-import {ActorDataState} from '../viewDataTypes/ActorDataState';
 import {Mode} from './EditSlice';
 import {handleError} from './GlobalSlice';
 
@@ -177,18 +176,12 @@ const SequenceModelSlice = createSlice({
 });
 
 function calcSequenceAndSetState(sequenceModel: SequenceCTO, dataSetup: DataSetupCTO, state: SequenceModelState) {
-  const result: CalcSequence = SequenceService.calculateSequence(sequenceModel, getActorDatas(dataSetup));
+  const result: CalcSequence = SequenceService.calculateSequence(sequenceModel, dataSetup);
   state.currentStepIndex = 0;
   state.errorActions = result.steps[state.currentStepIndex]?.errors || [];
   state.actorDatas = result.steps[state.currentStepIndex]?.actorDatas || [];
   state.calcSequence = result;
 }
-
-export const getActorDatas = (dataSetup: DataSetupCTO): ActorData[] => {
-  return dataSetup.initDatas.map((initData) => {
-    return {actorFk: initData.actorFk, dataFk: initData.dataFk, instanceFk: initData.instanceFk, state: ActorDataState.PERSISTENT};
-  });
-};
 
 function resetState(state: SequenceModelState) {
   state.errorActions = [];

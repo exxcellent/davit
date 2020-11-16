@@ -131,7 +131,7 @@ export const SequenceActionReducer = {
       if (dataIsPresentOnActor(checkedActorDatas)) {
         checkedActorDatas.forEach((actorData) => actorData.state=ActorDataState.CHECKED);
       } else {
-        actorDatas.push({actorFk: decision.actorFk, dataFk: dataAndInstanceId.dataFk, instanceFk: dataAndInstanceId.instanceId, state: ActorDataState.CHECK_FAILED});
+        newActorDatas.push({actorFk: decision.actorFk, dataFk: dataAndInstanceId.dataFk, instanceFk: dataAndInstanceId.instanceId, state: ActorDataState.CHECK_FAILED});
         goTo = decision.elseGoTo;
       }
     });
