@@ -641,6 +641,7 @@ carhHeaderText {
   width: 100%;
   text-align: center;
   border-top: 0.5px solid var(--carv2-text-color);
+  max-width: 15em;
 }
 
 .appearAnimation {
