@@ -1,7 +1,7 @@
 import React, {FunctionComponent} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {EditActions, editSelectors, Mode} from '../../../slices/EditSlice';
-import {Carv2Util} from '../../../utils/Carv2Util';
+import {DavitUtil} from '../../../utils/DavitUtil';
 import {ControllPanelEditController} from './fragments/edit/ControllPanelEditController';
 import {ControllPanelFileController} from './fragments/file/ControllPanelFileController';
 import {ControllPanelTabController} from './fragments/tabs/ControllPanelTabController';
@@ -13,7 +13,7 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (p
   const {mode} = useControllPanelViewModel();
 
   const useGetViewByMode = (mode: Mode) => {
-    if (!Carv2Util.isNullOrUndefined(mode)) {
+    if (!DavitUtil.isNullOrUndefined(mode)) {
       if (mode.includes('EDIT')) {
         return <ControllPanelEditController />;
       }

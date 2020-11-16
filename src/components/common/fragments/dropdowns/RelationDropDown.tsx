@@ -1,10 +1,11 @@
 import React, {FunctionComponent} from 'react';
 import {useSelector} from 'react-redux';
-import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
-import {isNullOrUndefined} from 'util';
+import {DropdownProps} from 'semantic-ui-react';
 import {DataCTO} from '../../../../dataAccess/access/cto/DataCTO';
 import {DataRelationTO} from '../../../../dataAccess/access/to/DataRelationTO';
 import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
+import {DavitUtil} from '../../../../utils/DavitUtil';
+import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from './DavitDropDown';
 
 interface RelationDropDownProps extends DropdownProps {
   onSelect: (relation: DataRelationTO | undefined) => void;
@@ -21,14 +22,10 @@ export const RelationDropDown: FunctionComponent<RelationDropDownProps> = (props
   const {relations, selectDataRelation, relationToOption} = useRelationDropDownViewModel();
 
   return (
-    <Dropdown
-      options={relations.map(relationToOption)}
+    <DavitDropDown
+      dropdownItems={relations.map(relationToOption)}
       placeholder={placeholder}
-      onChange={(event, data) => onSelect(selectDataRelation(Number(data.value), relations))}
-      selectOnBlur={false}
-      scrolling
-      selection
-      disabled={relations.length > 0 ? false : true}
+      onSelect={(relation) => onSelect(selectDataRelation(Number(relation.value), relations))}
     />
   );
 };
@@ -38,18 +35,10 @@ export const RelationDropDownButton: FunctionComponent<RelationDropDownPropsButt
   const {relations, selectDataRelation, relationToOption} = useRelationDropDownViewModel();
 
   return (
-    <Dropdown
-      options={relations.map(relationToOption)}
-      icon={relations.length > 0 ? icon : ''}
-      onChange={(event, data) => onSelect(selectDataRelation(Number(data.value), relations))}
-      className="button icon"
-      inverted="true"
-      color="orange"
-      floating
-      selectOnBlur={false}
-      trigger={<React.Fragment />}
-      scrolling
-      disabled={relations.length > 0 ? false : true}
+    <DavitIconDropDown
+      dropdownItems={relations.map(relationToOption)}
+      icon={icon}
+      onSelect={(relation) => onSelect(selectDataRelation(Number(relation.value), relations))}
     />
   );
 };
@@ -63,17 +52,17 @@ const useRelationDropDownViewModel = () => {
   };
 
   const selectDataRelation = (relationId: number, relations: DataRelationTO[]): DataRelationTO | undefined => {
-    if (!isNullOrUndefined(relationId) && !isNullOrUndefined(relations)) {
+    if (!DavitUtil.isNullOrUndefined(relationId) && !DavitUtil.isNullOrUndefined(relations)) {
       return relations.find((relation) => relation.id === relationId);
     }
     return undefined;
   };
 
-  const relationToOption = (relation: DataRelationTO): DropdownItemProps => {
+  const relationToOption = (relation: DataRelationTO): DavitDropDownItemProps => {
     const text: string = getDataName(relation.data1Fk, datas) + ' - ' + getDataName(relation.data2Fk, datas);
     return {
       key: relation.id,
-      value: relation.id,
+      value: relation.id.toString(),
       text: text,
     };
   };

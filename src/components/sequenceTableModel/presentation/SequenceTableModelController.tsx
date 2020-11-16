@@ -12,7 +12,7 @@ import {CalculatedStep} from '../../../services/SequenceService';
 import {editSelectors, Mode} from '../../../slices/EditSlice';
 import {masterDataSelectors} from '../../../slices/MasterDataSlice';
 import {sequenceModelSelectors} from '../../../slices/SequenceModelSlice';
-import {Carv2Util} from '../../../utils/Carv2Util';
+import {DavitUtil} from '../../../utils/DavitUtil';
 import {DavitTable} from '../../common/fragments/DavitTable';
 import {TabPanel} from '../fragments/TabPanel';
 import {useGetCalcLinkTableData} from '../tables/CalcLink';
@@ -179,9 +179,9 @@ const useSequenceTableViewModel = () => {
   }, [parentRef]);
 
   return {
-    showChainModelTab: !Carv2Util.isNullOrUndefined(selectedChain),
-    showSequenceModelTabs: !Carv2Util.isNullOrUndefined(selectedSequence),
-    showCalcChainTab: !Carv2Util.isNullOrUndefined(calcChain),
+    showChainModelTab: !DavitUtil.isNullOrUndefined(selectedChain),
+    showSequenceModelTabs: !DavitUtil.isNullOrUndefined(selectedSequence),
+    showCalcChainTab: !DavitUtil.isNullOrUndefined(calcChain),
     showCalcSequenceTab: calcSteps.length > 0,
     activeTab,
     setActiveTab,

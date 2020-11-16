@@ -5,7 +5,7 @@ import {DecisionTO} from '../../../../../../dataAccess/access/to/DecisionTO';
 import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
 import {sequenceModelSelectors} from '../../../../../../slices/SequenceModelSlice';
-import {Carv2Util} from '../../../../../../utils/Carv2Util';
+import {DavitUtil} from '../../../../../../utils/DavitUtil';
 import {DavitButtonIcon} from '../../../../../common/fragments/buttons/DavitButton';
 import {DavitMenuLabel} from '../../../../../common/fragments/DavitMenuLabel';
 import {ActorDropDown} from '../../../../../common/fragments/dropdowns/ActorDropDown';
@@ -27,14 +27,14 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
     actorFk,
     setActorFk,
     setData,
-    dataFks,
+    selectedInstances,
   } = useControllPanelEditConditionViewModel();
 
   return (
     <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={setMode}>
       <div className="optionFieldSpacer">
         <OptionField label="Select Actor">
-          <ActorDropDown value={actorFk} onSelect={(actor) => setActorFk(actor?.actor.id || -1)} />
+          <ActorDropDown value={actorFk?.toString()} onSelect={(actor) => setActorFk(actor?.actor.id || -1)} />
         </OptionField>
       </div>
       <div className="columnDivider optionFieldSpacer">
@@ -46,7 +46,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
             onSelect={(data) => {
               setData(data);
             }}
-            selected={dataFks || []}
+            selected={selectedInstances || []}
           />
         </OptionField>
       </div>
@@ -65,15 +65,15 @@ const useControllPanelEditConditionViewModel = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (Carv2Util.isNullOrUndefined(decisionToEdit)) {
+    if (DavitUtil.isNullOrUndefined(decisionToEdit)) {
       dispatch(handleError('Tried to go to edit decision without decisionToEdit specified'));
       dispatch(EditActions.setMode.edit());
     }
   }, [dispatch, decisionToEdit]);
 
   const setData = (dataAndInstanceIds: DataAndInstanceId[] | undefined) => {
-    if (!Carv2Util.isNullOrUndefined(decisionToEdit)) {
-      const copyDecisionToEdit: DecisionTO = Carv2Util.deepCopy(decisionToEdit);
+    if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
+      const copyDecisionToEdit: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
       copyDecisionToEdit.dataAndInstaceIds = dataAndInstanceIds || [];
       dispatch(EditActions.decision.save(copyDecisionToEdit));
       dispatch(EditActions.decision.update(copyDecisionToEdit));
@@ -81,7 +81,7 @@ const useControllPanelEditConditionViewModel = () => {
   };
 
   const setMode = (newMode?: string) => {
-    if (!Carv2Util.isNullOrUndefined(decisionToEdit)) {
+    if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
       if (newMode && newMode === 'EDIT') {
         dispatch(EditActions.setMode.edit());
       } else if (newMode && newMode === 'SEQUENCE') {
@@ -95,8 +95,8 @@ const useControllPanelEditConditionViewModel = () => {
   };
 
   const setActorFk = (actorId: number) => {
-    if (!Carv2Util.isNullOrUndefined(decisionToEdit)) {
-      const copyDecisionToEdit: DecisionTO = Carv2Util.deepCopy(decisionToEdit);
+    if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
+      const copyDecisionToEdit: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
       copyDecisionToEdit.actorFk = actorId;
       dispatch(EditActions.decision.save(copyDecisionToEdit));
       dispatch(EditActions.decision.update(copyDecisionToEdit));
@@ -110,6 +110,6 @@ const useControllPanelEditConditionViewModel = () => {
     actorFk: decisionToEdit?.actorFk,
     setActorFk,
     setData,
-    dataFks: decisionToEdit?.dataAndInstaceIds,
+    selectedInstances: decisionToEdit?.dataAndInstaceIds,
   };
 };

@@ -8,7 +8,7 @@ import {ActionType} from '../../../../../../dataAccess/access/types/ActionType';
 import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
 import {sequenceModelSelectors} from '../../../../../../slices/SequenceModelSlice';
-import {Carv2Util} from '../../../../../../utils/Carv2Util';
+import {DavitUtil} from '../../../../../../utils/DavitUtil';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import {DavitButtonIcon, DavitButtonLabel} from '../../../../../common/fragments/buttons/DavitButton';
 import {ActionTypeDropDown} from '../../../../../common/fragments/dropdowns/ActionTypeDropDown';
@@ -65,7 +65,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
           <OptionField label={actionType?.includes('SEND') ? 'Select sending Actor' : 'Actor'}>
             <ActorDropDown
               onSelect={(actor) => setActor(actor, actionType?.includes('SEND') ? true : false)}
-              value={actionType?.includes('SEND') ? sendingActorId : receivingActorId}
+              value={actionType?.includes('SEND') ? sendingActorId?.toString() : receivingActorId?.toString()}
             />
           </OptionField>
         </OptionField>
@@ -77,7 +77,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
               TO
             </label>
             <OptionField label="Select receiving Actor">
-              <ActorDropDown onSelect={(actor) => setActor(actor, false)} value={receivingActorId} />
+              <ActorDropDown onSelect={(actor) => setActor(actor, false)} value={receivingActorId?.toString()} />
             </OptionField>
           </OptionField>
         )}
@@ -124,7 +124,7 @@ const useControllPanelEditActionViewModel = () => {
 
   const setActor = (actor: ActorCTO | undefined, sending: boolean): void => {
     if (actor !== undefined) {
-      const copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
+      const copyActionToEdit: ActionTO = DavitUtil.deepCopy(actionToEdit);
       sending
         ? (copyActionToEdit.sendingActorFk = actor.actor.id)
         : (copyActionToEdit.receivingActorFk = actor.actor.id);
@@ -135,7 +135,7 @@ const useControllPanelEditActionViewModel = () => {
 
   const setAction = (newActionType: ActionType | undefined): void => {
     if (newActionType !== undefined && selectedSequence !== null && actionToEdit !== null) {
-      const copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
+      const copyActionToEdit: ActionTO = DavitUtil.deepCopy(actionToEdit);
       copyActionToEdit.actionType = newActionType;
       copyActionToEdit.sendingActorFk = newActionType.includes('SEND') ? actionToEdit.sendingActorFk : -1;
       copyActionToEdit.receivingActorFk = newActionType.includes('SEND') ? actionToEdit.receivingActorFk : -1;
@@ -146,7 +146,7 @@ const useControllPanelEditActionViewModel = () => {
 
   const setData = (data: DataCTO | undefined): void => {
     if (data !== undefined) {
-      const copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
+      const copyActionToEdit: ActionTO = DavitUtil.deepCopy(actionToEdit);
       copyActionToEdit.dataFk = data.data.id;
       dispatch(EditActions.action.update(copyActionToEdit));
       dispatch(EditActions.action.save(copyActionToEdit));
@@ -155,7 +155,7 @@ const useControllPanelEditActionViewModel = () => {
 
   const setDataAndInstance = (dataAndInstance: DataAndInstanceId | undefined): void => {
     if (dataAndInstance !== undefined) {
-      const copyActionToEdit: ActionTO = Carv2Util.deepCopy(actionToEdit);
+      const copyActionToEdit: ActionTO = DavitUtil.deepCopy(actionToEdit);
       copyActionToEdit.dataFk = dataAndInstance.dataFk;
       copyActionToEdit.instanceFk = dataAndInstance.instanceId;
       dispatch(EditActions.action.update(copyActionToEdit));
@@ -174,7 +174,7 @@ const useControllPanelEditActionViewModel = () => {
   };
 
   const setMode = (newMode?: string) => {
-    if (!Carv2Util.isNullOrUndefined(actionToEdit)) {
+    if (!DavitUtil.isNullOrUndefined(actionToEdit)) {
       if (!validAction(actionToEdit!)) {
         deleteAction();
       }

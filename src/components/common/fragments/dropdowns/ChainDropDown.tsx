@@ -1,9 +1,10 @@
 import React, {FunctionComponent} from 'react';
 import {useSelector} from 'react-redux';
-import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
-import {isNullOrUndefined} from 'util';
+import {DropdownProps} from 'semantic-ui-react';
 import {ChainTO} from '../../../../dataAccess/access/to/ChainTO';
 import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
+import {DavitUtil} from '../../../../utils/DavitUtil';
+import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from './DavitDropDown';
 
 interface ChainDropDownProps extends DropdownProps {
   onSelect: (chain: ChainTO | undefined) => void;
@@ -21,17 +22,12 @@ export const ChainDropDown: FunctionComponent<ChainDropDownProps> = (props) => {
   const {chainToOption, chains, selectChain} = useChainDropDownViewModel();
 
   return (
-    <Dropdown
-      options={chains.map(chainToOption)}
-      placeholder={placeholder || 'Select Chain ...'}
-      onChange={(event, sequence) => onSelect(selectChain(Number(sequence.value)))}
-      floating
-      selectOnBlur={false}
-      scrolling
-      clearable
-      selection
-      value={value}
-      disabled={chains.length > 0 ? false : true}
+    <DavitDropDown
+      dropdownItems={chains.map(chainToOption)}
+      onSelect={(sequence) => onSelect(selectChain(Number(sequence.value)))}
+      placeholder={placeholder}
+      value={value ? value.toString() : undefined}
+      clearable={true}
     />
   );
 };
@@ -41,18 +37,10 @@ export const ChainDropDownButton: FunctionComponent<ChainDropDownPropsButton> = 
   const {selectChain, chainToOption, chains} = useChainDropDownViewModel();
 
   return (
-    <Dropdown
-      options={chains.map(chainToOption)}
-      icon={chains.length > 0 ? icon : ''}
-      onChange={(event, sequence) => onSelect(selectChain(Number(sequence.value)))}
-      className="button icon"
-      inverted="true"
-      color="orange"
-      floating
-      selectOnBlur={false}
-      trigger={<React.Fragment />}
-      scrolling
-      disabled={chains.length > 0 ? false : true}
+    <DavitIconDropDown
+      dropdownItems={chains.map(chainToOption)}
+      onSelect={(chain) => onSelect(selectChain(Number(chain.value)))}
+      icon={icon}
     />
   );
 };
@@ -61,16 +49,16 @@ const useChainDropDownViewModel = () => {
   const chains: ChainTO[] = useSelector(masterDataSelectors.chains);
 
   const selectChain = (id: number): ChainTO | undefined => {
-    if (!isNullOrUndefined(id) && !isNullOrUndefined(chains)) {
+    if (!DavitUtil.isNullOrUndefined(id) && !DavitUtil.isNullOrUndefined(chains)) {
       return chains.find((chain) => chain.id === id);
     }
     return undefined;
   };
 
-  const chainToOption = (chain: ChainTO): DropdownItemProps => {
+  const chainToOption = (chain: ChainTO): DavitDropDownItemProps => {
     return {
       key: chain.id,
-      value: chain.id,
+      value: chain.id.toString(),
       text: chain.name,
     };
   };

@@ -6,7 +6,7 @@ import {ActorCTO} from '../../../../../../dataAccess/access/cto/ActorCTO';
 import {GroupTO} from '../../../../../../dataAccess/access/to/GroupTO';
 import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
-import {Carv2Util} from '../../../../../../utils/Carv2Util';
+import {DavitUtil} from '../../../../../../utils/DavitUtil';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import {DavitButtonIcon, DavitButtonLabel} from '../../../../../common/fragments/buttons/DavitButton';
 import {ControllPanelEditSub} from '../common/ControllPanelEditSub';
@@ -84,13 +84,13 @@ const useControllPanelEditComponentViewModel = () => {
   }, [componentToEdit]);
 
   const changeName = (name: string) => {
-    const copyComponentToEdit: ActorCTO = Carv2Util.deepCopy(componentToEdit);
+    const copyComponentToEdit: ActorCTO = DavitUtil.deepCopy(componentToEdit);
     copyComponentToEdit.actor.name = name;
     dispatch(EditActions.setMode.editActor(copyComponentToEdit));
   };
 
   const updateComponent = () => {
-    const copyComponentToEdit: ActorCTO = Carv2Util.deepCopy(componentToEdit);
+    const copyComponentToEdit: ActorCTO = DavitUtil.deepCopy(componentToEdit);
     dispatch(EditActions.actor.save(copyComponentToEdit));
   };
 
@@ -116,7 +116,7 @@ const useControllPanelEditComponentViewModel = () => {
 
   const setGroup = (group: GroupTO | undefined) => {
     if (!isNullOrUndefined(componentToEdit)) {
-      const copyComponentToEdit: ActorCTO = Carv2Util.deepCopy(componentToEdit);
+      const copyComponentToEdit: ActorCTO = DavitUtil.deepCopy(componentToEdit);
       if (group !== undefined) {
         copyComponentToEdit.actor.groupFks = group.id;
       } else {

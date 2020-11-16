@@ -1,4 +1,4 @@
-import {Carv2Util} from '../../utils/Carv2Util';
+import {DavitUtil} from '../../utils/DavitUtil';
 import {ChainCTO} from '../access/cto/ChainCTO';
 import {ChainlinkCTO} from '../access/cto/ChainlinkCTO';
 import {DataSetupCTO} from '../access/cto/DataSetupCTO';
@@ -170,7 +170,7 @@ export const SequenceDataAccessService = {
     CheckHelper.nullCheck(sequenceStep, 'step');
     sequenceStep.actions.map((action) => ActionRepository.delete(action.id));
     SequenceStepRepository.delete(sequenceStep.squenceStepTO);
-    const seqSteps: SequenceStepTO[] = Carv2Util.deepCopy(
+    const seqSteps: SequenceStepTO[] = DavitUtil.deepCopy(
         SequenceStepRepository.findAllForSequence(sequenceStep.squenceStepTO.sequenceFk),
     );
     seqSteps.sort((a, b) => a.index - b.index);
@@ -206,7 +206,7 @@ export const SequenceDataAccessService = {
 
   saveActionTO(action: ActionTO): ActionTO {
     CheckHelper.nullCheck(action, 'actionTO');
-    const copyAction: ActionTO = Carv2Util.deepCopy(action);
+    const copyAction: ActionTO = DavitUtil.deepCopy(action);
     const savedActionTO: ActionTO = ActionRepository.save(copyAction);
     return savedActionTO;
   },
@@ -235,7 +235,7 @@ export const SequenceDataAccessService = {
 
   saveDataSetupCTO(dataSetupCTO: DataSetupCTO): DataSetupCTO {
     CheckHelper.nullCheck(dataSetupCTO, 'dataSetupCTO');
-    const copyDataSetupCTO: DataSetupCTO = Carv2Util.deepCopy(dataSetupCTO);
+    const copyDataSetupCTO: DataSetupCTO = DavitUtil.deepCopy(dataSetupCTO);
     const savedDataSetupTO: DataSetupTO = DataSetupRepository.save(dataSetupCTO.dataSetup);
     // remove old init data.
     InitDataRepository.findAllForSetup(dataSetupCTO.dataSetup.id).forEach((initData) =>
@@ -391,7 +391,7 @@ const createChainLinkCTO = (link: ChainlinkTO | undefined): ChainlinkCTO => {
 
 const crateChainCTO = (chain: ChainTO): ChainCTO => {
   CheckHelper.nullCheck(chain, 'chainTO');
-  const copyChain: ChainTO = Carv2Util.deepCopy(chain);
+  const copyChain: ChainTO = DavitUtil.deepCopy(chain);
   const chainCTO: ChainCTO = new ChainCTO();
   const chainLinkTOs: ChainlinkTO[] | undefined = ChainLinkRepository.findAllForChain(copyChain.id);
   let chainLinkCTOs: ChainlinkCTO[] = [];

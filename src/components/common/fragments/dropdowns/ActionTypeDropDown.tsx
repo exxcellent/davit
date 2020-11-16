@@ -1,6 +1,7 @@
 import React, {FunctionComponent} from 'react';
-import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
+import {DropdownProps} from 'semantic-ui-react';
 import {ActionType} from '../../../../dataAccess/access/types/ActionType';
+import {DavitDropDown, DavitDropDownItemProps} from './DavitDropDown';
 
 interface ActionTypeDropDownnProps extends DropdownProps {
   onSelect: (actionType: ActionType | undefined) => void;
@@ -31,24 +32,19 @@ export const ActionTypeDropDown: FunctionComponent<ActionTypeDropDownnProps> = (
     return label;
   };
 
-  const actionTypeToOption = (actionType: ActionType): DropdownItemProps => {
+  const actionTypeToOption = (actionType: ActionType, key: number): DavitDropDownItemProps => {
     return {
-      key: actionType,
+      key: key,
       value: actionType,
       text: getActionTypeLabel(actionType),
     };
   };
 
   return (
-    <Dropdown
-      options={actions.map(actionTypeToOption).sort((a, b) => {
-        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
-      })}
-      selection
-      selectOnBlur={false}
-      onChange={(event, data) => onSelect(data.value as ActionType)}
-      scrolling
-      placeholder={placeholder || 'Select Action Type ...'}
+    <DavitDropDown
+      dropdownItems={actions.map((action, index) => actionTypeToOption(action, index))}
+      onSelect={(item) => onSelect((item.value as ActionType))}
+      placeholder={placeholder}
       value={value}
     />
   );

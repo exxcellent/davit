@@ -1,4 +1,4 @@
-import {Carv2Util} from '../../utils/Carv2Util';
+import {DavitUtil} from '../../utils/DavitUtil';
 import {GeometricalDataCTO} from '../access/cto/GeometraicalDataCTO';
 import {DesignTO} from '../access/to/DesignTO';
 import {GeometricalDataTO} from '../access/to/GeometricalDataTO';
@@ -33,7 +33,7 @@ export const TechnicalDataAccessService = {
     CheckHelper.nullCheck(geometricalDataCTO, 'geometricalDataCTO');
     CheckHelper.nullCheck(geometricalDataCTO.position, 'position');
     const savedPosition = PositionRepository.save(geometricalDataCTO.position);
-    const copyGeometricalDataCTO: GeometricalDataCTO = Carv2Util.deepCopy(geometricalDataCTO);
+    const copyGeometricalDataCTO: GeometricalDataCTO = DavitUtil.deepCopy(geometricalDataCTO);
     copyGeometricalDataCTO.geometricalData.positionFk = savedPosition.id;
     const savedGeometricalData = GeometricalDataRepository.save(copyGeometricalDataCTO.geometricalData);
     return {

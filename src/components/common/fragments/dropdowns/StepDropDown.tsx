@@ -1,11 +1,11 @@
 import React, {FunctionComponent} from 'react';
 import {useSelector} from 'react-redux';
-import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
-import {isNullOrUndefined} from 'util';
+import {DropdownProps} from 'semantic-ui-react';
 import {SequenceCTO} from '../../../../dataAccess/access/cto/SequenceCTO';
 import {SequenceStepCTO} from '../../../../dataAccess/access/cto/SequenceStepCTO';
 import {sequenceModelSelectors} from '../../../../slices/SequenceModelSlice';
-import {Carv2Util} from '../../../../utils/Carv2Util';
+import {DavitUtil} from '../../../../utils/DavitUtil';
+import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from './DavitDropDown';
 
 interface StepDropDownButtonProps extends DropdownProps {
   onSelect: (step: SequenceStepCTO | undefined) => void;
@@ -24,16 +24,10 @@ export const StepDropDownButton: FunctionComponent<StepDropDownButtonProps> = (p
   const {sequence, stepOptions, selectSequenceStep} = useStepDropDownViewModel();
 
   return (
-    <Dropdown
-      options={stepOptions()}
-      icon={sequence ? (sequence?.sequenceStepCTOs.length > 0 ? icon : '') : ''}
-      onChange={(event, data) => onSelect(selectSequenceStep(Number(data.value), sequence))}
-      className="button icon"
-      floating
-      selectOnBlur={false}
-      trigger={<React.Fragment />}
-      scrolling
-      disabled={sequence ? (sequence?.sequenceStepCTOs.length > 0 ? false : true) : false}
+    <DavitIconDropDown
+      dropdownItems={stepOptions()}
+      icon={icon}
+      onSelect={(step) => onSelect(selectSequenceStep(Number(step.value), sequence))}
     />
   );
 };
@@ -43,15 +37,11 @@ export const StepDropDown: FunctionComponent<StepDropDownProps> = (props) => {
   const {sequence, stepOptions, selectSequenceStep} = useStepDropDownViewModel(exclude);
 
   return (
-    <Dropdown
-      options={stepOptions()}
-      selection
-      selectOnBlur={false}
-      placeholder={placeholder || 'Select step ...'}
-      onChange={(event, data) => onSelect(selectSequenceStep(Number(data.value), sequence))}
-      scrolling
-      value={value === -1 ? undefined : value}
-      disabled={sequence ? (sequence?.sequenceStepCTOs.length > 0 ? false : true) : false}
+    <DavitDropDown
+      dropdownItems={stepOptions()}
+      placeholder={placeholder}
+      onSelect={(step) => onSelect(selectSequenceStep(Number(step.value), sequence))}
+      value={value === -1 ? undefined : value?.toString()}
     />
   );
 };
@@ -59,17 +49,17 @@ export const StepDropDown: FunctionComponent<StepDropDownProps> = (props) => {
 const useStepDropDownViewModel = (exclude?: number) => {
   const sequenceToEdit: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
 
-  const stepToOption = (step: SequenceStepCTO): DropdownItemProps => {
+  const stepToOption = (step: SequenceStepCTO): DavitDropDownItemProps => {
     return {
       key: step.squenceStepTO.id,
-      value: step.squenceStepTO.id,
+      value: step.squenceStepTO.id.toString(),
       text: step.squenceStepTO.name,
     };
   };
 
-  const stepOptions = (): DropdownItemProps[] => {
-    if (!isNullOrUndefined(sequenceToEdit)) {
-      let copySteps: SequenceStepCTO[] = Carv2Util.deepCopy(sequenceToEdit.sequenceStepCTOs);
+  const stepOptions = (): DavitDropDownItemProps[] => {
+    if (!DavitUtil.isNullOrUndefined(sequenceToEdit)) {
+      let copySteps: SequenceStepCTO[] = DavitUtil.deepCopy(sequenceToEdit!.sequenceStepCTOs);
       if (exclude) {
         copySteps = copySteps.filter((step) => step.squenceStepTO.id !== exclude);
       }
@@ -79,8 +69,8 @@ const useStepDropDownViewModel = (exclude?: number) => {
   };
 
   const selectSequenceStep = (stepId: number, sequence: SequenceCTO | null): SequenceStepCTO | undefined => {
-    if (!isNullOrUndefined(sequence) && !isNullOrUndefined(stepId)) {
-      return sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.id === stepId);
+    if (!DavitUtil.isNullOrUndefined(sequence) && !DavitUtil.isNullOrUndefined(stepId)) {
+      return sequence!.sequenceStepCTOs.find((step) => step.squenceStepTO.id === stepId);
     }
     return undefined;
   };

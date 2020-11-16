@@ -191,9 +191,7 @@ export const masterDataSelectors = {
   },
   getDataCTOById: (id: number) => {
     return (state: RootState): DataCTO | null => {
-      console.info('search data id: ' + id);
       const data: DataCTO | null = state.masterData.datas.find((data) => data.data.id === id) || null;
-      console.info('data found: ', data);
       return data;
     };
   },

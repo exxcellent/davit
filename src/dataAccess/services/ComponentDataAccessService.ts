@@ -1,4 +1,4 @@
-import {Carv2Util} from '../../utils/Carv2Util';
+import {DavitUtil} from '../../utils/DavitUtil';
 import {ActorCTO} from '../access/cto/ActorCTO';
 import {GeometricalDataCTO} from '../access/cto/GeometraicalDataCTO';
 import {ActorTO} from '../access/to/ActorTO';
@@ -51,7 +51,7 @@ export const ActorDataAccessService = {
 
   saveCTO(actorCTO: ActorCTO): ActorCTO {
     CheckHelper.nullCheck(actorCTO, 'ActorCTO');
-    const copy: ActorCTO = Carv2Util.deepCopy(actorCTO);
+    const copy: ActorCTO = DavitUtil.deepCopy(actorCTO);
     const savedDesign = TechnicalDataAccessService.saveDesign(copy.design);
     copy.actor.designFk = savedDesign.id;
     const savedGeometricalData = TechnicalDataAccessService.saveGeometricalData(copy.geometricalData);

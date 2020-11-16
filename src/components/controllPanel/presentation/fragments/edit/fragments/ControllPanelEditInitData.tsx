@@ -7,7 +7,7 @@ import {InitDataTO} from '../../../../../../dataAccess/access/to/InitDataTO';
 import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
 import {masterDataSelectors} from '../../../../../../slices/MasterDataSlice';
-import {Carv2Util} from '../../../../../../utils/Carv2Util';
+import {DavitUtil} from '../../../../../../utils/DavitUtil';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import {DavitButtonIcon, DavitButtonLabel} from '../../../../../common/fragments/buttons/DavitButton';
 import {ActorDropDown} from '../../../../../common/fragments/dropdowns/ActorDropDown';
@@ -43,7 +43,7 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
             onSelect={(actor) => (actor ? setActorId(actor.actor.id) : setActorId(-1))}
             placeholder="Select Actor..."
             onBlur={() => {}}
-            value={actor}
+            value={actor?.toString()}
           />
         </OptionField>
       </div>
@@ -118,7 +118,7 @@ const useControllPanelEditDataSetupViewModel = () => {
 
   const setActorId = (id: number) => {
     if (initDataToEdit !== null) {
-      const copyInitDataToEdit: InitDataTO = Carv2Util.deepCopy(initDataToEdit);
+      const copyInitDataToEdit: InitDataTO = DavitUtil.deepCopy(initDataToEdit);
       copyInitDataToEdit.actorFk = id;
       dispatch(EditActions.initData.update(copyInitDataToEdit));
     }
@@ -126,7 +126,7 @@ const useControllPanelEditDataSetupViewModel = () => {
 
   const setInstance = (dataAndInstanceId: DataAndInstanceId | undefined): void => {
     if (dataAndInstanceId !== undefined) {
-      const copyInitDataToEdit: InitDataTO = Carv2Util.deepCopy(initDataToEdit);
+      const copyInitDataToEdit: InitDataTO = DavitUtil.deepCopy(initDataToEdit);
       copyInitDataToEdit.dataFk = dataAndInstanceId.dataFk;
       copyInitDataToEdit.instanceFk = dataAndInstanceId.instanceId;
       dispatch(EditActions.initData.update(copyInitDataToEdit));

@@ -9,7 +9,7 @@ import {SequenceTO} from '../../../../../../dataAccess/access/to/SequenceTO';
 import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
 import {sequenceModelSelectors} from '../../../../../../slices/SequenceModelSlice';
-import {Carv2Util} from '../../../../../../utils/Carv2Util';
+import {DavitUtil} from '../../../../../../utils/DavitUtil';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import {DavitButtonIcon, DavitButtonLabel} from '../../../../../common/fragments/buttons/DavitButton';
 import {DecisionDropDownButton} from '../../../../../common/fragments/dropdowns/DecisionDropDown';
@@ -119,7 +119,7 @@ const useControllPanelEditSequenceViewModel = () => {
 
   const changeName = (name: string) => {
     if (!isNullOrUndefined(sequenceToEdit)) {
-      const copySequenceToEdit: SequenceTO = Carv2Util.deepCopy(sequenceToEdit);
+      const copySequenceToEdit: SequenceTO = DavitUtil.deepCopy(sequenceToEdit);
       copySequenceToEdit.name = name;
       dispatch(EditActions.sequence.save(copySequenceToEdit));
     }
@@ -145,7 +145,7 @@ const useControllPanelEditSequenceViewModel = () => {
 
   const validateInput = (): boolean => {
     if (!isNullOrUndefined(sequenceToEdit)) {
-      return Carv2Util.isValidName(sequenceToEdit.name);
+      return DavitUtil.isValidName(sequenceToEdit.name);
     } else {
       return false;
     }
@@ -176,7 +176,7 @@ const useControllPanelEditSequenceViewModel = () => {
   };
 
   const copySequence = () => {
-    const copySequence: SequenceTO = Carv2Util.deepCopy(sequenceToEdit);
+    const copySequence: SequenceTO = DavitUtil.deepCopy(sequenceToEdit);
     copySequence.name = sequenceToEdit?.name + '-copy';
     copySequence.id = -1;
     dispatch(EditActions.sequence.update(copySequence));
@@ -187,7 +187,7 @@ const useControllPanelEditSequenceViewModel = () => {
   };
 
   const updateSequence = () => {
-    const copySequence: SequenceTO = Carv2Util.deepCopy(sequenceToEdit);
+    const copySequence: SequenceTO = DavitUtil.deepCopy(sequenceToEdit);
     dispatch(EditActions.sequence.save(copySequence));
   };
 

@@ -131,7 +131,7 @@ export const SequenceActionReducer = {
       if (dataIsPresentOnActor(checkedActorDatas)) {
         checkedActorDatas.forEach((actorData) => actorData.state=ActorDataState.CHECKED);
       } else {
-        actorDatas.push({actorFk: decision.actorFk, dataFk: dataAndInstanceId.dataFk, instanceFk: dataAndInstanceId.instanceId, state: ActorDataState.CHECK_FAILED});
+        newActorDatas.push({actorFk: decision.actorFk, dataFk: dataAndInstanceId.dataFk, instanceFk: dataAndInstanceId.instanceId, state: ActorDataState.CHECK_FAILED});
         goTo = decision.elseGoTo;
       }
     });
@@ -144,7 +144,7 @@ const findActorDataIndex = (actorId: number, dataId: number, actorDatas: ActorDa
 };
 
 const isTransiantState = (state: ActorDataState) => {
-  return state === ActorDataState.DELETED || state=== ActorDataState.UPDATED_FROM ||state=== ActorDataState.CHECKED ||state=== ActorDataState.CHECK_FAILED;
+  return state === ActorDataState.DELETED || state=== ActorDataState.UPDATED_FROM ||state=== ActorDataState.CHECK_FAILED;
 };
 function actorDataIsPresent(indexActorDataToEdit: number) {
   return indexActorDataToEdit !== -1;

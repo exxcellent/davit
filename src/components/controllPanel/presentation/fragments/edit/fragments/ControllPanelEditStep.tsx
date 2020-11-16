@@ -9,11 +9,11 @@ import {GoTo, GoToTypes} from '../../../../../../dataAccess/access/types/GoToTyp
 import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
 import {handleError} from '../../../../../../slices/GlobalSlice';
 import {SequenceModelActions, sequenceModelSelectors} from '../../../../../../slices/SequenceModelSlice';
-import {Carv2Util} from '../../../../../../utils/Carv2Util';
+import {DavitUtil} from '../../../../../../utils/DavitUtil';
 import {Carv2DeleteButton} from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import {DavitButtonIcon} from '../../../../../common/fragments/buttons/DavitButton';
 import {DavitRootButton} from '../../../../../common/fragments/buttons/DavitRootButton';
-import {ActionDropDown} from '../../../../../common/fragments/dropdowns/ActionDropDown';
+import {ActionButtonDropDown} from '../../../../../common/fragments/dropdowns/ActionButtonDropDown';
 import {DecisionDropDown} from '../../../../../common/fragments/dropdowns/DecisionDropDown';
 import {GoToOptionDropDown} from '../../../../../common/fragments/dropdowns/GoToOptionDropDown';
 import {StepDropDown} from '../../../../../common/fragments/dropdowns/StepDropDown';
@@ -90,7 +90,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
               <Button id="buttonGroupLabel" disabled inverted color="orange">
                 Action
               </Button>
-              <ActionDropDown
+              <ActionButtonDropDown
                 onSelect={(action) => {
                   editOrAddAction(action);
                   updateStep();
@@ -184,8 +184,8 @@ const useControllPanelEditSequenceStepViewModel = () => {
   }, [dispatch, stepToEdit]);
 
   const changeName = (name: string) => {
-    if (!Carv2Util.isNullOrUndefined(stepToEdit)) {
-      const copySequenceStep: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
+    if (!DavitUtil.isNullOrUndefined(stepToEdit)) {
+      const copySequenceStep: SequenceStepCTO = DavitUtil.deepCopy(stepToEdit);
       copySequenceStep.squenceStepTO.name = name;
       dispatch(EditActions.setMode.editStep(copySequenceStep));
       dispatch(EditActions.step.save(copySequenceStep));
@@ -199,8 +199,8 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
   const saveSequenceStep = (newMode?: string) => {
     if (
-      !Carv2Util.isNullOrUndefined(stepToEdit)
-      && !Carv2Util.isNullOrUndefined(selectedSequence)
+      !DavitUtil.isNullOrUndefined(stepToEdit)
+      && !DavitUtil.isNullOrUndefined(selectedSequence)
     ) {
       if (stepToEdit!.squenceStepTO.name !== '') {
         dispatch(EditActions.step.save(stepToEdit!));
@@ -219,8 +219,8 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
   const deleteSequenceStep = () => {
     if (
-      !Carv2Util.isNullOrUndefined(stepToEdit)
-      && !Carv2Util.isNullOrUndefined(selectedSequence)
+      !DavitUtil.isNullOrUndefined(stepToEdit)
+      && !DavitUtil.isNullOrUndefined(selectedSequence)
     ) {
       dispatch(EditActions.step.delete(stepToEdit!, selectedSequence!));
       dispatch(
@@ -231,14 +231,14 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
   const updateStep = () => {
     if (stepToEdit !== null && undefined) {
-      const copySequenceStep: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
+      const copySequenceStep: SequenceStepCTO = DavitUtil.deepCopy(stepToEdit);
       dispatch(EditActions.step.save(copySequenceStep));
     }
   };
 
   const editOrAddAction = (action?: ActionTO) => {
-    if (!Carv2Util.isNullOrUndefined(stepToEdit)) {
-      let copyAction: ActionTO | undefined = Carv2Util.deepCopy(action);
+    if (!DavitUtil.isNullOrUndefined(stepToEdit)) {
+      let copyAction: ActionTO | undefined = DavitUtil.deepCopy(action);
       if (copyAction === undefined) {
         copyAction = new ActionTO();
         copyAction.sequenceStepFk = stepToEdit!.squenceStepTO.id;
@@ -251,7 +251,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
   const validStep = (): boolean => {
     let valid: boolean = false;
-    if (!Carv2Util.isNullOrUndefined(stepToEdit)) {
+    if (!DavitUtil.isNullOrUndefined(stepToEdit)) {
       if (stepToEdit!.squenceStepTO.name !== '') {
         valid = true;
       }
@@ -261,7 +261,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
   const saveGoToType = (goTo: GoTo) => {
     if (goTo !== undefined) {
-      const copySequenceStep: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
+      const copySequenceStep: SequenceStepCTO = DavitUtil.deepCopy(stepToEdit);
       copySequenceStep.squenceStepTO.goto = goTo;
       dispatch(EditActions.step.update(copySequenceStep));
       dispatch(EditActions.step.save(copySequenceStep));
@@ -305,10 +305,10 @@ const useControllPanelEditSequenceStepViewModel = () => {
   };
 
   const createGoToStep = () => {
-    if (!Carv2Util.isNullOrUndefined(stepToEdit)) {
+    if (!DavitUtil.isNullOrUndefined(stepToEdit)) {
       const goToStep: SequenceStepCTO = new SequenceStepCTO();
       goToStep.squenceStepTO.sequenceFk = stepToEdit!.squenceStepTO.sequenceFk;
-      const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
+      const copyStepToEdit: SequenceStepCTO = DavitUtil.deepCopy(stepToEdit);
       setKey(key + 1);
       dispatch(EditActions.setMode.editStep(goToStep, copyStepToEdit));
       dispatch(
@@ -320,18 +320,18 @@ const useControllPanelEditSequenceStepViewModel = () => {
   };
 
   const createGoToDecision = () => {
-    if (!Carv2Util.isNullOrUndefined(stepToEdit)) {
+    if (!DavitUtil.isNullOrUndefined(stepToEdit)) {
       const goToDecision: DecisionTO = new DecisionTO();
       goToDecision.sequenceFk = stepToEdit!.squenceStepTO.sequenceFk;
-      const copyStepToEdit: SequenceStepCTO = Carv2Util.deepCopy(stepToEdit);
+      const copyStepToEdit: SequenceStepCTO = DavitUtil.deepCopy(stepToEdit);
       dispatch(EditActions.setMode.editDecision(goToDecision, copyStepToEdit));
     }
   };
 
   const setRoot = () => {
     if (
-      !Carv2Util.isNullOrUndefined(stepToEdit)
-      && !Carv2Util.isNullOrUndefined(selectedSequence)
+      !DavitUtil.isNullOrUndefined(stepToEdit)
+      && !DavitUtil.isNullOrUndefined(selectedSequence)
     ) {
       dispatch(
           EditActions.sequence.setRoot(

@@ -1,6 +1,7 @@
 import React, {FunctionComponent} from 'react';
-import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
+import {DropdownProps} from 'semantic-ui-react';
 import {GoToTypes} from '../../../../dataAccess/access/types/GoToType';
+import {DavitDropDown, DavitDropDownItemProps} from './DavitDropDown';
 
 interface GoToOptionDropDownProps extends DropdownProps {
   onSelect: (gotoType: GoToTypes | undefined) => void;
@@ -10,13 +11,13 @@ interface GoToOptionDropDownProps extends DropdownProps {
 export const GoToOptionDropDown: FunctionComponent<GoToOptionDropDownProps> = (props) => {
   const {onSelect, value} = props;
 
-  const getOptions = (): DropdownItemProps[] => {
-    return Object.values(GoToTypes).map(goToToOption);
+  const getOptions = (): DavitDropDownItemProps[] => {
+    return Object.values(GoToTypes).map((goto, index) => goToToOption(goto, index));
   };
 
-  const goToToOption = (goTo: GoToTypes): DropdownItemProps => {
+  const goToToOption = (goTo: GoToTypes, key: number): DavitDropDownItemProps => {
     return {
-      key: goTo,
+      key: key,
       value: goTo,
       text: goTo,
     };
@@ -27,14 +28,10 @@ export const GoToOptionDropDown: FunctionComponent<GoToOptionDropDownProps> = (p
   };
 
   return (
-    <Dropdown
-      options={getOptions()}
-      selection
-      selectOnBlur={false}
-      onChange={(event, data) => onSelect(selectGotoType(data.value as string))}
-      scrolling
+    <DavitDropDown
+      dropdownItems={getOptions()}
+      onSelect={(data) => onSelect(selectGotoType(data.value))}
       value={value ? value : GoToTypes.ERROR}
-      compact
     />
   );
 };

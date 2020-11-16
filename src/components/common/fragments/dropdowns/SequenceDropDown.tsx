@@ -1,9 +1,10 @@
 import React, {FunctionComponent} from 'react';
 import {useSelector} from 'react-redux';
-import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
-import {isNullOrUndefined} from 'util';
+import {DropdownProps} from 'semantic-ui-react';
 import {SequenceTO} from '../../../../dataAccess/access/to/SequenceTO';
 import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
+import {DavitUtil} from '../../../../utils/DavitUtil';
+import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from './DavitDropDown';
 
 interface SequenceDropDownProps extends DropdownProps {
   onSelect: (sequence: SequenceTO | undefined) => void;
@@ -21,17 +22,11 @@ export const SequenceDropDown: FunctionComponent<SequenceDropDownProps> = (props
   const {sequences, selectSequence, sequenceToOption} = useSequenceDropDownViewModel();
 
   return (
-    <Dropdown
-      options={sequences.map(sequenceToOption)}
-      placeholder={placeholder || 'Select Sequence ...'}
-      onChange={(event, sequence) => onSelect(selectSequence(Number(sequence.value), sequences))}
-      floating
-      selectOnBlur={false}
-      scrolling
-      clearable
-      selection
-      value={value}
-      disabled={sequences.length > 0 ? false : true}
+    <DavitDropDown
+      dropdownItems={sequences.map(sequenceToOption)}
+      placeholder={placeholder}
+      onSelect={(sequence) => onSelect(selectSequence(Number(sequence.value), sequences))}
+      value={value?.toString()}
     />
   );
 };
@@ -41,18 +36,10 @@ export const SequenceDropDownButton: FunctionComponent<SequenceDropDownPropsButt
   const {sequences, selectSequence, sequenceToOption} = useSequenceDropDownViewModel();
 
   return (
-    <Dropdown
-      options={sequences.map(sequenceToOption)}
-      icon={sequences.length > 0 ? icon : ''}
-      onChange={(event, sequence) => onSelect(selectSequence(Number(sequence.value), sequences))}
-      className="button icon"
-      inverted="true"
-      color="orange"
-      floating
-      selectOnBlur={false}
-      trigger={<React.Fragment />}
-      scrolling
-      disabled={sequences.length > 0 ? false : true}
+    <DavitIconDropDown
+      dropdownItems={sequences.map(sequenceToOption)}
+      icon={icon}
+      onSelect={(sequence) => onSelect(selectSequence(Number(sequence.value), sequences))}
     />
   );
 };
@@ -61,16 +48,16 @@ const useSequenceDropDownViewModel = () => {
   const sequences: SequenceTO[] = useSelector(masterDataSelectors.sequences);
 
   const selectSequence = (sequenceId: number, sequences: SequenceTO[]): SequenceTO | undefined => {
-    if (!isNullOrUndefined(sequenceId) && !isNullOrUndefined(sequences)) {
+    if (!DavitUtil.isNullOrUndefined(sequenceId) && !DavitUtil.isNullOrUndefined(sequences)) {
       return sequences.find((sequence) => sequence.id === sequenceId);
     }
     return undefined;
   };
 
-  const sequenceToOption = (sequence: SequenceTO): DropdownItemProps => {
+  const sequenceToOption = (sequence: SequenceTO): DavitDropDownItemProps => {
     return {
       key: sequence.id,
-      value: sequence.id,
+      value: sequence.id.toString(),
       text: sequence.name,
     };
   };

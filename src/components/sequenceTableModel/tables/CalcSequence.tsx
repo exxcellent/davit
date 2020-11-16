@@ -24,11 +24,9 @@ export const useGetCalcSequenceTableData = (calcSteps: CalculatedStep[], selecte
   const bodyData: DavitTableRowData[] = calcSteps.map((step, index) =>{
     const onClick = ()=> dispatch(SequenceModelActions.setCurrentStepIndex(index));
 
-    return createCalcSequenceStepColumn(selectedSequence, step, index, stepIndex, loopStepStartIndex, onClick);
+    return createCalcSequenceStepColumn(selectedSequence, step, index, stepIndex, loopStepStartIndex, onClick, terminalStep);
   });
-  if (terminalStep) {
-    bodyData.push(createTerminalColumn(terminalStep));
-  }
+
   return {
     header,
     bodyData,
@@ -43,21 +41,29 @@ const header = [
 ];
 
 const createCalcSequenceStepColumn = (selectedSequence: SequenceCTO | null, step: CalculatedStep, index: number,
-    stepIndex: number, loopStepStartIndex: number | null, clickEvent: ()=>void): DavitTableRowData => {
+    stepIndex: number, loopStepStartIndex: number | null, clickEvent: ()=>void, terminal: Terminal | null): DavitTableRowData => {
   let trClass: string
       = loopStepStartIndex && loopStepStartIndex <= index
         ? 'carv2TrTerminalError'
         : 'carv2Tr';
 
+  if (step.type === 'TERMINAL' && terminal) {
+    trClass = 'carv2TrTerminal' + terminal.type;
+  }
+
   if (index === stepIndex) {
-    trClass = 'carv2TrMarked';
+    if (step.type === 'TERMINAL') {
+      trClass = trClass + ' davitTrTerminalMarked';
+    } else {
+      trClass = 'carv2TrMarked';
+    }
   }
 
   const hasError = step.errors.length > 0 ? true : false;
 
   return {
     actions: [],
-    data: [index.toString(), getModelElementName(step, selectedSequence), step.type, hasError ? getWarningIcon() : ''],
+    data: [index.toString(), getModelElementName(step, selectedSequence, terminal), step.type, hasError ? getWarningIcon() : ''],
     trClass: 'clickable ' + trClass,
     onClick: clickEvent,
   };
@@ -67,7 +73,7 @@ const getWarningIcon = () : JSX.Element => {
   return (<Icon name="warning sign" color="red" />);
 };
 
-function getModelElementName(step: CalculatedStep, selectSequence: SequenceCTO | null) {
+function getModelElementName(step: CalculatedStep, selectSequence: SequenceCTO | null, terminal: Terminal | null) {
   switch (step.type) {
     case 'STEP':
       return selectSequence?.sequenceStepCTOs.find(
@@ -79,16 +85,10 @@ function getModelElementName(step: CalculatedStep, selectSequence: SequenceCTO |
           )?.name || 'Decision not found!';
     case 'INIT':
       return 'Initial step';
+    case 'TERMINAL':
+      return terminal?.type || `Terminal name not found!`;
     default:
       return `ModelElement type has type ${step.type} which is not known`;
   }
 }
 
-const createTerminalColumn = (terminal: Terminal): DavitTableRowData => {
-  const className = 'carv2TrTerminal' + terminal.type;
-  return {
-    data: ['', terminal.type, '', ''],
-    actions: [],
-    trClass: className,
-  };
-};
