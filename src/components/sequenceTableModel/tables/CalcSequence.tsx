@@ -26,9 +26,7 @@ export const useGetCalcSequenceTableData = (calcSteps: CalculatedStep[], selecte
 
     return createCalcSequenceStepColumn(selectedSequence, step, index, stepIndex, loopStepStartIndex, onClick, terminalStep);
   });
-  // if (terminalStep) {
-  //   bodyData.push(createTerminalColumn(terminalStep));
-  // }
+
   return {
     header,
     bodyData,
@@ -55,7 +53,7 @@ const createCalcSequenceStepColumn = (selectedSequence: SequenceCTO | null, step
 
   if (index === stepIndex) {
     if (step.type === 'TERMINAL') {
-      trClass = trClass + ' ' + 'davitTrTerminalMarked';
+      trClass = trClass + ' davitTrTerminalMarked';
     } else {
       trClass = 'carv2TrMarked';
     }
@@ -94,11 +92,3 @@ function getModelElementName(step: CalculatedStep, selectSequence: SequenceCTO |
   }
 }
 
-const createTerminalColumn = (terminal: Terminal): DavitTableRowData => {
-  const className = 'carv2TrTerminal' + terminal.type;
-  return {
-    data: ['', terminal.type, '', ''],
-    actions: [],
-    trClass: className,
-  };
-};
