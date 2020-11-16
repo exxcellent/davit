@@ -71,6 +71,7 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
   const INTERFACE_OUTPUT: Point = {x: ELEMENT_WIDTH, y: sourceHeight / 2};
   const OFFSET: number = 10;
   const MARKER_WIDTH: number = 20;
+  const TEXT_OFFSET: number = 25;
 
   const createCurve = (x1: number, y1: number, x2: number, y2: number, type: ArrowType) => {
     const startDir: 'LEFT' | ' RIGHT' = x2 < (x1 + ELEMENT_WIDTH/2) ? 'LEFT' : ' RIGHT';
@@ -109,8 +110,8 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
         {dataLabels.map((label, index) => {
           return (
             <>
-              <text key={index} x={middlePoint.x} y={middlePoint.y + index * 20} className="davitArrowTextBG">{label}</text>
-              <text x={middlePoint.x} y={middlePoint.y + index * 20} key={index} className="davitArrowText">
+              <text key={index} x={middlePoint.x - TEXT_OFFSET} y={middlePoint.y + index * 20} className="davitArrowTextBG">{label}</text>
+              <text key={index} x={middlePoint.x - TEXT_OFFSET} y={middlePoint.y + index * 20} className="davitArrowText">
                 {label}
               </text>
             </>
