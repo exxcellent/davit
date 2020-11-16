@@ -65,34 +65,43 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
     }
   }, [ySource, xSource, yTarget, xTarget, parentRef]);
 
+  // TODO: measure real width of elements.
+  const ELEMENT_WIDTH=120;
   const INTERFACE_INPUT: Point = {x: 0, y: targetHeight / 2};
-  const INTERFACE_OUTPUT: Point = {x: sourceWidth, y: sourceHeight / 2};
+  const INTERFACE_OUTPUT: Point = {x: ELEMENT_WIDTH, y: sourceHeight / 2};
   const OFFSET: number = 10;
+  const MARKER_WIDTH: number = 20;
 
   const createCurve = (x1: number, y1: number, x2: number, y2: number, type: ArrowType) => {
-    let startPoint: Point = {x: x1, y: y1};
-    let endPoint: Point = {x: x2, y: y2};
+    const startDir: 'LEFT' | ' RIGHT' = x2 < (x1 + ELEMENT_WIDTH/2) ? 'LEFT' : ' RIGHT';
+    const endDir: 'LEFT' | ' RIGHT' = x1 < (x2 + ELEMENT_WIDTH/2) ? 'LEFT' : ' RIGHT';
+    const xStart= startDir==='LEFT' ? x1 : (x1 + ELEMENT_WIDTH);
+    const xEnd= endDir==='LEFT' ? x2 : (x2 + ELEMENT_WIDTH + OFFSET + MARKER_WIDTH);
+    let startPoint: Point = {x: xStart, y: y1};
+    let endPoint: Point = {x: xEnd, y: y2};
     // set interfaces
-    startPoint = plusPoint(startPoint, INTERFACE_OUTPUT);
+    startPoint = plusPoint(startPoint, INTERFACE_INPUT);
     endPoint = plusPoint(endPoint, INTERFACE_INPUT);
     // add object offset
-    const offsetStartPoint = setOutPutOffset(startPoint, OFFSET);
+    const offsetStartPoint = setOutPutOffset(startPoint, OFFSET, startDir);
     endPoint = setInputPutOffset(endPoint, OFFSET);
 
     const middlePoint = getMiddlePoint(offsetStartPoint, endPoint);
     const curveRefPoint = getCurvRefPoint(offsetStartPoint, middlePoint);
+    const offsetStartSign = startDir==='LEFT'? '-' : '';
+    const offsetEndSign = endDir==='LEFT'? '' : '-';
 
     return (
       <>
         <path
           d={`M ${startPoint.x},${startPoint.y} 
-        l 10,0
+        l ${offsetStartSign}10,0
         Q ${curveRefPoint.x}, 
         ${curveRefPoint.y} 
         ${middlePoint.x}, 
         ${middlePoint.y}
         T ${endPoint.x}, ${endPoint.y}
-        l 10,0
+        l ${offsetEndSign}10,0
         `}
           className={'carvPath ' + type.toString()}
           markerEnd="url(#arrow)"
@@ -138,8 +147,8 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
     return middleValue;
   };
 
-  const setOutPutOffset = (point: Point, offset: number): Point => {
-    return {x: point.x + offset, y: point.y};
+  const setOutPutOffset = (point: Point, offset: number, startDir: 'LEFT' | ' RIGHT'): Point => {
+    return startDir==='LEFT' ? {x: point.x - offset, y: point.y} : {x: point.x + offset, y: point.y};
   };
 
   const setInputPutOffset = (point: Point, offset: number): Point => {
