@@ -10,7 +10,7 @@ import {DavitUtil} from '../utils/DavitUtil';
 import {ActorData} from '../viewDataTypes/ActorData';
 
 export interface CalculatedStep {
-  type: 'STEP' | 'DECISION' | 'INIT';
+  type: 'STEP' | 'DECISION' | 'INIT' | 'TERMINAL';
   modelElementFk?: number;
   stepId: string;
   actorDatas: ActorData[];
@@ -107,6 +107,9 @@ export const SequenceService = {
         }
         if (!isLooping(loopStartingStep)) {
           calcSequence.terminal = stepOrDecision as Terminal;
+          const terminalResult: SequenceActionResult = SequenceActionReducer.executeActionsOnActorDatas([], actorDatas);
+          calcSequence.steps.push({stepId: stepId + '_' + (stepOrDecision as Terminal).type, actorDatas: terminalResult.actorDatas, type: 'TERMINAL', errors: terminalResult.errors});
+
           stepIds.push(stepId + '_' + (stepOrDecision as Terminal).type);
         }
       }

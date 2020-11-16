@@ -144,7 +144,7 @@ const findActorDataIndex = (actorId: number, dataId: number, actorDatas: ActorDa
 };
 
 const isTransiantState = (state: ActorDataState) => {
-  return state === ActorDataState.DELETED || state=== ActorDataState.UPDATED_FROM ||state=== ActorDataState.CHECKED ||state=== ActorDataState.CHECK_FAILED;
+  return state === ActorDataState.DELETED || state=== ActorDataState.UPDATED_FROM ||state=== ActorDataState.CHECK_FAILED;
 };
 function actorDataIsPresent(indexActorDataToEdit: number) {
   return indexActorDataToEdit !== -1;

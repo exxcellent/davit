@@ -22,9 +22,9 @@ export interface DavitIconDropDownProps extends DropdownItemProps {
 }
 
 export interface DavitMultiselectDropDownProps extends DropdownItemProps {
-  onSelect: (items: DavitDropDownItemProps[]) => void;
+  onSelect: (items: string[]) => void;
   dropdownItems: DavitDropDownItemProps[];
-  selection: DavitDropDownItemProps[];
+  selection: string[];
   placeholder?: string;
 }
 
@@ -89,17 +89,17 @@ export const DavitMultiselectDropDown: FunctionComponent<DavitMultiselectDropDow
       fluid
       multiple
       selection
-      search
-      value={selectedItemsToValuesArray(selected)}
+      // value={selectedItemsToValuesArray(selected)}
       scrolling
       disabled={dropdownItems.length < 1}
-      style={{overflow: 'auto'}}
+      // style={{overflow: 'auto'}}
       options={dropdownItems.sort(function(a, b) {
         return ('' + a.value).localeCompare(b.value);
       })}
-      onChange={(event, datas) => {
-        onSelect(datas.map((data: any) => parsDataToDavitDropDownItemProps(data)));
-      }}
+      // onChange={(event, datas) => {
+      //   console.info('datas: ', datas);
+      //   onSelect((datas.value as string[])
+      // }}
     />
   );
 };

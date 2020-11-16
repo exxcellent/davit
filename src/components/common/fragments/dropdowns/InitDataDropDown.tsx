@@ -1,12 +1,13 @@
 import React, {FunctionComponent} from 'react';
 import {useSelector} from 'react-redux';
-import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
-import {isNullOrUndefined} from 'util';
-
+import {DropdownProps} from 'semantic-ui-react';
 import {ActorCTO} from '../../../../dataAccess/access/cto/ActorCTO';
 import {DataCTO} from '../../../../dataAccess/access/cto/DataCTO';
 import {InitDataTO} from '../../../../dataAccess/access/to/InitDataTO';
 import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
+import {DavitUtil} from '../../../../utils/DavitUtil';
+import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from './DavitDropDown';
+
 
 interface InitDataDropDownDownProps extends DropdownProps {
   initDatas: InitDataTO[];
@@ -26,18 +27,12 @@ export const InitDataDropDown: FunctionComponent<InitDataDropDownDownProps> = (p
   const {initDataToOption, selectInitData} = useDataSetupDropDownViewModel();
 
   return (
-    <Dropdown
-      options={initDatas.map(initDataToOption).sort(function(a, b) {
-        return ('' + a.attr).localeCompare(b.attr);
-      })}
-      selection
-      selectOnBlur={false}
-      placeholder={placeholder || 'Select Data ...'}
-      onChange={(event, data) => onSelect(selectInitData(Number(data.value), initDatas))}
-      scrolling
-      clearable={true}
-      value={value}
-      disabled={initDatas.length > 0 ? false : true}
+    <DavitDropDown
+      dropdownItems={initDatas.map(initDataToOption)}
+      placeholder={placeholder}
+      onSelect={(initData) => onSelect(selectInitData(Number(initData.value), initDatas))}
+      clearable
+      value={value?.toString()}
     />
   );
 };
@@ -47,17 +42,10 @@ export const InitDataDropDownButton: FunctionComponent<InitDataDropDownPropsButt
   const {initDataToOption, selectInitData} = useDataSetupDropDownViewModel();
 
   return (
-    <Dropdown
-      options={initDatas.map(initDataToOption).sort(function(a, b) {
-        return ('' + a.attr).localeCompare(b.attr);
-      })}
-      icon={initDatas.length > 0 ? icon : ''}
-      selectOnBlur={false}
-      onChange={(event, data) => onSelect(selectInitData(Number(data.value), initDatas))}
-      className="button icon"
-      trigger={<React.Fragment />}
-      scrolling
-      disabled={initDatas.length > 0 ? false : true}
+    <DavitIconDropDown
+      dropdownItems={initDatas.map(initDataToOption)}
+      icon={icon}
+      onSelect={(initData) => onSelect(selectInitData(Number(initData.value), initDatas))}
     />
   );
 };
@@ -82,16 +70,16 @@ const useDataSetupDropDownViewModel = () => {
     return dataName;
   };
 
-  const initDataToOption = (initData: InitDataTO): DropdownItemProps => {
+  const initDataToOption = (initData: InitDataTO): DavitDropDownItemProps => {
     return {
       key: initData.id,
-      value: initData.id,
+      value: initData.id.toString(),
       text: getActorName(initData.actorFk) + ' + ' + getDataName(initData.dataFk, initData.instanceFk),
     };
   };
 
   const selectInitData = (initDataId: number, initDatas: InitDataTO[]): InitDataTO | undefined => {
-    if (!isNullOrUndefined(initDataId) && !isNullOrUndefined(initDatas)) {
+    if (!DavitUtil.isNullOrUndefined(initDataId) && !DavitUtil.isNullOrUndefined(initDatas)) {
       return initDatas.find((initData) => initData.id === initDataId);
     }
     return undefined;

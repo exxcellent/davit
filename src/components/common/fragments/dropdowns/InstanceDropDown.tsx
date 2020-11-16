@@ -1,10 +1,11 @@
 import React, {FunctionComponent} from 'react';
 import {useSelector} from 'react-redux';
-import {Dropdown, DropdownItemProps, DropdownProps} from 'semantic-ui-react';
-
+import {Dropdown, DropdownProps} from 'semantic-ui-react';
 import {DataCTO} from '../../../../dataAccess/access/cto/DataCTO';
 import {DataInstanceTO} from '../../../../dataAccess/access/to/DataInstanceTO';
 import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
+import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from './DavitDropDown';
+
 
 export interface DataAndInstanceId {
   dataFk: number;
@@ -23,7 +24,6 @@ interface InstanceDropDownButtonProps extends DropdownProps {
 }
 
 interface InstanceDropDownMultiselectProps extends DropdownProps {
-  // onSelect: (dataIds: number[] | undefined) => void;
   onSelect: (dataAndInstaces: DataAndInstanceId[] | undefined) => void;
   selected: DataAndInstanceId[];
   placeholder?: string;
@@ -36,17 +36,11 @@ export const InstanceDropDown: FunctionComponent<InstanceDropDownProps> = (
   const {selectInstance, createOptions} = useInstanceDropDownViewModel();
 
   return (
-    <Dropdown
-      options={createOptions()}
-      placeholder={placeholder || 'Select Data ...'}
-      onChange={(event, instance) =>
-        onSelect(selectInstance(instance.value!.toString()))
-      }
-      selectOnBlur={false}
-      scrolling
-      selection
+    <DavitDropDown
+      dropdownItems={createOptions()}
+      placeholder={placeholder}
+      onSelect={(instance) => onSelect(selectInstance(instance.value))}
       value={value !== '' ? value : undefined}
-      disabled={createOptions().length > 0 ? false : true}
     />
   );
 };
@@ -58,20 +52,10 @@ export const InstanceDropDownButton: FunctionComponent<InstanceDropDownButtonPro
   const {selectInstance, createOptions} = useInstanceDropDownViewModel();
 
   return (
-    <Dropdown
-      options={createOptions()}
-      icon={createOptions().length > 0 ? icon : ''}
-      onChange={(event, instance) =>
-        onSelect(selectInstance(instance.value!.toString()))
-      }
-      className="button icon"
-      inverted="true"
-      color="orange"
-      floating
-      selectOnBlur={false}
-      trigger={<React.Fragment />}
-      scrolling
-      disabled={createOptions().length > 0 ? false : true}
+    <DavitIconDropDown
+      dropdownItems={createOptions()}
+      icon={icon}
+      onSelect={(instance) => onSelect(selectInstance(instance.value))}
     />
   );
 };
@@ -82,10 +66,13 @@ export const InstanceDropDownMultiselect: FunctionComponent<InstanceDropDownMult
   const {onSelect, selected, placeholder} = props;
   const {selectInstances, createOptions} = useInstanceDropDownViewModel();
 
-  console.info(
-      'selected: ',
-      selected.map((select) => JSON.stringify(select)),
-  );
+  function parsDataAndInstanceIdToStringArray(dataAndInstanceIds: DataAndInstanceId[]): DavitDropDownItemProps[] {
+    return dataAndInstanceIds.map((dataAndInstanceId) => {
+      return {key: dataAndInstanceId.dataFk, value: JSON.stringify(dataAndInstanceId), text: ''};
+    });
+  }
+
+  console.info('seleted: ', parsDataAndInstanceIdToStringArray(selected));
 
   return (
     <Dropdown
@@ -102,6 +89,11 @@ export const InstanceDropDownMultiselect: FunctionComponent<InstanceDropDownMult
       value={selected.map((select) => JSON.stringify(select))}
       scrolling
       disabled={createOptions().length > 0 ? false : true}
+    // <DavitMultiselectDropDown
+    //   dropdownItems={createOptions()}
+    //   placeholder={placeholder}
+    //   onSelect={(instances) => onSelect(selectInstances(instances.map((inst) => inst.value)))}
+    //   // selection={parsDataAndInstanceIdToStringArray(selected)}
     />
   );
 };
@@ -109,9 +101,7 @@ export const InstanceDropDownMultiselect: FunctionComponent<InstanceDropDownMult
 const useInstanceDropDownViewModel = () => {
   const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
 
-  const selectInstance = (
-      optionItemString: string,
-  ): DataAndInstanceId | undefined => {
+  const selectInstance = (optionItemString: string): DataAndInstanceId | undefined => {
     if (optionItemString !== null && datas !== null) {
       const optionItem: DataAndInstanceId = JSON.parse(optionItemString);
       return optionItem;
@@ -119,9 +109,7 @@ const useInstanceDropDownViewModel = () => {
     return undefined;
   };
 
-  const selectInstances = (
-      optionItemStrings: string[] | undefined,
-  ): DataAndInstanceId[] => {
+  const selectInstances = (optionItemStrings: string[] | undefined): DataAndInstanceId[] => {
     const dataAndInstanceIds: DataAndInstanceId[] = [];
     if (optionItemStrings) {
       optionItemStrings.forEach((op) => {
@@ -134,39 +122,27 @@ const useInstanceDropDownViewModel = () => {
     return dataAndInstanceIds;
   };
 
-  const createOptions = (): DropdownItemProps[] => {
-    const dropdownItemas: DropdownItemProps[] = [];
+  const createOptions = (): DavitDropDownItemProps[] => {
+    const dropdownItemas: DavitDropDownItemProps[] = [];
     if (datas) {
       datas.forEach((data) => {
         data.data.instances.forEach((inst) => {
-          if (data.data.instances.length > 1) {
-            if (inst.id !== 1) {
-              dropdownItemas.push(instanceToOption(inst, data));
-            }
-          } else {
-            dropdownItemas.push(instanceToOption(inst, data));
-          }
+          dropdownItemas.push(instanceToOption(inst, data, (data.data.id * 100) + inst.id ));
         });
       });
     }
     return dropdownItemas;
   };
 
-  const instanceToOption = (
-      instance: DataInstanceTO,
-      data: DataCTO,
-  ): DropdownItemProps => {
-    const optionItem: DataAndInstanceId = {
-      dataFk: data.data.id,
-      instanceId: instance.id,
-    };
+  const instanceToOption = (instance: DataInstanceTO, data: DataCTO, key: number): DavitDropDownItemProps => {
+    const optionItem: DataAndInstanceId = {dataFk: data.data.id, instanceId: instance.id};
     const optionItemString: string = JSON.stringify(optionItem);
     let optionLabel: string = data.data.name;
     if (instance.id > 1) {
       optionLabel = optionLabel + ' - ' + instance.name;
     }
     return {
-      key: optionItemString,
+      key: key,
       value: optionItemString,
       text: optionLabel,
     };

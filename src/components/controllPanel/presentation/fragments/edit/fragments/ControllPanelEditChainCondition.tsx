@@ -26,7 +26,7 @@ export const ControllPanelEditChainCondition: FunctionComponent<ControllPanelEdi
     actorFk,
     setActorFk,
     setData,
-    dataFks,
+    selectedInstances,
   } = useControllPanelEditConditionViewModel();
 
   return (
@@ -45,7 +45,7 @@ export const ControllPanelEditChainCondition: FunctionComponent<ControllPanelEdi
             onSelect={(data) => {
               setData(data);
             }}
-            selected={dataFks || []}
+            selected={selectedInstances || []}
           />
         </OptionField>
       </div>
@@ -106,6 +106,6 @@ const useControllPanelEditConditionViewModel = () => {
     actorFk: decisionToEdit?.actorFk,
     setActorFk,
     setData,
-    dataFks: decisionToEdit?.dataAndInstanceIds,
+    selectedInstances: decisionToEdit?.dataAndInstanceIds,
   };
 };
