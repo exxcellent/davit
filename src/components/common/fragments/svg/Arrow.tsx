@@ -1,7 +1,7 @@
 import {motion, Point} from 'framer-motion';
 import React, {FunctionComponent, useEffect, useState} from 'react';
-
 import {GeometricalDataCTO} from '../../../../dataAccess/access/cto/GeometraicalDataCTO';
+
 
 export interface ArrowProps {
   xSource: number;
@@ -21,11 +21,13 @@ export interface Arrow {
   sourceGeometricalData: GeometricalDataCTO;
   targetGeometricalData: GeometricalDataCTO;
   dataLabels: string[];
+  type: ArrowType;
 }
 
-enum ArrowType {
-  CURVE = 'Curve',
+export enum ArrowType {
+  SEND = 'SEND',
   CORNER = 'CORNER',
+  TRIGGER = 'TRIGGER'
 }
 
 const Arrow: FunctionComponent<ArrowProps> = (props) => {
@@ -68,7 +70,7 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
   const INTERFACE_OUTPUT: Point = {x: sourceWidth, y: sourceHeight / 2};
   const OFFSET: number = 10;
 
-  const createCurve = (x1: number, y1: number, x2: number, y2: number) => {
+  const createCurve = (x1: number, y1: number, x2: number, y2: number, type: ArrowType) => {
     let startPoint: Point = {x: x1, y: y1};
     let endPoint: Point = {x: x2, y: y2};
     // set interfaces
@@ -93,7 +95,7 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
         T ${endPoint.x}, ${endPoint.y}
         l 10,0
         `}
-          className="carvPath"
+          className={'carvPath ' + type.toString()}
           markerEnd="url(#arrow)"
         />
         {dataLabels.map((label, index) => {
@@ -178,12 +180,40 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
           <path d="M0,0 L0,6 L9,3 z" className="carvArrowMarker" />
         </marker>
       </defs>
-      {type === ArrowType.CURVE
-        && createCurve(initXSource, initYSource, initXTarget, initYTarget)}
+      {type !== ArrowType.CORNER
+        && createCurve(initXSource, initYSource, initXTarget, initYTarget, type)}
       {type === ArrowType.CORNER
         && createCornerLine(initXSource, initYSource, initXTarget, initYTarget)}
     </motion.svg>
   );
+};
+
+export const createArrow = (
+    source: GeometricalDataCTO | undefined,
+    target: GeometricalDataCTO | undefined,
+    key: number,
+    parentRef: any,
+    type: ArrowType,
+    dataLabels?: string[],
+) => {
+  if (source && target) {
+    return (
+      <Arrow
+        xSource={source.position.x}
+        ySource={source.position.y}
+        sourceWidth={source.geometricalData.width}
+        sourceHeight={source.geometricalData.height}
+        xTarget={target.position.x}
+        yTarget={target.position.y}
+        targetWidth={target.geometricalData.width}
+        targetHeight={target.geometricalData.height}
+        type={type}
+        key={key}
+        parentRef={parentRef}
+        dataLabels={dataLabels || []}
+      />
+    );
+  }
 };
 
 export const createCurveArrow = (
@@ -204,7 +234,7 @@ export const createCurveArrow = (
         yTarget={target.position.y}
         targetWidth={target.geometricalData.width}
         targetHeight={target.geometricalData.height}
-        type={ArrowType.CURVE}
+        type={ArrowType.SEND}
         key={key}
         parentRef={parentRef}
         dataLabels={dataLabels}

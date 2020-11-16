@@ -16,6 +16,7 @@ import {ActorDropDown} from '../../../../../common/fragments/dropdowns/ActorDrop
 import {DataDropDown} from '../../../../../common/fragments/dropdowns/DataDropDown';
 import {DataAndInstanceId, InstanceDropDown} from '../../../../../common/fragments/dropdowns/InstanceDropDown';
 import {ControllPanelEditSub} from '../common/ControllPanelEditSub';
+import {Carv2LabelTextfield} from '../common/fragments/Carv2LabelTextfield';
 import {OptionField} from '../common/OptionField';
 
 
@@ -40,6 +41,8 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
     key,
     setDataAndInstance,
     dataAndInstance,
+    setTriggerLabel,
+    triggerlabe,
   } = useControllPanelEditActionViewModel();
 
   return (
@@ -49,12 +52,23 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
           <OptionField label="Select action to execute">
             <ActionTypeDropDown onSelect={setAction} value={actionType} />
           </OptionField>
-          <OptionField label="Data">
+          {actionType !== ActionType.TRIGGER && <OptionField label="Data">
             {actionType === ActionType.ADD && (
               <InstanceDropDown onSelect={setDataAndInstance} value={dataAndInstance} />
             )}
             {actionType !== ActionType.ADD && <DataDropDown onSelect={setData} value={dataId} />}
+          </OptionField>}
+          {actionType === ActionType.TRIGGER
+          && <OptionField label="LABEL">
+            <Carv2LabelTextfield
+              placeholder="Trigger text ..."
+              onChange={(event: any) => setTriggerLabel(event.target.value)}
+              value={triggerlabe}
+              autoFocus
+              unvisible={hidden}
+            />
           </OptionField>
+          }
         </OptionField>
       </div>
       <div className="optionFieldSpacer">
@@ -62,16 +76,16 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
           <label className="optionFieldLabel" style={{paddingTop: '1em'}}>
             {actionType === ActionType.ADD ? 'TO' : 'FROM'}
           </label>
-          <OptionField label={actionType?.includes('SEND') ? 'Select sending Actor' : 'Actor'}>
+          <OptionField label={actionType?.includes('SEND') || actionType === ActionType.TRIGGER ? 'Select sending Actor' : 'Actor'}>
             <ActorDropDown
-              onSelect={(actor) => setActor(actor, actionType?.includes('SEND') ? true : false)}
-              value={actionType?.includes('SEND') ? sendingActorId?.toString() : receivingActorId?.toString()}
+              onSelect={(actor) => setActor(actor, (actionType?.includes('SEND') || actionType === ActionType.TRIGGER) ? true : false)}
+              value={(actionType?.includes('SEND') || actionType === ActionType.TRIGGER) ? sendingActorId?.toString() : receivingActorId?.toString()}
             />
           </OptionField>
         </OptionField>
       </div>
       <div className="optionFieldSpacer">
-        {actionType?.includes('SEND') && (
+        {(actionType?.includes('SEND') || actionType === ActionType.TRIGGER) && (
           <OptionField label=" ">
             <label className="optionFieldLabel" style={{paddingTop: '1em'}}>
               TO
@@ -144,6 +158,16 @@ const useControllPanelEditActionViewModel = () => {
     }
   };
 
+  const setTriggerLabel = (text: string) =>{
+    if (actionToEdit !== undefined) {
+      const copyActionToEdit: ActionTO = DavitUtil.deepCopy(actionToEdit);
+      copyActionToEdit.triggerText = text;
+      dispatch(EditActions.action.update(copyActionToEdit));
+      // TODO: this can maybe removed, anyway would be better!
+      dispatch(EditActions.action.save(copyActionToEdit));
+    }
+  };
+
   const setData = (data: DataCTO | undefined): void => {
     if (data !== undefined) {
       const copyActionToEdit: ActionTO = DavitUtil.deepCopy(actionToEdit);
@@ -165,10 +189,18 @@ const useControllPanelEditActionViewModel = () => {
 
   const validAction = (action: ActionTO): boolean => {
     let valid: boolean = false;
-    if (action.actionType.includes('SEND')) {
-      valid = action.dataFk !== -1 && action.receivingActorFk !== -1 && action.sendingActorFk !== -1;
-    } else {
-      valid = action.dataFk !== -1 && action.receivingActorFk !== -1;
+    switch (action.actionType) {
+      case ActionType.TRIGGER:
+        valid = action.receivingActorFk !== -1 && action.sendingActorFk !== -1;
+        break;
+      case ActionType.SEND:
+        valid = action.dataFk !== -1 && action.receivingActorFk !== -1 && action.sendingActorFk !== -1;
+        break;
+      case ActionType.SEND_AND_DELETE:
+        valid = action.dataFk !== -1 && action.receivingActorFk !== -1 && action.sendingActorFk !== -1;
+        break;
+      default:
+        valid = action.dataFk !== -1 && action.receivingActorFk !== -1;
     }
     return valid;
   };
@@ -216,5 +248,7 @@ const useControllPanelEditActionViewModel = () => {
       dataFk: actionToEdit?.dataFk,
       instanceId: actionToEdit?.instanceFk,
     }),
+    setTriggerLabel,
+    triggerlabe: actionToEdit?.actionType === ActionType.TRIGGER ? actionToEdit.triggerText : '',
   };
 };

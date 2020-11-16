@@ -1,11 +1,11 @@
 import {motion} from 'framer-motion';
 import React, {FunctionComponent, useEffect, useRef, useState} from 'react';
-
 import {ASPECT_RATIO, WINDOW_FACTOR} from '../../../../app/Carv2Constants';
 import {PositionTO} from '../../../../dataAccess/access/to/PositionTO';
 import {useCurrentHeight, useCurrentWitdh} from '../../../../utils/WindowUtil';
 import {createDnDItem} from '../../../common/fragments/DnDWrapper';
-import {Arrow, createCurveArrow} from '../../../common/fragments/svg/Arrow';
+import {Arrow, createArrow} from '../../../common/fragments/svg/Arrow';
+
 
 interface ActorDnDBox {
   toDnDElements: { element: JSX.Element; position: PositionTO }[];
@@ -33,12 +33,13 @@ export const ActorDnDBox: FunctionComponent<ActorDnDBox> = (props) => {
       {toDnDElements.map(wrappItem)}
       <motion.svg className="dataSVGArea">
         {arrows.map((arrow, index) => {
-          return createCurveArrow(
+          return createArrow(
               arrow.sourceGeometricalData,
               arrow.targetGeometricalData,
-              arrow.dataLabels,
               index,
               constraintsRef,
+              arrow.type,
+              arrow.dataLabels,
           );
         })}
       </motion.svg>

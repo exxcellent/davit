@@ -38,7 +38,14 @@ export const SequenceService = {
 
     if (sequence && dataSetup) {
       const dataSetupActions: ActionTO[] = dataSetup.initDatas.map((data) => {
-        return {actionType: ActionType.ADD, receivingActorFk: data.actorFk, dataFk: data.dataFk, instanceFk: data.instanceFk, id: -1, sequenceStepFk: -1, sendingActorFk: -1};
+        return {actionType: ActionType.ADD,
+          receivingActorFk: data.actorFk,
+          dataFk: data.dataFk,
+          instanceFk: data.instanceFk,
+          id: -1,
+          sequenceStepFk: -1,
+          sendingActorFk: -1,
+          triggerText: ''};
       });
 
       const dataSetupResult: SequenceActionResult = SequenceActionReducer.executeActionsOnActorDatas(dataSetupActions, persistentDatas || []);
@@ -108,7 +115,11 @@ export const SequenceService = {
         if (!isLooping(loopStartingStep)) {
           calcSequence.terminal = stepOrDecision as Terminal;
           const terminalResult: SequenceActionResult = SequenceActionReducer.executeActionsOnActorDatas([], actorDatas);
-          calcSequence.steps.push({stepId: stepId + '_' + (stepOrDecision as Terminal).type, actorDatas: terminalResult.actorDatas, type: 'TERMINAL', errors: terminalResult.errors});
+          calcSequence.steps.push(
+              {stepId: stepId + '_' + (stepOrDecision as Terminal).type,
+                actorDatas: terminalResult.actorDatas,
+                type: 'TERMINAL',
+                errors: terminalResult.errors});
 
           stepIds.push(stepId + '_' + (stepOrDecision as Terminal).type);
         }

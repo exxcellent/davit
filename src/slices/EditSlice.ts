@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {AppThunk, RootState} from '../app/store';
-import {Arrow} from '../components/common/fragments/svg/Arrow';
+import {Arrow, ArrowType} from '../components/common/fragments/svg/Arrow';
 import {ActorCTO} from '../dataAccess/access/cto/ActorCTO';
 import {ChainCTO} from '../dataAccess/access/cto/ChainCTO';
 import {DataCTO} from '../dataAccess/access/cto/DataCTO';
@@ -19,6 +19,7 @@ import {GroupTO} from '../dataAccess/access/to/GroupTO';
 import {InitDataTO} from '../dataAccess/access/to/InitDataTO';
 import {SequenceStepTO} from '../dataAccess/access/to/SequenceStepTO';
 import {SequenceTO} from '../dataAccess/access/to/SequenceTO';
+import {ActionType} from '../dataAccess/access/types/ActionType';
 import {GoToTypes} from '../dataAccess/access/types/GoToType';
 import {GoToTypesChain} from '../dataAccess/access/types/GoToTypeChain';
 import {DataAccess} from '../dataAccess/DataAccess';
@@ -988,10 +989,16 @@ const mapActionsToArrows = (actions: ActionTO[], state: RootState): Arrow[] => {
     )?.geometricalData;
 
     const dataLabels: string[] = [];
-    const dataLabel: string | undefined = state.masterData.datas.find((data) => data.data.id === action.dataFk)?.data.name;
-    if (dataLabel) {
-      dataLabels.push(dataLabel);
+    if (action.actionType === ActionType.TRIGGER) {
+      dataLabels.push(action.triggerText);
+    } else {
+      const dataLabel: string | undefined = state.masterData.datas.find((data) => data.data.id === action.dataFk)?.data.name;
+      if (dataLabel) {
+        dataLabels.push(dataLabel);
+      }
     }
+
+    const type: ArrowType = action.actionType.includes('SEND') ? ArrowType.SEND : ArrowType.TRIGGER;
 
     if (sourceGeometricalData && targetGeometricalData) {
       const existingArrow: Arrow | undefined = arrows
@@ -1005,6 +1012,7 @@ const mapActionsToArrows = (actions: ActionTO[], state: RootState): Arrow[] => {
           sourceGeometricalData,
           targetGeometricalData,
           dataLabels,
+          type,
         });
       }
     }
@@ -1058,18 +1066,24 @@ export const editSelectors = {
   },
   editActionArrow: (state: RootState): Arrow | null => {
     if (state.edit.mode === Mode.EDIT_SEQUENCE_STEP_ACTION && (state.edit.objectToEdit as ActionTO).receivingActorFk) {
+      const actionToEdit: ActionTO = (state.edit.objectToEdit as ActionTO);
+
       const sourceComp: ActorCTO | undefined = state.masterData.actors.find(
-          (comp) => comp.actor.id === (state.edit.objectToEdit as ActionTO).sendingActorFk,
+          (comp) => comp.actor.id === actionToEdit.sendingActorFk,
       );
 
       const targetComp: ActorCTO | undefined = state.masterData.actors.find(
-          (comp) => comp.actor.id === (state.edit.objectToEdit as ActionTO).receivingActorFk,
+          (comp) => comp.actor.id === actionToEdit.receivingActorFk,
       );
 
-      const dataLabel: string = masterDataSelectors.getDataCTOById((state.edit.objectToEdit as ActionTO).dataFk)(state)?.data.name || 'Could not find data';
+      const dataLabel: string = actionToEdit.actionType === ActionType.TRIGGER
+      ? actionToEdit.triggerText
+      : masterDataSelectors.getDataCTOById(actionToEdit.dataFk)(state)?.data.name || 'Could not find data';
+
+      const type: ArrowType = actionToEdit.actionType.includes('SEND') ? ArrowType.SEND : ArrowType.TRIGGER;
 
       if (sourceComp && targetComp) {
-        return {sourceGeometricalData: sourceComp.geometricalData, targetGeometricalData: targetComp.geometricalData, dataLabels: [dataLabel]};
+        return {sourceGeometricalData: sourceComp.geometricalData, targetGeometricalData: targetComp.geometricalData, dataLabels: [dataLabel], type: type};
       } else {
         return null;
       }

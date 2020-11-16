@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {AppThunk, RootState} from '../app/store';
-import {Arrow} from '../components/common/fragments/svg/Arrow';
+import {Arrow, ArrowType} from '../components/common/fragments/svg/Arrow';
 import {ChainCTO} from '../dataAccess/access/cto/ChainCTO';
 import {ChainlinkCTO} from '../dataAccess/access/cto/ChainlinkCTO';
 import {DataSetupCTO} from '../dataAccess/access/cto/DataSetupCTO';
@@ -10,6 +10,7 @@ import {SequenceStepCTO} from '../dataAccess/access/cto/SequenceStepCTO';
 import {ActionTO} from '../dataAccess/access/to/ActionTO';
 import {ChainDecisionTO} from '../dataAccess/access/to/ChainDecisionTO';
 import {ChainTO} from '../dataAccess/access/to/ChainTO';
+import {ActionType} from '../dataAccess/access/types/ActionType';
 import {Terminal} from '../dataAccess/access/types/GoToType';
 import {DataAccess} from '../dataAccess/DataAccess';
 import {DataAccessResponse} from '../dataAccess/DataAccessResponse';
@@ -328,10 +329,17 @@ const mapActionsToArrows = (actions: ActionTO[], state: RootState): Arrow[] => {
     )?.geometricalData;
 
     const dataLabels: string[] = [];
-    const dataLabel: string | undefined = state.masterData.datas.find((data) => data.data.id === action.dataFk)?.data.name;
-    if (dataLabel) {
-      dataLabels.push(dataLabel);
+
+    if (action.actionType === ActionType.TRIGGER) {
+      dataLabels.push(action.triggerText);
+    } else {
+      const dataLabel: string | undefined = state.masterData.datas.find((data) => data.data.id === action.dataFk)?.data.name;
+      if (dataLabel) {
+        dataLabels.push(dataLabel);
+      }
     }
+
+    const type: ArrowType = action.actionType.includes('SEND') ? ArrowType.SEND : ArrowType.TRIGGER;
 
     if (sourceGeometricalData && targetGeometricalData) {
       const existingArrow: Arrow | undefined = arrows
@@ -347,6 +355,7 @@ const mapActionsToArrows = (actions: ActionTO[], state: RootState): Arrow[] => {
           sourceGeometricalData,
           targetGeometricalData,
           dataLabels,
+          type,
         });
       }
     }

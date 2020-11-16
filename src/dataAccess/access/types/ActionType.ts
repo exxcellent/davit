@@ -3,4 +3,5 @@ export enum ActionType {
   DELETE = 'DELETE',
   SEND = 'SEND',
   SEND_AND_DELETE = 'SEND_AND_DELETE',
+  TRIGGER = 'TRIGGER'
 }
