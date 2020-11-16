@@ -66,12 +66,6 @@ export const InstanceDropDownMultiselect: FunctionComponent<InstanceDropDownMult
   const {onSelect, selected, placeholder} = props;
   const {selectInstances, createOptions} = useInstanceDropDownViewModel();
 
-  function parsDataAndInstanceIdToStringArray(dataAndInstanceIds: DataAndInstanceId[]): DavitDropDownItemProps[] {
-    return dataAndInstanceIds.map((dataAndInstanceId) => {
-      return {key: dataAndInstanceId.dataFk, value: JSON.stringify(dataAndInstanceId), text: ''};
-    });
-  }
-
   return (
     <Dropdown
       placeholder={placeholder || 'Select Datas ...'}
