@@ -227,6 +227,15 @@
   fill: black;
 }
 
+.davitArrowText{
+  fill: var(--carv2-text-color);
+}
+
+.davitArrowTextBG{
+  stroke: var(--carv2-background-color-header);
+  stroke-width: 0.3em;
+}
+
 /* -------------------------------------------- BUTTON -------------------------------------------- */
 
 #buttonGroupLabel {
@@ -953,7 +962,6 @@ table {
 .carv2TrTerminalFIN.davitTrTerminalMarked{
   opacity: 1;
 }
-
 
 .carv2TrTerminalERROR.clickable:hover{
   background-color: var(--carv2-data-delete-color);

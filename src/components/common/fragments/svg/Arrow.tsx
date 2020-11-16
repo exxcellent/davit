@@ -2,7 +2,6 @@ import {motion, Point} from 'framer-motion';
 import React, {FunctionComponent, useEffect, useState} from 'react';
 import {GeometricalDataCTO} from '../../../../dataAccess/access/cto/GeometraicalDataCTO';
 
-
 export interface ArrowProps {
   xSource: number;
   ySource: number;
@@ -100,9 +99,12 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
         />
         {dataLabels.map((label, index) => {
           return (
-            <text x={middlePoint.x} y={middlePoint.y + index * 20} key={index}>
-              {label}
-            </text>
+            <>
+              <text key={index} x={middlePoint.x} y={middlePoint.y + index * 20} className="davitArrowTextBG">{label}</text>
+              <text x={middlePoint.x} y={middlePoint.y + index * 20} key={index} className="davitArrowText">
+                {label}
+              </text>
+            </>
           );
         })}
       </>
