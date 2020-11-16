@@ -933,19 +933,50 @@ table {
   height: 2.5em;
 }
 
+.carv2TrTerminalERROR.davitTrTerminalMarked{
+  opacity: 1;
+}
+
+.carv2TrTerminalIDLE.davitTrTerminalMarked{
+  opacity: 1;
+}
+
+.carv2TrTerminalFIN.davitTrTerminalMarked{
+  opacity: 1;
+}
+
+
+.carv2TrTerminalERROR.clickable:hover{
+  background-color: var(--carv2-data-delete-color);
+  opacity: 1;
+}
+
+.carv2TrTerminalFIN.clickable:hover{
+  background-color: var(--carv2-data-add-color);
+  opacity: 1;
+}
+
+.carv2TrTerminalIDLE.clickable:hover{
+  background-color: var(--carv2-color-exxcellent-blue);
+  opacity: 1;
+}
+
 .carv2TrTerminalERROR {
   background-color: var(--carv2-data-delete-color);
+  opacity: 0.75;
   height: 2.5em;
 }
 
 .carv2TrTerminalFIN {
   background-color: var(--carv2-data-add-color);
   height: 2.5em;
+  opacity: 0.75;
 }
 
 .carv2TrTerminalIDLE {
   background-color: var(--carv2-color-exxcellent-blue);
   height: 2.5em;
+  opacity: 0.75;
 }
 
 /* ---------------------------- KEY FRAMES ---------------------------- */

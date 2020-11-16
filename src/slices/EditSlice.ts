@@ -28,7 +28,6 @@ import {handleError} from './GlobalSlice';
 import {MasterDataActions, masterDataSelectors} from './MasterDataSlice';
 import {SequenceModelActions} from './SequenceModelSlice';
 
-
 export enum Mode {
   TAB = 'TAB',
   FILE = 'FILE',
@@ -1012,7 +1011,6 @@ const mapActionsToArrows = (actions: ActionTO[], state: RootState): Arrow[] => {
   });
   return arrows;
 };
-
 
 // =============================================== SELECTORS ===============================================
 export const EditReducer = EditSlice.reducer;

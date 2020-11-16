@@ -200,7 +200,7 @@ const useViewModel = () => {
     const data: DataCTO | undefined = datas.find((data) => data.data.id === dataId);
     if (data) {
       dataName = data.data.name;
-      if (instanceId && instanceId!==-1) {
+      if (instanceId !== undefined && instanceId!==-1) {
         dataName
           = dataName + ' - ' + (data.data.instances.find((inst) => inst.id === instanceId)?.name
           || 'Could not find instance Name');

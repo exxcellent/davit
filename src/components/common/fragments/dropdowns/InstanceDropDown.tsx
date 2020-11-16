@@ -7,6 +7,7 @@ import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
 import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from './DavitDropDown';
 
 
+
 export interface DataAndInstanceId {
   dataFk: number;
   instanceId: number;
@@ -138,7 +139,7 @@ const useInstanceDropDownViewModel = () => {
     const optionItem: DataAndInstanceId = {dataFk: data.data.id, instanceId: instance.id};
     const optionItemString: string = JSON.stringify(optionItem);
     let optionLabel: string = data.data.name;
-    if (instance.id > 1) {
+    if (instance.id !== -1) {
       optionLabel = optionLabel + ' - ' + instance.name;
     }
     return {
