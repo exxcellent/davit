@@ -40,6 +40,7 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
     const parentRef = useRef<HTMLDivElement>(null);
     const [tableHeight, setTabelHeihgt] = useState<number>(0);
 
+    // TODO: move this in to custom hook in WindowUtils
     useEffect(() => {
         const resizeListener = () => {
             if (parentRef && parentRef.current) {
