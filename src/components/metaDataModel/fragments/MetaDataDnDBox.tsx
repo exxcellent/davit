@@ -8,7 +8,7 @@ import { DavitUtil } from '../../../utils/DavitUtil';
 import { useCurrentHeight, useCurrentWitdh } from '../../../utils/WindowUtil';
 import { ViewFragmentProps } from '../../../viewDataTypes/ViewFragment';
 import { createDnDItem } from '../../common/fragments/DnDWrapper';
-import { createCornerConnection } from '../../common/fragments/svg/Carv2Path';
+import { createCornerConnection } from '../../common/fragments/svg/DavitPath';
 import { Carv2Card } from '../../metaComponentModel/presentation/fragments/Carv2Card';
 
 interface MetaDataDnDBox {

@@ -37,7 +37,7 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
         yTarget,
         type,
         parentRef,
-        sourceHeight,
+        // sourceHeight,
         // sourceWidth,
         targetHeight,
         dataLabels,
@@ -60,7 +60,7 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
     // TODO: measure real width of elements.
     const ELEMENT_WIDTH = 120;
     const INTERFACE_INPUT: Point = { x: 0, y: targetHeight / 2 };
-    const INTERFACE_OUTPUT: Point = { x: ELEMENT_WIDTH, y: sourceHeight / 2 };
+    // const INTERFACE_OUTPUT: Point = { x: ELEMENT_WIDTH, y: sourceHeight / 2 };
     const OFFSET: number = 10;
     const MARKER_WIDTH: number = 20;
     const TEXT_OFFSET: number = 25;
@@ -123,28 +123,6 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
         );
     };
 
-    const createCornerLine = (x1: number, y1: number, x2: number, y2: number) => {
-        let startPoint: Point = { x: x1, y: y1 };
-        let endPoint: Point = { x: x2, y: y2 };
-        // set interfaces
-        startPoint = plusPoint(startPoint, INTERFACE_OUTPUT);
-        endPoint = plusPoint(endPoint, INTERFACE_INPUT);
-
-        const middlePoint = getMiddlePoint(startPoint, endPoint);
-
-        return (
-            <path
-                d={`M ${startPoint.x},${startPoint.y} 
-        l ${middlePoint.x - startPoint.x},0
-        l 0,${endPoint.y - startPoint.y}
-        l ${endPoint.x - middlePoint.x},0
-        `}
-                markerEnd="url(#arrow)"
-                className="carvPath"
-            />
-        );
-    };
-
     const getMiddleValue = (val1: number, val2: number): number => {
         const middleValue = (val2 - val1) / 2 + val1;
         return middleValue;
@@ -183,8 +161,7 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
                     <path d="M0,0 L0,6 L9,3 z" className="carvArrowMarker" />
                 </marker>
             </defs>
-            {type !== ArrowType.CORNER && createCurve(initXSource, initYSource, initXTarget, initYTarget, type)}
-            {type === ArrowType.CORNER && createCornerLine(initXSource, initYSource, initXTarget, initYTarget)}
+            {createCurve(initXSource, initYSource, initXTarget, initYTarget, type)}
         </motion.svg>
     );
 };
@@ -212,59 +189,6 @@ export const createArrow = (
                 key={key}
                 parentRef={parentRef}
                 dataLabels={dataLabels || []}
-            />
-        );
-    }
-};
-
-export const createCurveArrow = (
-    source: GeometricalDataCTO | undefined,
-    target: GeometricalDataCTO | undefined,
-    dataLabels: string[],
-    key: number,
-    parentRef: any,
-) => {
-    if (source && target) {
-        return (
-            <Arrow
-                xSource={source.position.x}
-                ySource={source.position.y}
-                sourceWidth={source.geometricalData.width}
-                sourceHeight={source.geometricalData.height}
-                xTarget={target.position.x}
-                yTarget={target.position.y}
-                targetWidth={target.geometricalData.width}
-                targetHeight={target.geometricalData.height}
-                type={ArrowType.SEND}
-                key={key}
-                parentRef={parentRef}
-                dataLabels={dataLabels}
-            />
-        );
-    }
-};
-
-export const createCornerArrow = (
-    source: GeometricalDataCTO | undefined,
-    target: GeometricalDataCTO | undefined,
-    key: number,
-    parentRef: any,
-) => {
-    if (source && target) {
-        return (
-            <Arrow
-                xSource={source.position.x}
-                ySource={source.position.y}
-                sourceHeight={source.geometricalData.height}
-                sourceWidth={source.geometricalData.width}
-                xTarget={target.position.x}
-                yTarget={target.position.y}
-                targetHeight={target.geometricalData.height}
-                targetWidth={target.geometricalData.width}
-                type={ArrowType.CORNER}
-                key={key}
-                parentRef={parentRef}
-                dataLabels={[]}
             />
         );
     }
