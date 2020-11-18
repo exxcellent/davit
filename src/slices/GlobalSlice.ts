@@ -1,52 +1,52 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {AppThunk, RootState} from '../app/store';
-import {DataAccess} from '../dataAccess/DataAccess';
-import {DataAccessResponse} from '../dataAccess/DataAccessResponse';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AppThunk, RootState } from '../app/store';
+import { DataAccess } from '../dataAccess/DataAccess';
+import { DataAccessResponse } from '../dataAccess/DataAccessResponse';
 
 interface GlobalState {
-  errors: string[];
+    errors: string[];
 }
 const getInitialState = (): GlobalState => {
-  return {
-    errors: [],
-  };
+    return {
+        errors: [],
+    };
 };
 
 export const globalSlice = createSlice({
-  name: 'global',
-  initialState: getInitialState(),
-  reducers: {
-    handleError: (state, action: PayloadAction<string>) => {
-      state.errors.push(action.payload);
+    name: 'global',
+    initialState: getInitialState(),
+    reducers: {
+        handleError: (state, action: PayloadAction<string>) => {
+            state.errors.push(action.payload);
+        },
+        clearErrors: (state) => {
+            state.errors = [];
+        },
     },
-    clearErrors: (state) => {
-      state.errors = [];
-    },
-  },
 });
 
 const storefileData = (fileData: string): AppThunk => async (dispatch) => {
-  const response: DataAccessResponse<void> = await DataAccess.storeFileData(fileData);
-  if (response.code === 200) {
-    window.location.reload();
-  } else {
-    dispatch(handleError(response.message));
-  }
+    const response: DataAccessResponse<void> = await DataAccess.storeFileData(fileData);
+    if (response.code === 200) {
+        window.location.reload();
+    } else {
+        dispatch(handleError(response.message));
+    }
 };
 
 const downloadData = (projectName: string): AppThunk => (dispatch) => {
-  const response: DataAccessResponse<void> = DataAccess.downloadData(projectName);
-  if (response.code !== 200) {
-    dispatch(handleError(response.message));
-  }
+    const response: DataAccessResponse<void> = DataAccess.downloadData(projectName);
+    if (response.code !== 200) {
+        dispatch(handleError(response.message));
+    }
 };
 
 export const GlobalActions = {
-  storefileData,
-  downloadData,
+    storefileData,
+    downloadData,
 };
 
-export const {handleError} = globalSlice.actions;
+export const { handleError } = globalSlice.actions;
 
 export const globalReducer = globalSlice.reducer;
 

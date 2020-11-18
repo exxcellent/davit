@@ -1,67 +1,67 @@
-import React, {FunctionComponent} from 'react';
-import {useSelector} from 'react-redux';
-import {DropdownProps} from 'semantic-ui-react';
-import {GroupTO} from '../../../../dataAccess/access/to/GroupTO';
-import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
-import {DavitUtil} from '../../../../utils/DavitUtil';
-import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from './DavitDropDown';
+import React, { FunctionComponent } from 'react';
+import { useSelector } from 'react-redux';
+import { DropdownProps } from 'semantic-ui-react';
+import { GroupTO } from '../../../../dataAccess/access/to/GroupTO';
+import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
+import { DavitUtil } from '../../../../utils/DavitUtil';
+import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from './DavitDropDown';
 
 interface GroupDropDownProps extends DropdownProps {
-  onSelect: (group: GroupTO | undefined) => void;
-  placeholder?: string;
-  value?: number;
+    onSelect: (group: GroupTO | undefined) => void;
+    placeholder?: string;
+    value?: number;
 }
 
 interface GroupDropDownPropsButton extends DropdownProps {
-  onSelect: (group: GroupTO | undefined) => void;
-  icon?: string;
+    onSelect: (group: GroupTO | undefined) => void;
+    icon?: string;
 }
 
 export const GroupDropDown: FunctionComponent<GroupDropDownProps> = (props) => {
-  const {onSelect, placeholder, value} = props;
-  const {groups, groupToOption, selectGroup} = useGroupDropDownViewModel();
+    const { onSelect, placeholder, value } = props;
+    const { groups, groupToOption, selectGroup } = useGroupDropDownViewModel();
 
-  return (
-    <DavitDropDown
-      dropdownItems={groups.map(groupToOption)}
-      placeholder={placeholder}
-      onSelect={(group) => onSelect(selectGroup(Number(group.value), groups))}
-      clearable
-      value={value?.toString()}
-    />
-  );
+    return (
+        <DavitDropDown
+            dropdownItems={groups.map(groupToOption)}
+            placeholder={placeholder}
+            onSelect={(group) => onSelect(selectGroup(Number(group.value), groups))}
+            clearable
+            value={value?.toString()}
+        />
+    );
 };
 
 export const GroupDropDownButton: FunctionComponent<GroupDropDownPropsButton> = (props) => {
-  const {onSelect, icon} = props;
-  const {groups, groupToOption, selectGroup} = useGroupDropDownViewModel();
+    const { onSelect, icon } = props;
+    const { groups, groupToOption, selectGroup } = useGroupDropDownViewModel();
 
-  return (
-    <DavitIconDropDown
-      dropdownItems={groups.map(groupToOption)}
-      icon={icon}
-      onSelect={(group) => onSelect(selectGroup(Number(group.value), groups))}
-    />
-  );
+    return (
+        <DavitIconDropDown
+            dropdownItems={groups.map(groupToOption)}
+            icon={icon}
+            onSelect={(group) => onSelect(selectGroup(Number(group.value), groups))}
+        />
+    );
 };
 
 const useGroupDropDownViewModel = () => {
-  const groups: GroupTO[] = useSelector(masterDataSelectors.groups);
+    const groups: GroupTO[] = useSelector(masterDataSelectors.groups);
 
-  const groupToOption = (group: GroupTO): DavitDropDownItemProps => {
-    return {
-      key: group.id,
-      value: group.id.toString(),
-      text: group.name,
+    const groupToOption = (group: GroupTO): DavitDropDownItemProps => {
+        return {
+            key: group.id,
+            value: group.id.toString(),
+            text: group.name,
+        };
     };
-  };
 
-  const selectGroup = (groupId: number, groups: GroupTO[]): GroupTO | undefined => {
-    if (!DavitUtil.isNullOrUndefined(groups) && !DavitUtil.isNullOrUndefined(groupId)) {
-      return groups.find((group) => group.id === groupId);
-    }
-    return undefined;
-  };
+    const selectGroup = (groupId: number, groups: GroupTO[]): GroupTO | undefined => {
+        if (!DavitUtil.isNullOrUndefined(groups) && !DavitUtil.isNullOrUndefined(groupId)) {
+            return groups.find((group) => group.id === groupId);
+        }
+        return undefined;
+    };
 
-  return {groups, groupToOption, selectGroup};
+    return { groups, groupToOption, selectGroup };
 };
