@@ -39,26 +39,26 @@ const getDataName = (dataId: number, datas: DataCTO[]): string => {
     return name;
 };
 
-const getActionTypeLabel = (type: ActionType) : string => {
-  let label: string = '';
-  switch (type) {
-    case ActionType.ADD:
-      label = 'Add or Update';
-      break;
-    case ActionType.DELETE:
-      label = 'Delete';
-      break;
-    case ActionType.SEND:
-      label = 'Send';
-      break;
-    case ActionType.SEND_AND_DELETE:
-      label = 'Send and delete';
-      break;
-    case ActionType.TRIGGER:
-      label = 'Trigger';
-      break;
-  }
-  return label;
+const getActionTypeLabel = (type: ActionType): string => {
+    let label: string = '';
+    switch (type) {
+        case ActionType.ADD:
+            label = 'Add or Update';
+            break;
+        case ActionType.DELETE:
+            label = 'Delete';
+            break;
+        case ActionType.SEND:
+            label = 'Send';
+            break;
+        case ActionType.SEND_AND_DELETE:
+            label = 'Send and delete';
+            break;
+        case ActionType.TRIGGER:
+            label = 'Trigger';
+            break;
+    }
+    return label;
 };
 
 const useActionDropDownViewModel = () => {
@@ -66,32 +66,34 @@ const useActionDropDownViewModel = () => {
     const actors: ActorCTO[] = useSelector(masterDataSelectors.actors);
     const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
 
-  const actionToOption = (action: ActionTO): DavitDropDownItemProps => {
-    return {
-      key: action.id,
-      value: action.id.toString(),
-      text: getOptionText(action),
+    const actionToOption = (action: ActionTO): DavitDropDownItemProps => {
+        return {
+            key: action.id,
+            value: action.id.toString(),
+            text: getOptionText(action),
+        };
     };
 
-  const getOptionText = (action: ActionTO): string => {
-    let text: string = '';
-    if (action.actionType !== ActionType.TRIGGER) {
-      text = `${getActorName(action.receivingActorFk, actors)} - ${getActionTypeLabel(action.actionType)} - ${getDataName(
-          action.dataFk,
-          datas,
-      )}`;
-    } else {
-      text = `${getActorName(action.sendingActorFk, actors)} - ${getActionTypeLabel(action.actionType)} - ${getActorName(action.receivingActorFk, actors)}`;
-    }
-    return text;
-  };
+    const getOptionText = (action: ActionTO): string => {
+        let text: string = '';
+        if (action.actionType !== ActionType.TRIGGER) {
+            text = `${getActorName(action.receivingActorFk, actors)} - ${getActionTypeLabel(
+                action.actionType,
+            )} - ${getDataName(action.dataFk, datas)}`;
+        } else {
+            text = `${getActorName(action.sendingActorFk, actors)} - ${getActionTypeLabel(
+                action.actionType,
+            )} - ${getActorName(action.receivingActorFk, actors)}`;
+        }
+        return text;
+    };
 
-  const selectAction = (actionId: number, actions: ActionTO[]): ActionTO | undefined => {
-    if (!DavitUtil.isNullOrUndefined(actionId) && !DavitUtil.isNullOrUndefined(actions)) {
-      return actions.find((action) => action.id === actionId);
-    }
-    return undefined;
-  };
+    const selectAction = (actionId: number, actions: ActionTO[]): ActionTO | undefined => {
+        if (!DavitUtil.isNullOrUndefined(actionId) && !DavitUtil.isNullOrUndefined(actions)) {
+            return actions.find((action) => action.id === actionId);
+        }
+        return undefined;
+    };
 
     return { actions, actionToOption, selectAction };
 };

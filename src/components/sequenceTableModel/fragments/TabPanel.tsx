@@ -111,7 +111,6 @@ export const TabPanel: FunctionComponent<TabPanelProps> = (props) => {
                                 />
                             ),
                     )}
-                    )
                 </TabGroupFragment>
             )
         );

@@ -38,7 +38,7 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
 
     const [showChain, setShowChain] = useState<boolean>(false);
     useEffect(() => {
-        setShowChain(!isNullOrUndefined(chain));
+        setShowChain(!DavitUtil.isNullOrUndefined(chain));
     }, [chain]);
     const parentRef = useRef<HTMLDivElement>(null);
     const [tableHeight, setTabelHeihgt] = useState<number>(0);
