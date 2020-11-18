@@ -2,7 +2,6 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { ArcherContainer, ArcherElement, Relation } from 'react-archer';
 import { useSelector } from 'react-redux';
-import { isNullOrUndefined } from 'util';
 import { ChainCTO } from '../../dataAccess/access/cto/ChainCTO';
 import { ChainlinkCTO } from '../../dataAccess/access/cto/ChainlinkCTO';
 import { SequenceCTO } from '../../dataAccess/access/cto/SequenceCTO';
@@ -34,11 +33,9 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
         sequence,
     } = useFlowChartViewModel();
 
-    // console.info("current step id: " + currentStepId);
-
     const [showChain, setShowChain] = useState<boolean>(false);
     useEffect(() => {
-        setShowChain(!isNullOrUndefined(chain));
+        setShowChain(!DavitUtil.isNullOrUndefined(chain));
     }, [chain]);
     const parentRef = useRef<HTMLDivElement>(null);
     const [tableHeight, setTabelHeihgt] = useState<number>(0);
@@ -224,11 +221,11 @@ const useFlowChartViewModel = () => {
             value: { type: GoToTypes.ERROR },
             isLoop: false,
         };
-        if (!isNullOrUndefined(sequence)) {
-            const rootStep: SequenceStepCTO | undefined = sequence.sequenceStepCTOs.find(
+        if (!DavitUtil.isNullOrUndefined(sequence)) {
+            const rootStep: SequenceStepCTO | undefined = sequence!.sequenceStepCTOs.find(
                 (step) => step.squenceStepTO.root === true,
             );
-            const rootCond: DecisionTO | undefined = sequence.decisions.find((cond) => cond.root === true);
+            const rootCond: DecisionTO | undefined = sequence!.decisions.find((cond) => cond.root === true);
             if (!rootStep && !rootCond) {
                 handleError('No Root element found in Sequence!');
             }
@@ -250,8 +247,8 @@ const useFlowChartViewModel = () => {
             value: { type: GoToTypesChain.ERROR },
             isLoop: false,
         };
-        if (!isNullOrUndefined(chain)) {
-            const rootStep: ChainlinkCTO | undefined = chain.links.find((link) => link.chainLink.root === true);
+        if (!DavitUtil.isNullOrUndefined(chain)) {
+            const rootStep: ChainlinkCTO | undefined = chain!.links.find((link) => link.chainLink.root === true);
             if (rootStep) {
                 root.type = GoToTypesChain.LINK;
                 root.value = rootStep;
@@ -270,11 +267,11 @@ const useFlowChartViewModel = () => {
             parentId: parentId,
             childs: [],
         };
-        if (!isNullOrUndefined(sequence)) {
+        if (!DavitUtil.isNullOrUndefined(sequence)) {
             switch (goto.type) {
                 case GoToTypes.STEP:
                     const step: SequenceStepCTO | null =
-                        sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.id === goto.id) || null;
+                        sequence!.sequenceStepCTOs.find((step) => step.squenceStepTO.id === goto.id) || null;
                     if (step) {
                         const prefix: string = '_STEP_' + step.squenceStepTO.id;
                         nodeModel.id = parentId + prefix;
@@ -286,7 +283,7 @@ const useFlowChartViewModel = () => {
                     }
                     break;
                 case GoToTypes.DEC:
-                    const cond: DecisionTO | null = sequence.decisions.find((cond) => cond.id === goto.id) || null;
+                    const cond: DecisionTO | null = sequence!.decisions.find((cond) => cond.id === goto.id) || null;
                     if (cond) {
                         const prefix: string = '_COND_' + cond.id;
                         nodeModel.id = parentId + prefix;
@@ -322,10 +319,11 @@ const useFlowChartViewModel = () => {
             parentId: parentId,
             childs: [],
         };
-        if (!isNullOrUndefined(chain)) {
+        if (!DavitUtil.isNullOrUndefined(chain)) {
             switch (goto.type) {
                 case GoToTypesChain.LINK:
-                    const link: ChainlinkCTO | null = chain.links.find((link) => link.chainLink.id === goto.id) || null;
+                    const link: ChainlinkCTO | null =
+                        chain!.links.find((link) => link.chainLink.id === goto.id) || null;
                     if (link) {
                         const prefix: string = '_LINK_' + link.chainLink.id;
                         nodeModel.id = parentId + prefix;
@@ -337,7 +335,7 @@ const useFlowChartViewModel = () => {
                     }
                     break;
                 case GoToTypesChain.DEC:
-                    const decision: ChainDecisionTO | null = chain.decisions.find((dec) => dec.id === goto.id) || null;
+                    const decision: ChainDecisionTO | null = chain!.decisions.find((dec) => dec.id === goto.id) || null;
                     if (decision) {
                         const prefix: string = '_DEC_' + decision.id;
                         nodeModel.id = parentId + prefix;
