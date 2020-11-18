@@ -59,11 +59,14 @@ export const useCurrentHeight = () => {
     return height;
 };
 
-export const useZoomDisable = (zoomCallBacks?: { zoomInCallBack: () => void; zoomOutCallBack: () => void }) => {
+export const useCustomZoomEvent = (
+    zoomCallBacks?: { zoomInCallBack: () => void; zoomOutCallBack: () => void },
+    hover?: boolean,
+) => {
     const handleKeyDown = (wheelEvent: WheelEvent) => {
         if (wheelEvent.ctrlKey === true) {
             wheelEvent.preventDefault();
-            if (zoomCallBacks) {
+            if (zoomCallBacks && hover) {
                 wheelEvent.deltaY < 0 && zoomCallBacks.zoomInCallBack();
                 wheelEvent.deltaY > 0 && zoomCallBacks.zoomOutCallBack();
             }

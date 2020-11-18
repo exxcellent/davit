@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ActorCTO } from '../../../dataAccess/access/cto/ActorCTO';
 import { DataCTO } from '../../../dataAccess/access/cto/DataCTO';
@@ -27,7 +27,7 @@ interface ActorModelControllerProps {
 export const ActorModelController: FunctionComponent<ActorModelControllerProps> = (props) => {
     const { fullScreen } = props;
 
-    const { onPositionUpdate, getArrows, toDnDElements } = useViewModel();
+    const { onPositionUpdate, getArrows, toDnDElements, zoomIn, zoomOut } = useViewModel();
 
     const mapCardToJSX = (card: Carv2CardProps): JSX.Element => {
         return <Carv2Card {...card} />;
@@ -41,6 +41,8 @@ export const ActorModelController: FunctionComponent<ActorModelControllerProps> 
                 return { ...el, element: mapCardToJSX(el.card) };
             })}
             fullScreen={fullScreen}
+            zoomIn={zoomIn}
+            zoomOut={zoomOut}
         />
     );
 };
@@ -65,6 +67,8 @@ const useViewModel = () => {
     const errors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
     // const actions: ActionTO[] = useSelector(sequenceModelSelectors.selectActions);
     const dataSetup: DataSetupCTO | null = useSelector(sequenceModelSelectors.selectDataSetup);
+
+    const [zoom, setZoom] = useState<number>(1);
 
     React.useEffect(() => {
         dispatch(MasterDataActions.loadActorsFromBackend());
@@ -287,7 +291,7 @@ const useViewModel = () => {
                     act.parentId === actor.actor.id ||
                     (act.parentId as { dataId: number; instanceId: number }).dataId === actor.actor.id,
             ),
-            zoomFactor: 1,
+            zoomFactor: zoom,
             type: 'ACTOR',
         };
     };
@@ -303,9 +307,25 @@ const useViewModel = () => {
         return ar;
     };
 
+    const zoomOut = (): void => {
+        if (zoom > 1) {
+            setZoom(zoom - 0.1);
+        } else {
+            setZoom(zoom - 0.1);
+        }
+        console.info('zoomIn: ', zoom);
+    };
+
+    const zoomIn = (): void => {
+        setZoom(zoom + 0.1);
+        console.info('zoomOut: ', zoom);
+    };
+
     return {
         onPositionUpdate,
         getArrows,
         toDnDElements: toDnDElements(actors),
+        zoomIn,
+        zoomOut,
     };
 };

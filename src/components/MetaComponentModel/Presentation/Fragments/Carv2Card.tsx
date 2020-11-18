@@ -1,12 +1,11 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { DataInstanceTO } from '../../../../dataAccess/access/to/DataInstanceTO';
 import { EditActions } from '../../../../slices/EditSlice';
 import { Filter, SequenceModelActions, sequenceModelSelectors } from '../../../../slices/SequenceModelSlice';
 import { createViewFragment, ViewFragmentProps } from '../../../../viewDataTypes/ViewFragment';
-import { Carv2CardButton } from '../../../common/fragments/buttons/Carv2CardButton';
 import { Carv2CardMainButton } from '../../../common/fragments/buttons/Carv2CardMainButton';
+import { DavitCardButton } from '../../../common/fragments/buttons/DavitCardButton';
 
 export interface Carv2CardProps {
     id: number;
@@ -60,8 +59,8 @@ export const Carv2Card: FunctionComponent<Carv2CardProps> = (props) => {
                     <div className={showMenu ? 'carhHeaderTextInvisible' : 'cardHeaderText'}>{initName}</div>
                     {showMenu && (
                         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                            <Carv2CardButton icon="wrench" onClick={() => onClickEdit(id, type)} />
-                            <Carv2CardButton
+                            <DavitCardButton icon="wrench" onClick={() => onClickEdit(id, type)} />
+                            <DavitCardButton
                                 icon="filter"
                                 onClick={() => onClickFilter(id, type)}
                                 isActive={isActiveFilter}
