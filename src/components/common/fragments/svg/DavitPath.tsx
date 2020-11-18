@@ -1,10 +1,9 @@
 import { Point } from 'framer-motion';
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
-
 import { GeometricalDataCTO } from '../../../../dataAccess/access/cto/GeometraicalDataCTO';
 import { DataRelationTO, Direction, RelationType } from '../../../../dataAccess/access/to/DataRelationTO';
 
-export interface Carv2PathProps {
+export interface DavitPathProps {
     xSource: number;
     ySource: number;
     xTarget: number;
@@ -24,7 +23,7 @@ export interface Carv2PathProps {
     stroked?: boolean;
 }
 
-const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
+const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
     const {
         xSource,
         ySource,
@@ -136,6 +135,13 @@ const Carv2Path: FunctionComponent<Carv2PathProps> = (props) => {
     return createCornerLine();
 };
 
+export interface DavitPath {
+    source: GeometricalDataCTO | undefined;
+    target: GeometricalDataCTO | undefined;
+    dataRelation: DataRelationTO;
+    isEdit?: boolean;
+}
+
 export const createCornerConnection = (
     source: GeometricalDataCTO | undefined,
     target: GeometricalDataCTO | undefined,
@@ -146,7 +152,7 @@ export const createCornerConnection = (
 ) => {
     if (source && target) {
         return (
-            <Carv2Path
+            <DavitPath
                 xSource={source.position.x}
                 ySource={source.position.y}
                 xTarget={target.position.x}

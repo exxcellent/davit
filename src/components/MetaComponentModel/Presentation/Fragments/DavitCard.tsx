@@ -7,7 +7,7 @@ import { createViewFragment, ViewFragmentProps } from '../../../../viewDataTypes
 import { Carv2CardMainButton } from '../../../common/fragments/buttons/Carv2CardMainButton';
 import { DavitCardButton } from '../../../common/fragments/buttons/DavitCardButton';
 
-export interface Carv2CardProps {
+export interface DavitCardProps {
     id: number;
     initName: string;
     initWidth: number;
@@ -19,14 +19,14 @@ export interface Carv2CardProps {
     type: 'DATA' | 'ACTOR' | 'INSTANCE';
 }
 
-export const Carv2Card: FunctionComponent<Carv2CardProps> = (props) => {
+export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
     const { id, initName, initWidth, initHeigth, dataFragments, instances, zoomFactor, type } = props;
 
     const { onClickEdit, onClickFilter, showMenu, setShowMenu, isActiveFilter } = useCarv2CardViewModel(type, id);
 
     const createInstances = (id: number, instanceName: string, actors: ViewFragmentProps[]) => {
         return (
-            <Carv2Card
+            <DavitCard
                 id={id}
                 initName={instanceName}
                 dataFragments={actors}
