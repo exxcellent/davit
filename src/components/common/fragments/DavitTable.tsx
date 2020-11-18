@@ -26,7 +26,11 @@ export const DavitTable: FunctionComponent<DavitTableProps> = (props) => {
     const { header, bodyData, addFunction, tableHeight } = props;
 
     const mapValue = (value: string | JSX.Element, index: number) => {
-        return <td id={index.toString()}>{value}</td>;
+        return (
+            <td id={index.toString()} key={index}>
+                {value}
+            </td>
+        );
     };
 
     const createButton = (action: DavitTableAction) => {

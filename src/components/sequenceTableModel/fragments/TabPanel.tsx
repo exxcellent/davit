@@ -97,21 +97,21 @@ export const TabPanel: FunctionComponent<TabPanelProps> = (props) => {
         },
     ];
 
-    const mapTabGroups = (tabGroup: TabGroupDefinition) => {
+    const mapTabGroups = (tabGroup: TabGroupDefinition, key: number) => {
         return (
             (tabGroup.condition === undefined || tabGroup.condition) && (
-                <TabGroupFragment label={tabGroup.label}>
+                <TabGroupFragment label={tabGroup.label} key={key}>
                     {tabGroup.tabs.map(
-                        (tab: any) =>
+                        (tab: any, index) =>
                             (tab.condition === undefined || tab.condition) && (
                                 <TabFragment
                                     label={tab.label}
                                     isActive={activeTab === tab.identifier}
                                     onClick={() => setActiveTab(tab.identifier)}
+                                    key={index}
                                 />
                             ),
                     )}
-                    )
                 </TabGroupFragment>
             )
         );
