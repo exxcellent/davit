@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Input } from 'semantic-ui-react';
-import { isNullOrUndefined } from 'util';
 import { ActorCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
 import { GroupTO } from '../../../../../../dataAccess/access/to/GroupTO';
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
@@ -13,11 +12,11 @@ import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
 import { Carv2LabelTextfield } from '../common/fragments/Carv2LabelTextfield';
 import { OptionField } from '../common/OptionField';
 
-export interface ControllPanelEditComponentProps {
+export interface ControllPanelEditActorProps {
     hidden: boolean;
 }
 
-export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComponentProps> = (props) => {
+export const ControllPanelEditActor: FunctionComponent<ControllPanelEditActorProps> = (props) => {
     const { hidden } = props;
     const {
         label,
@@ -29,7 +28,7 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
         updateComponent,
         createAnother,
         id,
-    } = useControllPanelEditComponentViewModel();
+    } = useControllPanelEditActorViewModel();
 
     return (
         <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveComponent}>
@@ -67,38 +66,38 @@ export const ControllPanelEditComponent: FunctionComponent<ControllPanelEditComp
     );
 };
 
-const useControllPanelEditComponentViewModel = () => {
-    const componentToEdit: ActorCTO | null = useSelector(editSelectors.actorToEdit);
+const useControllPanelEditActorViewModel = () => {
+    const actorToEdit: ActorCTO | null = useSelector(editSelectors.actorToEdit);
     const dispatch = useDispatch();
     const textInput = useRef<Input>(null);
 
     useEffect(() => {
         // check if component to edit is really set or gos back to edit mode
-        if (isNullOrUndefined(componentToEdit)) {
+        if (DavitUtil.isNullOrUndefined(actorToEdit)) {
             handleError('Tried to go to edit component without componentToedit specified');
             EditActions.setMode.edit();
         }
         // used to focus the textfield on create another
         textInput.current!.focus();
-    }, [componentToEdit]);
+    }, [actorToEdit]);
 
     const changeName = (name: string) => {
-        const copyComponentToEdit: ActorCTO = DavitUtil.deepCopy(componentToEdit);
+        const copyComponentToEdit: ActorCTO = DavitUtil.deepCopy(actorToEdit);
         copyComponentToEdit.actor.name = name;
         dispatch(EditActions.setMode.editActor(copyComponentToEdit));
     };
 
-    const updateComponent = () => {
-        const copyComponentToEdit: ActorCTO = DavitUtil.deepCopy(componentToEdit);
+    const updateActor = () => {
+        const copyComponentToEdit: ActorCTO = DavitUtil.deepCopy(actorToEdit);
         dispatch(EditActions.actor.save(copyComponentToEdit));
     };
 
-    const saveComponent = (newMode?: string) => {
-        if (!isNullOrUndefined(componentToEdit)) {
-            if (componentToEdit?.actor.name !== '') {
-                dispatch(EditActions.actor.save(componentToEdit!));
+    const saveActor = (newMode?: string) => {
+        if (!DavitUtil.isNullOrUndefined(actorToEdit)) {
+            if (actorToEdit?.actor.name !== '') {
+                dispatch(EditActions.actor.save(actorToEdit!));
             } else {
-                deleteComponent();
+                deleteActor();
             }
             dispatch(EditActions.setMode.edit());
         }
@@ -108,14 +107,14 @@ const useControllPanelEditComponentViewModel = () => {
         dispatch(EditActions.setMode.editActor());
     };
 
-    const deleteComponent = () => {
-        dispatch(EditActions.actor.delete(componentToEdit!));
+    const deleteActor = () => {
+        dispatch(EditActions.actor.delete(actorToEdit!));
         dispatch(EditActions.setMode.edit());
     };
 
     const setGroup = (group: GroupTO | undefined) => {
-        if (!isNullOrUndefined(componentToEdit)) {
-            const copyComponentToEdit: ActorCTO = DavitUtil.deepCopy(componentToEdit);
+        if (!DavitUtil.isNullOrUndefined(actorToEdit)) {
+            const copyComponentToEdit: ActorCTO = DavitUtil.deepCopy(actorToEdit);
             if (group !== undefined) {
                 copyComponentToEdit.actor.groupFks = group.id;
             } else {
@@ -126,16 +125,16 @@ const useControllPanelEditComponentViewModel = () => {
     };
 
     return {
-        label: 'EDIT * ' + (componentToEdit?.actor.name || ''),
-        name: componentToEdit?.actor.name,
+        label: 'EDIT * ' + (actorToEdit?.actor.name || ''),
+        name: actorToEdit?.actor.name,
         changeName,
-        saveComponent,
-        deleteComponent,
+        saveComponent: saveActor,
+        deleteComponent: deleteActor,
         textInput,
         setGroup,
-        compGroup: componentToEdit?.actor.groupFks !== -1 ? componentToEdit?.actor.groupFks : undefined,
-        updateComponent,
+        compGroup: actorToEdit?.actor.groupFks !== -1 ? actorToEdit?.actor.groupFks : undefined,
+        updateComponent: updateActor,
         createAnother,
-        id: componentToEdit?.actor.id || -1,
+        id: actorToEdit?.actor.id || -1,
     };
 };

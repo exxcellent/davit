@@ -25,7 +25,6 @@ export interface Arrow {
 
 export enum ArrowType {
     SEND = 'SEND',
-    CORNER = 'CORNER',
     TRIGGER = 'TRIGGER',
 }
 
@@ -38,7 +37,7 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
         type,
         parentRef,
         // sourceHeight,
-        // sourceWidth,
+        sourceWidth,
         targetHeight,
         dataLabels,
     } = props;
@@ -58,7 +57,7 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
     }, [ySource, xSource, yTarget, xTarget, parentRef]);
 
     // TODO: measure real width of elements.
-    const ELEMENT_WIDTH = 120;
+    // const ELEMENT_WIDTH = 120;
     const INTERFACE_INPUT: Point = { x: 0, y: targetHeight / 2 };
     // const INTERFACE_OUTPUT: Point = { x: ELEMENT_WIDTH, y: sourceHeight / 2 };
     const OFFSET: number = 10;
@@ -66,10 +65,10 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
     const TEXT_OFFSET: number = 25;
 
     const createCurve = (x1: number, y1: number, x2: number, y2: number, type: ArrowType) => {
-        const startDir: 'LEFT' | ' RIGHT' = x2 < x1 + ELEMENT_WIDTH / 2 ? 'LEFT' : ' RIGHT';
-        const endDir: 'LEFT' | ' RIGHT' = x1 < x2 + ELEMENT_WIDTH / 2 ? 'LEFT' : ' RIGHT';
-        const xStart = startDir === 'LEFT' ? x1 : x1 + ELEMENT_WIDTH;
-        const xEnd = endDir === 'LEFT' ? x2 : x2 + ELEMENT_WIDTH + OFFSET + MARKER_WIDTH;
+        const startDir: 'LEFT' | ' RIGHT' = x2 < x1 + sourceWidth / 2 ? 'LEFT' : ' RIGHT';
+        const endDir: 'LEFT' | ' RIGHT' = x1 < x2 + sourceWidth / 2 ? 'LEFT' : ' RIGHT';
+        const xStart = startDir === 'LEFT' ? x1 : x1 + sourceWidth;
+        const xEnd = endDir === 'LEFT' ? x2 : x2 + sourceWidth + OFFSET + MARKER_WIDTH;
         let startPoint: Point = { x: xStart, y: y1 };
         let endPoint: Point = { x: xEnd, y: y2 };
         // set interfaces
