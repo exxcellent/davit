@@ -7,7 +7,10 @@
         "eslint:recommended",
         "plugin:react/recommended",
         "plugin:@typescript-eslint/eslint-recommended",
-        "google"
+        // "google",
+        "prettier",
+        "prettier/@typescript-eslint",
+        "plugin:prettier/recommended"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -19,7 +22,8 @@
             "jsx": true
         },
         "ecmaVersion": 2018,
-        "sourceType": "module"
+        "sourceType": "module",
+        "project": "./tsconfig.json"
     },
     "plugins": [
         "react",
@@ -33,15 +37,21 @@
         "react/jsx-uses-vars": "error",
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
-        "operator-linebreak": ["error", "before"],
-        "max-len": ["error", { "code": 180 }],
+        // turned off because of prettier conflict.
+        // "operator-linebreak": ["error", "before"],
+        // "max-len": ["error", { "code": 180 }],
         "semi": ["error", "always"],
         //turned off because the indentation often leads to problems in combination with the formatter
         // "indent": "off",
         //turned off because the IntelliJ formatter doesn't correct the linebreak-style even though it is configured correctly
-        "linebreak-style": "off",
+        // "linebreak-style": "off",
         //turned off to leave the decision weather a comment is needed or not to the developer
         "require-jsdoc": "off",
         "valid-jsdoc": "off"
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
     }
 }

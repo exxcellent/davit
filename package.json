@@ -1,5 +1,5 @@
 {
-  "name": "DAVIT",
+  "name": "davit",
   "version": "0.2.0",
   "description": "Modeling Tool",
   "author": "Flo Andy",
@@ -53,7 +53,8 @@
     "eject": "react-scripts eject",
     "ebuild": "electron-builder",
     "electron-build": "yarn build && yarn ebuild",
-    "electron": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:9000 && electron . \" "
+    "electron": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:9000 && electron . \" ",
+    "lint": "eslint --ext ts,tsx src --fix"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -74,6 +75,9 @@
     "concurrently": "^5.3.0",
     "electron": "^10.1.0",
     "electron-builder": "^22.8.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.1.2",
     "wait-on": "^5.2.0"
   }
 }

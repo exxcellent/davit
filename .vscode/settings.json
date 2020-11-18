@@ -1,24 +1,5 @@
 {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-    "editor.formatOnSave": true,
-    "eslint.format.enable": true,
     "editor.codeActionsOnSave": {
-        "source.fixAll": true
-    },
-    "[typescript]": {
-        "editor.codeActionsOnSave": {
-            "source.organizeImports": true
-        },
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    },
-    "[typescriptreact]": {
-        "editor.codeActionsOnSave": {
-            "source.organizeImports": true
-        },
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    },
-    "editor.formatOnPaste": true,
-    "javascript.format.semicolons": "insert",
-    "typescript.format.semicolons": "insert",
-    // "typescriptHero.imports.organizeOnSave": true
+    "source.fixAll.eslint": true
+  },
 }
