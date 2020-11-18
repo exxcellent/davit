@@ -1,17 +1,17 @@
-import React, {FunctionComponent} from 'react';
-import {DropdownProps} from 'semantic-ui-react';
-import {ActionType} from '../../../../dataAccess/access/types/ActionType';
-import {DavitDropDown, DavitDropDownItemProps} from './DavitDropDown';
+import React, { FunctionComponent } from 'react';
+import { DropdownProps } from 'semantic-ui-react';
+import { ActionType } from '../../../../dataAccess/access/types/ActionType';
+import { DavitDropDown, DavitDropDownItemProps } from './DavitDropDown';
 
 interface ActionTypeDropDownnProps extends DropdownProps {
-  onSelect: (actionType: ActionType | undefined) => void;
-  placeholder?: string;
-  value?: ActionType;
+    onSelect: (actionType: ActionType | undefined) => void;
+    placeholder?: string;
+    value?: ActionType;
 }
 
 export const ActionTypeDropDown: FunctionComponent<ActionTypeDropDownnProps> = (props) => {
-  const {onSelect, placeholder, value} = props;
-  const actions: ActionType[] = Object.values(ActionType);
+    const { onSelect, placeholder, value } = props;
+    const actions: ActionType[] = Object.values(ActionType);
 
   const getActionTypeLabel = (type: ActionType) : string => {
     let label: string = '';
@@ -35,20 +35,20 @@ export const ActionTypeDropDown: FunctionComponent<ActionTypeDropDownnProps> = (
     return label;
   };
 
-  const actionTypeToOption = (actionType: ActionType, key: number): DavitDropDownItemProps => {
-    return {
-      key: key,
-      value: actionType,
-      text: getActionTypeLabel(actionType),
+    const actionTypeToOption = (actionType: ActionType, key: number): DavitDropDownItemProps => {
+        return {
+            key: key,
+            value: actionType,
+            text: getActionTypeLabel(actionType),
+        };
     };
-  };
 
-  return (
-    <DavitDropDown
-      dropdownItems={actions.map((action, index) => actionTypeToOption(action, index))}
-      onSelect={(item) => onSelect((item.value as ActionType))}
-      placeholder={placeholder}
-      value={value}
-    />
-  );
+    return (
+        <DavitDropDown
+            dropdownItems={actions.map((action, index) => actionTypeToOption(action, index))}
+            onSelect={(item) => onSelect(item.value as ActionType)}
+            placeholder={placeholder}
+            value={value}
+        />
+    );
 };
