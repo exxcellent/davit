@@ -15,6 +15,7 @@ import { sequenceModelSelectors } from '../../slices/SequenceModelSlice';
 import { DavitUtil } from '../../utils/DavitUtil';
 import { TabFragment } from '../sequenceTableModel/fragments/TabFragment';
 import { TabGroupFragment } from '../sequenceTableModel/fragments/TabGroupFragment';
+import { FlowChartlabel } from './FlowChartlabel';
 
 interface FlowChartControllerProps {
     fullScreen?: boolean;
@@ -165,25 +166,16 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
 
     return (
         <div className={fullScreen ? 'fullscreen' : 'sequencModel'} ref={parentRef}>
-            <div style={{ display: 'flex', position: 'absolute', zIndex: 1, width: '47vw', justifyContent: 'end' }}>
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'end',
-                        flexDirection: 'column',
-                    }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', minWidth: '10em' }}>
-                        <label className="flowChartLabel">{'CHAIN: ' + chainName}</label>
-                        <label className="flowChartLabel">{'SEQU.: ' + sequenceName}</label>
-                    </div>
-                    {chain && (
-                        <TabGroupFragment
-                            label="Mode"
-                            style={{ backgroundColor: 'var(--carv2-background-color-header)' }}>
-                            <TabFragment label="Chain" isActive={showChain} onClick={() => setShowChain(true)} />
-                            <TabFragment label="Sequence" isActive={!showChain} onClick={() => setShowChain(false)} />
-                        </TabGroupFragment>
-                    )}
+            <div style={{ display: 'flex', position: 'absolute', zIndex: 1, width: '47vw' }}>
+                {chain && (
+                    <TabGroupFragment label="Mode" style={{ backgroundColor: 'var(--carv2-background-color-header)' }}>
+                        <TabFragment label="Chain" isActive={showChain} onClick={() => setShowChain(true)} />
+                        <TabFragment label="Sequence" isActive={!showChain} onClick={() => setShowChain(false)} />
+                    </TabGroupFragment>
+                )}
+                <div style={{ marginLeft: 'auto' }}>
+                    <FlowChartlabel label="CHAIN:" text={chainName} />
+                    <FlowChartlabel label="SEQU.:" text={sequenceName} />
                 </div>
             </div>
             <div className="flowChart" style={{ height: tableHeight }}>

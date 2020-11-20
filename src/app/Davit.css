@@ -114,12 +114,38 @@
 }
 
 .flowChartLabel{
-  color: var(--carv2-data-text-color);
-  border: 1.5px solid var(--carv2-color-primary);
-  border-radius: 5px;
+  margin-bottom: 2px;
+  width: 25em;
+  display: flex;
+  align-content: center;
+}
+
+.flowChartLabelLeft{
+  display: flex;
+  align-self: center;
+  border-left: 2px solid var(--carv2-color-secondary);
+  border-top: 2px solid var(--carv2-color-secondary);
+  border-bottom: 2px solid var(--carv2-color-secondary);
+  padding: 8px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  width: 20%;
+  background-color: var(--carv2-color-secondary);
+  font-weight: bold;
+  color: var(--carv2-background-color-slidebar);
+}
+
+.flowChartLabelRight{
+  width: 80%;
+  border-right: 2px solid var(--carv2-color-secondary);
+  border-top: 2px solid var(--carv2-color-secondary);
+  border-bottom: 2px solid var(--carv2-color-secondary);
   padding: 5px;
-  margin: 0.5px;
-  background-color: var(--carv2-data-table-row-odd-color);
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  font-weight: bold;
+  color: var(--carv2-text-color);
+  background-color: var(--carv2-background-color-header);
 }
 
 .sequenceTable {
