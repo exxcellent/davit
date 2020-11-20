@@ -4,7 +4,7 @@ import { ASPECT_RATIO, WINDOW_FACTOR } from '../../../../app/Carv2Constants';
 import { PositionTO } from '../../../../dataAccess/access/to/PositionTO';
 import { useCurrentHeight, useCurrentWitdh, useCustomZoomEvent } from '../../../../utils/WindowUtil';
 import { createDnDItem } from '../../../common/fragments/DnDWrapper';
-import { Arrow, createCurveArrow } from '../../../common/fragments/svg/Arrow';
+import { Arrow, createArrow } from '../../../common/fragments/svg/Arrow';
 import { createCornerConnection, DavitPath } from '../../../common/fragments/svg/DavitPath';
 
 interface DnDBox {
@@ -37,12 +37,13 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
         if (lines.length > 0) {
             if ((lines as Arrow[])[0].dataLabels) {
                 return (lines as Arrow[]).map((arrow: Arrow, index: number) => {
-                    return createCurveArrow(
+                    return createArrow(
                         arrow.sourceGeometricalData,
                         arrow.targetGeometricalData,
-                        arrow.dataLabels,
                         index,
                         constraintsRef,
+                        arrow.type,
+                        arrow.dataLabels,
                     );
                 });
             }
