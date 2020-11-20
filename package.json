@@ -2,7 +2,7 @@
   "name": "davit",
   "version": "0.2.0",
   "description": "Modeling Tool",
-  "author": "Flo Andy",
+  "author": "Florian Englberger Andreas Müller",
   "main": "public/electron.js",
   "build": {
     "appId": "DAVIT"
