@@ -35,8 +35,6 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
         sequenceName,
     } = useFlowChartViewModel();
 
-    // console.info("current step id: " + currentStepId);
-
     const [showChain, setShowChain] = useState<boolean>(false);
     useEffect(() => {
         setShowChain(!DavitUtil.isNullOrUndefined(chain));
