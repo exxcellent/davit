@@ -31,6 +31,8 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
         currentLinkId,
         chain,
         sequence,
+        chainName,
+        sequenceName,
     } = useFlowChartViewModel();
 
     const [showChain, setShowChain] = useState<boolean>(false);
@@ -164,14 +166,27 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
 
     return (
         <div className={fullScreen ? 'fullscreen' : 'sequencModel'} ref={parentRef}>
-            {chain && (
-                <div style={{ display: 'flex', position: 'absolute', zIndex: 1 }}>
-                    <TabGroupFragment label="Mode" style={{ backgroundColor: 'var(--carv2-background-color-header)' }}>
-                        <TabFragment label="Chain" isActive={showChain} onClick={() => setShowChain(true)} />
-                        <TabFragment label="Sequence" isActive={!showChain} onClick={() => setShowChain(false)} />
-                    </TabGroupFragment>
+            <div style={{ display: 'flex', position: 'absolute', zIndex: 1, width: '47vw', justifyContent: 'end' }}>
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'end',
+                        flexDirection: 'column',
+                    }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', minWidth: '10em' }}>
+                        <label className="flowChartLabel">{'CHAIN: ' + chainName}</label>
+                        <label className="flowChartLabel">{'SEQU.: ' + sequenceName}</label>
+                    </div>
+                    {chain && (
+                        <TabGroupFragment
+                            label="Mode"
+                            style={{ backgroundColor: 'var(--carv2-background-color-header)' }}>
+                            <TabFragment label="Chain" isActive={showChain} onClick={() => setShowChain(true)} />
+                            <TabFragment label="Sequence" isActive={!showChain} onClick={() => setShowChain(false)} />
+                        </TabGroupFragment>
+                    )}
                 </div>
-            )}
+            </div>
             <div className="flowChart" style={{ height: tableHeight }}>
                 {!showChain && sequence && buildFlowChart()}
                 {showChain && chain && buildChainFlowChart()}
@@ -438,7 +453,6 @@ const useFlowChartViewModel = () => {
     };
 
     return {
-        // nodeModelTree: buildNodeModelTree(getRoot(sequence)),
         nodeModelTree: buildNodeModelTree(getDataSetup()),
         nodeModelChainTree: buildNodeModelChainTree(getChainRoot(chain)),
         currentStepId,
@@ -447,5 +461,7 @@ const useFlowChartViewModel = () => {
         currentLinkId,
         sequence,
         chain,
+        chainName: chain?.chain.name || '',
+        sequenceName: sequence?.sequenceTO.name || '',
     };
 };

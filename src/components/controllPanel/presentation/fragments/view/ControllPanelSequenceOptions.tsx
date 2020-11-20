@@ -1,14 +1,13 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'semantic-ui-react';
-import { isNullOrUndefined } from 'util';
-
 import { DataSetupCTO } from '../../../../../dataAccess/access/cto/DataSetupCTO';
 import { SequenceCTO } from '../../../../../dataAccess/access/cto/SequenceCTO';
 import { ChainTO } from '../../../../../dataAccess/access/to/ChainTO';
 import { DataSetupTO } from '../../../../../dataAccess/access/to/DataSetupTO';
 import { SequenceTO } from '../../../../../dataAccess/access/to/SequenceTO';
 import { SequenceModelActions, sequenceModelSelectors } from '../../../../../slices/SequenceModelSlice';
+import { DavitUtil } from '../../../../../utils/DavitUtil';
 import { ChainDropDown } from '../../../../common/fragments/dropdowns/ChainDropDown';
 import { DataSetupDropDown } from '../../../../common/fragments/dropdowns/DataSetupDropDown';
 import { SequenceDropDown } from '../../../../common/fragments/dropdowns/SequenceDropDown';
@@ -74,7 +73,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
                             inverted
                             color="orange"
                             icon="fast backward"
-                            disabled={isNullOrUndefined(sequence)}
+                            disabled={DavitUtil.isNullOrUndefined(sequence)}
                             onClick={linkBack}
                         />
                         <Button
@@ -83,7 +82,7 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
                             icon="left arrow"
                             content="BACK"
                             labelPosition="left"
-                            disabled={isNullOrUndefined(sequence)}
+                            disabled={DavitUtil.isNullOrUndefined(sequence)}
                             onClick={stepBack}
                         />
                         <Button inverted color="orange" content={getIndex()} disabled={true} />
@@ -93,14 +92,14 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
                             icon="right arrow"
                             content="NEXT"
                             labelPosition="right"
-                            disabled={isNullOrUndefined(sequence)}
+                            disabled={DavitUtil.isNullOrUndefined(sequence)}
                             onClick={stepNext}
                         />
                         <Button
                             inverted
                             color="orange"
                             icon="fast forward"
-                            disabled={isNullOrUndefined(sequence)}
+                            disabled={DavitUtil.isNullOrUndefined(sequence)}
                             onClick={linkNext}
                         />
                     </Button.Group>
@@ -122,8 +121,8 @@ const useControllPanelSequenceOptionsViewModel = () => {
     const dispatch = useDispatch();
 
     const selectSequence = (sequence: SequenceTO | undefined) => {
-        if (!isNullOrUndefined(sequence)) {
-            dispatch(SequenceModelActions.setCurrentSequence(sequence.id));
+        if (!DavitUtil.isNullOrUndefined(sequence)) {
+            dispatch(SequenceModelActions.setCurrentSequence(sequence!.id));
         }
         if (sequence === undefined) {
             dispatch(SequenceModelActions.resetCurrentStepIndex);
@@ -132,8 +131,8 @@ const useControllPanelSequenceOptionsViewModel = () => {
     };
 
     const selectChain = (chain: ChainTO | undefined) => {
-        if (!isNullOrUndefined(chain)) {
-            dispatch(SequenceModelActions.setCurrentChain(chain));
+        if (!DavitUtil.isNullOrUndefined(chain)) {
+            dispatch(SequenceModelActions.setCurrentChain(chain!));
         }
         if (chain === undefined) {
             dispatch(SequenceModelActions.resetCurrentStepIndex);
@@ -142,21 +141,21 @@ const useControllPanelSequenceOptionsViewModel = () => {
     };
 
     const selectDataSetup = (dataSetup: DataSetupTO | undefined): void => {
-        if (isNullOrUndefined(dataSetup)) {
+        if (DavitUtil.isNullOrUndefined(dataSetup)) {
             dispatch(SequenceModelActions.resetCurrentDataSetup);
         } else {
-            dispatch(SequenceModelActions.setCurrentDataSetup(dataSetup.id));
+            dispatch(SequenceModelActions.setCurrentDataSetup(dataSetup!.id));
         }
     };
 
     const stepBack = () => {
-        if (!isNullOrUndefined(sequence)) {
+        if (!DavitUtil.isNullOrUndefined(sequence)) {
             dispatch(SequenceModelActions.stepBack(stepIndex));
         }
     };
 
     const stepNext = () => {
-        if (!isNullOrUndefined(sequence)) {
+        if (!DavitUtil.isNullOrUndefined(sequence)) {
             dispatch(SequenceModelActions.stepNext(stepIndex));
         }
     };

@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { ActorCTO } from '../../../../../dataAccess/access/cto/ActorCTO';
 import { DataCTO } from '../../../../../dataAccess/access/cto/DataCTO';
 import { ChainTO } from '../../../../../dataAccess/access/to/ChainTO';
@@ -9,7 +8,7 @@ import { DataSetupTO } from '../../../../../dataAccess/access/to/DataSetupTO';
 import { GroupTO } from '../../../../../dataAccess/access/to/GroupTO';
 import { EditActions, editSelectors, Mode } from '../../../../../slices/EditSlice';
 import { ControllPanelEditAction } from './fragments/ControllPanelEditAction';
-import { ControllPanelEditComponent as ControllPanelEditActor } from './fragments/ControllPanelEditActor';
+import { ControllPanelEditActor } from './fragments/ControllPanelEditActor';
 import { ControllPanelEditChain } from './fragments/ControllPanelEditChain';
 import { ControllPanelEditChainCondition } from './fragments/ControllPanelEditChainCondition';
 import { ControllPanelEditChainDecision } from './fragments/ControllPanelEditChainDecision';

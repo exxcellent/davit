@@ -50,6 +50,7 @@ export const SequenceService = {
                     id: -1,
                     sequenceStepFk: -1,
                     sendingActorFk: -1,
+                    triggerText: '',
                 };
             });
 

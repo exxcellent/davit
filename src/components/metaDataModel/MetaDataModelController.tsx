@@ -216,6 +216,9 @@ const useMetaDataModelViewModel = () => {
             case ActionType.SEND_AND_DELETE:
                 cdState = ActorDataState.NEW;
                 break;
+            case ActionType.TRIGGER:
+                cdState = ActorDataState.PERSISTENT;
+                break;
         }
         return cdState;
     };

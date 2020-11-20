@@ -137,24 +137,26 @@ const useViewModel = () => {
     };
 
     const mapActionToActorDatas = (actionItem: ActionTO): ViewFragmentProps[] => {
-        const state: ActorDataState = mapActionTypeToViewFragmentState(actionItem.actionType);
-        const parentId = state === ActorDataState.SENT ? actionItem.sendingActorFk : actionItem.receivingActorFk;
-
         const viewFragmentProps: ViewFragmentProps[] = [];
-        viewFragmentProps.push({
-            name: getDataNameById(actionItem.dataFk, actionItem.instanceFk),
-            state: state,
-            parentId: parentId,
-        });
 
-        if (actionItem.actionType === ActionType.SEND_AND_DELETE) {
+        if (actionItem.actionType !== ActionType.TRIGGER) {
+            const state: ActorDataState = mapActionTypeToViewFragmentState(actionItem.actionType);
+            const parentId = state === ActorDataState.SENT ? actionItem.sendingActorFk : actionItem.receivingActorFk;
+
             viewFragmentProps.push({
                 name: getDataNameById(actionItem.dataFk, actionItem.instanceFk),
-                state: ActorDataState.DELETED,
-                parentId: actionItem.sendingActorFk,
+                state: state,
+                parentId: parentId,
             });
-        }
 
+            if (actionItem.actionType === ActionType.SEND_AND_DELETE) {
+                viewFragmentProps.push({
+                    name: getDataNameById(actionItem.dataFk, actionItem.instanceFk),
+                    state: ActorDataState.DELETED,
+                    parentId: actionItem.sendingActorFk,
+                });
+            }
+        }
         return viewFragmentProps;
     };
 
@@ -231,6 +233,9 @@ const useViewModel = () => {
             case ActionType.SEND_AND_DELETE:
                 cdState = ActorDataState.SENT;
                 break;
+            case ActionType.TRIGGER:
+                cdState = ActorDataState.PERSISTENT;
+                break;
         }
         return cdState;
     };
@@ -247,6 +252,9 @@ const useViewModel = () => {
             case ActionType.SEND:
             case ActionType.SEND_AND_DELETE:
                 cdState = ActorDataState.ERROR_SEND;
+                break;
+            case ActionType.TRIGGER:
+                cdState = ActorDataState.PERSISTENT;
                 break;
         }
         return cdState;
