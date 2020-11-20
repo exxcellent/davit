@@ -97,10 +97,10 @@ export const TabPanel: FunctionComponent<TabPanelProps> = (props) => {
         },
     ];
 
-    const mapTabGroups = (tabGroup: TabGroupDefinition, key: number) => {
+    const mapTabGroups = (tabGroup: TabGroupDefinition, index: number) => {
         return (
             (tabGroup.condition === undefined || tabGroup.condition) && (
-                <TabGroupFragment label={tabGroup.label} key={key}>
+                <TabGroupFragment label={tabGroup.label} key={index}>
                     {tabGroup.tabs.map(
                         (tab: any, index) =>
                             (tab.condition === undefined || tab.condition) && (

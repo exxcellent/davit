@@ -1,7 +1,6 @@
+import { DAVIT_VERISON, STORE_ID } from '../app/DavitConstants';
 import { DataStoreCTO } from './access/cto/DataStoreCTO';
 import { StoreTO } from './access/to/StoreTO';
-
-const STORE_ID = 'carv2';
 
 class DataStore {
     static instance: DataStore;
@@ -25,6 +24,9 @@ class DataStore {
         } else {
             // TODO: check here for DAVIT version. If diff. than call migrator.
             objectStore = JSON.parse(dataObject);
+            if (objectStore.version !== DAVIT_VERISON) {
+                console.warn(`!!!WARNING!!! DAVIT Project has different version (${objectStore.version})!`);
+            }
         }
         this.readData(objectStore);
     }
@@ -33,15 +35,18 @@ class DataStore {
         this.data = new DataStoreCTO();
         Object.entries(objectStore).forEach(([key, value]) => {
             if (value !== undefined) {
-                const dataEntry = Object.entries(this.data!).find(([dataKey, dataValue]) => dataKey === key);
-                if (dataEntry) {
-                    value.forEach((abstractTO: any) => {
-                        dataEntry[1].set(abstractTO.id, abstractTO);
-                    });
-                } else {
-                    console.warn(`Data has wrong format: key ${key}, value ${value}`);
-                    throw new Error(`Data has wrong format: key ${key}, value ${value}`);
+                if (Array.isArray(value)) {
+                    const dataEntry = Object.entries(this.data!).find(([dataKey, dataValue]) => dataKey === key);
+                    if (dataEntry) {
+                        value.forEach((abstractTO: any) => {
+                            dataEntry[1].set(abstractTO.id, abstractTO);
+                        });
+                    } else {
+                        console.warn(`Data has wrong format: key ${key}, value ${value}`);
+                        throw new Error(`Data has wrong format: key ${key}, value ${value}`);
+                    }
                 }
+                // TODO read no array value's...
             } else {
                 throw new Error(`No value found for key ${key}`);
             }
@@ -54,6 +59,8 @@ class DataStore {
 
     private getDataStoreObject(): StoreTO {
         return {
+            projectName: '',
+            version: DAVIT_VERISON.toString(),
             actors: Array.from(this.data!.actors.values()),
             groups: Array.from(this.data!.groups.values()),
             designs: Array.from(this.data!.designs.values()),

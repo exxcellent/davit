@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
-import { ASPECT_RATIO, WINDOW_FACTOR } from '../../../../app/Carv2Constants';
+import { ASPECT_RATIO, WINDOW_FACTOR } from '../../../../app/DavitConstants';
 import { PositionTO } from '../../../../dataAccess/access/to/PositionTO';
 import { useCurrentHeight, useCurrentWitdh } from '../../../../utils/WindowUtil';
 import { createDnDItem } from '../../../common/fragments/DnDWrapper';
