@@ -28,6 +28,9 @@ export const ActionTypeDropDown: FunctionComponent<ActionTypeDropDownnProps> = (
             case ActionType.SEND_AND_DELETE:
                 label = 'Send and delete';
                 break;
+            case ActionType.TRIGGER:
+                label = 'Trigger';
+                break;
         }
         return label;
     };

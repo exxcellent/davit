@@ -54,6 +54,9 @@ const getActionTypeLabel = (type: ActionType): string => {
         case ActionType.SEND_AND_DELETE:
             label = 'Send and delete';
             break;
+        case ActionType.TRIGGER:
+            label = 'Trigger';
+            break;
     }
     return label;
 };
@@ -64,14 +67,25 @@ const useActionDropDownViewModel = () => {
     const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
 
     const actionToOption = (action: ActionTO): DavitDropDownItemProps => {
-        const text: string = `${getActorName(action.receivingActorFk, actors)} - ${getActionTypeLabel(
-            action.actionType,
-        )} - ${getDataName(action.dataFk, datas)}`;
         return {
             key: action.id,
             value: action.id.toString(),
-            text: text,
+            text: getOptionText(action),
         };
+    };
+
+    const getOptionText = (action: ActionTO): string => {
+        let text: string = '';
+        if (action.actionType !== ActionType.TRIGGER) {
+            text = `${getActorName(action.receivingActorFk, actors)} - ${getActionTypeLabel(
+                action.actionType,
+            )} - ${getDataName(action.dataFk, datas)}`;
+        } else {
+            text = `${getActorName(action.sendingActorFk, actors)} - ${getActionTypeLabel(
+                action.actionType,
+            )} - ${getActorName(action.receivingActorFk, actors)}`;
+        }
+        return text;
     };
 
     const selectAction = (actionId: number, actions: ActionTO[]): ActionTO | undefined => {

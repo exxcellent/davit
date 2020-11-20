@@ -214,9 +214,17 @@
 /* -------------------------------------------- PATH -------------------------------------------- */
 
 .carvPath {
-  stroke: black;
   stroke-width: 2px;
   fill: transparent;
+}
+
+.carvPath.SEND{
+  stroke: var(--carv2-color-exxcellent-blue);
+}
+
+.carvPath.TRIGGER{
+  stroke: black;
+  stroke-dasharray: 5,5;
 }
 
 .carvStrokeDasharray {
@@ -226,6 +234,15 @@
 
 .carvArrowMarker {
   fill: black;
+}
+
+.davitArrowText{
+  fill: var(--carv2-text-color);
+}
+
+.davitArrowTextBG{
+  stroke: var(--carv2-background-color-header);
+  stroke-width: 0.3em;
 }
 
 /* -------------------------------------------- BUTTON -------------------------------------------- */
@@ -954,7 +971,6 @@ table {
 .carv2TrTerminalFIN.davitTrTerminalMarked{
   opacity: 1;
 }
-
 
 .carv2TrTerminalERROR.clickable:hover{
   background-color: var(--carv2-data-delete-color);
