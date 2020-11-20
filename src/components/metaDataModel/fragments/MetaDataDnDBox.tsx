@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
-import { ASPECT_RATIO, WINDOW_FACTOR } from '../../../app/Carv2Constants';
+import { ASPECT_RATIO, WINDOW_FACTOR } from '../../../app/DavitConstants';
 import { DataCTO } from '../../../dataAccess/access/cto/DataCTO';
 import { GeometricalDataCTO } from '../../../dataAccess/access/cto/GeometraicalDataCTO';
 import { DataRelationTO } from '../../../dataAccess/access/to/DataRelationTO';

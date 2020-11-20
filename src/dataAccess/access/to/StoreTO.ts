@@ -1,4 +1,6 @@
 export interface StoreTO {
+    version: string;
+    projectName: string;
     // Acotrs
     actors: any[];
     groups: any[];

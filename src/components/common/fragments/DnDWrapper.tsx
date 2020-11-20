@@ -1,7 +1,6 @@
 import { motion, useInvertedScale, useMotionValue } from 'framer-motion';
 import React, { FunctionComponent, useEffect } from 'react';
-
-import { WINDOW_FACTOR } from '../../../app/Carv2Constants';
+import { WINDOW_FACTOR } from '../../../app/DavitConstants';
 import { PositionTO } from '../../../dataAccess/access/to/PositionTO';
 
 export interface DnDWrapperProps {
