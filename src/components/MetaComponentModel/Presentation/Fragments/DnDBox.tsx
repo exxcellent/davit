@@ -6,14 +6,14 @@ import { useCurrentHeight, useCurrentWitdh } from '../../../../utils/WindowUtil'
 import { createDnDItem } from '../../../common/fragments/DnDWrapper';
 import { Arrow, createArrow } from '../../../common/fragments/svg/Arrow';
 
-interface ActorDnDBox {
+interface DnDBoxProps {
     toDnDElements: { element: JSX.Element; position: PositionTO }[];
     arrows: Arrow[];
     fullScreen?: boolean;
     onPositionUpdate: (x: number, y: number, positionId: number) => void;
 }
 
-export const ActorDnDBox: FunctionComponent<ActorDnDBox> = (props) => {
+export const DnDBox: FunctionComponent<DnDBoxProps> = (props) => {
     const { arrows, fullScreen, toDnDElements, onPositionUpdate } = props;
     const { constraintsRef, key, height, width } = useActorDnDBoxViewModel();
 

@@ -17,8 +17,8 @@ import { ActorData } from '../../../viewDataTypes/ActorData';
 import { ActorDataState } from '../../../viewDataTypes/ActorDataState';
 import { ViewFragmentProps } from '../../../viewDataTypes/ViewFragment';
 import { Arrow } from '../../common/fragments/svg/Arrow';
-import { ActorDnDBox } from './fragments/ActorDnDBox';
 import { Carv2Card, Carv2CardProps } from './fragments/Carv2Card';
+import { DnDBox } from './fragments/DnDBox';
 
 interface ActorModelControllerProps {
     fullScreen?: boolean;
@@ -34,7 +34,7 @@ export const ActorModelController: FunctionComponent<ActorModelControllerProps> 
     };
 
     return (
-        <ActorDnDBox
+        <DnDBox
             onPositionUpdate={onPositionUpdate}
             arrows={getArrows()}
             toDnDElements={toDnDElements.map((el) => {
