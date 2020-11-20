@@ -27,6 +27,7 @@ export const SequenceDropDown: FunctionComponent<SequenceDropDownProps> = (props
             placeholder={placeholder}
             onSelect={(sequence) => onSelect(selectSequence(Number(sequence.value), sequences))}
             value={value?.toString()}
+            clearable={true}
         />
     );
 };
