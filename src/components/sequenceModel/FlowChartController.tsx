@@ -453,10 +453,7 @@ const useFlowChartViewModel = () => {
         }
     };
 
-    // TODO: add method get stepName, unterschied calc sequence und calcChain!!!
-
     return {
-        // nodeModelTree: buildNodeModelTree(getRoot(sequence)),
         nodeModelTree: buildNodeModelTree(getDataSetup()),
         nodeModelChainTree: buildNodeModelChainTree(getChainRoot(chain)),
         currentStepId,
