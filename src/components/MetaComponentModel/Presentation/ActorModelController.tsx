@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ActorCTO } from '../../../dataAccess/access/cto/ActorCTO';
 import { DataCTO } from '../../../dataAccess/access/cto/DataCTO';
@@ -17,8 +17,8 @@ import { ActorData } from '../../../viewDataTypes/ActorData';
 import { ActorDataState } from '../../../viewDataTypes/ActorDataState';
 import { ViewFragmentProps } from '../../../viewDataTypes/ViewFragment';
 import { Arrow } from '../../common/fragments/svg/Arrow';
-import { Carv2Card, Carv2CardProps } from './fragments/Carv2Card';
-import { DnDBox } from './fragments/DnDBox';
+import { DavitCard, DavitCardProps } from './fragments/DavitCard';
+import { DnDBox, DnDBoxType } from './fragments/DnDBox';
 
 interface ActorModelControllerProps {
     fullScreen?: boolean;
@@ -27,20 +27,23 @@ interface ActorModelControllerProps {
 export const ActorModelController: FunctionComponent<ActorModelControllerProps> = (props) => {
     const { fullScreen } = props;
 
-    const { onPositionUpdate, getArrows, toDnDElements } = useViewModel();
+    const { onPositionUpdate, getArrows, toDnDElements, zoomIn, zoomOut } = useViewModel();
 
-    const mapCardToJSX = (card: Carv2CardProps): JSX.Element => {
-        return <Carv2Card {...card} />;
+    const mapCardToJSX = (card: DavitCardProps): JSX.Element => {
+        return <DavitCard {...card} />;
     };
 
     return (
         <DnDBox
             onPositionUpdate={onPositionUpdate}
-            arrows={getArrows()}
+            paths={getArrows()}
             toDnDElements={toDnDElements.map((el) => {
                 return { ...el, element: mapCardToJSX(el.card) };
             })}
             fullScreen={fullScreen}
+            zoomIn={zoomIn}
+            zoomOut={zoomOut}
+            type={DnDBoxType.actor}
         />
     );
 };
@@ -65,6 +68,10 @@ const useViewModel = () => {
     const errors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
     // const actions: ActionTO[] = useSelector(sequenceModelSelectors.selectActions);
     const dataSetup: DataSetupCTO | null = useSelector(sequenceModelSelectors.selectDataSetup);
+
+    const [zoom, setZoom] = useState<number>(1);
+
+    const ZOOM_FACTOR: number = 0.1;
 
     React.useEffect(() => {
         dispatch(MasterDataActions.loadActorsFromBackend());
@@ -263,8 +270,8 @@ const useViewModel = () => {
         }
     };
 
-    const toDnDElements = (actors: ActorCTO[]): { card: Carv2CardProps; position: PositionTO }[] => {
-        let cards: { card: Carv2CardProps; position: PositionTO }[] = [];
+    const toDnDElements = (actors: ActorCTO[]): { card: DavitCardProps; position: PositionTO }[] => {
+        let cards: { card: DavitCardProps; position: PositionTO }[] = [];
         cards = actors
             .filter((actor) => !(actorCTOToEdit && actorCTOToEdit.actor.id === actor.actor.id))
             .map((actorr) => {
@@ -284,7 +291,7 @@ const useViewModel = () => {
         return cards;
     };
 
-    const actorToCard = (actor: ActorCTO): Carv2CardProps => {
+    const actorToCard = (actor: ActorCTO): DavitCardProps => {
         return {
             id: actor.actor.id,
             initName: actor.actor.name,
@@ -295,7 +302,7 @@ const useViewModel = () => {
                     act.parentId === actor.actor.id ||
                     (act.parentId as { dataId: number; instanceId: number }).dataId === actor.actor.id,
             ),
-            zoomFactor: 1,
+            zoomFactor: zoom,
             type: 'ACTOR',
         };
     };
@@ -310,9 +317,19 @@ const useViewModel = () => {
         return ar;
     };
 
+    const zoomOut = (): void => {
+        setZoom(zoom - ZOOM_FACTOR);
+    };
+
+    const zoomIn = (): void => {
+        setZoom(zoom + ZOOM_FACTOR);
+    };
+
     return {
         onPositionUpdate,
         getArrows,
         toDnDElements: toDnDElements(actors),
+        zoomIn,
+        zoomOut,
     };
 };

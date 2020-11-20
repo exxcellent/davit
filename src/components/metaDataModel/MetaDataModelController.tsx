@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ActorCTO } from '../../dataAccess/access/cto/ActorCTO';
 import { DataCTO } from '../../dataAccess/access/cto/DataCTO';
@@ -8,14 +8,18 @@ import { ActionTO } from '../../dataAccess/access/to/ActionTO';
 import { DataRelationTO } from '../../dataAccess/access/to/DataRelationTO';
 import { DecisionTO } from '../../dataAccess/access/to/DecisionTO';
 import { InitDataTO } from '../../dataAccess/access/to/InitDataTO';
+import { PositionTO } from '../../dataAccess/access/to/PositionTO';
 import { ActionType } from '../../dataAccess/access/types/ActionType';
 import { EditActions, editSelectors } from '../../slices/EditSlice';
 import { MasterDataActions, masterDataSelectors } from '../../slices/MasterDataSlice';
 import { SequenceModelActions, sequenceModelSelectors } from '../../slices/SequenceModelSlice';
+import { DavitUtil } from '../../utils/DavitUtil';
 import { ActorData } from '../../viewDataTypes/ActorData';
 import { ActorDataState } from '../../viewDataTypes/ActorDataState';
 import { ViewFragmentProps } from '../../viewDataTypes/ViewFragment';
-import { MetaDataDnDBox } from './fragments/MetaDataDnDBox';
+import { DavitPath } from '../common/fragments/svg/DavitPath';
+import { DavitCard, DavitCardProps } from '../metaComponentModel/presentation/fragments/DavitCard';
+import { DnDBox, DnDBoxType } from '../metaComponentModel/presentation/fragments/DnDBox';
 
 interface MetaDataModelControllerProps {
     fullScreen?: boolean;
@@ -24,26 +28,23 @@ interface MetaDataModelControllerProps {
 export const MetaDataModelController: FunctionComponent<MetaDataModelControllerProps> = (props) => {
     const { fullScreen } = props;
 
-    const {
-        datas,
-        dataRelations,
-        dataRelationToEdit,
-        dataCTOToEdit,
-        getActorDatas,
-        saveData,
-        handleDataClick,
-    } = useMetaDataModelViewModel();
+    const { onPositionUpdate, toDnDElements, zoomIn, zoomOut, getRelations } = useMetaDataModelViewModel();
+
+    const mapCardToJSX = (card: DavitCardProps): JSX.Element => {
+        return <DavitCard {...card} />;
+    };
 
     const createMetaDataDnDBox = () => {
         return (
-            <MetaDataDnDBox
-                dataCTOs={datas}
-                onSaveCallBack={saveData}
-                dataRelations={dataRelations}
-                dataCTOToEdit={dataCTOToEdit}
-                dataRelationToEdit={dataRelationToEdit}
-                actorDatas={getActorDatas()}
-                onClick={handleDataClick}
+            <DnDBox
+                onPositionUpdate={onPositionUpdate}
+                paths={getRelations()}
+                toDnDElements={toDnDElements.map((el) => {
+                    return { ...el, element: mapCardToJSX(el.card) };
+                })}
+                zoomIn={zoomIn}
+                zoomOut={zoomOut}
+                type={DnDBoxType.data}
                 fullScreen={fullScreen}
             />
         );
@@ -71,21 +72,14 @@ const useMetaDataModelViewModel = () => {
     const errors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
     const actions: ActionTO[] = useSelector(sequenceModelSelectors.selectActions);
 
+    const [zoom, setZoom] = useState<number>(1);
+
+    const ZOOM_FACTOR: number = 0.1;
+
     React.useEffect(() => {
         dispatch(MasterDataActions.loadDatasFromBackend());
         dispatch(MasterDataActions.loadRelationsFromBackend());
     }, [dispatch]);
-
-    const saveData = (dataCTO: DataCTO) => {
-        dispatch(EditActions.data.save(dataCTO));
-        dispatch(MasterDataActions.loadRelationsFromBackend());
-        if (dataCTO.data.id === dataRelationToEdit?.data1Fk) {
-            dispatch(EditActions.setMode.editRelation(dataRelationToEdit));
-        }
-        if (dataCTO.data.id === dataRelationToEdit?.data2Fk) {
-            dispatch(EditActions.setMode.editRelation(dataRelationToEdit));
-        }
-    };
 
     const getActorNameById = (actorId: number): string => {
         return actors.find((actor) => actor.actor.id === actorId)?.actor.name || 'Could not find Actor';
@@ -229,13 +223,88 @@ const useMetaDataModelViewModel = () => {
         return cdState;
     };
 
+    const onPositionUpdate = (x: number, y: number, positionId: number) => {
+        const dataCTO = datas.find((data) => data.geometricalData.position.id === positionId);
+        if (dataCTO) {
+            const copyDataCTO: DataCTO = DavitUtil.deepCopy(dataCTO);
+            copyDataCTO.geometricalData.position.x = x;
+            copyDataCTO.geometricalData.position.y = y;
+            dispatch(EditActions.data.save(copyDataCTO));
+        }
+    };
+
+    const toDnDElements = (datas: DataCTO[]): { card: DavitCardProps; position: PositionTO }[] => {
+        let cards: { card: DavitCardProps; position: PositionTO }[] = [];
+        cards = datas
+            .filter((data) => !(dataCTOToEdit && dataCTOToEdit.data.id === data.data.id))
+            .map((dataa) => {
+                return {
+                    card: dataToCard(dataa),
+                    position: dataa.geometricalData.position,
+                };
+            })
+            .filter((item) => item !== undefined);
+        // add actor to edit
+        if (dataCTOToEdit) {
+            cards.push({
+                card: dataToCard(dataCTOToEdit),
+                position: dataCTOToEdit.geometricalData.position,
+            });
+        }
+        return cards;
+    };
+
+    const dataToCard = (data: DataCTO): DavitCardProps => {
+        return {
+            id: data.data.id,
+            initName: data.data.name,
+            initWidth: data.geometricalData.geometricalData.width,
+            initHeigth: data.geometricalData.geometricalData.height,
+            dataFragments: getActorDatas().filter(
+                (act) =>
+                    act.parentId === data.data.id ||
+                    (act.parentId as { dataId: number; instanceId: number }).dataId === data.data.id,
+            ),
+            instances: data.data.instances,
+            zoomFactor: zoom,
+            type: 'DATA',
+        };
+    };
+
+    const zoomOut = (): void => {
+        setZoom(zoom - ZOOM_FACTOR);
+    };
+
+    const zoomIn = (): void => {
+        setZoom(zoom + ZOOM_FACTOR);
+    };
+
+    const relationToDavitPath = (relation: DataRelationTO, isEdit?: boolean): DavitPath => {
+        return {
+            source: datas.find((data) => data.data.id === relation.data1Fk)?.geometricalData || undefined,
+            target: datas.find((data) => data.data.id === relation.data2Fk)?.geometricalData || undefined,
+            dataRelation: relation,
+            isEdit: isEdit,
+        };
+    };
+
+    const getRelations = (): DavitPath[] => {
+        let paths: DavitPath[] = [];
+        let copyDataRelations: DataRelationTO[] = DavitUtil.deepCopy(dataRelations);
+        if (dataRelationToEdit) {
+            copyDataRelations = copyDataRelations.filter((relation) => relation.id !== dataRelationToEdit.id);
+            paths.push(relationToDavitPath(dataRelationToEdit, true));
+        }
+        copyDataRelations.forEach((rel) => paths.push(relationToDavitPath(rel)));
+        return paths;
+    };
+
     return {
-        datas,
-        dataRelations,
-        dataRelationToEdit,
-        dataCTOToEdit,
-        saveData,
-        getActorDatas,
         handleDataClick: (dataId: number) => dispatch(SequenceModelActions.handleDataClickEvent(dataId)),
+        onPositionUpdate,
+        toDnDElements: toDnDElements(datas),
+        zoomIn,
+        zoomOut,
+        getRelations,
     };
 };

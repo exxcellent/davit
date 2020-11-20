@@ -1,14 +1,13 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { DataInstanceTO } from '../../../../dataAccess/access/to/DataInstanceTO';
 import { EditActions } from '../../../../slices/EditSlice';
 import { Filter, SequenceModelActions, sequenceModelSelectors } from '../../../../slices/SequenceModelSlice';
 import { createViewFragment, ViewFragmentProps } from '../../../../viewDataTypes/ViewFragment';
-import { Carv2CardButton } from '../../../common/fragments/buttons/Carv2CardButton';
 import { Carv2CardMainButton } from '../../../common/fragments/buttons/Carv2CardMainButton';
+import { DavitCardButton } from '../../../common/fragments/buttons/DavitCardButton';
 
-export interface Carv2CardProps {
+export interface DavitCardProps {
     id: number;
     initName: string;
     initWidth: number;
@@ -20,14 +19,14 @@ export interface Carv2CardProps {
     type: 'DATA' | 'ACTOR' | 'INSTANCE';
 }
 
-export const Carv2Card: FunctionComponent<Carv2CardProps> = (props) => {
+export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
     const { id, initName, initWidth, initHeigth, dataFragments, instances, zoomFactor, type } = props;
 
     const { onClickEdit, onClickFilter, showMenu, setShowMenu, isActiveFilter } = useCarv2CardViewModel(type, id);
 
     const createInstances = (id: number, instanceName: string, actors: ViewFragmentProps[]) => {
         return (
-            <Carv2Card
+            <DavitCard
                 id={id}
                 initName={instanceName}
                 dataFragments={actors}
@@ -60,8 +59,8 @@ export const Carv2Card: FunctionComponent<Carv2CardProps> = (props) => {
                     <div className={showMenu ? 'carhHeaderTextInvisible' : 'cardHeaderText'}>{initName}</div>
                     {showMenu && (
                         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                            <Carv2CardButton icon="wrench" onClick={() => onClickEdit(id, type)} />
-                            <Carv2CardButton
+                            <DavitCardButton icon="wrench" onClick={() => onClickEdit(id, type)} />
+                            <DavitCardButton
                                 icon="filter"
                                 onClick={() => onClickFilter(id, type)}
                                 isActive={isActiveFilter}

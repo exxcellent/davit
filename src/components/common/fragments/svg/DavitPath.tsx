@@ -135,6 +135,13 @@ const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
     return createCornerLine();
 };
 
+export interface DavitPath {
+    source: GeometricalDataCTO | undefined;
+    target: GeometricalDataCTO | undefined;
+    dataRelation: DataRelationTO;
+    isEdit?: boolean;
+}
+
 export const createCornerConnection = (
     source: GeometricalDataCTO | undefined,
     target: GeometricalDataCTO | undefined,
