@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { ASPECT_RATIO, WINDOW_FACTOR } from '../../../../app/Carv2Constants';
 import { PositionTO } from '../../../../dataAccess/access/to/PositionTO';
-import { useCurrentHeight, useCurrentWitdh, useCustomZoomEvent } from '../../../../utils/WindowUtil';
+import { useCurrentHeight, useCurrentWitdh } from '../../../../utils/WindowUtil';
 import { createDnDItem } from '../../../common/fragments/DnDWrapper';
 import { Arrow, createArrow } from '../../../common/fragments/svg/Arrow';
 import { createCornerConnection, DavitPath } from '../../../common/fragments/svg/DavitPath';
@@ -27,7 +27,8 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
     const { constraintsRef, key, height, width } = useDnDBoxViewModel();
 
     const [mouseOver, setMouseOver] = useState<boolean>(false);
-    useCustomZoomEvent({ zoomInCallBack: zoomIn, zoomOutCallBack: zoomOut }, mouseOver);
+    // TODO: activate if arrows draw with ref's.
+    // useCustomZoomEvent({ zoomInCallBack: zoomIn, zoomOutCallBack: zoomOut }, mouseOver);
 
     const wrappItem = (toDnDElement: { element: JSX.Element; position: PositionTO }): JSX.Element => {
         return createDnDItem(toDnDElement.position, onPositionUpdate, constraintsRef, toDnDElement.element);
