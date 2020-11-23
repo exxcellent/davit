@@ -24,7 +24,7 @@ class DataStore {
         } else {
             // TODO: check here for DAVIT version. If diff. than call migrator.
             objectStore = JSON.parse(dataObject);
-            if (objectStore.version !== DAVIT_VERISON) {
+            if (objectStore.version !== DAVIT_VERISON || objectStore.version === undefined) {
                 console.warn(`!!!WARNING!!! DAVIT Project has different version (${objectStore.version})!`);
             }
         }
