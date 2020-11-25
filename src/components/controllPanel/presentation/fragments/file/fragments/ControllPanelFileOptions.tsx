@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux';
 import { ButtonGroup } from 'semantic-ui-react';
 import { EditActions } from '../../../../../../slices/EditSlice';
 import { GlobalActions } from '../../../../../../slices/GlobalSlice';
-import { Carv2FileInput } from '../../../../../common/fragments/buttons/Carv2FileInput';
 import { DavitButtonIcon } from '../../../../../common/fragments/buttons/DavitButton';
+import { DavitFileInput } from '../../../../../common/fragments/buttons/DavitFileInput';
 
 export interface ControllPanelFileOptionsProps {
     showDownloadFile: () => void;
@@ -18,7 +18,7 @@ export const ControllPanelFileOptions: FunctionComponent<ControllPanelFileOption
         <div>
             <div className="optionField">
                 <ButtonGroup>
-                    <Carv2FileInput />
+                    <DavitFileInput />
                     <DavitButtonIcon icon="download" onClick={showDownloadFile} />
                     <DavitButtonIcon icon="trash alternate" onClick={deleteLocalStorage} />
                 </ButtonGroup>
@@ -33,7 +33,8 @@ const useFileOptionModelView = () => {
 
     const deleteLocalStorage = () => {
         dispatch(EditActions.setMode.view());
-        dispatch(GlobalActions.storefileData('{}'));
+        // dispatch(GlobalActions.storefileData('{}'));
+        dispatch(GlobalActions.createNewProject());
     };
 
     return {

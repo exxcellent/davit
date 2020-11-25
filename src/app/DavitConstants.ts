@@ -5,4 +5,6 @@ export const ASPECT_RATIO: number = 56.25;
 
 export const STORE_ID = 'carv2';
 
-export const DAVIT_VERISON = 'V0.1';
+export const DAVIT_VERISON: number = 0.1;
+
+export const DEFAULT_PROJECT_NAME = 'New project';
