@@ -23,6 +23,7 @@ import { DecisionTO01 } from './to/DecisionTO01';
 export const DavitVersionMigrator01 = {
     migrate(dataStoreObject: StoreTO): StoreTO {
         console.info('start migration to version 0.1');
+        console.info('project: ', dataStoreObject);
         const version: number = DAVIT_VERISON;
         const projectName: string = DEFAULT_PROJECT_NAME;
 
@@ -30,20 +31,7 @@ export const DavitVersionMigrator01 = {
         const groups: GroupTO[] = dataStoreObject.groups as GroupTO[];
         const geometricalDatas: GeometricalDataTO[] = dataStoreObject.geometricalDatas as GeometricalDataTO[];
         const positions: PositionTO[] = dataStoreObject.positions as PositionTO[];
-        const designs: DecisionTO[] = (dataStoreObject.designs as DecisionTO01[]).map((decision) => {
-            const dataAndInstaceIds: DataAndInstanceId[] = [];
-            dataAndInstaceIds.push(decision.dataAndInstaceId);
-            return {
-                actorFk: decision.actorFk,
-                dataAndInstaceIds: dataAndInstaceIds,
-                elseGoTo: decision.elseGoTo,
-                id: decision.id,
-                ifGoTo: decision.ifGoTo,
-                name: decision.name,
-                root: decision.root,
-                sequenceFk: decision.sequenceFk,
-            };
-        });
+        const designs: DecisionTO[] = dataStoreObject.designs as DecisionTO[];
         const sequences: SequenceTO[] = dataStoreObject.sequences as SequenceTO[];
         const steps: SequenceStepTO[] = dataStoreObject.steps as SequenceStepTO[];
         const actions: ActionTO[] = (dataStoreObject.actions as ActionTO01[]).map((action) => {
@@ -58,7 +46,24 @@ export const DavitVersionMigrator01 = {
                 triggerText: '',
             };
         });
-        const decisions: DecisionTO[] = dataStoreObject.decisions as DecisionTO[];
+        const decisions: DecisionTO[] = (dataStoreObject.decisions as DecisionTO01[]).map((decision) => {
+            console.info('decision: ', decision);
+            const dataAndInstaceIds: DataAndInstanceId[] = [];
+            dataAndInstaceIds.push({
+                dataFk: decision.dataAndInstaceId.dataFk,
+                instanceId: decision.dataAndInstaceId.instanceId,
+            });
+            return {
+                actorFk: decision.actorFk,
+                dataAndInstaceIds: dataAndInstaceIds,
+                elseGoTo: decision.elseGoTo,
+                id: decision.id,
+                ifGoTo: decision.ifGoTo,
+                name: decision.name,
+                root: decision.root,
+                sequenceFk: decision.sequenceFk,
+            };
+        });
         const datas: DataTO[] = (dataStoreObject.datas as DataTO01[]).map((data) => {
             return {
                 id: data.id,
