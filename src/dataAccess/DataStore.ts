@@ -19,7 +19,26 @@ class DataStore {
 
     private readDataFromStorage() {
         const dataObjectString: string | null = localStorage.getItem(STORE_ID);
-        let objectStore: StoreTO = {} as StoreTO;
+        let objectStore: StoreTO = {
+            version: DAVIT_VERISON,
+            projectName: DEFAULT_PROJECT_NAME,
+            actors: [],
+            groups: [],
+            geometricalDatas: [],
+            positions: [],
+            designs: [],
+            sequences: [],
+            steps: [],
+            actions: [],
+            decisions: [],
+            datas: [],
+            dataConnections: [],
+            initDatas: [],
+            dataSetups: [],
+            chains: [],
+            chainlinks: [],
+            chaindecisions: [],
+        } as StoreTO;
         if (!dataObjectString) {
             localStorage.setItem(
                 STORE_ID,
@@ -46,8 +65,7 @@ class DataStore {
             );
         } else {
             objectStore = JSON.parse(dataObjectString);
-            if (objectStore.version !== DAVIT_VERISON || objectStore.version === undefined) {
-                console.warn(`!!!WARNING!!! DAVIT Project has different version (${objectStore.version})!`);
+            if (!DavitVersionManager.projectVersionIsEqualDavitVersion(objectStore)) {
                 objectStore = DavitVersionManager.updateProject(objectStore);
                 this.storeFileData(JSON.stringify(objectStore));
             }
@@ -57,6 +75,9 @@ class DataStore {
 
     private readData(objectStore: StoreTO) {
         this.data = new DataStoreCTO();
+        if (!DavitVersionManager.projectVersionIsEqualDavitVersion(objectStore)) {
+            objectStore = DavitVersionManager.updateProject(objectStore);
+        }
         Object.entries(objectStore).forEach(([key, value]) => {
             if (value !== undefined) {
                 if (Array.isArray(value)) {

@@ -1,4 +1,5 @@
 import { DAVIT_VERISON, DEFAULT_PROJECT_NAME } from '../../../app/DavitConstants';
+import { DataAndInstanceId } from '../../../components/common/fragments/dropdowns/InstanceDropDown';
 import { ActionTO } from '../../access/to/ActionTO';
 import { ActorTO } from '../../access/to/ActorTO';
 import { ChainDecisionTO } from '../../access/to/ChainDecisionTO';
@@ -16,6 +17,8 @@ import { SequenceStepTO } from '../../access/to/SequenceStepTO';
 import { SequenceTO } from '../../access/to/SequenceTO';
 import { StoreTO } from '../../access/to/StoreTO';
 import { ActionTO01 } from './to/ActionTO01';
+import { DataTO01 } from './to/DataTO01';
+import { DecisionTO01 } from './to/DecisionTO01';
 
 export const DavitVersionMigrator01 = {
     migrate(dataStoreObject: StoreTO): StoreTO {
@@ -27,7 +30,20 @@ export const DavitVersionMigrator01 = {
         const groups: GroupTO[] = dataStoreObject.groups as GroupTO[];
         const geometricalDatas: GeometricalDataTO[] = dataStoreObject.geometricalDatas as GeometricalDataTO[];
         const positions: PositionTO[] = dataStoreObject.positions as PositionTO[];
-        const designs: DecisionTO[] = dataStoreObject.designs as DecisionTO[];
+        const designs: DecisionTO[] = (dataStoreObject.designs as DecisionTO01[]).map((decision) => {
+            const dataAndInstaceIds: DataAndInstanceId[] = [];
+            dataAndInstaceIds.push(decision.dataAndInstaceId);
+            return {
+                actorFk: decision.actorFk,
+                dataAndInstaceIds: dataAndInstaceIds,
+                elseGoTo: decision.elseGoTo,
+                id: decision.id,
+                ifGoTo: decision.ifGoTo,
+                name: decision.name,
+                root: decision.root,
+                sequenceFk: decision.sequenceFk,
+            };
+        });
         const sequences: SequenceTO[] = dataStoreObject.sequences as SequenceTO[];
         const steps: SequenceStepTO[] = dataStoreObject.steps as SequenceStepTO[];
         const actions: ActionTO[] = (dataStoreObject.actions as ActionTO01[]).map((action) => {
@@ -43,7 +59,17 @@ export const DavitVersionMigrator01 = {
             };
         });
         const decisions: DecisionTO[] = dataStoreObject.decisions as DecisionTO[];
-        const datas: DataTO[] = dataStoreObject.datas as DataTO[];
+        const datas: DataTO[] = (dataStoreObject.datas as DataTO01[]).map((data) => {
+            return {
+                id: data.id,
+                name: data.name,
+                geometricalDataFk: data.geometricalDataFk,
+                dataConnectionFks: data.dataConnectionFks,
+                instances: data.instances.map((instance) => {
+                    return { id: instance.id, name: instance.name };
+                }),
+            };
+        });
         const dataConnections: DataRelationTO[] = dataStoreObject.dataConnections as DataRelationTO[];
         const initDatas: InitDataTO[] = dataStoreObject.initDatas as InitDataTO[];
         const dataSetups: DataSetupTO[] = dataStoreObject.dataSetups as DataSetupTO[];
