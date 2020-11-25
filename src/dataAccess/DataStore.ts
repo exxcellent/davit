@@ -1,7 +1,7 @@
 import { DAVIT_VERISON, DEFAULT_PROJECT_NAME, STORE_ID } from '../app/DavitConstants';
 import { DataStoreCTO } from './access/cto/DataStoreCTO';
 import { StoreTO } from './access/to/StoreTO';
-import { DavitVersionMigrator } from './migration/DavitVersionMigrator';
+import { DavitVersionManager } from './migration/DavitVersionManager';
 
 class DataStore {
     static instance: DataStore;
@@ -49,7 +49,7 @@ class DataStore {
             objectStore = JSON.parse(dataObjectString);
             if (objectStore.version !== DAVIT_VERISON || objectStore.version === undefined) {
                 console.warn(`!!!WARNING!!! DAVIT Project has different version (${objectStore.version})!`);
-                objectStore = DavitVersionMigrator.migrate(objectStore);
+                objectStore = DavitVersionManager.updateProject(objectStore);
                 this.storeFileData(JSON.stringify(objectStore));
             }
         }
