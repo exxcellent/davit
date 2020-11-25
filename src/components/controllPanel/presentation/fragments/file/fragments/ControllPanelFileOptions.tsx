@@ -33,7 +33,6 @@ const useFileOptionModelView = () => {
 
     const deleteLocalStorage = () => {
         dispatch(EditActions.setMode.view());
-        // dispatch(GlobalActions.storefileData('{}'));
         dispatch(GlobalActions.createNewProject());
     };
 
