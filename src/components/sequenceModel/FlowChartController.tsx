@@ -10,6 +10,7 @@ import { ChainDecisionTO } from '../../dataAccess/access/to/ChainDecisionTO';
 import { DecisionTO } from '../../dataAccess/access/to/DecisionTO';
 import { GoTo, GoToTypes, Terminal } from '../../dataAccess/access/types/GoToType';
 import { GoToChain, GoToTypesChain, TerminalChain } from '../../dataAccess/access/types/GoToTypeChain';
+import { CalcChain } from '../../services/SequenceChainService';
 import { handleError } from '../../slices/GlobalSlice';
 import { sequenceModelSelectors } from '../../slices/SequenceModelSlice';
 import { DavitUtil } from '../../utils/DavitUtil';
@@ -26,6 +27,7 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
     const {
         nodeModelTree,
         calcSteps,
+        calcLinkIds,
         lineColor,
         currentStepId,
         nodeModelChainTree,
@@ -34,6 +36,7 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
         sequence,
         chainName,
         sequenceName,
+        chainLineColor,
     } = useFlowChartViewModel();
 
     const [showChain, setShowChain] = useState<boolean>(false);
@@ -59,8 +62,7 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
         };
     }, [parentRef]);
 
-    const buildChart = (node: NodeModel): JSX.Element => {
-        // console.info("node id: " + node.id);
+    const buildSequenceChart = (node: NodeModel): JSX.Element => {
         const rel: Relation[] = [];
 
         if (node.parentId) {
@@ -98,7 +100,7 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
                         alignItems: 'start',
                         width: '100%',
                     }}>
-                    {node.childs.map(buildChart)}
+                    {node.childs.map(buildSequenceChart)}
                 </div>
             </div>
         );
@@ -114,11 +116,13 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
                 sourceAnchor: 'top',
                 style: {
                     strokeColor:
-                        calcSteps.find((step) => step === node.parentId) && calcSteps.find((step) => step === node.id)
-                            ? lineColor()
+                        calcLinkIds?.find((link) => link === node.parentId) &&
+                        calcLinkIds.find((link) => link === node.id)
+                            ? chainLineColor()
                             : 'var(--carv2-background-color-header)',
                     strokeWidth:
-                        calcSteps.find((step) => step === node.parentId) && calcSteps.find((step) => step === node.id)
+                        calcLinkIds?.find((link) => link === node.parentId) &&
+                        calcLinkIds.find((link) => link === node.id)
                             ? 5
                             : 3,
                 },
@@ -152,7 +156,7 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
     const buildFlowChart = (): JSX.Element => {
         return (
             <ArcherContainer noCurves={true} arrowLength={0}>
-                {buildChart(nodeModelTree)}
+                {buildSequenceChart(nodeModelTree)}
             </ArcherContainer>
         );
     };
@@ -220,6 +224,7 @@ const useFlowChartViewModel = () => {
     const terminalStep: Terminal | null = useSelector(sequenceModelSelectors.selectTerminalStep);
     const stepIds: string[] = useSelector(sequenceModelSelectors.selectCalcStepIds);
     const chain: ChainCTO | null = useSelector(sequenceModelSelectors.selectChainCTO);
+    const calcChain: CalcChain | null = useSelector(sequenceModelSelectors.selectCalcChain);
     const currentStepId: string = useSelector(sequenceModelSelectors.selectCurrentStepId);
     const currentLinkId: string = useSelector(sequenceModelSelectors.selectCurrentLinkId);
 
@@ -444,12 +449,27 @@ const useFlowChartViewModel = () => {
         }
     };
 
+    const getChainLineColor = (): string => {
+        if (calcChain) {
+            switch (calcChain.terminal.type) {
+                case GoToTypesChain.ERROR:
+                    return 'var(--carv2-data-delete-color)';
+                case GoToTypesChain.FIN:
+                    return 'var(--carv2-data-add-color)';
+            }
+        } else {
+            return '#FF00FF';
+        }
+    };
+
     return {
         nodeModelTree: buildNodeModelTree(getDataSetup()),
         nodeModelChainTree: buildNodeModelChainTree(getChainRoot(chain)),
         currentStepId,
         calcSteps: getSteps(),
+        calcLinkIds: calcChain?.linkIds,
         lineColor: getLineColor,
+        chainLineColor: getChainLineColor,
         currentLinkId,
         sequence,
         chain,
