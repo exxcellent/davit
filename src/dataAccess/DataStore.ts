@@ -40,29 +40,7 @@ class DataStore {
             chaindecisions: [],
         } as StoreTO;
         if (!dataObjectString) {
-            localStorage.setItem(
-                STORE_ID,
-                JSON.stringify({
-                    version: DAVIT_VERISON,
-                    projectName: DEFAULT_PROJECT_NAME,
-                    actors: [],
-                    groups: [],
-                    geometricalDatas: [],
-                    positions: [],
-                    designs: [],
-                    sequences: [],
-                    steps: [],
-                    actions: [],
-                    decisions: [],
-                    datas: [],
-                    dataConnections: [],
-                    initDatas: [],
-                    dataSetups: [],
-                    chains: [],
-                    chainlinks: [],
-                    chaindecisions: [],
-                } as StoreTO),
-            );
+            localStorage.setItem(STORE_ID, JSON.stringify(objectStore));
         } else {
             objectStore = JSON.parse(dataObjectString);
             if (!DavitVersionManager.projectVersionIsEqualDavitVersion(objectStore)) {

@@ -23,7 +23,6 @@ import { DecisionTO01 } from './to/DecisionTO01';
 export const DavitVersionMigrator01 = {
     migrate(dataStoreObject: StoreTO): StoreTO {
         console.info('start migration to version 0.1');
-        console.info('project: ', dataStoreObject);
         const version: number = DAVIT_VERISON;
         const projectName: string = DEFAULT_PROJECT_NAME;
 
@@ -47,7 +46,6 @@ export const DavitVersionMigrator01 = {
             };
         });
         const decisions: DecisionTO[] = (dataStoreObject.decisions as DecisionTO01[]).map((decision) => {
-            console.info('decision: ', decision);
             const dataAndInstaceIds: DataAndInstanceId[] = [];
             dataAndInstaceIds.push({
                 dataFk: decision.dataAndInstaceId.dataFk,
