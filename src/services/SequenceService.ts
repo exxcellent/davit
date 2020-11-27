@@ -111,7 +111,7 @@ export const SequenceService = {
                         stepOrDecision = getNext(result.goto, sequence);
                         type = getType(stepOrDecision);
 
-                        const newCondID = '_COND_' + decision.id;
+                        const newCondID = '_DEC_' + decision.id;
                         stepId = stepId + newCondID;
                         stepIds.push(stepId);
 

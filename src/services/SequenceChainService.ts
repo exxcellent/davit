@@ -24,11 +24,6 @@ export interface CalcChain {
     terminal: TerminalChain;
 }
 
-interface MergedActorDatas {
-    actorDatas: ActorData[];
-    errors: ActorData[];
-}
-
 export const SequenceChainService = {
     calculateChain: (sequenceChain: ChainCTO | null): CalcChain => {
         const calcSequenceChain: CalcChain = { calcLinks: [], linkIds: [], terminal: { type: GoToTypesChain.ERROR } };
@@ -85,7 +80,7 @@ export const SequenceChainService = {
                         step = getNext(goTo, sequenceChain);
                         type = getType(step);
 
-                        const newCondID = '_COND_' + decision.id;
+                        const newCondID = '_DEC_' + decision.id;
                         stepId = stepId === '' ? 'root' : stepId + newCondID;
                     }
                 }
