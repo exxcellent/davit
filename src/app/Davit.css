@@ -988,17 +988,14 @@ table {
 
 .carv2TrTerminalERROR.davitTrTerminalMarked{
   opacity: 1;
-  border: 0.25px solid white;
 }
 
 .carv2TrTerminalIDLE.davitTrTerminalMarked{
   opacity: 1;
-  border: 0.25px solid white;
 }
 
 .carv2TrTerminalFIN.davitTrTerminalMarked{
   opacity: 1;
-  border: 0.25px solid white;
 }
 
 .carv2TrTerminalERROR.clickable:hover{
