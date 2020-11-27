@@ -38,6 +38,20 @@ export const DataAccess = {
         }
     },
 
+    createNewProject(): DataAccessResponse<void> {
+        const response: DataAccessResponse<void> = {
+            object: undefined,
+            message: '',
+            code: 500,
+        };
+        try {
+            dataStore.createNewProject();
+            return { ...response, code: 200 };
+        } catch (error) {
+            return { ...response, message: error.message };
+        }
+    },
+
     downloadData(projectName: string): DataAccessResponse<void> {
         const response: DataAccessResponse<void> = {
             object: undefined,

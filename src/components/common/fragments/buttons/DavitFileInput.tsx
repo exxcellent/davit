@@ -3,9 +3,9 @@ import { useDispatch } from 'react-redux';
 import { GlobalActions } from '../../../../slices/GlobalSlice';
 import { DavitButtonIcon } from './DavitButton';
 
-export interface Carv2FileInputProps {}
+export interface DavitFileInputProps {}
 
-export const Carv2FileInput: FunctionComponent<Carv2FileInputProps> = (props) => {
+export const DavitFileInput: FunctionComponent<DavitFileInputProps> = (props) => {
     const dispatch = useDispatch();
     const inputFileRef = createRef<HTMLInputElement>();
 
