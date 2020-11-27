@@ -31,9 +31,11 @@ const createCalcLinkColumn = (
     const name: string = link.name || 'Link name not found!';
     const sequenceName: string = link.sequence.sequenceModel?.sequenceTO.name || 'Sequence name not found!';
     const dataSetupName: string = link.dataSetup.dataSetup?.name || 'Data setup name not found!';
-    let trClass = 'carv2Tr';
+    // let trClass = 'carv2Tr';
+    let trClass = 'carv2TrTerminal' + link.sequence.terminal.type.toString();
     if (index === chainIndex) {
-        trClass = 'carv2TrMarked';
+        // trClass = 'carv2TrMarked';
+        trClass = 'carv2TrTerminal' + link.sequence.terminal.type.toString() + ' davitTrTerminalMarked';
     }
     return {
         trClass: 'clickable ' + trClass,
