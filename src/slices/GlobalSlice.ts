@@ -34,6 +34,15 @@ const storefileData = (fileData: string): AppThunk => async (dispatch) => {
     }
 };
 
+const createNewProject = (): AppThunk => (dispatch) => {
+    const response: DataAccessResponse<void> = DataAccess.createNewProject();
+    if (response.code === 200) {
+        window.location.reload();
+    } else {
+        dispatch(handleError(response.message));
+    }
+};
+
 const downloadData = (projectName: string): AppThunk => (dispatch) => {
     const response: DataAccessResponse<void> = DataAccess.downloadData(projectName);
     if (response.code !== 200) {
@@ -43,6 +52,7 @@ const downloadData = (projectName: string): AppThunk => (dispatch) => {
 
 export const GlobalActions = {
     storefileData,
+    createNewProject,
     downloadData,
 };
 

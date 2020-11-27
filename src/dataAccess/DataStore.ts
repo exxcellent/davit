@@ -1,6 +1,7 @@
-import { DAVIT_VERISON, STORE_ID } from '../app/DavitConstants';
+import { DAVIT_VERISON, DEFAULT_PROJECT_NAME, STORE_ID } from '../app/DavitConstants';
 import { DataStoreCTO } from './access/cto/DataStoreCTO';
 import { StoreTO } from './access/to/StoreTO';
+import { DavitVersionManager } from './migration/DavitVersionManager';
 
 class DataStore {
     static instance: DataStore;
@@ -17,15 +18,34 @@ class DataStore {
     }
 
     private readDataFromStorage() {
-        const dataObject: string | null = localStorage.getItem(STORE_ID);
-        let objectStore: StoreTO = {} as StoreTO;
-        if (!dataObject) {
-            localStorage.setItem(STORE_ID, JSON.stringify({} as StoreTO));
+        const dataObjectString: string | null = localStorage.getItem(STORE_ID);
+        let objectStore: StoreTO = {
+            version: DAVIT_VERISON,
+            projectName: DEFAULT_PROJECT_NAME,
+            actors: [],
+            groups: [],
+            geometricalDatas: [],
+            positions: [],
+            designs: [],
+            sequences: [],
+            steps: [],
+            actions: [],
+            decisions: [],
+            datas: [],
+            dataConnections: [],
+            initDatas: [],
+            dataSetups: [],
+            chains: [],
+            chainlinks: [],
+            chaindecisions: [],
+        } as StoreTO;
+        if (!dataObjectString) {
+            localStorage.setItem(STORE_ID, JSON.stringify(objectStore));
         } else {
-            // TODO: check here for DAVIT version. If diff. than call migrator.
-            objectStore = JSON.parse(dataObject);
-            if (objectStore.version !== DAVIT_VERISON || objectStore.version === undefined) {
-                console.warn(`!!!WARNING!!! DAVIT Project has different version (${objectStore.version})!`);
+            objectStore = JSON.parse(dataObjectString);
+            if (!DavitVersionManager.projectVersionIsEqualDavitVersion(objectStore)) {
+                objectStore = DavitVersionManager.updateProject(objectStore);
+                this.storeFileData(JSON.stringify(objectStore));
             }
         }
         this.readData(objectStore);
@@ -33,6 +53,9 @@ class DataStore {
 
     private readData(objectStore: StoreTO) {
         this.data = new DataStoreCTO();
+        if (!DavitVersionManager.projectVersionIsEqualDavitVersion(objectStore)) {
+            objectStore = DavitVersionManager.updateProject(objectStore);
+        }
         Object.entries(objectStore).forEach(([key, value]) => {
             if (value !== undefined) {
                 if (Array.isArray(value)) {
@@ -59,8 +82,8 @@ class DataStore {
 
     private getDataStoreObject(): StoreTO {
         return {
-            projectName: '',
-            version: DAVIT_VERISON.toString(),
+            projectName: DEFAULT_PROJECT_NAME,
+            version: DAVIT_VERISON,
             actors: Array.from(this.data!.actors.values()),
             groups: Array.from(this.data!.groups.values()),
             designs: Array.from(this.data!.designs.values()),
@@ -95,6 +118,11 @@ class DataStore {
         linkElement.setAttribute('href', dataUri);
         linkElement.setAttribute('download', projectName + '.json');
         linkElement.click();
+    }
+
+    public createNewProject() {
+        localStorage.removeItem(STORE_ID);
+        this.readDataFromStorage();
     }
 
     public commitChanges(): void {

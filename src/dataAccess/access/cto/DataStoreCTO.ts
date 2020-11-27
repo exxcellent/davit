@@ -1,4 +1,4 @@
-import { DAVIT_VERISON } from '../../../app/DavitConstants';
+import { DAVIT_VERISON, DEFAULT_PROJECT_NAME } from '../../../app/DavitConstants';
 import { ActionTO } from '../to/ActionTO';
 import { ActorTO } from '../to/ActorTO';
 import { ChainDecisionTO } from '../to/ChainDecisionTO';
@@ -18,8 +18,8 @@ import { SequenceTO } from '../to/SequenceTO';
 
 export class DataStoreCTO {
     constructor(
-        public projectName: string = '',
-        public version: string = DAVIT_VERISON,
+        public projectName: string = DEFAULT_PROJECT_NAME,
+        public version: number = DAVIT_VERISON,
         // Actors
         public actors = new Map<number, ActorTO>(),
         public groups = new Map<number, GroupTO>(),
