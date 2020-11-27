@@ -124,8 +124,6 @@ export const SequenceActionReducer = {
             (actorData) => actorData.actorFk === decision.actorFk,
         );
         let goTo = decision.ifGoTo;
-        console.info('decision: ', decision);
-        console.info('decision dataAndInscatnceIds: ', decision.dataAndInstaceIds);
         decision.dataAndInstaceIds.forEach((dataAndInstanceId) => {
             // if data and instance id are defined search exact match. if only data id is defined search for any instance of that data
             const checkedActorDatas: ActorData[] = filteredActorData.filter(
