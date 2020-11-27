@@ -112,6 +112,8 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
         console.info('nodes: ', node);
         console.info('Terminal: ', chainLineColor());
         console.info('Current link id: ', currentLinkId);
+        console.info('calcLinkIds: ', calcLinkIds);
+        console.info('calcSteps: ', calcSteps);
 
         if (node.parentId) {
             rel.push({

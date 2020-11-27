@@ -82,6 +82,7 @@ export const SequenceChainService = {
 
                         const newCondID = '_DEC_' + decision.id;
                         stepId = stepId === '' ? 'root' : stepId + newCondID;
+                        calcSequenceChain.linkIds.push(stepId);
                     }
                 }
                 if (!isLooping(loopStartingStep)) {
