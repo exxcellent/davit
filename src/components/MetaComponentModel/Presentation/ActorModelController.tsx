@@ -66,7 +66,6 @@ const useViewModel = () => {
     const arrows: Arrow[] = useSelector(sequenceModelSelectors.selectCurrentArrows);
     const currentActorDatas: ActorData[] = useSelector(sequenceModelSelectors.selectActorData);
     const errors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
-    // const actions: ActionTO[] = useSelector(sequenceModelSelectors.selectActions);
     const dataSetup: DataSetupCTO | null = useSelector(sequenceModelSelectors.selectDataSetup);
 
     const [zoom, setZoom] = useState<number>(1);

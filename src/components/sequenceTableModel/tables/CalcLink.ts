@@ -20,7 +20,7 @@ export const useGetCalcLinkTableData = (calcChain: CalcChain | null) => {
     };
 };
 
-const header = ['INDEX', 'NAME', 'SEQUENCE', 'DATASETUP'];
+const header = ['INDEX', 'NAME', 'SEQUENCE', 'DATASETUP', 'TERMINAL'];
 
 const createCalcLinkColumn = (
     link: CalcChainLink,
@@ -37,7 +37,7 @@ const createCalcLinkColumn = (
     }
     return {
         trClass: 'clickable ' + trClass,
-        data: [(index + 1).toString(), name, sequenceName, dataSetupName],
+        data: [(index + 1).toString(), name, sequenceName, dataSetupName, link.sequence.terminal.type.toString()],
         actions: [],
         onClick,
     };

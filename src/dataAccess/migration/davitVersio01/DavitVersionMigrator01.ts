@@ -17,6 +17,7 @@ import { SequenceStepTO } from '../../access/to/SequenceStepTO';
 import { SequenceTO } from '../../access/to/SequenceTO';
 import { StoreTO } from '../../access/to/StoreTO';
 import { ActionTO01 } from './to/ActionTO01';
+import { ChainDecisionTO01 } from './to/ChainDecisionTO01';
 import { DataTO01 } from './to/DataTO01';
 import { DecisionTO01 } from './to/DecisionTO01';
 
@@ -47,10 +48,10 @@ export const DavitVersionMigrator01 = {
         });
         const decisions: DecisionTO[] = (dataStoreObject.decisions as DecisionTO01[]).map((decision) => {
             const dataAndInstaceIds: DataAndInstanceId[] = [];
-            dataAndInstaceIds.push({
-                dataFk: decision.dataAndInstaceId.dataFk,
-                instanceId: decision.dataAndInstaceId.instanceId,
+            decision.dataAndInstaceId.forEach((dataAndInsanceId) => {
+                dataAndInstaceIds.push(dataAndInsanceId);
             });
+
             return {
                 actorFk: decision.actorFk,
                 dataAndInstaceIds: dataAndInstaceIds,
@@ -78,7 +79,19 @@ export const DavitVersionMigrator01 = {
         const dataSetups: DataSetupTO[] = dataStoreObject.dataSetups as DataSetupTO[];
         const chains: ChainTO[] = dataStoreObject.chains as ChainTO[];
         const chainlinks: ChainlinkTO[] = dataStoreObject.chainlinks as ChainlinkTO[];
-        const chaindecisions: ChainDecisionTO[] = dataStoreObject.chaindecisions as ChainDecisionTO[];
+        const chaindecisions: ChainDecisionTO[] = (dataStoreObject.chaindecisions as ChainDecisionTO01[]).map(
+            (chainDecision) => {
+                return {
+                    id: chainDecision.id,
+                    name: chainDecision.name,
+                    chainFk: chainDecision.chainFk,
+                    actorFk: chainDecision.actorFk,
+                    dataAndInstanceIds: chainDecision.dataAndInstaceIds,
+                    ifGoTo: chainDecision.ifGoTo,
+                    elseGoTo: chainDecision.elseGoTo,
+                };
+            },
+        );
 
         return {
             version: version,

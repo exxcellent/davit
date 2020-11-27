@@ -8,17 +8,18 @@ import { DataSetupTO } from '../../../../../dataAccess/access/to/DataSetupTO';
 import { SequenceTO } from '../../../../../dataAccess/access/to/SequenceTO';
 import { SequenceModelActions, sequenceModelSelectors } from '../../../../../slices/SequenceModelSlice';
 import { DavitUtil } from '../../../../../utils/DavitUtil';
+import { useStepAndLinkNavigation } from '../../../../../utils/WindowUtil';
 import { ChainDropDown } from '../../../../common/fragments/dropdowns/ChainDropDown';
 import { DataSetupDropDown } from '../../../../common/fragments/dropdowns/DataSetupDropDown';
 import { SequenceDropDown } from '../../../../common/fragments/dropdowns/SequenceDropDown';
 import { ControllPanelEditSub } from '../edit/common/ControllPanelEditSub';
 import { OptionField } from '../edit/common/OptionField';
 
-export interface ControllPanelSequenceOptionsProps {
+export interface ControllPanelViewOptionsProps {
     hidden: boolean;
 }
 
-export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequenceOptionsProps> = (props) => {
+export const ControllPanelViewOptions: FunctionComponent<ControllPanelViewOptionsProps> = (props) => {
     const { hidden } = props;
 
     const {
@@ -27,16 +28,14 @@ export const ControllPanelSequenceOptions: FunctionComponent<ControllPanelSequen
         stepIndex,
         linkIndex,
         selectSequence,
-        stepBack,
-        stepNext,
         selectDataSetup,
         currentDataSetup,
         currentSequence,
         currentChain,
         selectChain,
-        linkBack,
-        linkNext,
     } = useControllPanelSequenceOptionsViewModel();
+
+    const { stepBack, stepNext, linkBack, linkNext } = useStepAndLinkNavigation();
 
     const getIndex = (): string => {
         const link: string = (linkIndex + 1).toString() || '0';
@@ -148,18 +147,6 @@ const useControllPanelSequenceOptionsViewModel = () => {
         }
     };
 
-    const stepBack = () => {
-        if (!DavitUtil.isNullOrUndefined(sequence)) {
-            dispatch(SequenceModelActions.stepBack(stepIndex));
-        }
-    };
-
-    const stepNext = () => {
-        if (!DavitUtil.isNullOrUndefined(sequence)) {
-            dispatch(SequenceModelActions.stepNext(stepIndex));
-        }
-    };
-
     const getDataSetupName = (): string => {
         if (selectedDataSetup) {
             return ' * ' + selectDataSetup.name;
@@ -187,28 +174,16 @@ const useControllPanelSequenceOptionsViewModel = () => {
         }
     };
 
-    const linkNext = () => {
-        dispatch(SequenceModelActions.linkNext(linkIndex));
-    };
-
-    const linkBack = () => {
-        dispatch(SequenceModelActions.linkBack(linkIndex));
-    };
-
     return {
         label: 'VIEW' + getDataSetupName() + getSequenceName() + getStepName(),
         sequence,
         stepIndex,
         linkIndex,
         selectSequence,
-        stepNext,
-        stepBack,
         selectDataSetup,
         currentDataSetup: selectedDataSetup?.dataSetup.id || -1,
         currentSequence: sequence?.sequenceTO.id || -1,
         currentChain: selectedChain?.id || -1,
         selectChain,
-        linkNext,
-        linkBack,
     };
 };

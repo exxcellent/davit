@@ -132,10 +132,7 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
         return (
             <div className="flowChartFlex" style={{ margin: node.id === 'root' ? '' : '50px 0' }} key={node.id}>
                 <ArcherElement id={node.id} relations={rel}>
-                    <div
-                        // className={node.id === "root" ? "ROOT" : node.leafType}
-                        className={node.leafType}
-                        id={currentLinkId === node.id ? 'flowChartCurrentStep' : ''}>
+                    <div className={node.leafType} id={currentLinkId === node.id ? 'flowChartCurrentStep' : ''}>
                         {node.leafType === GoToTypesChain.DEC ? '' : node.label}
                     </div>
                 </ArcherElement>
