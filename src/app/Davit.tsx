@@ -9,7 +9,6 @@ import { FlowChartController } from '../components/sequenceModel/FlowChartContro
 import { SequenceTableModelController } from '../components/sequenceTableModel/presentation/SequenceTableModelController';
 import { SidePanelController } from '../components/sidePanel/SidePanelController';
 import { MasterDataActions } from '../slices/MasterDataSlice';
-import { useCustomZoomEvent } from '../utils/WindowUtil';
 import './Davit.css';
 
 export const ModuleRoutes = {
@@ -28,7 +27,8 @@ export function Davit() {
     }, [dispatch]);
 
     // disable global key shortcuts.
-    useCustomZoomEvent();
+    // TODO: enable when Arrows working.
+    // useCustomZoomEvent();
 
     return (
         <div>

@@ -142,9 +142,11 @@ export const useStepAndLinkNavigation = () => {
             stepNext();
         }
         if (event.key === 'PageDown') {
+            event.preventDefault();
             linkNext();
         }
         if (event.key === 'PageUp') {
+            event.preventDefault();
             linkBack();
         }
     };
