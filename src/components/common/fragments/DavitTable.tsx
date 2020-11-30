@@ -33,15 +33,15 @@ export const DavitTable: FunctionComponent<DavitTableProps> = (props) => {
         );
     };
 
-    const createButton = (action: DavitTableAction) => {
-        return <Carv2TableButton icon={action.icon} onClick={action.callback} />;
+    const createButton = (action: DavitTableAction, key: number) => {
+        return <Carv2TableButton icon={action.icon} onClick={action.callback} key={key} />;
     };
 
     const createRow = (data: DavitTableRowData, index: number) => {
         return (
             <tr key={index} className={data.trClass} onClick={data.onClick}>
                 {data.data.map(mapValue)}
-                {data.actions.length > 0 && <td>{data.actions.map(createButton)}</td>}
+                {data.actions.length > 0 && <td>{data.actions.map((action, index) => createButton(action, index))}</td>}
             </tr>
         );
     };
@@ -76,7 +76,7 @@ export const DavitTable: FunctionComponent<DavitTableProps> = (props) => {
                 {bodyData.map(createRow)}
                 {addFunction && (
                     <tr>
-                        <td>{createButton({ icon: 'add', callback: addFunction })}</td>
+                        <td>{createButton({ icon: 'add', callback: addFunction }, 0)}</td>
                     </tr>
                 )}
                 {fillWithEmptyRows()}

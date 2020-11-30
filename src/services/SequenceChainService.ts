@@ -26,6 +26,7 @@ export interface CalcChain {
 
 export const SequenceChainService = {
     calculateChain: (sequenceChain: ChainCTO | null): CalcChain => {
+        console.info('calc chain!');
         const calcSequenceChain: CalcChain = { calcLinks: [], linkIds: [], terminal: { type: GoToTypesChain.ERROR } };
         let loopStartingStep: number = -1;
         let actorDatas: ActorData[] = [];

@@ -109,12 +109,6 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
     const buildChainChart = (node: NodeModelChain): JSX.Element => {
         const rel: Relation[] = [];
 
-        console.info('nodes: ', node);
-        console.info('Terminal: ', chainLineColor());
-        console.info('Current link id: ', currentLinkId);
-        console.info('calcLinkIds: ', calcLinkIds);
-        console.info('calcSteps: ', calcSteps);
-
         if (node.parentId) {
             rel.push({
                 targetId: node.parentId,
