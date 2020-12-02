@@ -17,7 +17,7 @@ import { DecisionDropDown } from '../../../../../common/fragments/dropdowns/Deci
 import { GoToOptionDropDown } from '../../../../../common/fragments/dropdowns/GoToOptionDropDown';
 import { StepDropDown } from '../../../../../common/fragments/dropdowns/StepDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { Carv2LabelTextfield } from '../common/fragments/Carv2LabelTextfield';
+import { DavitLabelTextfield } from '../common/fragments/Carv2LabelTextfield';
 import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditDecisionProps {
@@ -53,7 +53,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
             <div className="controllPanelEditChild">
                 <div className="optionField">
                     <OptionField label="Decision - name">
-                        <Carv2LabelTextfield
+                        <DavitLabelTextfield
                             label="Name:"
                             placeholder="Decision name ..."
                             onChange={(event: any) => changeName(event.target.value)}

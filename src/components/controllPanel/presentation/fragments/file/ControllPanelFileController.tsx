@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { GlobalActions } from '../../../../../slices/GlobalSlice';
 import { DavitButtonLabel } from '../../../../common/fragments/buttons/DavitButton';
 import { ControllPanelEditSub } from '../edit/common/ControllPanelEditSub';
-import { Carv2LabelTextfield } from '../edit/common/fragments/Carv2LabelTextfield';
+import { DavitLabelTextfield } from '../edit/common/fragments/Carv2LabelTextfield';
 import { ControllPanelFileOptions } from './fragments/ControllPanelFileOptions';
 
 export interface ControllPanelFileControllerProps {
@@ -27,7 +27,7 @@ export const ControllPanelFileController: FunctionComponent<ControllPanelFileCon
             </div>
             <div className="columnDivider controllPanelEditChild">
                 {showExportFile && (
-                    <Carv2LabelTextfield
+                    <DavitLabelTextfield
                         label="Export file name:"
                         placeholder="project"
                         onChange={(event: any) => setProjectName(event.target.value)}

@@ -21,7 +21,7 @@ import { DataSetupDropDown } from '../../../../../common/fragments/dropdowns/Dat
 import { GoToChainOptionDropDown } from '../../../../../common/fragments/dropdowns/GoToChainOptionDropDown';
 import { SequenceDropDown } from '../../../../../common/fragments/dropdowns/SequenceDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { Carv2LabelTextfield } from '../common/fragments/Carv2LabelTextfield';
+import { DavitLabelTextfield } from '../common/fragments/Carv2LabelTextfield';
 import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditChainLinkProps {
@@ -58,7 +58,7 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
         <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveChainLink}>
             <div className="optionFieldSpacer">
                 <OptionField label="Chainlink - name">
-                    <Carv2LabelTextfield
+                    <DavitLabelTextfield
                         label="Name:"
                         placeholder="Chainlink Name ..."
                         onChange={(event: any) => changeName(event.target.value)}

@@ -16,7 +16,7 @@ import { ActorDropDown } from '../../../../../common/fragments/dropdowns/ActorDr
 import { DataDropDown } from '../../../../../common/fragments/dropdowns/DataDropDown';
 import { DataAndInstanceId, InstanceDropDown } from '../../../../../common/fragments/dropdowns/InstanceDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { Carv2LabelTextfield } from '../common/fragments/Carv2LabelTextfield';
+import { DavitLabelTextfield } from '../common/fragments/Carv2LabelTextfield';
 import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditActionProps {
@@ -61,7 +61,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
                     )}
                     {actionType === ActionType.TRIGGER && (
                         <OptionField label="LABEL">
-                            <Carv2LabelTextfield
+                            <DavitLabelTextfield
                                 placeholder="Trigger text ..."
                                 onChange={(event: any) => setTriggerLabel(event.target.value)}
                                 value={triggerlabe}

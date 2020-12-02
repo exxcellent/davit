@@ -16,7 +16,7 @@ import { ChainDecisionDropDown } from '../../../../../common/fragments/dropdowns
 import { ChainLinkDropDown } from '../../../../../common/fragments/dropdowns/ChainLinkDropDown';
 import { GoToChainOptionDropDown } from '../../../../../common/fragments/dropdowns/GoToChainOptionDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { Carv2LabelTextfield } from '../common/fragments/Carv2LabelTextfield';
+import { DavitLabelTextfield } from '../common/fragments/Carv2LabelTextfield';
 import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditChainDecisionProps {
@@ -50,7 +50,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
             <div className="controllPanelEditChild">
                 <div className="optionField">
                     <OptionField label="Chain decision - name">
-                        <Carv2LabelTextfield
+                        <DavitLabelTextfield
                             label="Name:"
                             placeholder="Chain decision name ..."
                             onChange={(event: any) => changeName(event.target.value)}

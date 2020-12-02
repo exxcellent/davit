@@ -10,7 +10,7 @@ import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2
 import { DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
 import { ColorDropDown } from '../../../../../common/fragments/dropdowns/ColorDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { Carv2LabelTextfield } from '../common/fragments/Carv2LabelTextfield';
+import { DavitLabelTextfield } from '../common/fragments/Carv2LabelTextfield';
 
 export interface ControllPanelEditGroupProps {
     hidden: boolean;
@@ -42,7 +42,7 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
                 />
             </div>
             <div className="columnDivider controllPanelEditChild">
-                <Carv2LabelTextfield
+                <DavitLabelTextfield
                     label="Name:"
                     placeholder="Group Name ..."
                     onChange={(event: any) => changeName(event.target.value)}

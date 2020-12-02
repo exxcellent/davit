@@ -9,7 +9,7 @@ import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2
 import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
 import { DataInstanceDropDownButton } from '../../../../../common/fragments/dropdowns/DataInstanceDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { Carv2LabelTextfield } from '../common/fragments/Carv2LabelTextfield';
+import { DavitLabelTextfield } from '../common/fragments/Carv2LabelTextfield';
 import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditDataProps {
@@ -36,7 +36,7 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
         <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveData}>
             <div className="optionFieldSpacer">
                 <OptionField label="Data - Name">
-                    <Carv2LabelTextfield
+                    <DavitLabelTextfield
                         label="Name:"
                         placeholder="Data Name"
                         onChange={(event: any) => changeName(event.target.value)}

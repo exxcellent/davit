@@ -2,14 +2,14 @@
 import React from 'react';
 import { Input, InputProps } from 'semantic-ui-react';
 
-interface Carv2LabelTextfieldProps extends InputProps {
+interface DavitLabelTextfieldProps extends InputProps {
     label: string;
     placeholder: string;
     value: string;
     unvisible: boolean;
 }
 
-export const Carv2LabelTextfield = React.forwardRef<Input, Carv2LabelTextfieldProps>((props, ref) => {
+export const DavitLabelTextfield = React.forwardRef<Input, DavitLabelTextfieldProps>((props, ref) => {
     const { label, onChangeCallBack, placeholder, value, unvisible, ...other } = props;
     return (
         <Input

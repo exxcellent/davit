@@ -15,7 +15,7 @@ import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragmen
 import { DecisionDropDownButton } from '../../../../../common/fragments/dropdowns/DecisionDropDown';
 import { StepDropDownButton } from '../../../../../common/fragments/dropdowns/StepDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { Carv2LabelTextfield } from '../common/fragments/Carv2LabelTextfield';
+import { DavitLabelTextfield } from '../common/fragments/Carv2LabelTextfield';
 import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditSequenceProps {
@@ -58,7 +58,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
         <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveSequence}>
             <div className="optionFieldSpacer">
                 <OptionField label="Sequence - name">
-                    <Carv2LabelTextfield
+                    <DavitLabelTextfield
                         label="Name:"
                         placeholder="Sequence Name..."
                         onChange={(event: any) => changeName(event.target.value)}
