@@ -10,7 +10,7 @@ import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2
 import { DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
 import { ColorDropDown } from '../../../../../common/fragments/dropdowns/ColorDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { DavitLabelTextfield } from '../common/fragments/Carv2LabelTextfield';
+import { DavitLabelTextfield } from '../common/fragments/DavitLabelTextfield';
 
 export interface ControllPanelEditGroupProps {
     hidden: boolean;

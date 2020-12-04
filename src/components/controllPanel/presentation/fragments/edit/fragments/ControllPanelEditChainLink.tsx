@@ -21,7 +21,7 @@ import { DataSetupDropDown } from '../../../../../common/fragments/dropdowns/Dat
 import { GoToChainOptionDropDown } from '../../../../../common/fragments/dropdowns/GoToChainOptionDropDown';
 import { SequenceDropDown } from '../../../../../common/fragments/dropdowns/SequenceDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { DavitLabelTextfield } from '../common/fragments/Carv2LabelTextfield';
+import { DavitLabelTextfield } from '../common/fragments/DavitLabelTextfield';
 import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditChainLinkProps {

@@ -12,7 +12,7 @@ import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2
 import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
 import { InitDataDropDownButton } from '../../../../../common/fragments/dropdowns/InitDataDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { DavitLabelTextfield } from '../common/fragments/Carv2LabelTextfield';
+import { DavitLabelTextfield } from '../common/fragments/DavitLabelTextfield';
 import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditDataSetupProps {

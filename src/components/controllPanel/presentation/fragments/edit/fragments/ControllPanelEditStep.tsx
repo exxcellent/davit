@@ -18,7 +18,7 @@ import { DecisionDropDown } from '../../../../../common/fragments/dropdowns/Deci
 import { GoToOptionDropDown } from '../../../../../common/fragments/dropdowns/GoToOptionDropDown';
 import { StepDropDown } from '../../../../../common/fragments/dropdowns/StepDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { DavitLabelTextfield } from '../common/fragments/Carv2LabelTextfield';
+import { DavitLabelTextfield } from '../common/fragments/DavitLabelTextfield';
 import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditStepProps {

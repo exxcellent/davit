@@ -16,7 +16,7 @@ import { ActorDropDown } from '../../../../../common/fragments/dropdowns/ActorDr
 import { DataDropDown } from '../../../../../common/fragments/dropdowns/DataDropDown';
 import { DataAndInstanceId, InstanceDropDown } from '../../../../../common/fragments/dropdowns/InstanceDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { DavitLabelTextfield } from '../common/fragments/Carv2LabelTextfield';
+import { DavitLabelTextfield } from '../common/fragments/DavitLabelTextfield';
 import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditActionProps {

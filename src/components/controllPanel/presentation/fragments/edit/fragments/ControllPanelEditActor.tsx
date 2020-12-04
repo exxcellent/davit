@@ -9,7 +9,7 @@ import { DavitUtil } from '../../../../../../utils/DavitUtil';
 import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { DavitLabelTextfield } from '../common/fragments/Carv2LabelTextfield';
+import { DavitLabelTextfield } from '../common/fragments/DavitLabelTextfield';
 import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditActorProps {
@@ -25,7 +25,7 @@ export const ControllPanelEditActor: FunctionComponent<ControllPanelEditActorPro
         saveComponent,
         deleteComponent,
         textInput,
-        updateComponent,
+        updateActor,
         createAnother,
         id,
     } = useControllPanelEditActorViewModel();
@@ -37,8 +37,8 @@ export const ControllPanelEditActor: FunctionComponent<ControllPanelEditActorPro
                     <DavitLabelTextfield
                         label="Name:"
                         placeholder="Component Name"
-                        onChange={(event: any) => changeName(event.target.value)}
-                        onBlur={() => updateComponent()}
+                        onChangeDebounced={(name: string) => changeName(name)}
+                        onBlur={updateActor}
                         value={name}
                         autoFocus
                         ref={textInput}
@@ -133,7 +133,7 @@ const useControllPanelEditActorViewModel = () => {
         textInput,
         setGroup,
         compGroup: actorToEdit?.actor.groupFks !== -1 ? actorToEdit?.actor.groupFks : undefined,
-        updateComponent: updateActor,
+        updateActor,
         createAnother,
         id: actorToEdit?.actor.id || -1,
     };

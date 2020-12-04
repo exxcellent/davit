@@ -193,9 +193,11 @@ const EditSlice = createSlice({
 // =============================================== THUNKS ===============================================
 
 // ----------------------------------------------- SET MODE -----------------------------------------------
-const setModeWithStorage = (mode: Mode): AppThunk => (dispatch) => {
-    localStorage.setItem(MODE_LOCAL_STORAGE, mode);
-    dispatch(EditSlice.actions.setMode(mode));
+const setModeWithStorage = (mode: Mode): AppThunk => (dispatch, getstate) => {
+    if (mode !== getstate().edit.mode) {
+        localStorage.setItem(MODE_LOCAL_STORAGE, mode);
+        dispatch(EditSlice.actions.setMode(mode));
+    }
 };
 
 const setModeToFile = (): AppThunk => (dispatch) => {

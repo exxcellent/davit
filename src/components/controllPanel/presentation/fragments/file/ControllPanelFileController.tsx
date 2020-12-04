@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { GlobalActions } from '../../../../../slices/GlobalSlice';
 import { DavitButtonLabel } from '../../../../common/fragments/buttons/DavitButton';
 import { ControllPanelEditSub } from '../edit/common/ControllPanelEditSub';
-import { DavitLabelTextfield } from '../edit/common/fragments/Carv2LabelTextfield';
+import { DavitLabelTextfield } from '../edit/common/fragments/DavitLabelTextfield';
 import { ControllPanelFileOptions } from './fragments/ControllPanelFileOptions';
 
 export interface ControllPanelFileControllerProps {

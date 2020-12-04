@@ -34,9 +34,7 @@ export const DavitDropDown: FunctionComponent<DavitDropDownProps> = (props) => {
             disabled={dropdownItems.length < 1}
             search
             clearable={clearable ? clearable : false}
-            options={dropdownItems.sort((a, b) => {
-                return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
-            })}
+            options={dropdownItems.sort((a, b) => a.text.toLowerCase().localeCompare(b.text.toLowerCase()))}
             onChange={(event, data) => onSelect(parsDataToDavitDropDownItemProps(data))}
             {...others}
         />

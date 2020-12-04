@@ -15,7 +15,7 @@ import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragmen
 import { DecisionDropDownButton } from '../../../../../common/fragments/dropdowns/DecisionDropDown';
 import { StepDropDownButton } from '../../../../../common/fragments/dropdowns/StepDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { DavitLabelTextfield } from '../common/fragments/Carv2LabelTextfield';
+import { DavitLabelTextfield } from '../common/fragments/DavitLabelTextfield';
 import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditSequenceProps {

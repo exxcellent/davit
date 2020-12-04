@@ -16,7 +16,7 @@ import { ChainDecisionDropDown } from '../../../../../common/fragments/dropdowns
 import { ChainLinkDropDown } from '../../../../../common/fragments/dropdowns/ChainLinkDropDown';
 import { GoToChainOptionDropDown } from '../../../../../common/fragments/dropdowns/GoToChainOptionDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { DavitLabelTextfield } from '../common/fragments/Carv2LabelTextfield';
+import { DavitLabelTextfield } from '../common/fragments/DavitLabelTextfield';
 import { OptionField } from '../common/OptionField';
 
 export interface ControllPanelEditChainDecisionProps {
