@@ -63,7 +63,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
                         <OptionField label="LABEL">
                             <DavitLabelTextfield
                                 placeholder="Trigger text ..."
-                                onChange={(event: any) => setTriggerLabel(event.target.value)}
+                                onChangeDebounced={(name: string) => setTriggerLabel(name)}
                                 value={triggerlabe}
                                 autoFocus
                                 unvisible={hidden}

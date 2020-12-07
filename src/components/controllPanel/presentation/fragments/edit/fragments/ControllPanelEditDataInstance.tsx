@@ -38,7 +38,7 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
                     <DavitLabelTextfield
                         label="Name:"
                         placeholder="Data Instance Name"
-                        onChange={(event: any) => changeName(event.target.value)}
+                        onChangeDebounced={(name: string) => changeName(name)}
                         value={getName()}
                         autoFocus
                         ref={textInput}

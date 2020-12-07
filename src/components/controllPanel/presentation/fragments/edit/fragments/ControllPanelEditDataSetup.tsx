@@ -42,11 +42,11 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
                     <DavitLabelTextfield
                         label="Name:"
                         placeholder="Data Setup Name ..."
-                        onChange={(event: any) => changeName(event.target.value)}
+                        onChangeDebounced={(name: string) => changeName(name)}
                         value={name}
                         autoFocus
                         ref={textInput}
-                        onBlur={() => updateDataSetup()}
+                        onBlur={updateDataSetup}
                         unvisible={hidden}
                     />
                 </OptionField>

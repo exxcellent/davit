@@ -61,11 +61,11 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
                     <DavitLabelTextfield
                         label="Name:"
                         placeholder="Sequence Name..."
-                        onChange={(event: any) => changeName(event.target.value)}
+                        onChangeDebounced={(name: string) => changeName(name)}
                         value={name}
                         autoFocus
                         ref={textInput}
-                        onBlur={() => updateSequence()}
+                        onBlur={updateSequence}
                         unvisible={hidden}
                     />
                 </OptionField>

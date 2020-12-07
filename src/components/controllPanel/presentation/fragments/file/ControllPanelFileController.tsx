@@ -30,7 +30,7 @@ export const ControllPanelFileController: FunctionComponent<ControllPanelFileCon
                     <DavitLabelTextfield
                         label="Export file name:"
                         placeholder="project"
-                        onChange={(event: any) => setProjectName(event.target.value)}
+                        onChangeDebounced={(name: string) => setProjectName(name)}
                         value={projectName}
                         autoFocus
                         unvisible={hidden}

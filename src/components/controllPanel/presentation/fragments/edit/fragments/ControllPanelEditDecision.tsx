@@ -56,11 +56,11 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
                         <DavitLabelTextfield
                             label="Name:"
                             placeholder="Decision name ..."
-                            onChange={(event: any) => changeName(event.target.value)}
+                            onChangeDebounced={(name: string) => changeName(name)}
                             value={name}
                             autoFocus
                             ref={textInput}
-                            onBlur={() => updateDecision()}
+                            onBlur={updateDecision}
                             unvisible={hidden}
                         />
                     </OptionField>
