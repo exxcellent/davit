@@ -1,5 +1,5 @@
 import { motion, Point } from 'framer-motion';
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, { FunctionComponent } from 'react';
 import { GeometricalDataCTO } from '../../../../dataAccess/access/cto/GeometraicalDataCTO';
 
 export interface ArrowProps {
@@ -12,7 +12,6 @@ export interface ArrowProps {
     targetWidth: number;
     targetHeight: number;
     type: ArrowType;
-    parentRef: any;
     dataLabels: string[];
 }
 
@@ -35,26 +34,11 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
         xTarget,
         yTarget,
         type,
-        parentRef,
         // sourceHeight,
         sourceWidth,
         targetHeight,
         dataLabels,
     } = props;
-
-    const [initXSource, setInitXSource] = useState<number>(xSource * (parentRef.current.offsetWidth / 100));
-    const [initYSource, setInitYSource] = useState<number>(ySource * (parentRef.current.offsetHeight / 100));
-    const [initXTarget, setInitXTarget] = useState<number>(xTarget * (parentRef.current.offsetWidth / 100));
-    const [initYTarget, setInitYTarget] = useState<number>(yTarget * (parentRef.current.offsetHeight / 100));
-
-    useEffect(() => {
-        if (parentRef !== undefined && parentRef.current !== undefined) {
-            setInitXSource(xSource * (parentRef.current.offsetWidth / 100));
-            setInitYSource(ySource * (parentRef.current.offsetHeight / 100));
-            setInitXTarget(xTarget * (parentRef.current.offsetWidth / 100));
-            setInitYTarget(yTarget * (parentRef.current.offsetHeight / 100));
-        }
-    }, [ySource, xSource, yTarget, xTarget, parentRef]);
 
     // TODO: measure real width of elements.
     // const ELEMENT_WIDTH = 120;
@@ -160,7 +144,7 @@ const Arrow: FunctionComponent<ArrowProps> = (props) => {
                     <path d="M0,0 L0,6 L9,3 z" className="carvArrowMarker" />
                 </marker>
             </defs>
-            {createCurve(initXSource, initYSource, initXTarget, initYTarget, type)}
+            {createCurve(xSource, ySource, xTarget, yTarget, type)}
         </motion.svg>
     );
 };
@@ -169,10 +153,9 @@ export const createArrow = (
     source: GeometricalDataCTO | undefined,
     target: GeometricalDataCTO | undefined,
     key: number,
-    parentRef: any,
     type: ArrowType,
     dataLabels?: string[],
-) => {
+): JSX.Element | undefined => {
     if (source && target) {
         return (
             <Arrow
@@ -186,7 +169,6 @@ export const createArrow = (
                 targetHeight={target.geometricalData.height}
                 type={type}
                 key={key}
-                parentRef={parentRef}
                 dataLabels={dataLabels || []}
             />
         );

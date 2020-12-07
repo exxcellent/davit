@@ -17,9 +17,8 @@ import { DavitUtil } from '../../utils/DavitUtil';
 import { ActorData } from '../../viewDataTypes/ActorData';
 import { ActorDataState } from '../../viewDataTypes/ActorDataState';
 import { ViewFragmentProps } from '../../viewDataTypes/ViewFragment';
-import { DavitPath } from '../common/fragments/svg/DavitPath';
+import { DavitPath } from '../common/fragments/svg/DavitPathOld';
 import { DavitCard, DavitCardProps } from '../metaComponentModel/presentation/fragments/DavitCard';
-import { DnDBox, DnDBoxType } from '../metaComponentModel/presentation/fragments/DnDBox';
 
 interface MetaDataModelControllerProps {
     fullScreen?: boolean;
@@ -36,17 +35,18 @@ export const MetaDataModelController: FunctionComponent<MetaDataModelControllerP
 
     const createMetaDataDnDBox = () => {
         return (
-            <DnDBox
-                onPositionUpdate={onPositionUpdate}
-                paths={getRelations()}
-                toDnDElements={toDnDElements.map((el) => {
-                    return { ...el, element: mapCardToJSX(el.card) };
-                })}
-                zoomIn={zoomIn}
-                zoomOut={zoomOut}
-                type={DnDBoxType.data}
-                fullScreen={fullScreen}
-            />
+            <div />
+            // <DnDBox
+            //     onPositionUpdate={onPositionUpdate}
+            //     paths={getRelations()}
+            //     toDnDElements={toDnDElements.map((el) => {
+            //         return { ...el, element: mapCardToJSX(el.card) };
+            //     })}
+            //     zoomIn={zoomIn}
+            //     zoomOut={zoomOut}
+            //     type={DnDBoxType.data}
+            //     fullScreen={fullScreen}
+            // />
         );
     };
 
