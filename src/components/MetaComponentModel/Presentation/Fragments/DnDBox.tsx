@@ -39,8 +39,16 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
     const [key, setKey] = useState<number>(0);
 
     useEffect(() => {
+        const handleResize = () => setKey((prevState) => prevState + 1);
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    useEffect(() => {
         if (constraintsRef !== null && constraintsRef.current !== null) {
-            console.info('call useEffect!');
             svgElements.map((svg) => {
                 let svgWithRef: DavitPathProps = svg;
                 svgWithRef.xSource = svg.xSource * (constraintsRef.current!.offsetWidth / 100);

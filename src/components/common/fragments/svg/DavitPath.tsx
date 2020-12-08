@@ -49,7 +49,6 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
         head,
         lineType,
         lineColor,
-        key,
     } = props;
 
     // TODO: measure real width of elements.
