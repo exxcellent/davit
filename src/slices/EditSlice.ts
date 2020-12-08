@@ -429,8 +429,8 @@ const setModeToEditCondition = (decision: DecisionTO): AppThunk => (dispatch) =>
 const createActorThunk = (): AppThunk => (dispatch) => {
     const actor: ActorCTO = new ActorCTO();
     const response: DataAccessResponse<ActorCTO> = DataAccess.saveActorCTO(actor);
-    console.log(response);
     if (response.code !== 200) {
+        console.log(response);
         dispatch(handleError(response.message));
     }
     dispatch(MasterDataActions.loadActorsFromBackend());
@@ -439,8 +439,8 @@ const createActorThunk = (): AppThunk => (dispatch) => {
 
 const saveActorThunk = (actor: ActorCTO): AppThunk => (dispatch) => {
     const response: DataAccessResponse<ActorCTO> = DataAccess.saveActorCTO(actor);
-    console.log(response);
     if (response.code !== 200) {
+        console.log(response);
         dispatch(handleError(response.message));
     }
     dispatch(MasterDataActions.loadActorsFromBackend());
@@ -448,8 +448,8 @@ const saveActorThunk = (actor: ActorCTO): AppThunk => (dispatch) => {
 
 const deleteActorThunk = (actor: ActorCTO): AppThunk => async (dispatch) => {
     const response: DataAccessResponse<ActorCTO> = await DataAccess.deleteActorCTO(actor);
-    console.log(response);
     if (response.code !== 200) {
+        console.log(response);
         dispatch(handleError(response.message));
     }
     dispatch(MasterDataActions.loadActorsFromBackend());
@@ -460,8 +460,8 @@ const deleteActorThunk = (actor: ActorCTO): AppThunk => async (dispatch) => {
 const createGroupThunk = (): AppThunk => (dispatch) => {
     const group: GroupTO = new GroupTO();
     const response: DataAccessResponse<GroupTO> = DataAccess.saveGroup(group);
-    console.log(response);
     if (response.code !== 200) {
+        console.log(response);
         dispatch(handleError(response.message));
     }
     dispatch(MasterDataActions.loadGroupsFromBackend());
@@ -470,8 +470,8 @@ const createGroupThunk = (): AppThunk => (dispatch) => {
 
 const saveGroupThunk = (group: GroupTO): AppThunk => async (dispatch) => {
     const response: DataAccessResponse<GroupTO> = await DataAccess.saveGroup(group);
-    console.log(response);
     if (response.code !== 200) {
+        console.log(response);
         dispatch(handleError(response.message));
     }
     dispatch(MasterDataActions.loadGroupsFromBackend());
@@ -479,8 +479,8 @@ const saveGroupThunk = (group: GroupTO): AppThunk => async (dispatch) => {
 
 const deleteGroupThunk = (group: GroupTO): AppThunk => async (dispatch) => {
     const response: DataAccessResponse<GroupTO> = await DataAccess.deleteGroupTO(group);
-    console.log(response);
     if (response.code !== 200) {
+        console.log(response);
         dispatch(handleError(response.message));
     }
     dispatch(MasterDataActions.loadGroupsFromBackend());
@@ -524,8 +524,8 @@ const deleteDataThunk = (data: DataCTO): AppThunk => (dispatch) => {
 const createRelationThunk = (): AppThunk => (dispatch) => {
     const relation: DataRelationTO = new DataRelationTO();
     const response: DataAccessResponse<DataRelationTO> = DataAccess.saveDataRelationCTO(relation);
-    console.log(response);
     if (response.code !== 200) {
+        console.log(response);
         dispatch(handleError(response.message));
     }
     dispatch(MasterDataActions.loadRelationsFromBackend());
@@ -534,8 +534,8 @@ const createRelationThunk = (): AppThunk => (dispatch) => {
 
 const saveRelationThunk = (relation: DataRelationTO): AppThunk => async (dispatch) => {
     const response: DataAccessResponse<DataRelationTO> = await DataAccess.saveDataRelationCTO(relation);
-    console.log(response);
     if (response.code !== 200) {
+        console.log(response);
         dispatch(handleError(response.message));
     }
     dispatch(MasterDataActions.loadRelationsFromBackend());
@@ -543,8 +543,8 @@ const saveRelationThunk = (relation: DataRelationTO): AppThunk => async (dispatc
 
 const deleteRelationThunk = (relation: DataRelationTO): AppThunk => async (dispatch) => {
     const response: DataAccessResponse<DataRelationTO> = await DataAccess.deleteDataRelation(relation);
-    console.log(response);
     if (response.code !== 200) {
+        console.log(response);
         dispatch(handleError(response.message));
     }
     dispatch(MasterDataActions.loadRelationsFromBackend());

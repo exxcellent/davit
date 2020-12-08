@@ -36,39 +36,7 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
         return createDnDItem(toDnDElement.position, onPositionUpdate, constraintsRef, toDnDElement.element);
     };
 
-    // const drawLines = (lines: Arrow[] | DavitPath[]) => {
-    //     if (lines.length > 0) {
-    //         if ((lines as Arrow[])[0].dataLabels) {
-    //             return (lines as Arrow[]).map((arrow: Arrow, index: number) => {
-    //                 return createArrow(
-    //                     arrow.sourceGeometricalData,
-    //                     arrow.targetGeometricalData,
-    //                     index,
-    //                     constraintsRef,
-    //                     arrow.type,
-    //                     arrow.dataLabels,
-    //                 );
-    //             });
-    //         }
-    //         if ((lines as DavitPath[])[0].dataRelation) {
-    //             return (lines as DavitPath[]).map((path, index) => {
-    //                 return createCornerConnection(
-    //                     path.source,
-    //                     path.target,
-    //                     path.dataRelation,
-    //                     path.dataRelation.id,
-    //                     constraintsRef,
-    //                     path.isEdit,
-    //                 );
-    //             });
-    //         }
-    //     }
-    // };
-
-    // const [initXSource, setInitXSource] = useState<number>(xSource * (parentRef.current.offsetWidth / 100));
-    // const [initYSource, setInitYSource] = useState<number>(ySource * (parentRef.current.offsetHeight / 100));
-    // const [initXTarget, setInitXTarget] = useState<number>(xTarget * (parentRef.current.offsetWidth / 100));
-    // const [initYTarget, setInitYTarget] = useState<number>(yTarget * (parentRef.current.offsetHeight / 100));
+    const [key, setKey] = useState<number>(0);
 
     useEffect(() => {
         if (constraintsRef !== null && constraintsRef.current !== null) {
@@ -80,8 +48,15 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
                 svgWithRef.xTarget = svg.xTarget * (constraintsRef.current!.offsetWidth / 100);
                 svgWithRef.yTarget = svg.yTarget * (constraintsRef.current!.offsetHeight / 100);
             });
+            setKey((key) => key + 1);
         }
     }, [svgElements, constraintsRef]);
+
+    const createDavitPath = () => {
+        return svgElements.map((svg, index) => {
+            return <DavitPath {...svg} key={index} />;
+        });
+    };
 
     return (
         <motion.div
@@ -91,10 +66,8 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
             // style={fullScreen ? { height: height, maxWidth: width } : {}}
             className={fullScreen ? type.toString() + 'Fullscreen' : type.toString()}>
             {toDnDElements.map(wrappItem)}
-            <motion.svg className="dataSVGArea">
-                {svgElements.map((svg, index) => {
-                    return <DavitPath {...svg} id={index} key={index} />;
-                })}
+            <motion.svg className="dataSVGArea" key={key}>
+                {createDavitPath()}
             </motion.svg>
         </motion.div>
     );

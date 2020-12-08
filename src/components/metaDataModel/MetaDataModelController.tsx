@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ActorCTO } from '../../dataAccess/access/cto/ActorCTO';
 import { DataCTO } from '../../dataAccess/access/cto/DataCTO';
 import { DataSetupCTO } from '../../dataAccess/access/cto/DataSetupCTO';
+import { GeometricalDataCTO } from '../../dataAccess/access/cto/GeometraicalDataCTO';
 import { SequenceStepCTO } from '../../dataAccess/access/cto/SequenceStepCTO';
 import { ActionTO } from '../../dataAccess/access/to/ActionTO';
 import { DataRelationTO } from '../../dataAccess/access/to/DataRelationTO';
@@ -17,8 +18,9 @@ import { DavitUtil } from '../../utils/DavitUtil';
 import { ActorData } from '../../viewDataTypes/ActorData';
 import { ActorDataState } from '../../viewDataTypes/ActorDataState';
 import { ViewFragmentProps } from '../../viewDataTypes/ViewFragment';
-import { DavitPath } from '../common/fragments/svg/DavitPathOld';
+import { DavitPathProps, DavitPathTypes } from '../common/fragments/svg/DavitPath';
 import { DavitCard, DavitCardProps } from '../metaComponentModel/presentation/fragments/DavitCard';
+import { DnDBox, DnDBoxType } from '../metaComponentModel/presentation/fragments/DnDBox';
 
 interface MetaDataModelControllerProps {
     fullScreen?: boolean;
@@ -35,18 +37,17 @@ export const MetaDataModelController: FunctionComponent<MetaDataModelControllerP
 
     const createMetaDataDnDBox = () => {
         return (
-            <div />
-            // <DnDBox
-            //     onPositionUpdate={onPositionUpdate}
-            //     paths={getRelations()}
-            //     toDnDElements={toDnDElements.map((el) => {
-            //         return { ...el, element: mapCardToJSX(el.card) };
-            //     })}
-            //     zoomIn={zoomIn}
-            //     zoomOut={zoomOut}
-            //     type={DnDBoxType.data}
-            //     fullScreen={fullScreen}
-            // />
+            <DnDBox
+                onPositionUpdate={onPositionUpdate}
+                svgElements={getRelations()}
+                toDnDElements={toDnDElements.map((el) => {
+                    return { ...el, element: mapCardToJSX(el.card) };
+                })}
+                zoomIn={zoomIn}
+                zoomOut={zoomOut}
+                type={DnDBoxType.data}
+                fullScreen={fullScreen}
+            />
         );
     };
 
@@ -279,23 +280,41 @@ const useMetaDataModelViewModel = () => {
         setZoom(zoom + ZOOM_FACTOR);
     };
 
-    const relationToDavitPath = (relation: DataRelationTO, isEdit?: boolean): DavitPath => {
+    const getGeometricalData = (dataId: number): GeometricalDataCTO | undefined => {
+        return datas.find((data) => data.data.id === dataId)?.geometricalData || undefined;
+    };
+
+    const relationToDavitPath = (relation: DataRelationTO, id: number, isEdit?: boolean): DavitPathProps => {
+        const sourceGeometricalData: GeometricalDataCTO | undefined = getGeometricalData(relation.data1Fk);
+        const targetGeometricalData: GeometricalDataCTO | undefined = getGeometricalData(relation.data2Fk);
+
         return {
-            source: datas.find((data) => data.data.id === relation.data1Fk)?.geometricalData || undefined,
-            target: datas.find((data) => data.data.id === relation.data2Fk)?.geometricalData || undefined,
-            dataRelation: relation,
-            isEdit: isEdit,
+            id: id,
+            labels: [],
+            lineType: DavitPathTypes.GRID,
+            xSource: sourceGeometricalData?.position.x || 0,
+            ySource: sourceGeometricalData?.position.y || 0,
+            xTarget: targetGeometricalData?.position.x || 0,
+            yTarget: targetGeometricalData?.position.y || 0,
+            sourceHeight: sourceGeometricalData?.geometricalData.height || 0,
+            sourceWidth: sourceGeometricalData?.geometricalData.width || 0,
+            targetHeight: targetGeometricalData?.geometricalData.height || 0,
+            targetWidth: targetGeometricalData?.geometricalData.width || 0,
+            stroked: isEdit,
+            sourceDirection: relation.direction1,
+            targetDirection: relation.direction2,
         };
     };
 
-    const getRelations = (): DavitPath[] => {
-        let paths: DavitPath[] = [];
+    const getRelations = (): DavitPathProps[] => {
+        let paths: DavitPathProps[] = [];
         let copyDataRelations: DataRelationTO[] = DavitUtil.deepCopy(dataRelations);
         if (dataRelationToEdit) {
             copyDataRelations = copyDataRelations.filter((relation) => relation.id !== dataRelationToEdit.id);
-            paths.push(relationToDavitPath(dataRelationToEdit, true));
+            paths.push(relationToDavitPath(dataRelationToEdit, dataRelationToEdit.id, true));
         }
-        copyDataRelations.forEach((rel) => paths.push(relationToDavitPath(rel)));
+        copyDataRelations.forEach((rel) => paths.push(relationToDavitPath(rel, rel.id)));
+        console.info('paths: ', paths);
         return paths;
     };
 

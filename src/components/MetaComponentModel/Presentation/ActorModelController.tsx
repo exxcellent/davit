@@ -312,22 +312,22 @@ const useViewModel = () => {
         arrowsToDraw.push(...editStepArrows);
         // ===================================
 
-        arrowsToDraw.forEach((arrowToDrow, index) => {
+        arrowsToDraw.forEach((arrowToDraw, index) => {
             arrowProps.push({
                 head: DavitPathHead.ARROW,
                 id: index,
-                labels: arrowToDrow.dataLabels,
+                labels: arrowToDraw.dataLabels,
                 lineType: DavitPathTypes.SMOOTH,
-                xSource: arrowToDrow.sourceGeometricalData.position.x,
-                ySource: arrowToDrow.sourceGeometricalData.position.y,
-                xTarget: arrowToDrow.targetGeometricalData.position.x,
-                yTarget: arrowToDrow.targetGeometricalData.position.y,
-                sourceHeight: arrowToDrow.sourceGeometricalData.geometricalData.height,
-                sourceWidth: arrowToDrow.sourceGeometricalData.geometricalData.width,
-                targetHeight: arrowToDrow.targetGeometricalData.geometricalData.height,
-                targetWidth: arrowToDrow.targetGeometricalData.geometricalData.width,
-                stroked: arrowToDrow.type === ArrowType.TRIGGER,
-                lineColor: arrowToDrow.type === ArrowType.SEND ? 'var(--carv2-color-exxcellent-blue)' : 'black',
+                xSource: arrowToDraw.sourceGeometricalData.position.x,
+                ySource: arrowToDraw.sourceGeometricalData.position.y,
+                xTarget: arrowToDraw.targetGeometricalData.position.x,
+                yTarget: arrowToDraw.targetGeometricalData.position.y,
+                sourceHeight: arrowToDraw.sourceGeometricalData.geometricalData.height,
+                sourceWidth: arrowToDraw.sourceGeometricalData.geometricalData.width,
+                targetHeight: arrowToDraw.targetGeometricalData.geometricalData.height,
+                targetWidth: arrowToDraw.targetGeometricalData.geometricalData.width,
+                stroked: arrowToDraw.type === ArrowType.TRIGGER,
+                lineColor: arrowToDraw.type === ArrowType.SEND ? 'var(--carv2-color-exxcellent-blue)' : 'black',
             });
         });
         return arrowProps;

@@ -28,6 +28,7 @@ export interface DavitPathProps {
     targetDirection?: Direction;
     stroked?: boolean;
     lineColor?: string;
+    key?: any;
 }
 
 export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
@@ -48,6 +49,7 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
         head,
         lineType,
         lineColor,
+        key,
     } = props;
 
     // TODO: measure real width of elements.
@@ -58,7 +60,7 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
     const MARKER_WIDTH: number = 20;
     const TEXT_OFFSET: number = 25;
 
-    const createSmoothLine = (x1: number, y1: number, x2: number, y2: number, key: number) => {
+    const createSmoothLine = (x1: number, y1: number, x2: number, y2: number) => {
         const startDir: 'LEFT' | ' RIGHT' = x2 < x1 + sourceWidth / 2 ? 'LEFT' : ' RIGHT';
         const endDir: 'LEFT' | ' RIGHT' = x1 < x2 + sourceWidth / 2 ? 'LEFT' : ' RIGHT';
         const xStart = startDir === 'LEFT' ? x1 : x1 + sourceWidth;
@@ -97,14 +99,12 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
                     return (
                         <>
                             <text
-                                key={index}
                                 x={middlePoint.x - TEXT_OFFSET}
                                 y={middlePoint.y + index * 20}
                                 className="davitArrowTextBG">
                                 {label}
                             </text>
                             <text
-                                key={index}
                                 x={middlePoint.x - TEXT_OFFSET}
                                 y={middlePoint.y + index * 20}
                                 className="davitArrowText">
@@ -130,14 +130,13 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
             targetHeight,
             targetDirection,
         );
+
         // set interfaces
         const offset1 = getDirectionOffset(sourceDirection);
         const offset2 = getDirectionOffset(targetDirection);
 
         const offsetPoint1 = plusPoint(startPoint, offset1);
         const offsetPoint2 = plusPoint(endPoint, offset2);
-
-        const className = stroked ? 'carvPath carvStrokeDasharray' : 'carvPath';
 
         return (
             <path
@@ -146,23 +145,28 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
         L ${offsetPoint2.x},${offsetPoint2.y}
         L ${endPoint.x},${endPoint.y}
         `}
-                className={className}
+                style={{
+                    strokeDasharray: stroked ? '5,5' : 0,
+                    strokeWidth: '2px',
+                    fill: 'transparent',
+                    stroke: 'black',
+                }}
                 id={id.toString()}
             />
         );
     };
 
     const getDirectionOffset = (direction?: Direction): Point => {
-        const OFFSET = 25;
+        const offset = 25;
         switch (direction) {
             case Direction.TOP:
-                return { x: 0, y: -OFFSET };
+                return { x: 0, y: -offset };
             case Direction.LEFT:
-                return { x: -OFFSET, y: 0 };
+                return { x: -offset, y: 0 };
             case Direction.RIGHT:
-                return { x: OFFSET, y: 0 };
+                return { x: offset, y: 0 };
             case Direction.BOTTOM:
-                return { x: 0, y: OFFSET };
+                return { x: 0, y: offset };
             case undefined:
                 return { x: 0, y: 0 };
         }
@@ -224,14 +228,14 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
     const createPath = (type: DavitPathTypes) => {
         switch (type) {
             case DavitPathTypes.SMOOTH:
-                return createSmoothLine(xSource, ySource, xTarget, yTarget, id);
+                return createSmoothLine(xSource, ySource, xTarget, yTarget);
             case DavitPathTypes.GRID:
                 return createGridLine();
         }
     };
 
     return (
-        <motion.svg className="componentSVGArea" key={id}>
+        <motion.svg className="componentSVGArea">
             {head === DavitPathHead.ARROW && (
                 <defs>
                     <marker
