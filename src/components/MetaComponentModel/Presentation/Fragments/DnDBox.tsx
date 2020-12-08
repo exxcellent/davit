@@ -72,7 +72,8 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
             onMouseLeave={(event) => setMouseOver(false)}
             ref={constraintsRef}
             // style={fullScreen ? { height: height, maxWidth: width } : {}}
-            className={fullScreen ? type.toString() + 'Fullscreen' : type.toString()}>
+            className={fullScreen ? type.toString() + 'Fullscreen' : type.toString()}
+            key={key}>
             {toDnDElements.map(wrappItem)}
             <motion.svg className="dataSVGArea" key={key}>
                 {createDavitPath()}
@@ -80,24 +81,3 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
         </motion.div>
     );
 };
-
-// const useDnDBoxViewModel = () => {
-//     const currentWindowWitdh: number = useCurrentWitdh();
-//     const currentWindowHeight: number = useCurrentHeight();
-//     const newWindowHeight: number = (currentWindowWitdh / WINDOW_FACTOR) * ASPECT_RATIO;
-//     const newWindowWitdh: number = (currentWindowHeight / ASPECT_RATIO) * WINDOW_FACTOR;
-
-//     useEffect(() => {
-//         const handleResize = () => setKey((prevState) => prevState + 1);
-//         window.addEventListener('resize', handleResize);
-
-//         return () => {
-//             window.removeEventListener('resize', handleResize);
-//         };
-//     }, []);
-
-//     return {
-//         height: newWindowHeight,
-//         width: newWindowWitdh,
-//     };
-// };
