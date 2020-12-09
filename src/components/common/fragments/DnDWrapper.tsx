@@ -34,7 +34,7 @@ export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
         // console.info('onGeoUpdate: ', onGeoUpdate);
         // console.info('geoId: ', geoId);
         if (ref && ref.current && onGeoUpdate && geoId) {
-            console.info('call on Geo update');
+            // console.info('call on Geo update');
             onGeoUpdate(ref.current.getBoundingClientRect().width, ref.current.getBoundingClientRect().height, geoId);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

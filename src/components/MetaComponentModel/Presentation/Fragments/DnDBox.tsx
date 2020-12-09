@@ -32,13 +32,17 @@ export enum DnDBoxType {
 export const DnDBox: FunctionComponent<DnDBox> = (props) => {
     const { fullScreen, toDnDElements, onPositionUpdate, zoomIn, zoomOut, type, svgElements, onGeoUpdate } = props;
 
-    const { key, setKey, constraintsRef } = useDnDBoxViewModel();
-
-    // const constraintsRef = useRef<HTMLDivElement>(null);
+    const { key, constraintsRef, height, width, paths } = useDnDBoxViewModel(svgElements);
 
     const [mouseOver, setMouseOver] = useState<boolean>(false);
     // TODO: activate if arrows draw with ref's.
     // useCustomZoomEvent({ zoomInCallBack: zoomIn, zoomOutCallBack: zoomOut }, mouseOver);
+
+    const createDavitPath = (paths: DavitPathProps[]): JSX.Element[] => {
+        return paths.map((svg, index) => {
+            return <DavitPath {...svg} key={index} />;
+        });
+    };
 
     const wrappItem = (toDnDElement: DnDBoxElement): JSX.Element => {
         return createDnDItem(
@@ -52,45 +56,25 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
         );
     };
 
-    useEffect(() => {
-        if (constraintsRef !== null && constraintsRef.current !== null) {
-            svgElements.map((svg) => {
-                let svgWithRef: DavitPathProps = svg;
-                svgWithRef.xSource = svg.xSource * (constraintsRef.current!.offsetWidth / 100);
-                svgWithRef.ySource = svg.ySource * (constraintsRef.current!.offsetHeight / 100);
-                svgWithRef.xTarget = svg.xTarget * (constraintsRef.current!.offsetWidth / 100);
-                svgWithRef.yTarget = svg.yTarget * (constraintsRef.current!.offsetHeight / 100);
-            });
-            setKey((key) => key + 1);
-        }
-    }, [svgElements, constraintsRef, setKey]);
-
-    const createDavitPath = () => {
-        return svgElements.map((svg, index) => {
-            return <DavitPath {...svg} key={index} />;
-        });
-    };
-
     return (
         <motion.div
             onMouseEnter={(event) => setMouseOver(true)}
             onMouseLeave={(event) => setMouseOver(false)}
             ref={constraintsRef}
-            // style={fullScreen ? { height: height, maxWidth: width } : {}}
+            style={fullScreen ? { height: height, maxWidth: width } : {}}
             className={fullScreen ? type.toString() + 'Fullscreen' : type.toString()}
-            // key={key}
-        >
+            key={key}>
             {toDnDElements.map(wrappItem)}
-            <motion.svg className="dataSVGArea" key={key}>
-                {createDavitPath()}
-            </motion.svg>
+            <motion.svg className="dataSVGArea">{createDavitPath(paths)}</motion.svg>
         </motion.div>
     );
 };
 
-const useDnDBoxViewModel = () => {
+const useDnDBoxViewModel = (svgElements: DavitPathProps[]) => {
     const [key, setKey] = useState<number>(0);
     const constraintsRef = useRef<HTMLInputElement>(null);
+
+    const [paths, setPaths] = useState<DavitPathProps[]>([]);
 
     const currentWindowWitdh: number = useCurrentWitdh();
     const currentWindowHeight: number = useCurrentHeight();
@@ -106,11 +90,26 @@ const useDnDBoxViewModel = () => {
         };
     }, []);
 
+    useEffect(() => {
+        if (constraintsRef !== null && constraintsRef.current !== null) {
+            let newPaths: DavitPathProps[] = [];
+            svgElements.forEach((svg) => {
+                let updatedSvg: DavitPathProps = svg;
+                updatedSvg.xSource = svg.xSource * (constraintsRef.current!.offsetWidth / 100);
+                updatedSvg.ySource = svg.ySource * (constraintsRef.current!.offsetHeight / 100);
+                updatedSvg.xTarget = svg.xTarget * (constraintsRef.current!.offsetWidth / 100);
+                updatedSvg.yTarget = svg.yTarget * (constraintsRef.current!.offsetHeight / 100);
+                newPaths.push(updatedSvg);
+            });
+            setPaths(newPaths);
+        }
+    }, [constraintsRef, svgElements]);
+
     return {
         constraintsRef,
         height: newWindowHeight,
         width: newWindowWitdh,
         key,
-        setKey,
+        paths,
     };
 };
