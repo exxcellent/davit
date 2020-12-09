@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion';
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
+import { ASPECT_RATIO, WINDOW_FACTOR } from '../../../../app/DavitConstants';
 import { GeometricalDataTO } from '../../../../dataAccess/access/to/GeometricalDataTO';
 import { PositionTO } from '../../../../dataAccess/access/to/PositionTO';
+import { useCurrentHeight, useCurrentWitdh } from '../../../../utils/WindowUtil';
 import { createDnDItem } from '../../../common/fragments/DnDWrapper';
 import { DavitPath, DavitPathProps } from '../../../common/fragments/svg/DavitPath';
 
@@ -29,7 +31,10 @@ export enum DnDBoxType {
 
 export const DnDBox: FunctionComponent<DnDBox> = (props) => {
     const { fullScreen, toDnDElements, onPositionUpdate, zoomIn, zoomOut, type, svgElements, onGeoUpdate } = props;
-    const constraintsRef = useRef<HTMLDivElement>(null);
+
+    const { key, setKey, constraintsRef } = useDnDBoxViewModel();
+
+    // const constraintsRef = useRef<HTMLDivElement>(null);
 
     const [mouseOver, setMouseOver] = useState<boolean>(false);
     // TODO: activate if arrows draw with ref's.
@@ -47,17 +52,6 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
         );
     };
 
-    const [key, setKey] = useState<number>(0);
-
-    useEffect(() => {
-        const handleResize = () => setKey((prevState) => prevState + 1);
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
-
     useEffect(() => {
         if (constraintsRef !== null && constraintsRef.current !== null) {
             svgElements.map((svg) => {
@@ -69,7 +63,7 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
             });
             setKey((key) => key + 1);
         }
-    }, [svgElements, constraintsRef]);
+    }, [svgElements, constraintsRef, setKey]);
 
     const createDavitPath = () => {
         return svgElements.map((svg, index) => {
@@ -92,4 +86,31 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
             </motion.svg>
         </motion.div>
     );
+};
+
+const useDnDBoxViewModel = () => {
+    const [key, setKey] = useState<number>(0);
+    const constraintsRef = useRef<HTMLInputElement>(null);
+
+    const currentWindowWitdh: number = useCurrentWitdh();
+    const currentWindowHeight: number = useCurrentHeight();
+    const newWindowHeight: number = (currentWindowWitdh / WINDOW_FACTOR) * ASPECT_RATIO;
+    const newWindowWitdh: number = (currentWindowHeight / ASPECT_RATIO) * WINDOW_FACTOR;
+
+    useEffect(() => {
+        const handleResize = () => setKey((prevState) => prevState + 1);
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    return {
+        constraintsRef,
+        height: newWindowHeight,
+        width: newWindowWitdh,
+        key,
+        setKey,
+    };
 };

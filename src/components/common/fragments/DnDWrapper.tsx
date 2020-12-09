@@ -29,10 +29,10 @@ export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        console.info('ref: ', ref);
-        console.info('ref current: ', ref.current);
-        console.info('onGeoUpdate: ', onGeoUpdate);
-        console.info('geoId: ', geoId);
+        // console.info('ref: ', ref);
+        // console.info('ref current: ', ref.current);
+        // console.info('onGeoUpdate: ', onGeoUpdate);
+        // console.info('geoId: ', geoId);
         if (ref && ref.current && onGeoUpdate && geoId) {
             console.info('call on Geo update');
             onGeoUpdate(ref.current.getBoundingClientRect().width, ref.current.getBoundingClientRect().height, geoId);
