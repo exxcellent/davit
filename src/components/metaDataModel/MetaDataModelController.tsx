@@ -314,7 +314,6 @@ const useMetaDataModelViewModel = () => {
             paths.push(relationToDavitPath(dataRelationToEdit, dataRelationToEdit.id, true));
         }
         copyDataRelations.forEach((rel) => paths.push(relationToDavitPath(rel, rel.id)));
-        console.info('paths: ', paths);
         return paths;
     };
 

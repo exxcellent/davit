@@ -27,7 +27,7 @@ interface ActorModelControllerProps {
 export const ActorModelController: FunctionComponent<ActorModelControllerProps> = (props) => {
     const { fullScreen } = props;
 
-    const { onPositionUpdate, getArrows, toDnDElements, zoomIn, zoomOut } = useViewModel();
+    const { onPositionUpdate, getArrows, toDnDElements, zoomIn, zoomOut, onGeometricalDataUpdate } = useViewModel();
 
     return (
         <DnDBox
@@ -38,6 +38,7 @@ export const ActorModelController: FunctionComponent<ActorModelControllerProps> 
             zoomIn={zoomIn}
             zoomOut={zoomOut}
             type={DnDBoxType.actor}
+            onGeoUpdate={onGeometricalDataUpdate}
         />
     );
 };
@@ -263,6 +264,17 @@ const useViewModel = () => {
         }
     };
 
+    const onGeometricalDataUpdate = (width: number, height: number, geoId: number) => {
+        const copyActor: ActorCTO | undefined = DavitUtil.deepCopy(
+            actors.find((actor) => actor.geometricalData.geometricalData.id === geoId),
+        );
+        if (copyActor) {
+            copyActor.geometricalData.geometricalData.width = width;
+            copyActor.geometricalData.geometricalData.height = height;
+            dispatch(EditActions.actor.save(copyActor));
+        }
+    };
+
     const actorsToDnDElements = (actors: ActorCTO[]): DnDBoxElement[] => {
         let dndBoxElements: DnDBoxElement[] = [];
         dndBoxElements = actors
@@ -271,6 +283,7 @@ const useViewModel = () => {
                 return {
                     element: <DavitCard {...actorToCard(actorr)} />,
                     position: actorr.geometricalData.position,
+                    geometricalData: actorr.geometricalData.geometricalData,
                 };
             })
             .filter((item) => item !== undefined);
@@ -279,6 +292,7 @@ const useViewModel = () => {
             dndBoxElements.push({
                 element: <DavitCard {...actorToCard(actorCTOToEdit)} />,
                 position: actorCTOToEdit.geometricalData.position,
+                geometricalData: actorCTOToEdit.geometricalData.geometricalData,
             });
         }
         return dndBoxElements;
@@ -303,14 +317,13 @@ const useViewModel = () => {
     const getArrows = (): DavitPathProps[] => {
         const arrowProps: DavitPathProps[] = [];
         let arrowsToDraw: Arrow[] = [];
+
         arrowsToDraw = arrows;
-        // TODO prüfe ob dass das gleiche ist!
-        // ===================================
+
         if (editArrow) {
             arrowsToDraw.push(editArrow);
         }
         arrowsToDraw.push(...editStepArrows);
-        // ===================================
 
         arrowsToDraw.forEach((arrowToDraw, index) => {
             arrowProps.push({
@@ -347,5 +360,6 @@ const useViewModel = () => {
         toDnDElements: actorsToDnDElements(actors),
         zoomIn,
         zoomOut,
+        onGeometricalDataUpdate,
     };
 };

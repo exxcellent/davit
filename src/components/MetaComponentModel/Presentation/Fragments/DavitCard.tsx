@@ -76,21 +76,19 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
             </div>
             {instances && (
                 <div style={{ display: 'flex', alignItems: 'start' }}>
-                    {instances
-                        // .filter((inst) => inst.defaultInstance === false)
-                        .map((instance, index) =>
-                            createInstances(
-                                index,
-                                instance.name,
-                                dataFragments.filter(
-                                    (actor) =>
-                                        (actor.parentId as {
-                                            dataId: number;
-                                            instanceId: number;
-                                        }).instanceId === instance.id,
-                                ),
+                    {instances.map((instance, index) =>
+                        createInstances(
+                            index,
+                            instance.name,
+                            dataFragments.filter(
+                                (actor) =>
+                                    (actor.parentId as {
+                                        dataId: number;
+                                        instanceId: number;
+                                    }).instanceId === instance.id,
                             ),
-                        )}
+                        ),
+                    )}
                 </div>
             )}
             {(instances === undefined || instances?.length === 0) && dataFragments.map(createViewFragment)}

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
+import { GeometricalDataTO } from '../../../../dataAccess/access/to/GeometricalDataTO';
 import { PositionTO } from '../../../../dataAccess/access/to/PositionTO';
 import { createDnDItem } from '../../../common/fragments/DnDWrapper';
 import { DavitPath, DavitPathProps } from '../../../common/fragments/svg/DavitPath';
@@ -7,6 +8,7 @@ import { DavitPath, DavitPathProps } from '../../../common/fragments/svg/DavitPa
 export interface DnDBoxElement {
     element: JSX.Element;
     position: PositionTO;
+    geometricalData?: GeometricalDataTO;
 }
 
 interface DnDBox {
@@ -14,6 +16,7 @@ interface DnDBox {
     svgElements: DavitPathProps[];
     fullScreen?: boolean;
     onPositionUpdate: (x: number, y: number, positionId: number) => void;
+    onGeoUpdate?: (width: number, height: number, geoId: number) => void;
     zoomIn: () => void;
     zoomOut: () => void;
     type: DnDBoxType;
@@ -25,15 +28,23 @@ export enum DnDBoxType {
 }
 
 export const DnDBox: FunctionComponent<DnDBox> = (props) => {
-    const { fullScreen, toDnDElements, onPositionUpdate, zoomIn, zoomOut, type, svgElements } = props;
+    const { fullScreen, toDnDElements, onPositionUpdate, zoomIn, zoomOut, type, svgElements, onGeoUpdate } = props;
     const constraintsRef = useRef<HTMLDivElement>(null);
 
     const [mouseOver, setMouseOver] = useState<boolean>(false);
     // TODO: activate if arrows draw with ref's.
     // useCustomZoomEvent({ zoomInCallBack: zoomIn, zoomOutCallBack: zoomOut }, mouseOver);
 
-    const wrappItem = (toDnDElement: { element: JSX.Element; position: PositionTO }): JSX.Element => {
-        return createDnDItem(toDnDElement.position, onPositionUpdate, constraintsRef, toDnDElement.element);
+    const wrappItem = (toDnDElement: DnDBoxElement): JSX.Element => {
+        return createDnDItem(
+            toDnDElement.position,
+            onPositionUpdate,
+            constraintsRef,
+            toDnDElement.element,
+            undefined,
+            toDnDElement.geometricalData?.id || undefined,
+            onGeoUpdate,
+        );
     };
 
     const [key, setKey] = useState<number>(0);
@@ -73,7 +84,8 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
             ref={constraintsRef}
             // style={fullScreen ? { height: height, maxWidth: width } : {}}
             className={fullScreen ? type.toString() + 'Fullscreen' : type.toString()}
-            key={key}>
+            // key={key}
+        >
             {toDnDElements.map(wrappItem)}
             <motion.svg className="dataSVGArea" key={key}>
                 {createDavitPath()}
