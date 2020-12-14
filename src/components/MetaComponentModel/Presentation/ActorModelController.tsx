@@ -302,8 +302,10 @@ const useViewModel = () => {
         return {
             id: actor.actor.id,
             initName: actor.actor.name,
-            initWidth: actor.geometricalData.geometricalData.width,
-            initHeigth: actor.geometricalData.geometricalData.height,
+            initWidth: 100,
+            initHeigth: 30,
+            // initWidth: actor.geometricalData.geometricalData.width,
+            // initHeigth: actor.geometricalData.geometricalData.height,
             dataFragments: getActorDatas().filter(
                 (act) =>
                     act.parentId === actor.actor.id ||

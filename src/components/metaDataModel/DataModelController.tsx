@@ -22,11 +22,11 @@ import { DavitPathProps, DavitPathTypes } from '../common/fragments/svg/DavitPat
 import { DavitCard, DavitCardProps } from '../metaComponentModel/presentation/fragments/DavitCard';
 import { DnDBox, DnDBoxType } from '../metaComponentModel/presentation/fragments/DnDBox';
 
-interface MetaDataModelControllerProps {
+interface DataModelControllerProps {
     fullScreen?: boolean;
 }
 
-export const MetaDataModelController: FunctionComponent<MetaDataModelControllerProps> = (props) => {
+export const DataModelController: FunctionComponent<DataModelControllerProps> = (props) => {
     const { fullScreen } = props;
 
     const { onPositionUpdate, toDnDElements, zoomIn, zoomOut, getRelations } = useMetaDataModelViewModel();

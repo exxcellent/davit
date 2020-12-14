@@ -51,10 +51,8 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
         lineColor,
     } = props;
 
-    // TODO: measure real width of elements.
-    // const ELEMENT_WIDTH = 120;
     const INTERFACE_INPUT: Point = { x: 0, y: targetHeight / 2 };
-    // const INTERFACE_OUTPUT: Point = { x: ELEMENT_WIDTH, y: sourceHeight / 2 };
+    const INTERFACE_OUTPUT: Point = { x: 0, y: sourceHeight / 2 };
     const OFFSET: number = 10;
     const MARKER_WIDTH: number = 20;
     const TEXT_OFFSET: number = 25;
@@ -63,11 +61,11 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
         const startDir: 'LEFT' | ' RIGHT' = x2 < x1 + sourceWidth / 2 ? 'LEFT' : ' RIGHT';
         const endDir: 'LEFT' | ' RIGHT' = x1 < x2 + sourceWidth / 2 ? 'LEFT' : ' RIGHT';
         const xStart = startDir === 'LEFT' ? x1 : x1 + sourceWidth;
-        const xEnd = endDir === 'LEFT' ? x2 : x2 + sourceWidth + OFFSET + MARKER_WIDTH;
+        const xEnd = endDir === 'LEFT' ? x2 : x2 + targetWidth + OFFSET + MARKER_WIDTH;
         let startPoint: Point = { x: xStart, y: y1 };
         let endPoint: Point = { x: xEnd, y: y2 };
         // set interfaces
-        startPoint = plusPoint(startPoint, INTERFACE_INPUT);
+        startPoint = plusPoint(startPoint, INTERFACE_OUTPUT);
         endPoint = plusPoint(endPoint, INTERFACE_INPUT);
         // add object offset
         const offsetStartPoint = setOutPutOffset(startPoint, OFFSET, startDir);
@@ -172,8 +170,6 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
     };
 
     const getDirectionPoint = (point: Point, width: number, height: number, direction?: Direction): Point => {
-        // TODO: remove this constanse
-        const PADDING: number = 10;
         switch (direction) {
             case Direction.TOP:
                 point.x = point.x + width / 2;
@@ -187,7 +183,7 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
                 break;
             case Direction.BOTTOM:
                 point.x = point.x + width / 2;
-                point.y = point.y + height + PADDING;
+                point.y = point.y + height + OFFSET;
                 break;
         }
         return point;

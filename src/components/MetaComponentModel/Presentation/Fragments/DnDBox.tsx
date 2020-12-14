@@ -3,7 +3,7 @@ import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { ASPECT_RATIO, WINDOW_FACTOR } from '../../../../app/DavitConstants';
 import { GeometricalDataTO } from '../../../../dataAccess/access/to/GeometricalDataTO';
 import { PositionTO } from '../../../../dataAccess/access/to/PositionTO';
-import { useCurrentHeight, useCurrentWitdh } from '../../../../utils/WindowUtil';
+import { useCurrentHeight, useCurrentWitdh, useCustomZoomEvent } from '../../../../utils/WindowUtil';
 import { createDnDItem } from '../../../common/fragments/DnDWrapper';
 import { DavitPath, DavitPathProps } from '../../../common/fragments/svg/DavitPath';
 
@@ -36,7 +36,7 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
 
     const [mouseOver, setMouseOver] = useState<boolean>(false);
     // TODO: activate if arrows draw with ref's.
-    // useCustomZoomEvent({ zoomInCallBack: zoomIn, zoomOutCallBack: zoomOut }, mouseOver);
+    useCustomZoomEvent({ zoomInCallBack: zoomIn, zoomOutCallBack: zoomOut }, mouseOver);
 
     const createDavitPath = (paths: DavitPathProps[]): JSX.Element[] => {
         return paths.map((svg, index) => {
@@ -65,7 +65,7 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
             className={fullScreen ? type.toString() + 'Fullscreen' : type.toString()}
             key={key}>
             {toDnDElements.map(wrappItem)}
-            <motion.svg className="dataSVGArea">{createDavitPath(paths)}</motion.svg>
+            <motion.svg className="sVGArea">{createDavitPath(paths)}</motion.svg>
         </motion.div>
     );
 };
