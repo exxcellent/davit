@@ -183,7 +183,7 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
                 break;
             case Direction.BOTTOM:
                 point.x = point.x + width / 2;
-                point.y = point.y + height + OFFSET;
+                point.y = point.y + height;
                 break;
         }
         return point;

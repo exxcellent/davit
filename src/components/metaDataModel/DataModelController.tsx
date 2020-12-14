@@ -9,7 +9,6 @@ import { ActionTO } from '../../dataAccess/access/to/ActionTO';
 import { DataRelationTO } from '../../dataAccess/access/to/DataRelationTO';
 import { DecisionTO } from '../../dataAccess/access/to/DecisionTO';
 import { InitDataTO } from '../../dataAccess/access/to/InitDataTO';
-import { PositionTO } from '../../dataAccess/access/to/PositionTO';
 import { ActionType } from '../../dataAccess/access/types/ActionType';
 import { EditActions, editSelectors } from '../../slices/EditSlice';
 import { MasterDataActions, masterDataSelectors } from '../../slices/MasterDataSlice';
@@ -20,7 +19,7 @@ import { ActorDataState } from '../../viewDataTypes/ActorDataState';
 import { ViewFragmentProps } from '../../viewDataTypes/ViewFragment';
 import { DavitPathProps, DavitPathTypes } from '../common/fragments/svg/DavitPath';
 import { DavitCard, DavitCardProps } from '../metaComponentModel/presentation/fragments/DavitCard';
-import { DnDBox, DnDBoxType } from '../metaComponentModel/presentation/fragments/DnDBox';
+import { DnDBox, DnDBoxElement, DnDBoxType } from '../metaComponentModel/presentation/fragments/DnDBox';
 
 interface DataModelControllerProps {
     fullScreen?: boolean;
@@ -29,24 +28,26 @@ interface DataModelControllerProps {
 export const DataModelController: FunctionComponent<DataModelControllerProps> = (props) => {
     const { fullScreen } = props;
 
-    const { onPositionUpdate, toDnDElements, zoomIn, zoomOut, getRelations } = useMetaDataModelViewModel();
-
-    const mapCardToJSX = (card: DavitCardProps): JSX.Element => {
-        return <DavitCard {...card} />;
-    };
+    const {
+        onPositionUpdate,
+        toDnDElements,
+        zoomIn,
+        zoomOut,
+        getRelations,
+        onGeometricalDataUpdate,
+    } = useMetaDataModelViewModel();
 
     const createMetaDataDnDBox = () => {
         return (
             <DnDBox
                 onPositionUpdate={onPositionUpdate}
+                toDnDElements={toDnDElements}
                 svgElements={getRelations()}
-                toDnDElements={toDnDElements.map((el) => {
-                    return { ...el, element: mapCardToJSX(el.card) };
-                })}
+                fullScreen={fullScreen}
                 zoomIn={zoomIn}
                 zoomOut={zoomOut}
                 type={DnDBoxType.data}
-                fullScreen={fullScreen}
+                onGeoUpdate={onGeometricalDataUpdate}
             />
         );
     };
@@ -234,33 +235,35 @@ const useMetaDataModelViewModel = () => {
         }
     };
 
-    const toDnDElements = (datas: DataCTO[]): { card: DavitCardProps; position: PositionTO }[] => {
-        let cards: { card: DavitCardProps; position: PositionTO }[] = [];
-        cards = datas
+    const dataToDnDElements = (datas: DataCTO[]): DnDBoxElement[] => {
+        let dndBoxElements: DnDBoxElement[] = [];
+        dndBoxElements = datas
             .filter((data) => !(dataCTOToEdit && dataCTOToEdit.data.id === data.data.id))
             .map((dataa) => {
                 return {
-                    card: dataToCard(dataa),
+                    element: <DavitCard {...dataToCard(dataa)} />,
                     position: dataa.geometricalData.position,
+                    geometricalData: dataa.geometricalData.geometricalData,
                 };
             })
             .filter((item) => item !== undefined);
-        // add actor to edit
+        // add data to edit
         if (dataCTOToEdit) {
-            cards.push({
-                card: dataToCard(dataCTOToEdit),
+            dndBoxElements.push({
+                element: <DavitCard {...dataToCard(dataCTOToEdit)} />,
                 position: dataCTOToEdit.geometricalData.position,
+                geometricalData: dataCTOToEdit.geometricalData.geometricalData,
             });
         }
-        return cards;
+        return dndBoxElements;
     };
 
     const dataToCard = (data: DataCTO): DavitCardProps => {
         return {
             id: data.data.id,
             initName: data.data.name,
-            initWidth: data.geometricalData.geometricalData.width,
-            initHeigth: data.geometricalData.geometricalData.height,
+            initWidth: 100,
+            initHeigth: 30,
             dataFragments: getActorDatas().filter(
                 (act) =>
                     act.parentId === data.data.id ||
@@ -307,22 +310,37 @@ const useMetaDataModelViewModel = () => {
     };
 
     const getRelations = (): DavitPathProps[] => {
-        let paths: DavitPathProps[] = [];
+        let dataRelationsProps: DavitPathProps[] = [];
+
         let copyDataRelations: DataRelationTO[] = DavitUtil.deepCopy(dataRelations);
+
         if (dataRelationToEdit) {
             copyDataRelations = copyDataRelations.filter((relation) => relation.id !== dataRelationToEdit.id);
-            paths.push(relationToDavitPath(dataRelationToEdit, dataRelationToEdit.id, true));
+            dataRelationsProps.push(relationToDavitPath(dataRelationToEdit, dataRelationToEdit.id, true));
         }
-        copyDataRelations.forEach((rel) => paths.push(relationToDavitPath(rel, rel.id)));
-        return paths;
+
+        copyDataRelations.forEach((rel) => dataRelationsProps.push(relationToDavitPath(rel, rel.id)));
+        return dataRelationsProps;
+    };
+
+    const onGeometricalDataUpdate = (width: number, height: number, geoId: number) => {
+        const copyData: DataCTO | undefined = DavitUtil.deepCopy(
+            datas.find((data) => data.geometricalData.geometricalData.id === geoId),
+        );
+        if (copyData) {
+            copyData.geometricalData.geometricalData.width = width;
+            copyData.geometricalData.geometricalData.height = height;
+            dispatch(EditActions.data.save(copyData));
+        }
     };
 
     return {
         handleDataClick: (dataId: number) => dispatch(SequenceModelActions.handleDataClickEvent(dataId)),
         onPositionUpdate,
-        toDnDElements: toDnDElements(datas),
+        toDnDElements: dataToDnDElements(datas),
         zoomIn,
         zoomOut,
         getRelations,
+        onGeometricalDataUpdate,
     };
 };
