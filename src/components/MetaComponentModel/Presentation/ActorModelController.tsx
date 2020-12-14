@@ -15,8 +15,7 @@ import { DavitUtil } from '../../../utils/DavitUtil';
 import { ActorData } from '../../../viewDataTypes/ActorData';
 import { ActorDataState } from '../../../viewDataTypes/ActorDataState';
 import { ViewFragmentProps } from '../../../viewDataTypes/ViewFragment';
-import { Arrow, ArrowType } from '../../common/fragments/svg/Arrow';
-import { DavitPathHead, DavitPathProps, DavitPathTypes } from '../../common/fragments/svg/DavitPath';
+import { Arrow, ArrowType, DavitPathHead, DavitPathProps, DavitPathTypes } from '../../common/fragments/svg/DavitPath';
 import { DavitCard, DavitCardProps } from './fragments/DavitCard';
 import { DnDBox, DnDBoxElement, DnDBoxType } from './fragments/DnDBox';
 

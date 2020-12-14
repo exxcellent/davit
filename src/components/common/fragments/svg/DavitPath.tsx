@@ -1,6 +1,19 @@
 import { motion, Point } from 'framer-motion';
 import React, { FunctionComponent } from 'react';
+import { GeometricalDataCTO } from '../../../../dataAccess/access/cto/GeometraicalDataCTO';
 import { Direction } from '../../../../dataAccess/access/to/DataRelationTO';
+
+export interface Arrow {
+    sourceGeometricalData: GeometricalDataCTO;
+    targetGeometricalData: GeometricalDataCTO;
+    dataLabels: string[];
+    type: ArrowType;
+}
+
+export enum ArrowType {
+    SEND = 'SEND',
+    TRIGGER = 'TRIGGER',
+}
 
 export enum DavitPathTypes {
     SMOOTH = 'SMOOTH',
