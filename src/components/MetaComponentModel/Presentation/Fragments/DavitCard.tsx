@@ -7,6 +7,11 @@ import { createViewFragment, ViewFragmentProps } from '../../../../viewDataTypes
 import { Carv2CardMainButton } from '../../../common/fragments/buttons/Carv2CardMainButton';
 import { DavitCardButton } from '../../../common/fragments/buttons/DavitCardButton';
 
+/**
+ *  Prop: initWidth / initHeight
+ *  This is the default size of a card in this case.
+ *  If the card's child shrinks, the card it self needs a default size to fall back.
+ */
 export interface DavitCardProps {
     id: number;
     initName: string;
