@@ -1,5 +1,5 @@
 import { motion, useInvertedScale, useMotionValue } from 'framer-motion';
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent, useEffect, useRef } from 'react';
 import { WINDOW_FACTOR } from '../../../app/DavitConstants';
 import { PositionTO } from '../../../dataAccess/access/to/PositionTO';
 
@@ -10,10 +10,12 @@ export interface DnDWrapperProps {
     initY: number;
     onPositionUpdate: (x: number, y: number, positionId: number) => void;
     shadow?: string;
+    onGeoUpdate?: (width: number, height: number, geoId: number) => void;
+    geoId?: number;
 }
 
 export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
-    const { dragConstraintsRef, initX, initY, onPositionUpdate, positionId, shadow } = props;
+    const { dragConstraintsRef, initX, initY, onPositionUpdate, positionId, shadow, onGeoUpdate, geoId } = props;
 
     const x = useMotionValue(initX);
     const y = useMotionValue(initY);
@@ -23,6 +25,15 @@ export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
         x.set(initX * (dragConstraintsRef.current.offsetWidth / 100));
         y.set(initY * (dragConstraintsRef.current.offsetHeight / 100));
     }, [x, initX, y, initY, dragConstraintsRef]);
+
+    const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (ref && ref.current && onGeoUpdate && geoId) {
+            onGeoUpdate(ref.current.getBoundingClientRect().width, ref.current.getBoundingClientRect().height, geoId);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ref?.current?.getBoundingClientRect().width, ref?.current?.getBoundingClientRect().height]);
 
     return (
         <motion.div
@@ -48,7 +59,8 @@ export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
                 y,
                 scaleX,
                 scaleY,
-            }}>
+            }}
+            ref={ref}>
             {props.children}
         </motion.div>
     );
@@ -60,6 +72,8 @@ export const createDnDItem = (
     dragConstraintsRef: any,
     children: React.ReactNode,
     shadow?: string,
+    geoId?: number,
+    updateGeo?: (width: number, heigth: number, geoId: number) => void,
 ) => {
     return (
         <DnDWrapper
@@ -69,7 +83,9 @@ export const createDnDItem = (
             initX={position.x}
             initY={position.y}
             dragConstraintsRef={dragConstraintsRef}
-            shadow={shadow}>
+            shadow={shadow}
+            onGeoUpdate={updateGeo}
+            geoId={geoId}>
             {children}
         </DnDWrapper>
     );

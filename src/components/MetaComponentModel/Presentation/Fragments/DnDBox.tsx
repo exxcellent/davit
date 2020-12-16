@@ -1,17 +1,24 @@
 import { motion } from 'framer-motion';
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { ASPECT_RATIO, WINDOW_FACTOR } from '../../../../app/DavitConstants';
+import { GeometricalDataTO } from '../../../../dataAccess/access/to/GeometricalDataTO';
 import { PositionTO } from '../../../../dataAccess/access/to/PositionTO';
-import { useCurrentHeight, useCurrentWitdh } from '../../../../utils/WindowUtil';
+import { useCurrentHeight, useCurrentWitdh, useCustomZoomEvent } from '../../../../utils/WindowUtil';
 import { createDnDItem } from '../../../common/fragments/DnDWrapper';
-import { Arrow, createArrow } from '../../../common/fragments/svg/Arrow';
-import { createCornerConnection, DavitPath } from '../../../common/fragments/svg/DavitPath';
+import { DavitPath, DavitPathProps } from '../../../common/fragments/svg/DavitPath';
+
+export interface DnDBoxElement {
+    element: JSX.Element;
+    position: PositionTO;
+    geometricalData?: GeometricalDataTO;
+}
 
 interface DnDBox {
-    toDnDElements: { element: JSX.Element; position: PositionTO }[];
-    paths: Arrow[] | DavitPath[];
+    toDnDElements: DnDBoxElement[];
+    svgElements: DavitPathProps[];
     fullScreen?: boolean;
     onPositionUpdate: (x: number, y: number, positionId: number) => void;
+    onGeoUpdate?: (width: number, height: number, geoId: number) => void;
     zoomIn: () => void;
     zoomOut: () => void;
     type: DnDBoxType;
@@ -23,44 +30,30 @@ export enum DnDBoxType {
 }
 
 export const DnDBox: FunctionComponent<DnDBox> = (props) => {
-    const { paths, fullScreen, toDnDElements, onPositionUpdate, zoomIn, zoomOut, type } = props;
-    const { constraintsRef, key, height, width } = useDnDBoxViewModel();
+    const { fullScreen, toDnDElements, onPositionUpdate, zoomIn, zoomOut, type, svgElements, onGeoUpdate } = props;
+
+    const { key, constraintsRef, height, width, paths } = useDnDBoxViewModel(svgElements);
 
     const [mouseOver, setMouseOver] = useState<boolean>(false);
     // TODO: activate if arrows draw with ref's.
-    // useCustomZoomEvent({ zoomInCallBack: zoomIn, zoomOutCallBack: zoomOut }, mouseOver);
+    useCustomZoomEvent({ zoomInCallBack: zoomIn, zoomOutCallBack: zoomOut }, mouseOver);
 
-    const wrappItem = (toDnDElement: { element: JSX.Element; position: PositionTO }): JSX.Element => {
-        return createDnDItem(toDnDElement.position, onPositionUpdate, constraintsRef, toDnDElement.element);
+    const createDavitPath = (paths: DavitPathProps[]): JSX.Element[] => {
+        return paths.map((svg, index) => {
+            return <DavitPath {...svg} key={index} />;
+        });
     };
 
-    const drawLines = (lines: Arrow[] | DavitPath[]) => {
-        if (lines.length > 0) {
-            if ((lines as Arrow[])[0].dataLabels) {
-                return (lines as Arrow[]).map((arrow: Arrow, index: number) => {
-                    return createArrow(
-                        arrow.sourceGeometricalData,
-                        arrow.targetGeometricalData,
-                        index,
-                        constraintsRef,
-                        arrow.type,
-                        arrow.dataLabels,
-                    );
-                });
-            }
-            if ((lines as DavitPath[])[0].dataRelation) {
-                return (lines as DavitPath[]).map((path, index) => {
-                    return createCornerConnection(
-                        path.source,
-                        path.target,
-                        path.dataRelation,
-                        path.dataRelation.id,
-                        constraintsRef,
-                        path.isEdit,
-                    );
-                });
-            }
-        }
+    const wrappItem = (toDnDElement: DnDBoxElement): JSX.Element => {
+        return createDnDItem(
+            toDnDElement.position,
+            onPositionUpdate,
+            constraintsRef,
+            toDnDElement.element,
+            undefined,
+            toDnDElement.geometricalData?.id || undefined,
+            onGeoUpdate,
+        );
     };
 
     return (
@@ -72,14 +65,16 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
             className={fullScreen ? type.toString() + 'Fullscreen' : type.toString()}
             key={key}>
             {toDnDElements.map(wrappItem)}
-            <motion.svg className="dataSVGArea">{drawLines(paths)}</motion.svg>
+            <motion.svg className="sVGArea">{createDavitPath(paths)}</motion.svg>
         </motion.div>
     );
 };
 
-const useDnDBoxViewModel = () => {
+const useDnDBoxViewModel = (svgElements: DavitPathProps[]) => {
     const [key, setKey] = useState<number>(0);
     const constraintsRef = useRef<HTMLInputElement>(null);
+
+    const [paths, setPaths] = useState<DavitPathProps[]>([]);
 
     const currentWindowWitdh: number = useCurrentWitdh();
     const currentWindowHeight: number = useCurrentHeight();
@@ -95,10 +90,26 @@ const useDnDBoxViewModel = () => {
         };
     }, []);
 
+    useEffect(() => {
+        if (constraintsRef !== null && constraintsRef.current !== null) {
+            let newPaths: DavitPathProps[] = [];
+            svgElements.forEach((svg) => {
+                let updatedSvg: DavitPathProps = svg;
+                updatedSvg.xSource = svg.xSource * (constraintsRef.current!.offsetWidth / 100);
+                updatedSvg.ySource = svg.ySource * (constraintsRef.current!.offsetHeight / 100);
+                updatedSvg.xTarget = svg.xTarget * (constraintsRef.current!.offsetWidth / 100);
+                updatedSvg.yTarget = svg.yTarget * (constraintsRef.current!.offsetHeight / 100);
+                newPaths.push(updatedSvg);
+            });
+            setPaths(newPaths);
+        }
+    }, [constraintsRef, svgElements]);
+
     return {
         constraintsRef,
         height: newWindowHeight,
         width: newWindowWitdh,
         key,
+        paths,
     };
 };

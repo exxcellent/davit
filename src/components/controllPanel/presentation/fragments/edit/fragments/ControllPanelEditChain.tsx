@@ -44,7 +44,7 @@ export const ControllPanelEditChain: FunctionComponent<ControllPanelEditChainPro
                     <DavitLabelTextfield
                         label="Name:"
                         placeholder="Chain Name..."
-                        onChange={(event: any) => changeName(event.target.value)}
+                        onChangeDebounced={(name: string) => changeName(name)}
                         value={name}
                         autoFocus
                         ref={textInput}

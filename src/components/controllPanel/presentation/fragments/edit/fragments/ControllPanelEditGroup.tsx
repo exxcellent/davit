@@ -45,7 +45,7 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
                 <DavitLabelTextfield
                     label="Name:"
                     placeholder="Group Name ..."
-                    onChange={(event: any) => changeName(event.target.value)}
+                    onChangeDebounced={(name: string) => changeName(name)}
                     value={name}
                     autoFocus
                     ref={textInput}

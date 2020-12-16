@@ -1,15 +1,18 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { ErrorNotification } from '../components/common/fragments/ErrorNotification';
 import { ControllPanelController } from '../components/controllPanel/presentation/ControllPanelController';
 import { ActorModelController } from '../components/metaComponentModel/presentation/ActorModelController';
-import { MetaDataModelController } from '../components/metaDataModel/MetaDataModelController';
+import { DataModelController } from '../components/metaDataModel/DataModelController';
 import { FlowChartController } from '../components/sequenceModel/FlowChartController';
 import { SequenceTableModelController } from '../components/sequenceTableModel/presentation/SequenceTableModelController';
 import { SidePanelController } from '../components/sidePanel/SidePanelController';
 import { MasterDataActions } from '../slices/MasterDataSlice';
 import './Davit.css';
+
+// electron needs HashRouter
+// import { HashRouter as BrowserRouter } from 'react-router-dom';
 
 export const ModuleRoutes = {
     home: '/',
@@ -31,13 +34,13 @@ export function Davit() {
     // useCustomZoomEvent();
 
     return (
-        <div>
+        <BrowserRouter>
             <Switch>
                 <Route exact path={ModuleRoutes.home}>
                     <div className="carvGridContainer">
                         <ControllPanelController />
                         <ActorModelController />
-                        <MetaDataModelController />
+                        <DataModelController />
                         <SidePanelController />
                         <FlowChartController />
                         <SequenceTableModelController />
@@ -54,7 +57,7 @@ export function Davit() {
                 <Route exact path={ModuleRoutes.data}>
                     <div className="Carv2">
                         <div className="componentPage">
-                            <MetaDataModelController fullScreen />
+                            <DataModelController fullScreen />
                         </div>
                     </div>
                 </Route>
@@ -73,6 +76,6 @@ export function Davit() {
                     </div>
                 </Route>
             </Switch>
-        </div>
+        </BrowserRouter>
     );
 }

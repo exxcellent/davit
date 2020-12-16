@@ -7,6 +7,11 @@ import { createViewFragment, ViewFragmentProps } from '../../../../viewDataTypes
 import { Carv2CardMainButton } from '../../../common/fragments/buttons/Carv2CardMainButton';
 import { DavitCardButton } from '../../../common/fragments/buttons/DavitCardButton';
 
+/**
+ *  Prop: initWidth / initHeight
+ *  This is the default size of a card in this case.
+ *  If the card's child shrinks, the card it self needs a default size to fall back.
+ */
 export interface DavitCardProps {
     id: number;
     initName: string;
@@ -76,21 +81,19 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
             </div>
             {instances && (
                 <div style={{ display: 'flex', alignItems: 'start' }}>
-                    {instances
-                        // .filter((inst) => inst.defaultInstance === false)
-                        .map((instance, index) =>
-                            createInstances(
-                                index,
-                                instance.name,
-                                dataFragments.filter(
-                                    (actor) =>
-                                        (actor.parentId as {
-                                            dataId: number;
-                                            instanceId: number;
-                                        }).instanceId === instance.id,
-                                ),
+                    {instances.map((instance, index) =>
+                        createInstances(
+                            index,
+                            instance.name,
+                            dataFragments.filter(
+                                (actor) =>
+                                    (actor.parentId as {
+                                        dataId: number;
+                                        instanceId: number;
+                                    }).instanceId === instance.id,
                             ),
-                        )}
+                        ),
+                    )}
                 </div>
             )}
             {(instances === undefined || instances?.length === 0) && dataFragments.map(createViewFragment)}

@@ -56,11 +56,11 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
                         <DavitLabelTextfield
                             label="Name:"
                             placeholder="Step Name ..."
-                            onChange={(event: any) => changeName(event.target.value)}
+                            onChangeDebounced={(name: string) => changeName(name)}
                             value={name}
                             autoFocus
                             ref={textInput}
-                            onBlur={() => updateStep()}
+                            onBlur={updateStep}
                             unvisible={hidden}
                         />
                     </OptionField>

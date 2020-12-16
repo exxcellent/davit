@@ -170,20 +170,7 @@
   overflow: auto;
 }
 
-.dataSVGArea {
-  grid-area: dataModel;
-  overflow: "visible";
-  stroke: "black";
-  position: "absolute";
-  width: 100%;
-  height: 100%;
-}
-
-.componentSVGArea {
-  grid-area: compModel;
-  overflow: "visible";
-  stroke: "black";
-  position: "absolute";
+.sVGArea {
   width: 100%;
   height: 100%;
 }
@@ -242,6 +229,7 @@
 .carvPath {
   stroke-width: 2px;
   fill: transparent;
+  position: absolute;
 }
 
 .carvPath.SEND{

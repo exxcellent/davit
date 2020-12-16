@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
-import { HashRouter as BrowserRouter } from 'react-router-dom';
 import 'semantic-ui-css/semantic.min.css';
 import { Davit } from './app/Davit';
 import { store } from './app/store';
@@ -23,10 +22,7 @@ const localeData = languages[locale];
 ReactDOM.render(
     <Provider store={store}>
         <IntlProvider locale={locale} messages={localeData}>
-            {/* TODO: remove # from url */}
-            <BrowserRouter>
-                <Davit />
-            </BrowserRouter>
+            <Davit />
         </IntlProvider>
     </Provider>,
     document.getElementById('root'),
