@@ -31,6 +31,7 @@ import { EditActor } from './thunks/ActorThunks';
 import { EditDataSetup } from './thunks/DataSetupThunks';
 import { EditData } from './thunks/DataThunks';
 import { EditGroup } from './thunks/GroupThunks';
+import { EditInitData } from './thunks/InitDataThunks';
 import { EditRelation } from './thunks/RelationThunks';
 import { EditSequence } from './thunks/SequenceThunks';
 
@@ -398,7 +399,7 @@ const setModeToEditInitData = (initData: InitDataTO): AppThunk => (dispatch) => 
             handleError(response.message);
         }
     } else {
-        dispatch(EditActions.initData.save(initData));
+        dispatch(EditInitData.save(initData));
     }
 };
 
@@ -434,28 +435,6 @@ const setModeToEditCondition = (decision: DecisionTO): AppThunk => (dispatch) =>
     }
 };
 
-
-
-
-
-
-// ----------------------------------------------- Init Data -----------------------------------------------
-
-const saveInitDataThunk = (initData: InitDataTO): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<InitDataTO> = DataAccess.saveInitData(initData);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(EditActions.setMode.editInitData(response.object));
-};
-
-const deleteInitDataThunk = (initDataId: number): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<InitDataTO> = DataAccess.deleteInitData(initDataId);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadDataSetupsFromBackend());
-};
 
 // ----------------------------------------------- CHAIN -----------------------------------------------
 
@@ -1005,11 +984,7 @@ export const EditActions = {
     },
 
 
-    initData: {
-        save: saveInitDataThunk,
-        delete: deleteInitDataThunk,
-        update: EditSlice.actions.setInitDataToEdit,
-    },
+
     step: {
         save: saveSequenceStepThunk,
         delete: deleteSequenceStepThunk,
