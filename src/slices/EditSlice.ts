@@ -30,6 +30,7 @@ import { MasterDataActions, masterDataSelectors } from './MasterDataSlice';
 import { SequenceModelActions } from './SequenceModelSlice';
 import { EditActor } from './thunks/ActorThunks';
 import { EditData } from './thunks/DataThunks';
+import { EditGroup } from './thunks/GroupThunks';
 
 export enum Mode {
     TAB = 'TAB',
@@ -379,7 +380,7 @@ const setModeToEditAction = (action: ActionTO): AppThunk => (dispatch) => {
 const setModeToEditGroup = (group?: GroupTO): AppThunk => (dispatch) => {
     dispatch(setModeWithStorage(Mode.EDIT_GROUP));
     if (group === undefined) {
-        dispatch(EditActions.group.create());
+        dispatch(EditGroup.create());
     } else {
         dispatch(EditSlice.actions.setGroupToEdit(group));
     }
@@ -431,37 +432,7 @@ const setModeToEditCondition = (decision: DecisionTO): AppThunk => (dispatch) =>
     }
 };
 
-// ----------------------------------------------- GROUP -----------------------------------------------
 
-const createGroupThunk = (): AppThunk => (dispatch) => {
-    const group: GroupTO = new GroupTO();
-    const response: DataAccessResponse<GroupTO> = DataAccess.saveGroup(group);
-    if (response.code !== 200) {
-        console.log(response);
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadGroupsFromBackend());
-    dispatch(EditActions.group.update(response.object));
-};
-
-const saveGroupThunk = (group: GroupTO): AppThunk => async (dispatch) => {
-    const response: DataAccessResponse<GroupTO> = await DataAccess.saveGroup(group);
-    if (response.code !== 200) {
-        console.log(response);
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadGroupsFromBackend());
-};
-
-const deleteGroupThunk = (group: GroupTO): AppThunk => async (dispatch) => {
-    const response: DataAccessResponse<GroupTO> = await DataAccess.deleteGroupTO(group);
-    if (response.code !== 200) {
-        console.log(response);
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadGroupsFromBackend());
-    dispatch(MasterDataActions.loadActorsFromBackend());
-};
 
 // ----------------------------------------------- RELATION -----------------------------------------------
 
@@ -1136,12 +1107,6 @@ export const EditActions = {
         tab: setModeToTab,
     },
 
-    group: {
-        save: saveGroupThunk,
-        delete: deleteGroupThunk,
-        update: EditSlice.actions.setGroupToEdit,
-        create: createGroupThunk,
-    },
     relation: {
         save: saveRelationThunk,
         delete: deleteRelationThunk,
