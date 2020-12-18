@@ -28,6 +28,7 @@ import { handleError } from './GlobalSlice';
 import { MasterDataActions, masterDataSelectors } from './MasterDataSlice';
 import { SequenceModelActions } from './SequenceModelSlice';
 import { EditActor } from './thunks/ActorThunks';
+import { EditDataSetup } from './thunks/DataSetupThunks';
 import { EditData } from './thunks/DataThunks';
 import { EditGroup } from './thunks/GroupThunks';
 import { EditRelation } from './thunks/RelationThunks';
@@ -411,7 +412,7 @@ const setModeToEditDataSetup = (id?: number): AppThunk => (dispatch) => {
             handleError(response.message);
         }
     } else {
-        dispatch(EditActions.dataSetup.create());
+        dispatch(EditDataSetup.create());
     }
 };
 
@@ -436,33 +437,7 @@ const setModeToEditCondition = (decision: DecisionTO): AppThunk => (dispatch) =>
 
 
 
-// ----------------------------------------------- DATA SETUP -----------------------------------------------
 
-const createDataSetupThunk = (): AppThunk => (dispatch) => {
-    const dataSetup: DataSetupCTO = new DataSetupCTO();
-    const response: DataAccessResponse<DataSetupCTO> = DataAccess.saveDataSetupCTO(dataSetup);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadDataSetupsFromBackend());
-    dispatch(EditActions.dataSetup.update(response.object));
-};
-
-const saveDataSetupThunk = (dataSetup: DataSetupCTO): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<DataSetupCTO> = DataAccess.saveDataSetupCTO(dataSetup);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadDataSetupsFromBackend());
-};
-
-const deleteDataSetupThunk = (dataSetup: DataSetupCTO): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<DataSetupCTO> = DataAccess.deleteDataSetup(dataSetup);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadDataSetupsFromBackend());
-};
 
 // ----------------------------------------------- Init Data -----------------------------------------------
 
@@ -1029,12 +1004,7 @@ export const EditActions = {
         tab: setModeToTab,
     },
 
-    dataSetup: {
-        save: saveDataSetupThunk,
-        delete: deleteDataSetupThunk,
-        update: EditSlice.actions.setDataSetupToEdit,
-        create: createDataSetupThunk,
-    },
+
     initData: {
         save: saveInitDataThunk,
         delete: deleteInitDataThunk,
