@@ -60,7 +60,7 @@ export interface StepAction {
     actionTO: ActionTO;
 }
 
-export interface empty {}
+export interface EmptyObjectToEdit {}
 
 interface EditState {
     mode: Mode;
@@ -77,11 +77,12 @@ interface EditState {
         | DecisionTO
         | ChainlinkTO
         | ChainDecisionTO
-        | empty;
+        | ActionTO
+        | EmptyObjectToEdit;
     instanceId: number;
 }
 const getInitialState: EditState = {
-    objectToEdit: {},
+    objectToEdit: {} as EmptyObjectToEdit,
     mode: Mode.EDIT,
     instanceId: -1,
 };
@@ -185,7 +186,7 @@ const EditSlice = createSlice({
             }
         },
         clearObjectToEdit: (state) => {
-            state.objectToEdit = {};
+            state.objectToEdit = {} as EmptyObjectToEdit;
         },
         setMode: (state, action: PayloadAction<Mode>) => {
             state.mode = action.payload;
