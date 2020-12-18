@@ -28,6 +28,7 @@ import { DavitUtil } from '../utils/DavitUtil';
 import { handleError } from './GlobalSlice';
 import { MasterDataActions, masterDataSelectors } from './MasterDataSlice';
 import { SequenceModelActions } from './SequenceModelSlice';
+import { EditActor } from './thunks/ActorThunks';
 
 export enum Mode {
     TAB = 'TAB',
@@ -59,6 +60,8 @@ export interface StepAction {
     actionTO: ActionTO;
 }
 
+export interface empty {}
+
 interface EditState {
     mode: Mode;
     objectToEdit:
@@ -74,7 +77,7 @@ interface EditState {
         | DecisionTO
         | ChainlinkTO
         | ChainDecisionTO
-        | {};
+        | empty;
     instanceId: number;
 }
 const getInitialState: EditState = {
@@ -190,6 +193,8 @@ const EditSlice = createSlice({
     },
 });
 
+export const editActions = EditSlice.actions;
+
 // =============================================== THUNKS ===============================================
 
 // ----------------------------------------------- SET MODE -----------------------------------------------
@@ -242,7 +247,7 @@ const setModeToEdit = (): AppThunk => (dispatch, getState) => {
 const setModeToEditActor = (actor?: ActorCTO): AppThunk => (dispatch) => {
     dispatch(setModeWithStorage(Mode.EDIT_ACTOR));
     if (actor === undefined) {
-        dispatch(EditActions.actor.create());
+        dispatch(EditActor.create());
     } else {
         dispatch(EditSlice.actions.setActorToEdit(actor));
     }
@@ -422,37 +427,6 @@ const setModeToEditCondition = (decision: DecisionTO): AppThunk => (dispatch) =>
     } else {
         handleError("Edit Condition: 'Decision is null or undefined'.");
     }
-};
-
-// ----------------------------------------------- ACTOR -----------------------------------------------
-
-const createActorThunk = (): AppThunk => (dispatch) => {
-    const actor: ActorCTO = new ActorCTO();
-    const response: DataAccessResponse<ActorCTO> = DataAccess.saveActorCTO(actor);
-    if (response.code !== 200) {
-        console.log(response);
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadActorsFromBackend());
-    dispatch(EditActions.actor.update(response.object));
-};
-
-const saveActorThunk = (actor: ActorCTO): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<ActorCTO> = DataAccess.saveActorCTO(actor);
-    if (response.code !== 200) {
-        console.log(response);
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadActorsFromBackend());
-};
-
-const deleteActorThunk = (actor: ActorCTO): AppThunk => async (dispatch) => {
-    const response: DataAccessResponse<ActorCTO> = await DataAccess.deleteActorCTO(actor);
-    if (response.code !== 200) {
-        console.log(response);
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadActorsFromBackend());
 };
 
 // ----------------------------------------------- GROUP -----------------------------------------------
@@ -1191,12 +1165,7 @@ export const EditActions = {
         file: setModeToFile,
         tab: setModeToTab,
     },
-    actor: {
-        save: saveActorThunk,
-        delete: deleteActorThunk,
-        update: EditSlice.actions.setActorToEdit,
-        create: createActorThunk,
-    },
+
     data: {
         save: saveDataThunk,
         delete: deleteDataThunk,

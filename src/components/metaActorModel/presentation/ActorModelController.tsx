@@ -8,9 +8,10 @@ import { ActionTO } from '../../../dataAccess/access/to/ActionTO';
 import { DecisionTO } from '../../../dataAccess/access/to/DecisionTO';
 import { InitDataTO } from '../../../dataAccess/access/to/InitDataTO';
 import { ActionType } from '../../../dataAccess/access/types/ActionType';
-import { EditActions, editSelectors } from '../../../slices/EditSlice';
+import { editSelectors } from '../../../slices/EditSlice';
 import { MasterDataActions, masterDataSelectors } from '../../../slices/MasterDataSlice';
 import { sequenceModelSelectors } from '../../../slices/SequenceModelSlice';
+import { EditActor } from '../../../slices/thunks/ActorThunks';
 import { DavitUtil } from '../../../utils/DavitUtil';
 import { ActorData } from '../../../viewDataTypes/ActorData';
 import { ActorDataState } from '../../../viewDataTypes/ActorDataState';
@@ -259,7 +260,7 @@ const useViewModel = () => {
             const copyActorCTO: ActorCTO = DavitUtil.deepCopy(actorCTO);
             copyActorCTO.geometricalData.position.x = x;
             copyActorCTO.geometricalData.position.y = y;
-            dispatch(EditActions.actor.save(copyActorCTO));
+            dispatch(EditActor.save(copyActorCTO));
         }
     };
 
@@ -270,7 +271,7 @@ const useViewModel = () => {
         if (copyActor) {
             copyActor.geometricalData.geometricalData.width = width;
             copyActor.geometricalData.geometricalData.height = height;
-            dispatch(EditActions.actor.save(copyActor));
+            dispatch(EditActor.save(copyActor));
         }
     };
 
