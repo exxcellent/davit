@@ -7,6 +7,7 @@ import { DataRelationTO, Direction, RelationType } from '../../../../../../dataA
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
 import { handleError } from '../../../../../../slices/GlobalSlice';
 import { masterDataSelectors } from '../../../../../../slices/MasterDataSlice';
+import { EditRelation } from '../../../../../../slices/thunks/RelationThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
 import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
@@ -132,7 +133,7 @@ const useControllPanelEditRelationViewModel = () => {
 
     useEffect(() => {
         // check if component to edit is really set or go back to edit mode
-        if (isNullOrUndefined(relationToEdit)) {
+        if (DavitUtil.isNullOrUndefined(relationToEdit)) {
             dispatch(EditActions.setMode.edit());
             handleError('Tried to go to edit relation without relationToedit specified');
         }
@@ -172,7 +173,7 @@ const useControllPanelEditRelationViewModel = () => {
 
     const saveRelation = () => {
         if (relationToEdit?.data1Fk !== -1 && relationToEdit?.data2Fk !== -1) {
-            dispatch(EditActions.relation.save(relationToEdit!));
+            dispatch(EditRelation.save(relationToEdit!));
         } else {
             deleteRelation();
         }
@@ -180,13 +181,13 @@ const useControllPanelEditRelationViewModel = () => {
     };
 
     const deleteRelation = () => {
-        dispatch(EditActions.relation.delete(relationToEdit!));
+        dispatch(EditRelation.delete(relationToEdit!));
         dispatch(EditActions.setMode.edit());
     };
 
     const updateRelation = () => {
         const copyRelationToEdit: DataRelationTO = DavitUtil.deepCopy(relationToEdit);
-        dispatch(EditActions.relation.save(copyRelationToEdit));
+        dispatch(EditRelation.save(copyRelationToEdit));
     };
 
     const createAnother = () => {
