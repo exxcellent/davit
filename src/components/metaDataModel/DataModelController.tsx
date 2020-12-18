@@ -10,9 +10,10 @@ import { DataRelationTO } from '../../dataAccess/access/to/DataRelationTO';
 import { DecisionTO } from '../../dataAccess/access/to/DecisionTO';
 import { InitDataTO } from '../../dataAccess/access/to/InitDataTO';
 import { ActionType } from '../../dataAccess/access/types/ActionType';
-import { EditActions, editSelectors } from '../../slices/EditSlice';
+import { editSelectors } from '../../slices/EditSlice';
 import { MasterDataActions, masterDataSelectors } from '../../slices/MasterDataSlice';
 import { SequenceModelActions, sequenceModelSelectors } from '../../slices/SequenceModelSlice';
+import { EditData } from '../../slices/thunks/DataThunks';
 import { DavitUtil } from '../../utils/DavitUtil';
 import { ActorData } from '../../viewDataTypes/ActorData';
 import { ActorDataState } from '../../viewDataTypes/ActorDataState';
@@ -231,7 +232,7 @@ const useMetaDataModelViewModel = () => {
             const copyDataCTO: DataCTO = DavitUtil.deepCopy(dataCTO);
             copyDataCTO.geometricalData.position.x = x;
             copyDataCTO.geometricalData.position.y = y;
-            dispatch(EditActions.data.save(copyDataCTO));
+            dispatch(EditData.save(copyDataCTO));
         }
     };
 
@@ -330,7 +331,7 @@ const useMetaDataModelViewModel = () => {
         if (copyData) {
             copyData.geometricalData.geometricalData.width = width;
             copyData.geometricalData.geometricalData.height = height;
-            dispatch(EditActions.data.save(copyData));
+            dispatch(EditData.save(copyData));
         }
     };
 

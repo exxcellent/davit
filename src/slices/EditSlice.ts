@@ -29,6 +29,7 @@ import { handleError } from './GlobalSlice';
 import { MasterDataActions, masterDataSelectors } from './MasterDataSlice';
 import { SequenceModelActions } from './SequenceModelSlice';
 import { EditActor } from './thunks/ActorThunks';
+import { EditData } from './thunks/DataThunks';
 
 export enum Mode {
     TAB = 'TAB',
@@ -281,7 +282,7 @@ const editDataInstanceById = (id: number): AppThunk => (dispatch, getState) => {
 const setModeToEditData = (data?: DataCTO): AppThunk => (dispatch) => {
     dispatch(setModeWithStorage(Mode.EDIT_DATA));
     if (data === undefined) {
-        dispatch(EditActions.data.create());
+        dispatch(EditData.create());
     } else {
         dispatch(EditSlice.actions.setDataToEdit(data));
     }
@@ -460,38 +461,6 @@ const deleteGroupThunk = (group: GroupTO): AppThunk => async (dispatch) => {
     }
     dispatch(MasterDataActions.loadGroupsFromBackend());
     dispatch(MasterDataActions.loadActorsFromBackend());
-};
-
-// ----------------------------------------------- DATA -----------------------------------------------
-
-const createDataThunk = (): AppThunk => (dispatch) => {
-    const data: DataCTO = new DataCTO();
-    const response: DataAccessResponse<DataCTO> = DataAccess.saveDataCTO(data);
-    if (response.code !== 200) {
-        console.log(response);
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadDatasFromBackend());
-    dispatch(EditActions.data.update(response.object));
-};
-
-const saveDataThunk = (data: DataCTO): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<DataCTO> = DataAccess.saveDataCTO(data);
-    if (response.code !== 200) {
-        console.log(response);
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadDatasFromBackend());
-};
-
-const deleteDataThunk = (data: DataCTO): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<DataCTO> = DataAccess.deleteDataCTO(data);
-    if (response.code !== 200) {
-        console.log(response);
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadDatasFromBackend());
-    dispatch(MasterDataActions.loadRelationsFromBackend());
 };
 
 // ----------------------------------------------- RELATION -----------------------------------------------
@@ -1167,12 +1136,6 @@ export const EditActions = {
         tab: setModeToTab,
     },
 
-    data: {
-        save: saveDataThunk,
-        delete: deleteDataThunk,
-        update: EditSlice.actions.setDataToEdit,
-        create: createDataThunk,
-    },
     group: {
         save: saveGroupThunk,
         delete: deleteGroupThunk,

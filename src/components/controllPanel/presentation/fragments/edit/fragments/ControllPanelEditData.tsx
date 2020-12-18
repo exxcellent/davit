@@ -4,6 +4,7 @@ import { Button, Input } from 'semantic-ui-react';
 import { DataCTO } from '../../../../../../dataAccess/access/cto/DataCTO';
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
 import { handleError } from '../../../../../../slices/GlobalSlice';
+import { EditData } from '../../../../../../slices/thunks/DataThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
 import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
@@ -106,12 +107,12 @@ const useControllPanelEditDataViewModel = () => {
 
     const updateData = () => {
         const copyDataToEdit: DataCTO = DavitUtil.deepCopy(dataToEdit);
-        dispatch(EditActions.data.save(copyDataToEdit));
+        dispatch(EditData.save(copyDataToEdit));
     };
 
     const saveData = () => {
         if (dataToEdit?.data.name !== '') {
-            dispatch(EditActions.data.save(dataToEdit!));
+            dispatch(EditData.save(dataToEdit!));
         } else {
             deleteData();
         }
@@ -119,7 +120,7 @@ const useControllPanelEditDataViewModel = () => {
     };
 
     const deleteData = () => {
-        dispatch(EditActions.data.delete(dataToEdit!));
+        dispatch(EditData.delete(dataToEdit!));
         dispatch(EditActions.setMode.edit());
     };
 

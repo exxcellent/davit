@@ -5,6 +5,7 @@ import { DataCTO } from '../../../../../../dataAccess/access/cto/DataCTO';
 import { DataInstanceTO } from '../../../../../../dataAccess/access/to/DataInstanceTO';
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
 import { handleError } from '../../../../../../slices/GlobalSlice';
+import { EditData } from '../../../../../../slices/thunks/DataThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
 import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
@@ -88,7 +89,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
         if (dataToEdit !== null && instanceId !== null) {
             const copyData: DataCTO = DavitUtil.deepCopy(dataToEdit);
             copyData.data.instances.find((inst) => inst.id === instanceId)!.name = name;
-            dispatch(EditActions.data.update(copyData));
+            dispatch(EditData.update(copyData));
         }
     };
 
@@ -112,7 +113,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
         if (dataToEdit !== null && instanceId !== null) {
             const copyData: DataCTO = DavitUtil.deepCopy(dataToEdit);
             if (copyData.data.instances.find((inst) => inst.id === instanceId)!.name !== '') {
-                dispatch(EditActions.data.save(copyData));
+                dispatch(EditData.save(copyData));
             }
         }
     };
@@ -121,7 +122,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
         if (dataToEdit !== null && instanceId !== null) {
             const copyData: DataCTO = DavitUtil.deepCopy(dataToEdit);
             copyData.data.instances = copyData.data.instances.filter((inst) => inst.id !== instanceId);
-            dispatch(EditActions.data.save(copyData));
+            dispatch(EditData.save(copyData));
             dispatch(EditActions.setMode.editDataById(dataToEdit.data.id));
         }
     };

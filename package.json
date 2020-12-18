@@ -36,6 +36,7 @@
     "immutable": "^4.0.0-rc.12",
     "intl-messageformat-parser": "6.0",
     "lodash.debounce": "^4.0.8",
+    "prettier-plugin-organize-imports": "^1.1.1",
     "react": "^16.13.1",
     "react-archer": "^2.0.2",
     "react-dom": "^16.13.1",
