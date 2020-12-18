@@ -18,8 +18,8 @@ import { ActorData } from '../../viewDataTypes/ActorData';
 import { ActorDataState } from '../../viewDataTypes/ActorDataState';
 import { ViewFragmentProps } from '../../viewDataTypes/ViewFragment';
 import { DavitPathProps, DavitPathTypes } from '../common/fragments/svg/DavitPath';
-import { DavitCard, DavitCardProps } from '../metaComponentModel/presentation/fragments/DavitCard';
-import { DnDBox, DnDBoxElement, DnDBoxType } from '../metaComponentModel/presentation/fragments/DnDBox';
+import { DavitCard, DavitCardProps } from '../metaActorModel/presentation/fragments/DavitCard';
+import { DnDBox, DnDBoxElement, DnDBoxType } from '../metaActorModel/presentation/fragments/DnDBox';
 
 interface DataModelControllerProps {
     fullScreen?: boolean;

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ActorModelController } from '../../components/metaComponentModel/presentation/ActorModelController';
+import { ActorModelController } from '../../components/metaActorModel/presentation/ActorModelController';
 
 export function ComponentPage() {
     return (
