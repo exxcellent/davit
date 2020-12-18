@@ -3,10 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ActorCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
 import { DataCTO } from '../../../../../../dataAccess/access/cto/DataCTO';
 import { SequenceCTO } from '../../../../../../dataAccess/access/cto/SequenceCTO';
+import { SequenceStepCTO } from '../../../../../../dataAccess/access/cto/SequenceStepCTO';
 import { ActionTO } from '../../../../../../dataAccess/access/to/ActionTO';
 import { ActionType } from '../../../../../../dataAccess/access/types/ActionType';
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
 import { handleError } from '../../../../../../slices/GlobalSlice';
+import { MasterDataActions } from '../../../../../../slices/MasterDataSlice';
 import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
 import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
@@ -150,7 +152,16 @@ const useControllPanelEditActionViewModel = () => {
     const deleteAction = () => {
         if (actionToEdit !== null) {
             dispatch(EditActions.action.delete(actionToEdit));
-            dispatch(EditActions.setMode.editStep(EditActions.step.find(actionToEdit.sequenceStepFk)));
+            const step: SequenceStepCTO | undefined = MasterDataActions.find.findSequenceStepCTO(
+                actionToEdit.sequenceStepFk,
+            );
+            if (step) {
+                dispatch(EditActions.setMode.editStep(step));
+            } else {
+                // should never happend but as fallback savty.
+                dispatch(handleError('Step not found!'));
+                dispatch(EditActions.setMode.edit());
+            }
         }
     };
 
@@ -233,7 +244,12 @@ const useControllPanelEditActionViewModel = () => {
             } else if (newMode && newMode === 'SEQUENCE') {
                 dispatch(EditActions.setMode.editSequence(selectedSequence?.sequenceTO.id));
             } else {
-                dispatch(EditActions.setMode.editStep(EditActions.step.find(actionToEdit!.sequenceStepFk)));
+                const step: SequenceStepCTO | undefined = MasterDataActions.find.findSequenceStepCTO(
+                    actionToEdit!.sequenceStepFk,
+                );
+                if (step) {
+                    dispatch(EditActions.setMode.editStep(step));
+                }
             }
         }
     };

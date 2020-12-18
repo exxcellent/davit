@@ -8,8 +8,10 @@ import { DecisionTO } from '../../../../../../dataAccess/access/to/DecisionTO';
 import { GoTo, GoToTypes } from '../../../../../../dataAccess/access/types/GoToType';
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
 import { handleError } from '../../../../../../slices/GlobalSlice';
+import { MasterDataActions } from '../../../../../../slices/MasterDataSlice';
 import { SequenceModelActions, sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
 import { EditSequence } from '../../../../../../slices/thunks/SequenceThunks';
+import { EditStep } from '../../../../../../slices/thunks/StepThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
 import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonIcon } from '../../../../../common/fragments/buttons/DavitButton';
@@ -169,7 +171,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
             const copySequenceStep: SequenceStepCTO = DavitUtil.deepCopy(stepToEdit);
             copySequenceStep.squenceStepTO.name = name;
             dispatch(EditActions.setMode.editStep(copySequenceStep));
-            dispatch(EditActions.step.save(copySequenceStep));
+            dispatch(EditStep.save(copySequenceStep));
             dispatch(SequenceModelActions.setCurrentSequence(copySequenceStep.squenceStepTO.sequenceFk));
         }
     };
@@ -177,9 +179,9 @@ const useControllPanelEditSequenceStepViewModel = () => {
     const saveSequenceStep = (newMode?: string) => {
         if (!DavitUtil.isNullOrUndefined(stepToEdit) && !DavitUtil.isNullOrUndefined(selectedSequence)) {
             if (stepToEdit!.squenceStepTO.name !== '') {
-                dispatch(EditActions.step.save(stepToEdit!));
+                dispatch(EditStep.save(stepToEdit!));
             } else {
-                dispatch(EditActions.step.delete(stepToEdit!, selectedSequence!));
+                dispatch(EditStep.delete(stepToEdit!, selectedSequence!));
             }
             if (newMode && newMode === 'EDIT') {
                 dispatch(EditActions.setMode.edit());
@@ -191,7 +193,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
     const deleteSequenceStep = () => {
         if (!DavitUtil.isNullOrUndefined(stepToEdit) && !DavitUtil.isNullOrUndefined(selectedSequence)) {
-            dispatch(EditActions.step.delete(stepToEdit!, selectedSequence!));
+            dispatch(EditStep.delete(stepToEdit!, selectedSequence!));
             dispatch(EditActions.setMode.editSequence(stepToEdit!.squenceStepTO.sequenceFk));
         }
     };
@@ -199,7 +201,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
     const updateStep = () => {
         if (stepToEdit !== null && undefined) {
             const copySequenceStep: SequenceStepCTO = DavitUtil.deepCopy(stepToEdit);
-            dispatch(EditActions.step.save(copySequenceStep));
+            dispatch(EditStep.save(copySequenceStep));
         }
     };
 
@@ -230,8 +232,8 @@ const useControllPanelEditSequenceStepViewModel = () => {
         if (goTo !== undefined) {
             const copySequenceStep: SequenceStepCTO = DavitUtil.deepCopy(stepToEdit);
             copySequenceStep.squenceStepTO.goto = goTo;
-            dispatch(EditActions.step.update(copySequenceStep));
-            dispatch(EditActions.step.save(copySequenceStep));
+            dispatch(EditStep.update(copySequenceStep));
+            dispatch(EditStep.save(copySequenceStep));
             dispatch(SequenceModelActions.setCurrentSequence(copySequenceStep.squenceStepTO.sequenceFk));
         }
     };
@@ -290,7 +292,14 @@ const useControllPanelEditSequenceStepViewModel = () => {
     const setRoot = () => {
         if (!DavitUtil.isNullOrUndefined(stepToEdit) && !DavitUtil.isNullOrUndefined(selectedSequence)) {
             dispatch(EditSequence.setRoot(stepToEdit!.squenceStepTO.sequenceFk, stepToEdit!.squenceStepTO.id, false));
-            dispatch(EditActions.setMode.editStep(EditActions.step.find(stepToEdit!.squenceStepTO.id)));
+            const step: SequenceStepCTO | undefined = MasterDataActions.find.findSequenceStepCTO(
+                stepToEdit!.squenceStepTO.id,
+            );
+            if (step) {
+                dispatch(EditActions.setMode.editStep(step));
+            } else {
+                dispatch(EditActions.setMode.edit());
+            }
         }
     };
 

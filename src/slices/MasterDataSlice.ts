@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk, RootState } from '../app/store';
 import { ActorCTO } from '../dataAccess/access/cto/ActorCTO';
 import { DataCTO } from '../dataAccess/access/cto/DataCTO';
+import { SequenceStepCTO } from '../dataAccess/access/cto/SequenceStepCTO';
 import { ChainDecisionTO } from '../dataAccess/access/to/ChainDecisionTO';
 import { ChainlinkTO } from '../dataAccess/access/to/ChainlinkTO';
 import { ChainTO } from '../dataAccess/access/to/ChainTO';
@@ -153,6 +154,15 @@ const loadChainDecisionsFromBackend = (): AppThunk => (dispatch) => {
     }
 };
 
+const findSequenceStepCTO = (id: number): SequenceStepCTO | undefined => {
+    let step: SequenceStepCTO | undefined;
+    const response: DataAccessResponse<SequenceStepCTO> = DataAccess.findSequenceStepCTO(id);
+    if (response.code === 200) {
+        step = response.object;
+    }
+    return step;
+};
+
 const loadAll = (): AppThunk => (dispatch) => {
     dispatch(loadGroupsFromBackend());
     dispatch(loadActorsFromBackend());
@@ -226,4 +236,7 @@ export const MasterDataActions = {
     loadSequencesFromBackend,
     loadDatasFromBackend,
     loadAll,
+    find: {
+        findSequenceStepCTO,
+    },
 };

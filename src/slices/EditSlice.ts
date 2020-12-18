@@ -34,6 +34,7 @@ import { EditGroup } from './thunks/GroupThunks';
 import { EditInitData } from './thunks/InitDataThunks';
 import { EditRelation } from './thunks/RelationThunks';
 import { EditSequence } from './thunks/SequenceThunks';
+import { EditStep } from './thunks/StepThunks';
 
 export enum Mode {
     TAB = 'TAB',
@@ -372,7 +373,7 @@ const setModeToEditStep = (
     ifGoTo?: boolean,
 ): AppThunk => (dispatch) => {
     dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_STEP));
-    dispatch(EditActions.step.create(stepCTO, from, ifGoTo));
+    dispatch(EditStep.create(stepCTO, from, ifGoTo));
 };
 
 const setModeToEditAction = (action: ActionTO): AppThunk => (dispatch) => {
@@ -592,83 +593,7 @@ const findChainLinkThunk = (id: number): ChainlinkTO => {
 
 
 
-// ----------------------------------------------- SEQUENCE STEP -----------------------------------------------
-const createSequenceStepThunk = (
-    step: SequenceStepCTO,
-    from?: SequenceStepCTO | DecisionTO,
-    ifGoTO?: Boolean,
-): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<SequenceStepCTO> = DataAccess.saveSequenceStepCTO(step);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    } else {
-        if (from !== undefined) {
-            if ((from as SequenceStepCTO).squenceStepTO !== undefined) {
-                (from as SequenceStepCTO).squenceStepTO.goto = {
-                    type: GoToTypes.STEP,
-                    id: response.object.squenceStepTO.id,
-                };
-                dispatch(EditActions.step.save(from as SequenceStepCTO));
-            }
-            if ((from as DecisionTO).elseGoTo !== undefined) {
-                if (ifGoTO) {
-                    (from as DecisionTO).ifGoTo = { type: GoToTypes.STEP, id: response.object.squenceStepTO.id };
-                } else {
-                    (from as DecisionTO).elseGoTo = { type: GoToTypes.STEP, id: response.object.squenceStepTO.id };
-                }
-                dispatch(EditActions.decision.save(from as DecisionTO));
-            }
-        }
-        dispatch(EditActions.step.update(response.object));
-    }
-};
 
-const deleteSequenceStepThunk = (step: SequenceStepCTO, sequenceCTO?: SequenceCTO): AppThunk => (dispatch) => {
-    // update forent gotos.
-    if (sequenceCTO) {
-        const copySequence: SequenceCTO = DavitUtil.deepCopy(sequenceCTO);
-        // update steps
-        copySequence.sequenceStepCTOs.forEach((item) => {
-            if (
-                item.squenceStepTO.goto.type === GoToTypes.STEP &&
-                item.squenceStepTO.goto.id === step.squenceStepTO.id
-            ) {
-                item.squenceStepTO.goto = { type: GoToTypes.ERROR };
-                dispatch(EditActions.step.save(item));
-            }
-        });
-        // update decision
-        copySequence.decisions.forEach((cond) => {
-            if (cond.ifGoTo.type === GoToTypes.STEP && cond.ifGoTo.id === step.squenceStepTO.id) {
-                cond.ifGoTo = { type: GoToTypes.ERROR };
-                dispatch(EditActions.decision.save(cond));
-            }
-            if (cond.elseGoTo.type === GoToTypes.STEP && cond.elseGoTo.id === step.squenceStepTO.id) {
-                cond.elseGoTo = { type: GoToTypes.ERROR };
-                dispatch(EditActions.decision.save(cond));
-            }
-        });
-    }
-    // delete step.
-    const response: DataAccessResponse<SequenceStepCTO> = DataAccess.deleteSequenceStepCTO(step);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadSequencesFromBackend());
-};
-
-const saveSequenceStepThunk = (step: SequenceStepCTO): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<SequenceStepCTO> = DataAccess.saveSequenceStepCTO(step);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadSequencesFromBackend());
-};
-
-const findStepCTOThunk = (stepId: number): SequenceStepCTO => {
-    const response: DataAccessResponse<SequenceStepCTO> = DataAccess.findSequenceStepCTO(stepId);
-    return response.object;
-};
 
 // ----------------------------------------------- ACTION -----------------------------------------------
 
@@ -707,7 +632,7 @@ const createDecisionThunk = (decision: DecisionTO, from?: SequenceStepCTO | Deci
         if (from) {
             if ((from as SequenceStepCTO).squenceStepTO !== undefined) {
                 (from as SequenceStepCTO).squenceStepTO.goto = { type: GoToTypes.DEC, id: response.object.id };
-                dispatch(EditActions.step.save(from as SequenceStepCTO));
+                dispatch(EditStep.save(from as SequenceStepCTO));
             }
             if ((from as DecisionTO).elseGoTo !== undefined) {
                 if (ifGoTo) {
@@ -737,7 +662,7 @@ const deleteDecisionThunk = (decision: DecisionTO, sequenceCTO?: SequenceCTO): A
         copySequence.sequenceStepCTOs.forEach((step) => {
             if (step.squenceStepTO.goto.type === GoToTypes.DEC && step.squenceStepTO.goto.id === decision.id) {
                 step.squenceStepTO.goto = { type: GoToTypes.ERROR };
-                dispatch(EditActions.step.save(step));
+                dispatch(EditStep.save(step));
             }
         });
         // update decisions
@@ -983,15 +908,6 @@ export const EditActions = {
         tab: setModeToTab,
     },
 
-
-
-    step: {
-        save: saveSequenceStepThunk,
-        delete: deleteSequenceStepThunk,
-        update: EditSlice.actions.setStepToEdit,
-        create: createSequenceStepThunk,
-        find: findStepCTOThunk,
-    },
     action: {
         delete: deleteActionThunk,
         update: EditSlice.actions.setActionToEdit,
