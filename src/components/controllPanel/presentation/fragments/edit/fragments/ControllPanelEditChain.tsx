@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input } from 'semantic-ui-react';
-import { isNullOrUndefined } from 'util';
 import { ChainDecisionTO } from '../../../../../../dataAccess/access/to/ChainDecisionTO';
 import { ChainlinkTO } from '../../../../../../dataAccess/access/to/ChainlinkTO';
 import { ChainTO } from '../../../../../../dataAccess/access/to/ChainTO';
@@ -9,6 +8,7 @@ import { SequenceTO } from '../../../../../../dataAccess/access/to/SequenceTO';
 import { EditActions } from '../../../../../../slices/EditSlice';
 import { masterDataSelectors } from '../../../../../../slices/MasterDataSlice';
 import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
+import { EditSequence } from '../../../../../../slices/thunks/SequenceThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
 import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
@@ -106,7 +106,7 @@ const useControllPanelEditChainViewModel = () => {
 
     useEffect(() => {
         // check if sequence to edit is really set or gos back to edit mode
-        if (isNullOrUndefined(selectedChain)) {
+        if (DavitUtil.isNullOrUndefined(selectedChain)) {
             console.warn('Tried to go to edit sequence without chain specified' + selectedChain);
             dispatch(EditActions.setMode.edit());
         }
@@ -118,7 +118,7 @@ const useControllPanelEditChainViewModel = () => {
     }, [selectedChain, dispatch]);
 
     const changeName = (name: string) => {
-        if (!isNullOrUndefined(selectedChain)) {
+        if (!DavitUtil.isNullOrUndefined(selectedChain)) {
             const copyChainToEdit: ChainTO = DavitUtil.deepCopy(selectedChain);
             copyChainToEdit.name = name;
             dispatch(EditActions.chain.save(copyChainToEdit));
@@ -126,11 +126,11 @@ const useControllPanelEditChainViewModel = () => {
     };
 
     const saveChain = (newMode?: string) => {
-        if (!isNullOrUndefined(selectedChain)) {
-            if (selectedChain.name !== '') {
-                dispatch(EditActions.chain.save(selectedChain));
+        if (!DavitUtil.isNullOrUndefined(selectedChain)) {
+            if (selectedChain!.name !== '') {
+                dispatch(EditActions.chain.save(selectedChain!));
             } else {
-                dispatch(EditActions.chain.delete(selectedChain));
+                dispatch(EditActions.chain.delete(selectedChain!));
             }
             if (isCreateAnother && !newMode) {
                 dispatch(EditActions.setMode.editChain());
@@ -141,15 +141,15 @@ const useControllPanelEditChainViewModel = () => {
     };
 
     const deleteChain = () => {
-        if (!isNullOrUndefined(selectedChain)) {
-            dispatch(EditActions.chain.delete(selectedChain));
+        if (!DavitUtil.isNullOrUndefined(selectedChain)) {
+            dispatch(EditActions.chain.delete(selectedChain!));
         }
         dispatch(EditActions.setMode.edit());
     };
 
     const validateInput = (): boolean => {
-        if (!isNullOrUndefined(selectedChain)) {
-            return DavitUtil.isValidName(selectedChain.name);
+        if (!DavitUtil.isNullOrUndefined(selectedChain)) {
+            return DavitUtil.isValidName(selectedChain!.name);
         } else {
             return false;
         }
@@ -180,7 +180,7 @@ const useControllPanelEditChainViewModel = () => {
 
     const updateSequence = () => {
         const copySequence: SequenceTO = DavitUtil.deepCopy(selectedChain);
-        dispatch(EditActions.sequence.save(copySequence));
+        dispatch(EditSequence.save(copySequence));
     };
 
     return {

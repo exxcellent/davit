@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input } from 'semantic-ui-react';
-import { isNullOrUndefined } from 'util';
 import { SequenceCTO } from '../../../../../../dataAccess/access/cto/SequenceCTO';
 import { SequenceStepCTO } from '../../../../../../dataAccess/access/cto/SequenceStepCTO';
 import { DecisionTO } from '../../../../../../dataAccess/access/to/DecisionTO';
@@ -9,6 +8,7 @@ import { GoTo, GoToTypes } from '../../../../../../dataAccess/access/types/GoToT
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
 import { handleError } from '../../../../../../slices/GlobalSlice';
 import { SequenceModelActions, sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
+import { EditSequence } from '../../../../../../slices/thunks/SequenceThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
 import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonIcon } from '../../../../../common/fragments/buttons/DavitButton';
@@ -163,7 +163,7 @@ const useControllPanelEditConditionViewModel = () => {
     const [key, setKey] = useState<number>(0);
 
     useEffect(() => {
-        if (isNullOrUndefined(decisionToEdit)) {
+        if (DavitUtil.isNullOrUndefined(decisionToEdit)) {
             console.warn(decisionToEdit);
             dispatch(handleError('Tried to go to edit condition step without conditionToEdit specified'));
             dispatch(EditActions.setMode.edit());
@@ -177,7 +177,7 @@ const useControllPanelEditConditionViewModel = () => {
     }, [dispatch, decisionToEdit]);
 
     const changeName = (name: string) => {
-        if (!isNullOrUndefined(decisionToEdit)) {
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
             const copyConditionToEdit: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
             copyConditionToEdit.name = name;
             dispatch(EditActions.setMode.editDecision(copyConditionToEdit));
@@ -186,24 +186,24 @@ const useControllPanelEditConditionViewModel = () => {
     };
 
     const saveDecision = (newMode?: string) => {
-        if (!isNullOrUndefined(decisionToEdit) && !isNullOrUndefined(selectedSequence)) {
-            if (decisionToEdit.name !== '') {
-                dispatch(EditActions.decision.save(decisionToEdit));
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit) && !DavitUtil.isNullOrUndefined(selectedSequence)) {
+            if (decisionToEdit!.name !== '') {
+                dispatch(EditActions.decision.save(decisionToEdit!));
             } else {
-                dispatch(EditActions.decision.delete(decisionToEdit, selectedSequence));
+                dispatch(EditActions.decision.delete(decisionToEdit!, selectedSequence!));
             }
             if (newMode && newMode === 'EDIT') {
                 dispatch(EditActions.setMode.edit());
             } else {
-                dispatch(EditActions.setMode.editSequence(decisionToEdit.sequenceFk));
+                dispatch(EditActions.setMode.editSequence(decisionToEdit!.sequenceFk));
             }
         }
     };
 
     const deleteDecision = () => {
-        if (!isNullOrUndefined(decisionToEdit) && !isNullOrUndefined(selectedSequence)) {
-            dispatch(EditActions.decision.delete(decisionToEdit, selectedSequence));
-            dispatch(EditActions.setMode.editSequence(decisionToEdit.sequenceFk));
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit) && !DavitUtil.isNullOrUndefined(selectedSequence)) {
+            dispatch(EditActions.decision.delete(decisionToEdit!, selectedSequence!));
+            dispatch(EditActions.setMode.editSequence(decisionToEdit!.sequenceFk));
         }
     };
 
@@ -214,8 +214,8 @@ const useControllPanelEditConditionViewModel = () => {
 
     const validStep = (): boolean => {
         let valid: boolean = false;
-        if (!isNullOrUndefined(decisionToEdit)) {
-            if (decisionToEdit.name !== '') {
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
+            if (decisionToEdit!.name !== '') {
                 valid = true;
             }
         }
@@ -265,18 +265,18 @@ const useControllPanelEditConditionViewModel = () => {
     };
 
     const createGoToStep = (ifGoTo: boolean) => {
-        if (!isNullOrUndefined(decisionToEdit)) {
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
             const goToStep: SequenceStepCTO = new SequenceStepCTO();
-            goToStep.squenceStepTO.sequenceFk = decisionToEdit.sequenceFk;
+            goToStep.squenceStepTO.sequenceFk = decisionToEdit!.sequenceFk;
             const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
             dispatch(EditActions.setMode.editStep(goToStep, copyDecision, ifGoTo));
         }
     };
 
     const createGoToDecision = (ifGoTo: Boolean) => {
-        if (!isNullOrUndefined(decisionToEdit)) {
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
             const goToDecision: DecisionTO = new DecisionTO();
-            goToDecision.sequenceFk = decisionToEdit.sequenceFk;
+            goToDecision.sequenceFk = decisionToEdit!.sequenceFk;
             const copyStepToEdit: SequenceStepCTO = DavitUtil.deepCopy(decisionToEdit);
             dispatch(EditActions.setMode.editDecision(goToDecision, copyStepToEdit, ifGoTo));
             setKey(key + 1);
@@ -284,9 +284,9 @@ const useControllPanelEditConditionViewModel = () => {
     };
 
     const setRoot = () => {
-        if (!isNullOrUndefined(decisionToEdit)) {
-            dispatch(EditActions.sequence.setRoot(decisionToEdit.sequenceFk, decisionToEdit.id, true));
-            dispatch(EditActions.setMode.editDecision(EditActions.decision.find(decisionToEdit.id)));
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
+            dispatch(EditSequence.setRoot(decisionToEdit!.sequenceFk, decisionToEdit!.id, true));
+            dispatch(EditActions.setMode.editDecision(EditActions.decision.find(decisionToEdit!.id)));
         }
     };
 

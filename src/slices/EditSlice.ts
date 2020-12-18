@@ -17,7 +17,6 @@ import { DataRelationTO } from '../dataAccess/access/to/DataRelationTO';
 import { DecisionTO } from '../dataAccess/access/to/DecisionTO';
 import { GroupTO } from '../dataAccess/access/to/GroupTO';
 import { InitDataTO } from '../dataAccess/access/to/InitDataTO';
-import { SequenceStepTO } from '../dataAccess/access/to/SequenceStepTO';
 import { SequenceTO } from '../dataAccess/access/to/SequenceTO';
 import { ActionType } from '../dataAccess/access/types/ActionType';
 import { GoToTypes } from '../dataAccess/access/types/GoToType';
@@ -32,6 +31,7 @@ import { EditActor } from './thunks/ActorThunks';
 import { EditData } from './thunks/DataThunks';
 import { EditGroup } from './thunks/GroupThunks';
 import { EditRelation } from './thunks/RelationThunks';
+import { EditSequence } from './thunks/SequenceThunks';
 
 export enum Mode {
     TAB = 'TAB',
@@ -325,7 +325,7 @@ const setModeToEditSequence = (sequenceId?: number): AppThunk => (dispatch) => {
             handleError(response.message);
         }
     } else {
-        dispatch(EditActions.sequence.create());
+        dispatch(EditSequence.create());
     }
 };
 
@@ -636,56 +636,7 @@ const findChainLinkThunk = (id: number): ChainlinkTO => {
     return response.object;
 };
 
-// ----------------------------------------------- SEQUENCE -----------------------------------------------
 
-const createSequenceThunk = (): AppThunk => (dispatch) => {
-    const sequence: SequenceTO = new SequenceTO();
-    const response: DataAccessResponse<SequenceTO> = DataAccess.saveSequenceTO(sequence);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadSequencesFromBackend());
-    dispatch(EditActions.sequence.update(response.object));
-    dispatch(SequenceModelActions.setCurrentSequence(response.object.id));
-};
-
-const saveSequenceThunk = (sequence: SequenceTO): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<SequenceTO> = DataAccess.saveSequenceTO(sequence);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadSequencesFromBackend());
-    dispatch(EditSlice.actions.setSequenceToEdit(response.object));
-    dispatch(SequenceModelActions.setCurrentSequence(response.object.id));
-};
-
-const deleteSequenceThunk = (sequence: SequenceTO): AppThunk => async (dispatch) => {
-    const response: DataAccessResponse<SequenceTO> = await DataAccess.deleteSequenceTO(sequence);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadSequencesFromBackend());
-};
-
-const getSequenceCTOById = (sequenceId: number): SequenceCTO | null => {
-    const response: DataAccessResponse<SequenceCTO> = DataAccess.findSequenceCTO(sequenceId);
-    if (response.code !== 200) {
-        return null;
-    }
-    return response.object;
-};
-
-const setRootThunk = (sequenceId: number, rootId: number, isDecision: boolean): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<SequenceStepTO | DecisionTO> = DataAccess.setRoot(
-        sequenceId,
-        rootId,
-        isDecision,
-    );
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadSequencesFromBackend());
-};
 
 // ----------------------------------------------- SEQUENCE STEP -----------------------------------------------
 const createSequenceStepThunk = (
@@ -1078,15 +1029,6 @@ export const EditActions = {
         tab: setModeToTab,
     },
 
-
-    sequence: {
-        save: saveSequenceThunk,
-        delete: deleteSequenceThunk,
-        update: EditSlice.actions.setSequenceToEdit,
-        findCTO: getSequenceCTOById,
-        create: createSequenceThunk,
-        setRoot: setRootThunk,
-    },
     dataSetup: {
         save: saveDataSetupThunk,
         delete: deleteDataSetupThunk,

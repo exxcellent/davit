@@ -9,6 +9,7 @@ import { GoTo, GoToTypes } from '../../../../../../dataAccess/access/types/GoToT
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
 import { handleError } from '../../../../../../slices/GlobalSlice';
 import { SequenceModelActions, sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
+import { EditSequence } from '../../../../../../slices/thunks/SequenceThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
 import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonIcon } from '../../../../../common/fragments/buttons/DavitButton';
@@ -288,9 +289,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
     const setRoot = () => {
         if (!DavitUtil.isNullOrUndefined(stepToEdit) && !DavitUtil.isNullOrUndefined(selectedSequence)) {
-            dispatch(
-                EditActions.sequence.setRoot(stepToEdit!.squenceStepTO.sequenceFk, stepToEdit!.squenceStepTO.id, false),
-            );
+            dispatch(EditSequence.setRoot(stepToEdit!.squenceStepTO.sequenceFk, stepToEdit!.squenceStepTO.id, false));
             dispatch(EditActions.setMode.editStep(EditActions.step.find(stepToEdit!.squenceStepTO.id)));
         }
     };

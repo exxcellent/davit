@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input } from 'semantic-ui-react';
-import { isNullOrUndefined } from 'util';
 import { SequenceCTO } from '../../../../../../dataAccess/access/cto/SequenceCTO';
 import { SequenceStepCTO } from '../../../../../../dataAccess/access/cto/SequenceStepCTO';
 import { DecisionTO } from '../../../../../../dataAccess/access/to/DecisionTO';
@@ -9,6 +8,7 @@ import { SequenceTO } from '../../../../../../dataAccess/access/to/SequenceTO';
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
 import { handleError } from '../../../../../../slices/GlobalSlice';
 import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
+import { EditSequence } from '../../../../../../slices/thunks/SequenceThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
 import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
@@ -106,7 +106,7 @@ const useControllPanelEditSequenceViewModel = () => {
 
     useEffect(() => {
         // check if sequence to edit is really set or gos back to edit mode
-        if (isNullOrUndefined(sequenceToEdit)) {
+        if (DavitUtil.isNullOrUndefined(sequenceToEdit)) {
             handleError('Tried to go to edit sequence without sequenceToedit specified');
             dispatch(EditActions.setMode.edit());
         }
@@ -118,18 +118,18 @@ const useControllPanelEditSequenceViewModel = () => {
     }, [sequenceToEdit, dispatch]);
 
     const changeName = (name: string) => {
-        if (!isNullOrUndefined(sequenceToEdit)) {
+        if (!DavitUtil.isNullOrUndefined(sequenceToEdit)) {
             const copySequenceToEdit: SequenceTO = DavitUtil.deepCopy(sequenceToEdit);
             copySequenceToEdit.name = name;
-            dispatch(EditActions.sequence.save(copySequenceToEdit));
+            dispatch(EditSequence.save(copySequenceToEdit));
         }
     };
 
     const saveSequence = () => {
         if (sequenceToEdit!.name !== '') {
-            dispatch(EditActions.sequence.save(sequenceToEdit!));
+            dispatch(EditSequence.save(sequenceToEdit!));
         } else {
-            dispatch(EditActions.sequence.delete(sequenceToEdit!));
+            dispatch(EditSequence.delete(sequenceToEdit!));
         }
         if (isCreateAnother) {
             dispatch(EditActions.setMode.editSequence());
@@ -139,13 +139,13 @@ const useControllPanelEditSequenceViewModel = () => {
     };
 
     const deleteSequence = () => {
-        dispatch(EditActions.sequence.delete(sequenceToEdit!));
+        dispatch(EditSequence.delete(sequenceToEdit!));
         dispatch(EditActions.setMode.edit());
     };
 
     const validateInput = (): boolean => {
-        if (!isNullOrUndefined(sequenceToEdit)) {
-            return DavitUtil.isValidName(sequenceToEdit.name);
+        if (!DavitUtil.isNullOrUndefined(sequenceToEdit)) {
+            return DavitUtil.isValidName(sequenceToEdit!.name);
         } else {
             return false;
         }
@@ -181,7 +181,7 @@ const useControllPanelEditSequenceViewModel = () => {
         const copySequence: SequenceTO = DavitUtil.deepCopy(sequenceToEdit);
         copySequence.name = sequenceToEdit?.name + '-copy';
         copySequence.id = -1;
-        dispatch(EditActions.sequence.update(copySequence));
+        dispatch(EditSequence.update(copySequence));
     };
 
     const createAnother = () => {
@@ -190,7 +190,7 @@ const useControllPanelEditSequenceViewModel = () => {
 
     const updateSequence = () => {
         const copySequence: SequenceTO = DavitUtil.deepCopy(sequenceToEdit);
-        dispatch(EditActions.sequence.save(copySequence));
+        dispatch(EditSequence.save(copySequence));
     };
 
     return {
