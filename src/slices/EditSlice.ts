@@ -26,6 +26,7 @@ import { handleError } from './GlobalSlice';
 import { MasterDataActions, masterDataSelectors } from './MasterDataSlice';
 import { SequenceModelActions } from './SequenceModelSlice';
 import { EditActor } from './thunks/ActorThunks';
+import { EditChainLink } from './thunks/ChainLinkThunks';
 import { EditChain } from './thunks/ChainThunks';
 import { EditDataSetup } from './thunks/DataSetupThunks';
 import { EditData } from './thunks/DataThunks';
@@ -347,7 +348,7 @@ const setModeToEditChainlink = (
     ifGoTo?: boolean,
 ): AppThunk => (dispatch) => {
     dispatch(setModeWithStorage(Mode.EDIT_CHAIN_LINK));
-    dispatch(EditActions.chainLink.create(chainlink, from, ifGoTo));
+    dispatch(EditChainLink.create(chainlink, from, ifGoTo));
 };
 
 const setModeEditChainDecision = (
@@ -436,47 +437,6 @@ const setModeToEditCondition = (decision: DecisionTO): AppThunk => (dispatch) =>
     }
 };
 
-const createChainLinkThunk = (link: ChainlinkTO, from?: ChainlinkTO | ChainDecisionTO, ifGoTO?: boolean): AppThunk => (
-    dispatch,
-) => {
-    const response: DataAccessResponse<ChainlinkTO> = DataAccess.saveChainlink(link);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    } else {
-        if (from !== undefined) {
-            if ((from as ChainlinkTO).dataSetupFk !== undefined) {
-                (from as ChainlinkTO).goto = { type: GoToTypesChain.LINK, id: response.object.id };
-                dispatch(EditActions.chainLink.save(from as ChainlinkTO));
-            }
-            if ((from as ChainDecisionTO).ifGoTo !== undefined) {
-                if (ifGoTO) {
-                    (from as ChainDecisionTO).ifGoTo = { type: GoToTypesChain.LINK, id: response.object.id };
-                } else {
-                    (from as ChainDecisionTO).elseGoTo = { type: GoToTypesChain.LINK, id: response.object.id };
-                }
-                dispatch(EditActions.chainDecision.save(from as ChainDecisionTO));
-            }
-        }
-        dispatch(EditSlice.actions.setChainLinkToEdit(response.object));
-    }
-};
-
-const saveChainLinkThunk = (step: ChainlinkTO): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<ChainlinkTO> = DataAccess.saveChainlink(step);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadChainLinksFromBackend());
-};
-
-const deleteChainLinkThunk = (step: ChainlinkTO): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<ChainlinkTO> = DataAccess.deleteChainLink(step);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadChainLinksFromBackend());
-};
-
 const createChainDecisionThunk = (
     decision: ChainDecisionTO,
     from?: ChainDecisionTO | ChainlinkTO,
@@ -489,7 +449,7 @@ const createChainDecisionThunk = (
         if (from !== undefined) {
             if ((from as ChainlinkTO).dataSetupFk !== undefined) {
                 (from as ChainlinkTO).goto = { type: GoToTypesChain.DEC, id: response.object.id };
-                dispatch(EditActions.chainLink.save(from as ChainlinkTO));
+                dispatch(EditChainLink.save(from as ChainlinkTO));
             }
             if ((from as ChainDecisionTO).elseGoTo !== undefined) {
                 if (ifGoTO) {
@@ -522,14 +482,6 @@ const deleteChainDecisionThunk = (decision: ChainDecisionTO): AppThunk => (dispa
 
 const findChainDecisionThunk = (id: number): ChainDecisionTO => {
     const response: DataAccessResponse<ChainDecisionTO> = DataAccess.findChainDecision(id);
-    if (response.code !== 200) {
-        handleError(response.message);
-    }
-    return response.object;
-};
-
-const findChainLinkThunk = (id: number): ChainlinkTO => {
-    const response: DataAccessResponse<ChainlinkTO> = DataAccess.findChainLink(id);
     if (response.code !== 200) {
         handleError(response.message);
     }
@@ -751,12 +703,6 @@ export const EditActions = {
         tab: setModeToTab,
     },
 
-    chainLink: {
-        create: createChainLinkThunk,
-        save: saveChainLinkThunk,
-        delete: deleteChainLinkThunk,
-        find: findChainLinkThunk,
-    },
     chainDecision: {
         create: createChainDecisionThunk,
         save: saveChainDecisionThunk,
