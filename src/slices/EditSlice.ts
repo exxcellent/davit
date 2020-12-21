@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk, RootState } from '../app/store';
 import { Arrow, ArrowType } from '../components/common/fragments/svg/DavitPath';
 import { ActorCTO } from '../dataAccess/access/cto/ActorCTO';
-import { ChainCTO } from '../dataAccess/access/cto/ChainCTO';
 import { DataCTO } from '../dataAccess/access/cto/DataCTO';
 import { DataSetupCTO } from '../dataAccess/access/cto/DataSetupCTO';
 import { GeometricalDataCTO } from '../dataAccess/access/cto/GeometraicalDataCTO';
@@ -436,46 +435,6 @@ const setModeToEditCondition = (decision: DecisionTO): AppThunk => (dispatch) =>
     }
 };
 
-// ----------------------------------------------- CHAIN -----------------------------------------------
-
-const createChainThunk = (): AppThunk => (dispatch) => {
-    const chain: ChainTO = new ChainTO();
-    const response: DataAccessResponse<ChainTO> = DataAccess.saveChainTO(chain);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadChainsFromBackend());
-    dispatch(SequenceModelActions.setCurrentChain(response.object));
-};
-
-const getChainCTO = (chain: ChainTO): ChainCTO => {
-    const response: DataAccessResponse<ChainCTO> = DataAccess.getChainCTO(chain);
-    if (response.code !== 200) {
-        console.warn(response.message);
-    }
-    console.info(response.object);
-    return response.object;
-};
-
-const saveChainThunk = (chain: ChainTO): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<ChainTO> = DataAccess.saveChainTO(chain);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadChainsFromBackend());
-    dispatch(SequenceModelActions.setCurrentChain(response.object));
-};
-
-const deleteChainThunk = (chain: ChainTO): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<SequenceTO> = DataAccess.deleteChain(chain);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadChainsFromBackend());
-    dispatch(MasterDataActions.loadChainDecisionsFromBackend());
-    dispatch(MasterDataActions.loadChainLinksFromBackend());
-};
-
 const createChainLinkThunk = (link: ChainlinkTO, from?: ChainlinkTO | ChainDecisionTO, ifGoTO?: boolean): AppThunk => (
     dispatch,
 ) => {
@@ -557,20 +516,6 @@ const deleteChainDecisionThunk = (decision: ChainDecisionTO): AppThunk => (dispa
     if (response.code !== 200) {
         dispatch(handleError(response.message));
     }
-    dispatch(MasterDataActions.loadChainDecisionsFromBackend());
-};
-
-const setChainRootThunk = (chainId: number, rootId: number, isDecision: boolean): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<ChainlinkTO | ChainDecisionTO> = DataAccess.setChainRoot(
-        chainId,
-        rootId,
-        isDecision,
-    );
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadChainsFromBackend());
-    dispatch(MasterDataActions.loadChainLinksFromBackend());
     dispatch(MasterDataActions.loadChainDecisionsFromBackend());
 };
 
@@ -805,13 +750,6 @@ export const EditActions = {
         tab: setModeToTab,
     },
 
-    chain: {
-        create: createChainThunk,
-        save: saveChainThunk,
-        delete: deleteChainThunk,
-        setRoot: setChainRootThunk,
-        getCTO: getChainCTO,
-    },
     chainLink: {
         create: createChainLinkThunk,
         save: saveChainLinkThunk,
