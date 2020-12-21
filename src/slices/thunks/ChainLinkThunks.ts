@@ -4,9 +4,10 @@ import { ChainlinkTO } from '../../dataAccess/access/to/ChainlinkTO';
 import { GoToTypesChain } from '../../dataAccess/access/types/GoToTypeChain';
 import { DataAccess } from '../../dataAccess/DataAccess';
 import { DataAccessResponse } from '../../dataAccess/DataAccessResponse';
-import { editActions, EditActions, Mode } from '../EditSlice';
+import { editActions, Mode } from '../EditSlice';
 import { handleError } from '../GlobalSlice';
 import { MasterDataActions } from '../MasterDataSlice';
+import { EditChainDecision } from './ChainDecisionThunks';
 
 const createChainLinkThunk = (link: ChainlinkTO, from?: ChainlinkTO | ChainDecisionTO, ifGoTO?: boolean): AppThunk => (
     dispatch,
@@ -26,7 +27,7 @@ const createChainLinkThunk = (link: ChainlinkTO, from?: ChainlinkTO | ChainDecis
                 } else {
                     (from as ChainDecisionTO).elseGoTo = { type: GoToTypesChain.LINK, id: response.object.id };
                 }
-                dispatch(EditActions.chainDecision.save(from as ChainDecisionTO));
+                dispatch(EditChainDecision.save(from as ChainDecisionTO));
             }
         }
         dispatch(setChainLinkToEditThunk(response.object));

@@ -18,14 +18,14 @@ import { GroupTO } from '../dataAccess/access/to/GroupTO';
 import { InitDataTO } from '../dataAccess/access/to/InitDataTO';
 import { SequenceTO } from '../dataAccess/access/to/SequenceTO';
 import { ActionType } from '../dataAccess/access/types/ActionType';
-import { GoToTypesChain } from '../dataAccess/access/types/GoToTypeChain';
 import { DataAccess } from '../dataAccess/DataAccess';
 import { DataAccessResponse } from '../dataAccess/DataAccessResponse';
 import { DavitUtil } from '../utils/DavitUtil';
 import { handleError } from './GlobalSlice';
-import { MasterDataActions, masterDataSelectors } from './MasterDataSlice';
+import { masterDataSelectors } from './MasterDataSlice';
 import { SequenceModelActions } from './SequenceModelSlice';
 import { EditActor } from './thunks/ActorThunks';
+import { EditChainDecision } from './thunks/ChainDecisionThunks';
 import { EditChainLink } from './thunks/ChainLinkThunks';
 import { EditChain } from './thunks/ChainThunks';
 import { EditDataSetup } from './thunks/DataSetupThunks';
@@ -357,7 +357,7 @@ const setModeEditChainDecision = (
     ifGoTO?: boolean,
 ): AppThunk => (dispatch) => {
     dispatch(setModeWithStorage(Mode.EDIT_CHAIN_DECISION));
-    dispatch(EditActions.chainDecision.create(chainDecision, from, ifGoTO));
+    dispatch(EditChainDecision.create(chainDecision, from, ifGoTO));
 };
 
 const setModeToEditChainCondition = (decision: ChainDecisionTO): AppThunk => (dispatch) => {
@@ -435,57 +435,6 @@ const setModeToEditCondition = (decision: DecisionTO): AppThunk => (dispatch) =>
     } else {
         handleError("Edit Condition: 'Decision is null or undefined'.");
     }
-};
-
-const createChainDecisionThunk = (
-    decision: ChainDecisionTO,
-    from?: ChainDecisionTO | ChainlinkTO,
-    ifGoTO?: boolean,
-): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<ChainDecisionTO> = DataAccess.saveChaindecision(decision);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    } else {
-        if (from !== undefined) {
-            if ((from as ChainlinkTO).dataSetupFk !== undefined) {
-                (from as ChainlinkTO).goto = { type: GoToTypesChain.DEC, id: response.object.id };
-                dispatch(EditChainLink.save(from as ChainlinkTO));
-            }
-            if ((from as ChainDecisionTO).elseGoTo !== undefined) {
-                if (ifGoTO) {
-                    (from as ChainDecisionTO).ifGoTo = { type: GoToTypesChain.DEC, id: response.object.id };
-                } else {
-                    (from as ChainDecisionTO).elseGoTo = { type: GoToTypesChain.DEC, id: response.object.id };
-                }
-                dispatch(EditActions.chainDecision.save(from as ChainDecisionTO));
-            }
-        }
-        dispatch(EditSlice.actions.setChainDecisionToEdit(response.object));
-    }
-};
-
-const saveChainDecisionThunk = (decision: ChainDecisionTO): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<ChainDecisionTO> = DataAccess.saveChaindecision(decision);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadChainDecisionsFromBackend());
-};
-
-const deleteChainDecisionThunk = (decision: ChainDecisionTO): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<ChainDecisionTO> = DataAccess.deleteChaindecision(decision);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadChainDecisionsFromBackend());
-};
-
-const findChainDecisionThunk = (id: number): ChainDecisionTO => {
-    const response: DataAccessResponse<ChainDecisionTO> = DataAccess.findChainDecision(id);
-    if (response.code !== 200) {
-        handleError(response.message);
-    }
-    return response.object;
 };
 
 // TODO: this method is copied from sequencemodelslice! remove one and mage the other reachable in both slices
@@ -701,12 +650,5 @@ export const EditActions = {
         view: setModeToView,
         file: setModeToFile,
         tab: setModeToTab,
-    },
-
-    chainDecision: {
-        create: createChainDecisionThunk,
-        save: saveChainDecisionThunk,
-        delete: deleteChainDecisionThunk,
-        find: findChainDecisionThunk,
     },
 };
