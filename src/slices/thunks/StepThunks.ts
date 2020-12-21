@@ -6,9 +6,10 @@ import { GoToTypes } from '../../dataAccess/access/types/GoToType';
 import { DataAccess } from '../../dataAccess/DataAccess';
 import { DataAccessResponse } from '../../dataAccess/DataAccessResponse';
 import { DavitUtil } from '../../utils/DavitUtil';
-import { editActions, EditActions, Mode } from '../EditSlice';
+import { editActions, Mode } from '../EditSlice';
 import { handleError } from '../GlobalSlice';
 import { MasterDataActions } from '../MasterDataSlice';
+import { EditDecision } from './DecisionThunks';
 
 const createSequenceStepThunk = (
     step: SequenceStepCTO,
@@ -33,7 +34,7 @@ const createSequenceStepThunk = (
                 } else {
                     (from as DecisionTO).elseGoTo = { type: GoToTypes.STEP, id: response.object.squenceStepTO.id };
                 }
-                dispatch(EditActions.decision.save(from as DecisionTO));
+                dispatch(EditDecision.save(from as DecisionTO));
             }
         }
         dispatch(setStepToEditThunk(response.object));
@@ -58,11 +59,11 @@ const deleteSequenceStepThunk = (step: SequenceStepCTO, sequenceCTO?: SequenceCT
         copySequence.decisions.forEach((cond) => {
             if (cond.ifGoTo.type === GoToTypes.STEP && cond.ifGoTo.id === step.squenceStepTO.id) {
                 cond.ifGoTo = { type: GoToTypes.ERROR };
-                dispatch(EditActions.decision.save(cond));
+                dispatch(EditDecision.save(cond));
             }
             if (cond.elseGoTo.type === GoToTypes.STEP && cond.elseGoTo.id === step.squenceStepTO.id) {
                 cond.elseGoTo = { type: GoToTypes.ERROR };
-                dispatch(EditActions.decision.save(cond));
+                dispatch(EditDecision.save(cond));
             }
         });
     }

@@ -19,7 +19,6 @@ import { GroupTO } from '../dataAccess/access/to/GroupTO';
 import { InitDataTO } from '../dataAccess/access/to/InitDataTO';
 import { SequenceTO } from '../dataAccess/access/to/SequenceTO';
 import { ActionType } from '../dataAccess/access/types/ActionType';
-import { GoToTypes } from '../dataAccess/access/types/GoToType';
 import { GoToTypesChain } from '../dataAccess/access/types/GoToTypeChain';
 import { DataAccess } from '../dataAccess/DataAccess';
 import { DataAccessResponse } from '../dataAccess/DataAccessResponse';
@@ -30,6 +29,7 @@ import { SequenceModelActions } from './SequenceModelSlice';
 import { EditActor } from './thunks/ActorThunks';
 import { EditDataSetup } from './thunks/DataSetupThunks';
 import { EditData } from './thunks/DataThunks';
+import { EditDecision } from './thunks/DecisionThunks';
 import { EditGroup } from './thunks/GroupThunks';
 import { EditInitData } from './thunks/InitDataThunks';
 import { EditRelation } from './thunks/RelationThunks';
@@ -424,7 +424,7 @@ const setModeToEditDecision = (
     ifGoTo?: Boolean,
 ): AppThunk => (dispatch) => {
     dispatch(setModeWithStorage(Mode.EDIT_SEQUENCE_DECISION));
-    dispatch(EditActions.decision.create(decision, from, ifGoTo));
+    dispatch(EditDecision.create(decision, from, ifGoTo));
 };
 
 const setModeToEditCondition = (decision: DecisionTO): AppThunk => (dispatch) => {
@@ -584,79 +584,6 @@ const findChainDecisionThunk = (id: number): ChainDecisionTO => {
 
 const findChainLinkThunk = (id: number): ChainlinkTO => {
     const response: DataAccessResponse<ChainlinkTO> = DataAccess.findChainLink(id);
-    if (response.code !== 200) {
-        handleError(response.message);
-    }
-    return response.object;
-};
-
-// ----------------------------------------------- DECISION -----------------------------------------------
-
-const createDecisionThunk = (decision: DecisionTO, from?: SequenceStepCTO | DecisionTO, ifGoTo?: Boolean): AppThunk => (
-    dispatch,
-) => {
-    const response: DataAccessResponse<DecisionTO> = DataAccess.saveDecision(decision);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    } else {
-        if (from) {
-            if ((from as SequenceStepCTO).squenceStepTO !== undefined) {
-                (from as SequenceStepCTO).squenceStepTO.goto = { type: GoToTypes.DEC, id: response.object.id };
-                dispatch(EditStep.save(from as SequenceStepCTO));
-            }
-            if ((from as DecisionTO).elseGoTo !== undefined) {
-                if (ifGoTo) {
-                    (from as DecisionTO).ifGoTo = { type: GoToTypes.DEC, id: response.object.id };
-                } else {
-                    (from as DecisionTO).elseGoTo = { type: GoToTypes.DEC, id: response.object.id };
-                }
-                dispatch(EditActions.decision.save(from as DecisionTO));
-            }
-        }
-        dispatch(EditActions.decision.update(response.object));
-    }
-};
-
-const saveDecisionThunk = (decision: DecisionTO): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<DecisionTO> = DataAccess.saveDecision(decision);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-};
-
-const deleteDecisionThunk = (decision: DecisionTO, sequenceCTO?: SequenceCTO): AppThunk => (dispatch) => {
-    // update forent gotos.
-    if (sequenceCTO) {
-        const copySequence: SequenceCTO = DavitUtil.deepCopy(sequenceCTO);
-        // update steps
-        copySequence.sequenceStepCTOs.forEach((step) => {
-            if (step.squenceStepTO.goto.type === GoToTypes.DEC && step.squenceStepTO.goto.id === decision.id) {
-                step.squenceStepTO.goto = { type: GoToTypes.ERROR };
-                dispatch(EditStep.save(step));
-            }
-        });
-        // update decisions
-        copySequence.decisions.forEach((cond) => {
-            if (cond.ifGoTo.type === GoToTypes.DEC && cond.ifGoTo.id === decision.id) {
-                cond.ifGoTo = { type: GoToTypes.ERROR };
-                dispatch(EditActions.decision.save(cond));
-            }
-            if (cond.elseGoTo.type === GoToTypes.DEC && cond.elseGoTo.id === decision.id) {
-                cond.elseGoTo = { type: GoToTypes.ERROR };
-                dispatch(EditActions.decision.save(cond));
-            }
-        });
-    }
-    // delete decision.
-    const response: DataAccessResponse<DecisionTO> = DataAccess.deleteDecision(decision);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadSequencesFromBackend());
-};
-
-const findDecisionTOThunk = (decisionId: number): DecisionTO => {
-    const response: DataAccessResponse<DecisionTO> = DataAccess.findDecision(decisionId);
     if (response.code !== 200) {
         handleError(response.message);
     }
@@ -878,13 +805,6 @@ export const EditActions = {
         tab: setModeToTab,
     },
 
-    decision: {
-        create: createDecisionThunk,
-        update: EditSlice.actions.setDecisionToEdit,
-        save: saveDecisionThunk,
-        delete: deleteDecisionThunk,
-        find: findDecisionTOThunk,
-    },
     chain: {
         create: createChainThunk,
         save: saveChainThunk,
