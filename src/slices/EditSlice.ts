@@ -26,6 +26,7 @@ import { handleError } from './GlobalSlice';
 import { MasterDataActions, masterDataSelectors } from './MasterDataSlice';
 import { SequenceModelActions } from './SequenceModelSlice';
 import { EditActor } from './thunks/ActorThunks';
+import { EditChain } from './thunks/ChainThunks';
 import { EditDataSetup } from './thunks/DataSetupThunks';
 import { EditData } from './thunks/DataThunks';
 import { EditDecision } from './thunks/DecisionThunks';
@@ -333,7 +334,7 @@ const setModeToEditSequence = (sequenceId?: number): AppThunk => (dispatch) => {
 
 const setModeToEditChain = (chain?: ChainTO): AppThunk => (dispatch) => {
     if (!chain) {
-        dispatch(EditActions.chain.create());
+        dispatch(EditChain.create());
     } else {
         dispatch(SequenceModelActions.setCurrentChain(chain));
     }

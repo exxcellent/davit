@@ -8,6 +8,7 @@ import { SequenceTO } from '../../../../../../dataAccess/access/to/SequenceTO';
 import { EditActions } from '../../../../../../slices/EditSlice';
 import { masterDataSelectors } from '../../../../../../slices/MasterDataSlice';
 import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
+import { EditChain } from '../../../../../../slices/thunks/ChainThunks';
 import { EditSequence } from '../../../../../../slices/thunks/SequenceThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
 import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
@@ -121,16 +122,16 @@ const useControllPanelEditChainViewModel = () => {
         if (!DavitUtil.isNullOrUndefined(selectedChain)) {
             const copyChainToEdit: ChainTO = DavitUtil.deepCopy(selectedChain);
             copyChainToEdit.name = name;
-            dispatch(EditActions.chain.save(copyChainToEdit));
+            dispatch(EditChain.save(copyChainToEdit));
         }
     };
 
     const saveChain = (newMode?: string) => {
         if (!DavitUtil.isNullOrUndefined(selectedChain)) {
             if (selectedChain!.name !== '') {
-                dispatch(EditActions.chain.save(selectedChain!));
+                dispatch(EditChain.save(selectedChain!));
             } else {
-                dispatch(EditActions.chain.delete(selectedChain!));
+                dispatch(EditChain.delete(selectedChain!));
             }
             if (isCreateAnother && !newMode) {
                 dispatch(EditActions.setMode.editChain());
@@ -142,7 +143,7 @@ const useControllPanelEditChainViewModel = () => {
 
     const deleteChain = () => {
         if (!DavitUtil.isNullOrUndefined(selectedChain)) {
-            dispatch(EditActions.chain.delete(selectedChain!));
+            dispatch(EditChain.delete(selectedChain!));
         }
         dispatch(EditActions.setMode.edit());
     };

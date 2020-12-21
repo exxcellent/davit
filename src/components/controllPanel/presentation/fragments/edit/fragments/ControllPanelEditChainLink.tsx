@@ -11,6 +11,7 @@ import { GoToChain, GoToTypesChain } from '../../../../../../dataAccess/access/t
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
 import { handleError } from '../../../../../../slices/GlobalSlice';
 import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
+import { EditChain } from '../../../../../../slices/thunks/ChainThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
 import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonIcon } from '../../../../../common/fragments/buttons/DavitButton';
@@ -269,9 +270,9 @@ const useControllPanelEditChainStepViewModel = () => {
     };
 
     const setRoot = () => {
-        if (!isNullOrUndefined(chainLinkToEdit)) {
-            dispatch(EditActions.chain.setRoot(chainLinkToEdit.chainFk, chainLinkToEdit.id, false));
-            dispatch(EditActions.setMode.editChainLink(EditActions.chainLink.find(chainLinkToEdit.id)));
+        if (!DavitUtil.isNullOrUndefined(chainLinkToEdit)) {
+            dispatch(EditChain.setRoot(chainLinkToEdit!.chainFk, chainLinkToEdit!.id, false));
+            dispatch(EditActions.setMode.editChainLink(EditActions.chainLink.find(chainLinkToEdit!.id)));
         }
     };
 
