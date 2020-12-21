@@ -10,6 +10,7 @@ import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
 import { handleError } from '../../../../../../slices/GlobalSlice';
 import { MasterDataActions } from '../../../../../../slices/MasterDataSlice';
 import { SequenceModelActions, sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
+import { EditAction } from '../../../../../../slices/thunks/ActionThunks';
 import { EditSequence } from '../../../../../../slices/thunks/SequenceThunks';
 import { EditStep } from '../../../../../../slices/thunks/StepThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
@@ -211,7 +212,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
             if (copyAction === undefined) {
                 copyAction = new ActionTO();
                 copyAction.sequenceStepFk = stepToEdit!.squenceStepTO.id;
-                dispatch(EditActions.action.create(copyAction));
+                dispatch(EditAction.create(copyAction));
             } else {
                 dispatch(EditActions.setMode.editAction(copyAction));
             }

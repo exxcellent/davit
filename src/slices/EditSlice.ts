@@ -436,7 +436,6 @@ const setModeToEditCondition = (decision: DecisionTO): AppThunk => (dispatch) =>
     }
 };
 
-
 // ----------------------------------------------- CHAIN -----------------------------------------------
 
 const createChainThunk = (): AppThunk => (dispatch) => {
@@ -589,35 +588,6 @@ const findChainLinkThunk = (id: number): ChainlinkTO => {
         handleError(response.message);
     }
     return response.object;
-};
-
-
-
-
-
-// ----------------------------------------------- ACTION -----------------------------------------------
-
-const createActionThunk = (action: ActionTO): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<ActionTO> = DataAccess.saveActionTO(action);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(EditActions.setMode.editAction(response.object));
-};
-
-const saveActionThunk = (action: ActionTO): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<ActionTO> = DataAccess.saveActionTO(action);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-};
-
-const deleteActionThunk = (action: ActionTO): AppThunk => async (dispatch) => {
-    const response: DataAccessResponse<ActionTO> = await DataAccess.deleteActionCTO(action);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadSequencesFromBackend());
 };
 
 // ----------------------------------------------- DECISION -----------------------------------------------
@@ -908,12 +878,6 @@ export const EditActions = {
         tab: setModeToTab,
     },
 
-    action: {
-        delete: deleteActionThunk,
-        update: EditSlice.actions.setActionToEdit,
-        save: saveActionThunk,
-        create: createActionThunk,
-    },
     decision: {
         create: createDecisionThunk,
         update: EditSlice.actions.setDecisionToEdit,
