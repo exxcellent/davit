@@ -82,7 +82,7 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
 };
 
 const useControllPanelEditDataViewModel = () => {
-    const dataToEdit: DataCTO | null = useSelector(editSelectors.dataToEdit);
+    const dataToEdit: DataCTO | null = useSelector(editSelectors.selectDataToEdit);
     const dispatch = useDispatch();
     const textInput = useRef<Input>(null);
 

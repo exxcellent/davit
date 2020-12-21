@@ -135,7 +135,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
 };
 
 const useControllPanelEditActionViewModel = () => {
-    const actionToEdit: ActionTO | null = useSelector(editSelectors.actionToEdit);
+    const actionToEdit: ActionTO | null = useSelector(editSelectors.selectActionToEdit);
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const dispatch = useDispatch();
 

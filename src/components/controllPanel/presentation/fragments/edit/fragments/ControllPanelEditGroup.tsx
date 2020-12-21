@@ -66,7 +66,7 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
 };
 
 const useControllPanelEditGroupViewModel = () => {
-    const groupToEdit: GroupTO | null = useSelector(editSelectors.groupToEdit);
+    const groupToEdit: GroupTO | null = useSelector(editSelectors.selectGroupToEdit);
     const dispatch = useDispatch();
     const textInput = useRef<Input>(null);
 

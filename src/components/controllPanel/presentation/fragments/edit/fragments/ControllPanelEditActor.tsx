@@ -68,7 +68,7 @@ export const ControllPanelEditActor: FunctionComponent<ControllPanelEditActorPro
 };
 
 const useControllPanelEditActorViewModel = () => {
-    const actorToEdit: ActorCTO | null = useSelector(editSelectors.actorToEdit);
+    const actorToEdit: ActorCTO | null = useSelector(editSelectors.selectActorToEdit);
     const dispatch = useDispatch();
     const textInput = useRef<Input>(null);
 

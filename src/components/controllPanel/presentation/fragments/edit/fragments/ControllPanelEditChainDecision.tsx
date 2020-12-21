@@ -151,7 +151,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
 };
 
 const useControllPanelEditChainConditionViewModel = () => {
-    const decisionToEdit: ChainDecisionTO | null = useSelector(editSelectors.chainDecisionToEdit);
+    const decisionToEdit: ChainDecisionTO | null = useSelector(editSelectors.selectChainDecisionToEdit);
     const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
     const dispatch = useDispatch();
     const textInput = useRef<Input>(null);

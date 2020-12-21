@@ -80,7 +80,7 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
 };
 
 const useControllPanelEditDataSetupViewModel = () => {
-    const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.dataSetupToEdit);
+    const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.selectDataSetupToEdit);
     const dispatch = useDispatch();
     const [actorToEdit, setActorToEdit] = useState<ActorCTO | null>(null);
     const textInput = useRef<Input>(null);

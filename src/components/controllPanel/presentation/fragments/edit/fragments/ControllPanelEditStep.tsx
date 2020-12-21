@@ -145,7 +145,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
 };
 
 const useControllPanelEditSequenceStepViewModel = () => {
-    const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.stepToEdit);
+    const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.selectStepToEdit);
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const dispatch = useDispatch();
     const textInput = useRef<Input>(null);

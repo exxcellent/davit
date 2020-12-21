@@ -49,14 +49,14 @@ const useViewModel = () => {
     const actors: ActorCTO[] = useSelector(masterDataSelectors.actors);
     const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
     // ----- EDIT -----
-    const actorCTOToEdit: ActorCTO | null = useSelector(editSelectors.actorToEdit);
-    const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.stepToEdit);
-    const actionToEdit: ActionTO | null = useSelector(editSelectors.actionToEdit);
-    const decisionToEdit: DecisionTO | null = useSelector(editSelectors.decisionToEdit);
-    const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.dataSetupToEdit);
-    const initDataToEdit: InitDataTO | null = useSelector(editSelectors.initDataToEdit);
-    const editArrow: Arrow | null = useSelector(editSelectors.editActionArrow);
-    const editStepArrows: Arrow[] = useSelector(editSelectors.editStepArrows);
+    const actorCTOToEdit: ActorCTO | null = useSelector(editSelectors.selectActorToEdit);
+    const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.selectStepToEdit);
+    const actionToEdit: ActionTO | null = useSelector(editSelectors.selectActionToEdit);
+    const decisionToEdit: DecisionTO | null = useSelector(editSelectors.selectDecisionToEdit);
+    const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.selectDataSetupToEdit);
+    const initDataToEdit: InitDataTO | null = useSelector(editSelectors.selectInitDataToEdit);
+    const editArrow: Arrow | null = useSelector(editSelectors.selectEditActionArrow);
+    const editStepArrows: Arrow[] = useSelector(editSelectors.selectEditStepArrows);
     // ----- VIEW -----
     const arrows: Arrow[] = useSelector(sequenceModelSelectors.selectCurrentArrows);
     const currentActorDatas: ActorData[] = useSelector(sequenceModelSelectors.selectActorData);

@@ -138,7 +138,7 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
 };
 
 const useControllPanelEditChainStepViewModel = () => {
-    const chainLinkToEdit: ChainlinkTO | null = useSelector(editSelectors.chainLinkToEdit);
+    const chainLinkToEdit: ChainlinkTO | null = useSelector(editSelectors.selectChainLinkToEdit);
     const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
     const dispatch = useDispatch();
     const textInput = useRef<Input>(null);

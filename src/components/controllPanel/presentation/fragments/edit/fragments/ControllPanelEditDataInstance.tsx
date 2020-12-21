@@ -67,8 +67,8 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
 };
 
 const useControllPanelEditDataInstanceViewModel = () => {
-    const dataToEdit: DataCTO | null = useSelector(editSelectors.dataToEdit);
-    const instanceId: number | null = useSelector(editSelectors.instanceIdToEdit);
+    const dataToEdit: DataCTO | null = useSelector(editSelectors.selectDataToEdit);
+    const instanceId: number | null = useSelector(editSelectors.selectInstanceIdToEdit);
     const dispatch = useDispatch();
     const textInput = useRef<Input>(null);
 

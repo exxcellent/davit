@@ -98,7 +98,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
 };
 
 const useControllPanelEditSequenceViewModel = () => {
-    const sequenceToEdit: SequenceTO | null = useSelector(editSelectors.sequenceToEdit);
+    const sequenceToEdit: SequenceTO | null = useSelector(editSelectors.selectSequenceToEdit);
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const dispatch = useDispatch();
     const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);

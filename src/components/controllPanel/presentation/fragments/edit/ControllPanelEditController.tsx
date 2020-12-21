@@ -122,7 +122,7 @@ export const ControllPanelEditController: FunctionComponent<ControllPanelEditCon
 
 const useControllPanelEditViewModel = () => {
     const dispatch = useDispatch();
-    const mode: Mode = useSelector(editSelectors.mode);
+    const mode: Mode = useSelector(editSelectors.selectMode);
 
     return {
         mode,

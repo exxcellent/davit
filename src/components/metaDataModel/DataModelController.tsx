@@ -60,16 +60,16 @@ const useMetaDataModelViewModel = () => {
     const dispatch = useDispatch();
     // ====== SELECTORS =====
     const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
-    const dataCTOToEdit: DataCTO | null = useSelector(editSelectors.dataToEdit);
+    const dataCTOToEdit: DataCTO | null = useSelector(editSelectors.selectDataToEdit);
     const dataRelations: DataRelationTO[] = useSelector(masterDataSelectors.relations);
     const actors: ActorCTO[] = useSelector(masterDataSelectors.actors);
     // ----- EDIT -----
-    const dataRelationToEdit: DataRelationTO | null = useSelector(editSelectors.relationToEdit);
-    const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.stepToEdit);
-    const actionToEdit: ActionTO | null = useSelector(editSelectors.actionToEdit);
-    const decisionToEdit: DecisionTO | null = useSelector(editSelectors.decisionToEdit);
-    const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.dataSetupToEdit);
-    const initDataToEdit: InitDataTO | null = useSelector(editSelectors.initDataToEdit);
+    const dataRelationToEdit: DataRelationTO | null = useSelector(editSelectors.selectRelationToEdit);
+    const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.selectStepToEdit);
+    const actionToEdit: ActionTO | null = useSelector(editSelectors.selectActionToEdit);
+    const decisionToEdit: DecisionTO | null = useSelector(editSelectors.selectDecisionToEdit);
+    const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.selectDataSetupToEdit);
+    const initDataToEdit: InitDataTO | null = useSelector(editSelectors.selectInitDataToEdit);
     // ----- VIEW -----
     const currentActorDatas: ActorData[] = useSelector(sequenceModelSelectors.selectActorData);
     const errors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
