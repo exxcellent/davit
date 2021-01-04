@@ -297,11 +297,11 @@ const setModeToEditDataThunk = (data?: DataCTO): AppThunk => (dispatch) => {
 const setModeToEditDataInstanceThunk = (id?: number): AppThunk => (dispatch, getState) => {
     if ((getState().edit.objectToEdit as DataCTO).data) {
         if (id === undefined) {
-            id = -1;
             const copyData: DataCTO = DavitUtil.deepCopy(getState().edit.objectToEdit as DataCTO);
             const newInstance: DataInstanceTO = new DataInstanceTO();
             copyData.data.instances.push(newInstance);
             dispatch(EditSlice.actions.setDataToEdit(copyData));
+            id = newInstance.id;
         }
         dispatch(EditSlice.actions.setInstanceId(id));
         dispatch(setModeWithStorageThunk(Mode.EDIT_DATA_INSTANCE));
