@@ -23,8 +23,8 @@ export const DavitButtonLabel: FunctionComponent<DavitButtonLabelProps> = (props
     const { onClick, label, disable } = props;
 
     return (
-        <Button onClick={onClick} inverted color="orange" disabled={disable}>
-            {label}
-        </Button>
+        <button onClick={onClick} disabled={disable} style={{ opacity: disable ? '0.7' : '1' }}>
+            <label>{label}</label>
+        </button>
     );
 };

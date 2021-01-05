@@ -7,6 +7,7 @@ import { InitDataTO } from '../../../../../../dataAccess/access/to/InitDataTO';
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
 import { handleError } from '../../../../../../slices/GlobalSlice';
 import { masterDataSelectors } from '../../../../../../slices/MasterDataSlice';
+import { EditInitData } from '../../../../../../slices/thunks/InitDataThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
 import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
@@ -69,7 +70,7 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
 };
 
 const useControllPanelEditDataSetupViewModel = () => {
-    const initDataToEdit: InitDataTO | null = useSelector(editSelectors.initDataToEdit);
+    const initDataToEdit: InitDataTO | null = useSelector(editSelectors.selectInitDataToEdit);
     const dataSetup: DataSetupTO | null = useSelector(
         masterDataSelectors.getDataSetupToById(initDataToEdit?.dataSetupFk || -1),
     );
@@ -96,7 +97,7 @@ const useControllPanelEditDataSetupViewModel = () => {
                 initDataToEdit?.instanceFk !== -1 &&
                 initDataToEdit?.dataSetupFk !== -1
             ) {
-                dispatch(EditActions.initData.save(initDataToEdit));
+                dispatch(EditInitData.save(initDataToEdit));
             } else {
                 deleteInitData();
             }
@@ -110,7 +111,7 @@ const useControllPanelEditDataSetupViewModel = () => {
 
     const deleteInitData = () => {
         if (initDataToEdit !== null) {
-            dispatch(EditActions.initData.delete(initDataToEdit.id));
+            dispatch(EditInitData.delete(initDataToEdit.id));
             dispatch(EditActions.setMode.editDataSetup(initDataToEdit.dataSetupFk));
         }
     };
@@ -119,7 +120,7 @@ const useControllPanelEditDataSetupViewModel = () => {
         if (initDataToEdit !== null) {
             const copyInitDataToEdit: InitDataTO = DavitUtil.deepCopy(initDataToEdit);
             copyInitDataToEdit.actorFk = id;
-            dispatch(EditActions.initData.update(copyInitDataToEdit));
+            dispatch(EditInitData.update(copyInitDataToEdit));
         }
     };
 
@@ -128,7 +129,7 @@ const useControllPanelEditDataSetupViewModel = () => {
             const copyInitDataToEdit: InitDataTO = DavitUtil.deepCopy(initDataToEdit);
             copyInitDataToEdit.dataFk = dataAndInstanceId.dataFk;
             copyInitDataToEdit.instanceFk = dataAndInstanceId.instanceId;
-            dispatch(EditActions.initData.update(copyInitDataToEdit));
+            dispatch(EditInitData.update(copyInitDataToEdit));
         }
     };
 

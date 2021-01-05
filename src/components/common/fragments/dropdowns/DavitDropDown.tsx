@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { Dropdown, DropdownItemProps } from 'semantic-ui-react';
-import '../../../../app/Davit.css';
+import '../../../../app/css/Davit.css';
 
 export interface DavitDropDownItemProps {
     key: number;

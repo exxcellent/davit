@@ -3,11 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ActorCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
 import { DataCTO } from '../../../../../../dataAccess/access/cto/DataCTO';
 import { SequenceCTO } from '../../../../../../dataAccess/access/cto/SequenceCTO';
+import { SequenceStepCTO } from '../../../../../../dataAccess/access/cto/SequenceStepCTO';
 import { ActionTO } from '../../../../../../dataAccess/access/to/ActionTO';
 import { ActionType } from '../../../../../../dataAccess/access/types/ActionType';
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
 import { handleError } from '../../../../../../slices/GlobalSlice';
+import { MasterDataActions } from '../../../../../../slices/MasterDataSlice';
 import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
+import { EditAction } from '../../../../../../slices/thunks/ActionThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
 import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
@@ -132,7 +135,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
 };
 
 const useControllPanelEditActionViewModel = () => {
-    const actionToEdit: ActionTO | null = useSelector(editSelectors.actionToEdit);
+    const actionToEdit: ActionTO | null = useSelector(editSelectors.selectActionToEdit);
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const dispatch = useDispatch();
 
@@ -149,8 +152,17 @@ const useControllPanelEditActionViewModel = () => {
 
     const deleteAction = () => {
         if (actionToEdit !== null) {
-            dispatch(EditActions.action.delete(actionToEdit));
-            dispatch(EditActions.setMode.editStep(EditActions.step.find(actionToEdit.sequenceStepFk)));
+            dispatch(EditAction.delete(actionToEdit));
+            const step: SequenceStepCTO | undefined = MasterDataActions.find.findSequenceStepCTO(
+                actionToEdit.sequenceStepFk,
+            );
+            if (step) {
+                dispatch(EditActions.setMode.editStep(step));
+            } else {
+                // should never happend but as fallback savty.
+                dispatch(handleError('Step not found!'));
+                dispatch(EditActions.setMode.edit());
+            }
         }
     };
 
@@ -160,8 +172,8 @@ const useControllPanelEditActionViewModel = () => {
             sending
                 ? (copyActionToEdit.sendingActorFk = actor.actor.id)
                 : (copyActionToEdit.receivingActorFk = actor.actor.id);
-            dispatch(EditActions.action.update(copyActionToEdit));
-            dispatch(EditActions.action.save(copyActionToEdit));
+            dispatch(EditAction.update(copyActionToEdit));
+            dispatch(EditAction.save(copyActionToEdit));
         }
     };
 
@@ -171,8 +183,8 @@ const useControllPanelEditActionViewModel = () => {
             copyActionToEdit.actionType = newActionType;
             copyActionToEdit.sendingActorFk = newActionType.includes('SEND') ? actionToEdit.sendingActorFk : -1;
             copyActionToEdit.receivingActorFk = newActionType.includes('SEND') ? actionToEdit.receivingActorFk : -1;
-            dispatch(EditActions.action.update(copyActionToEdit));
-            dispatch(EditActions.action.save(copyActionToEdit));
+            dispatch(EditAction.update(copyActionToEdit));
+            dispatch(EditAction.save(copyActionToEdit));
         }
     };
 
@@ -180,9 +192,9 @@ const useControllPanelEditActionViewModel = () => {
         if (actionToEdit !== undefined) {
             const copyActionToEdit: ActionTO = DavitUtil.deepCopy(actionToEdit);
             copyActionToEdit.triggerText = text;
-            dispatch(EditActions.action.update(copyActionToEdit));
+            dispatch(EditAction.update(copyActionToEdit));
             // TODO: this can maybe removed, anyway would be better!
-            dispatch(EditActions.action.save(copyActionToEdit));
+            dispatch(EditAction.save(copyActionToEdit));
         }
     };
 
@@ -190,8 +202,8 @@ const useControllPanelEditActionViewModel = () => {
         if (data !== undefined) {
             const copyActionToEdit: ActionTO = DavitUtil.deepCopy(actionToEdit);
             copyActionToEdit.dataFk = data.data.id;
-            dispatch(EditActions.action.update(copyActionToEdit));
-            dispatch(EditActions.action.save(copyActionToEdit));
+            dispatch(EditAction.update(copyActionToEdit));
+            dispatch(EditAction.save(copyActionToEdit));
         }
     };
 
@@ -200,8 +212,8 @@ const useControllPanelEditActionViewModel = () => {
             const copyActionToEdit: ActionTO = DavitUtil.deepCopy(actionToEdit);
             copyActionToEdit.dataFk = dataAndInstance.dataFk;
             copyActionToEdit.instanceFk = dataAndInstance.instanceId;
-            dispatch(EditActions.action.update(copyActionToEdit));
-            dispatch(EditActions.action.save(copyActionToEdit));
+            dispatch(EditAction.update(copyActionToEdit));
+            dispatch(EditAction.save(copyActionToEdit));
         }
     };
 
@@ -233,7 +245,12 @@ const useControllPanelEditActionViewModel = () => {
             } else if (newMode && newMode === 'SEQUENCE') {
                 dispatch(EditActions.setMode.editSequence(selectedSequence?.sequenceTO.id));
             } else {
-                dispatch(EditActions.setMode.editStep(EditActions.step.find(actionToEdit!.sequenceStepFk)));
+                const step: SequenceStepCTO | undefined = MasterDataActions.find.findSequenceStepCTO(
+                    actionToEdit!.sequenceStepFk,
+                );
+                if (step) {
+                    dispatch(EditActions.setMode.editStep(step));
+                }
             }
         }
     };
@@ -242,7 +259,7 @@ const useControllPanelEditActionViewModel = () => {
         if (actionToEdit) {
             const newAction: ActionTO = new ActionTO();
             newAction.sequenceStepFk = actionToEdit.sequenceStepFk;
-            dispatch(EditActions.action.create(newAction));
+            dispatch(EditAction.create(newAction));
             setKey(key + 1);
         }
     };

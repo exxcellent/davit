@@ -1,12 +1,12 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input } from 'semantic-ui-react';
-import { isNullOrUndefined } from 'util';
 import { ActorCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
 import { DataSetupCTO } from '../../../../../../dataAccess/access/cto/DataSetupCTO';
 import { InitDataTO } from '../../../../../../dataAccess/access/to/InitDataTO';
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
 import { handleError } from '../../../../../../slices/GlobalSlice';
+import { EditDataSetup } from '../../../../../../slices/thunks/DataSetupThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
 import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
@@ -80,14 +80,14 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
 };
 
 const useControllPanelEditDataSetupViewModel = () => {
-    const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.dataSetupToEdit);
+    const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.selectDataSetupToEdit);
     const dispatch = useDispatch();
     const [actorToEdit, setActorToEdit] = useState<ActorCTO | null>(null);
     const textInput = useRef<Input>(null);
 
     useEffect(() => {
         // check if sequence to edit is really set or gos back to edit mode
-        if (isNullOrUndefined(dataSetupToEdit)) {
+        if (DavitUtil.isNullOrUndefined(dataSetupToEdit)) {
             handleError('Tried to go to edit dataSetup without dataSetupToedit specified');
             dispatch(EditActions.setMode.edit());
         }
@@ -96,16 +96,16 @@ const useControllPanelEditDataSetupViewModel = () => {
     }, [dataSetupToEdit, dispatch]);
 
     const changeName = (name: string) => {
-        if (!isNullOrUndefined(dataSetupToEdit)) {
+        if (!DavitUtil.isNullOrUndefined(dataSetupToEdit)) {
             const copyDataSetupToEdit: DataSetupCTO = DavitUtil.deepCopy(dataSetupToEdit);
             copyDataSetupToEdit.dataSetup.name = name;
-            dispatch(EditActions.dataSetup.update(copyDataSetupToEdit));
+            dispatch(EditDataSetup.update(copyDataSetupToEdit));
         }
     };
 
     const saveDataSetup = () => {
         if (dataSetupToEdit?.dataSetup.name !== '') {
-            dispatch(EditActions.dataSetup.save(dataSetupToEdit!));
+            dispatch(EditDataSetup.save(dataSetupToEdit!));
         } else {
             deleteDataSetup();
         }
@@ -113,7 +113,7 @@ const useControllPanelEditDataSetupViewModel = () => {
     };
 
     const deleteDataSetup = () => {
-        dispatch(EditActions.dataSetup.delete(dataSetupToEdit!));
+        dispatch(EditDataSetup.delete(dataSetupToEdit!));
         dispatch(EditActions.setMode.edit());
     };
 
@@ -123,7 +123,7 @@ const useControllPanelEditDataSetupViewModel = () => {
 
     const updateDataSetup = () => {
         const copyDataSetup: DataSetupCTO = DavitUtil.deepCopy(dataSetupToEdit);
-        dispatch(EditActions.dataSetup.save(copyDataSetup));
+        dispatch(EditDataSetup.save(copyDataSetup));
     };
 
     const copyDataSetup = () => {
@@ -139,9 +139,9 @@ const useControllPanelEditDataSetupViewModel = () => {
 
     const getDatas = (): number[] => {
         const dataIds: number[] = [];
-        if (!isNullOrUndefined(dataSetupToEdit) && !isNullOrUndefined(actorToEdit)) {
-            dataSetupToEdit.initDatas
-                .filter((initData) => initData.actorFk === actorToEdit.actor.id)
+        if (!DavitUtil.isNullOrUndefined(dataSetupToEdit) && !DavitUtil.isNullOrUndefined(actorToEdit)) {
+            dataSetupToEdit!.initDatas
+                .filter((initData) => initData.actorFk === actorToEdit!.actor.id)
                 .forEach((initData) => dataIds.push(initData.dataFk));
         }
         return dataIds;
@@ -154,9 +154,9 @@ const useControllPanelEditDataSetupViewModel = () => {
     };
 
     const createInitData = () => {
-        if (!isNullOrUndefined(dataSetupToEdit)) {
+        if (!DavitUtil.isNullOrUndefined(dataSetupToEdit)) {
             const initData: InitDataTO = new InitDataTO();
-            initData.dataSetupFk = dataSetupToEdit.dataSetup.id;
+            initData.dataSetupFk = dataSetupToEdit!.dataSetup.id;
             editInitData(initData);
         }
     };

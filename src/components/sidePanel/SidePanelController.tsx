@@ -37,7 +37,7 @@ export const SidePanelController: FunctionComponent<SidePanelProps> = (props) =>
 
 const useSidePanelViewModel = () => {
     const dispatch = useDispatch();
-    const mode = useSelector(editSelectors.mode);
+    const mode = useSelector(editSelectors.selectMode);
 
     const setModeToEdit = () => {
         dispatch(EditActions.setMode.edit());

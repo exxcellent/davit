@@ -5,6 +5,7 @@ import { DecisionTO } from '../../../../../../dataAccess/access/to/DecisionTO';
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
 import { handleError } from '../../../../../../slices/GlobalSlice';
 import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
+import { EditDecision } from '../../../../../../slices/thunks/DecisionThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
 import { DavitButtonIcon } from '../../../../../common/fragments/buttons/DavitButton';
 import { DavitMenuLabel } from '../../../../../common/fragments/DavitMenuLabel';
@@ -64,7 +65,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
 };
 
 const useControllPanelEditConditionViewModel = () => {
-    const decisionToEdit: DecisionTO | null = useSelector(editSelectors.decisionToEdit);
+    const decisionToEdit: DecisionTO | null = useSelector(editSelectors.selectDecisionToEdit);
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const dispatch = useDispatch();
 
@@ -79,8 +80,8 @@ const useControllPanelEditConditionViewModel = () => {
         if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
             const copyDecisionToEdit: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
             copyDecisionToEdit.dataAndInstaceIds = dataAndInstanceIds || [];
-            dispatch(EditActions.decision.save(copyDecisionToEdit));
-            dispatch(EditActions.decision.update(copyDecisionToEdit));
+            dispatch(EditDecision.save(copyDecisionToEdit));
+            dispatch(EditDecision.update(copyDecisionToEdit));
         }
     };
 
@@ -102,8 +103,8 @@ const useControllPanelEditConditionViewModel = () => {
         if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
             const copyDecisionToEdit: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
             copyDecisionToEdit.actorFk = actorId;
-            dispatch(EditActions.decision.save(copyDecisionToEdit));
-            dispatch(EditActions.decision.update(copyDecisionToEdit));
+            dispatch(EditDecision.save(copyDecisionToEdit));
+            dispatch(EditDecision.update(copyDecisionToEdit));
         }
     };
 

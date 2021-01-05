@@ -62,7 +62,7 @@ const getActionTypeLabel = (type: ActionType): string => {
 };
 
 const useActionDropDownViewModel = () => {
-    const actions: ActionTO[] = useSelector(editSelectors.stepToEdit)?.actions || [];
+    const actions: ActionTO[] = useSelector(editSelectors.selectStepToEdit)?.actions || [];
     const actors: ActorCTO[] = useSelector(masterDataSelectors.actors);
     const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
 
