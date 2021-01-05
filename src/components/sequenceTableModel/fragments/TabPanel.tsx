@@ -76,6 +76,10 @@ export const TabPanel: FunctionComponent<TabPanelProps> = (props) => {
                     label: 'Steps',
                     identifier: ActiveTab.step,
                 },
+                {
+                    label: 'Actions',
+                    identifier: ActiveTab.action,
+                },
             ],
         },
         {

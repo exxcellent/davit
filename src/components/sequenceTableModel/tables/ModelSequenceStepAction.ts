@@ -1,16 +1,15 @@
 import { useDispatch } from 'react-redux';
-import { SequenceStepCTO } from '../../../dataAccess/access/cto/SequenceStepCTO';
 import { ActionTO } from '../../../dataAccess/access/to/ActionTO';
 import { ActionType } from '../../../dataAccess/access/types/ActionType';
 import { DavitTableRowData } from '../../common/fragments/DavitTable';
 
 export const useGetStepActionTableData = (
-    selectedStep: SequenceStepCTO | null,
+    selectedActions: ActionTO[],
 ): { header: string[]; bodyData: DavitTableRowData[] } => {
     const dispatch = useDispatch();
     let list: DavitTableRowData[] = [];
-    if (selectedStep !== null) {
-        list = selectedStep.actions.map((action, index) => {
+    if (selectedActions !== null) {
+        list = selectedActions.map((action, index) => {
             const editCallback = () => {};
             return createModelActionColumn(index, action, editCallback);
         });

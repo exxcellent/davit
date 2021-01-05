@@ -3,7 +3,7 @@ import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ChainlinkCTO } from '../../../dataAccess/access/cto/ChainlinkCTO';
 import { SequenceCTO } from '../../../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../../../dataAccess/access/cto/SequenceStepCTO';
+import { ActionTO } from '../../../dataAccess/access/to/ActionTO';
 import { ChainDecisionTO } from '../../../dataAccess/access/to/ChainDecisionTO';
 import { ChainTO } from '../../../dataAccess/access/to/ChainTO';
 import { DataSetupTO } from '../../../dataAccess/access/to/DataSetupTO';
@@ -80,7 +80,7 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
 
 const useSequenceTableViewModel = () => {
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
-    const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.stepToEdit);
+    const selectedActions: ActionTO[] = useSelector(editSelectors.selectStepToEdit)?.actions || [];
     const calcSteps: CalculatedStep[] = useSelector(sequenceModelSelectors.selectCalcSteps);
     const calcChain: CalcChain | null = useSelector(sequenceModelSelectors.selectCalcChain);
     const sequences: SequenceTO[] = useSelector(masterDataSelectors.sequences);
@@ -111,14 +111,14 @@ const useSequenceTableViewModel = () => {
                 newActiveTab = ActiveTab.chaindecisions;
                 break;
             case Mode.EDIT_SEQUENCE:
-                newActiveTab = ActiveTab.sequenceModels;
+                newActiveTab = ActiveTab.step;
                 break;
             case Mode.EDIT_SEQUENCE_DECISION:
             case Mode.EDIT_SEQUENCE_DECISION_CONDITION:
                 newActiveTab = ActiveTab.decision;
                 break;
             case Mode.EDIT_SEQUENCE_STEP:
-                newActiveTab = ActiveTab.step;
+                newActiveTab = ActiveTab.action;
                 break;
             case Mode.EDIT_SEQUENCE_STEP_ACTION:
                 newActiveTab = ActiveTab.action;
@@ -133,7 +133,7 @@ const useSequenceTableViewModel = () => {
     const modelSequenceData = useGetSequenceModelsTableBody(sequences);
     const modelSequenceDecisionData = useGetModelSequenceDecisionTableData(selectedSequence);
     const modelSequenceStepData = useGetStepTableData(selectedSequence);
-    const modelStepActionData = useGetStepActionTableData(stepToEdit);
+    const modelStepActionData = useGetStepActionTableData(selectedActions);
     const modelChainData = useGetChainModelsTableData(chainModels);
     const modelChainDecisionData = useGetModelChainDecisionTableData(
         calcChain,
