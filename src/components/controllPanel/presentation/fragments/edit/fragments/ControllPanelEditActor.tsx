@@ -5,6 +5,7 @@ import { ActorCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
 import { GroupTO } from '../../../../../../dataAccess/access/to/GroupTO';
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
 import { handleError } from '../../../../../../slices/GlobalSlice';
+import { EditActor } from '../../../../../../slices/thunks/ActorThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
 import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
@@ -67,7 +68,7 @@ export const ControllPanelEditActor: FunctionComponent<ControllPanelEditActorPro
 };
 
 const useControllPanelEditActorViewModel = () => {
-    const actorToEdit: ActorCTO | null = useSelector(editSelectors.actorToEdit);
+    const actorToEdit: ActorCTO | null = useSelector(editSelectors.selectActorToEdit);
     const dispatch = useDispatch();
     const textInput = useRef<Input>(null);
 
@@ -89,13 +90,13 @@ const useControllPanelEditActorViewModel = () => {
 
     const updateActor = () => {
         const copyComponentToEdit: ActorCTO = DavitUtil.deepCopy(actorToEdit);
-        dispatch(EditActions.actor.save(copyComponentToEdit));
+        dispatch(EditActor.save(copyComponentToEdit));
     };
 
     const saveActor = (newMode?: string) => {
         if (!DavitUtil.isNullOrUndefined(actorToEdit)) {
             if (actorToEdit?.actor.name !== '') {
-                dispatch(EditActions.actor.save(actorToEdit!));
+                dispatch(EditActor.save(actorToEdit!));
             } else {
                 deleteActor();
             }
@@ -108,7 +109,7 @@ const useControllPanelEditActorViewModel = () => {
     };
 
     const deleteActor = () => {
-        dispatch(EditActions.actor.delete(actorToEdit!));
+        dispatch(EditActor.delete(actorToEdit!));
         dispatch(EditActions.setMode.edit());
     };
 

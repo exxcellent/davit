@@ -9,7 +9,7 @@ import { FlowChartController } from '../components/sequenceModel/FlowChartContro
 import { SequenceTableModelController } from '../components/sequenceTableModel/presentation/SequenceTableModelController';
 import { SidePanelController } from '../components/sidePanel/SidePanelController';
 import { MasterDataActions } from '../slices/MasterDataSlice';
-import './Davit.css';
+import './css/Davit.css';
 
 // electron needs HashRouter
 // import { HashRouter as BrowserRouter } from 'react-router-dom';

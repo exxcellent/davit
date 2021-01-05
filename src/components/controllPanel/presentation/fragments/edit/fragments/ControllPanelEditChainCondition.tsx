@@ -5,6 +5,7 @@ import { ChainTO } from '../../../../../../dataAccess/access/to/ChainTO';
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
 import { handleError } from '../../../../../../slices/GlobalSlice';
 import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
+import { EditChainDecision } from '../../../../../../slices/thunks/ChainDecisionThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
 import { DavitButtonIcon } from '../../../../../common/fragments/buttons/DavitButton';
 import { DavitMenuLabel } from '../../../../../common/fragments/DavitMenuLabel';
@@ -64,7 +65,7 @@ export const ControllPanelEditChainCondition: FunctionComponent<ControllPanelEdi
 };
 
 const useControllPanelEditConditionViewModel = () => {
-    const decisionToEdit: ChainDecisionTO | null = useSelector(editSelectors.chainDecisionToEdit);
+    const decisionToEdit: ChainDecisionTO | null = useSelector(editSelectors.selectChainDecisionToEdit);
     const chain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
     const dispatch = useDispatch();
 
@@ -79,7 +80,7 @@ const useControllPanelEditConditionViewModel = () => {
         if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
             const copyDecisionToEdit: ChainDecisionTO = DavitUtil.deepCopy(decisionToEdit);
             copyDecisionToEdit.dataAndInstanceIds = dataAndInstanceIds || [];
-            dispatch(EditActions.chainDecision.create(copyDecisionToEdit));
+            dispatch(EditChainDecision.create(copyDecisionToEdit));
         }
     };
 
@@ -101,7 +102,7 @@ const useControllPanelEditConditionViewModel = () => {
         if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
             const copyDecisionToEdit: ChainDecisionTO = DavitUtil.deepCopy(decisionToEdit);
             copyDecisionToEdit.actorFk = actorId;
-            dispatch(EditActions.chainDecision.create(copyDecisionToEdit));
+            dispatch(EditChainDecision.create(copyDecisionToEdit));
         }
     };
 

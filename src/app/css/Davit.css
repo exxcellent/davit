@@ -261,6 +261,19 @@
 
 /* -------------------------------------------- BUTTON -------------------------------------------- */
 
+button{
+  color: var(--carv2-text-color);
+  border: none;
+  border-radius: 5px;
+  border: 2px solid var(--carv2-color-secondary);
+  background-color: transparent;
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  font-weight: 700;
+  line-height: 1em;
+  font-style: normal;
+  text-align: center;
+}
+
 #buttonGroupLabel {
   opacity: 1 !important;
   color: var(--carv2-text-color);

@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input } from 'semantic-ui-react';
-import { isNullOrUndefined } from 'util';
 import { ChainDecisionTO } from '../../../../../../dataAccess/access/to/ChainDecisionTO';
 import { ChainlinkTO } from '../../../../../../dataAccess/access/to/ChainlinkTO';
 import { ChainTO } from '../../../../../../dataAccess/access/to/ChainTO';
@@ -9,6 +8,7 @@ import { GoToChain, GoToTypesChain } from '../../../../../../dataAccess/access/t
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
 import { handleError } from '../../../../../../slices/GlobalSlice';
 import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
+import { EditChainDecision } from '../../../../../../slices/thunks/ChainDecisionThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
 import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonIcon } from '../../../../../common/fragments/buttons/DavitButton';
@@ -151,7 +151,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
 };
 
 const useControllPanelEditChainConditionViewModel = () => {
-    const decisionToEdit: ChainDecisionTO | null = useSelector(editSelectors.chainDecisionToEdit);
+    const decisionToEdit: ChainDecisionTO | null = useSelector(editSelectors.selectChainDecisionToEdit);
     const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
     const dispatch = useDispatch();
     const textInput = useRef<Input>(null);
@@ -160,7 +160,7 @@ const useControllPanelEditChainConditionViewModel = () => {
     const [key, setKey] = useState<number>(0);
 
     useEffect(() => {
-        if (isNullOrUndefined(decisionToEdit)) {
+        if (DavitUtil.isNullOrUndefined(decisionToEdit)) {
             dispatch(handleError('Tried to go to edit condition step without conditionToEdit specified'));
             dispatch(EditActions.setMode.edit());
         }
@@ -174,7 +174,7 @@ const useControllPanelEditChainConditionViewModel = () => {
     }, [dispatch, decisionToEdit]);
 
     const changeName = (name: string) => {
-        if (!isNullOrUndefined(decisionToEdit)) {
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
             const copyDecisionToEdit: ChainDecisionTO = DavitUtil.deepCopy(decisionToEdit);
             copyDecisionToEdit.name = name;
             dispatch(EditActions.setMode.editChainDecision(copyDecisionToEdit));
@@ -182,31 +182,31 @@ const useControllPanelEditChainConditionViewModel = () => {
     };
 
     const saveDecision = (newMode?: string) => {
-        if (!isNullOrUndefined(decisionToEdit) && !isNullOrUndefined(selectedChain)) {
-            if (decisionToEdit.name !== '') {
-                dispatch(EditActions.chainDecision.save(decisionToEdit));
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit) && !DavitUtil.isNullOrUndefined(selectedChain)) {
+            if (decisionToEdit!.name !== '') {
+                dispatch(EditChainDecision.save(decisionToEdit!));
             } else {
-                dispatch(EditActions.chainDecision.delete(decisionToEdit));
+                dispatch(EditChainDecision.delete(decisionToEdit!));
             }
             if (newMode && newMode === 'EDIT') {
                 dispatch(EditActions.setMode.edit());
             } else {
-                dispatch(EditActions.setMode.editChain(selectedChain));
+                dispatch(EditActions.setMode.editChain(selectedChain!));
             }
         }
     };
 
     const deleteDecision = () => {
-        if (!isNullOrUndefined(decisionToEdit) && !isNullOrUndefined(selectedChain)) {
-            dispatch(EditActions.chainDecision.delete(decisionToEdit));
-            dispatch(EditActions.setMode.editChain(selectedChain));
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit) && !DavitUtil.isNullOrUndefined(selectedChain)) {
+            dispatch(EditChainDecision.delete(decisionToEdit!));
+            dispatch(EditActions.setMode.editChain(selectedChain!));
         }
     };
 
     const validStep = (): boolean => {
         let valid: boolean = false;
-        if (!isNullOrUndefined(decisionToEdit)) {
-            if (decisionToEdit.name !== '') {
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
+            if (decisionToEdit!.name !== '') {
                 valid = true;
             }
         }
@@ -217,7 +217,7 @@ const useControllPanelEditChainConditionViewModel = () => {
         if (goTo !== undefined) {
             const copyDecisionToEdit: ChainDecisionTO = DavitUtil.deepCopy(decisionToEdit);
             ifGoTo ? (copyDecisionToEdit.ifGoTo = goTo) : (copyDecisionToEdit.elseGoTo = goTo);
-            dispatch(EditActions.chainDecision.save(copyDecisionToEdit));
+            dispatch(EditChainDecision.save(copyDecisionToEdit));
             dispatch(EditActions.setMode.editChainDecision(copyDecisionToEdit));
         }
     };
@@ -252,18 +252,18 @@ const useControllPanelEditChainConditionViewModel = () => {
     };
 
     const createGoToLink = (ifGoTo: boolean) => {
-        if (!isNullOrUndefined(decisionToEdit)) {
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
             const copyDecision: ChainDecisionTO = DavitUtil.deepCopy(decisionToEdit);
             const goToLink: ChainlinkTO = new ChainlinkTO();
-            goToLink.chainFk = decisionToEdit.chainFk;
+            goToLink.chainFk = decisionToEdit!.chainFk;
             dispatch(EditActions.setMode.editChainLink(goToLink, copyDecision, ifGoTo));
         }
     };
 
     const createGoToDecision = (ifGoTo: boolean) => {
-        if (!isNullOrUndefined(decisionToEdit)) {
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
             const goToDecision: ChainDecisionTO = new ChainDecisionTO();
-            goToDecision.chainFk = decisionToEdit.chainFk;
+            goToDecision.chainFk = decisionToEdit!.chainFk;
             const copyDecisionToEdit: ChainDecisionTO = DavitUtil.deepCopy(decisionToEdit);
             dispatch(EditActions.setMode.editChainDecision(goToDecision, copyDecisionToEdit, ifGoTo));
             setKey(key + 1);

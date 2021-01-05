@@ -99,7 +99,7 @@ export const useCustomZoomEvent = (
 };
 
 export const useStepAndLinkNavigation = () => {
-    const mode: Mode = useSelector(editSelectors.mode);
+    const mode: Mode = useSelector(editSelectors.selectMode);
     const sequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const stepIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentStepIndex);
     const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);

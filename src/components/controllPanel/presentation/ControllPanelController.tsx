@@ -44,7 +44,7 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (p
 };
 
 const useControllPanelViewModel = () => {
-    const mode: Mode = useSelector(editSelectors.mode);
+    const mode: Mode = useSelector(editSelectors.selectMode);
     const dispatch = useDispatch();
 
     const onClickNavItem = (mode: string) => {
