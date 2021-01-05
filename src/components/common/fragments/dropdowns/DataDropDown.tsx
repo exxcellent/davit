@@ -45,7 +45,7 @@ export const DataDropDownButton: FunctionComponent<DataDropDownButtonProps> = (p
 };
 
 const useDataDropDownViewModel = () => {
-    const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
+    const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
 
     const selectData = (dataId: number, datas: DataCTO[]): DataCTO | undefined => {
         if (!DavitUtil.isNullOrUndefined(dataId) && !DavitUtil.isNullOrUndefined(datas)) {

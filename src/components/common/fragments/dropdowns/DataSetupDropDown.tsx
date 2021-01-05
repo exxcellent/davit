@@ -46,7 +46,7 @@ export const DataSetupDropDownButton: FunctionComponent<DataSetupDropDownPropsBu
 };
 
 const useDataSetupDropDownViewModel = () => {
-    const dataSetups: DataSetupTO[] = useSelector(masterDataSelectors.dataSetup);
+    const dataSetups: DataSetupTO[] = useSelector(masterDataSelectors.selectDataSetups);
 
     const dataSetupToOption = (dataSetup: DataSetupTO): DavitDropDownItemProps => {
         return {

@@ -53,7 +53,7 @@ export const ChainLinkDropDownButton: FunctionComponent<ChainLinkDropDownButtonP
 };
 
 const useChainStepDropDownViewModel = (chainId: number, exclude?: number) => {
-    const chainlinks: ChainlinkTO[] = useSelector(masterDataSelectors.chainLinks);
+    const chainlinks: ChainlinkTO[] = useSelector(masterDataSelectors.selectChainLinks);
 
     const chainStepToOption = (link: ChainlinkTO): DavitDropDownItemProps => {
         return {

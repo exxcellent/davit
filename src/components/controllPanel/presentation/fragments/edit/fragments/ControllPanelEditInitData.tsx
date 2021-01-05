@@ -72,9 +72,9 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
 const useControllPanelEditDataSetupViewModel = () => {
     const initDataToEdit: InitDataTO | null = useSelector(editSelectors.selectInitDataToEdit);
     const dataSetup: DataSetupTO | null = useSelector(
-        masterDataSelectors.getDataSetupToById(initDataToEdit?.dataSetupFk || -1),
+        masterDataSelectors.selectDataSetupToById(initDataToEdit?.dataSetupFk || -1),
     );
-    const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
+    const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
     const dispatch = useDispatch();
     const [key, setKey] = useState<number>(0);
 

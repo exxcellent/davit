@@ -181,30 +181,30 @@ const loadAll = (): AppThunk => (dispatch) => {
 
 export const MasterDataReducer = MasterDataSlice.reducer;
 export const masterDataSelectors = {
-    actors: (state: RootState): ActorCTO[] => state.masterData.actors,
-    groups: (state: RootState): GroupTO[] => state.masterData.groups,
-    datas: (state: RootState): DataCTO[] => state.masterData.datas,
-    relations: (state: RootState): DataRelationTO[] => state.masterData.relations,
-    sequences: (state: RootState): SequenceTO[] => state.masterData.sequences,
-    chains: (state: RootState): ChainTO[] => state.masterData.chains,
-    chainLinks: (state: RootState): ChainlinkTO[] => state.masterData.chainLinks,
-    chainDecisions: (state: RootState): ChainDecisionTO[] => state.masterData.chainDecisions,
-    dataSetup: (state: RootState): DataSetupTO[] => state.masterData.dataSetups,
-    getSequenceTO: (id: number) => (state: RootState): SequenceTO | undefined => {
+    selectActors: (state: RootState): ActorCTO[] => state.masterData.actors,
+    selectGroups: (state: RootState): GroupTO[] => state.masterData.groups,
+    selectDatas: (state: RootState): DataCTO[] => state.masterData.datas,
+    selectRelations: (state: RootState): DataRelationTO[] => state.masterData.relations,
+    selectSequences: (state: RootState): SequenceTO[] => state.masterData.sequences,
+    selectChains: (state: RootState): ChainTO[] => state.masterData.chains,
+    selectChainLinks: (state: RootState): ChainlinkTO[] => state.masterData.chainLinks,
+    selectChainDecisions: (state: RootState): ChainDecisionTO[] => state.masterData.chainDecisions,
+    selectDataSetups: (state: RootState): DataSetupTO[] => state.masterData.dataSetups,
+    selectSequenceTOById: (id: number) => (state: RootState): SequenceTO | undefined => {
         return state.masterData.sequences.find((sequence) => sequence.id === id);
     },
-    getActorById: (id: number) => {
+    selectActorById: (id: number) => {
         return (state: RootState): ActorCTO | null => {
             return state.masterData.actors.find((actor) => actor.actor.id === id) || null;
         };
     },
-    getDataCTOById: (id: number) => {
+    selectDataCTOById: (id: number) => {
         return (state: RootState): DataCTO | null => {
             const data: DataCTO | null = state.masterData.datas.find((data) => data.data.id === id) || null;
             return data;
         };
     },
-    getDataSetupToById: (id: number) => {
+    selectDataSetupToById: (id: number) => {
         return (state: RootState): DataSetupTO | null => {
             return state.masterData.dataSetups.find((dataSetup) => dataSetup.id === id) || null;
         };

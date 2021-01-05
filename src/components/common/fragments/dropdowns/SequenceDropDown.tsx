@@ -46,7 +46,7 @@ export const SequenceDropDownButton: FunctionComponent<SequenceDropDownPropsButt
 };
 
 const useSequenceDropDownViewModel = () => {
-    const sequences: SequenceTO[] = useSelector(masterDataSelectors.sequences);
+    const sequences: SequenceTO[] = useSelector(masterDataSelectors.selectSequences);
 
     const selectSequence = (sequenceId: number, sequences: SequenceTO[]): SequenceTO | undefined => {
         if (!DavitUtil.isNullOrUndefined(sequenceId) && !DavitUtil.isNullOrUndefined(sequences)) {

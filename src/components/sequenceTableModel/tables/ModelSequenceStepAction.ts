@@ -1,17 +1,44 @@
-import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { ActorCTO } from '../../../dataAccess/access/cto/ActorCTO';
+import { DataCTO } from '../../../dataAccess/access/cto/DataCTO';
 import { ActionTO } from '../../../dataAccess/access/to/ActionTO';
 import { ActionType } from '../../../dataAccess/access/types/ActionType';
+import { masterDataSelectors } from '../../../slices/MasterDataSlice';
 import { DavitTableRowData } from '../../common/fragments/DavitTable';
 
 export const useGetStepActionTableData = (
     selectedActions: ActionTO[],
 ): { header: string[]; bodyData: DavitTableRowData[] } => {
-    const dispatch = useDispatch();
+    const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
+    const actors: ActorCTO[] = useSelector(masterDataSelectors.selectActors);
+    // const dispatch = useDispatch();
+
     let list: DavitTableRowData[] = [];
+
     if (selectedActions !== null) {
         list = selectedActions.map((action, index) => {
             const editCallback = () => {};
-            return createModelActionColumn(index, action, editCallback);
+
+            const dataName: string = datas.find((data) => data.data.id === action.dataFk)?.data.name || '';
+
+            const toActorName: string =
+                actors.find((actor) => actor.actor.id === action.receivingActorFk)?.actor.name || '';
+
+            const fromActorName: string =
+                actors.find((actor) => actor.actor.id === action.sendingActorFk)?.actor.name || '';
+
+            console.info('dataName: ', dataName);
+            console.info('toAcotrName: ', toActorName);
+            console.info('fromActorName: ', fromActorName);
+
+            return createModelActionColumn(
+                index,
+                action.actionType,
+                dataName,
+                toActorName,
+                fromActorName,
+                editCallback,
+            );
         });
     }
     return {
@@ -22,31 +49,22 @@ export const useGetStepActionTableData = (
 
 const header = ['INDEX', 'TYPE', 'DATA', 'TO', 'FROM'];
 
-const createModelActionColumn = (arrayIndex: number, action: ActionTO, editCallback: () => void): DavitTableRowData => {
+const createModelActionColumn = (
+    arrayIndex: number,
+    actionType: ActionType,
+    dataName: string,
+    toActorName: string,
+    fromActorName: string,
+    editCallback: () => void,
+): DavitTableRowData => {
     const actionIndex: string = arrayIndex.toString();
-    const actionType: string = action.actionType;
-    const data: string = getDataName(action.dataFk);
-    const toActor: string = getActorName(action.receivingActorFk, action.actionType);
-    const fromActor: string = getActorName(action.receivingActorFk, action.actionType);
-
     const trClass = 'carv2Tr';
 
     return {
-        data: [actionIndex, actionType, data, toActor, fromActor],
+        data: [actionIndex, actionType, dataName, toActorName, fromActorName],
         trClass,
-        actions: [{ icon: 'wrench', callback: editCallback }],
+        // actions: [{ icon: 'wrench', callback: editCallback }],
+        // TODO: add index + 1 and index -1
+        actions: [],
     };
 };
-
-function getDataName(dataFk: number): string {
-    // ...
-    return 'dataName';
-}
-
-function getActorName(actorId: number, actionType: ActionType): string {
-    let actorName = '';
-    if (actionType === ActionType.SEND || actionType === ActionType.SEND_AND_DELETE) {
-        actorName = 'actorName';
-    }
-    return actorName;
-}

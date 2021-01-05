@@ -59,10 +59,10 @@ export const DataModelController: FunctionComponent<DataModelControllerProps> = 
 const useMetaDataModelViewModel = () => {
     const dispatch = useDispatch();
     // ====== SELECTORS =====
-    const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
+    const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
     const dataCTOToEdit: DataCTO | null = useSelector(editSelectors.selectDataToEdit);
-    const dataRelations: DataRelationTO[] = useSelector(masterDataSelectors.relations);
-    const actors: ActorCTO[] = useSelector(masterDataSelectors.actors);
+    const dataRelations: DataRelationTO[] = useSelector(masterDataSelectors.selectRelations);
+    const actors: ActorCTO[] = useSelector(masterDataSelectors.selectActors);
     // ----- EDIT -----
     const dataRelationToEdit: DataRelationTO | null = useSelector(editSelectors.selectRelationToEdit);
     const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.selectStepToEdit);

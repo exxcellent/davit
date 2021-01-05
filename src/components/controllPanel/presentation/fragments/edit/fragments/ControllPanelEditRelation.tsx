@@ -126,7 +126,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
 };
 
 const useControllPanelEditRelationViewModel = () => {
-    const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
+    const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
     const relationToEdit: DataRelationTO | null = useSelector(editSelectors.selectRelationToEdit);
     const dispatch = useDispatch();
     const [key, setKey] = useState<number>(0);

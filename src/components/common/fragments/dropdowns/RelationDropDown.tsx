@@ -44,8 +44,8 @@ export const RelationDropDownButton: FunctionComponent<RelationDropDownPropsButt
 };
 
 const useRelationDropDownViewModel = () => {
-    const relations: DataRelationTO[] = useSelector(masterDataSelectors.relations);
-    const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
+    const relations: DataRelationTO[] = useSelector(masterDataSelectors.selectRelations);
+    const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
 
     const getDataName = (dataId: number, datas: DataCTO[]): string => {
         return datas.find((data) => data.data.id === dataId)?.data.name || '';

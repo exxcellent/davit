@@ -50,8 +50,8 @@ export const InitDataDropDownButton: FunctionComponent<InitDataDropDownPropsButt
 };
 
 const useDataSetupDropDownViewModel = () => {
-    const actors: ActorCTO[] = useSelector(masterDataSelectors.actors);
-    const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
+    const actors: ActorCTO[] = useSelector(masterDataSelectors.selectActors);
+    const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
 
     const getActorName = (actorId: number): string => {
         return actors.find((actor) => actor.actor.id === actorId)?.actor.name || '';

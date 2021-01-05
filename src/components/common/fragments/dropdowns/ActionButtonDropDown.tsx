@@ -63,8 +63,8 @@ const getActionTypeLabel = (type: ActionType): string => {
 
 const useActionDropDownViewModel = () => {
     const actions: ActionTO[] = useSelector(editSelectors.selectStepToEdit)?.actions || [];
-    const actors: ActorCTO[] = useSelector(masterDataSelectors.actors);
-    const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
+    const actors: ActorCTO[] = useSelector(masterDataSelectors.selectActors);
+    const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
 
     const actionToOption = (action: ActionTO): DavitDropDownItemProps => {
         return {

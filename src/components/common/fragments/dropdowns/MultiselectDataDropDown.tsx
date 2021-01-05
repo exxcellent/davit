@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { useSelector } from 'react-redux';
 import { Dropdown, DropdownItemProps, DropdownProps } from 'semantic-ui-react';
-
 import { DataCTO } from '../../../../dataAccess/access/cto/DataCTO';
 import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
 
@@ -35,7 +34,7 @@ export const MultiselectDataDropDown: FunctionComponent<MultiselectDataDropDownP
 };
 
 const useMultiSelectDataDropDownViewModel = () => {
-    const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
+    const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
 
     const dataToOption = (data: DataCTO): DropdownItemProps[] => {
         if (data.data.instances.length === 0) {

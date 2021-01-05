@@ -83,10 +83,10 @@ const useSequenceTableViewModel = () => {
     const selectedActions: ActionTO[] = useSelector(editSelectors.selectStepToEdit)?.actions || [];
     const calcSteps: CalculatedStep[] = useSelector(sequenceModelSelectors.selectCalcSteps);
     const calcChain: CalcChain | null = useSelector(sequenceModelSelectors.selectCalcChain);
-    const sequences: SequenceTO[] = useSelector(masterDataSelectors.sequences);
-    const dataSetups: DataSetupTO[] = useSelector(masterDataSelectors.dataSetup);
+    const sequences: SequenceTO[] = useSelector(masterDataSelectors.selectSequences);
+    const dataSetups: DataSetupTO[] = useSelector(masterDataSelectors.selectDataSetups);
     const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
-    const chainModels: ChainTO[] = useSelector(masterDataSelectors.chains);
+    const chainModels: ChainTO[] = useSelector(masterDataSelectors.selectChains);
     const mode: Mode = useSelector(editSelectors.selectMode);
     const selectedChainlinks: ChainlinkCTO[] = useSelector(sequenceModelSelectors.selectCurrentChainLinks);
     const selectedChainDecisions: ChainDecisionTO[] = useSelector(sequenceModelSelectors.selectCurrentChainDecisions);
