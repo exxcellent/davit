@@ -3,6 +3,7 @@ import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ChainlinkCTO } from '../../../dataAccess/access/cto/ChainlinkCTO';
 import { SequenceCTO } from '../../../dataAccess/access/cto/SequenceCTO';
+import { SequenceStepCTO } from '../../../dataAccess/access/cto/SequenceStepCTO';
 import { ActionTO } from '../../../dataAccess/access/to/ActionTO';
 import { ChainDecisionTO } from '../../../dataAccess/access/to/ChainDecisionTO';
 import { ChainTO } from '../../../dataAccess/access/to/ChainTO';
@@ -91,6 +92,8 @@ const useSequenceTableViewModel = () => {
     const selectedChainlinks: ChainlinkCTO[] = useSelector(sequenceModelSelectors.selectCurrentChainLinks);
     const selectedChainDecisions: ChainDecisionTO[] = useSelector(sequenceModelSelectors.selectCurrentChainDecisions);
 
+    const selectedActionToEdit: ActionTO | null = useSelector(editSelectors.selectActionToEdit);
+
     const [activeTab, setActiveTab] = useState<ActiveTab>(ActiveTab.sequence);
 
     useEffect(() => {
@@ -133,7 +136,29 @@ const useSequenceTableViewModel = () => {
     const modelSequenceData = useGetSequenceModelsTableBody(sequences);
     const modelSequenceDecisionData = useGetModelSequenceDecisionTableData(selectedSequence);
     const modelSequenceStepData = useGetStepTableData(selectedSequence);
-    const modelStepActionData = useGetStepActionTableData(selectedActions);
+
+    const getActionsToShow = (): ActionTO[] => {
+        let actions: ActionTO[] = [];
+        /**
+         * In case to edit a action we want to show all other actions containing in the current step to edit.
+         */
+        if (mode === Mode.EDIT_SEQUENCE_STEP_ACTION) {
+            if (selectedActionToEdit) {
+                const step: SequenceStepCTO | undefined = selectedSequence?.sequenceStepCTOs.find(
+                    (step) => step.squenceStepTO.id === selectedActionToEdit?.sequenceStepFk,
+                );
+                if (step) {
+                    actions = step.actions;
+                }
+            }
+        } else {
+            actions = selectedActions;
+        }
+        return actions;
+    };
+
+    const modelStepActionData = useGetStepActionTableData(getActionsToShow());
+
     const modelChainData = useGetChainModelsTableData(chainModels);
     const modelChainDecisionData = useGetModelChainDecisionTableData(
         calcChain,

@@ -1,4 +1,6 @@
 import React, { FunctionComponent } from 'react';
+import { useSelector } from 'react-redux';
+import { editSelectors, Mode } from '../../../slices/EditSlice';
 import { ActiveTab } from '../presentation/SequenceTableModelController';
 import { TabFragment } from './TabFragment';
 import { TabGroupFragment } from './TabGroupFragment';
@@ -33,6 +35,31 @@ export const TabPanel: FunctionComponent<TabPanelProps> = (props) => {
         showSequenceModelTabs,
     } = props;
 
+    const mode: Mode = useSelector(editSelectors.selectMode);
+
+    const getSequenceModelTabGroupDefinition = (): TabGroupDefinition => {
+        const tabs: TabDefinition[] = [
+            {
+                label: 'Decision',
+                identifier: ActiveTab.decision,
+            },
+            {
+                label: 'Steps',
+                identifier: ActiveTab.step,
+            },
+        ];
+
+        if (mode === Mode.EDIT_SEQUENCE_STEP || mode === Mode.EDIT_SEQUENCE_STEP_ACTION) {
+            tabs.push({ label: 'Actions', identifier: ActiveTab.action });
+        }
+
+        return {
+            label: 'Sequence Model',
+            condition: showSequenceModelTabs,
+            tabs: tabs,
+        };
+    };
+
     const tabDefinitions: TabGroupDefinition[] = [
         {
             label: 'Calculated',
@@ -64,24 +91,7 @@ export const TabPanel: FunctionComponent<TabPanelProps> = (props) => {
                 },
             ],
         },
-        {
-            label: 'Sequence Model',
-            condition: showSequenceModelTabs,
-            tabs: [
-                {
-                    label: 'Decision',
-                    identifier: ActiveTab.decision,
-                },
-                {
-                    label: 'Steps',
-                    identifier: ActiveTab.step,
-                },
-                {
-                    label: 'Actions',
-                    identifier: ActiveTab.action,
-                },
-            ],
-        },
+        getSequenceModelTabGroupDefinition(),
         {
             label: 'Models',
             tabs: [
