@@ -12,6 +12,7 @@ import { GroupTO } from '../dataAccess/access/to/GroupTO';
 import { SequenceTO } from '../dataAccess/access/to/SequenceTO';
 import { DataAccess } from '../dataAccess/DataAccess';
 import { DataAccessResponse } from '../dataAccess/DataAccessResponse';
+import { DavitUtil } from '../utils/DavitUtil';
 import { handleError } from './GlobalSlice';
 
 interface MasterDataState {
@@ -158,7 +159,7 @@ const findSequenceStepCTO = (id: number): SequenceStepCTO | undefined => {
     let step: SequenceStepCTO | undefined;
     const response: DataAccessResponse<SequenceStepCTO> = DataAccess.findSequenceStepCTO(id);
     if (response.code === 200) {
-        step = response.object;
+        step = DavitUtil.deepCopy(response.object);
     }
     return step;
 };

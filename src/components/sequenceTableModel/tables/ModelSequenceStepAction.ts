@@ -4,8 +4,9 @@ import { DataCTO } from '../../../dataAccess/access/cto/DataCTO';
 import { SequenceStepCTO } from '../../../dataAccess/access/cto/SequenceStepCTO';
 import { ActionTO } from '../../../dataAccess/access/to/ActionTO';
 import { ActionType } from '../../../dataAccess/access/types/ActionType';
-import { EditActions, editSelectors } from '../../../slices/EditSlice';
+import { EditActions, editSelectors, Mode } from '../../../slices/EditSlice';
 import { masterDataSelectors } from '../../../slices/MasterDataSlice';
+import { SequenceModelActions } from '../../../slices/SequenceModelSlice';
 import { EditStep } from '../../../slices/thunks/StepThunks';
 import { DavitUtil } from '../../../utils/DavitUtil';
 import { DavitTableRowData } from '../../common/fragments/DavitTable';
@@ -16,6 +17,7 @@ export const useGetStepActionTableData = (
     const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
     const actors: ActorCTO[] = useSelector(masterDataSelectors.selectActors);
     const actionToEdit: ActionTO | null = useSelector(editSelectors.selectActionToEdit);
+    const mode: Mode = useSelector(editSelectors.selectMode);
     const dispatch = useDispatch();
 
     let list: DavitTableRowData[] = [];
@@ -26,6 +28,7 @@ export const useGetStepActionTableData = (
                 dispatch(EditActions.setMode.editAction(action));
             };
 
+            // TODO: refactor this two functions! there is a lot of double code!
             const indexIncrementCallback = () => {
                 const copyStep: SequenceStepCTO = DavitUtil.deepCopy(selectedStep);
                 if (index < copyStep.actions.length - 1) {
@@ -36,11 +39,17 @@ export const useGetStepActionTableData = (
                     copyStep.actions[index] = action2;
                     copyStep.actions[index + 1] = action1;
                 }
-                console.info('step to save: ', copyStep);
+
                 dispatch(EditStep.save(copyStep));
-                dispatch(EditStep.update(copyStep));
+
+                dispatch(SequenceModelActions.setCurrentSequence(copyStep.squenceStepTO.sequenceFk));
+
+                if (mode === Mode.EDIT_SEQUENCE_STEP) {
+                    dispatch(EditStep.update(copyStep));
+                }
             };
 
+            // TODO: function 2 s.o.
             const indexDecrementCallback = () => {
                 const copyStep: SequenceStepCTO = DavitUtil.deepCopy(selectedStep);
                 if (index > 0) {
@@ -53,7 +62,12 @@ export const useGetStepActionTableData = (
                 }
 
                 dispatch(EditStep.save(copyStep));
-                dispatch(EditStep.update(copyStep));
+
+                dispatch(SequenceModelActions.setCurrentSequence(copyStep.squenceStepTO.sequenceFk));
+
+                if (mode === Mode.EDIT_SEQUENCE_STEP) {
+                    dispatch(EditStep.update(copyStep));
+                }
             };
 
             const dataName: string = datas.find((data) => data.data.id === action.dataFk)?.data.name || '';

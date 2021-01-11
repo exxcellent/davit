@@ -153,9 +153,11 @@ const useControllPanelEditActionViewModel = () => {
     const deleteAction = () => {
         if (actionToEdit !== null) {
             dispatch(EditAction.delete(actionToEdit));
+
             const step: SequenceStepCTO | undefined = MasterDataActions.find.findSequenceStepCTO(
                 actionToEdit.sequenceStepFk,
             );
+
             if (step) {
                 dispatch(EditActions.setMode.editStep(step));
             } else {

@@ -1,12 +1,14 @@
 // ----------------------------------------------- ACTION -----------------------------------------------
 
 import { AppThunk } from '../../app/store';
+import { SequenceStepCTO } from '../../dataAccess/access/cto/SequenceStepCTO';
 import { ActionTO } from '../../dataAccess/access/to/ActionTO';
 import { DataAccess } from '../../dataAccess/DataAccess';
 import { DataAccessResponse } from '../../dataAccess/DataAccessResponse';
 import { editActions, EditActions, Mode } from '../EditSlice';
 import { handleError } from '../GlobalSlice';
 import { MasterDataActions } from '../MasterDataSlice';
+import { EditStep } from './StepThunks';
 
 const createActionThunk = (action: ActionTO): AppThunk => (dispatch) => {
     const response: DataAccessResponse<ActionTO> = DataAccess.saveActionTO(action);
@@ -24,10 +26,28 @@ const saveActionThunk = (action: ActionTO): AppThunk => (dispatch) => {
 };
 
 const deleteActionThunk = (action: ActionTO): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<ActionTO> = DataAccess.deleteActionCTO(action);
+    const actionIndex: number = action.index;
+
+    const response: DataAccessResponse<ActionTO> = DataAccess.deleteActionTO(action);
     if (response.code !== 200) {
         dispatch(handleError(response.message));
     }
+
+    const stepToUpdateActionIndexes: SequenceStepCTO | undefined = MasterDataActions.find.findSequenceStepCTO(
+        action.sequenceStepFk,
+    );
+
+    if (stepToUpdateActionIndexes) {
+        stepToUpdateActionIndexes.actions.map((action) => {
+            if (action.index > actionIndex) {
+                action.index = action.index - 1;
+            }
+            return action;
+        });
+
+        dispatch(EditStep.save(stepToUpdateActionIndexes));
+    }
+
     dispatch(MasterDataActions.loadSequencesFromBackend());
 };
 
