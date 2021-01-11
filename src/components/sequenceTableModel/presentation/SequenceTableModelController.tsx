@@ -81,7 +81,7 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
 
 const useSequenceTableViewModel = () => {
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
-    const selectedActions: ActionTO[] = useSelector(editSelectors.selectStepToEdit)?.actions || [];
+    const selectedStep: SequenceStepCTO | null = useSelector(editSelectors.selectStepToEdit);
     const calcSteps: CalculatedStep[] = useSelector(sequenceModelSelectors.selectCalcSteps);
     const calcChain: CalcChain | null = useSelector(sequenceModelSelectors.selectCalcChain);
     const sequences: SequenceTO[] = useSelector(masterDataSelectors.selectSequences);
@@ -137,8 +137,8 @@ const useSequenceTableViewModel = () => {
     const modelSequenceDecisionData = useGetModelSequenceDecisionTableData(selectedSequence);
     const modelSequenceStepData = useGetStepTableData(selectedSequence);
 
-    const getActionsToShow = (): ActionTO[] => {
-        let actions: ActionTO[] = [];
+    const getStep = (): SequenceStepCTO | null => {
+        let stepToShow: SequenceStepCTO | null = null;
         /**
          * In case to edit a action we want to show all other actions containing in the current step to edit.
          */
@@ -148,16 +148,16 @@ const useSequenceTableViewModel = () => {
                     (step) => step.squenceStepTO.id === selectedActionToEdit?.sequenceStepFk,
                 );
                 if (step) {
-                    actions = step.actions;
+                    stepToShow = step;
                 }
             }
         } else {
-            actions = selectedActions;
+            stepToShow = selectedStep;
         }
-        return actions;
+        return stepToShow;
     };
 
-    const modelStepActionData = useGetStepActionTableData(getActionsToShow());
+    const modelStepActionData = useGetStepActionTableData(getStep());
 
     const modelChainData = useGetChainModelsTableData(chainModels);
     const modelChainDecisionData = useGetModelChainDecisionTableData(

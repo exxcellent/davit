@@ -41,7 +41,7 @@ export const SequenceService = {
         let loopStartingStep: number = -1;
 
         if (sequence && dataSetup) {
-            const dataSetupActions: ActionTO[] = dataSetup.initDatas.map((data) => {
+            const dataSetupActions: ActionTO[] = dataSetup.initDatas.map((data, index) => {
                 return {
                     actionType: ActionType.ADD,
                     receivingActorFk: data.actorFk,
@@ -51,6 +51,7 @@ export const SequenceService = {
                     sequenceStepFk: -1,
                     sendingActorFk: -1,
                     triggerText: '',
+                    index: index,
                 };
             });
 

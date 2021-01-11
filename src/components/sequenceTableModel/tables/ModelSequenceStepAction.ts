@@ -1,15 +1,17 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { ActorCTO } from '../../../dataAccess/access/cto/ActorCTO';
 import { DataCTO } from '../../../dataAccess/access/cto/DataCTO';
+import { SequenceStepCTO } from '../../../dataAccess/access/cto/SequenceStepCTO';
 import { ActionTO } from '../../../dataAccess/access/to/ActionTO';
 import { ActionType } from '../../../dataAccess/access/types/ActionType';
 import { EditActions, editSelectors } from '../../../slices/EditSlice';
 import { masterDataSelectors } from '../../../slices/MasterDataSlice';
+import { EditStep } from '../../../slices/thunks/StepThunks';
 import { DavitUtil } from '../../../utils/DavitUtil';
 import { DavitTableRowData } from '../../common/fragments/DavitTable';
 
 export const useGetStepActionTableData = (
-    selectedActions: ActionTO[],
+    selectedStep: SequenceStepCTO | null,
 ): { header: string[]; bodyData: DavitTableRowData[] } => {
     const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
     const actors: ActorCTO[] = useSelector(masterDataSelectors.selectActors);
@@ -18,32 +20,40 @@ export const useGetStepActionTableData = (
 
     let list: DavitTableRowData[] = [];
 
-    if (selectedActions !== null) {
-        list = selectedActions.map((action, index) => {
+    if (selectedStep !== null) {
+        list = selectedStep.actions.map((action, index) => {
             const editCallback = () => {
                 dispatch(EditActions.setMode.editAction(action));
             };
+
             const indexIncrementCallback = () => {
-                const copyActions: ActionTO[] = DavitUtil.deepCopy(selectedActions);
-                if (index < copyActions.length - 1) {
-                    const action1: ActionTO = copyActions[index];
-                    const action2: ActionTO = copyActions[index + 1];
-                    copyActions[index] = action2;
-                    copyActions[index + 1] = action1;
+                const copyStep: SequenceStepCTO = DavitUtil.deepCopy(selectedStep);
+                if (index < copyStep.actions.length - 1) {
+                    const action1: ActionTO = copyStep.actions[index];
+                    action1.index = index + 1;
+                    const action2: ActionTO = copyStep.actions[index + 1];
+                    action2.index = index;
+                    copyStep.actions[index] = action2;
+                    copyStep.actions[index + 1] = action1;
                 }
-
-                // TODO: save new indexed Actions in Step Array!
+                console.info('step to save: ', copyStep);
+                dispatch(EditStep.save(copyStep));
+                dispatch(EditStep.update(copyStep));
             };
+
             const indexDecrementCallback = () => {
-                const copyActions: ActionTO[] = DavitUtil.deepCopy(selectedActions);
+                const copyStep: SequenceStepCTO = DavitUtil.deepCopy(selectedStep);
                 if (index > 0) {
-                    const action1: ActionTO = copyActions[index];
-                    const action2: ActionTO = copyActions[index - 1];
-                    copyActions[index] = action2;
-                    copyActions[index - 1] = action1;
+                    const action1: ActionTO = copyStep.actions[index];
+                    action1.index = index - 1;
+                    const action2: ActionTO = copyStep.actions[index - 1];
+                    action2.index = index;
+                    copyStep.actions[index] = action2;
+                    copyStep.actions[index - 1] = action1;
                 }
 
-                // TODO: save new indexed Actions in Step Array!
+                dispatch(EditStep.save(copyStep));
+                dispatch(EditStep.update(copyStep));
             };
 
             const dataName: string = datas.find((data) => data.data.id === action.dataFk)?.data.name || '';
@@ -63,7 +73,7 @@ export const useGetStepActionTableData = (
                 editCallback,
                 indexIncrementCallback,
                 indexDecrementCallback,
-                selectedActions.length,
+                selectedStep.actions.length,
                 action.id === actionToEdit?.id,
             );
         });

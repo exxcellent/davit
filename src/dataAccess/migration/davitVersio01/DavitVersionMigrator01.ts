@@ -34,7 +34,7 @@ export const DavitVersionMigrator01 = {
         const designs: DecisionTO[] = dataStoreObject.designs as DecisionTO[];
         const sequences: SequenceTO[] = dataStoreObject.sequences as SequenceTO[];
         const steps: SequenceStepTO[] = dataStoreObject.steps as SequenceStepTO[];
-        const actions: ActionTO[] = (dataStoreObject.actions as ActionTO01[]).map((action) => {
+        const actions: ActionTO[] = (dataStoreObject.actions as ActionTO01[]).map((action, index) => {
             return {
                 id: action.id,
                 actionType: action.actionType,
@@ -44,6 +44,7 @@ export const DavitVersionMigrator01 = {
                 sendingActorFk: action.sendingActorFk,
                 sequenceStepFk: action.sequenceStepFk,
                 triggerText: '',
+                index: index,
             };
         });
         const decisions: DecisionTO[] = (dataStoreObject.decisions as DecisionTO01[]).map((decision) => {
