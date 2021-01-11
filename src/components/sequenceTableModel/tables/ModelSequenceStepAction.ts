@@ -22,51 +22,44 @@ export const useGetStepActionTableData = (
 
     let list: DavitTableRowData[] = [];
 
+    const switchIndexesAndSave = (indexToUpdate: number, step: SequenceStepCTO, increment: boolean) => {
+        const newIndex: number = increment ? indexToUpdate + 1 : indexToUpdate - 1;
+        const copyStep: SequenceStepCTO = DavitUtil.deepCopy(step);
+
+        const action1: ActionTO = copyStep.actions[indexToUpdate];
+        action1.index = newIndex;
+        const action2: ActionTO = copyStep.actions[newIndex];
+        action2.index = indexToUpdate;
+        copyStep.actions[indexToUpdate] = action2;
+        copyStep.actions[newIndex] = action1;
+
+        // save step
+        dispatch(EditStep.save(copyStep));
+
+        // load sequence from backend
+        dispatch(SequenceModelActions.setCurrentSequence(copyStep.squenceStepTO.sequenceFk));
+
+        // update current step if object to edit
+        if (mode === Mode.EDIT_SEQUENCE_STEP) {
+            dispatch(EditStep.update(copyStep));
+        }
+    };
+
     if (selectedStep !== null) {
         list = selectedStep.actions.map((action, index) => {
             const editCallback = () => {
                 dispatch(EditActions.setMode.editAction(action));
             };
 
-            // TODO: refactor this two functions! there is a lot of double code!
             const indexIncrementCallback = () => {
-                const copyStep: SequenceStepCTO = DavitUtil.deepCopy(selectedStep);
-                if (index < copyStep.actions.length - 1) {
-                    const action1: ActionTO = copyStep.actions[index];
-                    action1.index = index + 1;
-                    const action2: ActionTO = copyStep.actions[index + 1];
-                    action2.index = index;
-                    copyStep.actions[index] = action2;
-                    copyStep.actions[index + 1] = action1;
-                }
-
-                dispatch(EditStep.save(copyStep));
-
-                dispatch(SequenceModelActions.setCurrentSequence(copyStep.squenceStepTO.sequenceFk));
-
-                if (mode === Mode.EDIT_SEQUENCE_STEP) {
-                    dispatch(EditStep.update(copyStep));
+                if (index < selectedStep.actions.length - 1) {
+                    switchIndexesAndSave(index, selectedStep, true);
                 }
             };
 
-            // TODO: function 2 s.o.
             const indexDecrementCallback = () => {
-                const copyStep: SequenceStepCTO = DavitUtil.deepCopy(selectedStep);
                 if (index > 0) {
-                    const action1: ActionTO = copyStep.actions[index];
-                    action1.index = index - 1;
-                    const action2: ActionTO = copyStep.actions[index - 1];
-                    action2.index = index;
-                    copyStep.actions[index] = action2;
-                    copyStep.actions[index - 1] = action1;
-                }
-
-                dispatch(EditStep.save(copyStep));
-
-                dispatch(SequenceModelActions.setCurrentSequence(copyStep.squenceStepTO.sequenceFk));
-
-                if (mode === Mode.EDIT_SEQUENCE_STEP) {
-                    dispatch(EditStep.update(copyStep));
+                    switchIndexesAndSave(index, selectedStep, false);
                 }
             };
 
