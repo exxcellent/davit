@@ -46,8 +46,8 @@ export const ActorModelController: FunctionComponent<ActorModelControllerProps> 
 const useViewModel = () => {
     const dispatch = useDispatch();
     // ====== SELECTORS =====
-    const actors: ActorCTO[] = useSelector(masterDataSelectors.actors);
-    const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
+    const actors: ActorCTO[] = useSelector(masterDataSelectors.selectActors);
+    const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
     // ----- EDIT -----
     const actorCTOToEdit: ActorCTO | null = useSelector(editSelectors.selectActorToEdit);
     const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.selectStepToEdit);

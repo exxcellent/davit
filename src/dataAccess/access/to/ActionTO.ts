@@ -10,6 +10,7 @@ export class ActionTO extends AbstractTO {
         public instanceFk = -1,
         public actionType = ActionType.ADD,
         public triggerText = '',
+        public index = -1,
     ) {
         super();
     }

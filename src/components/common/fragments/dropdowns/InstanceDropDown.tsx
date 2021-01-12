@@ -77,7 +77,7 @@ export const InstanceDropDownMultiselect: FunctionComponent<InstanceDropDownMult
 };
 
 const useInstanceDropDownViewModel = () => {
-    const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
+    const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
 
     const selectInstance = (optionItemString: string): DataAndInstanceId | undefined => {
         if (optionItemString !== null && datas !== null) {

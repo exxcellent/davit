@@ -49,7 +49,7 @@ export const ChainDecisionDropDown: FunctionComponent<ChainDecisionDropDownProps
 };
 
 const useChainDecisionDropDownViewModel = (chainId: number, exclude?: number) => {
-    const chainDecisions: ChainDecisionTO[] = useSelector(masterDataSelectors.chainDecisions);
+    const chainDecisions: ChainDecisionTO[] = useSelector(masterDataSelectors.selectChainDecisions);
 
     const chainDecisionToOption = (decision: ChainDecisionTO): DavitDropDownItemProps => {
         return {

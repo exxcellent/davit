@@ -359,9 +359,12 @@ const createSequenceCTO = (sequence: SequenceTO | undefined): SequenceCTO => {
 const createSequenceStepCTO = (sequenceStepTO: SequenceStepTO | undefined): SequenceStepCTO => {
     CheckHelper.nullCheck(sequenceStepTO, 'sequenceStepTO');
     const actionTOs: ActionTO[] = ActionRepository.findAllForStep(sequenceStepTO!.id);
+    const sortByIndexActions: ActionTO[] = actionTOs.sort(function (a, b) {
+        return a.index - b.index;
+    });
     return {
         squenceStepTO: sequenceStepTO!,
-        actions: actionTOs,
+        actions: sortByIndexActions,
     };
 };
 

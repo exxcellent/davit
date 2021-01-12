@@ -46,7 +46,7 @@ export const GroupDropDownButton: FunctionComponent<GroupDropDownPropsButton> = 
 };
 
 const useGroupDropDownViewModel = () => {
-    const groups: GroupTO[] = useSelector(masterDataSelectors.groups);
+    const groups: GroupTO[] = useSelector(masterDataSelectors.selectGroups);
 
     const groupToOption = (group: GroupTO): DavitDropDownItemProps => {
         return {

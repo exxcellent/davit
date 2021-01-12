@@ -556,7 +556,7 @@ export const editSelectors = {
             const dataLabel: string =
                 actionToEdit.actionType === ActionType.TRIGGER
                     ? actionToEdit.triggerText
-                    : masterDataSelectors.getDataCTOById(actionToEdit.dataFk)(state)?.data.name ||
+                    : masterDataSelectors.selectDataCTOById(actionToEdit.dataFk)(state)?.data.name ||
                       'Could not find data';
 
             const type: ArrowType = actionToEdit.actionType.includes('SEND') ? ArrowType.SEND : ArrowType.TRIGGER;

@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { useSelector } from 'react-redux';
 import { Dropdown, DropdownItemProps, DropdownProps } from 'semantic-ui-react';
-
 import { ActorCTO } from '../../../../dataAccess/access/cto/ActorCTO';
 import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
 
@@ -36,7 +35,7 @@ export const MultiselectActorDropDown: FunctionComponent<MultiselectActorDropDow
 };
 
 const useMultiselectActorDropDownViewModel = () => {
-    const actors: ActorCTO[] = useSelector(masterDataSelectors.actors);
+    const actors: ActorCTO[] = useSelector(masterDataSelectors.selectActors);
 
     const actorToOption = (actor: ActorCTO): DropdownItemProps[] => {
         return [

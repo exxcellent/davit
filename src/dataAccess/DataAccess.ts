@@ -207,7 +207,7 @@ export const DataAccess = {
 
     // ========================================= ACTION =========================================
 
-    deleteActionCTO(action: ActionTO): DataAccessResponse<ActionTO> {
+    deleteActionTO(action: ActionTO): DataAccessResponse<ActionTO> {
         return makeTransactional(() => SequenceDataAccessService.deleteAction(action));
     },
 

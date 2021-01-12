@@ -3,6 +3,8 @@ import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ChainlinkCTO } from '../../../dataAccess/access/cto/ChainlinkCTO';
 import { SequenceCTO } from '../../../dataAccess/access/cto/SequenceCTO';
+import { SequenceStepCTO } from '../../../dataAccess/access/cto/SequenceStepCTO';
+import { ActionTO } from '../../../dataAccess/access/to/ActionTO';
 import { ChainDecisionTO } from '../../../dataAccess/access/to/ChainDecisionTO';
 import { ChainTO } from '../../../dataAccess/access/to/ChainTO';
 import { DataSetupTO } from '../../../dataAccess/access/to/DataSetupTO';
@@ -24,12 +26,14 @@ import { useGetModelChainLinkTableData } from '../tables/ModelChainLink';
 import { useGetSequenceModelsTableBody } from '../tables/ModelSequence';
 import { useGetModelSequenceDecisionTableData } from '../tables/ModelSequenceDecision';
 import { useGetStepTableData } from '../tables/ModelSequenceStep';
+import { useGetStepActionTableData } from '../tables/ModelSequenceStepAction';
 
 interface SequenceTableModelControllerProps {
     fullScreen?: boolean;
 }
 
 export enum ActiveTab {
+    action = 'action',
     step = 'step',
     decision = 'decision',
     sequence = 'sequence',
@@ -77,15 +81,18 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
 
 const useSequenceTableViewModel = () => {
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
+    const selectedStep: SequenceStepCTO | null = useSelector(editSelectors.selectStepToEdit);
     const calcSteps: CalculatedStep[] = useSelector(sequenceModelSelectors.selectCalcSteps);
     const calcChain: CalcChain | null = useSelector(sequenceModelSelectors.selectCalcChain);
-    const sequences: SequenceTO[] = useSelector(masterDataSelectors.sequences);
-    const dataSetups: DataSetupTO[] = useSelector(masterDataSelectors.dataSetup);
+    const sequences: SequenceTO[] = useSelector(masterDataSelectors.selectSequences);
+    const dataSetups: DataSetupTO[] = useSelector(masterDataSelectors.selectDataSetups);
     const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
-    const chainModels: ChainTO[] = useSelector(masterDataSelectors.chains);
+    const chainModels: ChainTO[] = useSelector(masterDataSelectors.selectChains);
     const mode: Mode = useSelector(editSelectors.selectMode);
     const selectedChainlinks: ChainlinkCTO[] = useSelector(sequenceModelSelectors.selectCurrentChainLinks);
     const selectedChainDecisions: ChainDecisionTO[] = useSelector(sequenceModelSelectors.selectCurrentChainDecisions);
+
+    const selectedActionToEdit: ActionTO | null = useSelector(editSelectors.selectActionToEdit);
 
     const [activeTab, setActiveTab] = useState<ActiveTab>(ActiveTab.sequence);
 
@@ -107,15 +114,17 @@ const useSequenceTableViewModel = () => {
                 newActiveTab = ActiveTab.chaindecisions;
                 break;
             case Mode.EDIT_SEQUENCE:
-                newActiveTab = ActiveTab.sequenceModels;
+                newActiveTab = ActiveTab.step;
                 break;
             case Mode.EDIT_SEQUENCE_DECISION:
             case Mode.EDIT_SEQUENCE_DECISION_CONDITION:
                 newActiveTab = ActiveTab.decision;
                 break;
             case Mode.EDIT_SEQUENCE_STEP:
+                newActiveTab = ActiveTab.action;
+                break;
             case Mode.EDIT_SEQUENCE_STEP_ACTION:
-                newActiveTab = ActiveTab.step;
+                newActiveTab = ActiveTab.action;
                 break;
         }
         if (newActiveTab) {
@@ -127,6 +136,29 @@ const useSequenceTableViewModel = () => {
     const modelSequenceData = useGetSequenceModelsTableBody(sequences);
     const modelSequenceDecisionData = useGetModelSequenceDecisionTableData(selectedSequence);
     const modelSequenceStepData = useGetStepTableData(selectedSequence);
+
+    const getStep = (): SequenceStepCTO | null => {
+        let stepToShow: SequenceStepCTO | null = null;
+        /**
+         * In case to edit a action we want to show all other actions containing in the current step to edit.
+         */
+        if (mode === Mode.EDIT_SEQUENCE_STEP_ACTION) {
+            if (selectedActionToEdit) {
+                const step: SequenceStepCTO | undefined = selectedSequence?.sequenceStepCTOs.find(
+                    (step) => step.squenceStepTO.id === selectedActionToEdit?.sequenceStepFk,
+                );
+                if (step) {
+                    stepToShow = step;
+                }
+            }
+        } else {
+            stepToShow = selectedStep;
+        }
+        return stepToShow;
+    };
+
+    const modelStepActionData = useGetStepActionTableData(getStep());
+
     const modelChainData = useGetChainModelsTableData(chainModels);
     const modelChainDecisionData = useGetModelChainDecisionTableData(
         calcChain,
@@ -145,6 +177,8 @@ const useSequenceTableViewModel = () => {
                 return modelChainDecisionData;
             case ActiveTab.chainlinks:
                 return modelChainLinkData;
+            case ActiveTab.action:
+                return modelStepActionData;
             case ActiveTab.step:
                 return modelSequenceStepData;
             case ActiveTab.decision:

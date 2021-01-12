@@ -13,6 +13,7 @@ export interface DavitTableProps {
 export interface DavitTableAction {
     callback: () => void;
     icon: SemanticShorthandItem<IconProps>;
+    disable?: boolean;
 }
 
 export interface DavitTableRowData {
@@ -34,7 +35,7 @@ export const DavitTable: FunctionComponent<DavitTableProps> = (props) => {
     };
 
     const createButton = (action: DavitTableAction, key: number) => {
-        return <Carv2TableButton icon={action.icon} onClick={action.callback} key={key} />;
+        return <Carv2TableButton icon={action.icon} onClick={action.callback} key={key} disable={action.disable} />;
     };
 
     const createRow = (data: DavitTableRowData, index: number) => {

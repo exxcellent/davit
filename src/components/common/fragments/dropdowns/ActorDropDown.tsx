@@ -45,7 +45,7 @@ export const ActorDropDownButton: FunctionComponent<ActorDropDownButtonProps> = 
 };
 
 const useActorDropDownViewModel = () => {
-    const actors: ActorCTO[] = useSelector(masterDataSelectors.actors);
+    const actors: ActorCTO[] = useSelector(masterDataSelectors.selectActors);
 
     const actorToOption = (actor: ActorCTO): DavitDropDownItemProps => {
         return {

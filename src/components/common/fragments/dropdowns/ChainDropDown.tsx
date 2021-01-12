@@ -46,7 +46,7 @@ export const ChainDropDownButton: FunctionComponent<ChainDropDownPropsButton> = 
 };
 
 const useChainDropDownViewModel = () => {
-    const chains: ChainTO[] = useSelector(masterDataSelectors.chains);
+    const chains: ChainTO[] = useSelector(masterDataSelectors.selectChains);
 
     const selectChain = (id: number): ChainTO | undefined => {
         if (!DavitUtil.isNullOrUndefined(id) && !DavitUtil.isNullOrUndefined(chains)) {

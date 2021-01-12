@@ -212,6 +212,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
             if (copyAction === undefined) {
                 copyAction = new ActionTO();
                 copyAction.sequenceStepFk = stepToEdit!.squenceStepTO.id;
+                copyAction.index = stepToEdit!.actions.length;
                 dispatch(EditAction.create(copyAction));
             } else {
                 dispatch(EditActions.setMode.editAction(copyAction));
