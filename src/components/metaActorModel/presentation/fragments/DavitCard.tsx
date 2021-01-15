@@ -4,8 +4,8 @@ import { DataInstanceTO } from '../../../../dataAccess/access/to/DataInstanceTO'
 import { EditActions } from '../../../../slices/EditSlice';
 import { Filter, SequenceModelActions, sequenceModelSelectors } from '../../../../slices/SequenceModelSlice';
 import { createViewFragment, ViewFragmentProps } from '../../../../viewDataTypes/ViewFragment';
-import { Carv2CardMainButton } from '../../../common/fragments/buttons/Carv2CardMainButton';
 import { DavitCardButton } from '../../../common/fragments/buttons/DavitCardButton';
+import { DavitCardMainButton } from '../../../common/fragments/buttons/DavitCardMainButton';
 
 /**
  *  Prop: initWidth / initHeight
@@ -73,7 +73,7 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
                         </div>
                     )}
                 </div>
-                <Carv2CardMainButton
+                <DavitCardMainButton
                     onClick={() => {
                         setShowMenu(!showMenu);
                     }}

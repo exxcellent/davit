@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { DAVIT_VERISON } from '../../app/DavitConstants';
 import logo from '../../icons/logo200.png';
 import { EditActions, editSelectors, Mode } from '../../slices/EditSlice';
-import { Carv2ButtonGroup } from '../common/fragments/buttons/Carv2ButtonGroup';
-import { Carv2SidePanelButton } from '../common/fragments/buttons/Carv2SidePanelButton';
+import { DavitButtonGroup } from '../common/fragments/buttons/DavitButtonGroup';
+import { DavitSidePanelButton } from '../common/fragments/buttons/DavitSidePanelButton';
 
 export interface SidePanelProps {}
 
@@ -13,16 +13,16 @@ export const SidePanelController: FunctionComponent<SidePanelProps> = (props) =>
 
     return (
         <div className="leftPanel">
-            <Carv2ButtonGroup>
-                <Carv2SidePanelButton
+            <DavitButtonGroup>
+                <DavitSidePanelButton
                     icon="write"
                     onClick={setModeToEdit}
                     active={mode.includes(Mode.EDIT.toString())}
                 />
-                <Carv2SidePanelButton icon="eye" onClick={setModeToView} active={mode === Mode.VIEW} />
-                <Carv2SidePanelButton icon="file" onClick={setModeToFile} active={mode === Mode.FILE} />
-                <Carv2SidePanelButton icon="external alternate" onClick={setModeToTab} active={mode === Mode.TAB} />
-            </Carv2ButtonGroup>
+                <DavitSidePanelButton icon="eye" onClick={setModeToView} active={mode === Mode.VIEW} />
+                <DavitSidePanelButton icon="file" onClick={setModeToFile} active={mode === Mode.FILE} />
+                <DavitSidePanelButton icon="external alternate" onClick={setModeToTab} active={mode === Mode.TAB} />
+            </DavitButtonGroup>
 
             <div style={{ position: 'absolute', bottom: '1em' }}>
                 <img src={logo} alt="fireSpot" />
