@@ -1,4 +1,4 @@
-import { DAVIT_VERISON, DEFAULT_PROJECT_NAME } from '../../../app/DavitConstants';
+import { DEFAULT_PROJECT_NAME } from '../../../app/DavitConstants';
 import { DataAndInstanceId } from '../../../components/common/fragments/dropdowns/InstanceDropDown';
 import { ActionTO } from '../../access/to/ActionTO';
 import { ActorTO } from '../../access/to/ActorTO';
@@ -16,6 +16,7 @@ import { PositionTO } from '../../access/to/PositionTO';
 import { SequenceStepTO } from '../../access/to/SequenceStepTO';
 import { SequenceTO } from '../../access/to/SequenceTO';
 import { StoreTO } from '../../access/to/StoreTO';
+import { DecisionTO02 } from '../davitVersion02/to/DecisionTO02';
 import { ActionTO01 } from './to/ActionTO01';
 import { ChainDecisionTO01 } from './to/ChainDecisionTO01';
 import { DataTO01 } from './to/DataTO01';
@@ -24,16 +25,9 @@ import { DecisionTO01 } from './to/DecisionTO01';
 export const DavitVersionMigrator01 = {
     migrate(dataStoreObject: StoreTO): StoreTO {
         console.info('start migration to version 0.1');
-        const version: number = DAVIT_VERISON;
+        const version: number = 0.1;
         const projectName: string = DEFAULT_PROJECT_NAME;
 
-        const actors: ActorTO[] = dataStoreObject.actors as ActorTO[];
-        const groups: GroupTO[] = dataStoreObject.groups as GroupTO[];
-        const geometricalDatas: GeometricalDataTO[] = dataStoreObject.geometricalDatas as GeometricalDataTO[];
-        const positions: PositionTO[] = dataStoreObject.positions as PositionTO[];
-        const designs: DecisionTO[] = dataStoreObject.designs as DecisionTO[];
-        const sequences: SequenceTO[] = dataStoreObject.sequences as SequenceTO[];
-        const steps: SequenceStepTO[] = dataStoreObject.steps as SequenceStepTO[];
         const actions: ActionTO[] = (dataStoreObject.actions as ActionTO01[]).map((action, index) => {
             return {
                 id: action.id,
@@ -47,7 +41,7 @@ export const DavitVersionMigrator01 = {
                 index: index,
             };
         });
-        const decisions: DecisionTO[] = (dataStoreObject.decisions as DecisionTO01[]).map((decision) => {
+        const decisions: DecisionTO02[] = (dataStoreObject.decisions as DecisionTO01[]).map((decision) => {
             const dataAndInstaceIds: DataAndInstanceId[] = [];
             decision.dataAndInstaceId.forEach((dataAndInsanceId) => {
                 dataAndInstaceIds.push(dataAndInsanceId);
@@ -75,11 +69,7 @@ export const DavitVersionMigrator01 = {
                 }),
             };
         });
-        const dataConnections: DataRelationTO[] = dataStoreObject.dataConnections as DataRelationTO[];
-        const initDatas: InitDataTO[] = dataStoreObject.initDatas as InitDataTO[];
-        const dataSetups: DataSetupTO[] = dataStoreObject.dataSetups as DataSetupTO[];
-        const chains: ChainTO[] = dataStoreObject.chains as ChainTO[];
-        const chainlinks: ChainlinkTO[] = dataStoreObject.chainlinks as ChainlinkTO[];
+
         const chaindecisions: ChainDecisionTO[] = (dataStoreObject.chaindecisions as ChainDecisionTO01[]).map(
             (chainDecision) => {
                 return {
@@ -97,21 +87,23 @@ export const DavitVersionMigrator01 = {
         return {
             version: version,
             projectName: projectName,
-            actors: actors,
-            groups: groups,
-            geometricalDatas: geometricalDatas,
-            positions: positions,
-            designs: designs,
-            sequences: sequences,
-            steps: steps,
+
+            actors: dataStoreObject.actors as ActorTO[],
+            groups: dataStoreObject.groups as GroupTO[],
+            geometricalDatas: dataStoreObject.geometricalDatas as GeometricalDataTO[],
+            positions: dataStoreObject.positions as PositionTO[],
+            designs: dataStoreObject.designs as DecisionTO[],
+            sequences: dataStoreObject.sequences as SequenceTO[],
+            steps: dataStoreObject.steps as SequenceStepTO[],
+            dataConnections: dataStoreObject.dataConnections as DataRelationTO[],
+            initDatas: dataStoreObject.initDatas as InitDataTO[],
+            dataSetups: dataStoreObject.dataSetups as DataSetupTO[],
+            chains: dataStoreObject.chains as ChainTO[],
+            chainlinks: dataStoreObject.chainlinks as ChainlinkTO[],
+
             actions: actions,
             decisions: decisions,
             datas: datas,
-            dataConnections: dataConnections,
-            initDatas: initDatas,
-            dataSetups: dataSetups,
-            chains: chains,
-            chainlinks: chainlinks,
             chaindecisions: chaindecisions,
         };
     },
