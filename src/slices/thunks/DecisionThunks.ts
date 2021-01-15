@@ -81,7 +81,8 @@ const findDecisionTOThunk = (decisionId: number): DecisionTO => {
     if (response.code !== 200) {
         handleError(response.message);
     }
-    return response.object;
+    const copyObject: DecisionTO = DavitUtil.deepCopy(response.object);
+    return copyObject;
 };
 
 const setDecisionToEditThunk = (decision: DecisionTO): AppThunk => (dispatch, getState) => {

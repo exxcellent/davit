@@ -11,6 +11,7 @@ import { ActionTO } from '../dataAccess/access/to/ActionTO';
 import { ChainDecisionTO } from '../dataAccess/access/to/ChainDecisionTO';
 import { ChainlinkTO } from '../dataAccess/access/to/ChainlinkTO';
 import { ChainTO } from '../dataAccess/access/to/ChainTO';
+import { ConditionTO } from '../dataAccess/access/to/ConditionTO';
 import { DataInstanceTO } from '../dataAccess/access/to/DataInstanceTO';
 import { DataRelationTO } from '../dataAccess/access/to/DataRelationTO';
 import { DecisionTO } from '../dataAccess/access/to/DecisionTO';
@@ -85,6 +86,7 @@ interface EditState {
         | ChainlinkTO
         | ChainDecisionTO
         | ActionTO
+        | ConditionTO
         | EmptyObjectToEdit;
     instanceId: number;
 }
@@ -187,6 +189,13 @@ const EditSlice = createSlice({
         },
         setDecisionToEdit: (state, action: PayloadAction<DecisionTO>) => {
             if (state.mode === Mode.EDIT_SEQUENCE_DECISION || Mode.EDIT_SEQUENCE_DECISION_CONDITION) {
+                state.objectToEdit = action.payload;
+            } else {
+                handleError('Try to set decision to edit in mode: ' + state.mode);
+            }
+        },
+        setConditionToEdit: (state, action: PayloadAction<ConditionTO>) => {
+            if (state.mode === Mode.EDIT_SEQUENCE_DECISION_CONDITION) {
                 state.objectToEdit = action.payload;
             } else {
                 handleError('Try to set decision to edit in mode: ' + state.mode);
@@ -428,10 +437,21 @@ const setModeToEditDecisionThunk = (
     dispatch(EditDecision.create(decision, from, ifGoTo));
 };
 
-const setModeToEditConditionThunk = (decision: DecisionTO): AppThunk => (dispatch) => {
-    if (decision !== null && decision !== undefined) {
+const setModeToEditConditionThunk = (decision: DecisionTO, condition?: ConditionTO): AppThunk => (dispatch) => {
+    if (!DavitUtil.isNullOrUndefined(decision)) {
         dispatch(setModeWithStorageThunk(Mode.EDIT_SEQUENCE_DECISION_CONDITION));
-        // dispatch(EditSlice.actions.setDecisionToEdit(decision));
+        if (condition) {
+            dispatch(editActions.setConditionToEdit(condition));
+        } else {
+            const copyDecision: DecisionTO = DavitUtil.deepCopy(decision);
+            // create new condition
+            const newCondition: ConditionTO = new ConditionTO();
+            newCondition.decisionFk = decision.id;
+            copyDecision.conditions.push(newCondition);
+            // save decision
+            dispatch(EditDecision.save(copyDecision));
+            dispatch(editActions.setConditionToEdit(newCondition));
+        }
     } else {
         handleError("Edit Condition: 'Decision is null or undefined'.");
     }
@@ -616,6 +636,12 @@ export const editSelectors = {
         return (state.edit.mode === Mode.EDIT_SEQUENCE_DECISION || Mode.EDIT_SEQUENCE_DECISION_CONDITION) &&
             (state.edit.objectToEdit as DecisionTO).elseGoTo
             ? (state.edit.objectToEdit as DecisionTO)
+            : null;
+    },
+    selectConditionToEdit: (state: RootState): ConditionTO | null => {
+        return state.edit.mode === Mode.EDIT_SEQUENCE_DECISION_CONDITION &&
+            (state.edit.objectToEdit as ConditionTO).decisionFk
+            ? (state.edit.objectToEdit as ConditionTO)
             : null;
     },
     selectInstanceIdToEdit: (state: RootState): number => {
