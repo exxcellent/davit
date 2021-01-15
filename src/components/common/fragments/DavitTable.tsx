@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { IconProps } from 'semantic-ui-react';
 import { SemanticShorthandItem } from 'semantic-ui-react/dist/commonjs/generic';
-import { Carv2TableButton } from '../../../components/common/fragments/buttons/Carv2TableButton';
+import { DavitTableButton } from './buttons/DavitTableButton';
 
 export interface DavitTableProps {
     header: string[];
@@ -35,7 +35,7 @@ export const DavitTable: FunctionComponent<DavitTableProps> = (props) => {
     };
 
     const createButton = (action: DavitTableAction, key: number) => {
-        return <Carv2TableButton icon={action.icon} onClick={action.callback} key={key} disable={action.disable} />;
+        return <DavitTableButton icon={action.icon} onClick={action.callback} key={key} disable={action.disable} />;
     };
 
     const createRow = (data: DavitTableRowData, index: number) => {
