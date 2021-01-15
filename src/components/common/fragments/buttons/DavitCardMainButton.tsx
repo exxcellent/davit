@@ -1,12 +1,12 @@
 import React, { FunctionComponent } from 'react';
 import { Icon } from 'semantic-ui-react';
 
-interface Carv2CardMainButtonProps {
+interface DavitCardMainButtonProps {
     onClick: () => void;
     disable?: boolean;
 }
 
-export const Carv2CardMainButton: FunctionComponent<Carv2CardMainButtonProps> = (props) => {
+export const DavitCardMainButton: FunctionComponent<DavitCardMainButtonProps> = (props) => {
     const { onClick, disable } = props;
 
     return (

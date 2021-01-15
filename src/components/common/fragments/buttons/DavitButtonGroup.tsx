@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from 'react';
 
-interface Carv2ButtonGroupProps {}
+interface DavitButtonGroupProps {}
 
-export const Carv2ButtonGroup: FunctionComponent<Carv2ButtonGroupProps> = (props) => {
+export const DavitButtonGroup: FunctionComponent<DavitButtonGroupProps> = (props) => {
     const { children } = props;
 
     return <div className="ButtonGroup">{children}</div>;

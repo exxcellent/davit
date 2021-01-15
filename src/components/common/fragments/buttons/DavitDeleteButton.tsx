@@ -1,12 +1,12 @@
 import React, { FunctionComponent, useState } from 'react';
 import { Button } from 'semantic-ui-react';
 
-interface Carv2DeleteButtonProps {
+interface DavitDeleteButtonProps {
     onClick: () => void;
     disable?: boolean;
 }
 
-export const Carv2DeleteButton: FunctionComponent<Carv2DeleteButtonProps> = (props) => {
+export const DavitDeleteButton: FunctionComponent<DavitDeleteButtonProps> = (props) => {
     const { onClick, disable } = props;
 
     const [fluid, setFluid] = useState<boolean>(false);
