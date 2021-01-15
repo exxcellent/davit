@@ -7,8 +7,8 @@ import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
 import { handleError } from '../../../../../../slices/GlobalSlice';
 import { EditGroup } from '../../../../../../slices/thunks/GroupThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
+import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
 import { ColorDropDown } from '../../../../../common/fragments/dropdowns/ColorDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
 import { DavitLabelTextfield } from '../common/fragments/DavitLabelTextfield';
@@ -59,7 +59,7 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
                 <DavitButtonLabel onClick={saveGroup} label="OK" />
             </div>
             <div className="columnDivider controllPanelEditChild">
-                <Carv2DeleteButton onClick={deleteGroup} />
+                <DavitDeleteButton onClick={deleteGroup} />
             </div>
         </ControllPanelEditSub>
     );

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input } from 'semantic-ui-react';
 import { SequenceCTO } from '../../../../../../dataAccess/access/cto/SequenceCTO';
 import { SequenceStepCTO } from '../../../../../../dataAccess/access/cto/SequenceStepCTO';
+import { ConditionTO } from '../../../../../../dataAccess/access/to/ConditionTO';
 import { DecisionTO } from '../../../../../../dataAccess/access/to/DecisionTO';
 import { GoTo, GoToTypes } from '../../../../../../dataAccess/access/types/GoToType';
 import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
@@ -11,9 +12,10 @@ import { SequenceModelActions, sequenceModelSelectors } from '../../../../../../
 import { EditDecision } from '../../../../../../slices/thunks/DecisionThunks';
 import { EditSequence } from '../../../../../../slices/thunks/SequenceThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonIcon } from '../../../../../common/fragments/buttons/DavitButton';
+import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
 import { DavitRootButton } from '../../../../../common/fragments/buttons/DavitRootButton';
+import { ConditionDropDownButton } from '../../../../../common/fragments/dropdowns/ConditionDropDown';
 import { DecisionDropDown } from '../../../../../common/fragments/dropdowns/DecisionDropDown';
 import { GoToOptionDropDown } from '../../../../../common/fragments/dropdowns/GoToOptionDropDown';
 import { StepDropDown } from '../../../../../common/fragments/dropdowns/StepDropDown';
@@ -47,6 +49,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
         setGoToTypeDecision,
         editOrAddCondition,
         decId,
+        conditions,
     } = useControllPanelEditConditionViewModel();
 
     return (
@@ -67,10 +70,15 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
                     </OptionField>
                     <OptionField label="Create / Edit Condition">
                         <Button.Group>
+                            <Button icon="add" inverted color="orange" onClick={() => editOrAddCondition()} />
                             <Button id="buttonGroupLabel" disabled inverted color="orange">
                                 Condition
                             </Button>
-                            <Button icon="wrench" inverted color="orange" onClick={editOrAddCondition} />
+                            <ConditionDropDownButton
+                                conditions={conditions}
+                                icon="wrench"
+                                onSelect={editOrAddCondition}
+                            />
                         </Button.Group>
                     </OptionField>
                 </div>
@@ -144,7 +152,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
                         <OptionField label="Sequence - Options">
                             <DavitRootButton onClick={setRoot} isRoot={isRoot} />
                             <div>
-                                <Carv2DeleteButton onClick={deleteDecision} />
+                                <DavitDeleteButton onClick={deleteDecision} />
                             </div>
                         </OptionField>
                     </div>
@@ -165,7 +173,6 @@ const useControllPanelEditConditionViewModel = () => {
 
     useEffect(() => {
         if (DavitUtil.isNullOrUndefined(decisionToEdit)) {
-            console.warn(decisionToEdit);
             dispatch(handleError('Tried to go to edit condition step without conditionToEdit specified'));
             dispatch(EditActions.setMode.edit());
         }
@@ -291,9 +298,13 @@ const useControllPanelEditConditionViewModel = () => {
         }
     };
 
-    const editOrAddCondition = () => {
+    const editOrAddCondition = (index?: number) => {
+        let conditionToEdit: ConditionTO | undefined;
         if (decisionToEdit !== null) {
-            dispatch(EditActions.setMode.editCondition(decisionToEdit));
+            if (index) {
+                conditionToEdit = decisionToEdit.conditions[index];
+            }
+            dispatch(EditActions.setMode.editCondition(decisionToEdit, conditionToEdit));
         }
     };
 
@@ -318,5 +329,6 @@ const useControllPanelEditConditionViewModel = () => {
         key,
         editOrAddCondition,
         decId: decisionToEdit?.id,
+        conditions: decisionToEdit?.conditions || [],
     };
 };

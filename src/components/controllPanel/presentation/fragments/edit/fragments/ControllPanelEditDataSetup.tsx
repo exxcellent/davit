@@ -8,8 +8,8 @@ import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
 import { handleError } from '../../../../../../slices/GlobalSlice';
 import { EditDataSetup } from '../../../../../../slices/thunks/DataSetupThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
+import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
 import { InitDataDropDownButton } from '../../../../../common/fragments/dropdowns/InitDataDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
 import { DavitLabelTextfield } from '../common/fragments/DavitLabelTextfield';
@@ -72,7 +72,7 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
             </div>
             <div className="columnDivider optionFieldSpacer">
                 <OptionField label="options">
-                    <Carv2DeleteButton onClick={deleteDataSetup} />
+                    <DavitDeleteButton onClick={deleteDataSetup} />
                 </OptionField>
             </div>
         </ControllPanelEditSub>

@@ -13,8 +13,8 @@ import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSl
 import { EditChainLink } from '../../../../../../slices/thunks/ChainLinkThunks';
 import { EditChain } from '../../../../../../slices/thunks/ChainThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonIcon } from '../../../../../common/fragments/buttons/DavitButton';
+import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
 import { DavitRootButton } from '../../../../../common/fragments/buttons/DavitRootButton';
 import { ChainDecisionDropDown } from '../../../../../common/fragments/dropdowns/ChainDecisionDropDown';
 import { ChainLinkDropDown } from '../../../../../common/fragments/dropdowns/ChainLinkDropDown';
@@ -127,7 +127,7 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
                         <OptionField label="Sequence - Options">
                             <DavitRootButton onClick={setRoot} isRoot={isRoot} />
                             <div>
-                                <Carv2DeleteButton onClick={deleteChainLink} disable={isRoot} />
+                                <DavitDeleteButton onClick={deleteChainLink} disable={isRoot} />
                             </div>
                         </OptionField>
                     </div>

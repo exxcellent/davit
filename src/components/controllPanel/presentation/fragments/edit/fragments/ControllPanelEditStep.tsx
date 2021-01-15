@@ -14,8 +14,8 @@ import { EditAction } from '../../../../../../slices/thunks/ActionThunks';
 import { EditSequence } from '../../../../../../slices/thunks/SequenceThunks';
 import { EditStep } from '../../../../../../slices/thunks/StepThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonIcon } from '../../../../../common/fragments/buttons/DavitButton';
+import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
 import { DavitRootButton } from '../../../../../common/fragments/buttons/DavitRootButton';
 import { ActionButtonDropDown } from '../../../../../common/fragments/dropdowns/ActionButtonDropDown';
 import { DecisionDropDown } from '../../../../../common/fragments/dropdowns/DecisionDropDown';
@@ -134,7 +134,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
                         <OptionField label="Sequence - Options">
                             <DavitRootButton onClick={setRoot} isRoot={isRoot} />
                             <div>
-                                <Carv2DeleteButton onClick={deleteSequenceStep} />
+                                <DavitDeleteButton onClick={deleteSequenceStep} />
                             </div>
                         </OptionField>
                     </div>

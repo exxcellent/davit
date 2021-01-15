@@ -11,8 +11,8 @@ import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSl
 import { EditChain } from '../../../../../../slices/thunks/ChainThunks';
 import { EditSequence } from '../../../../../../slices/thunks/SequenceThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
+import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
 import { ChainDecisionDropDownButton } from '../../../../../common/fragments/dropdowns/ChainDecisionDropDown';
 import { ChainLinkDropDownButton } from '../../../../../common/fragments/dropdowns/ChainLinkDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
@@ -89,7 +89,7 @@ export const ControllPanelEditChain: FunctionComponent<ControllPanelEditChainPro
                 <div className="optionFieldSpacer">
                     <div>
                         <OptionField label="Sequence - Options">
-                            <Carv2DeleteButton onClick={deleteChain} />
+                            <DavitDeleteButton onClick={deleteChain} />
                         </OptionField>
                     </div>
                 </div>

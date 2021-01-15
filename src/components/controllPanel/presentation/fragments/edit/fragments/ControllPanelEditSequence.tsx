@@ -10,8 +10,8 @@ import { handleError } from '../../../../../../slices/GlobalSlice';
 import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
 import { EditSequence } from '../../../../../../slices/thunks/SequenceThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
+import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
 import { DecisionDropDownButton } from '../../../../../common/fragments/dropdowns/DecisionDropDown';
 import { StepDropDownButton } from '../../../../../common/fragments/dropdowns/StepDropDown';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
@@ -48,7 +48,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
             </div>
             <div className="optionFieldSpacer">
                 <OptionField label="Sequence - Options">
-                    <Carv2DeleteButton onClick={deleteSequence} />
+                    <DavitDeleteButton onClick={deleteSequence} />
                 </OptionField>
             </div>
         </div>

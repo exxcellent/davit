@@ -9,8 +9,8 @@ import { handleError } from '../../../../../../slices/GlobalSlice';
 import { masterDataSelectors } from '../../../../../../slices/MasterDataSlice';
 import { EditRelation } from '../../../../../../slices/thunks/RelationThunks';
 import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
 import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
+import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
 import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
 import { OptionField } from '../common/OptionField';
 
@@ -118,7 +118,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
             </div>
             <div className="columnDivider optionFieldSpacer">
                 <OptionField label="Relation options">
-                    <Carv2DeleteButton onClick={deleteRelation} />
+                    <DavitDeleteButton onClick={deleteRelation} />
                 </OptionField>
             </div>
         </ControllPanelEditSub>
