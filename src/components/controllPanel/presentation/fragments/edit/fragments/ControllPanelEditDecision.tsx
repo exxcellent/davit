@@ -298,11 +298,12 @@ const useControllPanelEditConditionViewModel = () => {
         }
     };
 
-    const editOrAddCondition = (index?: number) => {
+    const editOrAddCondition = (conditionId?: number) => {
         let conditionToEdit: ConditionTO | undefined;
         if (decisionToEdit !== null) {
-            if (index) {
-                conditionToEdit = decisionToEdit.conditions[index];
+            if (conditionId) {
+                conditionToEdit =
+                    decisionToEdit.conditions.find((condition) => condition.id === conditionId) || undefined;
             }
             dispatch(EditActions.setMode.editCondition(decisionToEdit, conditionToEdit));
         }

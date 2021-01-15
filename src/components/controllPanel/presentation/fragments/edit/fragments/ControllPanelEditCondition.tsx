@@ -28,7 +28,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
         actorFk,
         setActorFk,
         setData,
-        selectedInstance,
+        selectedData,
         deleteCondition,
     } = useControllPanelEditConditionViewModel();
 
@@ -51,7 +51,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
                         onSelect={(data) => {
                             setData(data);
                         }}
-                        selected={selectedInstance}
+                        value={JSON.stringify(selectedData)}
                     />
                 </OptionField>
             </div>
@@ -77,16 +77,6 @@ const useControllPanelEditConditionViewModel = () => {
         }
     }, [conditionToEdit, dispatch]);
 
-    const setData = (dataAndInstanceIds: DataAndInstanceId | undefined) => {
-        if (!DavitUtil.isNullOrUndefined(conditionToEdit)) {
-            const copyConditionToEdit: ConditionTO = DavitUtil.deepCopy(conditionToEdit);
-            copyConditionToEdit.dataFk = dataAndInstanceIds?.dataFk || -1;
-            copyConditionToEdit.instanceFk = dataAndInstanceIds?.instanceId || -1;
-            dispatch(EditCondition.save(copyConditionToEdit));
-            dispatch(EditCondition.update(copyConditionToEdit));
-        }
-    };
-
     const setMode = (newMode?: string) => {
         if (!DavitUtil.isNullOrUndefined(conditionToEdit)) {
             if (newMode && newMode === 'EDIT') {
@@ -94,15 +84,20 @@ const useControllPanelEditConditionViewModel = () => {
             } else if (newMode && newMode === 'SEQUENCE') {
                 dispatch(EditActions.setMode.editSequence(selectedSequence?.sequenceTO.id));
             } else {
-                // TODO: testen ob dass passt!!!
-                dispatch(
-                    EditActions.setMode.editDecision(
-                        selectedSequence?.decisions.find((decision) => decision.id === conditionToEdit?.decisionFk)!,
-                    ),
-                );
+                dispatch(EditActions.setMode.editDecision(EditDecision.find(conditionToEdit!.decisionFk))!);
             }
         } else {
             console.info('decisionToEdit is null!');
+        }
+    };
+
+    const setData = (dataAndInstanceIds: DataAndInstanceId | undefined) => {
+        if (!DavitUtil.isNullOrUndefined(conditionToEdit) && !DavitUtil.isNullOrUndefined(dataAndInstanceIds)) {
+            const copyConditionToEdit: ConditionTO = DavitUtil.deepCopy(conditionToEdit);
+            copyConditionToEdit.dataFk = dataAndInstanceIds!.dataFk;
+            copyConditionToEdit.instanceFk = dataAndInstanceIds!.instanceId;
+            dispatch(EditCondition.save(copyConditionToEdit));
+            dispatch(EditCondition.update(copyConditionToEdit));
         }
     };
 
@@ -134,7 +129,7 @@ const useControllPanelEditConditionViewModel = () => {
         actorFk: conditionToEdit?.actorFk,
         setActorFk,
         setData,
-        selectedInstance: conditionToEdit?.instanceFk,
+        selectedData: { dataFk: conditionToEdit?.dataFk, instanceId: conditionToEdit?.instanceFk },
         deleteCondition,
     };
 };

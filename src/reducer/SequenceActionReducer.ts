@@ -120,30 +120,40 @@ export const SequenceActionReducer = {
             .map((actorData) => {
                 return { ...actorData, state: ActorDataState.PERSISTENT };
             });
-        const filteredActorData: ActorData[] = newActorDatas.filter(
-            (actorData) => actorData.actorFk === decision.actorFk,
-        );
+
+        // const filteredActorData: ActorData[] = newActorDatas.filter(
+        //     (actorData) => actorData.actorFk === decision.actorFk,
+        // );
+
         let goTo = decision.ifGoTo;
-        decision.dataAndInstaceIds.forEach((dataAndInstanceId) => {
+
+        decision.conditions.forEach((condition) => {
             // if data and instance id are defined search exact match. if only data id is defined search for any instance of that data
-            const checkedActorDatas: ActorData[] = filteredActorData.filter(
-                (actor) =>
-                    actor.dataFk === dataAndInstanceId.dataFk &&
-                    (!dataAndInstanceId.instanceId || actor.instanceFk === dataAndInstanceId.instanceId),
+            // const checkedActorDatas: ActorData[] = filteredActorData.filter(
+            //     (actor) =>
+            //         actor.dataFk === condition.dataFk &&
+            //         (!condition.instanceId || actor.instanceFk === condition.instanceId),
+            // );
+
+            const checkedActorDatas: ActorData[] = actorDatas.filter(
+                (actorData) =>
+                    actorData.actorFk === condition.actorFk &&
+                    (!condition.instanceFk || actorData.instanceFk === condition.instanceFk),
             );
 
             if (dataIsPresentOnActor(checkedActorDatas)) {
                 checkedActorDatas.forEach((actorData) => (actorData.state = ActorDataState.CHECKED));
             } else {
                 newActorDatas.push({
-                    actorFk: decision.actorFk,
-                    dataFk: dataAndInstanceId.dataFk,
-                    instanceFk: dataAndInstanceId.instanceId,
+                    actorFk: condition.actorFk,
+                    dataFk: condition.dataFk,
+                    instanceFk: condition.instanceFk,
                     state: ActorDataState.CHECK_FAILED,
                 });
                 goTo = decision.elseGoTo;
             }
         });
+
         return { actorDatas: newActorDatas, goto: goTo };
     },
 };

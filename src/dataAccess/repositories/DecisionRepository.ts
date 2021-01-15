@@ -1,3 +1,4 @@
+import { DavitUtil } from '../../utils/DavitUtil';
 import { DecisionTO } from '../access/to/DecisionTO';
 import dataStore from '../DataStore';
 import { CheckHelper } from '../util/CheckHelper';
@@ -19,13 +20,23 @@ export const DecisionRepository = {
     save(decision: DecisionTO): DecisionTO {
         CheckHelper.nullCheck(decision, 'decision');
         let decisionTO: DecisionTO;
-        if (decision.id === -1) {
+
+        // Give condition a UID.
+        const copyDecisionToSave: DecisionTO = DavitUtil.deepCopy(decision);
+        copyDecisionToSave.conditions.map((condition) => {
+            if (condition.id === -1) {
+                condition.id = DataAccessUtil.determineNewId(decision.conditions);
+            }
+            return condition;
+        });
+
+        if (copyDecisionToSave.id === -1) {
             decisionTO = {
-                ...decision,
+                ...copyDecisionToSave,
                 id: DataAccessUtil.determineNewId(this.findAll()),
             };
         } else {
-            decisionTO = { ...decision };
+            decisionTO = { ...copyDecisionToSave };
         }
         dataStore.getDataStore().decisions.set(decisionTO.id, decisionTO);
         return decisionTO;

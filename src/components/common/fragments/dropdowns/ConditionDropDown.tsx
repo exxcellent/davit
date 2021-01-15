@@ -4,7 +4,7 @@ import { ConditionTO } from '../../../../dataAccess/access/to/ConditionTO';
 import { DavitDropDownItemProps, DavitIconDropDown } from './DavitDropDown';
 
 interface ConditionDropDownButtonProps extends DropdownProps {
-    onSelect: (conditionIndex: number | undefined) => void;
+    onSelect: (conditionId: number | undefined) => void;
     conditions: ConditionTO[];
     icon?: string;
 }
@@ -12,10 +12,10 @@ interface ConditionDropDownButtonProps extends DropdownProps {
 export const ConditionDropDownButton: FunctionComponent<ConditionDropDownButtonProps> = (props) => {
     const { onSelect, icon, conditions } = props;
 
-    const conditionToOption = (condition: ConditionTO, index: number): DavitDropDownItemProps => {
+    const conditionToOption = (condition: ConditionTO): DavitDropDownItemProps => {
         return {
-            key: index,
-            value: index.toString(),
+            key: condition.id,
+            value: condition.id.toString(),
             text: 'Actor: ' + condition.actorFk.toString() + ' + Data: ' + condition.dataFk.toString(),
         };
     };
@@ -23,7 +23,7 @@ export const ConditionDropDownButton: FunctionComponent<ConditionDropDownButtonP
     return (
         <DavitIconDropDown
             dropdownItems={conditions.map((condition, index) => {
-                return conditionToOption(condition, index);
+                return conditionToOption(condition);
             })}
             onSelect={(condition) => onSelect(Number(condition.value))}
             icon={icon}

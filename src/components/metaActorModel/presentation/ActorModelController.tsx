@@ -177,11 +177,11 @@ const useViewModel = () => {
     const mapDecisionToActorData = (decision: DecisionTO | null): ViewFragmentProps[] => {
         let props: ViewFragmentProps[] = [];
         if (decision) {
-            if (decision.dataAndInstaceIds !== undefined && decision.dataAndInstaceIds.length > 0) {
-                props = decision.dataAndInstaceIds.map((data) => {
+            if (decision.conditions !== undefined && decision.conditions.length > 0) {
+                props = decision.conditions.map((condition) => {
                     return {
-                        parentId: decision.actorFk,
-                        name: getDataNameById(data.dataFk, data.instanceId),
+                        parentId: condition.actorFk,
+                        name: getDataNameById(condition.dataFk, condition.instanceFk),
                         state: ActorDataState.CHECKED,
                     };
                 });

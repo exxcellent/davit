@@ -162,11 +162,11 @@ const useMetaDataModelViewModel = () => {
     const mapDecisionToCompData = (decision: DecisionTO | null): ViewFragmentProps[] => {
         let props: ViewFragmentProps[] = [];
         if (decision) {
-            if (decision.dataAndInstaceIds !== undefined && decision.dataAndInstaceIds.length > 0) {
-                props = decision.dataAndInstaceIds.map((data) => {
+            if (decision.conditions !== undefined && decision.conditions.length > 0) {
+                props = decision.conditions.map((condition) => {
                     return {
-                        parentId: { dataId: data.dataFk, instanceId: data.instanceId },
-                        name: getActorNameById(decision.actorFk),
+                        parentId: { dataId: condition.dataFk, instanceId: condition.instanceFk },
+                        name: getActorNameById(condition.actorFk),
                         state: ActorDataState.CHECKED,
                     };
                 });

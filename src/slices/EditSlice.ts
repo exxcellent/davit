@@ -445,12 +445,22 @@ const setModeToEditConditionThunk = (decision: DecisionTO, condition?: Condition
         } else {
             const copyDecision: DecisionTO = DavitUtil.deepCopy(decision);
             // create new condition
-            const newCondition: ConditionTO = new ConditionTO();
+            let newCondition: ConditionTO | undefined = new ConditionTO();
             newCondition.decisionFk = decision.id;
             copyDecision.conditions.push(newCondition);
             // save decision
             dispatch(EditDecision.save(copyDecision));
-            dispatch(editActions.setConditionToEdit(newCondition));
+            // get new decision with new id.
+            const updatedDecision: DecisionTO = EditDecision.find(copyDecision.id);
+
+            // get new condition with new id.
+            newCondition = updatedDecision.conditions.find(
+                (condition) => condition.actorFk === -1 && condition.dataFk === -1,
+            );
+
+            if (newCondition) {
+                dispatch(editActions.setConditionToEdit(newCondition));
+            }
         }
     } else {
         handleError("Edit Condition: 'Decision is null or undefined'.");

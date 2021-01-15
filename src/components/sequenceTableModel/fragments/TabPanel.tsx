@@ -53,6 +53,10 @@ export const TabPanel: FunctionComponent<TabPanelProps> = (props) => {
             tabs.push({ label: 'Actions', identifier: ActiveTab.action });
         }
 
+        if (mode === Mode.EDIT_SEQUENCE_DECISION || mode === Mode.EDIT_SEQUENCE_DECISION_CONDITION) {
+            tabs.push({ label: 'Condition', identifier: ActiveTab.condition });
+        }
+
         return {
             label: 'Sequence Model',
             condition: showSequenceModelTabs,

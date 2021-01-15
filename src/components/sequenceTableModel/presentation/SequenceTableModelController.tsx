@@ -33,6 +33,7 @@ interface SequenceTableModelControllerProps {
 }
 
 export enum ActiveTab {
+    condition = 'condition',
     action = 'action',
     step = 'step',
     decision = 'decision',

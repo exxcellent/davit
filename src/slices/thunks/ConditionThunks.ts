@@ -10,13 +10,11 @@ import { EditDecision } from './DecisionThunks';
 const saveConditionThunk = (conditionToSave: ConditionTO): AppThunk => (dispatch) => {
     const decisionToSave: DecisionTO = EditDecision.find(conditionToSave.decisionFk);
     const copyDecisionToSave: DecisionTO = DavitUtil.deepCopy(decisionToSave);
-    console.info('decision befor save: ', copyDecisionToSave);
-    copyDecisionToSave.conditions.forEach((condition) => {
-        if (condition.id === conditionToSave.id) {
-            condition = conditionToSave;
-        }
-    });
-    console.info('decision to save: ', copyDecisionToSave);
+    const filteredConditions: ConditionTO[] = copyDecisionToSave.conditions.filter(
+        (condition) => condition.id !== conditionToSave.id,
+    );
+    filteredConditions.push(conditionToSave);
+    copyDecisionToSave.conditions = filteredConditions;
     dispatch(EditDecision.save(copyDecisionToSave));
 };
 
