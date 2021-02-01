@@ -300,11 +300,12 @@ const useControllPanelEditConditionViewModel = () => {
 
     const editOrAddCondition = (conditionId?: number) => {
         let conditionToEdit: ConditionTO | undefined;
+
         if (decisionToEdit !== null) {
-            if (conditionId) {
-                conditionToEdit =
-                    decisionToEdit.conditions.find((condition) => condition.id === conditionId) || undefined;
+            if (!DavitUtil.isNullOrUndefined(conditionId)) {
+                conditionToEdit = decisionToEdit.conditions.find((condition) => condition.id === conditionId);
             }
+
             dispatch(EditActions.setMode.editCondition(decisionToEdit, conditionToEdit));
         }
     };

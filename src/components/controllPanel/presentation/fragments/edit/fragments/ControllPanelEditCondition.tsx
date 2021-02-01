@@ -29,7 +29,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
         setActorFk,
         setData,
         selectedData,
-        deleteCondition,
+        deleteConditionAndGoToEditDecision,
     } = useControllPanelEditConditionViewModel();
 
     return (
@@ -57,7 +57,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
             </div>
             <div className="columnDivider optionFieldSpacer">
                 <OptionField label="Navigation">
-                    <DavitDeleteButton onClick={deleteCondition} />
+                    <DavitDeleteButton onClick={deleteConditionAndGoToEditDecision} />
                     <DavitButtonIcon onClick={setMode} icon="reply" />
                 </OptionField>
             </div>
@@ -77,14 +77,27 @@ const useControllPanelEditConditionViewModel = () => {
         }
     }, [conditionToEdit, dispatch]);
 
+    const isConditionEmpty = (): boolean => {
+        let isEmpty: boolean = true;
+        if (!DavitUtil.isNullOrUndefined(conditionToEdit)) {
+            isEmpty =
+                conditionToEdit!.actorFk === -1 && conditionToEdit!.dataFk === -1 && conditionToEdit!.instanceFk === -1;
+        }
+        return isEmpty;
+    };
+
     const setMode = (newMode?: string) => {
         if (!DavitUtil.isNullOrUndefined(conditionToEdit)) {
+            if (isConditionEmpty()) {
+                deleteCondition();
+            }
+
             if (newMode && newMode === 'EDIT') {
                 dispatch(EditActions.setMode.edit());
             } else if (newMode && newMode === 'SEQUENCE') {
                 dispatch(EditActions.setMode.editSequence(selectedSequence?.sequenceTO.id));
             } else {
-                dispatch(EditActions.setMode.editDecision(EditDecision.find(conditionToEdit!.decisionFk))!);
+                goBackToEditDecision();
             }
         } else {
             console.info('decisionToEdit is null!');
@@ -110,12 +123,22 @@ const useControllPanelEditConditionViewModel = () => {
         }
     };
 
+    const goBackToEditDecision = () => {
+        if (!DavitUtil.isNullOrUndefined(conditionToEdit)) {
+            dispatch(EditActions.setMode.editDecision(EditDecision.find(conditionToEdit!.decisionFk)));
+        }
+    };
+
     const deleteCondition = () => {
         if (!DavitUtil.isNullOrUndefined(conditionToEdit)) {
             const copyCondition: ConditionTO = DavitUtil.deepCopy(conditionToEdit);
             dispatch(EditCondition.delete(copyCondition));
-            dispatch(EditActions.setMode.editDecision(EditDecision.find(conditionToEdit!.decisionFk)));
         }
+    };
+
+    const deleteConditionAndGoToEditDecision = () => {
+        deleteCondition();
+        goBackToEditDecision();
     };
 
     return {
@@ -130,6 +153,6 @@ const useControllPanelEditConditionViewModel = () => {
         setActorFk,
         setData,
         selectedData: { dataFk: conditionToEdit?.dataFk, instanceId: conditionToEdit?.instanceFk },
-        deleteCondition,
+        deleteConditionAndGoToEditDecision,
     };
 };
