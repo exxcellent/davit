@@ -63,7 +63,20 @@ export const useGetStepActionTableData = (
                 }
             };
 
-            const dataName: string = datas.find((data) => data.data.id === action.dataFk)?.data.name || '';
+            const data: DataCTO | undefined = datas.find((data) => data.data.id === action.dataFk);
+
+            let dataName: string = 'Could not find data name';
+
+            if (data) {
+                dataName = data.data.name;
+                if (action.actionType === ActionType.ADD) {
+                    dataName =
+                        dataName +
+                            ': ' +
+                            data.data.instances.find((instance) => instance.id === action.instanceFk)?.name ||
+                        'Could not find instance name';
+                }
+            }
 
             const toActorName: string =
                 actors.find((actor) => actor.actor.id === action.receivingActorFk)?.actor.name || '';

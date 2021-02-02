@@ -62,7 +62,7 @@ export const useGetModelSequenceConditionTableData = (
     };
 };
 
-const header = ['ACTOR', 'DATA', 'INSTANCE'];
+const header = ['ACTOR', 'DATA', 'INSTANCE', 'ACTIONS'];
 
 const createConditionColumn = (
     actorName: string,
