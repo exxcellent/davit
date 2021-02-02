@@ -34,11 +34,13 @@ export const SequenceActionReducer = {
                 action.dataFk,
                 newActorDatas,
             );
+
             const indexActorDataSending: number = findActorDataIndex(
                 action.sendingActorFk,
                 action.dataFk,
                 newActorDatas,
             );
+
             switch (action.actionType) {
                 case ActionType.ADD:
                     if (!actorDataIsPresent(indexActorDataReceiving)) {
