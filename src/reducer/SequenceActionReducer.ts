@@ -5,6 +5,8 @@ import { GoTo } from '../dataAccess/access/types/GoToType';
 import { ActorData } from '../viewDataTypes/ActorData';
 import { ActorDataState } from '../viewDataTypes/ActorDataState';
 
+// ----------------------------------------------------- INTERFACES ----------------------------------------------------------
+
 export interface SequenceActionResult {
     actorDatas: ActorData[];
     errors: ActionTO[];
@@ -13,6 +15,8 @@ export interface SequenceDecisionResult {
     actorDatas: ActorData[];
     goto: GoTo;
 }
+
+// ----------------------------------------------------- PUBLIC FUNCTION -----------------------------------------------------
 
 export const SequenceActionReducer = {
     executeActionsOnActorDatas(actions: ActionTO[], actorDatas: ActorData[]): SequenceActionResult {
@@ -157,6 +161,8 @@ export const SequenceActionReducer = {
         return { actorDatas: newActorDatas, goto: goTo };
     },
 };
+
+// ------------------------------------------------------------ PRIVATE FUNCTIONS ------------------------------------------------------------
 
 const findActorDataIndex = (actorId: number, dataId: number, actorDatas: ActorData[]): number => {
     return actorDatas.findIndex(

@@ -9,6 +9,7 @@ import { SequenceActionReducer, SequenceActionResult, SequenceDecisionResult } f
 import { DavitUtil } from '../utils/DavitUtil';
 import { ActorData } from '../viewDataTypes/ActorData';
 
+// ----------------------------------------------------- INTERFACES ----------------------------------------------------------
 export interface CalculatedStep {
     type: 'STEP' | 'DECISION' | 'INIT' | 'TERMINAL';
     modelElementFk?: number;
@@ -25,6 +26,8 @@ export interface CalcSequence {
     loopStartingStepIndex?: number;
 }
 
+// ----------------------------------------------------- PUBLIC FUNCTION -----------------------------------------------------
+
 export const SequenceService = {
     calculateSequence: (
         sequence: SequenceCTO | null,
@@ -40,7 +43,9 @@ export const SequenceService = {
         const stepIds: string[] = [];
         let loopStartingStep: number = -1;
 
+        /**  Start calculation if sequence and datasetup are selected */
         if (sequence && dataSetup) {
+            /** Execute datasetup */
             const dataSetupActions: ActionTO[] = dataSetup.initDatas.map((data, index) => {
                 return {
                     actionType: ActionType.ADD,
@@ -61,8 +66,9 @@ export const SequenceService = {
             );
 
             calcSequence.steps.push(getInitStep(dataSetupResult));
-
             let actorDatas: ActorData[] = DavitUtil.deepCopy(dataSetupResult.actorDatas);
+
+            /** Find root and start calculating sequence */
             const root: SequenceStepCTO | DecisionTO | undefined = getRoot(sequence);
 
             if (root !== undefined) {
@@ -149,6 +155,8 @@ export const SequenceService = {
         };
     },
 };
+
+// ------------------------------------------------------------ PRIVATE FUNCTIONS ------------------------------------------------------------
 
 const getInitStep = (result: SequenceActionResult): CalculatedStep => {
     return { stepId: 'root', actorDatas: result.actorDatas, type: 'INIT', errors: result.errors };
