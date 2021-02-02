@@ -7,7 +7,9 @@ import { SequenceStepCTO } from '../../../dataAccess/access/cto/SequenceStepCTO'
 import { ActionTO } from '../../../dataAccess/access/to/ActionTO';
 import { ChainDecisionTO } from '../../../dataAccess/access/to/ChainDecisionTO';
 import { ChainTO } from '../../../dataAccess/access/to/ChainTO';
+import { ConditionTO } from '../../../dataAccess/access/to/ConditionTO';
 import { DataSetupTO } from '../../../dataAccess/access/to/DataSetupTO';
+import { DecisionTO } from '../../../dataAccess/access/to/DecisionTO';
 import { SequenceTO } from '../../../dataAccess/access/to/SequenceTO';
 import { CalcChain } from '../../../services/SequenceChainService';
 import { CalculatedStep } from '../../../services/SequenceService';
@@ -24,6 +26,7 @@ import { useGetChainModelsTableData } from '../tables/ModelChain';
 import { useGetModelChainDecisionTableData } from '../tables/ModelChainDecision';
 import { useGetModelChainLinkTableData } from '../tables/ModelChainLink';
 import { useGetSequenceModelsTableBody } from '../tables/ModelSequence';
+import { useGetModelSequenceConditionTableData } from '../tables/ModelSequenceCondition';
 import { useGetModelSequenceDecisionTableData } from '../tables/ModelSequenceDecision';
 import { useGetStepTableData } from '../tables/ModelSequenceStep';
 import { useGetStepActionTableData } from '../tables/ModelSequenceStepAction';
@@ -94,6 +97,8 @@ const useSequenceTableViewModel = () => {
     const selectedChainDecisions: ChainDecisionTO[] = useSelector(sequenceModelSelectors.selectCurrentChainDecisions);
 
     const selectedActionToEdit: ActionTO | null = useSelector(editSelectors.selectActionToEdit);
+    const selectedDecisionToEdit: DecisionTO | null = useSelector(editSelectors.selectDecisionToEdit);
+    const selectedConditionToEdit: ConditionTO | null = useSelector(editSelectors.selectConditionToEdit);
 
     const [activeTab, setActiveTab] = useState<ActiveTab>(ActiveTab.sequence);
 
@@ -119,7 +124,7 @@ const useSequenceTableViewModel = () => {
                 break;
             case Mode.EDIT_SEQUENCE_DECISION:
             case Mode.EDIT_SEQUENCE_DECISION_CONDITION:
-                newActiveTab = ActiveTab.decision;
+                newActiveTab = ActiveTab.condition;
                 break;
             case Mode.EDIT_SEQUENCE_STEP:
                 newActiveTab = ActiveTab.action;
@@ -136,6 +141,10 @@ const useSequenceTableViewModel = () => {
     const dataSetupData = useGetDataSetupTableData(dataSetups);
     const modelSequenceData = useGetSequenceModelsTableBody(sequences);
     const modelSequenceDecisionData = useGetModelSequenceDecisionTableData(selectedSequence);
+    const modelSequenceConditionData = useGetModelSequenceConditionTableData(
+        selectedDecisionToEdit,
+        selectedConditionToEdit,
+    );
     const modelSequenceStepData = useGetStepTableData(selectedSequence);
 
     const getStep = (): SequenceStepCTO | null => {
@@ -184,6 +193,8 @@ const useSequenceTableViewModel = () => {
                 return modelSequenceStepData;
             case ActiveTab.decision:
                 return modelSequenceDecisionData;
+            case ActiveTab.condition:
+                return modelSequenceConditionData;
             case ActiveTab.sequence:
                 return calcSequenceData;
             case ActiveTab.sequenceModels:
