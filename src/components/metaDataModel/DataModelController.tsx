@@ -6,6 +6,7 @@ import { DataSetupCTO } from '../../dataAccess/access/cto/DataSetupCTO';
 import { GeometricalDataCTO } from '../../dataAccess/access/cto/GeometraicalDataCTO';
 import { SequenceStepCTO } from '../../dataAccess/access/cto/SequenceStepCTO';
 import { ActionTO } from '../../dataAccess/access/to/ActionTO';
+import { ConditionTO } from '../../dataAccess/access/to/ConditionTO';
 import { DataRelationTO } from '../../dataAccess/access/to/DataRelationTO';
 import { DecisionTO } from '../../dataAccess/access/to/DecisionTO';
 import { InitDataTO } from '../../dataAccess/access/to/InitDataTO';
@@ -68,6 +69,7 @@ const useMetaDataModelViewModel = () => {
     const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.selectStepToEdit);
     const actionToEdit: ActionTO | null = useSelector(editSelectors.selectActionToEdit);
     const decisionToEdit: DecisionTO | null = useSelector(editSelectors.selectDecisionToEdit);
+    const conditionToEdit: ConditionTO | null = useSelector(editSelectors.selectConditionToEdit);
     const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.selectDataSetupToEdit);
     const initDataToEdit: InitDataTO | null = useSelector(editSelectors.selectInitDataToEdit);
     // ----- VIEW -----
@@ -137,6 +139,9 @@ const useMetaDataModelViewModel = () => {
         if (actorDataFromInitDataToEdit) {
             actorDatas.push(actorDataFromInitDataToEdit);
         }
+        if (conditionToEdit) {
+            actorDatas.push(mapConditionToCompData(conditionToEdit));
+        }
         return actorDatas;
     };
 
@@ -164,15 +169,19 @@ const useMetaDataModelViewModel = () => {
         if (decision) {
             if (decision.conditions !== undefined && decision.conditions.length > 0) {
                 props = decision.conditions.map((condition) => {
-                    return {
-                        parentId: { dataId: condition.dataFk, instanceId: condition.instanceFk },
-                        name: getActorNameById(condition.actorFk),
-                        state: ActorDataState.CHECKED,
-                    };
+                    return mapConditionToCompData(condition);
                 });
             }
         }
         return props;
+    };
+
+    const mapConditionToCompData = (condition: ConditionTO): ViewFragmentProps => {
+        return {
+            parentId: { dataId: condition.dataFk, instanceId: condition.instanceFk },
+            name: getActorNameById(condition.actorFk),
+            state: ActorDataState.CHECKED,
+        };
     };
 
     const mapInitDataToCompData = (initData: InitDataTO): ViewFragmentProps => {
