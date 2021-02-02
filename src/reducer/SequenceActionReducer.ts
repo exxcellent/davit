@@ -29,7 +29,7 @@ export const SequenceActionReducer = {
         const errors: ActionTO[] = [];
 
         actions.forEach((action) => {
-            const indexActorDataToEdit: number = findActorDataIndex(
+            const indexActorDataReceiving: number = findActorDataIndex(
                 action.receivingActorFk,
                 action.dataFk,
                 newActorDatas,
@@ -41,22 +41,22 @@ export const SequenceActionReducer = {
             );
             switch (action.actionType) {
                 case ActionType.ADD:
-                    if (!actorDataIsPresent(indexActorDataToEdit)) {
+                    if (!actorDataIsPresent(indexActorDataReceiving)) {
                         newActorDatas.push({
                             actorFk: action.receivingActorFk,
                             dataFk: action.dataFk,
                             instanceFk: action.instanceFk,
                             state: ActorDataState.NEW,
                         });
-                    } else if (newActorDatas[indexActorDataToEdit].instanceFk !== action.instanceFk) {
+                    } else if (newActorDatas[indexActorDataReceiving].instanceFk !== action.instanceFk) {
                         newActorDatas.push({
                             actorFk: action.receivingActorFk,
                             dataFk: action.dataFk,
                             instanceFk: action.instanceFk,
                             state: ActorDataState.UPDATED_TO,
                         });
-                        newActorDatas[indexActorDataToEdit] = {
-                            ...newActorDatas[indexActorDataToEdit],
+                        newActorDatas[indexActorDataReceiving] = {
+                            ...newActorDatas[indexActorDataReceiving],
                             state: ActorDataState.UPDATED_FROM,
                         };
                     } else {
@@ -64,8 +64,8 @@ export const SequenceActionReducer = {
                     }
                     break;
                 case ActionType.DELETE:
-                    actorDataIsPresent(indexActorDataToEdit)
-                        ? (newActorDatas[indexActorDataToEdit].state = ActorDataState.DELETED)
+                    actorDataIsPresent(indexActorDataReceiving)
+                        ? (newActorDatas[indexActorDataReceiving].state = ActorDataState.DELETED)
                         : errors.push(action);
                     break;
                 case ActionType.SEND:
@@ -77,14 +77,14 @@ export const SequenceActionReducer = {
                             state: ActorDataState.SENT,
                         };
                         newActorDatas[indexActorDataSending].state = ActorDataState.SENT;
-                        if (actorDataIsPresent(indexActorDataToEdit)) {
+                        if (actorDataIsPresent(indexActorDataReceiving)) {
                             newActorDatas.push({
                                 actorFk: action.receivingActorFk,
                                 dataFk: action.dataFk,
-                                instanceFk: newActorDatas[indexActorDataToEdit].instanceFk,
+                                instanceFk: newActorDatas[indexActorDataReceiving].instanceFk,
                                 state: ActorDataState.UPDATED_FROM,
                             });
-                            newActorDatas[indexActorDataToEdit] = { ...actorData, state: ActorDataState.UPDATED_TO };
+                            newActorDatas[indexActorDataReceiving] = { ...actorData, state: ActorDataState.UPDATED_TO };
                         } else {
                             newActorDatas.push(actorData);
                         }
@@ -101,8 +101,8 @@ export const SequenceActionReducer = {
                             state: ActorDataState.SENT,
                         };
                         newActorDatas[indexActorDataSending].state = ActorDataState.DELETED;
-                        if (actorDataIsPresent(indexActorDataToEdit)) {
-                            newActorDatas[indexActorDataToEdit] = { ...actorData, state: ActorDataState.UPDATED_TO };
+                        if (actorDataIsPresent(indexActorDataReceiving)) {
+                            newActorDatas[indexActorDataReceiving] = { ...actorData, state: ActorDataState.UPDATED_TO };
                         } else {
                             newActorDatas.push(actorData);
                         }
