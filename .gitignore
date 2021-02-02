@@ -23,3 +23,9 @@ yarn-debug.log*
 yarn-error.log*
 .vscode/launch.json
 dist
+/.idea/.gitignore
+/.idea/carv_2.iml
+/.idea/codeStyles/codeStyleConfig.xml
+/.idea/modules.xml
+/.idea/codeStyles/Project.xml
+/.idea/vcs.xml
