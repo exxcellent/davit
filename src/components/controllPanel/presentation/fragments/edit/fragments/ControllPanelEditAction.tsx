@@ -1,26 +1,26 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { ActorCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
-import { DataCTO } from '../../../../../../dataAccess/access/cto/DataCTO';
-import { SequenceCTO } from '../../../../../../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../../../../../../dataAccess/access/cto/SequenceStepCTO';
-import { ActionTO } from '../../../../../../dataAccess/access/to/ActionTO';
-import { ActionType } from '../../../../../../dataAccess/access/types/ActionType';
-import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
-import { handleError } from '../../../../../../slices/GlobalSlice';
-import { MasterDataActions } from '../../../../../../slices/MasterDataSlice';
-import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
-import { EditAction } from '../../../../../../slices/thunks/ActionThunks';
-import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
-import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
-import { ActionTypeDropDown } from '../../../../../common/fragments/dropdowns/ActionTypeDropDown';
-import { ActorDropDown } from '../../../../../common/fragments/dropdowns/ActorDropDown';
-import { DataDropDown } from '../../../../../common/fragments/dropdowns/DataDropDown';
-import { DataAndInstanceId, InstanceDropDown } from '../../../../../common/fragments/dropdowns/InstanceDropDown';
-import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { DavitLabelTextfield } from '../common/fragments/DavitLabelTextfield';
-import { OptionField } from '../common/OptionField';
+import React, { FunctionComponent, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { ActorCTO } from "../../../../../../dataAccess/access/cto/ActorCTO";
+import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
+import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
+import { ActionTO } from "../../../../../../dataAccess/access/to/ActionTO";
+import { ActionType } from "../../../../../../dataAccess/access/types/ActionType";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
+import { handleError } from "../../../../../../slices/GlobalSlice";
+import { MasterDataActions } from "../../../../../../slices/MasterDataSlice";
+import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
+import { EditAction } from "../../../../../../slices/thunks/ActionThunks";
+import { DavitUtil } from "../../../../../../utils/DavitUtil";
+import { DavitButtonIcon, DavitButtonLabel } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { ActionTypeDropDown } from "../../../../../common/fragments/dropdowns/ActionTypeDropDown";
+import { ActorDropDown } from "../../../../../common/fragments/dropdowns/ActorDropDown";
+import { DataDropDown } from "../../../../../common/fragments/dropdowns/DataDropDown";
+import { DataAndInstanceId, InstanceDropDown } from "../../../../../common/fragments/dropdowns/InstanceDropDown";
+import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
+import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditActionProps {
     hidden: boolean;
@@ -77,24 +77,21 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
             </div>
             <div className="optionFieldSpacer">
                 <OptionField label=" ">
-                    <label className="optionFieldLabel" style={{ paddingTop: '1em' }}>
-                        {actionType === ActionType.ADD ? 'TO' : 'FROM'}
+                    <label className="optionFieldLabel" style={{ paddingTop: "1em" }}>
+                        {actionType === ActionType.ADD ? "TO" : "FROM"}
                     </label>
                     <OptionField
                         label={
-                            actionType?.includes('SEND') || actionType === ActionType.TRIGGER
-                                ? 'Select sending Actor'
-                                : 'Actor'
+                            actionType?.includes("SEND") || actionType === ActionType.TRIGGER
+                                ? "Select sending Actor"
+                                : "Actor"
                         }>
                         <ActorDropDown
                             onSelect={(actor) =>
-                                setActor(
-                                    actor,
-                                    actionType?.includes('SEND') || actionType === ActionType.TRIGGER ? true : false,
-                                )
+                                setActor(actor, actionType?.includes("SEND") || actionType === ActionType.TRIGGER)
                             }
                             value={
-                                actionType?.includes('SEND') || actionType === ActionType.TRIGGER
+                                actionType?.includes("SEND") || actionType === ActionType.TRIGGER
                                     ? sendingActorId?.toString()
                                     : receivingActorId?.toString()
                             }
@@ -103,9 +100,9 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
                 </OptionField>
             </div>
             <div className="optionFieldSpacer">
-                {(actionType?.includes('SEND') || actionType === ActionType.TRIGGER) && (
+                {(actionType?.includes("SEND") || actionType === ActionType.TRIGGER) && (
                     <OptionField label=" ">
-                        <label className="optionFieldLabel" style={{ paddingTop: '1em' }}>
+                        <label className="optionFieldLabel" style={{ paddingTop: "1em" }}>
                             TO
                         </label>
                         <OptionField label="Select receiving Actor">
@@ -144,7 +141,7 @@ const useControllPanelEditActionViewModel = () => {
     useEffect(() => {
         // check if actor to edit is really set or gos back to edit mode
         if (actionToEdit === null || actionToEdit === undefined) {
-            dispatch(handleError('Tried to go to edit action without actionToEdit specified'));
+            dispatch(handleError("Tried to go to edit action without actionToEdit specified"));
             dispatch(EditActions.setMode.edit());
         }
         // used to focus the textfield on create another
@@ -162,7 +159,7 @@ const useControllPanelEditActionViewModel = () => {
                 dispatch(EditActions.setMode.editStep(step));
             } else {
                 // should never happend but as fallback savty.
-                dispatch(handleError('Step not found!'));
+                dispatch(handleError("Step not found!"));
                 dispatch(EditActions.setMode.edit());
             }
         }
@@ -183,8 +180,8 @@ const useControllPanelEditActionViewModel = () => {
         if (newActionType !== undefined && selectedSequence !== null && actionToEdit !== null) {
             const copyActionToEdit: ActionTO = DavitUtil.deepCopy(actionToEdit);
             copyActionToEdit.actionType = newActionType;
-            copyActionToEdit.sendingActorFk = newActionType.includes('SEND') ? actionToEdit.sendingActorFk : -1;
-            copyActionToEdit.receivingActorFk = newActionType.includes('SEND') ? actionToEdit.receivingActorFk : -1;
+            copyActionToEdit.sendingActorFk = newActionType.includes("SEND") ? actionToEdit.sendingActorFk : -1;
+            copyActionToEdit.receivingActorFk = newActionType.includes("SEND") ? actionToEdit.receivingActorFk : -1;
             dispatch(EditAction.update(copyActionToEdit));
             dispatch(EditAction.save(copyActionToEdit));
         }
@@ -242,9 +239,9 @@ const useControllPanelEditActionViewModel = () => {
             if (!validAction(actionToEdit!)) {
                 deleteAction();
             }
-            if (newMode && newMode === 'EDIT') {
+            if (newMode && newMode === "EDIT") {
                 dispatch(EditActions.setMode.edit());
-            } else if (newMode && newMode === 'SEQUENCE') {
+            } else if (newMode && newMode === "SEQUENCE") {
                 dispatch(EditActions.setMode.editSequence(selectedSequence?.sequenceTO.id));
             } else {
                 const step: SequenceStepCTO | undefined = MasterDataActions.find.findSequenceStepCTO(
@@ -261,13 +258,14 @@ const useControllPanelEditActionViewModel = () => {
         if (actionToEdit) {
             const newAction: ActionTO = new ActionTO();
             newAction.sequenceStepFk = actionToEdit.sequenceStepFk;
+            newAction.index = actionToEdit.index + 1;
             dispatch(EditAction.create(newAction));
             setKey(key + 1);
         }
     };
 
     return {
-        label: 'EDIT * SEQUENCE * STEP * ACTION',
+        label: "EDIT * SEQUENCE * STEP * ACTION",
         action: actionToEdit,
         setActor,
         setAction,
@@ -286,6 +284,6 @@ const useControllPanelEditActionViewModel = () => {
             instanceId: actionToEdit?.instanceFk,
         }),
         setTriggerLabel,
-        triggerlabe: actionToEdit?.actionType === ActionType.TRIGGER ? actionToEdit.triggerText : '',
+        triggerlabe: actionToEdit?.actionType === ActionType.TRIGGER ? actionToEdit.triggerText : "",
     };
 };
