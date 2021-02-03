@@ -13,7 +13,7 @@ import { InitDataTO } from "../../dataAccess/access/to/InitDataTO";
 import { ActionType } from "../../dataAccess/access/types/ActionType";
 import { editSelectors } from "../../slices/EditSlice";
 import { MasterDataActions, masterDataSelectors } from "../../slices/MasterDataSlice";
-import { SequenceModelActions, sequenceModelSelectors } from "../../slices/SequenceModelSlice";
+import { sequenceModelSelectors } from "../../slices/SequenceModelSlice";
 import { EditData } from "../../slices/thunks/DataThunks";
 import { DavitUtil } from "../../utils/DavitUtil";
 import { ActorData } from "../../viewDataTypes/ActorData";
@@ -102,7 +102,9 @@ const useMetaDataModelViewModel = () => {
         const actorDatasFromErros: ViewFragmentProps[] = errors.map(mapActionToActorDatas);
         const actorDatasFromActions: ViewFragmentProps[] = actions.map(mapActionToActorDatas);
 
-        const actorDatasFromCompDatas: ViewFragmentProps[] = currentActorDatas.map(mapActorDataToActorData);
+        const actorDatasFromCompDatas: ViewFragmentProps[] = currentActorDatas
+            .filter((actDat) => actDat.state !== ActorDataState.UPDATED_FROM)
+            .map(mapActorDataToActorData);
         actorDatas.push(...actorDatasFromErros);
         actorDatas.push(
             ...actorDatasFromActions.filter(
@@ -148,11 +150,10 @@ const useMetaDataModelViewModel = () => {
     function mapActionToActorDatas(actionItem: ActionTO): ViewFragmentProps {
         const state: ActorDataState = mapActionTypeToViewFragmentState(actionItem.actionType);
         // const parentId = getDataAndInstanceIds(actionItem.dataFk);
-        const parentId = actionItem.dataFk;
         return {
             name: getActorNameById(actionItem.receivingActorFk),
             state: state,
-            parentId: parentId,
+            parentId: actionItem.dataFk,
         };
     }
 
@@ -246,7 +247,7 @@ const useMetaDataModelViewModel = () => {
     };
 
     const dataToDnDElements = (datas: DataCTO[]): DnDBoxElement[] => {
-        let dndBoxElements: DnDBoxElement[] = [];
+        let dndBoxElements: DnDBoxElement[];
         dndBoxElements = datas
             .filter((data) => !(dataCTOToEdit && dataCTOToEdit.data.id === data.data.id))
             .map((dataa) => {
@@ -345,7 +346,6 @@ const useMetaDataModelViewModel = () => {
     };
 
     return {
-        handleDataClick: (dataId: number) => dispatch(SequenceModelActions.handleDataClickEvent(dataId)),
         onPositionUpdate,
         toDnDElements: dataToDnDElements(datas),
         zoomIn,
