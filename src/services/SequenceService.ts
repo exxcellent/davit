@@ -1,17 +1,17 @@
-import { DataSetupCTO } from '../dataAccess/access/cto/DataSetupCTO';
-import { SequenceCTO } from '../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../dataAccess/access/cto/SequenceStepCTO';
-import { ActionTO } from '../dataAccess/access/to/ActionTO';
-import { DecisionTO } from '../dataAccess/access/to/DecisionTO';
-import { ActionType } from '../dataAccess/access/types/ActionType';
-import { GoTo, GoToTypes, Terminal } from '../dataAccess/access/types/GoToType';
-import { SequenceActionReducer, SequenceActionResult, SequenceDecisionResult } from '../reducer/SequenceActionReducer';
-import { DavitUtil } from '../utils/DavitUtil';
-import { ActorData } from '../viewDataTypes/ActorData';
+import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
+import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
+import { ActionTO } from "../dataAccess/access/to/ActionTO";
+import { DecisionTO } from "../dataAccess/access/to/DecisionTO";
+import { ActionType } from "../dataAccess/access/types/ActionType";
+import { GoTo, GoToTypes, Terminal } from "../dataAccess/access/types/GoToType";
+import { SequenceActionReducer, SequenceActionResult, SequenceDecisionResult } from "../reducer/SequenceActionReducer";
+import { DavitUtil } from "../utils/DavitUtil";
+import { ActorData } from "../viewDataTypes/ActorData";
 
-// ----------------------------------------------------- INTERFACES ----------------------------------------------------------
+// ----------------------------------------------------- INTERFACES ----------------------------------------------------
 export interface CalculatedStep {
-    type: 'STEP' | 'DECISION' | 'INIT' | 'TERMINAL';
+    type: "STEP" | "DECISION" | "INIT" | "TERMINAL";
     modelElementFk?: number;
     stepId: string;
     actorDatas: ActorData[];
@@ -26,7 +26,7 @@ export interface CalcSequence {
     loopStartingStepIndex?: number;
 }
 
-// ----------------------------------------------------- PUBLIC FUNCTION -----------------------------------------------------
+// ----------------------------------------------------- PUBLIC FUNCTION -----------------------------------------------
 
 export const SequenceService = {
     calculateSequence: (
@@ -43,9 +43,9 @@ export const SequenceService = {
         const stepIds: string[] = [];
         let loopStartingStep: number = -1;
 
-        /**  Start calculation if sequence and datasetup are selected */
+        /**  Start calculation if sequence and data setup are selected */
         if (sequence && dataSetup) {
-            /** Execute datasetup */
+            /** Execute data setup */
             const dataSetupActions: ActionTO[] = dataSetup.initDatas.map((data, index) => {
                 return {
                     actionType: ActionType.ADD,
@@ -55,7 +55,7 @@ export const SequenceService = {
                     id: -1,
                     sequenceStepFk: -1,
                     sendingActorFk: -1,
-                    triggerText: '',
+                    triggerText: "",
                     index: index,
                 };
             });
@@ -74,7 +74,7 @@ export const SequenceService = {
             if (root !== undefined) {
                 let stepOrDecision: SequenceStepCTO | DecisionTO | Terminal = root;
                 let type = getType(stepOrDecision);
-                let stepId: string = 'root';
+                let stepId: string = "root";
 
                 // calc next step or decision if not looping.
                 while (!isLooping(loopStartingStep) && (type === GoToTypes.STEP || type === GoToTypes.DEC)) {
@@ -86,7 +86,7 @@ export const SequenceService = {
 
                         loopStartingStep = checkForLoop(calcSequence, step, result);
 
-                        const newStepId = '_STEP_' + step.squenceStepTO.id;
+                        const newStepId = "_STEP_" + step.squenceStepTO.id;
                         stepId = stepId + newStepId;
                         stepIds.push(stepId);
 
@@ -95,7 +95,7 @@ export const SequenceService = {
                             actorDatas: actorDatas,
                             errors: result.errors,
                             modelElementFk: step.squenceStepTO.id,
-                            type: 'STEP',
+                            type: "STEP",
                         });
 
                         if (!isLooping(loopStartingStep)) {
@@ -118,7 +118,7 @@ export const SequenceService = {
                         stepOrDecision = getNext(result.goto, sequence);
                         type = getType(stepOrDecision);
 
-                        const newCondID = '_DEC_' + decision.id;
+                        const newCondID = "_DEC_" + decision.id;
                         stepId = stepId + newCondID;
                         stepIds.push(stepId);
 
@@ -127,7 +127,7 @@ export const SequenceService = {
                             actorDatas: actorDatas,
                             errors: [],
                             modelElementFk: decision.id,
-                            type: 'DECISION',
+                            type: "DECISION",
                         });
                     }
                 }
@@ -138,13 +138,13 @@ export const SequenceService = {
                         actorDatas,
                     );
                     calcSequence.steps.push({
-                        stepId: stepId + '_' + (stepOrDecision as Terminal).type,
+                        stepId: stepId + "_" + (stepOrDecision as Terminal).type,
                         actorDatas: terminalResult.actorDatas,
-                        type: 'TERMINAL',
+                        type: "TERMINAL",
                         errors: terminalResult.errors,
                     });
 
-                    stepIds.push(stepId + '_' + (stepOrDecision as Terminal).type);
+                    stepIds.push(stepId + "_" + (stepOrDecision as Terminal).type);
                 }
             }
         }
@@ -156,10 +156,10 @@ export const SequenceService = {
     },
 };
 
-// ------------------------------------------------------------ PRIVATE FUNCTIONS ------------------------------------------------------------
+// ------------------------------------------ PRIVATE FUNCTIONS --------------------------------------
 
 const getInitStep = (result: SequenceActionResult): CalculatedStep => {
-    return { stepId: 'root', actorDatas: result.actorDatas, type: 'INIT', errors: result.errors };
+    return { stepId: "root", actorDatas: result.actorDatas, type: "INIT", errors: result.errors };
 };
 
 const getStepFromSequence = (stepId: number, sequence: SequenceCTO): SequenceStepCTO | undefined => {
@@ -209,7 +209,7 @@ const getType = (stepOrDecisionOrTerminal: SequenceStepCTO | DecisionTO | Termin
     } else if ((stepOrDecisionOrTerminal as Terminal).type) {
         return (stepOrDecisionOrTerminal as Terminal).type;
     } else {
-        throw Error('Illegal Type in Sequence');
+        throw Error("Illegal Type in Sequence");
     }
 };
 

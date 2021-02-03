@@ -1,9 +1,9 @@
-import { ActionTO } from '../dataAccess/access/to/ActionTO';
-import { DecisionTO } from '../dataAccess/access/to/DecisionTO';
-import { ActionType } from '../dataAccess/access/types/ActionType';
-import { GoTo } from '../dataAccess/access/types/GoToType';
-import { ActorData } from '../viewDataTypes/ActorData';
-import { ActorDataState } from '../viewDataTypes/ActorDataState';
+import { ActionTO } from "../dataAccess/access/to/ActionTO";
+import { DecisionTO } from "../dataAccess/access/to/DecisionTO";
+import { ActionType } from "../dataAccess/access/types/ActionType";
+import { GoTo } from "../dataAccess/access/types/GoToType";
+import { ActorData } from "../viewDataTypes/ActorData";
+import { ActorDataState } from "../viewDataTypes/ActorDataState";
 
 // ----------------------------------------------------- INTERFACES ----------------------------------------------------------
 
@@ -11,6 +11,7 @@ export interface SequenceActionResult {
     actorDatas: ActorData[];
     errors: ActionTO[];
 }
+
 export interface SequenceDecisionResult {
     actorDatas: ActorData[];
     goto: GoTo;
@@ -118,7 +119,11 @@ export const SequenceActionReducer = {
     },
 
     executeDecisionCheck(decision: DecisionTO, actorDatas: ActorData[]): SequenceDecisionResult {
-        const newActorDatas: ActorData[] = actorDatas
+        /**
+         * Remove with status "deleted" and "check failed"
+         * Change rest to status "persistent".
+         * */
+        const updatedActorDatas: ActorData[] = actorDatas
             .filter(
                 (actorData) =>
                     actorData.state !== ActorDataState.DELETED && actorData.state !== ActorDataState.CHECK_FAILED,
@@ -127,30 +132,17 @@ export const SequenceActionReducer = {
                 return { ...actorData, state: ActorDataState.PERSISTENT };
             });
 
-        // const filteredActorData: ActorData[] = newActorDatas.filter(
-        //     (actorData) => actorData.actorFk === decision.actorFk,
-        // );
-
         let goTo = decision.ifGoTo;
 
         decision.conditions.forEach((condition) => {
-            // if data and instance id are defined search exact match. if only data id is defined search for any instance of that data
-            // const checkedActorDatas: ActorData[] = filteredActorData.filter(
-            //     (actor) =>
-            //         actor.dataFk === condition.dataFk &&
-            //         (!condition.instanceId || actor.instanceFk === condition.instanceId),
-            // );
-
-            const checkedActorDatas: ActorData[] = actorDatas.filter(
-                (actorData) =>
-                    actorData.actorFk === condition.actorFk &&
-                    (!condition.instanceFk || actorData.instanceFk === condition.instanceFk),
+            const actorDataToCheck: ActorData | undefined = updatedActorDatas.find(
+                (actorData) => actorData.actorFk === condition.actorFk && actorData.instanceFk === condition.instanceFk,
             );
 
-            if (dataIsPresentOnActor(checkedActorDatas)) {
-                checkedActorDatas.forEach((actorData) => (actorData.state = ActorDataState.CHECKED));
+            if (actorDataToCheck) {
+                actorDataToCheck.state = ActorDataState.CHECKED;
             } else {
-                newActorDatas.push({
+                updatedActorDatas.push({
                     actorFk: condition.actorFk,
                     dataFk: condition.dataFk,
                     instanceFk: condition.instanceFk,
@@ -160,7 +152,7 @@ export const SequenceActionReducer = {
             }
         });
 
-        return { actorDatas: newActorDatas, goto: goTo };
+        return { actorDatas: updatedActorDatas, goto: goTo };
     },
 };
 
@@ -180,10 +172,11 @@ const isTransiantState = (state: ActorDataState) => {
         state === ActorDataState.CHECK_FAILED
     );
 };
+
 function actorDataIsPresent(indexActorDataToEdit: number) {
     return indexActorDataToEdit !== -1;
 }
 
-const dataIsPresentOnActor = (actorData: ActorData[]) => {
-    return actorData && actorData.length > 0;
-};
+// const dataIsPresentOnActor = (actorData: ActorData[]) => {
+//     return actorData && actorData.length > 0;
+// };
