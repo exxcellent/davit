@@ -1,11 +1,11 @@
-import { motion } from 'framer-motion';
-import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
-import { ASPECT_RATIO, WINDOW_FACTOR } from '../../../../app/DavitConstants';
-import { GeometricalDataTO } from '../../../../dataAccess/access/to/GeometricalDataTO';
-import { PositionTO } from '../../../../dataAccess/access/to/PositionTO';
-import { useCurrentHeight, useCurrentWitdh, useCustomZoomEvent } from '../../../../utils/WindowUtil';
-import { createDnDItem } from '../../../common/fragments/DnDWrapper';
-import { DavitPath, DavitPathProps } from '../../../common/fragments/svg/DavitPath';
+import { motion } from "framer-motion";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import { ASPECT_RATIO, WINDOW_FACTOR } from "../../../../app/DavitConstants";
+import { GeometricalDataTO } from "../../../../dataAccess/access/to/GeometricalDataTO";
+import { PositionTO } from "../../../../dataAccess/access/to/PositionTO";
+import { useCurrentHeight, useCurrentWitdh, useCustomZoomEvent } from "../../../../utils/WindowUtil";
+import { createDnDItem } from "../../../common/fragments/DnDWrapper";
+import { DavitPath, DavitPathProps } from "../../../common/fragments/svg/DavitPath";
 
 export interface DnDBoxElement {
     element: JSX.Element;
@@ -25,8 +25,8 @@ interface DnDBox {
 }
 
 export enum DnDBoxType {
-    actor = 'actorModel',
-    data = 'dataModel',
+    actor = "actorModel",
+    data = "dataModel",
 }
 
 export const DnDBox: FunctionComponent<DnDBox> = (props) => {
@@ -62,7 +62,7 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
             onMouseLeave={(event) => setMouseOver(false)}
             ref={constraintsRef}
             style={fullScreen ? { height: height, maxWidth: width } : {}}
-            className={fullScreen ? type.toString() + 'Fullscreen' : type.toString()}
+            className={fullScreen ? type.toString() + "Fullscreen" : type.toString()}
             key={key}>
             {toDnDElements.map(wrappItem)}
             <motion.svg className="sVGArea">{createDavitPath(paths)}</motion.svg>
@@ -83,10 +83,10 @@ const useDnDBoxViewModel = (svgElements: DavitPathProps[]) => {
 
     useEffect(() => {
         const handleResize = () => setKey((prevState) => prevState + 1);
-        window.addEventListener('resize', handleResize);
+        window.addEventListener("resize", handleResize);
 
         return () => {
-            window.removeEventListener('resize', handleResize);
+            window.removeEventListener("resize", handleResize);
         };
     }, []);
 

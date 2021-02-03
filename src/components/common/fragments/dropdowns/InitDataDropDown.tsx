@@ -1,12 +1,12 @@
-import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
-import { DropdownProps } from 'semantic-ui-react';
-import { ActorCTO } from '../../../../dataAccess/access/cto/ActorCTO';
-import { DataCTO } from '../../../../dataAccess/access/cto/DataCTO';
-import { InitDataTO } from '../../../../dataAccess/access/to/InitDataTO';
-import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
-import { DavitUtil } from '../../../../utils/DavitUtil';
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from './DavitDropDown';
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { DropdownProps } from "semantic-ui-react";
+import { ActorCTO } from "../../../../dataAccess/access/cto/ActorCTO";
+import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
+import { InitDataTO } from "../../../../dataAccess/access/to/InitDataTO";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import { DavitUtil } from "../../../../utils/DavitUtil";
+import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
 
 interface InitDataDropDownDownProps extends DropdownProps {
     initDatas: InitDataTO[];
@@ -54,17 +54,17 @@ const useDataSetupDropDownViewModel = () => {
     const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
 
     const getActorName = (actorId: number): string => {
-        return actors.find((actor) => actor.actor.id === actorId)?.actor.name || '';
+        return actors.find((actor) => actor.actor.id === actorId)?.actor.name || "";
     };
 
     const getDataName = (dataId: number, instanceId?: number): string => {
-        let dataName: string = '';
-        let instanceName: string = '';
+        let dataName: string = "";
+        let instanceName: string = "";
         const data: DataCTO | undefined = datas.find((data) => data.data.id === dataId);
-        dataName = data?.data.name || '';
+        dataName = data?.data.name || "";
         if (data && instanceId && instanceId > 1) {
-            instanceName = data.data.instances.find((inst) => inst.id === instanceId)?.name || '';
-            dataName = dataName + ' - ' + instanceName;
+            instanceName = data.data.instances.find((inst) => inst.id === instanceId)?.name || "";
+            dataName = dataName + " - " + instanceName;
         }
         return dataName;
     };
@@ -73,7 +73,7 @@ const useDataSetupDropDownViewModel = () => {
         return {
             key: initData.id,
             value: initData.id.toString(),
-            text: getActorName(initData.actorFk) + ' + ' + getDataName(initData.dataFk, initData.instanceFk),
+            text: getActorName(initData.actorFk) + " + " + getDataName(initData.dataFk, initData.instanceFk),
         };
     };
 

@@ -1,6 +1,6 @@
-import { DecisionTO } from '../to/DecisionTO';
-import { SequenceTO } from '../to/SequenceTO';
-import { SequenceStepCTO } from './SequenceStepCTO';
+import { DecisionTO } from "../to/DecisionTO";
+import { SequenceTO } from "../to/SequenceTO";
+import { SequenceStepCTO } from "./SequenceStepCTO";
 
 export class SequenceCTO {
     constructor(

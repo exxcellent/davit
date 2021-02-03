@@ -1,26 +1,26 @@
-import { DAVIT_VERISON } from '../../../app/DavitConstants';
-import { ActionTO } from '../../access/to/ActionTO';
-import { ActorTO } from '../../access/to/ActorTO';
-import { ChainDecisionTO } from '../../access/to/ChainDecisionTO';
-import { ChainlinkTO } from '../../access/to/ChainlinkTO';
-import { ChainTO } from '../../access/to/ChainTO';
-import { ConditionTO } from '../../access/to/ConditionTO';
-import { DataRelationTO } from '../../access/to/DataRelationTO';
-import { DataSetupTO } from '../../access/to/DataSetupTO';
-import { DataTO } from '../../access/to/DataTO';
-import { DecisionTO } from '../../access/to/DecisionTO';
-import { GeometricalDataTO } from '../../access/to/GeometricalDataTO';
-import { GroupTO } from '../../access/to/GroupTO';
-import { InitDataTO } from '../../access/to/InitDataTO';
-import { PositionTO } from '../../access/to/PositionTO';
-import { SequenceStepTO } from '../../access/to/SequenceStepTO';
-import { SequenceTO } from '../../access/to/SequenceTO';
-import { StoreTO } from '../../access/to/StoreTO';
-import { DecisionTO02 } from './to/DecisionTO02';
+import { DAVIT_VERISON } from "../../../app/DavitConstants";
+import { ActionTO } from "../../access/to/ActionTO";
+import { ActorTO } from "../../access/to/ActorTO";
+import { ChainDecisionTO } from "../../access/to/ChainDecisionTO";
+import { ChainlinkTO } from "../../access/to/ChainlinkTO";
+import { ChainTO } from "../../access/to/ChainTO";
+import { ConditionTO } from "../../access/to/ConditionTO";
+import { DataRelationTO } from "../../access/to/DataRelationTO";
+import { DataSetupTO } from "../../access/to/DataSetupTO";
+import { DataTO } from "../../access/to/DataTO";
+import { DecisionTO } from "../../access/to/DecisionTO";
+import { GeometricalDataTO } from "../../access/to/GeometricalDataTO";
+import { GroupTO } from "../../access/to/GroupTO";
+import { InitDataTO } from "../../access/to/InitDataTO";
+import { PositionTO } from "../../access/to/PositionTO";
+import { SequenceStepTO } from "../../access/to/SequenceStepTO";
+import { SequenceTO } from "../../access/to/SequenceTO";
+import { StoreTO } from "../../access/to/StoreTO";
+import { DecisionTO02 } from "./to/DecisionTO02";
 
 export const DavitVersionMigrator02 = {
     migrate(dataStoreObject: StoreTO): StoreTO {
-        console.info('start migration to version 0.2');
+        console.info("start migration to version 0.2");
 
         const decisions: DecisionTO[] = (dataStoreObject.decisions as DecisionTO02[]).map((decision) => {
             const conditions: ConditionTO[] = [];

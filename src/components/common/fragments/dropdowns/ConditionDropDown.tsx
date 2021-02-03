@@ -1,11 +1,11 @@
-import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
-import { DropdownProps } from 'semantic-ui-react';
-import { ActorCTO } from '../../../../dataAccess/access/cto/ActorCTO';
-import { DataCTO } from '../../../../dataAccess/access/cto/DataCTO';
-import { ConditionTO } from '../../../../dataAccess/access/to/ConditionTO';
-import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
-import { DavitDropDownItemProps, DavitIconDropDown } from './DavitDropDown';
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { DropdownProps } from "semantic-ui-react";
+import { ActorCTO } from "../../../../dataAccess/access/cto/ActorCTO";
+import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
+import { ConditionTO } from "../../../../dataAccess/access/to/ConditionTO";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import { DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
 
 interface ConditionDropDownButtonProps extends DropdownProps {
     onSelect: (conditionId: number | undefined) => void;
@@ -21,16 +21,16 @@ export const ConditionDropDownButton: FunctionComponent<ConditionDropDownButtonP
 
     const conditionToOption = (condition: ConditionTO): DavitDropDownItemProps => {
         const actorName: string =
-            actors.find((actor) => actor.actor.id === condition.actorFk)?.actor.name || 'Could not find Actor';
-        let dataName: string = 'Could not find Data';
-        let instanceName: string = 'Could not find Instance';
+            actors.find((actor) => actor.actor.id === condition.actorFk)?.actor.name || "Could not find Actor";
+        let dataName: string = "Could not find Data";
+        let instanceName: string = "Could not find Instance";
         const data: DataCTO | undefined = datas.find((data) => data.data.id === condition.dataFk);
 
         if (data) {
             dataName = data.data.name;
             instanceName =
                 data.data.instances.find((instance) => instance.id === condition.instanceFk)?.name ||
-                'Could not find Instance';
+                "Could not find Instance";
         }
 
         return {

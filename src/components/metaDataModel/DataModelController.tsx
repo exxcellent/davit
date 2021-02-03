@@ -1,27 +1,27 @@
-import React, { FunctionComponent, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { ActorCTO } from '../../dataAccess/access/cto/ActorCTO';
-import { DataCTO } from '../../dataAccess/access/cto/DataCTO';
-import { DataSetupCTO } from '../../dataAccess/access/cto/DataSetupCTO';
-import { GeometricalDataCTO } from '../../dataAccess/access/cto/GeometraicalDataCTO';
-import { SequenceStepCTO } from '../../dataAccess/access/cto/SequenceStepCTO';
-import { ActionTO } from '../../dataAccess/access/to/ActionTO';
-import { ConditionTO } from '../../dataAccess/access/to/ConditionTO';
-import { DataRelationTO } from '../../dataAccess/access/to/DataRelationTO';
-import { DecisionTO } from '../../dataAccess/access/to/DecisionTO';
-import { InitDataTO } from '../../dataAccess/access/to/InitDataTO';
-import { ActionType } from '../../dataAccess/access/types/ActionType';
-import { editSelectors } from '../../slices/EditSlice';
-import { MasterDataActions, masterDataSelectors } from '../../slices/MasterDataSlice';
-import { SequenceModelActions, sequenceModelSelectors } from '../../slices/SequenceModelSlice';
-import { EditData } from '../../slices/thunks/DataThunks';
-import { DavitUtil } from '../../utils/DavitUtil';
-import { ActorData } from '../../viewDataTypes/ActorData';
-import { ActorDataState } from '../../viewDataTypes/ActorDataState';
-import { ViewFragmentProps } from '../../viewDataTypes/ViewFragment';
-import { DavitPathProps, DavitPathTypes } from '../common/fragments/svg/DavitPath';
-import { DavitCard, DavitCardProps } from '../metaActorModel/presentation/fragments/DavitCard';
-import { DnDBox, DnDBoxElement, DnDBoxType } from '../metaActorModel/presentation/fragments/DnDBox';
+import React, { FunctionComponent, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { ActorCTO } from "../../dataAccess/access/cto/ActorCTO";
+import { DataCTO } from "../../dataAccess/access/cto/DataCTO";
+import { DataSetupCTO } from "../../dataAccess/access/cto/DataSetupCTO";
+import { GeometricalDataCTO } from "../../dataAccess/access/cto/GeometraicalDataCTO";
+import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
+import { ActionTO } from "../../dataAccess/access/to/ActionTO";
+import { ConditionTO } from "../../dataAccess/access/to/ConditionTO";
+import { DataRelationTO } from "../../dataAccess/access/to/DataRelationTO";
+import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
+import { InitDataTO } from "../../dataAccess/access/to/InitDataTO";
+import { ActionType } from "../../dataAccess/access/types/ActionType";
+import { editSelectors } from "../../slices/EditSlice";
+import { MasterDataActions, masterDataSelectors } from "../../slices/MasterDataSlice";
+import { SequenceModelActions, sequenceModelSelectors } from "../../slices/SequenceModelSlice";
+import { EditData } from "../../slices/thunks/DataThunks";
+import { DavitUtil } from "../../utils/DavitUtil";
+import { ActorData } from "../../viewDataTypes/ActorData";
+import { ActorDataState } from "../../viewDataTypes/ActorDataState";
+import { ViewFragmentProps } from "../../viewDataTypes/ViewFragment";
+import { DavitPathProps, DavitPathTypes } from "../common/fragments/svg/DavitPath";
+import { DavitCard, DavitCardProps } from "../metaActorModel/presentation/fragments/DavitCard";
+import { DnDBox, DnDBoxElement, DnDBoxType } from "../metaActorModel/presentation/fragments/DnDBox";
 
 interface DataModelControllerProps {
     fullScreen?: boolean;
@@ -87,7 +87,7 @@ const useMetaDataModelViewModel = () => {
     }, [dispatch]);
 
     const getActorNameById = (actorId: number): string => {
-        return actors.find((actor) => actor.actor.id === actorId)?.actor.name || 'Could not find Actor';
+        return actors.find((actor) => actor.actor.id === actorId)?.actor.name || "Could not find Actor";
     };
 
     const getActorDatas = () => {
@@ -281,7 +281,7 @@ const useMetaDataModelViewModel = () => {
             ),
             instances: data.data.instances,
             zoomFactor: zoom,
-            type: 'DATA',
+            type: "DATA",
         };
     };
 

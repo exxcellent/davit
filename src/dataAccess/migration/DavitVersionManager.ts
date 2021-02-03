@@ -1,11 +1,11 @@
-import { DAVIT_VERISON } from '../../app/DavitConstants';
-import { StoreTO } from '../access/to/StoreTO';
-import { DavitVersionMigrator01 } from './davitVersio01/DavitVersionMigrator01';
-import { DavitVersionMigrator02 } from './davitVersion02/DavitVersionMigrator02';
+import { DAVIT_VERISON } from "../../app/DavitConstants";
+import { StoreTO } from "../access/to/StoreTO";
+import { DavitVersionMigrator01 } from "./davitVersio01/DavitVersionMigrator01";
+import { DavitVersionMigrator02 } from "./davitVersion02/DavitVersionMigrator02";
 
 export const DavitVersionManager = {
     updateProject(dataStoreObject: StoreTO): StoreTO {
-        console.info('call davit version manager.');
+        console.info("call davit version manager.");
         let migratedDataStoreObject: StoreTO = {} as StoreTO;
         switch (dataStoreObject.version) {
             case undefined:

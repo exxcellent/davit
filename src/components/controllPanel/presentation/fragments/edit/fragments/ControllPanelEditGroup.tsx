@@ -1,17 +1,17 @@
-import React, { FunctionComponent, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Input } from 'semantic-ui-react';
-import { isNullOrUndefined } from 'util';
-import { GroupTO } from '../../../../../../dataAccess/access/to/GroupTO';
-import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
-import { handleError } from '../../../../../../slices/GlobalSlice';
-import { EditGroup } from '../../../../../../slices/thunks/GroupThunks';
-import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
-import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
-import { ColorDropDown } from '../../../../../common/fragments/dropdowns/ColorDropDown';
-import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { DavitLabelTextfield } from '../common/fragments/DavitLabelTextfield';
+import React, { FunctionComponent, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Input } from "semantic-ui-react";
+import { isNullOrUndefined } from "util";
+import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
+import { handleError } from "../../../../../../slices/GlobalSlice";
+import { EditGroup } from "../../../../../../slices/thunks/GroupThunks";
+import { DavitUtil } from "../../../../../../utils/DavitUtil";
+import { DavitButtonLabel } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { ColorDropDown } from "../../../../../common/fragments/dropdowns/ColorDropDown";
+import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
 
 export interface ControllPanelEditGroupProps {
     hidden: boolean;
@@ -39,7 +39,7 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
                 <ColorDropDown
                     onSelect={setGroupColor}
                     placeholder={getGroupColor()}
-                    colors={['red', 'blue', 'green']}
+                    colors={["red", "blue", "green"]}
                 />
             </div>
             <div className="columnDivider controllPanelEditChild">
@@ -73,7 +73,7 @@ const useControllPanelEditGroupViewModel = () => {
     useEffect(() => {
         // check if sequence to edit is really set or gos back to edit mode
         if (DavitUtil.isNullOrUndefined(groupToEdit)) {
-            handleError('Tried to go to edit group without groupToEdit specified');
+            handleError("Tried to go to edit group without groupToEdit specified");
             dispatch(EditActions.setMode.edit());
         }
         // used to focus the textfield on create another
@@ -111,7 +111,7 @@ const useControllPanelEditGroupViewModel = () => {
         if (!DavitUtil.isNullOrUndefined(groupToEdit)) {
             return groupToEdit!.color;
         } else {
-            return '';
+            return "";
         }
     };
 
@@ -126,7 +126,7 @@ const useControllPanelEditGroupViewModel = () => {
     };
 
     return {
-        label: 'EDIT GROUP',
+        label: "EDIT GROUP",
         name: groupToEdit?.name,
         changeName,
         saveGroup,

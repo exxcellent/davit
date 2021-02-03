@@ -1,7 +1,7 @@
-import { ChainlinkTO } from '../access/to/ChainlinkTO';
-import dataStore from '../DataStore';
-import { CheckHelper } from '../util/CheckHelper';
-import { DataAccessUtil } from '../util/DataAccessUtil';
+import { ChainlinkTO } from "../access/to/ChainlinkTO";
+import dataStore from "../DataStore";
+import { CheckHelper } from "../util/CheckHelper";
+import { DataAccessUtil } from "../util/DataAccessUtil";
 
 export const ChainLinkRepository = {
     find(id: number): ChainlinkTO | undefined {
@@ -22,13 +22,13 @@ export const ChainLinkRepository = {
         // ConstraintsHelper.deleteStepConstraintCheck(step.id, dataStore.getDataStore());
         const success = dataStore.getDataStore().chainlinks.delete(step.id);
         if (!success) {
-            throw new Error('dataAccess.repository.error.notExists');
+            throw new Error("dataAccess.repository.error.notExists");
         }
         return step;
     },
 
     save(chainLink: ChainlinkTO): ChainlinkTO {
-        CheckHelper.nullCheck(chainLink, 'chainlink');
+        CheckHelper.nullCheck(chainLink, "chainlink");
         let chainlinkTO: ChainlinkTO;
         if (chainLink.id === -1) {
             chainlinkTO = {

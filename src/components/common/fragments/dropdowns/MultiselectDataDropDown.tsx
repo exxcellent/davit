@@ -1,8 +1,8 @@
-import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
-import { Dropdown, DropdownItemProps, DropdownProps } from 'semantic-ui-react';
-import { DataCTO } from '../../../../dataAccess/access/cto/DataCTO';
-import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
+import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 
 interface MultiselectDataDropDownProps extends DropdownProps {
     onSelect: (dataIds: number[] | undefined) => void;
@@ -16,12 +16,12 @@ export const MultiselectDataDropDown: FunctionComponent<MultiselectDataDropDownP
 
     return (
         <Dropdown
-            placeholder={placeholder || 'Select Datas ...'}
+            placeholder={placeholder || "Select Datas ..."}
             fluid
             multiple
             selection
             options={([] as DropdownItemProps[]).concat.apply([], datas.map(dataToOption)).sort(function (a, b) {
-                return ('' + a.attr).localeCompare(b.attr);
+                return ("" + a.attr).localeCompare(b.attr);
             })}
             onChange={(event, data) => {
                 onSelect((data.value as number[]) || undefined);
@@ -47,7 +47,7 @@ const useMultiSelectDataDropDownViewModel = () => {
             ];
         } else {
             return data.data.instances.map((instance) => {
-                const instanceLabel: string = data.data.name === instance.name ? '' : ' : ' + instance.name;
+                const instanceLabel: string = data.data.name === instance.name ? "" : " : " + instance.name;
                 return {
                     key: instance.name,
                     value: instance.name,

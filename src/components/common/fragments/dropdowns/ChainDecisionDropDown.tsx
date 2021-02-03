@@ -1,10 +1,10 @@
-import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
-import { DropdownProps } from 'semantic-ui-react';
-import { ChainDecisionTO } from '../../../../dataAccess/access/to/ChainDecisionTO';
-import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
-import { DavitUtil } from '../../../../utils/DavitUtil';
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from './DavitDropDown';
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { DropdownProps } from "semantic-ui-react";
+import { ChainDecisionTO } from "../../../../dataAccess/access/to/ChainDecisionTO";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import { DavitUtil } from "../../../../utils/DavitUtil";
+import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
 
 interface ChainDecisionDropDownButtonProps extends DropdownProps {
     onSelect: (link: ChainDecisionTO | undefined) => void;

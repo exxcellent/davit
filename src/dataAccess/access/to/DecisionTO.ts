@@ -1,10 +1,10 @@
-import { GoTo, GoToTypes } from '../types/GoToType';
-import { AbstractTO } from './AbstractTO';
-import { ConditionTO } from './ConditionTO';
+import { GoTo, GoToTypes } from "../types/GoToType";
+import { AbstractTO } from "./AbstractTO";
+import { ConditionTO } from "./ConditionTO";
 
 export class DecisionTO extends AbstractTO {
     constructor(
-        public name: string = '',
+        public name: string = "",
         public sequenceFk: number = -1,
         public conditions: ConditionTO[] = [],
         public ifGoTo: GoTo = { type: GoToTypes.FIN },

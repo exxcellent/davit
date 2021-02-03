@@ -1,52 +1,52 @@
 /* eslint-disable react/display-name */
-import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { ChainlinkCTO } from '../../../dataAccess/access/cto/ChainlinkCTO';
-import { SequenceCTO } from '../../../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../../../dataAccess/access/cto/SequenceStepCTO';
-import { ActionTO } from '../../../dataAccess/access/to/ActionTO';
-import { ChainDecisionTO } from '../../../dataAccess/access/to/ChainDecisionTO';
-import { ChainTO } from '../../../dataAccess/access/to/ChainTO';
-import { ConditionTO } from '../../../dataAccess/access/to/ConditionTO';
-import { DataSetupTO } from '../../../dataAccess/access/to/DataSetupTO';
-import { DecisionTO } from '../../../dataAccess/access/to/DecisionTO';
-import { SequenceTO } from '../../../dataAccess/access/to/SequenceTO';
-import { CalcChain } from '../../../services/SequenceChainService';
-import { CalculatedStep } from '../../../services/SequenceService';
-import { editSelectors, Mode } from '../../../slices/EditSlice';
-import { masterDataSelectors } from '../../../slices/MasterDataSlice';
-import { sequenceModelSelectors } from '../../../slices/SequenceModelSlice';
-import { DavitUtil } from '../../../utils/DavitUtil';
-import { DavitTable } from '../../common/fragments/DavitTable';
-import { TabPanel } from '../fragments/TabPanel';
-import { useGetCalcLinkTableData } from '../tables/CalcLink';
-import { useGetCalcSequenceTableData } from '../tables/CalcSequence';
-import { useGetDataSetupTableData } from '../tables/DataSetup';
-import { useGetChainModelsTableData } from '../tables/ModelChain';
-import { useGetModelChainDecisionTableData } from '../tables/ModelChainDecision';
-import { useGetModelChainLinkTableData } from '../tables/ModelChainLink';
-import { useGetSequenceModelsTableBody } from '../tables/ModelSequence';
-import { useGetModelSequenceConditionTableData } from '../tables/ModelSequenceCondition';
-import { useGetModelSequenceDecisionTableData } from '../tables/ModelSequenceDecision';
-import { useGetStepTableData } from '../tables/ModelSequenceStep';
-import { useGetStepActionTableData } from '../tables/ModelSequenceStepAction';
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import { ChainlinkCTO } from "../../../dataAccess/access/cto/ChainlinkCTO";
+import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
+import { ActionTO } from "../../../dataAccess/access/to/ActionTO";
+import { ChainDecisionTO } from "../../../dataAccess/access/to/ChainDecisionTO";
+import { ChainTO } from "../../../dataAccess/access/to/ChainTO";
+import { ConditionTO } from "../../../dataAccess/access/to/ConditionTO";
+import { DataSetupTO } from "../../../dataAccess/access/to/DataSetupTO";
+import { DecisionTO } from "../../../dataAccess/access/to/DecisionTO";
+import { SequenceTO } from "../../../dataAccess/access/to/SequenceTO";
+import { CalcChain } from "../../../services/SequenceChainService";
+import { CalculatedStep } from "../../../services/SequenceService";
+import { editSelectors, Mode } from "../../../slices/EditSlice";
+import { masterDataSelectors } from "../../../slices/MasterDataSlice";
+import { sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
+import { DavitUtil } from "../../../utils/DavitUtil";
+import { DavitTable } from "../../common/fragments/DavitTable";
+import { TabPanel } from "../fragments/TabPanel";
+import { useGetCalcLinkTableData } from "../tables/CalcLink";
+import { useGetCalcSequenceTableData } from "../tables/CalcSequence";
+import { useGetDataSetupTableData } from "../tables/DataSetup";
+import { useGetChainModelsTableData } from "../tables/ModelChain";
+import { useGetModelChainDecisionTableData } from "../tables/ModelChainDecision";
+import { useGetModelChainLinkTableData } from "../tables/ModelChainLink";
+import { useGetSequenceModelsTableBody } from "../tables/ModelSequence";
+import { useGetModelSequenceConditionTableData } from "../tables/ModelSequenceCondition";
+import { useGetModelSequenceDecisionTableData } from "../tables/ModelSequenceDecision";
+import { useGetStepTableData } from "../tables/ModelSequenceStep";
+import { useGetStepActionTableData } from "../tables/ModelSequenceStepAction";
 
 interface SequenceTableModelControllerProps {
     fullScreen?: boolean;
 }
 
 export enum ActiveTab {
-    condition = 'condition',
-    action = 'action',
-    step = 'step',
-    decision = 'decision',
-    sequence = 'sequence',
-    chain = 'chain',
-    chainlinks = 'chainlinks',
-    chaindecisions = 'chaindecisions',
-    sequenceModels = 'sequenceModels',
-    chainModel = 'chainModels',
-    dataSetup = 'dataSetup',
+    condition = "condition",
+    action = "action",
+    step = "step",
+    decision = "decision",
+    sequence = "sequence",
+    chain = "chain",
+    chainlinks = "chainlinks",
+    chaindecisions = "chaindecisions",
+    sequenceModels = "sequenceModels",
+    chainModel = "chainModels",
+    dataSetup = "dataSetup",
 }
 
 export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (props) => {
@@ -67,7 +67,7 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
     } = useSequenceTableViewModel();
 
     return (
-        <div className={fullScreen ? '' : 'sequenceTable'} ref={parentRef}>
+        <div className={fullScreen ? "" : "sequenceTable"} ref={parentRef}>
             <div className="tableBorder">
                 <TabPanel
                     showChainModelTab={showChainModelTab}
@@ -220,10 +220,10 @@ const useSequenceTableViewModel = () => {
         };
 
         resizeListener();
-        window.addEventListener('resize', resizeListener);
+        window.addEventListener("resize", resizeListener);
 
         return () => {
-            window.removeEventListener('resize', resizeListener);
+            window.removeEventListener("resize", resizeListener);
         };
     }, [parentRef]);
 

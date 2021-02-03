@@ -1,13 +1,13 @@
-import { DavitUtil } from '../../utils/DavitUtil';
-import { ActorCTO } from '../access/cto/ActorCTO';
-import { GeometricalDataCTO } from '../access/cto/GeometraicalDataCTO';
-import { ActorTO } from '../access/to/ActorTO';
-import { DesignTO } from '../access/to/DesignTO';
-import { GroupTO } from '../access/to/GroupTO';
-import { ActorRepository } from '../repositories/ComponentRepository';
-import { GroupRepository } from '../repositories/GroupRepository';
-import { CheckHelper } from '../util/CheckHelper';
-import { TechnicalDataAccessService } from './TechnicalDataAccessService';
+import { DavitUtil } from "../../utils/DavitUtil";
+import { ActorCTO } from "../access/cto/ActorCTO";
+import { GeometricalDataCTO } from "../access/cto/GeometraicalDataCTO";
+import { ActorTO } from "../access/to/ActorTO";
+import { DesignTO } from "../access/to/DesignTO";
+import { GroupTO } from "../access/to/GroupTO";
+import { ActorRepository } from "../repositories/ComponentRepository";
+import { GroupRepository } from "../repositories/GroupRepository";
+import { CheckHelper } from "../util/CheckHelper";
+import { TechnicalDataAccessService } from "./TechnicalDataAccessService";
 
 export const ActorDataAccessService = {
     findAll(): ActorCTO[] {
@@ -27,9 +27,9 @@ export const ActorDataAccessService = {
     },
 
     delete(actor: ActorCTO): ActorCTO {
-        CheckHelper.nullCheck(actor.geometricalData, 'GeometricalDataCTO');
-        CheckHelper.nullCheck(actor.design, 'DesignTO');
-        CheckHelper.nullCheck(actor.actor, 'ActorTO');
+        CheckHelper.nullCheck(actor.geometricalData, "GeometricalDataCTO");
+        CheckHelper.nullCheck(actor.design, "DesignTO");
+        CheckHelper.nullCheck(actor.actor, "ActorTO");
         ActorRepository.delete(actor.actor);
         TechnicalDataAccessService.deleteGeometricalDataCTO(actor.geometricalData);
         TechnicalDataAccessService.deleteDesign(actor.design);
@@ -37,7 +37,7 @@ export const ActorDataAccessService = {
     },
 
     deleteGroup(group: GroupTO): GroupTO {
-        CheckHelper.nullCheck(group, 'group');
+        CheckHelper.nullCheck(group, "group");
         const actorsToClean: ActorCTO[] = this.findAll().filter((actor) => actor.actor.groupFks === group.id);
         actorsToClean.forEach((actor) => {
             actor.actor.groupFks = -1;
@@ -48,7 +48,7 @@ export const ActorDataAccessService = {
     },
 
     saveCTO(actorCTO: ActorCTO): ActorCTO {
-        CheckHelper.nullCheck(actorCTO, 'ActorCTO');
+        CheckHelper.nullCheck(actorCTO, "ActorCTO");
         const copy: ActorCTO = DavitUtil.deepCopy(actorCTO);
         const savedDesign = TechnicalDataAccessService.saveDesign(copy.design);
         copy.actor.designFk = savedDesign.id;
@@ -63,19 +63,19 @@ export const ActorDataAccessService = {
     },
 
     saveGroup(group: GroupTO): GroupTO {
-        CheckHelper.nullCheck(group, 'group');
+        CheckHelper.nullCheck(group, "group");
         return GroupRepository.save(group);
     },
 };
 
 const createActorCTO = (actor: ActorTO | undefined): ActorCTO => {
-    CheckHelper.nullCheck(actor, 'actor');
+    CheckHelper.nullCheck(actor, "actor");
     const design: DesignTO | undefined = TechnicalDataAccessService.findDesign(actor!.designFk!);
-    CheckHelper.nullCheck(design, 'design');
+    CheckHelper.nullCheck(design, "design");
     const geometricalData: GeometricalDataCTO | undefined = TechnicalDataAccessService.findGeometricalDataCTO(
         actor!.geometricalDataFk!,
     );
-    CheckHelper.nullCheck(geometricalData, 'geometricalData');
+    CheckHelper.nullCheck(geometricalData, "geometricalData");
     return {
         actor: actor!,
         geometricalData: geometricalData!,

@@ -1,5 +1,5 @@
-import React, { FunctionComponent, useState } from 'react';
-import { Button } from 'semantic-ui-react';
+import React, { FunctionComponent, useState } from "react";
+import { Button } from "semantic-ui-react";
 
 interface DavitDeleteButtonProps {
     onClick: () => void;
@@ -18,13 +18,13 @@ export const DavitDeleteButton: FunctionComponent<DavitDeleteButtonProps> = (pro
     return (
         <div
             style={{
-                display: 'flex',
-                width: '100%',
-                justifyContent: 'center',
+                display: "flex",
+                width: "100%",
+                justifyContent: "center",
             }}>
             {!fluid && (
                 <Button
-                    icon={disable ? '' : 'trash alternate'}
+                    icon={disable ? "" : "trash alternate"}
                     onClick={onButtonClick}
                     className="carv2Button"
                     inverted

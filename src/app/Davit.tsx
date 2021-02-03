@@ -1,25 +1,25 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { ErrorNotification } from '../components/common/fragments/ErrorNotification';
-import { ControllPanelController } from '../components/controllPanel/presentation/ControllPanelController';
-import { ActorModelController } from '../components/metaActorModel/presentation/ActorModelController';
-import { DataModelController } from '../components/metaDataModel/DataModelController';
-import { FlowChartController } from '../components/sequenceModel/FlowChartController';
-import { SequenceTableModelController } from '../components/sequenceTableModel/presentation/SequenceTableModelController';
-import { SidePanelController } from '../components/sidePanel/SidePanelController';
-import { MasterDataActions } from '../slices/MasterDataSlice';
-import './css/Davit.css';
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { ErrorNotification } from "../components/common/fragments/ErrorNotification";
+import { ControllPanelController } from "../components/controllPanel/presentation/ControllPanelController";
+import { ActorModelController } from "../components/metaActorModel/presentation/ActorModelController";
+import { DataModelController } from "../components/metaDataModel/DataModelController";
+import { FlowChartController } from "../components/sequenceModel/FlowChartController";
+import { SequenceTableModelController } from "../components/sequenceTableModel/presentation/SequenceTableModelController";
+import { SidePanelController } from "../components/sidePanel/SidePanelController";
+import { MasterDataActions } from "../slices/MasterDataSlice";
+import "./css/Davit.css";
 
 // electron needs HashRouter
 // import { HashRouter as BrowserRouter } from 'react-router-dom';
 
 export const ModuleRoutes = {
-    home: '/',
-    actor: '/component',
-    data: '/data',
-    table: '/table',
-    flowChart: '/flowChart',
+    home: "/",
+    actor: "/component",
+    data: "/data",
+    table: "/table",
+    flowChart: "/flowChart",
 };
 
 // inital data load from backend.

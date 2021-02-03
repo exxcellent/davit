@@ -1,10 +1,10 @@
-import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
-import { DropdownProps } from 'semantic-ui-react';
-import { GroupTO } from '../../../../dataAccess/access/to/GroupTO';
-import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
-import { DavitUtil } from '../../../../utils/DavitUtil';
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from './DavitDropDown';
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { DropdownProps } from "semantic-ui-react";
+import { GroupTO } from "../../../../dataAccess/access/to/GroupTO";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import { DavitUtil } from "../../../../utils/DavitUtil";
+import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
 
 interface GroupDropDownProps extends DropdownProps {
     onSelect: (group: GroupTO | undefined) => void;

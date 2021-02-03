@@ -1,25 +1,25 @@
-import { ActorCTO } from './access/cto/ActorCTO';
-import { ChainCTO } from './access/cto/ChainCTO';
-import { DataCTO } from './access/cto/DataCTO';
-import { DataSetupCTO } from './access/cto/DataSetupCTO';
-import { SequenceCTO } from './access/cto/SequenceCTO';
-import { SequenceStepCTO } from './access/cto/SequenceStepCTO';
-import { ActionTO } from './access/to/ActionTO';
-import { ChainDecisionTO } from './access/to/ChainDecisionTO';
-import { ChainlinkTO } from './access/to/ChainlinkTO';
-import { ChainTO } from './access/to/ChainTO';
-import { DataRelationTO } from './access/to/DataRelationTO';
-import { DataSetupTO } from './access/to/DataSetupTO';
-import { DecisionTO } from './access/to/DecisionTO';
-import { GroupTO } from './access/to/GroupTO';
-import { InitDataTO } from './access/to/InitDataTO';
-import { SequenceStepTO } from './access/to/SequenceStepTO';
-import { SequenceTO } from './access/to/SequenceTO';
-import { DataAccessResponse } from './DataAccessResponse';
-import dataStore from './DataStore';
-import { ActorDataAccessService } from './services/ComponentDataAccessService';
-import { DataDataAccessService } from './services/DataDataAccessService';
-import { SequenceDataAccessService } from './services/SequenceDataAccessService';
+import { ActorCTO } from "./access/cto/ActorCTO";
+import { ChainCTO } from "./access/cto/ChainCTO";
+import { DataCTO } from "./access/cto/DataCTO";
+import { DataSetupCTO } from "./access/cto/DataSetupCTO";
+import { SequenceCTO } from "./access/cto/SequenceCTO";
+import { SequenceStepCTO } from "./access/cto/SequenceStepCTO";
+import { ActionTO } from "./access/to/ActionTO";
+import { ChainDecisionTO } from "./access/to/ChainDecisionTO";
+import { ChainlinkTO } from "./access/to/ChainlinkTO";
+import { ChainTO } from "./access/to/ChainTO";
+import { DataRelationTO } from "./access/to/DataRelationTO";
+import { DataSetupTO } from "./access/to/DataSetupTO";
+import { DecisionTO } from "./access/to/DecisionTO";
+import { GroupTO } from "./access/to/GroupTO";
+import { InitDataTO } from "./access/to/InitDataTO";
+import { SequenceStepTO } from "./access/to/SequenceStepTO";
+import { SequenceTO } from "./access/to/SequenceTO";
+import { DataAccessResponse } from "./DataAccessResponse";
+import dataStore from "./DataStore";
+import { ActorDataAccessService } from "./services/ComponentDataAccessService";
+import { DataDataAccessService } from "./services/DataDataAccessService";
+import { SequenceDataAccessService } from "./services/SequenceDataAccessService";
 
 export const DataAccess = {
     // ========================================= FILE =========================================
@@ -27,7 +27,7 @@ export const DataAccess = {
     storeFileData(fileData: string): DataAccessResponse<void> {
         const response: DataAccessResponse<void> = {
             object: undefined,
-            message: '',
+            message: "",
             code: 500,
         };
         try {
@@ -41,7 +41,7 @@ export const DataAccess = {
     createNewProject(): DataAccessResponse<void> {
         const response: DataAccessResponse<void> = {
             object: undefined,
-            message: '',
+            message: "",
             code: 500,
         };
         try {
@@ -55,7 +55,7 @@ export const DataAccess = {
     downloadData(projectName: string): DataAccessResponse<void> {
         const response: DataAccessResponse<void> = {
             object: undefined,
-            message: '',
+            message: "",
             code: 500,
         };
         try {
@@ -289,12 +289,12 @@ export const DataAccess = {
 function makeTransactional<T>(callback: () => T): DataAccessResponse<T> {
     const response: DataAccessResponse<T> = {
         object: {} as T,
-        message: '',
+        message: "",
         code: 500,
     };
     try {
         const object = callback();
-        response.object = typeof object === 'undefined' ? undefined : JSON.parse(JSON.stringify(object));
+        response.object = typeof object === "undefined" ? undefined : JSON.parse(JSON.stringify(object));
         response.code = 200;
         dataStore.commitChanges();
     } catch (error) {

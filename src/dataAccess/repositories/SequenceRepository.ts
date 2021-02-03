@@ -1,8 +1,8 @@
-import { SequenceTO } from '../access/to/SequenceTO';
-import { ConstraintsHelper } from '../ConstraintsHelper';
-import dataStore from '../DataStore';
-import { CheckHelper } from '../util/CheckHelper';
-import { DataAccessUtil } from '../util/DataAccessUtil';
+import { SequenceTO } from "../access/to/SequenceTO";
+import { ConstraintsHelper } from "../ConstraintsHelper";
+import dataStore from "../DataStore";
+import { CheckHelper } from "../util/CheckHelper";
+import { DataAccessUtil } from "../util/DataAccessUtil";
 
 export const SequenceRepository = {
     find(sequenceId: number): SequenceTO | undefined {
@@ -14,7 +14,7 @@ export const SequenceRepository = {
     },
 
     save(sequence: SequenceTO): SequenceTO {
-        CheckHelper.nullCheck(sequence, 'sequence');
+        CheckHelper.nullCheck(sequence, "sequence");
         let sequenceTO: SequenceTO;
         if (sequence.id === -1) {
             sequenceTO = {
@@ -32,7 +32,7 @@ export const SequenceRepository = {
         ConstraintsHelper.deleteSequenceConstraintCheck(sequence.id, dataStore.getDataStore());
         const success = dataStore.getDataStore().sequences.delete(sequence.id!);
         if (!success) {
-            throw new Error('dataAccess.repository.error.notExists');
+            throw new Error("dataAccess.repository.error.notExists");
         }
         return sequence;
     },

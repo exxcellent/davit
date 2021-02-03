@@ -1,11 +1,11 @@
-import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
-import { DropdownProps } from 'semantic-ui-react';
-import { SequenceCTO } from '../../../../dataAccess/access/cto/SequenceCTO';
-import { DecisionTO } from '../../../../dataAccess/access/to/DecisionTO';
-import { sequenceModelSelectors } from '../../../../slices/SequenceModelSlice';
-import { DavitUtil } from '../../../../utils/DavitUtil';
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from './DavitDropDown';
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { DropdownProps } from "semantic-ui-react";
+import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
+import { DecisionTO } from "../../../../dataAccess/access/to/DecisionTO";
+import { sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
+import { DavitUtil } from "../../../../utils/DavitUtil";
+import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
 
 interface DecisionDropDownButtonProps extends DropdownProps {
     onSelect: (decision: DecisionTO | undefined) => void;

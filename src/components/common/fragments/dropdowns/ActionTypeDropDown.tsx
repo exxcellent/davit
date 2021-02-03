@@ -1,7 +1,7 @@
-import React, { FunctionComponent } from 'react';
-import { DropdownProps } from 'semantic-ui-react';
-import { ActionType } from '../../../../dataAccess/access/types/ActionType';
-import { DavitDropDown, DavitDropDownItemProps } from './DavitDropDown';
+import React, { FunctionComponent } from "react";
+import { DropdownProps } from "semantic-ui-react";
+import { ActionType } from "../../../../dataAccess/access/types/ActionType";
+import { DavitDropDown, DavitDropDownItemProps } from "./DavitDropDown";
 
 interface ActionTypeDropDownnProps extends DropdownProps {
     onSelect: (actionType: ActionType | undefined) => void;
@@ -14,22 +14,22 @@ export const ActionTypeDropDown: FunctionComponent<ActionTypeDropDownnProps> = (
     const actions: ActionType[] = Object.values(ActionType);
 
     const getActionTypeLabel = (type: ActionType): string => {
-        let label: string = '';
+        let label: string = "";
         switch (type) {
             case ActionType.ADD:
-                label = 'Add or Update';
+                label = "Add or Update";
                 break;
             case ActionType.DELETE:
-                label = 'Delete';
+                label = "Delete";
                 break;
             case ActionType.SEND:
-                label = 'Send';
+                label = "Send";
                 break;
             case ActionType.SEND_AND_DELETE:
-                label = 'Send and delete';
+                label = "Send and delete";
                 break;
             case ActionType.TRIGGER:
-                label = 'Trigger';
+                label = "Trigger";
                 break;
         }
         return label;

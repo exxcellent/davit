@@ -1,8 +1,8 @@
-import React, { FunctionComponent } from 'react';
-import { DropdownProps } from 'semantic-ui-react';
-import { GoToTypes } from '../../../../dataAccess/access/types/GoToType';
-import { GoToTypesChain } from '../../../../dataAccess/access/types/GoToTypeChain';
-import { DavitDropDown, DavitDropDownItemProps } from './DavitDropDown';
+import React, { FunctionComponent } from "react";
+import { DropdownProps } from "semantic-ui-react";
+import { GoToTypes } from "../../../../dataAccess/access/types/GoToType";
+import { GoToTypesChain } from "../../../../dataAccess/access/types/GoToTypeChain";
+import { DavitDropDown, DavitDropDownItemProps } from "./DavitDropDown";
 
 interface GoToChainOptionDropDownProps extends DropdownProps {
     onSelect: (gotoType: GoToTypesChain | undefined) => void;

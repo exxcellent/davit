@@ -1,5 +1,5 @@
-import { DataTO } from '../to/DataTO';
-import { GeometricalDataCTO } from './GeometraicalDataCTO';
+import { DataTO } from "../to/DataTO";
+import { GeometricalDataCTO } from "./GeometraicalDataCTO";
 
 export class DataCTO {
     constructor(

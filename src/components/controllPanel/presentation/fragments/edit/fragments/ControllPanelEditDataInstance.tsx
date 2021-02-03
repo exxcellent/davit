@@ -1,17 +1,17 @@
-import React, { FunctionComponent, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Input } from 'semantic-ui-react';
-import { DataCTO } from '../../../../../../dataAccess/access/cto/DataCTO';
-import { DataInstanceTO } from '../../../../../../dataAccess/access/to/DataInstanceTO';
-import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
-import { handleError } from '../../../../../../slices/GlobalSlice';
-import { EditData } from '../../../../../../slices/thunks/DataThunks';
-import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
-import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
-import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { DavitLabelTextfield } from '../common/fragments/DavitLabelTextfield';
-import { OptionField } from '../common/OptionField';
+import React, { FunctionComponent, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Input } from "semantic-ui-react";
+import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
+import { DataInstanceTO } from "../../../../../../dataAccess/access/to/DataInstanceTO";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
+import { handleError } from "../../../../../../slices/GlobalSlice";
+import { EditData } from "../../../../../../slices/thunks/DataThunks";
+import { DavitUtil } from "../../../../../../utils/DavitUtil";
+import { DavitButtonIcon, DavitButtonLabel } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
+import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditDataInstanceProps {
     hidden: boolean;
@@ -80,7 +80,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
     useEffect(() => {
         // check if component to edit is really set or go back to edit mode
         if (dataToEdit === null && instanceId === -1) {
-            handleError('Tried to go to edit data without dataToedit specified');
+            handleError("Tried to go to edit data without dataToedit specified");
             dispatch(EditActions.setMode.edit());
         }
     });
@@ -97,7 +97,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
         if (dataToEdit !== null && instanceId !== null) {
             const copyData: DataCTO = DavitUtil.deepCopy(dataToEdit);
             const instance: DataInstanceTO | undefined = copyData.data.instances.find((inst) => inst.id === instanceId);
-            if (instance && instance.name === '') {
+            if (instance && instance.name === "") {
                 if (instance.id === -1) {
                     deleteDataInstance();
                 } else {
@@ -112,7 +112,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
     const saveOnBlure = () => {
         if (dataToEdit !== null && instanceId !== null) {
             const copyData: DataCTO = DavitUtil.deepCopy(dataToEdit);
-            if (copyData.data.instances.find((inst) => inst.id === instanceId)!.name !== '') {
+            if (copyData.data.instances.find((inst) => inst.id === instanceId)!.name !== "") {
                 dispatch(EditData.save(copyData));
             }
         }
@@ -134,12 +134,12 @@ const useControllPanelEditDataInstanceViewModel = () => {
     };
 
     const getName = (): string => {
-        let name = '';
+        let name = "";
         const instance = dataToEdit?.data.instances.find((inst) => inst.id === instanceId);
         if (instance) {
             name = instance.name;
         } else {
-            name = 'could not find instance!';
+            name = "could not find instance!";
         }
         return name;
     };
@@ -153,7 +153,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
     };
 
     return {
-        label: 'EDIT * DATA * INSTANCE',
+        label: "EDIT * DATA * INSTANCE",
         getName,
         changeName,
         goBack,

@@ -1,7 +1,7 @@
-import { DAVIT_VERISON, DEFAULT_PROJECT_NAME, STORE_ID } from '../app/DavitConstants';
-import { DataStoreCTO } from './access/cto/DataStoreCTO';
-import { StoreTO } from './access/to/StoreTO';
-import { DavitVersionManager } from './migration/DavitVersionManager';
+import { DAVIT_VERISON, DEFAULT_PROJECT_NAME, STORE_ID } from "../app/DavitConstants";
+import { DataStoreCTO } from "./access/cto/DataStoreCTO";
+import { StoreTO } from "./access/to/StoreTO";
+import { DavitVersionManager } from "./migration/DavitVersionManager";
 
 class DataStore {
     static instance: DataStore;
@@ -104,7 +104,7 @@ class DataStore {
     }
 
     public storeFileData(fileData: string) {
-        console.log('Writing to storage:');
+        console.log("Writing to storage:");
         console.log(fileData);
         const objectStore: StoreTO = JSON.parse(fileData);
         this.readData(objectStore);
@@ -113,10 +113,10 @@ class DataStore {
 
     public downloadData(projectName: string) {
         const dataStr = JSON.stringify(this.getDataStoreObject());
-        const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-        const linkElement = document.createElement('a');
-        linkElement.setAttribute('href', dataUri);
-        linkElement.setAttribute('download', projectName + '.json');
+        const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+        const linkElement = document.createElement("a");
+        linkElement.setAttribute("href", dataUri);
+        linkElement.setAttribute("download", projectName + ".json");
         linkElement.click();
     }
 
@@ -131,7 +131,7 @@ class DataStore {
     }
 
     public roleBack(): void {
-        console.warn('Data Store: role back.');
+        console.warn("Data Store: role back.");
         this.readDataFromStorage();
     }
 
@@ -142,6 +142,7 @@ class DataStore {
         return this.data!;
     }
 }
+
 const dataStore = new DataStore();
 
 export default dataStore;

@@ -1,4 +1,4 @@
-import { AbstractTO } from './AbstractTO';
+import { AbstractTO } from "./AbstractTO";
 
 export class ConditionTO extends AbstractTO {
     constructor(

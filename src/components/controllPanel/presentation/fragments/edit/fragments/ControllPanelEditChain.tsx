@@ -1,23 +1,23 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, Input } from 'semantic-ui-react';
-import { ChainDecisionTO } from '../../../../../../dataAccess/access/to/ChainDecisionTO';
-import { ChainlinkTO } from '../../../../../../dataAccess/access/to/ChainlinkTO';
-import { ChainTO } from '../../../../../../dataAccess/access/to/ChainTO';
-import { SequenceTO } from '../../../../../../dataAccess/access/to/SequenceTO';
-import { EditActions } from '../../../../../../slices/EditSlice';
-import { masterDataSelectors } from '../../../../../../slices/MasterDataSlice';
-import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
-import { EditChain } from '../../../../../../slices/thunks/ChainThunks';
-import { EditSequence } from '../../../../../../slices/thunks/SequenceThunks';
-import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
-import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
-import { ChainDecisionDropDownButton } from '../../../../../common/fragments/dropdowns/ChainDecisionDropDown';
-import { ChainLinkDropDownButton } from '../../../../../common/fragments/dropdowns/ChainLinkDropDown';
-import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { DavitLabelTextfield } from '../common/fragments/DavitLabelTextfield';
-import { OptionField } from '../common/OptionField';
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Button, Input } from "semantic-ui-react";
+import { ChainDecisionTO } from "../../../../../../dataAccess/access/to/ChainDecisionTO";
+import { ChainlinkTO } from "../../../../../../dataAccess/access/to/ChainlinkTO";
+import { ChainTO } from "../../../../../../dataAccess/access/to/ChainTO";
+import { SequenceTO } from "../../../../../../dataAccess/access/to/SequenceTO";
+import { EditActions } from "../../../../../../slices/EditSlice";
+import { masterDataSelectors } from "../../../../../../slices/MasterDataSlice";
+import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
+import { EditChain } from "../../../../../../slices/thunks/ChainThunks";
+import { EditSequence } from "../../../../../../slices/thunks/SequenceThunks";
+import { DavitUtil } from "../../../../../../utils/DavitUtil";
+import { DavitButtonIcon, DavitButtonLabel } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { ChainDecisionDropDownButton } from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
+import { ChainLinkDropDownButton } from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
+import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
+import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditChainProps {
     hidden: boolean;
@@ -108,7 +108,7 @@ const useControllPanelEditChainViewModel = () => {
     useEffect(() => {
         // check if sequence to edit is really set or gos back to edit mode
         if (DavitUtil.isNullOrUndefined(selectedChain)) {
-            console.warn('Tried to go to edit sequence without chain specified' + selectedChain);
+            console.warn("Tried to go to edit sequence without chain specified" + selectedChain);
             dispatch(EditActions.setMode.edit());
         }
         if (selectedChain?.id !== -1) {
@@ -128,7 +128,7 @@ const useControllPanelEditChainViewModel = () => {
 
     const saveChain = (newMode?: string) => {
         if (!DavitUtil.isNullOrUndefined(selectedChain)) {
-            if (selectedChain!.name !== '') {
+            if (selectedChain!.name !== "") {
                 dispatch(EditChain.save(selectedChain!));
             } else {
                 dispatch(EditChain.delete(selectedChain!));
@@ -185,7 +185,7 @@ const useControllPanelEditChainViewModel = () => {
     };
 
     return {
-        label: 'EDIT * ' + (selectedChain?.name || ''),
+        label: "EDIT * " + (selectedChain?.name || ""),
         name: selectedChain?.name,
         id: selectedChain?.id ? selectedChain.id : -1,
         changeName,

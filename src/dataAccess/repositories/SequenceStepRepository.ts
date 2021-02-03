@@ -1,8 +1,8 @@
-import { SequenceStepTO } from '../access/to/SequenceStepTO';
-import { ConstraintsHelper } from '../ConstraintsHelper';
-import dataStore from '../DataStore';
-import { CheckHelper } from '../util/CheckHelper';
-import { DataAccessUtil } from '../util/DataAccessUtil';
+import { SequenceStepTO } from "../access/to/SequenceStepTO";
+import { ConstraintsHelper } from "../ConstraintsHelper";
+import dataStore from "../DataStore";
+import { CheckHelper } from "../util/CheckHelper";
+import { DataAccessUtil } from "../util/DataAccessUtil";
 
 export const SequenceStepRepository = {
     find(stepId: number): SequenceStepTO | undefined {
@@ -21,13 +21,13 @@ export const SequenceStepRepository = {
         ConstraintsHelper.deleteStepConstraintCheck(step.id, dataStore.getDataStore());
         const success = dataStore.getDataStore().steps.delete(step.id);
         if (!success) {
-            throw new Error('dataAccess.repository.error.notExists');
+            throw new Error("dataAccess.repository.error.notExists");
         }
         return step;
     },
 
     save(sequenceStep: SequenceStepTO): SequenceStepTO {
-        CheckHelper.nullCheck(sequenceStep, 'sequenceStep');
+        CheckHelper.nullCheck(sequenceStep, "sequenceStep");
         let sequenceStepTO: SequenceStepTO;
         if (sequenceStep.id === -1) {
             sequenceStepTO = {

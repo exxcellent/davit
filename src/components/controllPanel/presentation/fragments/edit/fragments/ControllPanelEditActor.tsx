@@ -1,17 +1,17 @@
-import React, { FunctionComponent, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Input } from 'semantic-ui-react';
-import { ActorCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
-import { GroupTO } from '../../../../../../dataAccess/access/to/GroupTO';
-import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
-import { handleError } from '../../../../../../slices/GlobalSlice';
-import { EditActor } from '../../../../../../slices/thunks/ActorThunks';
-import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
-import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
-import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { DavitLabelTextfield } from '../common/fragments/DavitLabelTextfield';
-import { OptionField } from '../common/OptionField';
+import React, { FunctionComponent, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Input } from "semantic-ui-react";
+import { ActorCTO } from "../../../../../../dataAccess/access/cto/ActorCTO";
+import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
+import { handleError } from "../../../../../../slices/GlobalSlice";
+import { EditActor } from "../../../../../../slices/thunks/ActorThunks";
+import { DavitUtil } from "../../../../../../utils/DavitUtil";
+import { DavitButtonIcon, DavitButtonLabel } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
+import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditActorProps {
     hidden: boolean;
@@ -75,7 +75,7 @@ const useControllPanelEditActorViewModel = () => {
     useEffect(() => {
         // check if component to edit is really set or gos back to edit mode
         if (DavitUtil.isNullOrUndefined(actorToEdit)) {
-            handleError('Tried to go to edit component without componentToedit specified');
+            handleError("Tried to go to edit component without componentToedit specified");
             EditActions.setMode.edit();
         }
         // used to focus the textfield on create another
@@ -95,7 +95,7 @@ const useControllPanelEditActorViewModel = () => {
 
     const saveActor = (newMode?: string) => {
         if (!DavitUtil.isNullOrUndefined(actorToEdit)) {
-            if (actorToEdit?.actor.name !== '') {
+            if (actorToEdit?.actor.name !== "") {
                 dispatch(EditActor.save(actorToEdit!));
             } else {
                 deleteActor();
@@ -126,7 +126,7 @@ const useControllPanelEditActorViewModel = () => {
     };
 
     return {
-        label: 'EDIT * ' + (actorToEdit?.actor.name || ''),
+        label: "EDIT * " + (actorToEdit?.actor.name || ""),
         name: actorToEdit?.actor.name,
         changeName,
         saveComponent: saveActor,

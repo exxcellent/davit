@@ -1,7 +1,7 @@
-import React, { FunctionComponent } from 'react';
-import { IconProps } from 'semantic-ui-react';
-import { SemanticShorthandItem } from 'semantic-ui-react/dist/commonjs/generic';
-import { DavitTableButton } from './buttons/DavitTableButton';
+import React, { FunctionComponent } from "react";
+import { IconProps } from "semantic-ui-react";
+import { SemanticShorthandItem } from "semantic-ui-react/dist/commonjs/generic";
+import { DavitTableButton } from "./buttons/DavitTableButton";
 
 export interface DavitTableProps {
     header: string[];
@@ -53,7 +53,7 @@ export const DavitTable: FunctionComponent<DavitTableProps> = (props) => {
         const numberOfColumns = bodyData[0]?.data.length || 1;
         const emptyRows = [];
         for (let i = filledRows; i <= 10; i++) {
-            emptyRows.push(createEmptyRow(i.toString(), numberOfColumns, 'carv2Tr'));
+            emptyRows.push(createEmptyRow(i.toString(), numberOfColumns, "carv2Tr"));
         }
         return emptyRows;
     };
@@ -77,7 +77,7 @@ export const DavitTable: FunctionComponent<DavitTableProps> = (props) => {
                 {bodyData.map(createRow)}
                 {addFunction && (
                     <tr>
-                        <td>{createButton({ icon: 'add', callback: addFunction }, 0)}</td>
+                        <td>{createButton({ icon: "add", callback: addFunction }, 0)}</td>
                     </tr>
                 )}
                 {fillWithEmptyRows()}

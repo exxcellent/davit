@@ -1,11 +1,11 @@
-import { DavitUtil } from '../../utils/DavitUtil';
-import { DataStoreCTO } from '../access/cto/DataStoreCTO';
-import { DataInstanceTO } from '../access/to/DataInstanceTO';
-import { DataTO } from '../access/to/DataTO';
-import { ConstraintsHelper } from '../ConstraintsHelper';
-import dataStore from '../DataStore';
-import { CheckHelper } from '../util/CheckHelper';
-import { DataAccessUtil } from '../util/DataAccessUtil';
+import { DavitUtil } from "../../utils/DavitUtil";
+import { DataStoreCTO } from "../access/cto/DataStoreCTO";
+import { DataInstanceTO } from "../access/to/DataInstanceTO";
+import { DataTO } from "../access/to/DataTO";
+import { ConstraintsHelper } from "../ConstraintsHelper";
+import dataStore from "../DataStore";
+import { CheckHelper } from "../util/CheckHelper";
+import { DataAccessUtil } from "../util/DataAccessUtil";
 
 export const DataRepository = {
     find(dataId: number): DataTO | undefined {
@@ -17,7 +17,7 @@ export const DataRepository = {
     },
 
     save(data: DataTO) {
-        CheckHelper.nullCheck(data, 'data');
+        CheckHelper.nullCheck(data, "data");
 
         if (data.instances.length <= 0) {
             throw new Error(`dataTO with id: ${data.id} has no instances!`);
@@ -41,7 +41,7 @@ export const DataRepository = {
         );
         const success = dataStore.getDataStore().datas.delete(dataTO.id!);
         if (!success) {
-            throw new Error('dataAccess.repository.error.notExists');
+            throw new Error("dataAccess.repository.error.notExists");
         }
         return dataTO;
     },

@@ -1,19 +1,19 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppThunk, RootState } from '../app/store';
-import { ActorCTO } from '../dataAccess/access/cto/ActorCTO';
-import { DataCTO } from '../dataAccess/access/cto/DataCTO';
-import { SequenceStepCTO } from '../dataAccess/access/cto/SequenceStepCTO';
-import { ChainDecisionTO } from '../dataAccess/access/to/ChainDecisionTO';
-import { ChainlinkTO } from '../dataAccess/access/to/ChainlinkTO';
-import { ChainTO } from '../dataAccess/access/to/ChainTO';
-import { DataRelationTO } from '../dataAccess/access/to/DataRelationTO';
-import { DataSetupTO } from '../dataAccess/access/to/DataSetupTO';
-import { GroupTO } from '../dataAccess/access/to/GroupTO';
-import { SequenceTO } from '../dataAccess/access/to/SequenceTO';
-import { DataAccess } from '../dataAccess/DataAccess';
-import { DataAccessResponse } from '../dataAccess/DataAccessResponse';
-import { DavitUtil } from '../utils/DavitUtil';
-import { handleError } from './GlobalSlice';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AppThunk, RootState } from "../app/store";
+import { ActorCTO } from "../dataAccess/access/cto/ActorCTO";
+import { DataCTO } from "../dataAccess/access/cto/DataCTO";
+import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
+import { ChainDecisionTO } from "../dataAccess/access/to/ChainDecisionTO";
+import { ChainlinkTO } from "../dataAccess/access/to/ChainlinkTO";
+import { ChainTO } from "../dataAccess/access/to/ChainTO";
+import { DataRelationTO } from "../dataAccess/access/to/DataRelationTO";
+import { DataSetupTO } from "../dataAccess/access/to/DataSetupTO";
+import { GroupTO } from "../dataAccess/access/to/GroupTO";
+import { SequenceTO } from "../dataAccess/access/to/SequenceTO";
+import { DataAccess } from "../dataAccess/DataAccess";
+import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
+import { DavitUtil } from "../utils/DavitUtil";
+import { handleError } from "./GlobalSlice";
 
 interface MasterDataState {
     actors: ActorCTO[];
@@ -26,6 +26,7 @@ interface MasterDataState {
     chainLinks: ChainlinkTO[];
     chainDecisions: ChainDecisionTO[];
 }
+
 const getInitialState: MasterDataState = {
     actors: [],
     groups: [],
@@ -39,7 +40,7 @@ const getInitialState: MasterDataState = {
 };
 
 const MasterDataSlice = createSlice({
-    name: 'masterData',
+    name: "masterData",
     initialState: getInitialState,
     reducers: {
         setActors: (state, action: PayloadAction<ActorCTO[]>) => {

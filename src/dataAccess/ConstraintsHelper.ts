@@ -1,5 +1,5 @@
-import { DataStoreCTO } from './access/cto/DataStoreCTO';
-import { GoToTypes } from './access/types/GoToType';
+import { DataStoreCTO } from "./access/cto/DataStoreCTO";
+import { GoToTypes } from "./access/types/GoToType";
 
 export const ConstraintsHelper = {
     deleteDataConstraintCheck(dataId: number, dataStore: DataStoreCTO) {

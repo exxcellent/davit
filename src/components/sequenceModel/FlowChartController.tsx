@@ -1,22 +1,22 @@
 /* eslint-disable no-case-declarations */
-import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
-import { ArcherContainer, ArcherElement, Relation } from 'react-archer';
-import { useSelector } from 'react-redux';
-import { ChainCTO } from '../../dataAccess/access/cto/ChainCTO';
-import { ChainlinkCTO } from '../../dataAccess/access/cto/ChainlinkCTO';
-import { SequenceCTO } from '../../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../../dataAccess/access/cto/SequenceStepCTO';
-import { ChainDecisionTO } from '../../dataAccess/access/to/ChainDecisionTO';
-import { DecisionTO } from '../../dataAccess/access/to/DecisionTO';
-import { GoTo, GoToTypes, Terminal } from '../../dataAccess/access/types/GoToType';
-import { GoToChain, GoToTypesChain, TerminalChain } from '../../dataAccess/access/types/GoToTypeChain';
-import { CalcChain } from '../../services/SequenceChainService';
-import { handleError } from '../../slices/GlobalSlice';
-import { sequenceModelSelectors } from '../../slices/SequenceModelSlice';
-import { DavitUtil } from '../../utils/DavitUtil';
-import { TabFragment } from '../sequenceTableModel/fragments/TabFragment';
-import { TabGroupFragment } from '../sequenceTableModel/fragments/TabGroupFragment';
-import { FlowChartlabel } from './FlowChartlabel';
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import { ArcherContainer, ArcherElement, Relation } from "react-archer";
+import { useSelector } from "react-redux";
+import { ChainCTO } from "../../dataAccess/access/cto/ChainCTO";
+import { ChainlinkCTO } from "../../dataAccess/access/cto/ChainlinkCTO";
+import { SequenceCTO } from "../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
+import { ChainDecisionTO } from "../../dataAccess/access/to/ChainDecisionTO";
+import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
+import { GoTo, GoToTypes, Terminal } from "../../dataAccess/access/types/GoToType";
+import { GoToChain, GoToTypesChain, TerminalChain } from "../../dataAccess/access/types/GoToTypeChain";
+import { CalcChain } from "../../services/SequenceChainService";
+import { handleError } from "../../slices/GlobalSlice";
+import { sequenceModelSelectors } from "../../slices/SequenceModelSlice";
+import { DavitUtil } from "../../utils/DavitUtil";
+import { TabFragment } from "../sequenceTableModel/fragments/TabFragment";
+import { TabGroupFragment } from "../sequenceTableModel/fragments/TabGroupFragment";
+import { FlowChartlabel } from "./FlowChartlabel";
 
 interface FlowChartControllerProps {
     fullScreen?: boolean;
@@ -55,10 +55,10 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
         };
 
         resizeListener();
-        window.addEventListener('resize', resizeListener);
+        window.addEventListener("resize", resizeListener);
 
         return () => {
-            window.removeEventListener('resize', resizeListener);
+            window.removeEventListener("resize", resizeListener);
         };
     }, [parentRef]);
 
@@ -68,13 +68,13 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
         if (node.parentId) {
             rel.push({
                 targetId: node.parentId,
-                targetAnchor: 'bottom',
-                sourceAnchor: 'top',
+                targetAnchor: "bottom",
+                sourceAnchor: "top",
                 style: {
                     strokeColor:
                         calcSteps.find((step) => step === node.parentId) && calcSteps.find((step) => step === node.id)
                             ? lineColor()
-                            : 'var(--carv2-background-color-header)',
+                            : "var(--carv2-background-color-header)",
                     strokeWidth:
                         calcSteps.find((step) => step === node.parentId) && calcSteps.find((step) => step === node.id)
                             ? 5
@@ -84,21 +84,21 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
         }
 
         return (
-            <div className="flowChartFlex" style={{ margin: node.id === 'root' ? '' : '50px 0' }} key={node.id}>
+            <div className="flowChartFlex" style={{ margin: node.id === "root" ? "" : "50px 0" }} key={node.id}>
                 <ArcherElement id={node.id} relations={rel}>
                     <div
-                        className={node.id === 'root' ? 'ROOT' : node.leafType}
-                        id={currentStepId === node.id ? 'flowChartCurrentStep' : ''}>
-                        {node.id === 'root' || node.leafType === GoToTypes.DEC ? '' : node.label}
+                        className={node.id === "root" ? "ROOT" : node.leafType}
+                        id={currentStepId === node.id ? "flowChartCurrentStep" : ""}>
+                        {node.id === "root" || node.leafType === GoToTypes.DEC ? "" : node.label}
                     </div>
                 </ArcherElement>
                 {node.leafType === GoToTypes.DEC && <div className="condLabel">{node.label}</div>}
                 <div
                     style={{
-                        display: 'flex',
-                        justifyContent: 'space-around',
-                        alignItems: 'start',
-                        width: '100%',
+                        display: "flex",
+                        justifyContent: "space-around",
+                        alignItems: "start",
+                        width: "100%",
                     }}>
                     {node.childs.map(buildSequenceChart)}
                 </div>
@@ -112,14 +112,14 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
         if (node.parentId) {
             rel.push({
                 targetId: node.parentId,
-                targetAnchor: 'bottom',
-                sourceAnchor: 'top',
+                targetAnchor: "bottom",
+                sourceAnchor: "top",
                 style: {
                     strokeColor:
                         calcLinkIds?.find((link) => link === node.parentId) &&
                         calcLinkIds.find((link) => link === node.id)
                             ? chainLineColor()
-                            : 'var(--carv2-background-color-header)',
+                            : "var(--carv2-background-color-header)",
                     strokeWidth:
                         calcLinkIds?.find((link) => link === node.parentId) &&
                         calcLinkIds.find((link) => link === node.id)
@@ -130,19 +130,19 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
         }
 
         return (
-            <div className="flowChartFlex" style={{ margin: node.id === 'root' ? '' : '50px 0' }} key={node.id}>
+            <div className="flowChartFlex" style={{ margin: node.id === "root" ? "" : "50px 0" }} key={node.id}>
                 <ArcherElement id={node.id} relations={rel}>
-                    <div className={node.leafType} id={currentLinkId === node.id ? 'flowChartCurrentStep' : ''}>
-                        {node.leafType === GoToTypesChain.DEC ? '' : node.label}
+                    <div className={node.leafType} id={currentLinkId === node.id ? "flowChartCurrentStep" : ""}>
+                        {node.leafType === GoToTypesChain.DEC ? "" : node.label}
                     </div>
                 </ArcherElement>
                 {node.leafType === GoToTypesChain.DEC && <div className="condLabel">{node.label}</div>}
                 <div
                     style={{
-                        display: 'flex',
-                        justifyContent: 'space-around',
-                        alignItems: 'start',
-                        width: '100%',
+                        display: "flex",
+                        justifyContent: "space-around",
+                        alignItems: "start",
+                        width: "100%",
                     }}>
                     {node.childs.map(buildChainChart)}
                 </div>
@@ -167,15 +167,15 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
     };
 
     return (
-        <div className={fullScreen ? 'fullscreen' : 'sequencModel'} ref={parentRef}>
-            <div style={{ display: 'flex', position: 'absolute', zIndex: 1, width: '47vw' }}>
+        <div className={fullScreen ? "fullscreen" : "sequencModel"} ref={parentRef}>
+            <div style={{ display: "flex", position: "absolute", zIndex: 1, width: "47vw" }}>
                 {chain && (
-                    <TabGroupFragment label="Mode" style={{ backgroundColor: 'var(--carv2-background-color-header)' }}>
+                    <TabGroupFragment label="Mode" style={{ backgroundColor: "var(--carv2-background-color-header)" }}>
                         <TabFragment label="Chain" isActive={showChain} onClick={() => setShowChain(true)} />
                         <TabFragment label="Sequence" isActive={!showChain} onClick={() => setShowChain(false)} />
                     </TabGroupFragment>
                 )}
-                <div style={{ marginLeft: 'auto' }}>
+                <div style={{ marginLeft: "auto" }}>
                     <FlowChartlabel label="CHAIN:" text={chainName} />
                     <FlowChartlabel label="SEQU.:" text={sequenceName} />
                 </div>
@@ -237,7 +237,7 @@ const useFlowChartViewModel = () => {
             );
             const rootCond: DecisionTO | undefined = sequence!.decisions.find((cond) => cond.root === true);
             if (!rootStep && !rootCond) {
-                handleError('No Root element found in Sequence!');
+                handleError("No Root element found in Sequence!");
             }
             if (rootStep && !rootCond) {
                 root.type = GoToTypes.STEP;
@@ -263,7 +263,7 @@ const useFlowChartViewModel = () => {
                 root.type = GoToTypesChain.LINK;
                 root.value = rootStep;
             } else {
-                handleError('No Root element found in Sequence!');
+                handleError("No Root element found in Sequence!");
             }
         }
         return root;
@@ -271,8 +271,8 @@ const useFlowChartViewModel = () => {
 
     const setGoToAsNode = (goto: GoTo, parentId: string, parentIds: string[]): NodeModel => {
         const nodeModel: NodeModel = {
-            id: '',
-            label: '',
+            id: "",
+            label: "",
             leafType: goto.type,
             parentId: parentId,
             childs: [],
@@ -283,7 +283,7 @@ const useFlowChartViewModel = () => {
                     const step: SequenceStepCTO | null =
                         sequence!.sequenceStepCTOs.find((step) => step.squenceStepTO.id === goto.id) || null;
                     if (step) {
-                        const prefix: string = '_STEP_' + step.squenceStepTO.id;
+                        const prefix: string = "_STEP_" + step.squenceStepTO.id;
                         nodeModel.id = parentId + prefix;
                         nodeModel.label = step.squenceStepTO.name;
                         if (!parentId.includes(prefix)) {
@@ -295,7 +295,7 @@ const useFlowChartViewModel = () => {
                 case GoToTypes.DEC:
                     const cond: DecisionTO | null = sequence!.decisions.find((cond) => cond.id === goto.id) || null;
                     if (cond) {
-                        const prefix: string = '_DEC_' + cond.id;
+                        const prefix: string = "_DEC_" + cond.id;
                         nodeModel.id = parentId + prefix;
                         nodeModel.label = cond.name;
 
@@ -308,13 +308,13 @@ const useFlowChartViewModel = () => {
                     }
                     break;
                 case GoToTypes.ERROR:
-                    nodeModel.id = parentId + '_ERROR';
+                    nodeModel.id = parentId + "_ERROR";
                     break;
                 case GoToTypes.FIN:
-                    nodeModel.id = parentId + '_FIN';
+                    nodeModel.id = parentId + "_FIN";
                     break;
                 case GoToTypes.IDLE:
-                    nodeModel.id = parentId + '_IDLE';
+                    nodeModel.id = parentId + "_IDLE";
                     break;
             }
         }
@@ -323,8 +323,8 @@ const useFlowChartViewModel = () => {
 
     const setGoToAsNodeChain = (goto: GoToChain, parentId: string, parentIds: string[]): NodeModelChain => {
         const nodeModel: NodeModelChain = {
-            id: '',
-            label: '',
+            id: "",
+            label: "",
             leafType: goto.type,
             parentId: parentId,
             childs: [],
@@ -335,7 +335,7 @@ const useFlowChartViewModel = () => {
                     const link: ChainlinkCTO | null =
                         chain!.links.find((link) => link.chainLink.id === goto.id) || null;
                     if (link) {
-                        const prefix: string = '_LINK_' + link.chainLink.id;
+                        const prefix: string = "_LINK_" + link.chainLink.id;
                         nodeModel.id = parentId + prefix;
                         nodeModel.label = link.chainLink.name;
                         if (!parentId.includes(prefix)) {
@@ -347,7 +347,7 @@ const useFlowChartViewModel = () => {
                 case GoToTypesChain.DEC:
                     const decision: ChainDecisionTO | null = chain!.decisions.find((dec) => dec.id === goto.id) || null;
                     if (decision) {
-                        const prefix: string = '_DEC_' + decision.id;
+                        const prefix: string = "_DEC_" + decision.id;
                         nodeModel.id = parentId + prefix;
                         nodeModel.label = decision.name;
 
@@ -360,10 +360,10 @@ const useFlowChartViewModel = () => {
                     }
                     break;
                 case GoToTypesChain.ERROR:
-                    nodeModel.id = parentId + '_ERROR';
+                    nodeModel.id = parentId + "_ERROR";
                     break;
                 case GoToTypesChain.FIN:
-                    nodeModel.id = parentId + '_FIN';
+                    nodeModel.id = parentId + "_FIN";
                     break;
             }
         }
@@ -393,7 +393,7 @@ const useFlowChartViewModel = () => {
 
     const buildNodeModelTree = (node: Node): NodeModel => {
         const parentIds: string[] = [];
-        const nodeModel: NodeModel = { id: 'root', label: '', leafType: node.type, childs: [] };
+        const nodeModel: NodeModel = { id: "root", label: "", leafType: node.type, childs: [] };
         switch (node.type) {
             case GoToTypes.STEP:
                 parentIds.push(nodeModel.id);
@@ -414,7 +414,7 @@ const useFlowChartViewModel = () => {
 
     const buildNodeModelChainTree = (node: NodeChain): NodeModelChain => {
         const parentIds: string[] = [];
-        const nodeModel: NodeModelChain = { id: '', label: '', leafType: node.type, childs: [] };
+        const nodeModel: NodeModelChain = { id: "", label: "", leafType: node.type, childs: [] };
         parentIds.push(nodeModel.id);
         if ((node.value as ChainlinkCTO).chainLink) {
             nodeModel.id = (node.value as ChainlinkCTO).chainLink.id.toString();
@@ -435,14 +435,14 @@ const useFlowChartViewModel = () => {
         if (terminalStep) {
             switch (terminalStep.type) {
                 case GoToTypes.ERROR:
-                    return 'var(--carv2-data-delete-color)';
+                    return "var(--carv2-data-delete-color)";
                 case GoToTypes.FIN:
-                    return 'var(--carv2-data-add-color)';
+                    return "var(--carv2-data-add-color)";
                 case GoToTypes.IDLE:
-                    return 'var(--carv2-color-exxcellent-blue)';
+                    return "var(--carv2-color-exxcellent-blue)";
             }
         } else {
-            return '#FF00FF';
+            return "#FF00FF";
         }
     };
 
@@ -450,12 +450,12 @@ const useFlowChartViewModel = () => {
         if (calcChain) {
             switch (calcChain.terminal.type) {
                 case GoToTypesChain.ERROR:
-                    return 'var(--carv2-data-delete-color)';
+                    return "var(--carv2-data-delete-color)";
                 case GoToTypesChain.FIN:
-                    return 'var(--carv2-data-add-color)';
+                    return "var(--carv2-data-add-color)";
             }
         } else {
-            return '#FF00FF';
+            return "#FF00FF";
         }
     };
 
@@ -470,7 +470,7 @@ const useFlowChartViewModel = () => {
         currentLinkId,
         sequence,
         chain,
-        chainName: chain?.chain.name || '',
-        sequenceName: sequence?.sequenceTO.name || '',
+        chainName: chain?.chain.name || "",
+        sequenceName: sequence?.sequenceTO.name || "",
     };
 };

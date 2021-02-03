@@ -1,15 +1,15 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { ActorCTO } from '../../../dataAccess/access/cto/ActorCTO';
-import { DataCTO } from '../../../dataAccess/access/cto/DataCTO';
-import { SequenceStepCTO } from '../../../dataAccess/access/cto/SequenceStepCTO';
-import { ActionTO } from '../../../dataAccess/access/to/ActionTO';
-import { ActionType } from '../../../dataAccess/access/types/ActionType';
-import { EditActions, editSelectors, Mode } from '../../../slices/EditSlice';
-import { masterDataSelectors } from '../../../slices/MasterDataSlice';
-import { SequenceModelActions } from '../../../slices/SequenceModelSlice';
-import { EditStep } from '../../../slices/thunks/StepThunks';
-import { DavitUtil } from '../../../utils/DavitUtil';
-import { DavitTableRowData } from '../../common/fragments/DavitTable';
+import { useDispatch, useSelector } from "react-redux";
+import { ActorCTO } from "../../../dataAccess/access/cto/ActorCTO";
+import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
+import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
+import { ActionTO } from "../../../dataAccess/access/to/ActionTO";
+import { ActionType } from "../../../dataAccess/access/types/ActionType";
+import { EditActions, editSelectors, Mode } from "../../../slices/EditSlice";
+import { masterDataSelectors } from "../../../slices/MasterDataSlice";
+import { SequenceModelActions } from "../../../slices/SequenceModelSlice";
+import { EditStep } from "../../../slices/thunks/StepThunks";
+import { DavitUtil } from "../../../utils/DavitUtil";
+import { DavitTableRowData } from "../../common/fragments/DavitTable";
 
 export const useGetStepActionTableData = (
     selectedStep: SequenceStepCTO | null,
@@ -65,24 +65,24 @@ export const useGetStepActionTableData = (
 
             const data: DataCTO | undefined = datas.find((data) => data.data.id === action.dataFk);
 
-            let dataName: string = 'Could not find data name';
+            let dataName: string = "Could not find data name";
 
             if (data) {
                 dataName = data.data.name;
                 if (action.actionType === ActionType.ADD) {
                     dataName =
                         dataName +
-                            ': ' +
+                            ": " +
                             data.data.instances.find((instance) => instance.id === action.instanceFk)?.name ||
-                        'Could not find instance name';
+                        "Could not find instance name";
                 }
             }
 
             const toActorName: string =
-                actors.find((actor) => actor.actor.id === action.receivingActorFk)?.actor.name || '';
+                actors.find((actor) => actor.actor.id === action.receivingActorFk)?.actor.name || "";
 
             const fromActorName: string =
-                actors.find((actor) => actor.actor.id === action.sendingActorFk)?.actor.name || '';
+                actors.find((actor) => actor.actor.id === action.sendingActorFk)?.actor.name || "";
 
             return createModelActionColumn(
                 index,
@@ -104,7 +104,7 @@ export const useGetStepActionTableData = (
     };
 };
 
-const header = ['INDEX', 'TYPE', 'DATA', 'TO', 'FROM', 'ACTIONS'];
+const header = ["INDEX", "TYPE", "DATA", "TO", "FROM", "ACTIONS"];
 
 const createModelActionColumn = (
     arrayIndex: number,
@@ -119,15 +119,15 @@ const createModelActionColumn = (
     marked?: boolean,
 ): DavitTableRowData => {
     const actionIndex: string = arrayIndex.toString();
-    const trClass = marked ? 'carv2TrMarked' : 'carv2Tr';
+    const trClass = marked ? "carv2TrMarked" : "carv2Tr";
 
     return {
         data: [actionIndex, actionType, dataName, toActorName, fromActorName],
         trClass,
         actions: [
-            { icon: 'angle up', callback: indexDecrementCallback, disable: arrayIndex === 0 },
-            { icon: 'angle down', callback: indexIncrementCallback, disable: arrayIndex >= arrayLength - 1 },
-            { icon: 'wrench', callback: editCallback },
+            { icon: "angle up", callback: indexDecrementCallback, disable: arrayIndex === 0 },
+            { icon: "angle down", callback: indexIncrementCallback, disable: arrayIndex >= arrayLength - 1 },
+            { icon: "wrench", callback: editCallback },
         ],
     };
 };

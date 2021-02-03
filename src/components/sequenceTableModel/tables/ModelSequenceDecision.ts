@@ -1,10 +1,10 @@
-import { useDispatch } from 'react-redux';
-import { SequenceCTO } from '../../../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../../../dataAccess/access/cto/SequenceStepCTO';
-import { DecisionTO } from '../../../dataAccess/access/to/DecisionTO';
-import { GoTo, GoToTypes, Intermediate } from '../../../dataAccess/access/types/GoToType';
-import { EditActions } from '../../../slices/EditSlice';
-import { DavitTableRowData } from '../../common/fragments/DavitTable';
+import { useDispatch } from "react-redux";
+import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
+import { DecisionTO } from "../../../dataAccess/access/to/DecisionTO";
+import { GoTo, GoToTypes, Intermediate } from "../../../dataAccess/access/types/GoToType";
+import { EditActions } from "../../../slices/EditSlice";
+import { DavitTableRowData } from "../../common/fragments/DavitTable";
 
 export const useGetModelSequenceDecisionTableData = (selectedSequence: SequenceCTO | null) => {
     const dispatch = useDispatch();
@@ -22,7 +22,7 @@ export const useGetModelSequenceDecisionTableData = (selectedSequence: SequenceC
     };
 };
 
-const header = ['NAME', 'IF GOTO', 'ELSE GOTO', 'ACTIONS', 'START'];
+const header = ["NAME", "IF GOTO", "ELSE GOTO", "ACTIONS", "START"];
 
 const createDecisionColumn = (
     decision: DecisionTO,
@@ -40,9 +40,9 @@ const createDecisionColumn = (
         selectedSequence?.sequenceStepCTOs || [],
         selectedSequence?.decisions || [],
     );
-    const root: string = decision.root ? 'start' : '';
-    const trClass = 'carv2Tr';
-    const editAction = { icon: 'wrench', callback: editCallback };
+    const root: string = decision.root ? "start" : "";
+    const trClass = "carv2Tr";
+    const editAction = { icon: "wrench", callback: editCallback };
 
     return {
         trClass,
@@ -52,7 +52,7 @@ const createDecisionColumn = (
 };
 
 function getGotoName(goto: GoTo, steps: SequenceStepCTO[], decisions: DecisionTO[]) {
-    let gotoName: string = 'could not find goto';
+    let gotoName: string = "could not find goto";
     switch (goto.type) {
         case GoToTypes.ERROR:
         case GoToTypes.FIN:

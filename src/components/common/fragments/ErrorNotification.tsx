@@ -1,7 +1,7 @@
-import React, { FunctionComponent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, Message, Transition } from 'semantic-ui-react';
-import { globalSlice, selectGlobalErrorState } from '../../../slices/GlobalSlice';
+import React, { FunctionComponent } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Button, Message, Transition } from "semantic-ui-react";
+import { globalSlice, selectGlobalErrorState } from "../../../slices/GlobalSlice";
 
 export interface ErrorNotificationProps {}
 

@@ -1,5 +1,5 @@
-import { ActionType } from '../types/ActionType';
-import { AbstractTO } from './AbstractTO';
+import { ActionType } from "../types/ActionType";
+import { AbstractTO } from "./AbstractTO";
 
 export class ActionTO extends AbstractTO {
     constructor(
@@ -9,7 +9,7 @@ export class ActionTO extends AbstractTO {
         public dataFk = -1,
         public instanceFk = -1,
         public actionType = ActionType.ADD,
-        public triggerText = '',
+        public triggerText = "",
         public index = -1,
     ) {
         super();

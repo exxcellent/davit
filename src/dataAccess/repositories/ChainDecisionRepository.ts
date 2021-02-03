@@ -1,7 +1,7 @@
-import { ChainDecisionTO } from '../access/to/ChainDecisionTO';
-import dataStore from '../DataStore';
-import { CheckHelper } from '../util/CheckHelper';
-import { DataAccessUtil } from '../util/DataAccessUtil';
+import { ChainDecisionTO } from "../access/to/ChainDecisionTO";
+import dataStore from "../DataStore";
+import { CheckHelper } from "../util/CheckHelper";
+import { DataAccessUtil } from "../util/DataAccessUtil";
 
 export const ChainDecisionRepository = {
     find(id: number): ChainDecisionTO | undefined {
@@ -22,13 +22,13 @@ export const ChainDecisionRepository = {
         // ConstraintsHelper.deleteStepConstraintCheck(step.id, dataStore.getDataStore());
         const success = dataStore.getDataStore().chaindecisions.delete(decision.id);
         if (!success) {
-            throw new Error('dataAccess.repository.error.notExists');
+            throw new Error("dataAccess.repository.error.notExists");
         }
         return decision;
     },
 
     save(decision: ChainDecisionTO): ChainDecisionTO {
-        CheckHelper.nullCheck(decision, 'decision');
+        CheckHelper.nullCheck(decision, "decision");
         let chaindecisionTO: ChainDecisionTO;
         if (decision.id === -1) {
             chaindecisionTO = {

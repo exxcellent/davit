@@ -1,6 +1,6 @@
-import { ActorTO } from '../to/ActorTO';
-import { DesignTO } from '../to/DesignTO';
-import { GeometricalDataCTO } from './GeometraicalDataCTO';
+import { ActorTO } from "../to/ActorTO";
+import { DesignTO } from "../to/DesignTO";
+import { GeometricalDataCTO } from "./GeometraicalDataCTO";
 
 export class ActorCTO {
     constructor(

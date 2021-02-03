@@ -1,8 +1,8 @@
-import { GroupTO } from '../access/to/GroupTO';
-import { ConstraintsHelper } from '../ConstraintsHelper';
-import dataStore from '../DataStore';
-import { CheckHelper } from '../util/CheckHelper';
-import { DataAccessUtil } from '../util/DataAccessUtil';
+import { GroupTO } from "../access/to/GroupTO";
+import { ConstraintsHelper } from "../ConstraintsHelper";
+import dataStore from "../DataStore";
+import { CheckHelper } from "../util/CheckHelper";
+import { DataAccessUtil } from "../util/DataAccessUtil";
 
 export const GroupRepository = {
     find(id: number): GroupTO | undefined {
@@ -17,20 +17,20 @@ export const GroupRepository = {
         ConstraintsHelper.deleteGroupConstraintCheck(group.id, dataStore.getDataStore());
         const success = dataStore.getDataStore().groups.delete(group.id!);
         if (!success) {
-            throw new Error('dataAccess.repository.error.notExists');
+            throw new Error("dataAccess.repository.error.notExists");
         }
         return group;
     },
 
     save(group: GroupTO): GroupTO {
-        CheckHelper.nullCheck(group, 'actor');
+        CheckHelper.nullCheck(group, "actor");
         let groupTO: GroupTO;
         if (group.id === -1) {
             groupTO = {
                 ...group,
                 id: DataAccessUtil.determineNewId(this.findAll()),
             };
-            console.info('set new actor id: ' + groupTO.id);
+            console.info("set new actor id: " + groupTO.id);
         } else {
             groupTO = { ...group };
         }

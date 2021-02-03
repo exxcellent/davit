@@ -1,10 +1,10 @@
-import { AppThunk } from '../../app/store';
-import { GroupTO } from '../../dataAccess/access/to/GroupTO';
-import { DataAccess } from '../../dataAccess/DataAccess';
-import { DataAccessResponse } from '../../dataAccess/DataAccessResponse';
-import { editActions, Mode } from '../EditSlice';
-import { handleError } from '../GlobalSlice';
-import { MasterDataActions } from '../MasterDataSlice';
+import { AppThunk } from "../../app/store";
+import { GroupTO } from "../../dataAccess/access/to/GroupTO";
+import { DataAccess } from "../../dataAccess/DataAccess";
+import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
+import { editActions, Mode } from "../EditSlice";
+import { handleError } from "../GlobalSlice";
+import { MasterDataActions } from "../MasterDataSlice";
 
 const createGroupThunk = (): AppThunk => (dispatch) => {
     const group: GroupTO = new GroupTO();
@@ -41,7 +41,7 @@ const setGroupToEditThunk = (group: GroupTO): AppThunk => (dispatch, getState) =
     if (mode === Mode.EDIT_DATA || mode === Mode.EDIT_DATA_INSTANCE) {
         dispatch(editActions.setGroupToEdit(group));
     } else {
-        handleError('Try to set data to edit in mode: ' + mode);
+        handleError("Try to set data to edit in mode: " + mode);
     }
 };
 

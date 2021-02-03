@@ -1,7 +1,7 @@
-import React, { createRef, FunctionComponent } from 'react';
-import { useDispatch } from 'react-redux';
-import { GlobalActions } from '../../../../slices/GlobalSlice';
-import { DavitButtonIcon } from './DavitButton';
+import React, { createRef, FunctionComponent } from "react";
+import { useDispatch } from "react-redux";
+import { GlobalActions } from "../../../../slices/GlobalSlice";
+import { DavitButtonIcon } from "./DavitButton";
 
 export interface DavitFileInputProps {}
 

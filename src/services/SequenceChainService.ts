@@ -1,12 +1,12 @@
-import { ChainCTO } from '../dataAccess/access/cto/ChainCTO';
-import { ChainlinkCTO } from '../dataAccess/access/cto/ChainlinkCTO';
-import { DataSetupCTO } from '../dataAccess/access/cto/DataSetupCTO';
-import { ActionTO } from '../dataAccess/access/to/ActionTO';
-import { ChainDecisionTO } from '../dataAccess/access/to/ChainDecisionTO';
-import { GoToChain, GoToTypesChain, TerminalChain } from '../dataAccess/access/types/GoToTypeChain';
-import { DavitUtil } from '../utils/DavitUtil';
-import { ActorData } from '../viewDataTypes/ActorData';
-import { CalcSequence, SequenceService } from './SequenceService';
+import { ChainCTO } from "../dataAccess/access/cto/ChainCTO";
+import { ChainlinkCTO } from "../dataAccess/access/cto/ChainlinkCTO";
+import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
+import { ActionTO } from "../dataAccess/access/to/ActionTO";
+import { ChainDecisionTO } from "../dataAccess/access/to/ChainDecisionTO";
+import { GoToChain, GoToTypesChain, TerminalChain } from "../dataAccess/access/types/GoToTypeChain";
+import { DavitUtil } from "../utils/DavitUtil";
+import { ActorData } from "../viewDataTypes/ActorData";
+import { CalcSequence, SequenceService } from "./SequenceService";
 
 export interface CalcChainLink {
     name: string;
@@ -36,7 +36,7 @@ export const SequenceChainService = {
             if (root) {
                 let step: ChainlinkCTO | ChainDecisionTO | TerminalChain = root;
                 let type = getType(step);
-                let stepId: string = '';
+                let stepId: string = "";
 
                 while (!isLooping(loopStartingStep) && (type === GoToTypesChain.LINK || type === GoToTypesChain.DEC)) {
                     if (type === GoToTypesChain.LINK) {
@@ -53,8 +53,8 @@ export const SequenceChainService = {
                         actorDatas = result.steps.length > 0 ? result.steps[result.steps.length - 1].actorDatas : [];
 
                         // STEP ID
-                        const newLinkId = '_LINK_' + link.chainLink.id;
-                        stepId = stepId === '' ? link.chainLink.id.toString() : stepId + newLinkId;
+                        const newLinkId = "_LINK_" + link.chainLink.id;
+                        stepId = stepId === "" ? link.chainLink.id.toString() : stepId + newLinkId;
                         calcSequenceChain.linkIds.push(stepId);
 
                         calcSequenceChain.calcLinks.push({
@@ -80,14 +80,14 @@ export const SequenceChainService = {
                         step = getNext(goTo, sequenceChain);
                         type = getType(step);
 
-                        const newCondID = '_DEC_' + decision.id;
-                        stepId = stepId === '' ? 'root' : stepId + newCondID;
+                        const newCondID = "_DEC_" + decision.id;
+                        stepId = stepId === "" ? "root" : stepId + newCondID;
                         calcSequenceChain.linkIds.push(stepId);
                     }
                 }
                 if (!isLooping(loopStartingStep)) {
                     calcSequenceChain.terminal = step as TerminalChain;
-                    calcSequenceChain.linkIds.push(stepId + '_' + (step as TerminalChain).type);
+                    calcSequenceChain.linkIds.push(stepId + "_" + (step as TerminalChain).type);
                 }
             }
         }
@@ -150,7 +150,7 @@ const getType = (step: ChainlinkCTO | ChainDecisionTO | TerminalChain): GoToType
     } else if ((step as TerminalChain).type) {
         return (step as TerminalChain).type;
     } else {
-        throw Error('Illegal Type in Sequence');
+        throw Error("Illegal Type in Sequence");
     }
 };
 

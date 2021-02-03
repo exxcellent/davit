@@ -1,19 +1,19 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, Input } from 'semantic-ui-react';
-import { ActorCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
-import { DataSetupCTO } from '../../../../../../dataAccess/access/cto/DataSetupCTO';
-import { InitDataTO } from '../../../../../../dataAccess/access/to/InitDataTO';
-import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
-import { handleError } from '../../../../../../slices/GlobalSlice';
-import { EditDataSetup } from '../../../../../../slices/thunks/DataSetupThunks';
-import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
-import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
-import { InitDataDropDownButton } from '../../../../../common/fragments/dropdowns/InitDataDropDown';
-import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { DavitLabelTextfield } from '../common/fragments/DavitLabelTextfield';
-import { OptionField } from '../common/OptionField';
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Button, Input } from "semantic-ui-react";
+import { ActorCTO } from "../../../../../../dataAccess/access/cto/ActorCTO";
+import { DataSetupCTO } from "../../../../../../dataAccess/access/cto/DataSetupCTO";
+import { InitDataTO } from "../../../../../../dataAccess/access/to/InitDataTO";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
+import { handleError } from "../../../../../../slices/GlobalSlice";
+import { EditDataSetup } from "../../../../../../slices/thunks/DataSetupThunks";
+import { DavitUtil } from "../../../../../../utils/DavitUtil";
+import { DavitButtonIcon, DavitButtonLabel } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { InitDataDropDownButton } from "../../../../../common/fragments/dropdowns/InitDataDropDown";
+import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
+import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditDataSetupProps {
     hidden: boolean;
@@ -88,7 +88,7 @@ const useControllPanelEditDataSetupViewModel = () => {
     useEffect(() => {
         // check if sequence to edit is really set or gos back to edit mode
         if (DavitUtil.isNullOrUndefined(dataSetupToEdit)) {
-            handleError('Tried to go to edit dataSetup without dataSetupToedit specified');
+            handleError("Tried to go to edit dataSetup without dataSetupToedit specified");
             dispatch(EditActions.setMode.edit());
         }
         // used to focus the textfield on create another
@@ -104,7 +104,7 @@ const useControllPanelEditDataSetupViewModel = () => {
     };
 
     const saveDataSetup = () => {
-        if (dataSetupToEdit?.dataSetup.name !== '') {
+        if (dataSetupToEdit?.dataSetup.name !== "") {
             dispatch(EditDataSetup.save(dataSetupToEdit!));
         } else {
             deleteDataSetup();
@@ -128,7 +128,7 @@ const useControllPanelEditDataSetupViewModel = () => {
 
     const copyDataSetup = () => {
         const copyDataSetup: DataSetupCTO = DavitUtil.deepCopy(dataSetupToEdit);
-        copyDataSetup.dataSetup.name = dataSetupToEdit?.dataSetup.name + '-copy';
+        copyDataSetup.dataSetup.name = dataSetupToEdit?.dataSetup.name + "-copy";
         copyDataSetup.dataSetup.id = -1;
         copyDataSetup.initDatas.forEach((initData) => {
             initData.id = -1;
@@ -162,7 +162,7 @@ const useControllPanelEditDataSetupViewModel = () => {
     };
 
     return {
-        label: 'EDIT * ' + (dataSetupToEdit?.dataSetup.name || ''),
+        label: "EDIT * " + (dataSetupToEdit?.dataSetup.name || ""),
         name: dataSetupToEdit?.dataSetup.name,
         changeName,
         saveDataSetup,

@@ -1,5 +1,5 @@
-import React, { FunctionComponent } from 'react';
-import { Icon, SemanticICONS } from 'semantic-ui-react';
+import React, { FunctionComponent } from "react";
+import { Icon, SemanticICONS } from "semantic-ui-react";
 
 interface DavitButtonIconProps {
     onClick: () => void;
@@ -11,7 +11,7 @@ export const DavitSidePanelButton: FunctionComponent<DavitButtonIconProps> = (pr
     const { onClick, icon, active } = props;
 
     return (
-        <div className={'carv2SidePanelButton' + (active ? ' SidePanelButtonActive' : '')} onClick={onClick}>
+        <div className={"carv2SidePanelButton" + (active ? " SidePanelButtonActive" : "")} onClick={onClick}>
             <Icon name={icon} />
         </div>
     );

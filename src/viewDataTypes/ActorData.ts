@@ -1,4 +1,4 @@
-import { ActorDataState } from './ActorDataState';
+import { ActorDataState } from "./ActorDataState";
 
 export class ActorData {
     constructor(

@@ -1,29 +1,29 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, Input } from 'semantic-ui-react';
-import { SequenceCTO } from '../../../../../../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../../../../../../dataAccess/access/cto/SequenceStepCTO';
-import { ActionTO } from '../../../../../../dataAccess/access/to/ActionTO';
-import { DecisionTO } from '../../../../../../dataAccess/access/to/DecisionTO';
-import { GoTo, GoToTypes } from '../../../../../../dataAccess/access/types/GoToType';
-import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
-import { handleError } from '../../../../../../slices/GlobalSlice';
-import { MasterDataActions } from '../../../../../../slices/MasterDataSlice';
-import { SequenceModelActions, sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
-import { EditAction } from '../../../../../../slices/thunks/ActionThunks';
-import { EditSequence } from '../../../../../../slices/thunks/SequenceThunks';
-import { EditStep } from '../../../../../../slices/thunks/StepThunks';
-import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { DavitButtonIcon } from '../../../../../common/fragments/buttons/DavitButton';
-import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
-import { DavitRootButton } from '../../../../../common/fragments/buttons/DavitRootButton';
-import { ActionButtonDropDown } from '../../../../../common/fragments/dropdowns/ActionButtonDropDown';
-import { DecisionDropDown } from '../../../../../common/fragments/dropdowns/DecisionDropDown';
-import { GoToOptionDropDown } from '../../../../../common/fragments/dropdowns/GoToOptionDropDown';
-import { StepDropDown } from '../../../../../common/fragments/dropdowns/StepDropDown';
-import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { DavitLabelTextfield } from '../common/fragments/DavitLabelTextfield';
-import { OptionField } from '../common/OptionField';
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Button, Input } from "semantic-ui-react";
+import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
+import { ActionTO } from "../../../../../../dataAccess/access/to/ActionTO";
+import { DecisionTO } from "../../../../../../dataAccess/access/to/DecisionTO";
+import { GoTo, GoToTypes } from "../../../../../../dataAccess/access/types/GoToType";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
+import { handleError } from "../../../../../../slices/GlobalSlice";
+import { MasterDataActions } from "../../../../../../slices/MasterDataSlice";
+import { SequenceModelActions, sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
+import { EditAction } from "../../../../../../slices/thunks/ActionThunks";
+import { EditSequence } from "../../../../../../slices/thunks/SequenceThunks";
+import { EditStep } from "../../../../../../slices/thunks/StepThunks";
+import { DavitUtil } from "../../../../../../utils/DavitUtil";
+import { DavitButtonIcon } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitRootButton } from "../../../../../common/fragments/buttons/DavitRootButton";
+import { ActionButtonDropDown } from "../../../../../common/fragments/dropdowns/ActionButtonDropDown";
+import { DecisionDropDown } from "../../../../../common/fragments/dropdowns/DecisionDropDown";
+import { GoToOptionDropDown } from "../../../../../common/fragments/dropdowns/GoToOptionDropDown";
+import { StepDropDown } from "../../../../../common/fragments/dropdowns/StepDropDown";
+import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
+import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditStepProps {
     hidden: boolean;
@@ -91,7 +91,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
                                     editOrAddAction(action);
                                     updateStep();
                                 }}
-                                icon={'wrench'}
+                                icon={"wrench"}
                             />
                         </Button.Group>
                     </OptionField>
@@ -157,7 +157,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
     useEffect(() => {
         if (stepToEdit === undefined || null) {
-            handleError('Tried to go to edit sequence step without sequenceStepToEdit specified');
+            handleError("Tried to go to edit sequence step without sequenceStepToEdit specified");
             dispatch(EditActions.setMode.edit());
         }
         if (stepToEdit) {
@@ -179,12 +179,12 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
     const saveSequenceStep = (newMode?: string) => {
         if (!DavitUtil.isNullOrUndefined(stepToEdit) && !DavitUtil.isNullOrUndefined(selectedSequence)) {
-            if (stepToEdit!.squenceStepTO.name !== '') {
+            if (stepToEdit!.squenceStepTO.name !== "") {
                 dispatch(EditStep.save(stepToEdit!));
             } else {
                 dispatch(EditStep.delete(stepToEdit!, selectedSequence!));
             }
-            if (newMode && newMode === 'EDIT') {
+            if (newMode && newMode === "EDIT") {
                 dispatch(EditActions.setMode.edit());
             } else {
                 dispatch(EditActions.setMode.editSequence(stepToEdit!.squenceStepTO.sequenceFk));
@@ -223,7 +223,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
     const validStep = (): boolean => {
         let valid: boolean = false;
         if (!DavitUtil.isNullOrUndefined(stepToEdit)) {
-            if (stepToEdit!.squenceStepTO.name !== '') {
+            if (stepToEdit!.squenceStepTO.name !== "") {
                 valid = true;
             }
         }
@@ -306,8 +306,8 @@ const useControllPanelEditSequenceStepViewModel = () => {
     };
 
     return {
-        label: 'EDIT * ' + (selectedSequence?.sequenceTO.name || '') + ' * ' + (stepToEdit?.squenceStepTO.name || ''),
-        name: stepToEdit ? stepToEdit!.squenceStepTO.name : '',
+        label: "EDIT * " + (selectedSequence?.sequenceTO.name || "") + " * " + (stepToEdit?.squenceStepTO.name || ""),
+        name: stepToEdit ? stepToEdit!.squenceStepTO.name : "",
         changeName,
         saveSequenceStep,
         deleteSequenceStep,

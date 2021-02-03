@@ -1,11 +1,11 @@
 // ----------------------------------------------- DECISION -----------------------------------------------
 
-import { AppThunk } from '../../app/store';
-import { ConditionTO } from '../../dataAccess/access/to/ConditionTO';
-import { DecisionTO } from '../../dataAccess/access/to/DecisionTO';
-import { DavitUtil } from '../../utils/DavitUtil';
-import { editActions } from '../EditSlice';
-import { EditDecision } from './DecisionThunks';
+import { AppThunk } from "../../app/store";
+import { ConditionTO } from "../../dataAccess/access/to/ConditionTO";
+import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
+import { DavitUtil } from "../../utils/DavitUtil";
+import { editActions } from "../EditSlice";
+import { EditDecision } from "./DecisionThunks";
 
 const saveConditionThunk = (conditionToSave: ConditionTO): AppThunk => (dispatch) => {
     const decisionToSave: DecisionTO = EditDecision.find(conditionToSave.decisionFk);

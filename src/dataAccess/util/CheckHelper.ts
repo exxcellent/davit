@@ -1,4 +1,4 @@
-import { DavitUtil } from '../../utils/DavitUtil';
+import { DavitUtil } from "../../utils/DavitUtil";
 
 export const CheckHelper = {
     nullCheck(object: any, name: string) {

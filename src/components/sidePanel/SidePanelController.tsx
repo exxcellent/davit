@@ -1,10 +1,10 @@
-import React, { FunctionComponent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { DAVIT_VERISON } from '../../app/DavitConstants';
-import logo from '../../icons/logo200.png';
-import { EditActions, editSelectors, Mode } from '../../slices/EditSlice';
-import { DavitButtonGroup } from '../common/fragments/buttons/DavitButtonGroup';
-import { DavitSidePanelButton } from '../common/fragments/buttons/DavitSidePanelButton';
+import React, { FunctionComponent } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { DAVIT_VERISON } from "../../app/DavitConstants";
+import logo from "../../icons/logo200.png";
+import { EditActions, editSelectors, Mode } from "../../slices/EditSlice";
+import { DavitButtonGroup } from "../common/fragments/buttons/DavitButtonGroup";
+import { DavitSidePanelButton } from "../common/fragments/buttons/DavitSidePanelButton";
 
 export interface SidePanelProps {}
 
@@ -24,11 +24,11 @@ export const SidePanelController: FunctionComponent<SidePanelProps> = (props) =>
                 <DavitSidePanelButton icon="external alternate" onClick={setModeToTab} active={mode === Mode.TAB} />
             </DavitButtonGroup>
 
-            <div style={{ position: 'absolute', bottom: '1em' }}>
+            <div style={{ position: "absolute", bottom: "1em" }}>
                 <img src={logo} alt="fireSpot" />
                 <div className="verticalLabel">DAVIT by</div>
             </div>
-            <label style={{ color: 'white', position: 'absolute', bottom: '0.5em', marginLeft: '5px' }}>
+            <label style={{ color: "white", position: "absolute", bottom: "0.5em", marginLeft: "5px" }}>
                 {DAVIT_VERISON}
             </label>
         </div>

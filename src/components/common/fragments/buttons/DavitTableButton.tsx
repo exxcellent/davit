@@ -1,5 +1,5 @@
-import React, { FunctionComponent } from 'react';
-import { Button, IconProps, SemanticShorthandItem } from 'semantic-ui-react';
+import React, { FunctionComponent } from "react";
+import { Button, IconProps, SemanticShorthandItem } from "semantic-ui-react";
 
 interface DavitTableButtonProps {
     onClick: () => void;

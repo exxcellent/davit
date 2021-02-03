@@ -1,5 +1,5 @@
-import React from 'react';
-import { ActorDataState } from './ActorDataState';
+import React from "react";
+import { ActorDataState } from "./ActorDataState";
 
 export interface ViewFragmentProps {
     parentId: number | { dataId: number; instanceId?: number };
@@ -8,7 +8,7 @@ export interface ViewFragmentProps {
 }
 
 const getClassnameForViewFragmentState = (state: ActorDataState) => {
-    return 'carv2ActorData' + state;
+    return "carv2ActorData" + state;
 };
 
 export const createViewFragment = (actorDataFragmentProps: ViewFragmentProps, key: number) => {

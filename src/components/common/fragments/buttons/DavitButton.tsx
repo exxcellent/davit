@@ -1,5 +1,5 @@
-import React, { FunctionComponent } from 'react';
-import { Button } from 'semantic-ui-react';
+import React, { FunctionComponent } from "react";
+import { Button } from "semantic-ui-react";
 
 interface DavitButtonIconProps {
     onClick: () => void;
@@ -23,7 +23,7 @@ export const DavitButtonLabel: FunctionComponent<DavitButtonLabelProps> = (props
     const { onClick, label, disable } = props;
 
     return (
-        <button onClick={onClick} disabled={disable} style={{ opacity: disable ? '0.7' : '1' }}>
+        <button onClick={onClick} disabled={disable} style={{ opacity: disable ? "0.7" : "1" }}>
             <label>{label}</label>
         </button>
     );

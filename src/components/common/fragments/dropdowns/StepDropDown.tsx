@@ -1,11 +1,11 @@
-import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
-import { DropdownProps } from 'semantic-ui-react';
-import { SequenceCTO } from '../../../../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../../../../dataAccess/access/cto/SequenceStepCTO';
-import { sequenceModelSelectors } from '../../../../slices/SequenceModelSlice';
-import { DavitUtil } from '../../../../utils/DavitUtil';
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from './DavitDropDown';
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { DropdownProps } from "semantic-ui-react";
+import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
+import { sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
+import { DavitUtil } from "../../../../utils/DavitUtil";
+import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
 
 interface StepDropDownButtonProps extends DropdownProps {
     onSelect: (step: SequenceStepCTO | undefined) => void;

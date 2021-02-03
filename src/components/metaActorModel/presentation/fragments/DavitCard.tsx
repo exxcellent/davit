@@ -1,11 +1,11 @@
-import React, { FunctionComponent, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { DataInstanceTO } from '../../../../dataAccess/access/to/DataInstanceTO';
-import { EditActions } from '../../../../slices/EditSlice';
-import { Filter, SequenceModelActions, sequenceModelSelectors } from '../../../../slices/SequenceModelSlice';
-import { createViewFragment, ViewFragmentProps } from '../../../../viewDataTypes/ViewFragment';
-import { DavitCardButton } from '../../../common/fragments/buttons/DavitCardButton';
-import { DavitCardMainButton } from '../../../common/fragments/buttons/DavitCardMainButton';
+import React, { FunctionComponent, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { DataInstanceTO } from "../../../../dataAccess/access/to/DataInstanceTO";
+import { EditActions } from "../../../../slices/EditSlice";
+import { Filter, SequenceModelActions, sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
+import { createViewFragment, ViewFragmentProps } from "../../../../viewDataTypes/ViewFragment";
+import { DavitCardButton } from "../../../common/fragments/buttons/DavitCardButton";
+import { DavitCardMainButton } from "../../../common/fragments/buttons/DavitCardMainButton";
 
 /**
  *  Prop: initWidth / initHeight
@@ -21,7 +21,7 @@ export interface DavitCardProps {
     instances?: DataInstanceTO[];
     zoomFactor: number;
     onClick?: (id: number) => void;
-    type: 'DATA' | 'ACTOR' | 'INSTANCE';
+    type: "DATA" | "ACTOR" | "INSTANCE";
 }
 
 export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
@@ -46,7 +46,7 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
 
     return (
         <div
-            className={isActiveFilter ? 'activeFilter card' : 'card'}
+            className={isActiveFilter ? "activeFilter card" : "card"}
             style={{
                 minWidth: initWidth * zoomFactor,
                 minHeight: initHeigth * zoomFactor,
@@ -56,14 +56,14 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
             key={id}>
             <div
                 style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    width: '100%',
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
                 }}>
-                <div className={showMenu ? 'cardHeaderButtons' : 'cardHeader'}>
-                    <div className={showMenu ? 'carhHeaderTextInvisible' : 'cardHeaderText'}>{initName}</div>
+                <div className={showMenu ? "cardHeaderButtons" : "cardHeader"}>
+                    <div className={showMenu ? "carhHeaderTextInvisible" : "cardHeaderText"}>{initName}</div>
                     {showMenu && (
-                        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <div style={{ display: "flex", justifyContent: "flex-end" }}>
                             <DavitCardButton icon="wrench" onClick={() => onClickEdit(id, type)} />
                             <DavitCardButton
                                 icon="filter"
@@ -80,7 +80,7 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
                 />
             </div>
             {instances && (
-                <div style={{ display: 'flex', alignItems: 'start' }}>
+                <div style={{ display: "flex", alignItems: "start" }}>
                     {instances.map((instance, index) =>
                         createInstances(
                             index,
@@ -101,27 +101,27 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
     );
 };
 
-const useCarv2CardViewModel = (type: 'DATA' | 'ACTOR' | 'INSTANCE', id: number) => {
+const useCarv2CardViewModel = (type: "DATA" | "ACTOR" | "INSTANCE", id: number) => {
     const activeFilters: Filter[] = useSelector(sequenceModelSelectors.activeFilters);
     const [showMenu, setShowMenu] = useState<boolean>(false);
     const dispatch = useDispatch();
 
-    const onClickEdit = (currentId: number, currentType: 'DATA' | 'ACTOR' | 'INSTANCE') => {
+    const onClickEdit = (currentId: number, currentType: "DATA" | "ACTOR" | "INSTANCE") => {
         switch (currentType) {
-            case 'ACTOR':
+            case "ACTOR":
                 dispatch(EditActions.setMode.editActorById(currentId));
                 break;
-            case 'DATA':
+            case "DATA":
                 dispatch(EditActions.setMode.editDataById(currentId));
                 break;
-            case 'INSTANCE':
+            case "INSTANCE":
                 dispatch(EditActions.setMode.editInstaceById(currentId));
         }
         setShowMenu(false);
     };
-    const onClickFilter = (currentId: number, currentType: 'DATA' | 'ACTOR' | 'INSTANCE') => {
+    const onClickFilter = (currentId: number, currentType: "DATA" | "ACTOR" | "INSTANCE") => {
         switch (currentType) {
-            case 'ACTOR':
+            case "ACTOR":
                 if (isActiveFilter) {
                     dispatch(SequenceModelActions.removeActorFilter(currentId));
                     setShowMenu(false);
@@ -129,8 +129,8 @@ const useCarv2CardViewModel = (type: 'DATA' | 'ACTOR' | 'INSTANCE', id: number) 
                     dispatch(SequenceModelActions.addActorFilters(currentId));
                 }
                 break;
-            case 'DATA':
-            case 'INSTANCE':
+            case "DATA":
+            case "INSTANCE":
                 if (isActiveFilter) {
                     dispatch(SequenceModelActions.removeDataFilters(currentId));
                     setShowMenu(false);
@@ -142,7 +142,7 @@ const useCarv2CardViewModel = (type: 'DATA' | 'ACTOR' | 'INSTANCE', id: number) 
     };
 
     const isActiveFilter = activeFilters.some(
-        (filter) => (filter.type === type || (filter.type === 'DATA' && type === 'INSTANCE')) && filter.id === id,
+        (filter) => (filter.type === type || (filter.type === "DATA" && type === "INSTANCE")) && filter.id === id,
     );
 
     return {

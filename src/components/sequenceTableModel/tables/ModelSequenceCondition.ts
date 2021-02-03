@@ -1,12 +1,12 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { ActorCTO } from '../../../dataAccess/access/cto/ActorCTO';
-import { DataCTO } from '../../../dataAccess/access/cto/DataCTO';
-import { ConditionTO } from '../../../dataAccess/access/to/ConditionTO';
-import { DecisionTO } from '../../../dataAccess/access/to/DecisionTO';
-import { EditActions, editSelectors } from '../../../slices/EditSlice';
-import { masterDataSelectors } from '../../../slices/MasterDataSlice';
-import { EditDecision } from '../../../slices/thunks/DecisionThunks';
-import { DavitTableRowData } from '../../common/fragments/DavitTable';
+import { useDispatch, useSelector } from "react-redux";
+import { ActorCTO } from "../../../dataAccess/access/cto/ActorCTO";
+import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
+import { ConditionTO } from "../../../dataAccess/access/to/ConditionTO";
+import { DecisionTO } from "../../../dataAccess/access/to/DecisionTO";
+import { EditActions, editSelectors } from "../../../slices/EditSlice";
+import { masterDataSelectors } from "../../../slices/MasterDataSlice";
+import { EditDecision } from "../../../slices/thunks/DecisionThunks";
+import { DavitTableRowData } from "../../common/fragments/DavitTable";
 
 export const useGetModelSequenceConditionTableData = (
     decision: DecisionTO | null,
@@ -30,18 +30,18 @@ export const useGetModelSequenceConditionTableData = (
     if (decisionToShow !== null) {
         bodyData = decisionToShow.conditions.map((condition) => {
             const actorName: string =
-                actors.find((actor) => actor.actor.id === condition.actorFk)?.actor.name || 'Could not find actor';
+                actors.find((actor) => actor.actor.id === condition.actorFk)?.actor.name || "Could not find actor";
 
             const dataCTO: DataCTO | undefined = datas.find((data) => data.data.id === condition.dataFk);
 
-            let dataName: string = 'Could not find data';
-            let instanceName: string = 'Could not find data';
+            let dataName: string = "Could not find data";
+            let instanceName: string = "Could not find data";
 
             if (dataCTO) {
-                dataName = dataCTO?.data.name || 'Could not find data';
+                dataName = dataCTO?.data.name || "Could not find data";
                 instanceName =
                     dataCTO?.data.instances.find((instance) => instance.id === condition.instanceFk)?.name ||
-                    'Could not find instance';
+                    "Could not find instance";
             }
 
             const onClickEdit = () => dispatch(EditActions.setMode.editCondition(decisionToShow!, condition));
@@ -62,7 +62,7 @@ export const useGetModelSequenceConditionTableData = (
     };
 };
 
-const header = ['ACTOR', 'DATA', 'INSTANCE', 'ACTIONS'];
+const header = ["ACTOR", "DATA", "INSTANCE", "ACTIONS"];
 
 const createConditionColumn = (
     actorName: string,
@@ -71,8 +71,8 @@ const createConditionColumn = (
     editCallback: () => void,
     marked?: boolean,
 ): DavitTableRowData => {
-    const trClass = marked ? 'carv2TrMarked' : 'carv2Tr';
-    const editAction = { icon: 'wrench', callback: editCallback };
+    const trClass = marked ? "carv2TrMarked" : "carv2Tr";
+    const editAction = { icon: "wrench", callback: editCallback };
 
     return {
         trClass,

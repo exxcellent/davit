@@ -1,23 +1,23 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, Input } from 'semantic-ui-react';
-import { ChainDecisionTO } from '../../../../../../dataAccess/access/to/ChainDecisionTO';
-import { ChainlinkTO } from '../../../../../../dataAccess/access/to/ChainlinkTO';
-import { ChainTO } from '../../../../../../dataAccess/access/to/ChainTO';
-import { GoToChain, GoToTypesChain } from '../../../../../../dataAccess/access/types/GoToTypeChain';
-import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
-import { handleError } from '../../../../../../slices/GlobalSlice';
-import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
-import { EditChainDecision } from '../../../../../../slices/thunks/ChainDecisionThunks';
-import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { DavitButtonIcon } from '../../../../../common/fragments/buttons/DavitButton';
-import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
-import { ChainDecisionDropDown } from '../../../../../common/fragments/dropdowns/ChainDecisionDropDown';
-import { ChainLinkDropDown } from '../../../../../common/fragments/dropdowns/ChainLinkDropDown';
-import { GoToChainOptionDropDown } from '../../../../../common/fragments/dropdowns/GoToChainOptionDropDown';
-import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { DavitLabelTextfield } from '../common/fragments/DavitLabelTextfield';
-import { OptionField } from '../common/OptionField';
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Button, Input } from "semantic-ui-react";
+import { ChainDecisionTO } from "../../../../../../dataAccess/access/to/ChainDecisionTO";
+import { ChainlinkTO } from "../../../../../../dataAccess/access/to/ChainlinkTO";
+import { ChainTO } from "../../../../../../dataAccess/access/to/ChainTO";
+import { GoToChain, GoToTypesChain } from "../../../../../../dataAccess/access/types/GoToTypeChain";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
+import { handleError } from "../../../../../../slices/GlobalSlice";
+import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
+import { EditChainDecision } from "../../../../../../slices/thunks/ChainDecisionThunks";
+import { DavitUtil } from "../../../../../../utils/DavitUtil";
+import { DavitButtonIcon } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { ChainDecisionDropDown } from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
+import { ChainLinkDropDown } from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
+import { GoToChainOptionDropDown } from "../../../../../common/fragments/dropdowns/GoToChainOptionDropDown";
+import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
+import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditChainDecisionProps {
     hidden: boolean;
@@ -71,7 +71,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
                 </div>
             </div>
             <div className="columnDivider optionFieldSpacer">
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <OptionField label="Type condition true">
                         <GoToChainOptionDropDown
                             onSelect={(gt) => {
@@ -104,7 +104,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
                 </div>
             </div>
             <div className="columnDivider optionFieldSpacer">
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <OptionField label="Type condition false">
                         <GoToChainOptionDropDown
                             onSelect={(gt) => handleType(false, gt)}
@@ -161,11 +161,11 @@ const useControllPanelEditChainConditionViewModel = () => {
 
     useEffect(() => {
         if (DavitUtil.isNullOrUndefined(decisionToEdit)) {
-            dispatch(handleError('Tried to go to edit condition step without conditionToEdit specified'));
+            dispatch(handleError("Tried to go to edit condition step without conditionToEdit specified"));
             dispatch(EditActions.setMode.edit());
         }
         if (decisionToEdit) {
-            console.warn('set curretn go to type: ', decisionToEdit.ifGoTo);
+            console.warn("set curretn go to type: ", decisionToEdit.ifGoTo);
             setCurrentIfGoTo(decisionToEdit.ifGoTo);
             setCurrentElseGoTo(decisionToEdit.elseGoTo);
         }
@@ -183,12 +183,12 @@ const useControllPanelEditChainConditionViewModel = () => {
 
     const saveDecision = (newMode?: string) => {
         if (!DavitUtil.isNullOrUndefined(decisionToEdit) && !DavitUtil.isNullOrUndefined(selectedChain)) {
-            if (decisionToEdit!.name !== '') {
+            if (decisionToEdit!.name !== "") {
                 dispatch(EditChainDecision.save(decisionToEdit!));
             } else {
                 dispatch(EditChainDecision.delete(decisionToEdit!));
             }
-            if (newMode && newMode === 'EDIT') {
+            if (newMode && newMode === "EDIT") {
                 dispatch(EditActions.setMode.edit());
             } else {
                 dispatch(EditActions.setMode.editChain(selectedChain!));
@@ -206,7 +206,7 @@ const useControllPanelEditChainConditionViewModel = () => {
     const validStep = (): boolean => {
         let valid: boolean = false;
         if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
-            if (decisionToEdit!.name !== '') {
+            if (decisionToEdit!.name !== "") {
                 valid = true;
             }
         }
@@ -277,7 +277,7 @@ const useControllPanelEditChainConditionViewModel = () => {
     };
 
     return {
-        label: 'EDIT * ' + (selectedChain?.name || '') + ' * ' + (decisionToEdit?.name || ''),
+        label: "EDIT * " + (selectedChain?.name || "") + " * " + (decisionToEdit?.name || ""),
         name: decisionToEdit?.name,
         changeName,
         saveDecision,

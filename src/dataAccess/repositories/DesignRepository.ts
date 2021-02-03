@@ -1,7 +1,7 @@
-import { DesignTO } from '../access/to/DesignTO';
-import { ConstraintsHelper } from '../ConstraintsHelper';
-import dataStore from '../DataStore';
-import { DataAccessUtil } from '../util/DataAccessUtil';
+import { DesignTO } from "../access/to/DesignTO";
+import { ConstraintsHelper } from "../ConstraintsHelper";
+import dataStore from "../DataStore";
+import { DataAccessUtil } from "../util/DataAccessUtil";
 
 export const DesignRepository = {
     find(id: number): DesignTO | undefined {
@@ -16,7 +16,7 @@ export const DesignRepository = {
         ConstraintsHelper.deleteDesignConstraintCheck(design.id, dataStore.getDataStore());
         const success = dataStore.getDataStore().designs.delete(design.id!);
         if (!success) {
-            throw new Error('dataAccess.repository.error.notExists');
+            throw new Error("dataAccess.repository.error.notExists");
         }
         return design;
     },

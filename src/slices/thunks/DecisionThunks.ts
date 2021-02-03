@@ -1,17 +1,17 @@
 // ----------------------------------------------- DECISION -----------------------------------------------
 
-import { AppThunk } from '../../app/store';
-import { SequenceCTO } from '../../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../../dataAccess/access/cto/SequenceStepCTO';
-import { DecisionTO } from '../../dataAccess/access/to/DecisionTO';
-import { GoToTypes } from '../../dataAccess/access/types/GoToType';
-import { DataAccess } from '../../dataAccess/DataAccess';
-import { DataAccessResponse } from '../../dataAccess/DataAccessResponse';
-import { DavitUtil } from '../../utils/DavitUtil';
-import { editActions, Mode } from '../EditSlice';
-import { handleError } from '../GlobalSlice';
-import { MasterDataActions } from '../MasterDataSlice';
-import { EditStep } from './StepThunks';
+import { AppThunk } from "../../app/store";
+import { SequenceCTO } from "../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
+import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
+import { GoToTypes } from "../../dataAccess/access/types/GoToType";
+import { DataAccess } from "../../dataAccess/DataAccess";
+import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
+import { DavitUtil } from "../../utils/DavitUtil";
+import { editActions, Mode } from "../EditSlice";
+import { handleError } from "../GlobalSlice";
+import { MasterDataActions } from "../MasterDataSlice";
+import { EditStep } from "./StepThunks";
 
 const createDecisionThunk = (decision: DecisionTO, from?: SequenceStepCTO | DecisionTO, ifGoTo?: Boolean): AppThunk => (
     dispatch,
@@ -91,7 +91,7 @@ const setDecisionToEditThunk = (decision: DecisionTO): AppThunk => (dispatch, ge
     if (mode === Mode.EDIT_SEQUENCE_DECISION || Mode.EDIT_SEQUENCE_DECISION_CONDITION) {
         dispatch(editActions.setDecisionToEdit(decision));
     } else {
-        handleError('Try to set decision to edit in mode: ' + mode);
+        handleError("Try to set decision to edit in mode: " + mode);
     }
 };
 
