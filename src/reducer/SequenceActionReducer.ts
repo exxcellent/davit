@@ -124,10 +124,7 @@ export const SequenceActionReducer = {
          * Change rest to status "persistent".
          * */
         const updatedActorDatas: ActorData[] = actorDatas
-            .filter(
-                (actorData) =>
-                    actorData.state !== ActorDataState.DELETED && actorData.state !== ActorDataState.CHECK_FAILED,
-            )
+            .filter((actorData) => !isTransiantState(actorData.state))
             .map((actorData) => {
                 return { ...actorData, state: ActorDataState.PERSISTENT };
             });
@@ -176,7 +173,3 @@ const isTransiantState = (state: ActorDataState) => {
 function actorDataIsPresent(indexActorDataToEdit: number) {
     return indexActorDataToEdit !== -1;
 }
-
-// const dataIsPresentOnActor = (actorData: ActorData[]) => {
-//     return actorData && actorData.length > 0;
-// };

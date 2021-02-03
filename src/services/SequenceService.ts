@@ -177,7 +177,7 @@ const getRoot = (sequence: SequenceCTO): SequenceStepCTO | DecisionTO | undefine
 };
 
 const getNext = (goTo: GoTo, sequence: SequenceCTO): SequenceStepCTO | DecisionTO | Terminal => {
-    let nextStepOrDecisionOrTerminal: SequenceStepCTO | DecisionTO | Terminal = { type: GoToTypes.ERROR };
+    let nextStepOrDecisionOrTerminal: SequenceStepCTO | DecisionTO | Terminal;
     switch (goTo.type) {
         case GoToTypes.STEP:
             nextStepOrDecisionOrTerminal = getStepFromSequence(goTo.id, sequence) || { type: GoToTypes.ERROR };
