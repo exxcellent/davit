@@ -56,12 +56,9 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
         showSequenceModelTabs,
         showCalcChainTab,
         showCalcSequenceTab,
-
         activeTab,
         setActiveTab,
-
         activeTableData,
-
         tableHeight,
         parentRef,
     } = useSequenceTableViewModel();
@@ -84,6 +81,7 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
 };
 
 const useSequenceTableViewModel = () => {
+    const mode: Mode = useSelector(editSelectors.selectMode);
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const selectedStep: SequenceStepCTO | null = useSelector(editSelectors.selectStepToEdit);
     const calcSteps: CalculatedStep[] = useSelector(sequenceModelSelectors.selectCalcSteps);
@@ -92,10 +90,8 @@ const useSequenceTableViewModel = () => {
     const dataSetups: DataSetupTO[] = useSelector(masterDataSelectors.selectDataSetups);
     const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
     const chainModels: ChainTO[] = useSelector(masterDataSelectors.selectChains);
-    const mode: Mode = useSelector(editSelectors.selectMode);
     const selectedChainlinks: ChainlinkCTO[] = useSelector(sequenceModelSelectors.selectCurrentChainLinks);
     const selectedChainDecisions: ChainDecisionTO[] = useSelector(sequenceModelSelectors.selectCurrentChainDecisions);
-
     const selectedActionToEdit: ActionTO | null = useSelector(editSelectors.selectActionToEdit);
     const selectedDecisionToEdit: DecisionTO | null = useSelector(editSelectors.selectDecisionToEdit);
     const selectedConditionToEdit: ConditionTO | null = useSelector(editSelectors.selectConditionToEdit);

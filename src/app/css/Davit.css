@@ -860,7 +860,6 @@ td:last-child {
 
 tr {
     color: var(--carv2-text-color);
-    padding: 0 0 0 1em;
 }
 
 tbody {
@@ -883,8 +882,6 @@ tbody tr {
 }
 
 thead {
-    width: calc(100% - 1.2em);
-    /*scrollbar is average 1em/16px width, remove it from thead width */
     background-color: var(--carv2-background-color-header);
     color: var(--carv2-text-color);
     animation-name: appearText;
