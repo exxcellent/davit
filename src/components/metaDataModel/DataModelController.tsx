@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ActorCTO } from "../../dataAccess/access/cto/ActorCTO";
 import { DataCTO } from "../../dataAccess/access/cto/DataCTO";
@@ -12,6 +12,7 @@ import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
 import { InitDataTO } from "../../dataAccess/access/to/InitDataTO";
 import { ActionType } from "../../dataAccess/access/types/ActionType";
 import { editSelectors } from "../../slices/EditSlice";
+import { GlobalActions, globalSelectors } from "../../slices/GlobalSlice";
 import { MasterDataActions, masterDataSelectors } from "../../slices/MasterDataSlice";
 import { sequenceModelSelectors } from "../../slices/SequenceModelSlice";
 import { EditData } from "../../slices/thunks/DataThunks";
@@ -37,6 +38,7 @@ export const DataModelController: FunctionComponent<DataModelControllerProps> = 
         zoomOut,
         getRelations,
         onGeometricalDataUpdate,
+        dataZoomFactor,
     } = useMetaDataModelViewModel();
 
     const createMetaDataDnDBox = () => {
@@ -48,6 +50,7 @@ export const DataModelController: FunctionComponent<DataModelControllerProps> = 
                 fullScreen={fullScreen}
                 zoomIn={zoomIn}
                 zoomOut={zoomOut}
+                zoom={dataZoomFactor}
                 type={DnDBoxType.data}
                 onGeoUpdate={onGeometricalDataUpdate}
             />
@@ -77,9 +80,7 @@ const useMetaDataModelViewModel = () => {
     const errors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
     const actions: ActionTO[] = useSelector(sequenceModelSelectors.selectActions);
 
-    const [zoom, setZoom] = useState<number>(1);
-
-    const ZOOM_FACTOR: number = 0.1;
+    const dataZoomFactor: number = useSelector(globalSelectors.selectDataZoomFactor);
 
     React.useEffect(() => {
         dispatch(MasterDataActions.loadDatasFromBackend());
@@ -281,17 +282,17 @@ const useMetaDataModelViewModel = () => {
                     (act.parentId as { dataId: number; instanceId: number }).dataId === data.data.id,
             ),
             instances: data.data.instances,
-            zoomFactor: zoom,
+            zoomFactor: dataZoomFactor,
             type: "DATA",
         };
     };
 
     const zoomOut = (): void => {
-        setZoom(zoom - ZOOM_FACTOR);
+        dispatch(GlobalActions.dataZoomOut());
     };
 
     const zoomIn = (): void => {
-        setZoom(zoom + ZOOM_FACTOR);
+        dispatch(GlobalActions.dataZoomIn());
     };
 
     const getGeometricalData = (dataId: number): GeometricalDataCTO | undefined => {
@@ -352,5 +353,6 @@ const useMetaDataModelViewModel = () => {
         zoomOut,
         getRelations,
         onGeometricalDataUpdate,
+        dataZoomFactor,
     };
 };

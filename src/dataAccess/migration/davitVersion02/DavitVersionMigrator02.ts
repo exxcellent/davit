@@ -49,6 +49,9 @@ export const DavitVersionMigrator02 = {
         return {
             version: DAVIT_VERISON,
             projectName: dataStoreObject.projectName,
+            actorZoom: dataStoreObject.actorZoom,
+            dataZoom: dataStoreObject.dataZoom,
+
             actors: dataStoreObject.actors as ActorTO[],
             groups: dataStoreObject.groups as GroupTO[],
             geometricalDatas: dataStoreObject.geometricalDatas as GeometricalDataTO[],

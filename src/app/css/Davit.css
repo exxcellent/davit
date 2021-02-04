@@ -1030,6 +1030,14 @@ table {
     opacity: 0.75;
 }
 
+.zoomLabel{
+    color: var(--carv2-text-color);
+    font-size: 0.7em;
+    animation-name: disapear;
+    animation-duration: 3s;
+    opacity: 0;
+}
+
 /* ---------------------------- KEY FRAMES ---------------------------- */
 
 @keyframes appearTabGroup {
@@ -1166,5 +1174,14 @@ table {
         width: 1.2em;
         color: white !important;
         box-shadow: 0 0 0 1px var(--carv2-color-border) !important;
+    }
+}
+
+@keyframes disapear {
+    0%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
     }
 }

@@ -8,3 +8,5 @@ export const STORE_ID = "carv2";
 export const DAVIT_VERISON: number = 0.2;
 
 export const DEFAULT_PROJECT_NAME = "New project";
+
+export const DEFAULT_ZOOM: number = 1;

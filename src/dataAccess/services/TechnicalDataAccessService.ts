@@ -6,6 +6,7 @@ import { PositionTO } from "../access/to/PositionTO";
 import { DesignRepository } from "../repositories/DesignRepository";
 import { GeometricalDataRepository } from "../repositories/GeometricalDataRepository";
 import { PositionRepository } from "../repositories/PositionRepository";
+import { ProjectRepository } from "../repositories/ProjectRepository";
 import { CheckHelper } from "../util/CheckHelper";
 
 export const TechnicalDataAccessService = {
@@ -63,5 +64,25 @@ export const TechnicalDataAccessService = {
             throw new Error("Couldn't delete");
         }
         return design;
+    },
+
+    saveActorZoom(zoom: number): number {
+        return ProjectRepository.saveActionZoom(zoom);
+    },
+
+    saveDataZoom(zoom: number): number {
+        return ProjectRepository.saveDataZoom(zoom);
+    },
+
+    saveProjectName(projectName: string): string {
+        return ProjectRepository.saveProjectName(projectName);
+    },
+
+    getActorZoom(): number {
+        return ProjectRepository.getActorZoom();
+    },
+
+    getDataZoom(): number {
+        return ProjectRepository.getDataZoom();
     },
 };

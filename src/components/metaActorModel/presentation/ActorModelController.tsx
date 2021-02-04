@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ActorCTO } from "../../../dataAccess/access/cto/ActorCTO";
 import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
@@ -10,6 +10,7 @@ import { DecisionTO } from "../../../dataAccess/access/to/DecisionTO";
 import { InitDataTO } from "../../../dataAccess/access/to/InitDataTO";
 import { ActionType } from "../../../dataAccess/access/types/ActionType";
 import { editSelectors } from "../../../slices/EditSlice";
+import { GlobalActions, globalSelectors } from "../../../slices/GlobalSlice";
 import { MasterDataActions, masterDataSelectors } from "../../../slices/MasterDataSlice";
 import { sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
 import { EditActor } from "../../../slices/thunks/ActorThunks";
@@ -28,7 +29,15 @@ interface ActorModelControllerProps {
 export const ActorModelController: FunctionComponent<ActorModelControllerProps> = (props) => {
     const { fullScreen } = props;
 
-    const { onPositionUpdate, getArrows, toDnDElements, zoomIn, zoomOut, onGeometricalDataUpdate } = useViewModel();
+    const {
+        onPositionUpdate,
+        getArrows,
+        toDnDElements,
+        zoomIn,
+        zoomOut,
+        actorZoom,
+        onGeometricalDataUpdate,
+    } = useViewModel();
 
     return (
         <DnDBox
@@ -38,6 +47,7 @@ export const ActorModelController: FunctionComponent<ActorModelControllerProps> 
             fullScreen={fullScreen}
             zoomIn={zoomIn}
             zoomOut={zoomOut}
+            zoom={actorZoom}
             type={DnDBoxType.actor}
             onGeoUpdate={onGeometricalDataUpdate}
         />
@@ -65,9 +75,7 @@ const useViewModel = () => {
     const errors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
     const dataSetup: DataSetupCTO | null = useSelector(sequenceModelSelectors.selectDataSetup);
 
-    const [zoom, setZoom] = useState<number>(1);
-
-    const ZOOM_FACTOR: number = 0.1;
+    const actorZoom: number = useSelector(globalSelectors.selectActorZoomFactor);
 
     React.useEffect(() => {
         dispatch(MasterDataActions.loadActorsFromBackend());
@@ -318,7 +326,7 @@ const useViewModel = () => {
                     act.parentId === actor.actor.id ||
                     (act.parentId as { dataId: number; instanceId: number }).dataId === actor.actor.id,
             ),
-            zoomFactor: zoom,
+            zoomFactor: actorZoom,
             type: "ACTOR",
         };
     };
@@ -356,11 +364,13 @@ const useViewModel = () => {
     };
 
     const zoomOut = (): void => {
-        setZoom(zoom - ZOOM_FACTOR);
+        console.info("zoom out");
+        dispatch(GlobalActions.actorZoomOut());
     };
 
     const zoomIn = (): void => {
-        setZoom(zoom + ZOOM_FACTOR);
+        console.info("zoom in");
+        dispatch(GlobalActions.actorZoomIn());
     };
 
     return {
@@ -370,5 +380,6 @@ const useViewModel = () => {
         zoomIn,
         zoomOut,
         onGeometricalDataUpdate,
+        actorZoom,
     };
 };

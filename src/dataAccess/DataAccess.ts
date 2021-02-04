@@ -20,6 +20,7 @@ import dataStore from "./DataStore";
 import { ActorDataAccessService } from "./services/ComponentDataAccessService";
 import { DataDataAccessService } from "./services/DataDataAccessService";
 import { SequenceDataAccessService } from "./services/SequenceDataAccessService";
+import { TechnicalDataAccessService } from "./services/TechnicalDataAccessService";
 
 export const DataAccess = {
     // ========================================= FILE =========================================
@@ -58,12 +59,31 @@ export const DataAccess = {
             message: "",
             code: 500,
         };
+        makeTransactional(() => TechnicalDataAccessService.saveProjectName(projectName));
         try {
             dataStore.downloadData(projectName);
             return { ...response, code: 200 };
         } catch (error) {
             return { ...response, message: error.message };
         }
+    },
+
+    // ========================================= ZOOM =========================================
+
+    setActorZoom(zoom: number): DataAccessResponse<number> {
+        return makeTransactional(() => TechnicalDataAccessService.saveActorZoom(zoom));
+    },
+
+    setDataZoom(zoom: number): DataAccessResponse<number> {
+        return makeTransactional(() => TechnicalDataAccessService.saveDataZoom(zoom));
+    },
+
+    loadActorZoom(): DataAccessResponse<number> {
+        return makeTransactional(TechnicalDataAccessService.getActorZoom);
+    },
+
+    loadDataZoom(): DataAccessResponse<number> {
+        return makeTransactional(TechnicalDataAccessService.getDataZoom);
     },
 
     // ========================================= ACTOR =========================================

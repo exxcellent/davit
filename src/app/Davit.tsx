@@ -8,6 +8,7 @@ import { DataModelController } from "../components/metaDataModel/DataModelContro
 import { FlowChartController } from "../components/sequenceModel/FlowChartController";
 import { SequenceTableModelController } from "../components/sequenceTableModel/presentation/SequenceTableModelController";
 import { SidePanelController } from "../components/sidePanel/SidePanelController";
+import { GlobalActions } from "../slices/GlobalSlice";
 import { MasterDataActions } from "../slices/MasterDataSlice";
 import "./css/Davit.css";
 
@@ -27,6 +28,8 @@ export function Davit() {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(MasterDataActions.loadAll());
+        dispatch(GlobalActions.loadActorZoomFromBackend());
+        dispatch(GlobalActions.loadDataZoomFromBackend());
     }, [dispatch]);
 
     // disable global key shortcuts.

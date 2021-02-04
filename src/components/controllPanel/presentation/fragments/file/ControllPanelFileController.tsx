@@ -38,9 +38,9 @@ export const ControllPanelFileController: FunctionComponent<ControllPanelFileCon
                 )}
             </div>
             <div className="columnDivider controllPanelEditChild">
-                {showExportFile && <DavitButtonLabel label="Export File" onClick={downloadData}></DavitButtonLabel>}
+                {showExportFile && <DavitButtonLabel label="Export File" onClick={downloadData} />}
             </div>
-            <div className="columnDivider controllPanelEditChild"></div>
+            <div className="columnDivider controllPanelEditChild" />
         </ControllPanelEditSub>
     );
 };
