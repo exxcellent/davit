@@ -48,7 +48,7 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
                     />
                 </OptionField>
             </div>
-            <div className="columnDivider controllPanelEditChild"></div>
+            <div className="columnDivider controllPanelEditChild" />
             <div className="columnDivider controllPanelEditChild">
                 <div>
                     <OptionField label="Navigation">
@@ -80,7 +80,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
     useEffect(() => {
         // check if component to edit is really set or go back to edit mode
         if (dataToEdit === null && instanceId === -1) {
-            handleError("Tried to go to edit data without dataToedit specified");
+            handleError("Tried to go to edit data without data to edit specified");
             dispatch(EditActions.setMode.edit());
         }
     });
@@ -134,7 +134,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
     };
 
     const getName = (): string => {
-        let name = "";
+        let name: string;
         const instance = dataToEdit?.data.instances.find((inst) => inst.id === instanceId);
         if (instance) {
             name = instance.name;

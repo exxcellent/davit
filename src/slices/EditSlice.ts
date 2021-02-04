@@ -309,6 +309,7 @@ const setModeToEditDataInstanceThunk = (id?: number): AppThunk => (dispatch, get
         if (id === undefined) {
             const copyData: DataCTO = DavitUtil.deepCopy(getState().edit.objectToEdit as DataCTO);
             const newInstance: DataInstanceTO = new DataInstanceTO();
+            newInstance.id = copyData.data.instances.length;
             copyData.data.instances.push(newInstance);
             dispatch(EditSlice.actions.setDataToEdit(copyData));
             id = newInstance.id;
