@@ -50,7 +50,7 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
             style={{
                 minWidth: initWidth * zoomFactor,
                 minHeight: initHeigth * zoomFactor,
-                fontSize: `${1 * zoomFactor}em`,
+                fontSize: `${zoomFactor}em`,
             }}
             onClick={props.onClick ? () => props.onClick!(props.id) : undefined}
             key={id}>
