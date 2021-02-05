@@ -272,6 +272,7 @@ button {
     line-height: 1em;
     font-style: normal;
     text-align: center;
+    padding: 0.5em;
 }
 
 #buttonGroupLabel {
@@ -296,11 +297,17 @@ button {
     align-items: center;
 }
 
+.deleteButton{
+    background-color: transparent;
+    box-shadow: 0 0 0 1px var(--carv2-color-secondary);
+    color: white;
+    animation: growDeleteButton var(--animation-time) ease-in-out 0s;
+}
+
 .carv2Button {
     background-color: transparent;
     box-shadow: 0 0 0 1px var(--carv2-color-secondary);
     color: white;
-
 }
 
 .carv2SidePanelButton {
@@ -1128,6 +1135,22 @@ table {
         background-color: rgba(0, 0, 0, 0.2);
         height: 2.2em;
         border-right: 0.5px solid rgba(255, 250, 250, 0.2);
+    }
+}
+
+@keyframes growDeleteButton {
+    0%{
+        width: 0;
+        color: transparent;
+    }
+
+    80%{
+        color: transparent;
+    }
+
+    100%{
+        width: 100%;
+        color: red;
     }
 }
 

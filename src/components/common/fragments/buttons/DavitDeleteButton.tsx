@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { Button } from "semantic-ui-react";
 
 interface DavitDeleteButtonProps {
@@ -9,11 +9,13 @@ interface DavitDeleteButtonProps {
 export const DavitDeleteButton: FunctionComponent<DavitDeleteButtonProps> = (props) => {
     const { onClick, disable } = props;
 
+    const SHRINK_DELAY: number = 3000;
+
     const [fluid, setFluid] = useState<boolean>(false);
 
-    const onButtonClick = () => {
-        setFluid(true);
-    };
+    useEffect(() => {
+        if (fluid) setTimeout(() => setFluid(false), SHRINK_DELAY);
+    }, [fluid]);
 
     return (
         <div
@@ -25,7 +27,7 @@ export const DavitDeleteButton: FunctionComponent<DavitDeleteButtonProps> = (pro
             {!fluid && (
                 <Button
                     icon={disable ? "" : "trash alternate"}
-                    onClick={onButtonClick}
+                    onClick={() => setFluid(true)}
                     className="carv2Button"
                     inverted
                     color="red"
@@ -33,7 +35,7 @@ export const DavitDeleteButton: FunctionComponent<DavitDeleteButtonProps> = (pro
                 />
             )}
             {fluid && (
-                <Button onClick={onClick} className="carv2Button" inverted color="red" fluid>
+                <Button onClick={onClick} className="deleteButton" inverted color="red" fluid>
                     SURE?
                 </Button>
             )}
