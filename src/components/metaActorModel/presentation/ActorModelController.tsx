@@ -293,7 +293,7 @@ const useViewModel = () => {
     };
 
     const actorsToDnDElements = (actors: ActorCTO[]): DnDBoxElement[] => {
-        let dndBoxElements: DnDBoxElement[] = [];
+        let dndBoxElements: DnDBoxElement[];
         dndBoxElements = actors
             .filter((actor) => !(actorCTOToEdit && actorCTOToEdit.actor.id === actor.actor.id))
             .map((actorr) => {
@@ -333,7 +333,7 @@ const useViewModel = () => {
 
     const getArrows = (): DavitPathProps[] => {
         const arrowProps: DavitPathProps[] = [];
-        let arrowsToDraw: Arrow[] = [];
+        let arrowsToDraw: Arrow[];
 
         arrowsToDraw = arrows;
 
