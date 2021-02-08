@@ -1,5 +1,5 @@
-import { DataStoreCTO } from './access/cto/DataStoreCTO';
-import { GoToTypes } from './access/types/GoToType';
+import { DataStoreCTO } from "./access/cto/DataStoreCTO";
+import { GoToTypes } from "./access/types/GoToType";
 
 export const ConstraintsHelper = {
     deleteDataConstraintCheck(dataId: number, dataStore: DataStoreCTO) {
@@ -12,7 +12,7 @@ export const ConstraintsHelper = {
         );
 
         const decisionExists: boolean = Array.from(dataStore.decisions.values()).some((decision) =>
-            decision.dataAndInstaceIds.some((dataAndInstaceId) => dataAndInstaceId.dataFk === dataId),
+            decision.conditions.some((condition) => condition.dataFk === dataId),
         );
 
         const chainDecisionExists: boolean = Array.from(dataStore.chaindecisions.values()).some((chainDecision) =>
@@ -34,10 +34,7 @@ export const ConstraintsHelper = {
         );
 
         const decisionExists: boolean = Array.from(dataStore.decisions.values()).some((decision) =>
-            decision.dataAndInstaceIds.some(
-                (dataAndInstanceId) =>
-                    dataAndInstanceId.dataFk === dataId && dataAndInstanceId.instanceId === instanceId,
-            ),
+            decision.conditions.some((condition) => condition.dataFk === dataId && condition.instanceFk === instanceId),
         );
 
         const chainDecisionExists: boolean = Array.from(dataStore.chaindecisions.values()).some((chainDecision) =>
@@ -60,8 +57,8 @@ export const ConstraintsHelper = {
             (action) => action.sendingActorFk === actorId || action.receivingActorFk === actorId,
         );
 
-        const decisionExists: boolean = Array.from(dataStore.decisions.values()).some(
-            (decision) => decision.actorFk === actorId,
+        const decisionExists: boolean = Array.from(dataStore.decisions.values()).some((decision) =>
+            decision.conditions.some((condition) => condition.actorFk === actorId),
         );
 
         const chainDecisionExists: boolean = Array.from(dataStore.chaindecisions.values()).some(

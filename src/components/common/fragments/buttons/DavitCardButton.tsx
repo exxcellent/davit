@@ -1,5 +1,5 @@
-import React, { FunctionComponent } from 'react';
-import { Icon, SemanticICONS } from 'semantic-ui-react';
+import React, { FunctionComponent } from "react";
+import { Icon, SemanticICONS } from "semantic-ui-react";
 
 interface DavitCardButtonProps {
     onClick: () => void;
@@ -14,7 +14,7 @@ export const DavitCardButton: FunctionComponent<DavitCardButtonProps> = (props) 
     return (
         <button
             onClick={onClick}
-            className={'Carv2CardButton' + (isActive ? ' activeButton' : '') + (disable ? ' disabled' : '')}
+            className={"Carv2CardButton" + (isActive ? " activeButton" : "") + (disable ? " disabled" : "")}
             disabled={disable}>
             <Icon size="small" name={icon} />
         </button>

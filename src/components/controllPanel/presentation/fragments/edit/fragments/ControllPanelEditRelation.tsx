@@ -1,18 +1,18 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Dropdown, DropdownItemProps } from 'semantic-ui-react';
-import { isNullOrUndefined } from 'util';
-import { DataCTO } from '../../../../../../dataAccess/access/cto/DataCTO';
-import { DataRelationTO, Direction, RelationType } from '../../../../../../dataAccess/access/to/DataRelationTO';
-import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
-import { handleError } from '../../../../../../slices/GlobalSlice';
-import { masterDataSelectors } from '../../../../../../slices/MasterDataSlice';
-import { EditRelation } from '../../../../../../slices/thunks/RelationThunks';
-import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
-import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
-import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { OptionField } from '../common/OptionField';
+import React, { FunctionComponent, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Dropdown, DropdownItemProps } from "semantic-ui-react";
+import { isNullOrUndefined } from "util";
+import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
+import { DataRelationTO, Direction, RelationType } from "../../../../../../dataAccess/access/to/DataRelationTO";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
+import { handleError } from "../../../../../../slices/GlobalSlice";
+import { masterDataSelectors } from "../../../../../../slices/MasterDataSlice";
+import { EditRelation } from "../../../../../../slices/thunks/RelationThunks";
+import { DavitUtil } from "../../../../../../utils/DavitUtil";
+import { DavitButtonIcon, DavitButtonLabel } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditRelationProps {
     hidden: boolean;
@@ -72,9 +72,9 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
                     <OptionField label="Select second relation data">
                         <div
                             style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'center',
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
                             }}>
                             <Dropdown
                                 placeholder="Select Data..."
@@ -92,9 +92,9 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
                     <OptionField label="Selct line ''in'' direction">
                         <div
                             style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'center',
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
                             }}>
                             <Dropdown
                                 placeholder="Select Direction2"
@@ -118,7 +118,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
             </div>
             <div className="columnDivider optionFieldSpacer">
                 <OptionField label="Relation options">
-                    <Carv2DeleteButton onClick={deleteRelation} />
+                    <DavitDeleteButton onClick={deleteRelation} />
                 </OptionField>
             </div>
         </ControllPanelEditSub>
@@ -135,7 +135,7 @@ const useControllPanelEditRelationViewModel = () => {
         // check if component to edit is really set or go back to edit mode
         if (DavitUtil.isNullOrUndefined(relationToEdit)) {
             dispatch(EditActions.setMode.edit());
-            handleError('Tried to go to edit relation without relationToedit specified');
+            handleError("Tried to go to edit relation without relationToedit specified");
         }
     }, [relationToEdit, dispatch]);
 
@@ -216,7 +216,7 @@ const useControllPanelEditRelationViewModel = () => {
     };
 
     return {
-        label: 'EDIT * RELATION',
+        label: "EDIT * RELATION",
         label1: relationToEdit?.label1,
         label2: relationToEdit?.label2,
         data1: relationToEdit?.data1Fk === -1 ? undefined : relationToEdit?.data1Fk,

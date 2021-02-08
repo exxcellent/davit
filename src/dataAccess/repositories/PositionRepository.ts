@@ -1,7 +1,7 @@
-import { PositionTO } from '../access/to/PositionTO';
-import { ConstraintsHelper } from '../ConstraintsHelper';
-import dataStore from '../DataStore';
-import { DataAccessUtil } from '../util/DataAccessUtil';
+import { PositionTO } from "../access/to/PositionTO";
+import { ConstraintsHelper } from "../ConstraintsHelper";
+import dataStore from "../DataStore";
+import { DataAccessUtil } from "../util/DataAccessUtil";
 
 export const PositionRepository = {
     find(id: number): PositionTO | undefined {
@@ -16,7 +16,7 @@ export const PositionRepository = {
         ConstraintsHelper.deletePositionConstraintCheck(position.id, dataStore.getDataStore());
         const success = dataStore.getDataStore().positions.delete(position.id!);
         if (!success) {
-            throw new Error('dataAccess.repository.error.notExists');
+            throw new Error("dataAccess.repository.error.notExists");
         }
         return success;
     },

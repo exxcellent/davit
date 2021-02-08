@@ -1,6 +1,6 @@
-import { ChainlinkTO } from '../to/ChainlinkTO';
-import { DataSetupCTO } from './DataSetupCTO';
-import { SequenceCTO } from './SequenceCTO';
+import { ChainlinkTO } from "../to/ChainlinkTO";
+import { DataSetupCTO } from "./DataSetupCTO";
+import { SequenceCTO } from "./SequenceCTO";
 
 export class ChainlinkCTO {
     constructor(

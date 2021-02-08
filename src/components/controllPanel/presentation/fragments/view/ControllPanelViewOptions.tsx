@@ -1,19 +1,19 @@
-import React, { FunctionComponent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button } from 'semantic-ui-react';
-import { DataSetupCTO } from '../../../../../dataAccess/access/cto/DataSetupCTO';
-import { SequenceCTO } from '../../../../../dataAccess/access/cto/SequenceCTO';
-import { ChainTO } from '../../../../../dataAccess/access/to/ChainTO';
-import { DataSetupTO } from '../../../../../dataAccess/access/to/DataSetupTO';
-import { SequenceTO } from '../../../../../dataAccess/access/to/SequenceTO';
-import { SequenceModelActions, sequenceModelSelectors } from '../../../../../slices/SequenceModelSlice';
-import { DavitUtil } from '../../../../../utils/DavitUtil';
-import { useStepAndLinkNavigation } from '../../../../../utils/WindowUtil';
-import { ChainDropDown } from '../../../../common/fragments/dropdowns/ChainDropDown';
-import { DataSetupDropDown } from '../../../../common/fragments/dropdowns/DataSetupDropDown';
-import { SequenceDropDown } from '../../../../common/fragments/dropdowns/SequenceDropDown';
-import { ControllPanelEditSub } from '../edit/common/ControllPanelEditSub';
-import { OptionField } from '../edit/common/OptionField';
+import React, { FunctionComponent } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Button } from "semantic-ui-react";
+import { DataSetupCTO } from "../../../../../dataAccess/access/cto/DataSetupCTO";
+import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
+import { ChainTO } from "../../../../../dataAccess/access/to/ChainTO";
+import { DataSetupTO } from "../../../../../dataAccess/access/to/DataSetupTO";
+import { SequenceTO } from "../../../../../dataAccess/access/to/SequenceTO";
+import { SequenceModelActions, sequenceModelSelectors } from "../../../../../slices/SequenceModelSlice";
+import { DavitUtil } from "../../../../../utils/DavitUtil";
+import { useStepAndLinkNavigation } from "../../../../../utils/WindowUtil";
+import { ChainDropDown } from "../../../../common/fragments/dropdowns/ChainDropDown";
+import { DataSetupDropDown } from "../../../../common/fragments/dropdowns/DataSetupDropDown";
+import { SequenceDropDown } from "../../../../common/fragments/dropdowns/SequenceDropDown";
+import { ControllPanelEditSub } from "../edit/common/ControllPanelEditSub";
+import { OptionField } from "../edit/common/OptionField";
 
 export interface ControllPanelViewOptionsProps {
     hidden: boolean;
@@ -38,9 +38,9 @@ export const ControllPanelViewOptions: FunctionComponent<ControllPanelViewOption
     const { stepBack, stepNext, linkBack, linkNext } = useStepAndLinkNavigation();
 
     const getIndex = (): string => {
-        const link: string = (linkIndex + 1).toString() || '0';
-        const step: string = stepIndex.toString() || '0';
-        const index: string = link + ' / ' + step;
+        const link: string = (linkIndex + 1).toString() || "0";
+        const step: string = stepIndex.toString() || "0";
+        const index: string = link + " / " + step;
         return index;
     };
 
@@ -149,33 +149,33 @@ const useControllPanelSequenceOptionsViewModel = () => {
 
     const getDataSetupName = (): string => {
         if (selectedDataSetup) {
-            return ' * ' + selectDataSetup.name;
+            return " * " + selectDataSetup.name;
         } else {
-            return '';
+            return "";
         }
     };
 
     const getSequenceName = (): string => {
         if (sequence) {
-            return ' * ' + sequence.sequenceTO.name;
+            return " * " + sequence.sequenceTO.name;
         } else {
-            return '';
+            return "";
         }
     };
 
     const getStepName = (): string => {
         if (stepIndex && sequence) {
             return (
-                ' * ' +
+                " * " +
                 sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.id === stepIndex)?.squenceStepTO.name
             );
         } else {
-            return '';
+            return "";
         }
     };
 
     return {
-        label: 'VIEW' + getDataSetupName() + getSequenceName() + getStepName(),
+        label: "VIEW" + getDataSetupName() + getSequenceName() + getStepName(),
         sequence,
         stepIndex,
         linkIndex,

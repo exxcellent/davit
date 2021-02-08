@@ -1,28 +1,28 @@
-import { DavitUtil } from '../../utils/DavitUtil';
-import { ChainCTO } from '../access/cto/ChainCTO';
-import { ChainlinkCTO } from '../access/cto/ChainlinkCTO';
-import { DataSetupCTO } from '../access/cto/DataSetupCTO';
-import { SequenceCTO } from '../access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../access/cto/SequenceStepCTO';
-import { ActionTO } from '../access/to/ActionTO';
-import { ChainDecisionTO } from '../access/to/ChainDecisionTO';
-import { ChainlinkTO } from '../access/to/ChainlinkTO';
-import { ChainTO } from '../access/to/ChainTO';
-import { DataSetupTO } from '../access/to/DataSetupTO';
-import { DecisionTO } from '../access/to/DecisionTO';
-import { InitDataTO } from '../access/to/InitDataTO';
-import { SequenceStepTO } from '../access/to/SequenceStepTO';
-import { SequenceTO } from '../access/to/SequenceTO';
-import { ActionRepository } from '../repositories/ActionRepository';
-import { ChainDecisionRepository } from '../repositories/ChainDecisionRepository';
-import { ChainLinkRepository } from '../repositories/ChainLinkRepository';
-import { ChainRepository } from '../repositories/ChainRepository';
-import { DataSetupRepository } from '../repositories/DataSetupRepository';
-import { DecisionRepository } from '../repositories/DecisionRepository';
-import { InitDataRepository } from '../repositories/InitDataRepository';
-import { SequenceRepository } from '../repositories/SequenceRepository';
-import { SequenceStepRepository } from '../repositories/SequenceStepRepository';
-import { CheckHelper } from '../util/CheckHelper';
+import { DavitUtil } from "../../utils/DavitUtil";
+import { ChainCTO } from "../access/cto/ChainCTO";
+import { ChainlinkCTO } from "../access/cto/ChainlinkCTO";
+import { DataSetupCTO } from "../access/cto/DataSetupCTO";
+import { SequenceCTO } from "../access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../access/cto/SequenceStepCTO";
+import { ActionTO } from "../access/to/ActionTO";
+import { ChainDecisionTO } from "../access/to/ChainDecisionTO";
+import { ChainlinkTO } from "../access/to/ChainlinkTO";
+import { ChainTO } from "../access/to/ChainTO";
+import { DataSetupTO } from "../access/to/DataSetupTO";
+import { DecisionTO } from "../access/to/DecisionTO";
+import { InitDataTO } from "../access/to/InitDataTO";
+import { SequenceStepTO } from "../access/to/SequenceStepTO";
+import { SequenceTO } from "../access/to/SequenceTO";
+import { ActionRepository } from "../repositories/ActionRepository";
+import { ChainDecisionRepository } from "../repositories/ChainDecisionRepository";
+import { ChainLinkRepository } from "../repositories/ChainLinkRepository";
+import { ChainRepository } from "../repositories/ChainRepository";
+import { DataSetupRepository } from "../repositories/DataSetupRepository";
+import { DecisionRepository } from "../repositories/DecisionRepository";
+import { InitDataRepository } from "../repositories/InitDataRepository";
+import { SequenceRepository } from "../repositories/SequenceRepository";
+import { SequenceStepRepository } from "../repositories/SequenceStepRepository";
+import { CheckHelper } from "../util/CheckHelper";
 
 export const SequenceDataAccessService = {
     // ---------------------------------------------------------- Sequence ----------------------------------------------------------
@@ -40,7 +40,7 @@ export const SequenceDataAccessService = {
     },
 
     saveSequenceCTO(sequence: SequenceCTO): SequenceCTO {
-        CheckHelper.nullCheck(sequence, 'sequenceCTO');
+        CheckHelper.nullCheck(sequence, "sequenceCTO");
         const sequenceTO: SequenceTO = SequenceRepository.save(sequence.sequenceTO);
         sequence.sequenceStepCTOs.forEach((step) => {
             if (step.squenceStepTO.sequenceFk === -1) {
@@ -52,13 +52,13 @@ export const SequenceDataAccessService = {
     },
 
     saveSequenceTO(sequenceTO: SequenceTO): SequenceTO {
-        CheckHelper.nullCheck(sequenceTO, 'sequenceTO');
+        CheckHelper.nullCheck(sequenceTO, "sequenceTO");
         const savedSequenceTO: SequenceTO = SequenceRepository.save(sequenceTO);
         return savedSequenceTO;
     },
 
     deleteSequenceTO(sequenceTO: SequenceTO): SequenceTO {
-        CheckHelper.nullCheck(sequenceTO, 'sequenceTO');
+        CheckHelper.nullCheck(sequenceTO, "sequenceTO");
         const tempCTO: SequenceCTO = createSequenceCTO(sequenceTO);
         tempCTO.sequenceStepCTOs.forEach((step) => SequenceStepRepository.delete(step.squenceStepTO));
         tempCTO.decisions.forEach((cond) => DecisionRepository.delete(cond));
@@ -66,10 +66,10 @@ export const SequenceDataAccessService = {
     },
 
     deleteSequenceCTO(sequence: SequenceCTO): SequenceCTO {
-        CheckHelper.nullCheck(sequence.sequenceTO, 'sequenceTO');
+        CheckHelper.nullCheck(sequence.sequenceTO, "sequenceTO");
         sequence.sequenceStepCTOs.forEach(this.deleteSequenceStep);
         if (sequence.sequenceStepCTOs.length > 0) {
-            throw new Error('can not delete sequence, at least one step is containing in this sequence.');
+            throw new Error("can not delete sequence, at least one step is containing in this sequence.");
         }
         this.deleteSequenceTO(sequence.sequenceTO);
         return sequence;
@@ -105,7 +105,7 @@ export const SequenceDataAccessService = {
         copySteps.forEach((step) => SequenceStepRepository.save(step));
 
         if (root === null) {
-            throw Error('no root is set!');
+            throw Error("no root is set!");
         } else {
             return root;
         }
@@ -137,7 +137,7 @@ export const SequenceDataAccessService = {
         copySteps.forEach((step) => ChainLinkRepository.save(step));
 
         if (root === null) {
-            throw Error('no root is set!');
+            throw Error("no root is set!");
         } else {
             return root;
         }
@@ -146,7 +146,7 @@ export const SequenceDataAccessService = {
     // ---------------------------------------------------------- Sequence step ----------------------------------------------------------
 
     saveSequenceStep(sequenceStep: SequenceStepCTO): SequenceStepCTO {
-        CheckHelper.nullCheck(sequenceStep, 'sequenceStep');
+        CheckHelper.nullCheck(sequenceStep, "sequenceStep");
         // TODO: move this in a CheckSaveDecision class.
         if (sequenceStep.squenceStepTO.sequenceFk === -1) {
             throw new Error("Sequence step sequenceFk is '-1'!");
@@ -167,7 +167,7 @@ export const SequenceDataAccessService = {
     },
 
     deleteSequenceStep(sequenceStep: SequenceStepCTO): SequenceStepCTO {
-        CheckHelper.nullCheck(sequenceStep, 'step');
+        CheckHelper.nullCheck(sequenceStep, "step");
         sequenceStep.actions.map((action) => ActionRepository.delete(action.id));
         SequenceStepRepository.delete(sequenceStep.squenceStepTO);
         const seqSteps: SequenceStepTO[] = DavitUtil.deepCopy(
@@ -197,7 +197,7 @@ export const SequenceDataAccessService = {
     findDecision(id: number): DecisionTO {
         const decision: DecisionTO | undefined = DecisionRepository.find(id);
         if (decision === undefined) {
-            throw Error('Decision with id: ' + id + ' dos not exists!');
+            throw Error("Decision with id: " + id + " dos not exists!");
         }
         return decision;
     },
@@ -205,14 +205,14 @@ export const SequenceDataAccessService = {
     // ---------------------------------------------------------- Action ----------------------------------------------------------
 
     saveActionTO(action: ActionTO): ActionTO {
-        CheckHelper.nullCheck(action, 'actionTO');
+        CheckHelper.nullCheck(action, "actionTO");
         const copyAction: ActionTO = DavitUtil.deepCopy(action);
         const savedActionTO: ActionTO = ActionRepository.save(copyAction);
         return savedActionTO;
     },
 
     deleteAction(action: ActionTO): ActionTO {
-        CheckHelper.nullCheck(action, 'action');
+        CheckHelper.nullCheck(action, "action");
         ActionRepository.delete(action.id);
         return action;
     },
@@ -228,13 +228,13 @@ export const SequenceDataAccessService = {
     },
 
     saveDataSetup(dataSetup: DataSetupTO): DataSetupTO {
-        CheckHelper.nullCheck(dataSetup, 'dataSetup');
+        CheckHelper.nullCheck(dataSetup, "dataSetup");
         const dataSetupTO: DataSetupTO = DataSetupRepository.save(dataSetup);
         return dataSetupTO;
     },
 
     saveDataSetupCTO(dataSetupCTO: DataSetupCTO): DataSetupCTO {
-        CheckHelper.nullCheck(dataSetupCTO, 'dataSetupCTO');
+        CheckHelper.nullCheck(dataSetupCTO, "dataSetupCTO");
         const copyDataSetupCTO: DataSetupCTO = DavitUtil.deepCopy(dataSetupCTO);
         const savedDataSetupTO: DataSetupTO = DataSetupRepository.save(dataSetupCTO.dataSetup);
         // remove old init data.
@@ -251,7 +251,7 @@ export const SequenceDataAccessService = {
     },
 
     deleteDataSetup(dataSetup: DataSetupCTO): DataSetupCTO {
-        CheckHelper.nullCheck(dataSetup, 'dataSetup');
+        CheckHelper.nullCheck(dataSetup, "dataSetup");
         dataSetup.initDatas.forEach((initData) => InitDataRepository.delete(initData.id));
         DataSetupRepository.delete(dataSetup.dataSetup);
         return dataSetup;
@@ -265,14 +265,14 @@ export const SequenceDataAccessService = {
     findInitData(id: number): InitDataTO {
         const initData: InitDataTO | undefined = InitDataRepository.find(id);
         if (!initData) {
-            throw new Error('Could not find Init Data with id: ' + id);
+            throw new Error("Could not find Init Data with id: " + id);
         } else {
             return initData;
         }
     },
 
     saveInitData(initData: InitDataTO): InitDataTO {
-        CheckHelper.nullCheck(initData, 'initData');
+        CheckHelper.nullCheck(initData, "initData");
         const savedInitData: InitDataTO = InitDataRepository.save(initData);
         return savedInitData;
     },
@@ -331,7 +331,7 @@ export const SequenceDataAccessService = {
         if (link) {
             return link;
         } else {
-            throw Error('could not find chain link with id: ' + id);
+            throw Error("could not find chain link with id: " + id);
         }
     },
 
@@ -340,14 +340,14 @@ export const SequenceDataAccessService = {
         if (decision) {
             return decision;
         } else {
-            throw Error('could not find chain decision with id: ' + id);
+            throw Error("could not find chain decision with id: " + id);
         }
     },
 };
 // ======================================================== PRIVATE ========================================================
 
 const createSequenceCTO = (sequence: SequenceTO | undefined): SequenceCTO => {
-    CheckHelper.nullCheck(sequence, 'sequence');
+    CheckHelper.nullCheck(sequence, "sequence");
     const sequenceStepCTOs: SequenceStepCTO[] = SequenceStepRepository.findAllForSequence(sequence!.id).map(
         createSequenceStepCTO,
     );
@@ -357,7 +357,7 @@ const createSequenceCTO = (sequence: SequenceTO | undefined): SequenceCTO => {
 };
 
 const createSequenceStepCTO = (sequenceStepTO: SequenceStepTO | undefined): SequenceStepCTO => {
-    CheckHelper.nullCheck(sequenceStepTO, 'sequenceStepTO');
+    CheckHelper.nullCheck(sequenceStepTO, "sequenceStepTO");
     const actionTOs: ActionTO[] = ActionRepository.findAllForStep(sequenceStepTO!.id);
     const sortByIndexActions: ActionTO[] = actionTOs.sort(function (a, b) {
         return a.index - b.index;
@@ -369,7 +369,7 @@ const createSequenceStepCTO = (sequenceStepTO: SequenceStepTO | undefined): Sequ
 };
 
 const createDataSetupCTO = (dataSetupTO: DataSetupTO | undefined): DataSetupCTO => {
-    CheckHelper.nullCheck(dataSetupTO, 'dataSetupTO');
+    CheckHelper.nullCheck(dataSetupTO, "dataSetupTO");
     const initDatas: InitDataTO[] = InitDataRepository.findAllForSetup(dataSetupTO!.id);
     return {
         dataSetup: dataSetupTO!,
@@ -378,7 +378,7 @@ const createDataSetupCTO = (dataSetupTO: DataSetupTO | undefined): DataSetupCTO 
 };
 
 const createChainLinkCTO = (link: ChainlinkTO | undefined): ChainlinkCTO => {
-    CheckHelper.nullCheck(link, 'chainlink');
+    CheckHelper.nullCheck(link, "chainlink");
     const chainLinkCTO: ChainlinkCTO = new ChainlinkCTO();
     chainLinkCTO.chainLink = link!;
     const dataSetupTO: DataSetupTO | undefined = DataSetupRepository.find(link!.dataSetupFk);
@@ -393,7 +393,7 @@ const createChainLinkCTO = (link: ChainlinkTO | undefined): ChainlinkCTO => {
 };
 
 const crateChainCTO = (chain: ChainTO): ChainCTO => {
-    CheckHelper.nullCheck(chain, 'chainTO');
+    CheckHelper.nullCheck(chain, "chainTO");
     const copyChain: ChainTO = DavitUtil.deepCopy(chain);
     const chainCTO: ChainCTO = new ChainCTO();
     const chainLinkTOs: ChainlinkTO[] | undefined = ChainLinkRepository.findAllForChain(copyChain.id);

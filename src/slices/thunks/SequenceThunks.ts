@@ -1,14 +1,14 @@
-import { AppThunk } from '../../app/store';
-import { SequenceCTO } from '../../dataAccess/access/cto/SequenceCTO';
-import { DecisionTO } from '../../dataAccess/access/to/DecisionTO';
-import { SequenceStepTO } from '../../dataAccess/access/to/SequenceStepTO';
-import { SequenceTO } from '../../dataAccess/access/to/SequenceTO';
-import { DataAccess } from '../../dataAccess/DataAccess';
-import { DataAccessResponse } from '../../dataAccess/DataAccessResponse';
-import { editActions, Mode } from '../EditSlice';
-import { handleError } from '../GlobalSlice';
-import { MasterDataActions } from '../MasterDataSlice';
-import { SequenceModelActions } from '../SequenceModelSlice';
+import { AppThunk } from "../../app/store";
+import { SequenceCTO } from "../../dataAccess/access/cto/SequenceCTO";
+import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
+import { SequenceStepTO } from "../../dataAccess/access/to/SequenceStepTO";
+import { SequenceTO } from "../../dataAccess/access/to/SequenceTO";
+import { DataAccess } from "../../dataAccess/DataAccess";
+import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
+import { editActions, Mode } from "../EditSlice";
+import { handleError } from "../GlobalSlice";
+import { MasterDataActions } from "../MasterDataSlice";
+import { SequenceModelActions } from "../SequenceModelSlice";
 
 const createSequenceThunk = (): AppThunk => (dispatch) => {
     const sequence: SequenceTO = new SequenceTO();
@@ -65,7 +65,7 @@ const setSequenceToEditThunk = (sequence: SequenceTO): AppThunk => (dispatch, ge
     if (mode === Mode.EDIT_SEQUENCE) {
         dispatch(editActions.setSequenceToEdit(sequence));
     } else {
-        handleError('Try to set sequence to edit in mode: ' + mode);
+        handleError("Try to set sequence to edit in mode: " + mode);
     }
 };
 

@@ -1,15 +1,15 @@
-import { AppThunk } from '../../app/store';
-import { SequenceCTO } from '../../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../../dataAccess/access/cto/SequenceStepCTO';
-import { DecisionTO } from '../../dataAccess/access/to/DecisionTO';
-import { GoToTypes } from '../../dataAccess/access/types/GoToType';
-import { DataAccess } from '../../dataAccess/DataAccess';
-import { DataAccessResponse } from '../../dataAccess/DataAccessResponse';
-import { DavitUtil } from '../../utils/DavitUtil';
-import { editActions, Mode } from '../EditSlice';
-import { handleError } from '../GlobalSlice';
-import { MasterDataActions } from '../MasterDataSlice';
-import { EditDecision } from './DecisionThunks';
+import { AppThunk } from "../../app/store";
+import { SequenceCTO } from "../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
+import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
+import { GoToTypes } from "../../dataAccess/access/types/GoToType";
+import { DataAccess } from "../../dataAccess/DataAccess";
+import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
+import { DavitUtil } from "../../utils/DavitUtil";
+import { editActions, Mode } from "../EditSlice";
+import { handleError } from "../GlobalSlice";
+import { MasterDataActions } from "../MasterDataSlice";
+import { EditDecision } from "./DecisionThunks";
 
 const createSequenceStepThunk = (
     step: SequenceStepCTO,
@@ -89,7 +89,7 @@ const setStepToEditThunk = (step: SequenceStepCTO): AppThunk => (dispatch, getSt
     if (mode.startsWith(Mode.EDIT_SEQUENCE_STEP)) {
         dispatch(editActions.setStepToEdit(step));
     } else {
-        handleError('Try to set step to edit in mode: ' + mode);
+        handleError("Try to set step to edit in mode: " + mode);
     }
 };
 

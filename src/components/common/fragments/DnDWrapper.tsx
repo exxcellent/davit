@@ -1,7 +1,7 @@
-import { motion, useInvertedScale, useMotionValue } from 'framer-motion';
-import React, { FunctionComponent, useEffect, useRef } from 'react';
-import { WINDOW_FACTOR } from '../../../app/DavitConstants';
-import { PositionTO } from '../../../dataAccess/access/to/PositionTO';
+import { motion, useInvertedScale, useMotionValue } from "framer-motion";
+import React, { FunctionComponent, useEffect, useRef } from "react";
+import { WINDOW_FACTOR } from "../../../app/DavitConstants";
+import { PositionTO } from "../../../dataAccess/access/to/PositionTO";
 
 export interface DnDWrapperProps {
     dragConstraintsRef: any;
@@ -54,7 +54,7 @@ export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
             }}
             className="dndWrapper"
             style={{
-                boxShadow: shadow ? '3px 3px 3px ' + shadow : '',
+                boxShadow: shadow ? "3px 3px 3px " + shadow : "",
                 x,
                 y,
                 scaleX,

@@ -1,10 +1,10 @@
-import { AppThunk } from '../../app/store';
-import { DataRelationTO } from '../../dataAccess/access/to/DataRelationTO';
-import { DataAccess } from '../../dataAccess/DataAccess';
-import { DataAccessResponse } from '../../dataAccess/DataAccessResponse';
-import { editActions, Mode } from '../EditSlice';
-import { handleError } from '../GlobalSlice';
-import { MasterDataActions } from '../MasterDataSlice';
+import { AppThunk } from "../../app/store";
+import { DataRelationTO } from "../../dataAccess/access/to/DataRelationTO";
+import { DataAccess } from "../../dataAccess/DataAccess";
+import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
+import { editActions, Mode } from "../EditSlice";
+import { handleError } from "../GlobalSlice";
+import { MasterDataActions } from "../MasterDataSlice";
 
 const createRelationThunk = (): AppThunk => (dispatch) => {
     const relation: DataRelationTO = new DataRelationTO();
@@ -40,7 +40,7 @@ const setRelationToEditThunk = (relation: DataRelationTO): AppThunk => (dispatch
     if (mode === Mode.EDIT_RELATION) {
         dispatch(editActions.setRelationToEdit(relation));
     } else {
-        handleError('Try to set relation to edit in mode: ' + mode);
+        handleError("Try to set relation to edit in mode: " + mode);
     }
 };
 

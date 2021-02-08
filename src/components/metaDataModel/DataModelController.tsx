@@ -1,26 +1,28 @@
-import React, { FunctionComponent, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { ActorCTO } from '../../dataAccess/access/cto/ActorCTO';
-import { DataCTO } from '../../dataAccess/access/cto/DataCTO';
-import { DataSetupCTO } from '../../dataAccess/access/cto/DataSetupCTO';
-import { GeometricalDataCTO } from '../../dataAccess/access/cto/GeometraicalDataCTO';
-import { SequenceStepCTO } from '../../dataAccess/access/cto/SequenceStepCTO';
-import { ActionTO } from '../../dataAccess/access/to/ActionTO';
-import { DataRelationTO } from '../../dataAccess/access/to/DataRelationTO';
-import { DecisionTO } from '../../dataAccess/access/to/DecisionTO';
-import { InitDataTO } from '../../dataAccess/access/to/InitDataTO';
-import { ActionType } from '../../dataAccess/access/types/ActionType';
-import { editSelectors } from '../../slices/EditSlice';
-import { MasterDataActions, masterDataSelectors } from '../../slices/MasterDataSlice';
-import { SequenceModelActions, sequenceModelSelectors } from '../../slices/SequenceModelSlice';
-import { EditData } from '../../slices/thunks/DataThunks';
-import { DavitUtil } from '../../utils/DavitUtil';
-import { ActorData } from '../../viewDataTypes/ActorData';
-import { ActorDataState } from '../../viewDataTypes/ActorDataState';
-import { ViewFragmentProps } from '../../viewDataTypes/ViewFragment';
-import { DavitPathProps, DavitPathTypes } from '../common/fragments/svg/DavitPath';
-import { DavitCard, DavitCardProps } from '../metaActorModel/presentation/fragments/DavitCard';
-import { DnDBox, DnDBoxElement, DnDBoxType } from '../metaActorModel/presentation/fragments/DnDBox';
+import React, { FunctionComponent } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { ActorCTO } from "../../dataAccess/access/cto/ActorCTO";
+import { DataCTO } from "../../dataAccess/access/cto/DataCTO";
+import { DataSetupCTO } from "../../dataAccess/access/cto/DataSetupCTO";
+import { GeometricalDataCTO } from "../../dataAccess/access/cto/GeometraicalDataCTO";
+import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
+import { ActionTO } from "../../dataAccess/access/to/ActionTO";
+import { ConditionTO } from "../../dataAccess/access/to/ConditionTO";
+import { DataRelationTO } from "../../dataAccess/access/to/DataRelationTO";
+import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
+import { InitDataTO } from "../../dataAccess/access/to/InitDataTO";
+import { ActionType } from "../../dataAccess/access/types/ActionType";
+import { editSelectors } from "../../slices/EditSlice";
+import { GlobalActions, globalSelectors } from "../../slices/GlobalSlice";
+import { MasterDataActions, masterDataSelectors } from "../../slices/MasterDataSlice";
+import { sequenceModelSelectors } from "../../slices/SequenceModelSlice";
+import { EditData } from "../../slices/thunks/DataThunks";
+import { DavitUtil } from "../../utils/DavitUtil";
+import { ActorData } from "../../viewDataTypes/ActorData";
+import { ActorDataState } from "../../viewDataTypes/ActorDataState";
+import { ViewFragmentProps } from "../../viewDataTypes/ViewFragment";
+import { DavitPathProps, DavitPathTypes } from "../common/fragments/svg/DavitPath";
+import { DavitCard, DavitCardProps } from "../metaActorModel/presentation/fragments/DavitCard";
+import { DnDBox, DnDBoxElement, DnDBoxType } from "../metaActorModel/presentation/fragments/DnDBox";
 
 interface DataModelControllerProps {
     fullScreen?: boolean;
@@ -36,6 +38,7 @@ export const DataModelController: FunctionComponent<DataModelControllerProps> = 
         zoomOut,
         getRelations,
         onGeometricalDataUpdate,
+        dataZoomFactor,
     } = useMetaDataModelViewModel();
 
     const createMetaDataDnDBox = () => {
@@ -47,6 +50,7 @@ export const DataModelController: FunctionComponent<DataModelControllerProps> = 
                 fullScreen={fullScreen}
                 zoomIn={zoomIn}
                 zoomOut={zoomOut}
+                zoom={dataZoomFactor}
                 type={DnDBoxType.data}
                 onGeoUpdate={onGeometricalDataUpdate}
             />
@@ -68,6 +72,7 @@ const useMetaDataModelViewModel = () => {
     const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.selectStepToEdit);
     const actionToEdit: ActionTO | null = useSelector(editSelectors.selectActionToEdit);
     const decisionToEdit: DecisionTO | null = useSelector(editSelectors.selectDecisionToEdit);
+    const conditionToEdit: ConditionTO | null = useSelector(editSelectors.selectConditionToEdit);
     const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.selectDataSetupToEdit);
     const initDataToEdit: InitDataTO | null = useSelector(editSelectors.selectInitDataToEdit);
     // ----- VIEW -----
@@ -75,9 +80,7 @@ const useMetaDataModelViewModel = () => {
     const errors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
     const actions: ActionTO[] = useSelector(sequenceModelSelectors.selectActions);
 
-    const [zoom, setZoom] = useState<number>(1);
-
-    const ZOOM_FACTOR: number = 0.1;
+    const dataZoomFactor: number = useSelector(globalSelectors.selectDataZoomFactor);
 
     React.useEffect(() => {
         dispatch(MasterDataActions.loadDatasFromBackend());
@@ -85,7 +88,7 @@ const useMetaDataModelViewModel = () => {
     }, [dispatch]);
 
     const getActorNameById = (actorId: number): string => {
-        return actors.find((actor) => actor.actor.id === actorId)?.actor.name || 'Could not find Actor';
+        return actors.find((actor) => actor.actor.id === actorId)?.actor.name || "Could not find Actor";
     };
 
     const getActorDatas = () => {
@@ -100,7 +103,9 @@ const useMetaDataModelViewModel = () => {
         const actorDatasFromErros: ViewFragmentProps[] = errors.map(mapActionToActorDatas);
         const actorDatasFromActions: ViewFragmentProps[] = actions.map(mapActionToActorDatas);
 
-        const actorDatasFromCompDatas: ViewFragmentProps[] = currentActorDatas.map(mapActorDataToActorData);
+        const actorDatasFromCompDatas: ViewFragmentProps[] = currentActorDatas
+            .filter((actDat) => actDat.state !== ActorDataState.UPDATED_FROM)
+            .map(mapActorDataToActorData);
         actorDatas.push(...actorDatasFromErros);
         actorDatas.push(
             ...actorDatasFromActions.filter(
@@ -137,17 +142,19 @@ const useMetaDataModelViewModel = () => {
         if (actorDataFromInitDataToEdit) {
             actorDatas.push(actorDataFromInitDataToEdit);
         }
+        if (conditionToEdit) {
+            actorDatas.push(mapConditionToCompData(conditionToEdit));
+        }
         return actorDatas;
     };
 
     function mapActionToActorDatas(actionItem: ActionTO): ViewFragmentProps {
         const state: ActorDataState = mapActionTypeToViewFragmentState(actionItem.actionType);
         // const parentId = getDataAndInstanceIds(actionItem.dataFk);
-        const parentId = actionItem.dataFk;
         return {
             name: getActorNameById(actionItem.receivingActorFk),
             state: state,
-            parentId: parentId,
+            parentId: actionItem.dataFk,
         };
     }
 
@@ -162,17 +169,21 @@ const useMetaDataModelViewModel = () => {
     const mapDecisionToCompData = (decision: DecisionTO | null): ViewFragmentProps[] => {
         let props: ViewFragmentProps[] = [];
         if (decision) {
-            if (decision.dataAndInstaceIds !== undefined && decision.dataAndInstaceIds.length > 0) {
-                props = decision.dataAndInstaceIds.map((data) => {
-                    return {
-                        parentId: { dataId: data.dataFk, instanceId: data.instanceId },
-                        name: getActorNameById(decision.actorFk),
-                        state: ActorDataState.CHECKED,
-                    };
+            if (decision.conditions !== undefined && decision.conditions.length > 0) {
+                props = decision.conditions.map((condition) => {
+                    return mapConditionToCompData(condition);
                 });
             }
         }
         return props;
+    };
+
+    const mapConditionToCompData = (condition: ConditionTO): ViewFragmentProps => {
+        return {
+            parentId: { dataId: condition.dataFk, instanceId: condition.instanceFk },
+            name: getActorNameById(condition.actorFk),
+            state: ActorDataState.CHECKED,
+        };
     };
 
     const mapInitDataToCompData = (initData: InitDataTO): ViewFragmentProps => {
@@ -237,7 +248,7 @@ const useMetaDataModelViewModel = () => {
     };
 
     const dataToDnDElements = (datas: DataCTO[]): DnDBoxElement[] => {
-        let dndBoxElements: DnDBoxElement[] = [];
+        let dndBoxElements: DnDBoxElement[];
         dndBoxElements = datas
             .filter((data) => !(dataCTOToEdit && dataCTOToEdit.data.id === data.data.id))
             .map((dataa) => {
@@ -271,17 +282,17 @@ const useMetaDataModelViewModel = () => {
                     (act.parentId as { dataId: number; instanceId: number }).dataId === data.data.id,
             ),
             instances: data.data.instances,
-            zoomFactor: zoom,
-            type: 'DATA',
+            zoomFactor: dataZoomFactor,
+            type: "DATA",
         };
     };
 
     const zoomOut = (): void => {
-        setZoom(zoom - ZOOM_FACTOR);
+        dispatch(GlobalActions.dataZoomOut());
     };
 
     const zoomIn = (): void => {
-        setZoom(zoom + ZOOM_FACTOR);
+        dispatch(GlobalActions.dataZoomIn());
     };
 
     const getGeometricalData = (dataId: number): GeometricalDataCTO | undefined => {
@@ -336,12 +347,12 @@ const useMetaDataModelViewModel = () => {
     };
 
     return {
-        handleDataClick: (dataId: number) => dispatch(SequenceModelActions.handleDataClickEvent(dataId)),
         onPositionUpdate,
         toDnDElements: dataToDnDElements(datas),
         zoomIn,
         zoomOut,
         getRelations,
         onGeometricalDataUpdate,
+        dataZoomFactor,
     };
 };

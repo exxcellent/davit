@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { SequenceCTO } from '../dataAccess/access/cto/SequenceCTO';
-import { ChainTO } from '../dataAccess/access/to/ChainTO';
-import { editSelectors, Mode } from '../slices/EditSlice';
-import { SequenceModelActions, sequenceModelSelectors } from '../slices/SequenceModelSlice';
-import { DavitUtil } from './DavitUtil';
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
+import { ChainTO } from "../dataAccess/access/to/ChainTO";
+import { editSelectors, Mode } from "../slices/EditSlice";
+import { SequenceModelActions, sequenceModelSelectors } from "../slices/SequenceModelSlice";
+import { DavitUtil } from "./DavitUtil";
 
 const getWidth = () => window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 const getHeight = () => window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
@@ -25,12 +25,12 @@ export const useCurrentWitdh = () => {
             timeoutId = setTimeout(() => setWidth(getWidth()), 150);
         };
         // set resize listener
-        window.addEventListener('resize', resizeListener);
+        window.addEventListener("resize", resizeListener);
 
         // clean up function
         return () => {
             // remove resize listener
-            window.removeEventListener('resize', resizeListener);
+            window.removeEventListener("resize", resizeListener);
         };
     }, []);
 
@@ -53,12 +53,12 @@ export const useCurrentHeight = () => {
             timeoutId = setTimeout(() => setHeight(getHeight()), 150);
         };
         // set resize listener
-        window.addEventListener('resize', resizeListener);
+        window.addEventListener("resize", resizeListener);
 
         // clean up function
         return () => {
             // remove resize listener
-            window.removeEventListener('resize', resizeListener);
+            window.removeEventListener("resize", resizeListener);
         };
     }, []);
 
@@ -81,19 +81,19 @@ export const useCustomZoomEvent = (
 
     const checkZoom = (event: KeyboardEvent) => {
         if (event.ctrlKey === true) {
-            if (event.key === '+' || event.key === '-') {
+            if (event.key === "+" || event.key === "-") {
                 event.preventDefault();
             }
         }
     };
 
     useEffect(() => {
-        document.addEventListener('wheel', handleKeyDown, { passive: false });
-        document.addEventListener('keydown', checkZoom);
+        document.addEventListener("wheel", handleKeyDown, { passive: false });
+        document.addEventListener("keydown", checkZoom);
 
         return () => {
-            document.removeEventListener('wheel', handleKeyDown);
-            document.removeEventListener('keydown', checkZoom);
+            document.removeEventListener("wheel", handleKeyDown);
+            document.removeEventListener("keydown", checkZoom);
         };
     });
 };
@@ -135,27 +135,27 @@ export const useStepAndLinkNavigation = () => {
     };
 
     const handleArrowKeyEvent = (event: KeyboardEvent) => {
-        if (event.key === 'ArrowLeft') {
+        if (event.key === "ArrowLeft") {
             stepBack();
         }
-        if (event.key === 'ArrowRight') {
+        if (event.key === "ArrowRight") {
             stepNext();
         }
-        if (event.key === 'PageDown') {
+        if (event.key === "PageDown") {
             event.preventDefault();
             linkNext();
         }
-        if (event.key === 'PageUp') {
+        if (event.key === "PageUp") {
             event.preventDefault();
             linkBack();
         }
     };
 
     useEffect(() => {
-        document.addEventListener('keydown', handleArrowKeyEvent);
+        document.addEventListener("keydown", handleArrowKeyEvent);
 
         return () => {
-            document.removeEventListener('keydown', handleArrowKeyEvent);
+            document.removeEventListener("keydown", handleArrowKeyEvent);
         };
     });
 

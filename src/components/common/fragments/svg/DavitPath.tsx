@@ -1,7 +1,7 @@
-import { motion, Point } from 'framer-motion';
-import React, { FunctionComponent } from 'react';
-import { GeometricalDataCTO } from '../../../../dataAccess/access/cto/GeometraicalDataCTO';
-import { Direction } from '../../../../dataAccess/access/to/DataRelationTO';
+import { motion, Point } from "framer-motion";
+import React, { FunctionComponent } from "react";
+import { GeometricalDataCTO } from "../../../../dataAccess/access/cto/GeometraicalDataCTO";
+import { Direction } from "../../../../dataAccess/access/to/DataRelationTO";
 
 export interface Arrow {
     sourceGeometricalData: GeometricalDataCTO;
@@ -11,17 +11,17 @@ export interface Arrow {
 }
 
 export enum ArrowType {
-    SEND = 'SEND',
-    TRIGGER = 'TRIGGER',
+    SEND = "SEND",
+    TRIGGER = "TRIGGER",
 }
 
 export enum DavitPathTypes {
-    SMOOTH = 'SMOOTH',
-    GRID = 'GRID',
+    SMOOTH = "SMOOTH",
+    GRID = "GRID",
 }
 
 export enum DavitPathHead {
-    ARROW = 'ARROW',
+    ARROW = "ARROW",
 }
 
 export interface DavitPathProps {
@@ -71,10 +71,10 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
     const TEXT_OFFSET: number = 25;
 
     const createSmoothLine = (x1: number, y1: number, x2: number, y2: number) => {
-        const startDir: 'LEFT' | ' RIGHT' = x2 < x1 + sourceWidth / 2 ? 'LEFT' : ' RIGHT';
-        const endDir: 'LEFT' | ' RIGHT' = x1 < x2 + sourceWidth / 2 ? 'LEFT' : ' RIGHT';
-        const xStart = startDir === 'LEFT' ? x1 : x1 + sourceWidth;
-        const xEnd = endDir === 'LEFT' ? x2 : x2 + targetWidth + OFFSET + MARKER_WIDTH;
+        const startDir: "LEFT" | " RIGHT" = x2 < x1 + sourceWidth / 2 ? "LEFT" : " RIGHT";
+        const endDir: "LEFT" | " RIGHT" = x1 < x2 + sourceWidth / 2 ? "LEFT" : " RIGHT";
+        const xStart = startDir === "LEFT" ? x1 : x1 + sourceWidth;
+        const xEnd = endDir === "LEFT" ? x2 : x2 + targetWidth + OFFSET + MARKER_WIDTH;
         let startPoint: Point = { x: xStart, y: y1 };
         let endPoint: Point = { x: xEnd, y: y2 };
         // set interfaces
@@ -86,8 +86,8 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
 
         const middlePoint = getMiddlePoint(offsetStartPoint, endPoint);
         const curveRefPoint = getCurvRefPoint(offsetStartPoint, middlePoint);
-        const offsetStartSign = startDir === 'LEFT' ? '-' : '';
-        const offsetEndSign = endDir === 'LEFT' ? '' : '-';
+        const offsetStartSign = startDir === "LEFT" ? "-" : "";
+        const offsetEndSign = endDir === "LEFT" ? "" : "-";
 
         return (
             <>
@@ -101,9 +101,9 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
         T ${endPoint.x}, ${endPoint.y}
         l ${offsetEndSign}10,0
         `}
-                    className={'carvPath '}
+                    className={"carvPath "}
                     markerEnd="url(#arrow)"
-                    style={{ stroke: lineColor ? lineColor : 'black', strokeDasharray: stroked ? 5.5 : '' }}
+                    style={{ stroke: lineColor ? lineColor : "black", strokeDasharray: stroked ? 5.5 : "" }}
                 />
                 {labels.map((label, index) => {
                     return (
@@ -156,10 +156,10 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
         L ${endPoint.x},${endPoint.y}
         `}
                 style={{
-                    strokeDasharray: stroked ? '5,5' : 0,
-                    strokeWidth: '2px',
-                    fill: 'transparent',
-                    stroke: 'black',
+                    strokeDasharray: stroked ? "5,5" : 0,
+                    strokeWidth: "2px",
+                    fill: "transparent",
+                    stroke: "black",
                 }}
                 id={id.toString()}
             />
@@ -207,8 +207,8 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
         return middleValue;
     };
 
-    const setOutPutOffset = (point: Point, offset: number, startDir: 'LEFT' | ' RIGHT'): Point => {
-        return startDir === 'LEFT' ? { x: point.x - offset, y: point.y } : { x: point.x + offset, y: point.y };
+    const setOutPutOffset = (point: Point, offset: number, startDir: "LEFT" | " RIGHT"): Point => {
+        return startDir === "LEFT" ? { x: point.x - offset, y: point.y } : { x: point.x + offset, y: point.y };
     };
 
     const setInputPutOffset = (point: Point, offset: number): Point => {

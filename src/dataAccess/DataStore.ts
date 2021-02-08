@@ -1,7 +1,7 @@
-import { DAVIT_VERISON, DEFAULT_PROJECT_NAME, STORE_ID } from '../app/DavitConstants';
-import { DataStoreCTO } from './access/cto/DataStoreCTO';
-import { StoreTO } from './access/to/StoreTO';
-import { DavitVersionManager } from './migration/DavitVersionManager';
+import { DAVIT_VERISON, DEFAULT_PROJECT_NAME, DEFAULT_ZOOM, STORE_ID } from "../app/DavitConstants";
+import { DataStoreCTO } from "./access/cto/DataStoreCTO";
+import { StoreTO } from "./access/to/StoreTO";
+import { DavitVersionManager } from "./migration/DavitVersionManager";
 
 class DataStore {
     static instance: DataStore;
@@ -22,6 +22,8 @@ class DataStore {
         let objectStore: StoreTO = {
             version: DAVIT_VERISON,
             projectName: DEFAULT_PROJECT_NAME,
+            actorZoom: DEFAULT_ZOOM,
+            dataZoom: DEFAULT_ZOOM,
             actors: [],
             groups: [],
             geometricalDatas: [],
@@ -69,7 +71,9 @@ class DataStore {
                         throw new Error(`Data has wrong format: key ${key}, value ${value}`);
                     }
                 }
-                // TODO read no array value's...
+                this.data!.projectName = objectStore.projectName;
+                this.data!.actorZoom = objectStore.actorZoom;
+                this.data!.dataZoom = objectStore.dataZoom;
             } else {
                 throw new Error(`No value found for key ${key}`);
             }
@@ -81,9 +85,12 @@ class DataStore {
     }
 
     private getDataStoreObject(): StoreTO {
+        console.info(this.data);
         return {
-            projectName: DEFAULT_PROJECT_NAME,
+            projectName: this.data!.projectName.toString(),
             version: DAVIT_VERISON,
+            actorZoom: Number(this.data!.actorZoom),
+            dataZoom: Number(this.data!.dataZoom),
             actors: Array.from(this.data!.actors.values()),
             groups: Array.from(this.data!.groups.values()),
             designs: Array.from(this.data!.designs.values()),
@@ -104,7 +111,7 @@ class DataStore {
     }
 
     public storeFileData(fileData: string) {
-        console.log('Writing to storage:');
+        console.log("Writing to storage:");
         console.log(fileData);
         const objectStore: StoreTO = JSON.parse(fileData);
         this.readData(objectStore);
@@ -113,10 +120,10 @@ class DataStore {
 
     public downloadData(projectName: string) {
         const dataStr = JSON.stringify(this.getDataStoreObject());
-        const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-        const linkElement = document.createElement('a');
-        linkElement.setAttribute('href', dataUri);
-        linkElement.setAttribute('download', projectName + '.json');
+        const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+        const linkElement = document.createElement("a");
+        linkElement.setAttribute("href", dataUri);
+        linkElement.setAttribute("download", projectName + ".json");
         linkElement.click();
     }
 
@@ -131,7 +138,7 @@ class DataStore {
     }
 
     public roleBack(): void {
-        console.warn('Data Store: role back.');
+        console.warn("Data Store: role back.");
         this.readDataFromStorage();
     }
 
@@ -142,6 +149,7 @@ class DataStore {
         return this.data!;
     }
 }
+
 const dataStore = new DataStore();
 
 export default dataStore;

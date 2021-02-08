@@ -1,7 +1,7 @@
-import React, { FunctionComponent } from 'react';
-import { DropdownProps } from 'semantic-ui-react';
-import { DataInstanceTO } from '../../../../dataAccess/access/to/DataInstanceTO';
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from './DavitDropDown';
+import React, { FunctionComponent } from "react";
+import { DropdownProps } from "semantic-ui-react";
+import { DataInstanceTO } from "../../../../dataAccess/access/to/DataInstanceTO";
+import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
 
 interface DataInstanceDropDownProps extends DropdownProps {
     onSelect: (id: number | undefined) => void;

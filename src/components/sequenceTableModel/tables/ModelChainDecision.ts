@@ -1,10 +1,10 @@
-import { useDispatch } from 'react-redux';
-import { ChainlinkCTO } from '../../../dataAccess/access/cto/ChainlinkCTO';
-import { ChainDecisionTO } from '../../../dataAccess/access/to/ChainDecisionTO';
-import { CalcChain } from '../../../services/SequenceChainService';
-import { EditActions } from '../../../slices/EditSlice';
-import { DavitTableRowData } from '../../common/fragments/DavitTable';
-import { getChainGotoName } from '../util/TableUtil';
+import { useDispatch } from "react-redux";
+import { ChainlinkCTO } from "../../../dataAccess/access/cto/ChainlinkCTO";
+import { ChainDecisionTO } from "../../../dataAccess/access/to/ChainDecisionTO";
+import { CalcChain } from "../../../services/SequenceChainService";
+import { EditActions } from "../../../slices/EditSlice";
+import { DavitTableRowData } from "../../common/fragments/DavitTable";
+import { getChainGotoName } from "../util/TableUtil";
 
 export const useGetModelChainDecisionTableData = (
     calcChain: CalcChain | null,
@@ -26,7 +26,7 @@ export const useGetModelChainDecisionTableData = (
     };
 };
 
-const header = ['NAME', 'IF GOTO', 'ELSE GOTO', 'ACTIONS'];
+const header = ["NAME", "IF GOTO", "ELSE GOTO", "ACTIONS"];
 
 const createChainDecisionColumn = (
     decision: ChainDecisionTO,
@@ -37,9 +37,9 @@ const createChainDecisionColumn = (
     const name: string = decision.name;
     const ifgoto: string = getChainGotoName(decision.ifGoTo, selectedChainlinks, selectedChainDecisions);
     const elsegoto: string = getChainGotoName(decision.elseGoTo, selectedChainlinks, selectedChainDecisions);
-    const trClass = 'carv2Tr';
+    const trClass = "carv2Tr";
 
-    const editAction = { icon: 'wrench', callback: editCallback };
+    const editAction = { icon: "wrench", callback: editCallback };
 
     return {
         trClass,

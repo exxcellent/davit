@@ -1,18 +1,23 @@
-import { ActionTO } from '../dataAccess/access/to/ActionTO';
-import { DecisionTO } from '../dataAccess/access/to/DecisionTO';
-import { ActionType } from '../dataAccess/access/types/ActionType';
-import { GoTo } from '../dataAccess/access/types/GoToType';
-import { ActorData } from '../viewDataTypes/ActorData';
-import { ActorDataState } from '../viewDataTypes/ActorDataState';
+import { ActionTO } from "../dataAccess/access/to/ActionTO";
+import { DecisionTO } from "../dataAccess/access/to/DecisionTO";
+import { ActionType } from "../dataAccess/access/types/ActionType";
+import { GoTo } from "../dataAccess/access/types/GoToType";
+import { ActorData } from "../viewDataTypes/ActorData";
+import { ActorDataState } from "../viewDataTypes/ActorDataState";
+
+// ----------------------------------------------------- INTERFACES ----------------------------------------------------------
 
 export interface SequenceActionResult {
     actorDatas: ActorData[];
     errors: ActionTO[];
 }
+
 export interface SequenceDecisionResult {
     actorDatas: ActorData[];
     goto: GoTo;
 }
+
+// ----------------------------------------------------- PUBLIC FUNCTION -----------------------------------------------------
 
 export const SequenceActionReducer = {
     executeActionsOnActorDatas(actions: ActionTO[], actorDatas: ActorData[]): SequenceActionResult {
@@ -25,34 +30,36 @@ export const SequenceActionReducer = {
         const errors: ActionTO[] = [];
 
         actions.forEach((action) => {
-            const indexActorDataToEdit: number = findActorDataIndex(
+            const indexActorDataReceiving: number = findActorDataIndex(
                 action.receivingActorFk,
                 action.dataFk,
                 newActorDatas,
             );
+
             const indexActorDataSending: number = findActorDataIndex(
                 action.sendingActorFk,
                 action.dataFk,
                 newActorDatas,
             );
+
             switch (action.actionType) {
                 case ActionType.ADD:
-                    if (!actorDataIsPresent(indexActorDataToEdit)) {
+                    if (!actorDataIsPresent(indexActorDataReceiving)) {
                         newActorDatas.push({
                             actorFk: action.receivingActorFk,
                             dataFk: action.dataFk,
                             instanceFk: action.instanceFk,
                             state: ActorDataState.NEW,
                         });
-                    } else if (newActorDatas[indexActorDataToEdit].instanceFk !== action.instanceFk) {
+                    } else if (newActorDatas[indexActorDataReceiving].instanceFk !== action.instanceFk) {
                         newActorDatas.push({
                             actorFk: action.receivingActorFk,
                             dataFk: action.dataFk,
                             instanceFk: action.instanceFk,
                             state: ActorDataState.UPDATED_TO,
                         });
-                        newActorDatas[indexActorDataToEdit] = {
-                            ...newActorDatas[indexActorDataToEdit],
+                        newActorDatas[indexActorDataReceiving] = {
+                            ...newActorDatas[indexActorDataReceiving],
                             state: ActorDataState.UPDATED_FROM,
                         };
                     } else {
@@ -60,8 +67,8 @@ export const SequenceActionReducer = {
                     }
                     break;
                 case ActionType.DELETE:
-                    actorDataIsPresent(indexActorDataToEdit)
-                        ? (newActorDatas[indexActorDataToEdit].state = ActorDataState.DELETED)
+                    actorDataIsPresent(indexActorDataReceiving)
+                        ? (newActorDatas[indexActorDataReceiving].state = ActorDataState.DELETED)
                         : errors.push(action);
                     break;
                 case ActionType.SEND:
@@ -73,14 +80,14 @@ export const SequenceActionReducer = {
                             state: ActorDataState.SENT,
                         };
                         newActorDatas[indexActorDataSending].state = ActorDataState.SENT;
-                        if (actorDataIsPresent(indexActorDataToEdit)) {
+                        if (actorDataIsPresent(indexActorDataReceiving)) {
                             newActorDatas.push({
                                 actorFk: action.receivingActorFk,
                                 dataFk: action.dataFk,
-                                instanceFk: newActorDatas[indexActorDataToEdit].instanceFk,
+                                instanceFk: newActorDatas[indexActorDataReceiving].instanceFk,
                                 state: ActorDataState.UPDATED_FROM,
                             });
-                            newActorDatas[indexActorDataToEdit] = { ...actorData, state: ActorDataState.UPDATED_TO };
+                            newActorDatas[indexActorDataReceiving] = { ...actorData, state: ActorDataState.UPDATED_TO };
                         } else {
                             newActorDatas.push(actorData);
                         }
@@ -97,8 +104,8 @@ export const SequenceActionReducer = {
                             state: ActorDataState.SENT,
                         };
                         newActorDatas[indexActorDataSending].state = ActorDataState.DELETED;
-                        if (actorDataIsPresent(indexActorDataToEdit)) {
-                            newActorDatas[indexActorDataToEdit] = { ...actorData, state: ActorDataState.UPDATED_TO };
+                        if (actorDataIsPresent(indexActorDataReceiving)) {
+                            newActorDatas[indexActorDataReceiving] = { ...actorData, state: ActorDataState.UPDATED_TO };
                         } else {
                             newActorDatas.push(actorData);
                         }
@@ -112,41 +119,41 @@ export const SequenceActionReducer = {
     },
 
     executeDecisionCheck(decision: DecisionTO, actorDatas: ActorData[]): SequenceDecisionResult {
-        const newActorDatas: ActorData[] = actorDatas
-            .filter(
-                (actorData) =>
-                    actorData.state !== ActorDataState.DELETED && actorData.state !== ActorDataState.CHECK_FAILED,
-            )
+        /**
+         * Remove with status "deleted" and "check failed"
+         * Change rest to status "persistent".
+         * */
+        const updatedActorDatas: ActorData[] = actorDatas
+            .filter((actorData) => !isTransiantState(actorData.state))
             .map((actorData) => {
                 return { ...actorData, state: ActorDataState.PERSISTENT };
             });
-        const filteredActorData: ActorData[] = newActorDatas.filter(
-            (actorData) => actorData.actorFk === decision.actorFk,
-        );
+
         let goTo = decision.ifGoTo;
-        decision.dataAndInstaceIds.forEach((dataAndInstanceId) => {
-            // if data and instance id are defined search exact match. if only data id is defined search for any instance of that data
-            const checkedActorDatas: ActorData[] = filteredActorData.filter(
-                (actor) =>
-                    actor.dataFk === dataAndInstanceId.dataFk &&
-                    (!dataAndInstanceId.instanceId || actor.instanceFk === dataAndInstanceId.instanceId),
+
+        decision.conditions.forEach((condition) => {
+            const actorDataToCheck: ActorData | undefined = updatedActorDatas.find(
+                (actorData) => actorData.actorFk === condition.actorFk && actorData.instanceFk === condition.instanceFk,
             );
 
-            if (dataIsPresentOnActor(checkedActorDatas)) {
-                checkedActorDatas.forEach((actorData) => (actorData.state = ActorDataState.CHECKED));
+            if (actorDataToCheck) {
+                actorDataToCheck.state = ActorDataState.CHECKED;
             } else {
-                newActorDatas.push({
-                    actorFk: decision.actorFk,
-                    dataFk: dataAndInstanceId.dataFk,
-                    instanceFk: dataAndInstanceId.instanceId,
+                updatedActorDatas.push({
+                    actorFk: condition.actorFk,
+                    dataFk: condition.dataFk,
+                    instanceFk: condition.instanceFk,
                     state: ActorDataState.CHECK_FAILED,
                 });
                 goTo = decision.elseGoTo;
             }
         });
-        return { actorDatas: newActorDatas, goto: goTo };
+
+        return { actorDatas: updatedActorDatas, goto: goTo };
     },
 };
+
+// ------------------------------------------------------------ PRIVATE FUNCTIONS ------------------------------------------------------------
 
 const findActorDataIndex = (actorId: number, dataId: number, actorDatas: ActorData[]): number => {
     return actorDatas.findIndex(
@@ -162,10 +169,7 @@ const isTransiantState = (state: ActorDataState) => {
         state === ActorDataState.CHECK_FAILED
     );
 };
+
 function actorDataIsPresent(indexActorDataToEdit: number) {
     return indexActorDataToEdit !== -1;
 }
-
-const dataIsPresentOnActor = (actorData: ActorData[]) => {
-    return actorData && actorData.length > 0;
-};

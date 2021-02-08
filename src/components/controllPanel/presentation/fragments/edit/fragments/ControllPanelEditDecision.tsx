@@ -1,25 +1,27 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, Input } from 'semantic-ui-react';
-import { SequenceCTO } from '../../../../../../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../../../../../../dataAccess/access/cto/SequenceStepCTO';
-import { DecisionTO } from '../../../../../../dataAccess/access/to/DecisionTO';
-import { GoTo, GoToTypes } from '../../../../../../dataAccess/access/types/GoToType';
-import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
-import { handleError } from '../../../../../../slices/GlobalSlice';
-import { SequenceModelActions, sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
-import { EditDecision } from '../../../../../../slices/thunks/DecisionThunks';
-import { EditSequence } from '../../../../../../slices/thunks/SequenceThunks';
-import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
-import { DavitButtonIcon } from '../../../../../common/fragments/buttons/DavitButton';
-import { DavitRootButton } from '../../../../../common/fragments/buttons/DavitRootButton';
-import { DecisionDropDown } from '../../../../../common/fragments/dropdowns/DecisionDropDown';
-import { GoToOptionDropDown } from '../../../../../common/fragments/dropdowns/GoToOptionDropDown';
-import { StepDropDown } from '../../../../../common/fragments/dropdowns/StepDropDown';
-import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { DavitLabelTextfield } from '../common/fragments/DavitLabelTextfield';
-import { OptionField } from '../common/OptionField';
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Button, Input } from "semantic-ui-react";
+import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
+import { ConditionTO } from "../../../../../../dataAccess/access/to/ConditionTO";
+import { DecisionTO } from "../../../../../../dataAccess/access/to/DecisionTO";
+import { GoTo, GoToTypes } from "../../../../../../dataAccess/access/types/GoToType";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
+import { handleError } from "../../../../../../slices/GlobalSlice";
+import { SequenceModelActions, sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
+import { EditDecision } from "../../../../../../slices/thunks/DecisionThunks";
+import { EditSequence } from "../../../../../../slices/thunks/SequenceThunks";
+import { DavitUtil } from "../../../../../../utils/DavitUtil";
+import { DavitButtonIcon } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitRootButton } from "../../../../../common/fragments/buttons/DavitRootButton";
+import { ConditionDropDownButton } from "../../../../../common/fragments/dropdowns/ConditionDropDown";
+import { DecisionDropDown } from "../../../../../common/fragments/dropdowns/DecisionDropDown";
+import { GoToOptionDropDown } from "../../../../../common/fragments/dropdowns/GoToOptionDropDown";
+import { StepDropDown } from "../../../../../common/fragments/dropdowns/StepDropDown";
+import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
+import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditDecisionProps {
     hidden: boolean;
@@ -47,6 +49,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
         setGoToTypeDecision,
         editOrAddCondition,
         decId,
+        conditions,
     } = useControllPanelEditConditionViewModel();
 
     return (
@@ -67,16 +70,21 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
                     </OptionField>
                     <OptionField label="Create / Edit Condition">
                         <Button.Group>
+                            <Button icon="add" inverted color="orange" onClick={() => editOrAddCondition()} />
                             <Button id="buttonGroupLabel" disabled inverted color="orange">
                                 Condition
                             </Button>
-                            <Button icon="wrench" inverted color="orange" onClick={editOrAddCondition} />
+                            <ConditionDropDownButton
+                                conditions={conditions}
+                                icon="wrench"
+                                onSelect={editOrAddCondition}
+                            />
                         </Button.Group>
                     </OptionField>
                 </div>
             </div>
             <div className="columnDivider optionFieldSpacer">
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <OptionField label="Type condition true">
                         <GoToOptionDropDown
                             onSelect={(gt) => handleType(true, gt)}
@@ -105,7 +113,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
                 </div>
             </div>
             <div className="columnDivider optionFieldSpacer">
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <OptionField label="Type condition false">
                         <GoToOptionDropDown
                             onSelect={(gt) => handleType(false, gt)}
@@ -144,7 +152,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
                         <OptionField label="Sequence - Options">
                             <DavitRootButton onClick={setRoot} isRoot={isRoot} />
                             <div>
-                                <Carv2DeleteButton onClick={deleteDecision} />
+                                <DavitDeleteButton onClick={deleteDecision} />
                             </div>
                         </OptionField>
                     </div>
@@ -165,8 +173,7 @@ const useControllPanelEditConditionViewModel = () => {
 
     useEffect(() => {
         if (DavitUtil.isNullOrUndefined(decisionToEdit)) {
-            console.warn(decisionToEdit);
-            dispatch(handleError('Tried to go to edit condition step without conditionToEdit specified'));
+            dispatch(handleError("Tried to go to edit condition step without conditionToEdit specified"));
             dispatch(EditActions.setMode.edit());
         }
         if (decisionToEdit) {
@@ -188,12 +195,12 @@ const useControllPanelEditConditionViewModel = () => {
 
     const saveDecision = (newMode?: string) => {
         if (!DavitUtil.isNullOrUndefined(decisionToEdit) && !DavitUtil.isNullOrUndefined(selectedSequence)) {
-            if (decisionToEdit!.name !== '') {
+            if (decisionToEdit!.name !== "") {
                 dispatch(EditDecision.save(decisionToEdit!));
             } else {
                 dispatch(EditDecision.delete(decisionToEdit!, selectedSequence!));
             }
-            if (newMode && newMode === 'EDIT') {
+            if (newMode && newMode === "EDIT") {
                 dispatch(EditActions.setMode.edit());
             } else {
                 dispatch(EditActions.setMode.editSequence(decisionToEdit!.sequenceFk));
@@ -216,7 +223,7 @@ const useControllPanelEditConditionViewModel = () => {
     const validStep = (): boolean => {
         let valid: boolean = false;
         if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
-            if (decisionToEdit!.name !== '') {
+            if (decisionToEdit!.name !== "") {
                 valid = true;
             }
         }
@@ -291,14 +298,20 @@ const useControllPanelEditConditionViewModel = () => {
         }
     };
 
-    const editOrAddCondition = () => {
+    const editOrAddCondition = (conditionId?: number) => {
+        let conditionToEdit: ConditionTO | undefined;
+
         if (decisionToEdit !== null) {
-            dispatch(EditActions.setMode.editCondition(decisionToEdit));
+            if (!DavitUtil.isNullOrUndefined(conditionId)) {
+                conditionToEdit = decisionToEdit.conditions.find((condition) => condition.id === conditionId);
+            }
+
+            dispatch(EditActions.setMode.editCondition(decisionToEdit, conditionToEdit));
         }
     };
 
     return {
-        label: 'EDIT * ' + (selectedSequence?.sequenceTO.name || '') + ' * ' + (decisionToEdit?.name || ''),
+        label: "EDIT * " + (selectedSequence?.sequenceTO.name || "") + " * " + (decisionToEdit?.name || ""),
         name: decisionToEdit?.name,
         changeName,
         saveDecision,
@@ -318,5 +331,6 @@ const useControllPanelEditConditionViewModel = () => {
         key,
         editOrAddCondition,
         decId: decisionToEdit?.id,
+        conditions: decisionToEdit?.conditions || [],
     };
 };

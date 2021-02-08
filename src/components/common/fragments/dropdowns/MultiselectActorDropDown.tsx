@@ -1,8 +1,8 @@
-import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
-import { Dropdown, DropdownItemProps, DropdownProps } from 'semantic-ui-react';
-import { ActorCTO } from '../../../../dataAccess/access/cto/ActorCTO';
-import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
+import { ActorCTO } from "../../../../dataAccess/access/cto/ActorCTO";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 
 interface MultiselectActorDropDownProps extends DropdownProps {
     onSelect: (dataIds: number[] | undefined) => void;
@@ -16,12 +16,12 @@ export const MultiselectActorDropDown: FunctionComponent<MultiselectActorDropDow
 
     return (
         <Dropdown
-            placeholder={placeholder || 'Select Actors ...'}
+            placeholder={placeholder || "Select Actors ..."}
             fluid
             multiple
             selection
             options={([] as DropdownItemProps[]).concat.apply([], actors.map(actorToOption)).sort(function (a, b) {
-                return ('' + a.attr).localeCompare(b.attr);
+                return ("" + a.attr).localeCompare(b.attr);
             })}
             onChange={(event, data) => {
                 onSelect((data.value as number[]) || undefined);
@@ -29,7 +29,7 @@ export const MultiselectActorDropDown: FunctionComponent<MultiselectActorDropDow
             value={selected}
             scrolling
             disabled={actors.length > 0 ? false : true}
-            style={{ overflow: 'auto' }}
+            style={{ overflow: "auto" }}
         />
     );
 };

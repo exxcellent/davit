@@ -1,10 +1,10 @@
-import { AppThunk } from '../../app/store';
-import { ActorCTO } from '../../dataAccess/access/cto/ActorCTO';
-import { DataAccess } from '../../dataAccess/DataAccess';
-import { DataAccessResponse } from '../../dataAccess/DataAccessResponse';
-import { editActions, Mode } from '../EditSlice';
-import { handleError } from '../GlobalSlice';
-import { MasterDataActions } from '../MasterDataSlice';
+import { AppThunk } from "../../app/store";
+import { ActorCTO } from "../../dataAccess/access/cto/ActorCTO";
+import { DataAccess } from "../../dataAccess/DataAccess";
+import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
+import { editActions, Mode } from "../EditSlice";
+import { handleError } from "../GlobalSlice";
+import { MasterDataActions } from "../MasterDataSlice";
 
 const createActorThunk = (): AppThunk => (dispatch) => {
     const actor: ActorCTO = new ActorCTO();
@@ -40,7 +40,7 @@ const setActorToEditThunk = (actor: ActorCTO): AppThunk => (dispatch, getState) 
     if (mode === Mode.EDIT_ACTOR) {
         dispatch(editActions.setActorToEdit(actor));
     } else {
-        handleError('Try to set actor to edit in mode: ' + mode);
+        handleError("Try to set actor to edit in mode: " + mode);
     }
 };
 

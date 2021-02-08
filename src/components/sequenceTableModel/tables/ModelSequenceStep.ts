@@ -1,10 +1,10 @@
-import { useDispatch } from 'react-redux';
-import { SequenceCTO } from '../../../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../../../dataAccess/access/cto/SequenceStepCTO';
-import { DecisionTO } from '../../../dataAccess/access/to/DecisionTO';
-import { GoTo, GoToTypes, Intermediate } from '../../../dataAccess/access/types/GoToType';
-import { EditActions } from '../../../slices/EditSlice';
-import { DavitTableRowData } from '../../common/fragments/DavitTable';
+import { useDispatch } from "react-redux";
+import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
+import { DecisionTO } from "../../../dataAccess/access/to/DecisionTO";
+import { GoTo, GoToTypes, Intermediate } from "../../../dataAccess/access/types/GoToType";
+import { EditActions } from "../../../slices/EditSlice";
+import { DavitTableRowData } from "../../common/fragments/DavitTable";
 
 export const useGetStepTableData = (
     selectedSequence: SequenceCTO | null,
@@ -23,7 +23,7 @@ export const useGetStepTableData = (
     };
 };
 
-const header = ['NAME', 'GOTO', 'START', 'ACTIONS'];
+const header = ["NAME", "GOTO", "START", "ACTIONS"];
 
 const createModelStepColumn = (
     step: SequenceStepCTO,
@@ -36,19 +36,19 @@ const createModelStepColumn = (
         selectedSequence?.sequenceStepCTOs || [],
         selectedSequence?.decisions || [],
     );
-    const start: string = step.squenceStepTO.root ? 'start' : '';
+    const start: string = step.squenceStepTO.root ? "start" : "";
 
-    const trClass = 'carv2Tr';
+    const trClass = "carv2Tr";
 
     return {
         data: [name, gotoName, start],
         trClass,
-        actions: [{ icon: 'wrench', callback: editCallback }],
+        actions: [{ icon: "wrench", callback: editCallback }],
     };
 };
 
 function getGotoName(goto: GoTo, steps: SequenceStepCTO[], decisions: DecisionTO[]) {
-    let gotoName: string = 'could not find goto';
+    let gotoName: string = "could not find goto";
     switch (goto.type) {
         case GoToTypes.ERROR:
         case GoToTypes.FIN:

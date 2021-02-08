@@ -1,11 +1,11 @@
-import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
-import { DropdownProps } from 'semantic-ui-react';
-import { DataCTO } from '../../../../dataAccess/access/cto/DataCTO';
-import { DataRelationTO } from '../../../../dataAccess/access/to/DataRelationTO';
-import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
-import { DavitUtil } from '../../../../utils/DavitUtil';
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from './DavitDropDown';
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { DropdownProps } from "semantic-ui-react";
+import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
+import { DataRelationTO } from "../../../../dataAccess/access/to/DataRelationTO";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import { DavitUtil } from "../../../../utils/DavitUtil";
+import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
 
 interface RelationDropDownProps extends DropdownProps {
     onSelect: (relation: DataRelationTO | undefined) => void;
@@ -48,7 +48,7 @@ const useRelationDropDownViewModel = () => {
     const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
 
     const getDataName = (dataId: number, datas: DataCTO[]): string => {
-        return datas.find((data) => data.data.id === dataId)?.data.name || '';
+        return datas.find((data) => data.data.id === dataId)?.data.name || "";
     };
 
     const selectDataRelation = (relationId: number, relations: DataRelationTO[]): DataRelationTO | undefined => {
@@ -59,7 +59,7 @@ const useRelationDropDownViewModel = () => {
     };
 
     const relationToOption = (relation: DataRelationTO): DavitDropDownItemProps => {
-        const text: string = getDataName(relation.data1Fk, datas) + ' - ' + getDataName(relation.data2Fk, datas);
+        const text: string = getDataName(relation.data1Fk, datas) + " - " + getDataName(relation.data2Fk, datas);
         return {
             key: relation.id,
             value: relation.id.toString(),

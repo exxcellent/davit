@@ -1,6 +1,6 @@
-import React, { FunctionComponent } from 'react';
-import { Dropdown, DropdownItemProps } from 'semantic-ui-react';
-import '../../../../app/css/Davit.css';
+import React, { FunctionComponent } from "react";
+import { Dropdown, DropdownItemProps } from "semantic-ui-react";
+import "../../../../app/css/Davit.css";
 
 export interface DavitDropDownItemProps {
     key: number;
@@ -28,7 +28,7 @@ export const DavitDropDown: FunctionComponent<DavitDropDownProps> = (props) => {
         <Dropdown
             selection
             selectOnBlur={false}
-            placeholder={placeholder || ''}
+            placeholder={placeholder || ""}
             scrolling
             value={value}
             disabled={dropdownItems.length < 1}
@@ -46,7 +46,7 @@ export const DavitIconDropDown: FunctionComponent<DavitIconDropDownProps> = (pro
 
     return (
         <Dropdown
-            icon={dropdownItems.length > 0 ? icon : ''}
+            icon={dropdownItems.length > 0 ? icon : ""}
             selectOnBlur={false}
             className="button icon"
             trigger={<React.Fragment />}
@@ -63,7 +63,7 @@ export const DavitIconDropDown: FunctionComponent<DavitIconDropDownProps> = (pro
 function parsDataToDavitDropDownItemProps(data: any): DavitDropDownItemProps {
     return {
         key: data.key ? data.key : -1,
-        text: data.text ? data.text : '',
-        value: data.value ? data.value.toString() : '',
+        text: data.text ? data.text : "",
+        value: data.value ? data.value.toString() : "",
     };
 }

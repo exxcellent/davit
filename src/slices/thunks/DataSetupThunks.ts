@@ -1,10 +1,10 @@
-import { AppThunk } from '../../app/store';
-import { DataSetupCTO } from '../../dataAccess/access/cto/DataSetupCTO';
-import { DataAccess } from '../../dataAccess/DataAccess';
-import { DataAccessResponse } from '../../dataAccess/DataAccessResponse';
-import { editActions, Mode } from '../EditSlice';
-import { handleError } from '../GlobalSlice';
-import { MasterDataActions } from '../MasterDataSlice';
+import { AppThunk } from "../../app/store";
+import { DataSetupCTO } from "../../dataAccess/access/cto/DataSetupCTO";
+import { DataAccess } from "../../dataAccess/DataAccess";
+import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
+import { editActions, Mode } from "../EditSlice";
+import { handleError } from "../GlobalSlice";
+import { MasterDataActions } from "../MasterDataSlice";
 
 const createDataSetupThunk = (): AppThunk => (dispatch) => {
     const dataSetup: DataSetupCTO = new DataSetupCTO();
@@ -38,7 +38,7 @@ const setDataSetupThunk = (dataSetup: DataSetupCTO): AppThunk => (dispatch, getS
     if (mode === Mode.EDIT_DATASETUP) {
         dispatch(editActions.setDataSetupToEdit(dataSetup));
     } else {
-        handleError('Try to set dataSetup to edit in mode: ' + mode);
+        handleError("Try to set dataSetup to edit in mode: " + mode);
     }
 };
 

@@ -1,13 +1,13 @@
-import React, { FunctionComponent } from 'react';
-import { Button, IconProps, SemanticShorthandItem } from 'semantic-ui-react';
+import React, { FunctionComponent } from "react";
+import { Button, IconProps, SemanticShorthandItem } from "semantic-ui-react";
 
-interface Carv2TableButtonProps {
+interface DavitTableButtonProps {
     onClick: () => void;
     disable?: boolean;
     icon?: SemanticShorthandItem<IconProps>;
 }
 
-export const Carv2TableButton: FunctionComponent<Carv2TableButtonProps> = (props) => {
+export const DavitTableButton: FunctionComponent<DavitTableButtonProps> = (props) => {
     const { onClick, icon, disable } = props;
 
     return (

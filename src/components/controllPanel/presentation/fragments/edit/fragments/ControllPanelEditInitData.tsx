@@ -1,20 +1,20 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { DataCTO } from '../../../../../../dataAccess/access/cto/DataCTO';
-import { DataInstanceTO } from '../../../../../../dataAccess/access/to/DataInstanceTO';
-import { DataSetupTO } from '../../../../../../dataAccess/access/to/DataSetupTO';
-import { InitDataTO } from '../../../../../../dataAccess/access/to/InitDataTO';
-import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
-import { handleError } from '../../../../../../slices/GlobalSlice';
-import { masterDataSelectors } from '../../../../../../slices/MasterDataSlice';
-import { EditInitData } from '../../../../../../slices/thunks/InitDataThunks';
-import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
-import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
-import { ActorDropDown } from '../../../../../common/fragments/dropdowns/ActorDropDown';
-import { DataAndInstanceId, InstanceDropDown } from '../../../../../common/fragments/dropdowns/InstanceDropDown';
-import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { OptionField } from '../common/OptionField';
+import React, { FunctionComponent, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
+import { DataInstanceTO } from "../../../../../../dataAccess/access/to/DataInstanceTO";
+import { DataSetupTO } from "../../../../../../dataAccess/access/to/DataSetupTO";
+import { InitDataTO } from "../../../../../../dataAccess/access/to/InitDataTO";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
+import { handleError } from "../../../../../../slices/GlobalSlice";
+import { masterDataSelectors } from "../../../../../../slices/MasterDataSlice";
+import { EditInitData } from "../../../../../../slices/thunks/InitDataThunks";
+import { DavitUtil } from "../../../../../../utils/DavitUtil";
+import { DavitButtonIcon, DavitButtonLabel } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { ActorDropDown } from "../../../../../common/fragments/dropdowns/ActorDropDown";
+import { DataAndInstanceId, InstanceDropDown } from "../../../../../common/fragments/dropdowns/InstanceDropDown";
+import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditInitDataProps {
     hidden: boolean;
@@ -52,7 +52,7 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
                     <InstanceDropDown onSelect={setInstance} value={data} />
                 </OptionField>
             </div>
-            <div className="columnDivider controllPanelEditChild" style={{ paddingLeft: '10px', paddingRight: '10px' }}>
+            <div className="columnDivider controllPanelEditChild" style={{ paddingLeft: "10px", paddingRight: "10px" }}>
                 <div>
                     <OptionField label="Navigation">
                         <DavitButtonLabel onClick={createAnother} label="Create another" />
@@ -62,7 +62,7 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
             </div>
             <div className="columnDivider optionFieldSpacer">
                 <OptionField label="options">
-                    <Carv2DeleteButton onClick={deleteInitData} />
+                    <DavitDeleteButton onClick={deleteInitData} />
                 </OptionField>
             </div>
         </ControllPanelEditSub>
@@ -81,7 +81,7 @@ const useControllPanelEditDataSetupViewModel = () => {
     useEffect(() => {
         // check if sequence to edit is really set or gos back to edit mode
         if (initDataToEdit === null) {
-            handleError('Tried to go to edit initData without initDataToedit specified');
+            handleError("Tried to go to edit initData without initDataToedit specified");
             dispatch(EditActions.setMode.edit());
         }
         // used to focus the textfield on create another
@@ -101,7 +101,7 @@ const useControllPanelEditDataSetupViewModel = () => {
             } else {
                 deleteInitData();
             }
-            if (newMode && newMode === 'EDIT') {
+            if (newMode && newMode === "EDIT") {
                 dispatch(EditActions.setMode.edit());
             } else {
                 dispatch(EditActions.setMode.editDataSetup(initDataToEdit?.dataSetupFk));
@@ -159,7 +159,7 @@ const useControllPanelEditDataSetupViewModel = () => {
     };
 
     return {
-        label: 'EDIT * ' + (dataSetup?.name || '') + ' * INIT DATA',
+        label: "EDIT * " + (dataSetup?.name || "") + " * INIT DATA",
         data: JSON.stringify({
             dataFk: initDataToEdit?.dataFk,
             instanceId: initDataToEdit?.instanceFk,

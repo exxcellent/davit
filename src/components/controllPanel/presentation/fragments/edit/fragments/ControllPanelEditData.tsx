@@ -1,17 +1,17 @@
-import React, { FunctionComponent, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, Input } from 'semantic-ui-react';
-import { DataCTO } from '../../../../../../dataAccess/access/cto/DataCTO';
-import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
-import { handleError } from '../../../../../../slices/GlobalSlice';
-import { EditData } from '../../../../../../slices/thunks/DataThunks';
-import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { Carv2DeleteButton } from '../../../../../common/fragments/buttons/Carv2DeleteButton';
-import { DavitButtonIcon, DavitButtonLabel } from '../../../../../common/fragments/buttons/DavitButton';
-import { DataInstanceDropDownButton } from '../../../../../common/fragments/dropdowns/DataInstanceDropDown';
-import { ControllPanelEditSub } from '../common/ControllPanelEditSub';
-import { DavitLabelTextfield } from '../common/fragments/DavitLabelTextfield';
-import { OptionField } from '../common/OptionField';
+import React, { FunctionComponent, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Button, Input } from "semantic-ui-react";
+import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
+import { handleError } from "../../../../../../slices/GlobalSlice";
+import { EditData } from "../../../../../../slices/thunks/DataThunks";
+import { DavitUtil } from "../../../../../../utils/DavitUtil";
+import { DavitButtonIcon, DavitButtonLabel } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DataInstanceDropDownButton } from "../../../../../common/fragments/dropdowns/DataInstanceDropDown";
+import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
+import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditDataProps {
     hidden: boolean;
@@ -58,7 +58,7 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
                         </Button>
                         <DataInstanceDropDownButton
                             onSelect={(id) => editOrAddInstance(id)}
-                            icon={'wrench'}
+                            icon={"wrench"}
                             instances={instances}
                         />
                     </Button.Group>
@@ -74,7 +74,7 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
             </div>
             <div className="columnDivider optionFieldSpacer">
                 <OptionField label="Data - Options">
-                    <Carv2DeleteButton onClick={deleteData} />
+                    <DavitDeleteButton onClick={deleteData} />
                 </OptionField>
             </div>
         </ControllPanelEditSub>
@@ -94,7 +94,7 @@ const useControllPanelEditDataViewModel = () => {
     useEffect(() => {
         // check if component to edit is really set or gso back to edit mode
         if (dataToEdit === null || dataToEdit === undefined) {
-            handleError('Tried to go to edit data without dataToedit specified');
+            handleError("Tried to go to edit data without dataToedit specified");
             dispatch(EditActions.setMode.edit());
         }
     });
@@ -111,7 +111,7 @@ const useControllPanelEditDataViewModel = () => {
     };
 
     const saveData = () => {
-        if (dataToEdit?.data.name !== '') {
+        if (dataToEdit?.data.name !== "") {
             dispatch(EditData.save(dataToEdit!));
         } else {
             deleteData();
@@ -135,7 +135,7 @@ const useControllPanelEditDataViewModel = () => {
     };
 
     return {
-        label: 'EDIT * ' + (dataToEdit?.data.name || ''),
+        label: "EDIT * " + (dataToEdit?.data.name || ""),
         name: dataToEdit?.data.name,
         changeName,
         saveData,

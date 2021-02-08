@@ -1,10 +1,10 @@
-import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
-import { Dropdown, DropdownProps } from 'semantic-ui-react';
-import { DataCTO } from '../../../../dataAccess/access/cto/DataCTO';
-import { DataInstanceTO } from '../../../../dataAccess/access/to/DataInstanceTO';
-import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from './DavitDropDown';
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { Dropdown, DropdownProps } from "semantic-ui-react";
+import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
+import { DataInstanceTO } from "../../../../dataAccess/access/to/DataInstanceTO";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
 
 export interface DataAndInstanceId {
     dataFk: number;
@@ -37,7 +37,7 @@ export const InstanceDropDown: FunctionComponent<InstanceDropDownProps> = (props
             dropdownItems={createOptions()}
             placeholder={placeholder}
             onSelect={(instance) => onSelect(selectInstance(instance.value))}
-            value={value !== '' ? value : undefined}
+            value={value !== "" ? value : undefined}
         />
     );
 };
@@ -61,7 +61,7 @@ export const InstanceDropDownMultiselect: FunctionComponent<InstanceDropDownMult
 
     return (
         <Dropdown
-            placeholder={placeholder || 'Select Datas ...'}
+            placeholder={placeholder || "Select Datas ..."}
             fluid
             multiple
             selection
@@ -117,7 +117,7 @@ const useInstanceDropDownViewModel = () => {
         const optionItemString: string = JSON.stringify(optionItem);
         let optionLabel: string = data.data.name;
         if (instance.id !== -1) {
-            optionLabel = optionLabel + ' - ' + instance.name;
+            optionLabel = optionLabel + " - " + instance.name;
         }
         return {
             key: key,

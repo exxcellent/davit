@@ -1,11 +1,11 @@
-import React, { FunctionComponent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { EditActions, editSelectors, Mode } from '../../../slices/EditSlice';
-import { DavitUtil } from '../../../utils/DavitUtil';
-import { ControllPanelEditController } from './fragments/edit/ControllPanelEditController';
-import { ControllPanelFileController } from './fragments/file/ControllPanelFileController';
-import { ControllPanelTabController } from './fragments/tabs/ControllPanelTabController';
-import { ControllPanelViewOptions } from './fragments/view/ControllPanelViewOptions';
+import React, { FunctionComponent } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { EditActions, editSelectors, Mode } from "../../../slices/EditSlice";
+import { DavitUtil } from "../../../utils/DavitUtil";
+import { ControllPanelEditController } from "./fragments/edit/ControllPanelEditController";
+import { ControllPanelFileController } from "./fragments/file/ControllPanelFileController";
+import { ControllPanelTabController } from "./fragments/tabs/ControllPanelTabController";
+import { ControllPanelViewOptions } from "./fragments/view/ControllPanelViewOptions";
 
 export interface ControllPanelProps {}
 
@@ -14,24 +14,24 @@ export const ControllPanelController: FunctionComponent<ControllPanelProps> = (p
 
     const useGetViewByMode = (mode: Mode) => {
         if (!DavitUtil.isNullOrUndefined(mode)) {
-            if (mode.includes('EDIT')) {
+            if (mode.includes("EDIT")) {
                 return <ControllPanelEditController />;
             }
-            if (mode.includes('VIEW')) {
-                return <ControllPanelViewOptions hidden={!mode.includes('VIEW')} />;
+            if (mode.includes("VIEW")) {
+                return <ControllPanelViewOptions hidden={!mode.includes("VIEW")} />;
             }
-            if (mode.includes('FILE')) {
-                return <ControllPanelFileController hidden={!mode.includes('FILE')} />;
+            if (mode.includes("FILE")) {
+                return <ControllPanelFileController hidden={!mode.includes("FILE")} />;
             }
-            if (mode.includes('TAB')) {
-                return <ControllPanelTabController hidden={!mode.includes('TAB')} />;
+            if (mode.includes("TAB")) {
+                return <ControllPanelTabController hidden={!mode.includes("TAB")} />;
             }
         }
     };
 
     return (
         <div className="controllerHeader">
-            <div style={{ display: 'flex', width: '100%', padding: '0' }}>
+            <div style={{ display: "flex", width: "100%", padding: "0" }}>
                 {/* {getModesDivs(mode, onClickNavItem)} */}
                 {/* <ControllPanelEditController />
       <ControllPanelSequenceOptions hidden={mode.includes("VIEW")} />
@@ -49,16 +49,16 @@ const useControllPanelViewModel = () => {
 
     const onClickNavItem = (mode: string) => {
         switch (mode) {
-            case 'EDIT':
+            case "EDIT":
                 dispatch(EditActions.setMode.edit());
                 break;
-            case 'DATA':
+            case "DATA":
                 dispatch(EditActions.setMode.editData());
                 break;
-            case 'DATASETUP':
+            case "DATASETUP":
                 dispatch(EditActions.setMode.editDataSetup());
                 break;
-            case 'SEQUENCE':
+            case "SEQUENCE":
                 dispatch(EditActions.setMode.editSequence());
                 break;
             // TODO: check how to activate these since they need an object
@@ -68,7 +68,7 @@ const useControllPanelViewModel = () => {
             // case "DECISION":
             //   dispatch(EditActions.setMode.editDecision());
             //   break;
-            case 'CHAIN':
+            case "CHAIN":
                 dispatch(EditActions.setMode.editChain());
                 break;
             // case "DECISION":

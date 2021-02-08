@@ -1,10 +1,10 @@
-import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
-import { DropdownProps } from 'semantic-ui-react';
-import { ActorCTO } from '../../../../dataAccess/access/cto/ActorCTO';
-import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
-import { DavitUtil } from '../../../../utils/DavitUtil';
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from './DavitDropDown';
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { DropdownProps } from "semantic-ui-react";
+import { ActorCTO } from "../../../../dataAccess/access/cto/ActorCTO";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import { DavitUtil } from "../../../../utils/DavitUtil";
+import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
 
 interface ActorDropDownProps extends DropdownProps {
     onSelect: (actor: ActorCTO | undefined) => void;

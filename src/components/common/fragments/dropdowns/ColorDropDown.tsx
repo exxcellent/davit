@@ -1,6 +1,6 @@
-import React, { FunctionComponent } from 'react';
-import { DropdownProps } from 'semantic-ui-react';
-import { DavitDropDown, DavitDropDownItemProps } from './DavitDropDown';
+import React, { FunctionComponent } from "react";
+import { DropdownProps } from "semantic-ui-react";
+import { DavitDropDown, DavitDropDownItemProps } from "./DavitDropDown";
 
 interface ColorDropDownProps extends DropdownProps {
     onSelect: (color: string | undefined) => void;

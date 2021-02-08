@@ -1,27 +1,27 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppThunk, RootState } from '../app/store';
-import { Arrow, ArrowType } from '../components/common/fragments/svg/DavitPath';
-import { ChainCTO } from '../dataAccess/access/cto/ChainCTO';
-import { ChainlinkCTO } from '../dataAccess/access/cto/ChainlinkCTO';
-import { DataSetupCTO } from '../dataAccess/access/cto/DataSetupCTO';
-import { GeometricalDataCTO } from '../dataAccess/access/cto/GeometraicalDataCTO';
-import { SequenceCTO } from '../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../dataAccess/access/cto/SequenceStepCTO';
-import { ActionTO } from '../dataAccess/access/to/ActionTO';
-import { ChainDecisionTO } from '../dataAccess/access/to/ChainDecisionTO';
-import { ChainTO } from '../dataAccess/access/to/ChainTO';
-import { ActionType } from '../dataAccess/access/types/ActionType';
-import { Terminal } from '../dataAccess/access/types/GoToType';
-import { DataAccess } from '../dataAccess/DataAccess';
-import { DataAccessResponse } from '../dataAccess/DataAccessResponse';
-import { CalcChain, getRoot, SequenceChainService } from '../services/SequenceChainService';
-import { CalcSequence, CalculatedStep, SequenceService } from '../services/SequenceService';
-import { ActorData } from '../viewDataTypes/ActorData';
-import { Mode } from './EditSlice';
-import { handleError } from './GlobalSlice';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AppThunk, RootState } from "../app/store";
+import { Arrow, ArrowType } from "../components/common/fragments/svg/DavitPath";
+import { ChainCTO } from "../dataAccess/access/cto/ChainCTO";
+import { ChainlinkCTO } from "../dataAccess/access/cto/ChainlinkCTO";
+import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
+import { GeometricalDataCTO } from "../dataAccess/access/cto/GeometraicalDataCTO";
+import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
+import { ActionTO } from "../dataAccess/access/to/ActionTO";
+import { ChainDecisionTO } from "../dataAccess/access/to/ChainDecisionTO";
+import { ChainTO } from "../dataAccess/access/to/ChainTO";
+import { ActionType } from "../dataAccess/access/types/ActionType";
+import { Terminal } from "../dataAccess/access/types/GoToType";
+import { DataAccess } from "../dataAccess/DataAccess";
+import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
+import { CalcChain, getRoot, SequenceChainService } from "../services/SequenceChainService";
+import { CalcSequence, CalculatedStep, SequenceService } from "../services/SequenceService";
+import { ActorData } from "../viewDataTypes/ActorData";
+import { Mode } from "./EditSlice";
+import { handleError } from "./GlobalSlice";
 
 export interface Filter {
-    type: 'ACTOR' | 'DATA';
+    type: "ACTOR" | "DATA";
     id: number;
 }
 
@@ -38,6 +38,7 @@ interface SequenceModelState {
     activeFilter: Filter[];
     selectedChain: ChainCTO | null;
 }
+
 const getInitialState: SequenceModelState = {
     selectedSequenceModel: null,
     selectedDataSetup: null,
@@ -53,7 +54,7 @@ const getInitialState: SequenceModelState = {
 };
 
 const SequenceModelSlice = createSlice({
-    name: 'sequenceModel',
+    name: "sequenceModel",
     initialState: getInitialState,
     reducers: {
         setSelectedSequence: (state, action: PayloadAction<SequenceCTO | null>) => {
@@ -109,22 +110,22 @@ const SequenceModelSlice = createSlice({
             }
         },
         addDataFilter: (state, action: PayloadAction<number>) => {
-            state.activeFilter = [...state.activeFilter, { type: 'DATA', id: action.payload }];
+            state.activeFilter = [...state.activeFilter, { type: "DATA", id: action.payload }];
             state.currentStepIndex = 0;
         },
         removeDataFilter: (state, action: PayloadAction<number>) => {
             state.activeFilter = state.activeFilter.filter(
-                (filt) => !(filt.type === 'DATA' && filt.id === action.payload),
+                (filt) => !(filt.type === "DATA" && filt.id === action.payload),
             );
             state.currentStepIndex = 0;
         },
         addActorFilters: (state, action: PayloadAction<number>) => {
-            state.activeFilter = [...state.activeFilter, { type: 'ACTOR', id: action.payload }];
+            state.activeFilter = [...state.activeFilter, { type: "ACTOR", id: action.payload }];
             state.currentStepIndex = 0;
         },
         removeActorFilter: (state, action: PayloadAction<number>) => {
             state.activeFilter = state.activeFilter.filter(
-                (filt) => !(filt.type === 'ACTOR' && filt.id === action.payload),
+                (filt) => !(filt.type === "ACTOR" && filt.id === action.payload),
             );
             state.currentStepIndex = 0;
         },
@@ -274,13 +275,13 @@ const getSequenceCTOFromBackend = (sequenceId: number): AppThunk => (dispatch) =
 
 const handleActorClickEvent = (actorId: number): AppThunk => (dispatch) => {
     const filter: Filter[] = [];
-    filter.push({ type: 'ACTOR', id: actorId });
+    filter.push({ type: "ACTOR", id: actorId });
     dispatch(SequenceModelSlice.actions.setFilter(filter));
 };
 
 const handleDataClickEvent = (dataId: number): AppThunk => (dispatch) => {
     const filter: Filter[] = [];
-    filter.push({ type: 'DATA', id: dataId });
+    filter.push({ type: "DATA", id: dataId });
     dispatch(SequenceModelSlice.actions.setFilter(filter));
 };
 
@@ -293,9 +294,9 @@ const filterSteps = (steps: CalculatedStep[], filter: Filter[], modelSteps: Sequ
             const actions: ActionTO[] =
                 modelSteps.find((modelStep) => modelStep.squenceStepTO.id === step.modelElementFk)?.actions || [];
             switch (currentFilter.type) {
-                case 'ACTOR':
+                case "ACTOR":
                     return actions.some((action) => action.receivingActorFk === currentFilter.id);
-                case 'DATA':
+                case "DATA":
                     return actions.some((action) => action.dataFk === currentFilter.id);
                 default:
                     return false;
@@ -340,7 +341,7 @@ const mapActionsToArrows = (actions: ActionTO[], state: RootState): Arrow[] => {
             }
         }
 
-        const type: ArrowType = action.actionType.includes('SEND') ? ArrowType.SEND : ArrowType.TRIGGER;
+        const type: ArrowType = action.actionType.includes("SEND") ? ArrowType.SEND : ArrowType.TRIGGER;
 
         if (sourceGeometricalData && targetGeometricalData) {
             const existingArrow: Arrow | undefined = arrows.find(
@@ -419,18 +420,18 @@ export const sequenceModelSelectors = {
     },
     selectCurrentStepIndex: (state: RootState): number => state.sequenceModel.currentStepIndex,
     selectCurrentStepId: (state: RootState): string => {
-        return getCurrentCalcSequence(state.sequenceModel)?.steps[state.sequenceModel.currentStepIndex]?.stepId || '';
+        return getCurrentCalcSequence(state.sequenceModel)?.steps[state.sequenceModel.currentStepIndex]?.stepId || "";
     },
     selectCurrentLinkIndex: (state: RootState): number => state.sequenceModel.currentLinkIndex,
     selectCurrentLinkId: (state: RootState): string =>
-        state.sequenceModel.calcChain?.calcLinks[state.sequenceModel.currentLinkIndex]?.stepId || '',
+        state.sequenceModel.calcChain?.calcLinks[state.sequenceModel.currentLinkIndex]?.stepId || "",
     selectCurrentArrows: (state: RootState): Arrow[] => {
         const arrows: Arrow[] = [];
         const filteredSteps = getFilteredSteps(state);
         const stepFks: number[] = [];
 
         const stepFk: number | undefined =
-            filteredSteps[state.sequenceModel.currentStepIndex]?.type === 'STEP'
+            filteredSteps[state.sequenceModel.currentStepIndex]?.type === "STEP"
                 ? filteredSteps[state.sequenceModel.currentStepIndex]?.modelElementFk
                 : undefined;
         if (stepFk) {
@@ -478,6 +479,7 @@ export const SequenceModelActions = {
     removeActorFilter: SequenceModelSlice.actions.removeActorFilter,
     calcChain: calcModelsThunk,
 };
+
 function getFilteredSteps(state: RootState) {
     return state.edit.mode === Mode.VIEW
         ? filterSteps(
@@ -499,6 +501,7 @@ function getCurrentSequenceModel(state: SequenceModelState): SequenceCTO | null 
         ? state.calcChain?.calcLinks[state.currentLinkIndex].sequence.sequenceModel || null
         : state.selectedSequenceModel;
 }
+
 function getCurrentDataSetup(state: SequenceModelState): DataSetupCTO | null {
     return state.selectedChain
         ? state.calcChain?.calcLinks[state.currentLinkIndex].dataSetup || null

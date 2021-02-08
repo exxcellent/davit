@@ -1,6 +1,6 @@
-import { ChainDecisionTO } from '../to/ChainDecisionTO';
-import { ChainTO } from '../to/ChainTO';
-import { ChainlinkCTO } from './ChainlinkCTO';
+import { ChainDecisionTO } from "../to/ChainDecisionTO";
+import { ChainTO } from "../to/ChainTO";
+import { ChainlinkCTO } from "./ChainlinkCTO";
 
 export class ChainCTO {
     constructor(

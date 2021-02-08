@@ -1,4 +1,4 @@
-import { AbstractTO } from '../access/to/AbstractTO';
+import { AbstractTO } from "../access/to/AbstractTO";
 
 export const DataAccessUtil = {
     determineNewId(abstractTOs: AbstractTO[]): number {

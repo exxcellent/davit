@@ -1,10 +1,10 @@
-import React, { FunctionComponent, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { GlobalActions } from '../../../../../slices/GlobalSlice';
-import { DavitButtonLabel } from '../../../../common/fragments/buttons/DavitButton';
-import { ControllPanelEditSub } from '../edit/common/ControllPanelEditSub';
-import { DavitLabelTextfield } from '../edit/common/fragments/DavitLabelTextfield';
-import { ControllPanelFileOptions } from './fragments/ControllPanelFileOptions';
+import React, { FunctionComponent, useState } from "react";
+import { useDispatch } from "react-redux";
+import { GlobalActions } from "../../../../../slices/GlobalSlice";
+import { DavitButtonLabel } from "../../../../common/fragments/buttons/DavitButton";
+import { ControllPanelEditSub } from "../edit/common/ControllPanelEditSub";
+import { DavitLabelTextfield } from "../edit/common/fragments/DavitLabelTextfield";
+import { ControllPanelFileOptions } from "./fragments/ControllPanelFileOptions";
 
 export interface ControllPanelFileControllerProps {
     hidden: boolean;
@@ -38,9 +38,9 @@ export const ControllPanelFileController: FunctionComponent<ControllPanelFileCon
                 )}
             </div>
             <div className="columnDivider controllPanelEditChild">
-                {showExportFile && <DavitButtonLabel label="Export File" onClick={downloadData}></DavitButtonLabel>}
+                {showExportFile && <DavitButtonLabel label="Export File" onClick={downloadData} />}
             </div>
-            <div className="columnDivider controllPanelEditChild"></div>
+            <div className="columnDivider controllPanelEditChild" />
         </ControllPanelEditSub>
     );
 };
@@ -48,15 +48,15 @@ export const ControllPanelFileController: FunctionComponent<ControllPanelFileCon
 const useControllPanelFileViewModel = () => {
     const dispatch = useDispatch();
     const [showExportFile, setShowExportFile] = useState<boolean>(false);
-    const [projectName, setProjectName] = useState<string>('');
+    const [projectName, setProjectName] = useState<string>("");
 
     const toggleShowExportFile = () => {
         setShowExportFile(!showExportFile);
     };
 
     const downloadData = () => {
-        dispatch(GlobalActions.downloadData(projectName !== '' ? projectName : 'project'));
-        setProjectName('');
+        dispatch(GlobalActions.downloadData(projectName !== "" ? projectName : "project"));
+        setProjectName("");
         toggleShowExportFile();
     };
 

@@ -1,9 +1,9 @@
-import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
-import { editSelectors, Mode } from '../../../slices/EditSlice';
-import { ActiveTab } from '../presentation/SequenceTableModelController';
-import { TabFragment } from './TabFragment';
-import { TabGroupFragment } from './TabGroupFragment';
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { editSelectors, Mode } from "../../../slices/EditSlice";
+import { ActiveTab } from "../presentation/SequenceTableModelController";
+import { TabFragment } from "./TabFragment";
+import { TabGroupFragment } from "./TabGroupFragment";
 
 interface TabPanelProps {
     activeTab: ActiveTab;
@@ -19,6 +19,7 @@ interface TabGroupDefinition {
     tabs: TabDefinition[];
     condition?: boolean;
 }
+
 interface TabDefinition {
     label: string;
     identifier: ActiveTab;
@@ -40,21 +41,25 @@ export const TabPanel: FunctionComponent<TabPanelProps> = (props) => {
     const getSequenceModelTabGroupDefinition = (): TabGroupDefinition => {
         const tabs: TabDefinition[] = [
             {
-                label: 'Decision',
+                label: "Decision",
                 identifier: ActiveTab.decision,
             },
             {
-                label: 'Steps',
+                label: "Steps",
                 identifier: ActiveTab.step,
             },
         ];
 
         if (mode === Mode.EDIT_SEQUENCE_STEP || mode === Mode.EDIT_SEQUENCE_STEP_ACTION) {
-            tabs.push({ label: 'Actions', identifier: ActiveTab.action });
+            tabs.push({ label: "Actions", identifier: ActiveTab.action });
+        }
+
+        if (mode === Mode.EDIT_SEQUENCE_DECISION || mode === Mode.EDIT_SEQUENCE_DECISION_CONDITION) {
+            tabs.push({ label: "Condition", identifier: ActiveTab.condition });
         }
 
         return {
-            label: 'Sequence Model',
+            label: "Sequence Model",
             condition: showSequenceModelTabs,
             tabs: tabs,
         };
@@ -62,49 +67,49 @@ export const TabPanel: FunctionComponent<TabPanelProps> = (props) => {
 
     const tabDefinitions: TabGroupDefinition[] = [
         {
-            label: 'Calculated',
+            label: "Calculated",
             condition: showCalcChainTab || showCalcSequenceTab,
             tabs: [
                 {
-                    label: 'Chain',
+                    label: "Chain",
                     identifier: ActiveTab.chain,
                     condition: showCalcChainTab,
                 },
                 {
-                    label: 'Sequence',
+                    label: "Sequence",
                     identifier: ActiveTab.sequence,
                     condition: showCalcSequenceTab,
                 },
             ],
         },
         {
-            label: 'Chain Model',
+            label: "Chain Model",
             condition: showChainModelTab,
             tabs: [
                 {
-                    label: 'Decision',
+                    label: "Decision",
                     identifier: ActiveTab.chaindecisions,
                 },
                 {
-                    label: 'Links',
+                    label: "Links",
                     identifier: ActiveTab.chainlinks,
                 },
             ],
         },
         getSequenceModelTabGroupDefinition(),
         {
-            label: 'Models',
+            label: "Models",
             tabs: [
                 {
-                    label: 'Chain',
+                    label: "Chain",
                     identifier: ActiveTab.chainModel,
                 },
                 {
-                    label: 'Sequence',
+                    label: "Sequence",
                     identifier: ActiveTab.sequenceModels,
                 },
                 {
-                    label: 'Data Setup',
+                    label: "Data Setup",
                     identifier: ActiveTab.dataSetup,
                 },
             ],
@@ -132,10 +137,10 @@ export const TabPanel: FunctionComponent<TabPanelProps> = (props) => {
     };
 
     const getTabsKey = () => {
-        let key = showCalcChainTab ? 'chain' : '';
-        key += showSequenceModelTabs ? 'seqModel' : '';
-        key += showChainModelTab ? 'chainModel' : '';
-        key += showCalcSequenceTab ? 'seq' : '';
+        let key = showCalcChainTab ? "chain" : "";
+        key += showSequenceModelTabs ? "seqModel" : "";
+        key += showChainModelTab ? "chainModel" : "";
+        key += showCalcSequenceTab ? "seq" : "";
         return key;
     };
 

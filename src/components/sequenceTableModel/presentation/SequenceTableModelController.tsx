@@ -1,48 +1,52 @@
 /* eslint-disable react/display-name */
-import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { ChainlinkCTO } from '../../../dataAccess/access/cto/ChainlinkCTO';
-import { SequenceCTO } from '../../../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../../../dataAccess/access/cto/SequenceStepCTO';
-import { ActionTO } from '../../../dataAccess/access/to/ActionTO';
-import { ChainDecisionTO } from '../../../dataAccess/access/to/ChainDecisionTO';
-import { ChainTO } from '../../../dataAccess/access/to/ChainTO';
-import { DataSetupTO } from '../../../dataAccess/access/to/DataSetupTO';
-import { SequenceTO } from '../../../dataAccess/access/to/SequenceTO';
-import { CalcChain } from '../../../services/SequenceChainService';
-import { CalculatedStep } from '../../../services/SequenceService';
-import { editSelectors, Mode } from '../../../slices/EditSlice';
-import { masterDataSelectors } from '../../../slices/MasterDataSlice';
-import { sequenceModelSelectors } from '../../../slices/SequenceModelSlice';
-import { DavitUtil } from '../../../utils/DavitUtil';
-import { DavitTable } from '../../common/fragments/DavitTable';
-import { TabPanel } from '../fragments/TabPanel';
-import { useGetCalcLinkTableData } from '../tables/CalcLink';
-import { useGetCalcSequenceTableData } from '../tables/CalcSequence';
-import { useGetDataSetupTableData } from '../tables/DataSetup';
-import { useGetChainModelsTableData } from '../tables/ModelChain';
-import { useGetModelChainDecisionTableData } from '../tables/ModelChainDecision';
-import { useGetModelChainLinkTableData } from '../tables/ModelChainLink';
-import { useGetSequenceModelsTableBody } from '../tables/ModelSequence';
-import { useGetModelSequenceDecisionTableData } from '../tables/ModelSequenceDecision';
-import { useGetStepTableData } from '../tables/ModelSequenceStep';
-import { useGetStepActionTableData } from '../tables/ModelSequenceStepAction';
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import { ChainlinkCTO } from "../../../dataAccess/access/cto/ChainlinkCTO";
+import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
+import { ActionTO } from "../../../dataAccess/access/to/ActionTO";
+import { ChainDecisionTO } from "../../../dataAccess/access/to/ChainDecisionTO";
+import { ChainTO } from "../../../dataAccess/access/to/ChainTO";
+import { ConditionTO } from "../../../dataAccess/access/to/ConditionTO";
+import { DataSetupTO } from "../../../dataAccess/access/to/DataSetupTO";
+import { DecisionTO } from "../../../dataAccess/access/to/DecisionTO";
+import { SequenceTO } from "../../../dataAccess/access/to/SequenceTO";
+import { CalcChain } from "../../../services/SequenceChainService";
+import { CalculatedStep } from "../../../services/SequenceService";
+import { editSelectors, Mode } from "../../../slices/EditSlice";
+import { masterDataSelectors } from "../../../slices/MasterDataSlice";
+import { sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
+import { DavitUtil } from "../../../utils/DavitUtil";
+import { DavitTable } from "../../common/fragments/DavitTable";
+import { TabPanel } from "../fragments/TabPanel";
+import { useGetCalcLinkTableData } from "../tables/CalcLink";
+import { useGetCalcSequenceTableData } from "../tables/CalcSequence";
+import { useGetDataSetupTableData } from "../tables/DataSetup";
+import { useGetChainModelsTableData } from "../tables/ModelChain";
+import { useGetModelChainDecisionTableData } from "../tables/ModelChainDecision";
+import { useGetModelChainLinkTableData } from "../tables/ModelChainLink";
+import { useGetSequenceModelsTableBody } from "../tables/ModelSequence";
+import { useGetModelSequenceConditionTableData } from "../tables/ModelSequenceCondition";
+import { useGetModelSequenceDecisionTableData } from "../tables/ModelSequenceDecision";
+import { useGetStepTableData } from "../tables/ModelSequenceStep";
+import { useGetStepActionTableData } from "../tables/ModelSequenceStepAction";
 
 interface SequenceTableModelControllerProps {
     fullScreen?: boolean;
 }
 
 export enum ActiveTab {
-    action = 'action',
-    step = 'step',
-    decision = 'decision',
-    sequence = 'sequence',
-    chain = 'chain',
-    chainlinks = 'chainlinks',
-    chaindecisions = 'chaindecisions',
-    sequenceModels = 'sequenceModels',
-    chainModel = 'chainModels',
-    dataSetup = 'dataSetup',
+    condition = "condition",
+    action = "action",
+    step = "step",
+    decision = "decision",
+    sequence = "sequence",
+    chain = "chain",
+    chainlinks = "chainlinks",
+    chaindecisions = "chaindecisions",
+    sequenceModels = "sequenceModels",
+    chainModel = "chainModels",
+    dataSetup = "dataSetup",
 }
 
 export const SequenceTableModelController: FunctionComponent<SequenceTableModelControllerProps> = (props) => {
@@ -52,18 +56,15 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
         showSequenceModelTabs,
         showCalcChainTab,
         showCalcSequenceTab,
-
         activeTab,
         setActiveTab,
-
         activeTableData,
-
         tableHeight,
         parentRef,
     } = useSequenceTableViewModel();
 
     return (
-        <div className={fullScreen ? '' : 'sequenceTable'} ref={parentRef}>
+        <div className={fullScreen ? "" : "sequenceTable"} ref={parentRef}>
             <div className="tableBorder">
                 <TabPanel
                     showChainModelTab={showChainModelTab}
@@ -80,6 +81,7 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
 };
 
 const useSequenceTableViewModel = () => {
+    const mode: Mode = useSelector(editSelectors.selectMode);
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const selectedStep: SequenceStepCTO | null = useSelector(editSelectors.selectStepToEdit);
     const calcSteps: CalculatedStep[] = useSelector(sequenceModelSelectors.selectCalcSteps);
@@ -88,11 +90,11 @@ const useSequenceTableViewModel = () => {
     const dataSetups: DataSetupTO[] = useSelector(masterDataSelectors.selectDataSetups);
     const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
     const chainModels: ChainTO[] = useSelector(masterDataSelectors.selectChains);
-    const mode: Mode = useSelector(editSelectors.selectMode);
     const selectedChainlinks: ChainlinkCTO[] = useSelector(sequenceModelSelectors.selectCurrentChainLinks);
     const selectedChainDecisions: ChainDecisionTO[] = useSelector(sequenceModelSelectors.selectCurrentChainDecisions);
-
     const selectedActionToEdit: ActionTO | null = useSelector(editSelectors.selectActionToEdit);
+    const selectedDecisionToEdit: DecisionTO | null = useSelector(editSelectors.selectDecisionToEdit);
+    const selectedConditionToEdit: ConditionTO | null = useSelector(editSelectors.selectConditionToEdit);
 
     const [activeTab, setActiveTab] = useState<ActiveTab>(ActiveTab.sequence);
 
@@ -118,7 +120,7 @@ const useSequenceTableViewModel = () => {
                 break;
             case Mode.EDIT_SEQUENCE_DECISION:
             case Mode.EDIT_SEQUENCE_DECISION_CONDITION:
-                newActiveTab = ActiveTab.decision;
+                newActiveTab = ActiveTab.condition;
                 break;
             case Mode.EDIT_SEQUENCE_STEP:
                 newActiveTab = ActiveTab.action;
@@ -135,6 +137,10 @@ const useSequenceTableViewModel = () => {
     const dataSetupData = useGetDataSetupTableData(dataSetups);
     const modelSequenceData = useGetSequenceModelsTableBody(sequences);
     const modelSequenceDecisionData = useGetModelSequenceDecisionTableData(selectedSequence);
+    const modelSequenceConditionData = useGetModelSequenceConditionTableData(
+        selectedDecisionToEdit,
+        selectedConditionToEdit,
+    );
     const modelSequenceStepData = useGetStepTableData(selectedSequence);
 
     const getStep = (): SequenceStepCTO | null => {
@@ -183,6 +189,8 @@ const useSequenceTableViewModel = () => {
                 return modelSequenceStepData;
             case ActiveTab.decision:
                 return modelSequenceDecisionData;
+            case ActiveTab.condition:
+                return modelSequenceConditionData;
             case ActiveTab.sequence:
                 return calcSequenceData;
             case ActiveTab.sequenceModels:
@@ -208,10 +216,10 @@ const useSequenceTableViewModel = () => {
         };
 
         resizeListener();
-        window.addEventListener('resize', resizeListener);
+        window.addEventListener("resize", resizeListener);
 
         return () => {
-            window.removeEventListener('resize', resizeListener);
+            window.removeEventListener("resize", resizeListener);
         };
     }, [parentRef]);
 

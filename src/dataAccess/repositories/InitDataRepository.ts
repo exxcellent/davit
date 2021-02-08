@@ -1,8 +1,8 @@
-import { DavitUtil } from '../../utils/DavitUtil';
-import { InitDataTO } from '../access/to/InitDataTO';
-import dataStore from '../DataStore';
-import { CheckHelper } from '../util/CheckHelper';
-import { DataAccessUtil } from '../util/DataAccessUtil';
+import { DavitUtil } from "../../utils/DavitUtil";
+import { InitDataTO } from "../access/to/InitDataTO";
+import dataStore from "../DataStore";
+import { CheckHelper } from "../util/CheckHelper";
+import { DataAccessUtil } from "../util/DataAccessUtil";
 
 export const InitDataRepository = {
     find(initDataId: number): InitDataTO | undefined {
@@ -19,7 +19,7 @@ export const InitDataRepository = {
     },
 
     save(initData: InitDataTO) {
-        CheckHelper.nullCheck(initData, 'initData');
+        CheckHelper.nullCheck(initData, "initData");
         let initDataTO: InitDataTO;
         if (initData.id === -1) {
             initDataTO = {
@@ -40,7 +40,7 @@ export const InitDataRepository = {
         } else {
             const success = dataStore.getDataStore().initDatas.delete(id);
             if (!success) {
-                throw new Error('dataAccess.repository.error.notExists');
+                throw new Error("dataAccess.repository.error.notExists");
             }
             return deletedInitData;
         }

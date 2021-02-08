@@ -1,8 +1,7 @@
-import React, { FunctionComponent } from 'react';
-import { Card } from 'semantic-ui-react';
-
-import { ActorCTO } from '../../../../dataAccess/access/cto/ActorCTO';
-import { createViewFragment, ViewFragmentProps } from '../../../../viewDataTypes/ViewFragment';
+import React, { FunctionComponent } from "react";
+import { Card } from "semantic-ui-react";
+import { ActorCTO } from "../../../../dataAccess/access/cto/ActorCTO";
+import { createViewFragment, ViewFragmentProps } from "../../../../viewDataTypes/ViewFragment";
 
 export interface MetaActorFragmentProps {
     id: number;
@@ -20,7 +19,7 @@ export const MetaActorFragment: FunctionComponent<MetaActorFragmentProps> = (pro
     return (
         <Card
             raised
-            style={{ width: initWidth, height: initHeigth, fontSize: '0.7em' }}
+            style={{ width: initWidth, height: initHeigth, fontSize: "0.7em" }}
             onClick={props.onClick ? () => props.onClick!(props.id) : undefined}>
             <Card.Content header={initName}></Card.Content>
             {dataFragments.map(createViewFragment)}

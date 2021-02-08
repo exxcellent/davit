@@ -1,10 +1,10 @@
-import { DataAndInstanceId } from '../../../../components/common/fragments/dropdowns/InstanceDropDown';
-import { AbstractTO } from '../../../access/to/AbstractTO';
-import { GoTo, GoToTypes } from '../../../access/types/GoToType';
+import { DataAndInstanceId } from "../../../../components/common/fragments/dropdowns/InstanceDropDown";
+import { AbstractTO } from "../../../access/to/AbstractTO";
+import { GoTo, GoToTypes } from "../../../access/types/GoToType";
 
 export class DecisionTO01 extends AbstractTO {
     constructor(
-        public name: string = '',
+        public name: string = "",
         public sequenceFk: number = -1,
         public actorFk: number = -1,
         public dataAndInstaceId: DataAndInstanceId[] = [],

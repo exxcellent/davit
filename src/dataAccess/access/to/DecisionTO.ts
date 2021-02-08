@@ -1,13 +1,12 @@
-import { DataAndInstanceId } from '../../../components/common/fragments/dropdowns/InstanceDropDown';
-import { GoTo, GoToTypes } from '../types/GoToType';
-import { AbstractTO } from './AbstractTO';
+import { GoTo, GoToTypes } from "../types/GoToType";
+import { AbstractTO } from "./AbstractTO";
+import { ConditionTO } from "./ConditionTO";
 
 export class DecisionTO extends AbstractTO {
     constructor(
-        public name: string = '',
+        public name: string = "",
         public sequenceFk: number = -1,
-        public actorFk: number = -1,
-        public dataAndInstaceIds: DataAndInstanceId[] = [],
+        public conditions: ConditionTO[] = [],
         public ifGoTo: GoTo = { type: GoToTypes.FIN },
         public elseGoTo: GoTo = { type: GoToTypes.ERROR },
         public root: boolean = false,

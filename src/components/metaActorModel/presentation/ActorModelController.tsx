@@ -1,24 +1,26 @@
-import React, { FunctionComponent, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { ActorCTO } from '../../../dataAccess/access/cto/ActorCTO';
-import { DataCTO } from '../../../dataAccess/access/cto/DataCTO';
-import { DataSetupCTO } from '../../../dataAccess/access/cto/DataSetupCTO';
-import { SequenceStepCTO } from '../../../dataAccess/access/cto/SequenceStepCTO';
-import { ActionTO } from '../../../dataAccess/access/to/ActionTO';
-import { DecisionTO } from '../../../dataAccess/access/to/DecisionTO';
-import { InitDataTO } from '../../../dataAccess/access/to/InitDataTO';
-import { ActionType } from '../../../dataAccess/access/types/ActionType';
-import { editSelectors } from '../../../slices/EditSlice';
-import { MasterDataActions, masterDataSelectors } from '../../../slices/MasterDataSlice';
-import { sequenceModelSelectors } from '../../../slices/SequenceModelSlice';
-import { EditActor } from '../../../slices/thunks/ActorThunks';
-import { DavitUtil } from '../../../utils/DavitUtil';
-import { ActorData } from '../../../viewDataTypes/ActorData';
-import { ActorDataState } from '../../../viewDataTypes/ActorDataState';
-import { ViewFragmentProps } from '../../../viewDataTypes/ViewFragment';
-import { Arrow, ArrowType, DavitPathHead, DavitPathProps, DavitPathTypes } from '../../common/fragments/svg/DavitPath';
-import { DavitCard, DavitCardProps } from './fragments/DavitCard';
-import { DnDBox, DnDBoxElement, DnDBoxType } from './fragments/DnDBox';
+import React, { FunctionComponent } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { ActorCTO } from "../../../dataAccess/access/cto/ActorCTO";
+import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
+import { DataSetupCTO } from "../../../dataAccess/access/cto/DataSetupCTO";
+import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
+import { ActionTO } from "../../../dataAccess/access/to/ActionTO";
+import { ConditionTO } from "../../../dataAccess/access/to/ConditionTO";
+import { DecisionTO } from "../../../dataAccess/access/to/DecisionTO";
+import { InitDataTO } from "../../../dataAccess/access/to/InitDataTO";
+import { ActionType } from "../../../dataAccess/access/types/ActionType";
+import { editSelectors } from "../../../slices/EditSlice";
+import { GlobalActions, globalSelectors } from "../../../slices/GlobalSlice";
+import { MasterDataActions, masterDataSelectors } from "../../../slices/MasterDataSlice";
+import { sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
+import { EditActor } from "../../../slices/thunks/ActorThunks";
+import { DavitUtil } from "../../../utils/DavitUtil";
+import { ActorData } from "../../../viewDataTypes/ActorData";
+import { ActorDataState } from "../../../viewDataTypes/ActorDataState";
+import { ViewFragmentProps } from "../../../viewDataTypes/ViewFragment";
+import { Arrow, ArrowType, DavitPathHead, DavitPathProps, DavitPathTypes } from "../../common/fragments/svg/DavitPath";
+import { DavitCard, DavitCardProps } from "./fragments/DavitCard";
+import { DnDBox, DnDBoxElement, DnDBoxType } from "./fragments/DnDBox";
 
 interface ActorModelControllerProps {
     fullScreen?: boolean;
@@ -27,7 +29,15 @@ interface ActorModelControllerProps {
 export const ActorModelController: FunctionComponent<ActorModelControllerProps> = (props) => {
     const { fullScreen } = props;
 
-    const { onPositionUpdate, getArrows, toDnDElements, zoomIn, zoomOut, onGeometricalDataUpdate } = useViewModel();
+    const {
+        onPositionUpdate,
+        getArrows,
+        toDnDElements,
+        zoomIn,
+        zoomOut,
+        actorZoom,
+        onGeometricalDataUpdate,
+    } = useViewModel();
 
     return (
         <DnDBox
@@ -37,6 +47,7 @@ export const ActorModelController: FunctionComponent<ActorModelControllerProps> 
             fullScreen={fullScreen}
             zoomIn={zoomIn}
             zoomOut={zoomOut}
+            zoom={actorZoom}
             type={DnDBoxType.actor}
             onGeoUpdate={onGeometricalDataUpdate}
         />
@@ -53,6 +64,7 @@ const useViewModel = () => {
     const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.selectStepToEdit);
     const actionToEdit: ActionTO | null = useSelector(editSelectors.selectActionToEdit);
     const decisionToEdit: DecisionTO | null = useSelector(editSelectors.selectDecisionToEdit);
+    const conditionToEdit: ConditionTO | null = useSelector(editSelectors.selectConditionToEdit);
     const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.selectDataSetupToEdit);
     const initDataToEdit: InitDataTO | null = useSelector(editSelectors.selectInitDataToEdit);
     const editArrow: Arrow | null = useSelector(editSelectors.selectEditActionArrow);
@@ -63,9 +75,7 @@ const useViewModel = () => {
     const errors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
     const dataSetup: DataSetupCTO | null = useSelector(sequenceModelSelectors.selectDataSetup);
 
-    const [zoom, setZoom] = useState<number>(1);
-
-    const ZOOM_FACTOR: number = 0.1;
+    const actorZoom: number = useSelector(globalSelectors.selectActorZoomFactor);
 
     React.useEffect(() => {
         dispatch(MasterDataActions.loadActorsFromBackend());
@@ -123,6 +133,9 @@ const useViewModel = () => {
         if (actorDatasFromInitData) {
             actorDatas.push(actorDatasFromInitData);
         }
+        if (conditionToEdit) {
+            actorDatas.push(mapConditionToActorData(conditionToEdit));
+        }
         return actorDatas;
     };
 
@@ -177,17 +190,21 @@ const useViewModel = () => {
     const mapDecisionToActorData = (decision: DecisionTO | null): ViewFragmentProps[] => {
         let props: ViewFragmentProps[] = [];
         if (decision) {
-            if (decision.dataAndInstaceIds !== undefined && decision.dataAndInstaceIds.length > 0) {
-                props = decision.dataAndInstaceIds.map((data) => {
-                    return {
-                        parentId: decision.actorFk,
-                        name: getDataNameById(data.dataFk, data.instanceId),
-                        state: ActorDataState.CHECKED,
-                    };
+            if (decision.conditions !== undefined && decision.conditions.length > 0) {
+                props = decision.conditions.map((condition) => {
+                    return mapConditionToActorData(condition);
                 });
             }
         }
         return props;
+    };
+
+    const mapConditionToActorData = (condition: ConditionTO): ViewFragmentProps => {
+        return {
+            parentId: condition.actorFk,
+            name: getDataNameById(condition.dataFk, condition.instanceFk),
+            state: ActorDataState.CHECKED,
+        };
     };
 
     const mapInitDataToActorData = (initData: InitDataTO): ViewFragmentProps => {
@@ -199,16 +216,16 @@ const useViewModel = () => {
     };
 
     const getDataNameById = (dataId: number, instanceId?: number): string => {
-        let dataName: string = 'Could not find Data';
+        let dataName: string = "Could not find Data";
         const data: DataCTO | undefined = datas.find((data) => data.data.id === dataId);
         if (data) {
             dataName = data.data.name;
             if (instanceId !== undefined && instanceId !== -1) {
                 dataName =
                     dataName +
-                    ' - ' +
+                    " - " +
                     (data.data.instances.find((inst) => inst.id === instanceId)?.name ||
-                        'Could not find instance Name');
+                        "Could not find instance Name");
             }
         }
         return dataName;
@@ -276,7 +293,7 @@ const useViewModel = () => {
     };
 
     const actorsToDnDElements = (actors: ActorCTO[]): DnDBoxElement[] => {
-        let dndBoxElements: DnDBoxElement[] = [];
+        let dndBoxElements: DnDBoxElement[];
         dndBoxElements = actors
             .filter((actor) => !(actorCTOToEdit && actorCTOToEdit.actor.id === actor.actor.id))
             .map((actorr) => {
@@ -309,14 +326,14 @@ const useViewModel = () => {
                     act.parentId === actor.actor.id ||
                     (act.parentId as { dataId: number; instanceId: number }).dataId === actor.actor.id,
             ),
-            zoomFactor: zoom,
-            type: 'ACTOR',
+            zoomFactor: actorZoom,
+            type: "ACTOR",
         };
     };
 
     const getArrows = (): DavitPathProps[] => {
         const arrowProps: DavitPathProps[] = [];
-        let arrowsToDraw: Arrow[] = [];
+        let arrowsToDraw: Arrow[];
 
         arrowsToDraw = arrows;
 
@@ -340,18 +357,20 @@ const useViewModel = () => {
                 targetHeight: arrowToDraw.targetGeometricalData.geometricalData.height,
                 targetWidth: arrowToDraw.targetGeometricalData.geometricalData.width,
                 stroked: arrowToDraw.type === ArrowType.TRIGGER,
-                lineColor: arrowToDraw.type === ArrowType.SEND ? 'var(--carv2-color-exxcellent-blue)' : 'black',
+                lineColor: arrowToDraw.type === ArrowType.SEND ? "var(--carv2-color-exxcellent-blue)" : "black",
             });
         });
         return arrowProps;
     };
 
     const zoomOut = (): void => {
-        setZoom(zoom - ZOOM_FACTOR);
+        console.info("zoom out");
+        dispatch(GlobalActions.actorZoomOut());
     };
 
     const zoomIn = (): void => {
-        setZoom(zoom + ZOOM_FACTOR);
+        console.info("zoom in");
+        dispatch(GlobalActions.actorZoomIn());
     };
 
     return {
@@ -361,5 +380,6 @@ const useViewModel = () => {
         zoomIn,
         zoomOut,
         onGeometricalDataUpdate,
+        actorZoom,
     };
 };

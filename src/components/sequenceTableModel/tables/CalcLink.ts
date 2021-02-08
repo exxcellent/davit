@@ -1,7 +1,7 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { CalcChain, CalcChainLink } from '../../../services/SequenceChainService';
-import { SequenceModelActions, sequenceModelSelectors } from '../../../slices/SequenceModelSlice';
-import { DavitTableRowData } from '../../common/fragments/DavitTable';
+import { useDispatch, useSelector } from "react-redux";
+import { CalcChain, CalcChainLink } from "../../../services/SequenceChainService";
+import { SequenceModelActions, sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
+import { DavitTableRowData } from "../../common/fragments/DavitTable";
 
 export const useGetCalcLinkTableData = (calcChain: CalcChain | null) => {
     const dispatch = useDispatch();
@@ -20,7 +20,7 @@ export const useGetCalcLinkTableData = (calcChain: CalcChain | null) => {
     };
 };
 
-const header = ['INDEX', 'NAME', 'SEQUENCE', 'DATASETUP', 'TERMINAL'];
+const header = ["INDEX", "NAME", "SEQUENCE", "DATASETUP", "TERMINAL"];
 
 const createCalcLinkColumn = (
     link: CalcChainLink,
@@ -28,15 +28,15 @@ const createCalcLinkColumn = (
     onClick: () => void,
     chainIndex: number,
 ): DavitTableRowData => {
-    const name: string = link.name || 'Link name not found!';
-    const sequenceName: string = link.sequence.sequenceModel?.sequenceTO.name || 'Sequence name not found!';
-    const dataSetupName: string = link.dataSetup.dataSetup?.name || 'Data setup name not found!';
-    let trClass = 'carv2Tr';
+    const name: string = link.name || "Link name not found!";
+    const sequenceName: string = link.sequence.sequenceModel?.sequenceTO.name || "Sequence name not found!";
+    const dataSetupName: string = link.dataSetup.dataSetup?.name || "Data setup name not found!";
+    let trClass = "carv2Tr";
     if (index === chainIndex) {
-        trClass = 'carv2TrMarked';
+        trClass = "carv2TrMarked";
     }
     return {
-        trClass: 'clickable ' + trClass,
+        trClass: "clickable " + trClass,
         data: [(index + 1).toString(), name, sequenceName, dataSetupName, link.sequence.terminal.type.toString()],
         actions: [],
         onClick,

@@ -1,8 +1,8 @@
-import { useDispatch } from 'react-redux';
-import { ChainTO } from '../../../dataAccess/access/to/ChainTO';
-import { EditActions } from '../../../slices/EditSlice';
-import { SequenceModelActions } from '../../../slices/SequenceModelSlice';
-import { DavitTableRowData } from '../../common/fragments/DavitTable';
+import { useDispatch } from "react-redux";
+import { ChainTO } from "../../../dataAccess/access/to/ChainTO";
+import { EditActions } from "../../../slices/EditSlice";
+import { SequenceModelActions } from "../../../slices/SequenceModelSlice";
+import { DavitTableRowData } from "../../common/fragments/DavitTable";
 
 export const useGetChainModelsTableData = (chainModels: ChainTO[]) => {
     const dispatch = useDispatch();
@@ -23,7 +23,7 @@ export const useGetChainModelsTableData = (chainModels: ChainTO[]) => {
     };
 };
 
-const header = ['NAME', 'ACTIONS'];
+const header = ["NAME", "ACTIONS"];
 
 const createChainModelColumn = (
     chain: ChainTO,
@@ -31,9 +31,9 @@ const createChainModelColumn = (
     selectCallback: () => void,
 ): DavitTableRowData => {
     const name = chain.name;
-    const trClass = 'carv2Tr';
-    const editAction = { icon: 'wrench', callback: editCallback };
-    const selectAction = { icon: 'hand pointer', callback: selectCallback };
+    const trClass = "carv2Tr";
+    const editAction = { icon: "wrench", callback: editCallback };
+    const selectAction = { icon: "hand pointer", callback: selectCallback };
 
     return {
         trClass,

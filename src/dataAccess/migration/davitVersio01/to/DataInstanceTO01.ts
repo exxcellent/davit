@@ -1,7 +1,7 @@
-import { AbstractTO } from '../../../access/to/AbstractTO';
+import { AbstractTO } from "../../../access/to/AbstractTO";
 
 export class DataInstanceTO01 extends AbstractTO {
-    constructor(public name: string = '', public defaultInstance: boolean = true) {
+    constructor(public name: string = "", public defaultInstance: boolean = true) {
         super();
     }
 }
