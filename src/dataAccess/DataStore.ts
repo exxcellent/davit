@@ -74,17 +74,8 @@ class DataStore {
                 this.data!.projectName = objectStore.projectName;
 
                 // If zoom is not set, fall back to default 100%
-                if (objectStore.actorZoom !== undefined) {
-                    this.data!.actorZoom = objectStore.actorZoom;
-                } else {
-                    this.data!.actorZoom = 1;
-                }
-
-                if (objectStore.dataZoom !== undefined) {
-                    this.data!.dataZoom = objectStore.dataZoom;
-                } else {
-                    this.data!.dataZoom = 1;
-                }
+                this.data!.actorZoom = objectStore.actorZoom ? objectStore.actorZoom : 1;
+                this.data!.dataZoom = objectStore.dataZoom ? objectStore.dataZoom : 1;
             } else {
                 throw new Error(`No value found for key ${key}`);
             }
