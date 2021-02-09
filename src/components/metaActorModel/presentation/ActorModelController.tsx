@@ -364,12 +364,10 @@ const useViewModel = () => {
     };
 
     const zoomOut = (): void => {
-        console.info("zoom out");
         dispatch(GlobalActions.actorZoomOut());
     };
 
     const zoomIn = (): void => {
-        console.info("zoom in");
         dispatch(GlobalActions.actorZoomIn());
     };
 
