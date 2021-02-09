@@ -13,6 +13,7 @@ export const DavitDeleteButton: FunctionComponent<DavitDeleteButtonProps> = (pro
 
     const [fluid, setFluid] = useState<boolean>(false);
 
+    // TODO: BUG JIRA => CARV2-227
     useEffect(() => {
         if (fluid) setTimeout(() => setFluid(false), SHRINK_DELAY);
     }, [fluid]);
