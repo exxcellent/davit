@@ -78,15 +78,23 @@ export const ConstraintsHelper = {
     },
 
     deleteStepConstraintCheck(stepToDelete: SequenceStepTO, dataStore: DataStoreCTO) {
-        let errorMessagePrefix: string = `delete.error! step: ${stepToDelete.name} with id: ${stepToDelete.id} is still connected to `;
+        let errorMessagePrefix: string = `delete.error! step: ${stepToDelete.name} with id: ${stepToDelete.id} is still connected to: \n`;
+        let errorMessageSuffix: string = "";
 
         const constraintStep: SequenceStepTO | undefined = Array.from(dataStore.steps.values()).find(
             (step) => step.goto.type === GoToTypes.STEP && step.goto.id === stepToDelete.id,
         );
 
+        errorMessageSuffix =
+            errorMessageSuffix + (constraintStep ? `step: ${constraintStep.name} with id: ${constraintStep.id}!` : "");
+
         const constraintAction: ActionTO | undefined = Array.from(dataStore.actions.values()).find(
             (action) => action.sequenceStepFk === stepToDelete.id,
         );
+
+        errorMessageSuffix =
+            errorMessageSuffix +
+            (constraintAction ? `\n action: ${constraintAction.actionType} with id: ${constraintAction.id}!` : "");
 
         const constraintDecision: DecisionTO | undefined = Array.from(dataStore.decisions.values()).find(
             (decision) =>
@@ -94,20 +102,12 @@ export const ConstraintsHelper = {
                 (decision.elseGoTo.type === GoToTypes.STEP && decision.elseGoTo.id === stepToDelete.id),
         );
 
-        if (constraintStep !== undefined) {
-            throw new Error(`${errorMessagePrefix} step: ${constraintStep.name} with id: ${constraintStep.id}!`);
-        }
+        errorMessageSuffix =
+            errorMessageSuffix +
+            (constraintDecision ? `\n decision: ${constraintDecision.name} with id: ${constraintDecision.id}!` : "");
 
-        if (constraintAction !== undefined) {
-            throw new Error(
-                `${errorMessagePrefix} action: ${constraintAction.actionType} with id: ${constraintAction.id}!`,
-            );
-        }
-
-        if (constraintDecision !== undefined) {
-            throw new Error(
-                `${errorMessagePrefix} decision: ${constraintDecision.name} with id: ${constraintDecision.id}!`,
-            );
+        if (errorMessageSuffix.length > 0) {
+            throw new Error(errorMessagePrefix + errorMessageSuffix);
         }
     },
 
