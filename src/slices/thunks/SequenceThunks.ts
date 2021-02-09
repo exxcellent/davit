@@ -12,13 +12,7 @@ import { SequenceModelActions } from "../SequenceModelSlice";
 
 const createSequenceThunk = (): AppThunk => (dispatch) => {
     const sequence: SequenceTO = new SequenceTO();
-    const response: DataAccessResponse<SequenceTO> = DataAccess.saveSequenceTO(sequence);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
-    }
-    dispatch(MasterDataActions.loadSequencesFromBackend());
-    dispatch(setSequenceToEditThunk(response.object));
-    dispatch(SequenceModelActions.setCurrentSequence(response.object.id));
+    dispatch(saveSequenceThunk(sequence));
 };
 
 const saveSequenceThunk = (sequence: SequenceTO): AppThunk => (dispatch) => {
@@ -31,12 +25,22 @@ const saveSequenceThunk = (sequence: SequenceTO): AppThunk => (dispatch) => {
     dispatch(SequenceModelActions.setCurrentSequence(response.object.id));
 };
 
-const deleteSequenceThunk = (sequence: SequenceTO): AppThunk => async (dispatch) => {
-    const response: DataAccessResponse<SequenceTO> = await DataAccess.deleteSequenceTO(sequence);
-    if (response.code !== 200) {
-        dispatch(handleError(response.message));
+const deleteSequenceThunk = (sequence: SequenceTO): AppThunk => (dispatch, getState) => {
+    const sequenceCTOToDelete: SequenceCTO | null = getSequenceCTOById(sequence.id);
+
+    if (sequenceCTOToDelete !== null) {
+        const response: DataAccessResponse<SequenceCTO> = DataAccess.deleteSequenceCTO(sequenceCTOToDelete);
+
+        if (response.code !== 200) {
+            dispatch(handleError(response.message));
+        }
+
+        if (getState().sequenceModel.selectedSequenceModel?.sequenceTO?.id === sequence.id) {
+            dispatch(SequenceModelActions.resetCurrentSequence);
+        }
+
+        dispatch(MasterDataActions.loadSequencesFromBackend());
     }
-    dispatch(MasterDataActions.loadSequencesFromBackend());
 };
 
 const getSequenceCTOById = (sequenceId: number): SequenceCTO | null => {

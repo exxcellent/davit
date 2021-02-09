@@ -61,7 +61,7 @@ class DataStore {
         Object.entries(objectStore).forEach(([key, value]) => {
             if (value !== undefined) {
                 if (Array.isArray(value)) {
-                    const dataEntry = Object.entries(this.data!).find(([dataKey, dataValue]) => dataKey === key);
+                    const dataEntry = Object.entries(this.data!).find(([dataKey]) => dataKey === key);
                     if (dataEntry) {
                         value.forEach((abstractTO: any) => {
                             dataEntry[1].set(abstractTO.id, abstractTO);
@@ -72,8 +72,10 @@ class DataStore {
                     }
                 }
                 this.data!.projectName = objectStore.projectName;
-                this.data!.actorZoom = objectStore.actorZoom;
-                this.data!.dataZoom = objectStore.dataZoom;
+
+                // If zoom is not set, fall back to default 100%
+                this.data!.actorZoom = objectStore.actorZoom ? objectStore.actorZoom : 1;
+                this.data!.dataZoom = objectStore.dataZoom ? objectStore.dataZoom : 1;
             } else {
                 throw new Error(`No value found for key ${key}`);
             }
@@ -85,7 +87,6 @@ class DataStore {
     }
 
     private getDataStoreObject(): StoreTO {
-        console.info(this.data);
         return {
             projectName: this.data!.projectName.toString(),
             version: DAVIT_VERISON,
@@ -111,8 +112,6 @@ class DataStore {
     }
 
     public storeFileData(fileData: string) {
-        console.log("Writing to storage:");
-        console.log(fileData);
         const objectStore: StoreTO = JSON.parse(fileData);
         this.readData(objectStore);
         localStorage.setItem(STORE_ID, fileData);

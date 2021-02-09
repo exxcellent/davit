@@ -1,4 +1,7 @@
 import { DataStoreCTO } from "./access/cto/DataStoreCTO";
+import { ActionTO } from "./access/to/ActionTO";
+import { DecisionTO } from "./access/to/DecisionTO";
+import { SequenceStepTO } from "./access/to/SequenceStepTO";
 import { GoToTypes } from "./access/types/GoToType";
 
 export const ConstraintsHelper = {
@@ -74,23 +77,37 @@ export const ConstraintsHelper = {
         }
     },
 
-    deleteStepConstraintCheck(stepId: number, dataStore: DataStoreCTO) {
-        const sequenceExists: boolean = Array.from(dataStore.actions.values()).some(
-            (actorData) => actorData.sequenceStepFk === stepId,
+    deleteStepConstraintCheck(stepToDelete: SequenceStepTO, dataStore: DataStoreCTO) {
+        let errorMessagePrefix: string = `delete.error! step: ${stepToDelete.name} with id: ${stepToDelete.id} is still connected to: \n`;
+        let errorMessageSuffix: string = "";
+
+        const constraintStep: SequenceStepTO | undefined = Array.from(dataStore.steps.values()).find(
+            (step) => step.goto.type === GoToTypes.STEP && step.goto.id === stepToDelete.id,
         );
 
-        const actionExists: boolean = Array.from(dataStore.actions.values()).some(
-            (action) => action.sequenceStepFk === stepId,
+        errorMessageSuffix =
+            errorMessageSuffix + (constraintStep ? `step: ${constraintStep.name} with id: ${constraintStep.id}!` : "");
+
+        const constraintAction: ActionTO | undefined = Array.from(dataStore.actions.values()).find(
+            (action) => action.sequenceStepFk === stepToDelete.id,
         );
 
-        const decisionExists: boolean = Array.from(dataStore.decisions.values()).some(
+        errorMessageSuffix =
+            errorMessageSuffix +
+            (constraintAction ? `\n action: ${constraintAction.actionType} with id: ${constraintAction.id}!` : "");
+
+        const constraintDecision: DecisionTO | undefined = Array.from(dataStore.decisions.values()).find(
             (decision) =>
-                (decision.ifGoTo.type === GoToTypes.STEP && decision.ifGoTo.id === stepId) ||
-                (decision.elseGoTo.type === GoToTypes.STEP && decision.elseGoTo.id === stepId),
+                (decision.ifGoTo.type === GoToTypes.STEP && decision.ifGoTo.id === stepToDelete.id) ||
+                (decision.elseGoTo.type === GoToTypes.STEP && decision.elseGoTo.id === stepToDelete.id),
         );
 
-        if (sequenceExists || actionExists || decisionExists) {
-            throw new Error(`delete.error! step: ${stepId} is still connected to actordata(s)!`);
+        errorMessageSuffix =
+            errorMessageSuffix +
+            (constraintDecision ? `\n decision: ${constraintDecision.name} with id: ${constraintDecision.id}!` : "");
+
+        if (errorMessageSuffix.length > 0) {
+            throw new Error(errorMessagePrefix + errorMessageSuffix);
         }
     },
 
