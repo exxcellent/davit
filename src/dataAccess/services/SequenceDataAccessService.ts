@@ -13,6 +13,7 @@ import { DecisionTO } from "../access/to/DecisionTO";
 import { InitDataTO } from "../access/to/InitDataTO";
 import { SequenceStepTO } from "../access/to/SequenceStepTO";
 import { SequenceTO } from "../access/to/SequenceTO";
+import { GoToTypes } from "../access/types/GoToType";
 import { ActionRepository } from "../repositories/ActionRepository";
 import { ChainDecisionRepository } from "../repositories/ChainDecisionRepository";
 import { ChainLinkRepository } from "../repositories/ChainLinkRepository";
@@ -67,10 +68,30 @@ export const SequenceDataAccessService = {
 
     deleteSequenceCTO(sequence: SequenceCTO): SequenceCTO {
         CheckHelper.nullCheck(sequence.sequenceTO, "sequenceTO");
+
+        // Remove all goto id's (FK's)
+        sequence.decisions.forEach((decision) => {
+            if (decision.ifGoTo.type === GoToTypes.STEP || decision.ifGoTo.type === GoToTypes.DEC) {
+                decision.ifGoTo.id = -1;
+                this.saveDecision(decision);
+            }
+            if (decision.elseGoTo.type === GoToTypes.STEP || decision.elseGoTo.type === GoToTypes.DEC) {
+                decision.elseGoTo.id = -1;
+                this.saveDecision(decision);
+            }
+        });
+
+        sequence.sequenceStepCTOs.forEach((step) => {
+            if (step.squenceStepTO.goto.type === GoToTypes.STEP || step.squenceStepTO.goto.type === GoToTypes.DEC) {
+                step.squenceStepTO.goto.id = -1;
+                this.saveSequenceStep(step);
+            }
+        });
+
+        // Delete decisions and steps
+        sequence.decisions.forEach(this.deleteDecision);
         sequence.sequenceStepCTOs.forEach(this.deleteSequenceStep);
-        if (sequence.sequenceStepCTOs.length > 0) {
-            throw new Error("can not delete sequence, at least one step is containing in this sequence.");
-        }
+
         this.deleteSequenceTO(sequence.sequenceTO);
         return sequence;
     },
