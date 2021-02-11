@@ -1,8 +1,8 @@
 import { useDispatch } from "react-redux";
-import { SequenceTO } from "../../../dataAccess/access/to/SequenceTO";
-import { EditActions } from "../../../slices/EditSlice";
-import { SequenceModelActions } from "../../../slices/SequenceModelSlice";
-import { DavitTableAction, DavitTableRowData } from "../../common/fragments/DavitTable";
+import { SequenceTO } from "../../../../dataAccess/access/to/SequenceTO";
+import { EditActions } from "../../../../slices/EditSlice";
+import { SequenceModelActions } from "../../../../slices/SequenceModelSlice";
+import { DavitTableAction, DavitTableRowData } from "../../../common/fragments/DavitTable";
 
 export const useGetSequenceModelsTableBody = (sequences: SequenceTO[]) => {
     const dispatch = useDispatch();

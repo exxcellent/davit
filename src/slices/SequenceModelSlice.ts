@@ -133,7 +133,7 @@ const SequenceModelSlice = createSlice({
             let filteredSteps: CalculatedStep[] = [];
             if (getCurrentCalcSequence(state)) {
                 filteredSteps = filterSteps(
-                    getCurrentCalcSequence(state)?.steps || [],
+                    getCurrentCalcSequence(state)?.calculatedSteps || [],
                     state.activeFilter,
                     getCurrentSequenceModel(state)?.sequenceStepCTOs || [],
                 );
@@ -152,12 +152,12 @@ const SequenceModelSlice = createSlice({
             } else if (state.calcChain && newStepIndex === -1) {
                 const newLinkIndex =
                     state.currentLinkIndex > 0 ? state.currentLinkIndex - 1 : state.calcChain.calcLinks.length - 1;
-                const newfilteredSteps = filterSteps(
-                    state.calcChain.calcLinks[newLinkIndex].sequence.steps || [],
+                const newFilteredSteps = filterSteps(
+                    state.calcChain.calcLinks[newLinkIndex].sequence.calculatedSteps || [],
                     state.activeFilter,
                     state.calcChain.calcLinks[newLinkIndex].sequence.sequenceModel?.sequenceStepCTOs || [],
                 );
-                state.currentStepIndex = newfilteredSteps.length - 1;
+                state.currentStepIndex = newFilteredSteps.length - 1;
                 state.currentLinkIndex = newLinkIndex;
             } else {
                 state.currentStepIndex = 0;
@@ -182,8 +182,8 @@ const SequenceModelSlice = createSlice({
 function calcSequenceAndSetState(sequenceModel: SequenceCTO, dataSetup: DataSetupCTO, state: SequenceModelState) {
     const result: CalcSequence = SequenceService.calculateSequence(sequenceModel, dataSetup);
     state.currentStepIndex = 0;
-    state.errorActions = result.steps[state.currentStepIndex]?.errors || [];
-    state.actorDatas = result.steps[state.currentStepIndex]?.actorDatas || [];
+    state.errorActions = result.calculatedSteps[state.currentStepIndex]?.errors || [];
+    state.actorDatas = result.calculatedSteps[state.currentStepIndex]?.actorDatas || [];
     state.calcSequence = result;
 }
 
@@ -382,7 +382,7 @@ export const sequenceModelSelectors = {
             const currentSequence: SequenceCTO | null = getCurrentSequenceModel(state.sequenceModel);
             const calcSequence: CalcSequence | null = getCurrentCalcSequence(state.sequenceModel);
             return filterSteps(
-                calcSequence?.steps || [],
+                calcSequence?.calculatedSteps || [],
                 state.sequenceModel.activeFilter,
                 currentSequence?.sequenceStepCTOs || [],
             );
@@ -420,7 +420,10 @@ export const sequenceModelSelectors = {
     },
     selectCurrentStepIndex: (state: RootState): number => state.sequenceModel.currentStepIndex,
     selectCurrentStepId: (state: RootState): string => {
-        return getCurrentCalcSequence(state.sequenceModel)?.steps[state.sequenceModel.currentStepIndex]?.stepId || "";
+        return (
+            getCurrentCalcSequence(state.sequenceModel)?.calculatedSteps[state.sequenceModel.currentStepIndex]
+                ?.stepId || ""
+        );
     },
     selectCurrentLinkIndex: (state: RootState): number => state.sequenceModel.currentLinkIndex,
     selectCurrentLinkId: (state: RootState): string =>
@@ -483,7 +486,7 @@ export const SequenceModelActions = {
 function getFilteredSteps(state: RootState) {
     return state.edit.mode === Mode.VIEW
         ? filterSteps(
-              getCurrentCalcSequence(state.sequenceModel)?.steps || [],
+              getCurrentCalcSequence(state.sequenceModel)?.calculatedSteps || [],
               state.sequenceModel.activeFilter,
               getCurrentSequenceModel(state.sequenceModel)?.sequenceStepCTOs || [],
           )

@@ -1,15 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
-import { ActorCTO } from "../../../dataAccess/access/cto/ActorCTO";
-import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
-import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
-import { ActionTO } from "../../../dataAccess/access/to/ActionTO";
-import { ActionType } from "../../../dataAccess/access/types/ActionType";
-import { EditActions, editSelectors, Mode } from "../../../slices/EditSlice";
-import { masterDataSelectors } from "../../../slices/MasterDataSlice";
-import { SequenceModelActions } from "../../../slices/SequenceModelSlice";
-import { EditStep } from "../../../slices/thunks/StepThunks";
-import { DavitUtil } from "../../../utils/DavitUtil";
-import { DavitTableRowData } from "../../common/fragments/DavitTable";
+import { ActorCTO } from "../../../../dataAccess/access/cto/ActorCTO";
+import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
+import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
+import { ActionTO } from "../../../../dataAccess/access/to/ActionTO";
+import { ActionType } from "../../../../dataAccess/access/types/ActionType";
+import { EditActions, editSelectors, Mode } from "../../../../slices/EditSlice";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import { SequenceModelActions } from "../../../../slices/SequenceModelSlice";
+import { EditStep } from "../../../../slices/thunks/StepThunks";
+import { DavitUtil } from "../../../../utils/DavitUtil";
+import { DavitTableRowData } from "../../../common/fragments/DavitTable";
 
 export const useGetStepActionTableData = (
     selectedStep: SequenceStepCTO | null,

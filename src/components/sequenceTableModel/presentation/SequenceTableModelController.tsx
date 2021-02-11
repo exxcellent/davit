@@ -19,17 +19,17 @@ import { sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
 import { DavitUtil } from "../../../utils/DavitUtil";
 import { DavitTable } from "../../common/fragments/DavitTable";
 import { TabPanel } from "../fragments/TabPanel";
-import { useGetCalcLinkTableData } from "../tables/CalcLink";
-import { useGetCalcSequenceTableData } from "../tables/CalcSequence";
-import { useGetDataSetupTableData } from "../tables/DataSetup";
-import { useGetChainModelsTableData } from "../tables/ModelChain";
-import { useGetModelChainDecisionTableData } from "../tables/ModelChainDecision";
-import { useGetModelChainLinkTableData } from "../tables/ModelChainLink";
-import { useGetSequenceModelsTableBody } from "../tables/ModelSequence";
-import { useGetModelSequenceConditionTableData } from "../tables/ModelSequenceCondition";
-import { useGetModelSequenceDecisionTableData } from "../tables/ModelSequenceDecision";
-import { useGetStepTableData } from "../tables/ModelSequenceStep";
-import { useGetStepActionTableData } from "../tables/ModelSequenceStepAction";
+import { useGetCalcLinkTableData } from "../tables/calculated/CalcLink";
+import { useGetCalcSequenceTableData } from "../tables/calculated/CalcSequence";
+import { useGetChainModelsTableData } from "../tables/model/ModelChain";
+import { useGetModelChainDecisionTableData } from "../tables/model/ModelChainDecision";
+import { useGetModelChainLinkTableData } from "../tables/model/ModelChainLink";
+import { useGetDataSetupTableData } from "../tables/model/ModelDataSetup";
+import { useGetSequenceModelsTableBody } from "../tables/model/ModelSequence";
+import { useGetModelSequenceConditionTableData } from "../tables/model/ModelSequenceCondition";
+import { useGetModelSequenceDecisionTableData } from "../tables/model/ModelSequenceDecision";
+import { useGetStepTableData } from "../tables/model/ModelSequenceStep";
+import { useGetStepActionTableData } from "../tables/model/ModelSequenceStepAction";
 
 interface SequenceTableModelControllerProps {
     fullScreen?: boolean;

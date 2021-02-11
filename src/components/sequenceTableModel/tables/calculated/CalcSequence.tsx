@@ -1,11 +1,11 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "semantic-ui-react";
-import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
-import { Terminal } from "../../../dataAccess/access/types/GoToType";
-import { CalculatedStep } from "../../../services/SequenceService";
-import { SequenceModelActions, sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
-import { DavitTableRowData } from "../../common/fragments/DavitTable";
+import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
+import { Terminal } from "../../../../dataAccess/access/types/GoToType";
+import { CalculatedStep } from "../../../../services/SequenceService";
+import { SequenceModelActions, sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
+import { DavitTableRowData } from "../../../common/fragments/DavitTable";
 
 export const useGetCalcSequenceTableData = (calcSteps: CalculatedStep[], selectedSequence: SequenceCTO | null) => {
     const dispatch = useDispatch();
@@ -60,7 +60,7 @@ const createCalcSequenceStepColumn = (
         }
     }
 
-    const hasError = step.errors.length > 0 ? true : false;
+    const hasError = step.errors.length > 0;
 
     return {
         actions: [],
