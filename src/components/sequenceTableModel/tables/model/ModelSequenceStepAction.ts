@@ -104,7 +104,7 @@ export const useGetStepActionTableData = (
     };
 };
 
-const header = ["INDEX", "TYPE", "DATA", "TO", "FROM", "ACTIONS"];
+const header = ["INDEX", "TYPE", "DATA", "TARGET", "SOURCE", "ACTIONS"];
 
 const createModelActionColumn = (
     arrayIndex: number,

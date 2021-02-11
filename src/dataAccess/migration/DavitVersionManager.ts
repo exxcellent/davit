@@ -9,7 +9,9 @@ export const DavitVersionManager = {
         let migratedDataStoreObject: StoreTO = {} as StoreTO;
         switch (dataStoreObject.version) {
             case undefined:
-                migratedDataStoreObject = DavitVersionMigrator01.migrate(dataStoreObject);
+                migratedDataStoreObject = DavitVersionMigrator02.migrate(
+                    DavitVersionMigrator01.migrate(dataStoreObject),
+                );
                 break;
             case 0.1:
                 migratedDataStoreObject = DavitVersionMigrator02.migrate(dataStoreObject);
