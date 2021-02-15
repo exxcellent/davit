@@ -50,7 +50,10 @@ export const SequenceChainService = {
                             actorDatas,
                         );
 
-                        actorDatas = result.steps.length > 0 ? result.steps[result.steps.length - 1].actorDatas : [];
+                        actorDatas =
+                            result.calculatedSteps.length > 0
+                                ? result.calculatedSteps[result.calculatedSteps.length - 1].actorDatas
+                                : [];
 
                         // STEP ID
                         const newLinkId = "_LINK_" + link.chainLink.id;
@@ -63,7 +66,7 @@ export const SequenceChainService = {
                             stepId: stepId,
                             sequence: result,
                             dataSetup: link.dataSetup,
-                            errors: result.steps.map((step) => step.errors).flat(1),
+                            errors: result.calculatedSteps.map((step) => step.errors).flat(1),
                         });
 
                         if (!isLooping(loopStartingStep)) {
@@ -158,8 +161,8 @@ const checkForLoop = (calcSequenceChain: CalcChain, step: ChainlinkCTO, actorDat
     return calcSequenceChain.calcLinks.findIndex(
         (calcLink) =>
             calcLink.chainLinkId === step.chainLink.id &&
-            calcLink.sequence.steps[0].actorDatas.length === actorDatas.length &&
-            !calcLink.sequence.steps[0].actorDatas.some(
+            calcLink.sequence.calculatedSteps[0].actorDatas.length === actorDatas.length &&
+            !calcLink.sequence.calculatedSteps[0].actorDatas.some(
                 (cp) => !actorDatas.some((rcp) => rcp.actorFk === cp.actorFk && rcp.dataFk === cp.dataFk),
             ),
     );

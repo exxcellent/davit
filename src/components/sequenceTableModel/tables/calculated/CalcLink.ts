@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
-import { CalcChain, CalcChainLink } from "../../../services/SequenceChainService";
-import { SequenceModelActions, sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
-import { DavitTableRowData } from "../../common/fragments/DavitTable";
+import { CalcChain, CalcChainLink } from "../../../../services/SequenceChainService";
+import { SequenceModelActions, sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
+import { DavitTableRowData } from "../../../common/fragments/DavitTable";
 
 export const useGetCalcLinkTableData = (calcChain: CalcChain | null) => {
     const dispatch = useDispatch();

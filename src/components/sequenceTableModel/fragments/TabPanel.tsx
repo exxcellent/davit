@@ -12,6 +12,7 @@ interface TabPanelProps {
     showSequenceModelTabs: boolean;
     showCalcChainTab: boolean;
     showCalcSequenceTab: boolean;
+    showErrorTab: boolean;
 }
 
 interface TabGroupDefinition {
@@ -34,6 +35,7 @@ export const TabPanel: FunctionComponent<TabPanelProps> = (props) => {
         showCalcSequenceTab,
         showChainModelTab,
         showSequenceModelTabs,
+        showErrorTab,
     } = props;
 
     const mode: Mode = useSelector(editSelectors.selectMode);
@@ -80,6 +82,11 @@ export const TabPanel: FunctionComponent<TabPanelProps> = (props) => {
                     identifier: ActiveTab.sequence,
                     condition: showCalcSequenceTab,
                 },
+                {
+                    label: "Errors",
+                    identifier: ActiveTab.errorAction,
+                    condition: showErrorTab,
+                },
             ],
         },
         {
@@ -88,11 +95,11 @@ export const TabPanel: FunctionComponent<TabPanelProps> = (props) => {
             tabs: [
                 {
                     label: "Decision",
-                    identifier: ActiveTab.chaindecisions,
+                    identifier: ActiveTab.chainDecisions,
                 },
                 {
                     label: "Links",
-                    identifier: ActiveTab.chainlinks,
+                    identifier: ActiveTab.chainLinks,
                 },
             ],
         },

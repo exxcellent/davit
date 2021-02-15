@@ -21,7 +21,7 @@ export interface CalculatedStep {
 export interface CalcSequence {
     sequenceModel: SequenceCTO | null;
     stepIds: string[];
-    steps: CalculatedStep[];
+    calculatedSteps: CalculatedStep[];
     terminal: Terminal;
     loopStartingStepIndex?: number;
 }
@@ -37,7 +37,7 @@ export const SequenceService = {
         const calcSequence: CalcSequence = {
             sequenceModel: sequence,
             stepIds: [],
-            steps: [],
+            calculatedSteps: [],
             terminal: { type: GoToTypes.ERROR },
         };
         const stepIds: string[] = [];
@@ -65,7 +65,7 @@ export const SequenceService = {
                 persistentDatas || [],
             );
 
-            calcSequence.steps.push(getInitStep(dataSetupResult));
+            calcSequence.calculatedSteps.push(getInitStep(dataSetupResult));
             let actorDatas: ActorData[] = DavitUtil.deepCopy(dataSetupResult.actorDatas);
 
             /** Find root and start calculating sequence */
@@ -90,7 +90,7 @@ export const SequenceService = {
                         stepId = stepId + newStepId;
                         stepIds.push(stepId);
 
-                        calcSequence.steps.push({
+                        calcSequence.calculatedSteps.push({
                             stepId: stepId,
                             actorDatas: actorDatas,
                             errors: result.errors,
@@ -122,7 +122,7 @@ export const SequenceService = {
                         stepId = stepId + newCondID;
                         stepIds.push(stepId);
 
-                        calcSequence.steps.push({
+                        calcSequence.calculatedSteps.push({
                             stepId: stepId,
                             actorDatas: actorDatas,
                             errors: [],
@@ -137,7 +137,7 @@ export const SequenceService = {
                         [],
                         actorDatas,
                     );
-                    calcSequence.steps.push({
+                    calcSequence.calculatedSteps.push({
                         stepId: stepId + "_" + (stepOrDecision as Terminal).type,
                         actorDatas: terminalResult.actorDatas,
                         type: "TERMINAL",
@@ -214,7 +214,7 @@ const getType = (stepOrDecisionOrTerminal: SequenceStepCTO | DecisionTO | Termin
 };
 
 const checkForLoop = (calcSequence: CalcSequence, step: SequenceStepCTO, result: SequenceActionResult): number => {
-    return calcSequence.steps.findIndex(
+    return calcSequence.calculatedSteps.findIndex(
         (calcStep) =>
             calcStep.modelElementFk === step.squenceStepTO.id &&
             calcStep.actorDatas.length === result.actorDatas.length &&

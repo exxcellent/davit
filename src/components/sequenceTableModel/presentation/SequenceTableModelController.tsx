@@ -19,17 +19,18 @@ import { sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
 import { DavitUtil } from "../../../utils/DavitUtil";
 import { DavitTable } from "../../common/fragments/DavitTable";
 import { TabPanel } from "../fragments/TabPanel";
-import { useGetCalcLinkTableData } from "../tables/CalcLink";
-import { useGetCalcSequenceTableData } from "../tables/CalcSequence";
-import { useGetDataSetupTableData } from "../tables/DataSetup";
-import { useGetChainModelsTableData } from "../tables/ModelChain";
-import { useGetModelChainDecisionTableData } from "../tables/ModelChainDecision";
-import { useGetModelChainLinkTableData } from "../tables/ModelChainLink";
-import { useGetSequenceModelsTableBody } from "../tables/ModelSequence";
-import { useGetModelSequenceConditionTableData } from "../tables/ModelSequenceCondition";
-import { useGetModelSequenceDecisionTableData } from "../tables/ModelSequenceDecision";
-import { useGetStepTableData } from "../tables/ModelSequenceStep";
-import { useGetStepActionTableData } from "../tables/ModelSequenceStepAction";
+import { useGetCalcErrorActionsTableData } from "../tables/calculated/CalcErrorActions";
+import { useGetCalcLinkTableData } from "../tables/calculated/CalcLink";
+import { useGetCalcSequenceTableData } from "../tables/calculated/CalcSequence";
+import { useGetChainModelsTableData } from "../tables/model/ModelChain";
+import { useGetModelChainDecisionTableData } from "../tables/model/ModelChainDecision";
+import { useGetModelChainLinkTableData } from "../tables/model/ModelChainLink";
+import { useGetDataSetupTableData } from "../tables/model/ModelDataSetup";
+import { useGetSequenceModelsTableBody } from "../tables/model/ModelSequence";
+import { useGetModelSequenceConditionTableData } from "../tables/model/ModelSequenceCondition";
+import { useGetModelSequenceDecisionTableData } from "../tables/model/ModelSequenceDecision";
+import { useGetStepTableData } from "../tables/model/ModelSequenceStep";
+import { useGetStepActionTableData } from "../tables/model/ModelSequenceStepAction";
 
 interface SequenceTableModelControllerProps {
     fullScreen?: boolean;
@@ -38,12 +39,13 @@ interface SequenceTableModelControllerProps {
 export enum ActiveTab {
     condition = "condition",
     action = "action",
+    errorAction = "errorAction",
     step = "step",
     decision = "decision",
     sequence = "sequence",
     chain = "chain",
-    chainlinks = "chainlinks",
-    chaindecisions = "chaindecisions",
+    chainLinks = "chainLinks",
+    chainDecisions = "chainDecisions",
     sequenceModels = "sequenceModels",
     chainModel = "chainModels",
     dataSetup = "dataSetup",
@@ -56,6 +58,7 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
         showSequenceModelTabs,
         showCalcChainTab,
         showCalcSequenceTab,
+        showErrorTab,
         activeTab,
         setActiveTab,
         activeTableData,
@@ -73,6 +76,7 @@ export const SequenceTableModelController: FunctionComponent<SequenceTableModelC
                     showCalcSequenceTab={showCalcSequenceTab}
                     activeTab={activeTab}
                     setActiveTab={setActiveTab}
+                    showErrorTab={showErrorTab}
                 />
                 <DavitTable {...activeTableData} tableHeight={tableHeight} />
             </div>
@@ -95,6 +99,7 @@ const useSequenceTableViewModel = () => {
     const selectedActionToEdit: ActionTO | null = useSelector(editSelectors.selectActionToEdit);
     const selectedDecisionToEdit: DecisionTO | null = useSelector(editSelectors.selectDecisionToEdit);
     const selectedConditionToEdit: ConditionTO | null = useSelector(editSelectors.selectConditionToEdit);
+    const selectedErrors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
 
     const [activeTab, setActiveTab] = useState<ActiveTab>(ActiveTab.sequence);
 
@@ -113,7 +118,7 @@ const useSequenceTableViewModel = () => {
                 break;
             case Mode.EDIT_CHAIN_DECISION:
             case Mode.EDIT_CHAIN_DECISION_CONDITION:
-                newActiveTab = ActiveTab.chaindecisions;
+                newActiveTab = ActiveTab.chainDecisions;
                 break;
             case Mode.EDIT_SEQUENCE:
                 newActiveTab = ActiveTab.step;
@@ -175,13 +180,15 @@ const useSequenceTableViewModel = () => {
     const calcSequenceData = useGetCalcSequenceTableData(calcSteps, selectedSequence);
     const calcLinkData = useGetCalcLinkTableData(calcChain);
 
+    const calcErrorAction = useGetCalcErrorActionsTableData(selectedErrors);
+
     const getActiveTableData = () => {
         switch (activeTab) {
             case ActiveTab.chain:
                 return calcLinkData;
-            case ActiveTab.chaindecisions:
+            case ActiveTab.chainDecisions:
                 return modelChainDecisionData;
-            case ActiveTab.chainlinks:
+            case ActiveTab.chainLinks:
                 return modelChainLinkData;
             case ActiveTab.action:
                 return modelStepActionData;
@@ -199,6 +206,8 @@ const useSequenceTableViewModel = () => {
                 return modelChainData;
             case ActiveTab.dataSetup:
                 return dataSetupData;
+            case ActiveTab.errorAction:
+                return calcErrorAction;
             default:
                 return { header: [], bodyData: [] };
         }
@@ -228,6 +237,7 @@ const useSequenceTableViewModel = () => {
         showSequenceModelTabs: !DavitUtil.isNullOrUndefined(selectedSequence),
         showCalcChainTab: !DavitUtil.isNullOrUndefined(calcChain),
         showCalcSequenceTab: calcSteps.length > 0,
+        showErrorTab: selectedErrors.length > 0,
         activeTab,
         setActiveTab,
 

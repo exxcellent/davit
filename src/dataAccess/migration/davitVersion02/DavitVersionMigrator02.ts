@@ -1,4 +1,4 @@
-import { DAVIT_VERISON } from "../../../app/DavitConstants";
+import { DAVIT_VERISON, DEFAULT_ZOOM } from "../../../app/DavitConstants";
 import { ActionTO } from "../../access/to/ActionTO";
 import { ActorTO } from "../../access/to/ActorTO";
 import { ChainDecisionTO } from "../../access/to/ChainDecisionTO";
@@ -16,11 +16,14 @@ import { PositionTO } from "../../access/to/PositionTO";
 import { SequenceStepTO } from "../../access/to/SequenceStepTO";
 import { SequenceTO } from "../../access/to/SequenceTO";
 import { StoreTO } from "../../access/to/StoreTO";
+import { StoreTO01 } from "../davitVersio01/to/StoreTO01";
 import { DecisionTO02 } from "./to/DecisionTO02";
 
 export const DavitVersionMigrator02 = {
-    migrate(dataStoreObject: StoreTO): StoreTO {
+    migrate(dataStoreObject: StoreTO01): StoreTO {
         console.info("start migration to version 0.2");
+        const actorZoom: number = DEFAULT_ZOOM;
+        const dataZoom: number = DEFAULT_ZOOM;
 
         const decisions: DecisionTO[] = (dataStoreObject.decisions as DecisionTO02[]).map((decision) => {
             const conditions: ConditionTO[] = [];
@@ -49,8 +52,8 @@ export const DavitVersionMigrator02 = {
         return {
             version: DAVIT_VERISON,
             projectName: dataStoreObject.projectName,
-            actorZoom: dataStoreObject.actorZoom,
-            dataZoom: dataStoreObject.dataZoom,
+            actorZoom: actorZoom,
+            dataZoom: dataZoom,
 
             actors: dataStoreObject.actors as ActorTO[],
             groups: dataStoreObject.groups as GroupTO[],

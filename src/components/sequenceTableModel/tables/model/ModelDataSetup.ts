@@ -1,8 +1,8 @@
 import { useDispatch } from "react-redux";
-import { DataSetupTO } from "../../../dataAccess/access/to/DataSetupTO";
-import { EditActions } from "../../../slices/EditSlice";
-import { SequenceModelActions } from "../../../slices/SequenceModelSlice";
-import { DavitTableRowData } from "../../common/fragments/DavitTable";
+import { DataSetupTO } from "../../../../dataAccess/access/to/DataSetupTO";
+import { EditActions } from "../../../../slices/EditSlice";
+import { SequenceModelActions } from "../../../../slices/SequenceModelSlice";
+import { DavitTableRowData } from "../../../common/fragments/DavitTable";
 
 export const useGetDataSetupTableData = (dataSetups: DataSetupTO[]) => {
     const dispatch = useDispatch();
@@ -13,7 +13,7 @@ export const useGetDataSetupTableData = (dataSetups: DataSetupTO[]) => {
             dispatch(SequenceModelActions.setCurrentDataSetup(dataSetup.id));
             dispatch(EditActions.setMode.view());
         };
-        return createDataSetupColumn(dataSetup, onClickEdit, onClickSelect);
+        return createModelDataSetupColumn(dataSetup, onClickEdit, onClickSelect);
     });
     return {
         header,
@@ -23,7 +23,7 @@ export const useGetDataSetupTableData = (dataSetups: DataSetupTO[]) => {
 
 const header = ["NAME", "ACTIONS"];
 
-const createDataSetupColumn = (
+const createModelDataSetupColumn = (
     dataSetup: DataSetupTO,
     editCallback: () => void,
     selectCallback: () => void,

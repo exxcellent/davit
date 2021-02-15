@@ -1,4 +1,4 @@
-import { DEFAULT_PROJECT_NAME, DEFAULT_ZOOM } from "../../../app/DavitConstants";
+import { DEFAULT_PROJECT_NAME } from "../../../app/DavitConstants";
 import { DataAndInstanceId } from "../../../components/common/fragments/dropdowns/InstanceDropDown";
 import { ActionTO } from "../../access/to/ActionTO";
 import { ActorTO } from "../../access/to/ActorTO";
@@ -21,14 +21,13 @@ import { ActionTO01 } from "./to/ActionTO01";
 import { ChainDecisionTO01 } from "./to/ChainDecisionTO01";
 import { DataTO01 } from "./to/DataTO01";
 import { DecisionTO01 } from "./to/DecisionTO01";
+import { StoreTO01 } from "./to/StoreTO01";
 
 export const DavitVersionMigrator01 = {
-    migrate(dataStoreObject: StoreTO): StoreTO {
+    migrate(dataStoreObject: StoreTO): StoreTO01 {
         console.info("start migration to version 0.1");
         const version: number = 0.1;
         const projectName: string = DEFAULT_PROJECT_NAME;
-        const actorZoom: number = DEFAULT_ZOOM;
-        const dataZoom: number = DEFAULT_ZOOM;
 
         const actions: ActionTO[] = (dataStoreObject.actions as ActionTO01[]).map((action, index) => {
             return {
@@ -89,8 +88,6 @@ export const DavitVersionMigrator01 = {
         return {
             version: version,
             projectName: projectName,
-            actorZoom: actorZoom,
-            dataZoom: dataZoom,
 
             actors: dataStoreObject.actors as ActorTO[],
             groups: dataStoreObject.groups as GroupTO[],

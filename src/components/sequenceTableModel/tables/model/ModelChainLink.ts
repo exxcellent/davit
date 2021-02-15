@@ -1,9 +1,9 @@
 import { useDispatch } from "react-redux";
-import { ChainlinkCTO } from "../../../dataAccess/access/cto/ChainlinkCTO";
-import { ChainDecisionTO } from "../../../dataAccess/access/to/ChainDecisionTO";
-import { EditActions } from "../../../slices/EditSlice";
-import { DavitTableRowData } from "../../common/fragments/DavitTable";
-import { getChainGotoName } from "../util/TableUtil";
+import { ChainlinkCTO } from "../../../../dataAccess/access/cto/ChainlinkCTO";
+import { ChainDecisionTO } from "../../../../dataAccess/access/to/ChainDecisionTO";
+import { EditActions } from "../../../../slices/EditSlice";
+import { DavitTableRowData } from "../../../common/fragments/DavitTable";
+import { getChainGotoName } from "../../util/TableUtil";
 
 export const useGetModelChainLinkTableData = (
     selectedChainlinks: ChainlinkCTO[],
