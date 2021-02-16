@@ -1,0 +1,12 @@
+:root {
+    --davit-border-radius: 5px;
+    --davit-padding: 1em;
+    --davit-font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+    --davit-font-size: 16px;
+}
+
+html{
+    font-size: var(--davit-font-size);
+    font-family: var(--davit-font-family);
+    color: var(--carv2-text-color);
+}

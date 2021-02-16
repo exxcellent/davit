@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useRef } from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Input } from "semantic-ui-react";
 import { ActorCTO } from "../../../../../../dataAccess/access/cto/ActorCTO";
@@ -9,6 +9,8 @@ import { EditActor } from "../../../../../../slices/thunks/ActorThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
 import { DavitButtonIcon, DavitButtonLabel } from "../../../../../common/fragments/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitModal } from "../../../../../common/fragments/DavitModal";
+import { DavitNote } from "../../../../../common/fragments/DavitNote";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
 import { OptionField } from "../common/OptionField";
@@ -19,6 +21,9 @@ export interface ControllPanelEditActorProps {
 
 export const ControllPanelEditActor: FunctionComponent<ControllPanelEditActorProps> = (props) => {
     const { hidden } = props;
+
+    const [showNote, setShowNote] = useState<boolean>(false);
+
     const {
         label,
         name,
@@ -48,7 +53,21 @@ export const ControllPanelEditActor: FunctionComponent<ControllPanelEditActorPro
                 </OptionField>
             </div>
             <div className="columnDivider">
-                <OptionField></OptionField>
+                <OptionField>
+                    <button onClick={() => setShowNote(true)}>NOTE</button>
+                    {showNote && (
+                        <DavitModal
+                            content={
+                                <DavitNote
+                                    onSubmit={() => {
+                                        setShowNote(false);
+                                    }}
+                                    onCancel={() => setShowNote(false)}
+                                />
+                            }
+                        />
+                    )}
+                </OptionField>
             </div>
             <div className="columnDivider controllPanelEditChild">
                 <div>

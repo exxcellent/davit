@@ -1,4 +1,5 @@
 @import "Colors.css";
+@import "Atomic.css";
 @import "SemanticOverwrite.css";
 
 .carvGridContainer {
@@ -184,6 +185,36 @@
     margin: 10px;
 }
 
+.davitModal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 99;
+}
+
+.noteCard{
+    width: 30%;
+    height: 60%;
+    background: var(--carv2-background-color);
+    border-radius: var(--davit-border-radius);
+    padding: var(--davit-padding);
+}
+
+.noteTextarea{
+    border-radius: var(--davit-border-radius);
+    resize: none;
+    width: 100%;
+    height: 80%;
+    font-size: var(--davit-font-size);
+    padding: var(--davit-padding);
+}
+
 /* -------------------------------------------- Optionfield -------------------------------------------- */
 
 .optionFieldAround {
@@ -263,16 +294,15 @@
 
 button {
     color: var(--carv2-text-color);
-    border: none;
-    border-radius: 5px;
+    border-radius: var(--davit-border-radius);
     border: 2px solid var(--carv2-color-secondary);
     background-color: transparent;
-    font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    font-weight: 700;
-    line-height: 1em;
-    font-style: normal;
     text-align: center;
-    padding: 0.5em;
+    padding: var(--davit-padding);
+}
+
+button:hover{
+    background: rgba(0,0,0,.5);
 }
 
 #buttonGroupLabel {

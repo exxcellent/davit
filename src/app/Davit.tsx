@@ -32,10 +32,6 @@ export function Davit() {
         dispatch(GlobalActions.loadDataZoomFromBackend());
     }, [dispatch]);
 
-    // disable global key shortcuts.
-    // TODO: enable when Arrows working.
-    // useCustomZoomEvent();
-
     return (
         <BrowserRouter>
             <Switch>
