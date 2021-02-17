@@ -12,8 +12,10 @@ import { EditSequence } from "../../../../../../slices/thunks/SequenceThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
 import { DavitButtonIcon, DavitButtonLabel } from "../../../../../common/fragments/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitModal } from "../../../../../common/fragments/DavitModal";
 import { DecisionDropDownButton } from "../../../../../common/fragments/dropdowns/DecisionDropDown";
 import { StepDropDownButton } from "../../../../../common/fragments/dropdowns/StepDropDown";
+import { DavitNoteForm } from "../../../../../common/fragments/forms/DavitNoteForm";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
 import { OptionField } from "../common/OptionField";
@@ -24,6 +26,8 @@ export interface ControllPanelEditSequenceProps {
 
 export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSequenceProps> = (props) => {
     const { hidden } = props;
+    const [showNote, setShowNote] = useState<boolean>(false);
+
     const {
         label,
         name,
@@ -36,6 +40,8 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
         updateSequence,
         editOrAddDecision,
         id,
+        note,
+        saveNote,
     } = useControllPanelEditSequenceViewModel();
 
     const menuButtons = (
@@ -48,6 +54,21 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
             </div>
             <div className="optionFieldSpacer">
                 <OptionField label="Sequence - Options">
+                    <button onClick={() => setShowNote(true)}>Note</button>
+                    {showNote && (
+                        <DavitModal
+                            content={
+                                <DavitNoteForm
+                                    text={note}
+                                    onSubmit={(text: string) => {
+                                        setShowNote(false);
+                                        saveNote(text);
+                                    }}
+                                    onCancel={() => setShowNote(false)}
+                                />
+                            }
+                        />
+                    )}
                     <DavitDeleteButton onClick={deleteSequence} />
                 </OptionField>
             </div>
@@ -172,9 +193,7 @@ const useControllPanelEditSequenceViewModel = () => {
     };
 
     const isFirst = (): boolean => {
-        return selectedSequence?.sequenceStepCTOs.length === 0 && selectedSequence.decisions.length === 0
-            ? true
-            : false;
+        return selectedSequence?.sequenceStepCTOs.length === 0 && selectedSequence.decisions.length === 0;
     };
 
     const copySequence = () => {
@@ -193,6 +212,14 @@ const useControllPanelEditSequenceViewModel = () => {
         dispatch(EditSequence.save(copySequence));
     };
 
+    const saveNote = (text: string) => {
+        if (!DavitUtil.isNullOrUndefined(sequenceToEdit) && text !== "") {
+            const copySequenceToEdit: SequenceTO = DavitUtil.deepCopy(sequenceToEdit);
+            copySequenceToEdit.note = text;
+            dispatch(EditSequence.save(copySequenceToEdit));
+        }
+    };
+
     return {
         label: "EDIT * " + (sequenceToEdit?.name || ""),
         name: sequenceToEdit?.name,
@@ -207,5 +234,7 @@ const useControllPanelEditSequenceViewModel = () => {
         updateSequence,
         editOrAddDecision,
         id: sequenceToEdit?.id || -1,
+        note: sequenceToEdit ? sequenceToEdit.note : "",
+        saveNote,
     };
 };

@@ -50,7 +50,7 @@ export const ControllPanelEditMenu: FunctionComponent<ControllPanelEditMenuProps
                     <Button.Group>
                         <Button icon="add" inverted color="orange" onClick={() => editOrAddActor()} />
                         <Button id="buttonGroupLabel" disabled inverted color="orange">
-                            ACTOR
+                            Actor
                         </Button>
                         <ActorDropDownButton onSelect={editOrAddActor} icon="wrench" />
                     </Button.Group>

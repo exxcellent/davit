@@ -2,7 +2,8 @@
   "name": "davit",
   "version": "0.2.0",
   "description": "Modeling Tool",
-  "author": "Florian Englberger Andreas Müller",
+  "author": "Florian Englberger, Andreas Müller",
+  "license": "EPL-2.0",
   "main": "public/electron.js",
   "build": {
     "appId": "DAVIT"

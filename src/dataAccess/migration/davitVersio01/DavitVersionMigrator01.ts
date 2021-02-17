@@ -65,6 +65,7 @@ export const DavitVersionMigrator01 = {
                 name: data.name,
                 geometricalDataFk: data.geometricalDataFk,
                 dataConnectionFks: data.dataConnectionFks,
+                note: "",
                 instances: data.instances.map((instance) => {
                     return { id: instance.id, name: instance.name };
                 }),

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useRef } from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Input } from "semantic-ui-react";
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
@@ -8,7 +8,9 @@ import { EditData } from "../../../../../../slices/thunks/DataThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
 import { DavitButtonIcon, DavitButtonLabel } from "../../../../../common/fragments/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitModal } from "../../../../../common/fragments/DavitModal";
 import { DataInstanceDropDownButton } from "../../../../../common/fragments/dropdowns/DataInstanceDropDown";
+import { DavitNoteForm } from "../../../../../common/fragments/forms/DavitNoteForm";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
 import { OptionField } from "../common/OptionField";
@@ -19,6 +21,9 @@ export interface ControllPanelEditDataProps {
 
 export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps> = (props) => {
     const { hidden } = props;
+
+    const [showModal, setShowModal] = useState<boolean>(false);
+
     const {
         label,
         textInput,
@@ -31,6 +36,8 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
         instances,
         editOrAddInstance,
         id,
+        note,
+        saveNote,
     } = useControllPanelEditDataViewModel();
 
     return (
@@ -65,17 +72,36 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
                 </OptionField>
             </div>
             <div className="columnDivider controllPanelEditChild">
-                <div>
+                <OptionField>
+                    <button onClick={() => setShowModal(true)}>Note</button>
+                    {showModal && (
+                        <DavitModal
+                            content={
+                                <DavitNoteForm
+                                    text={note}
+                                    onSubmit={(text: string) => {
+                                        setShowModal(false);
+                                        saveNote(text);
+                                    }}
+                                    onCancel={() => setShowModal(false)}
+                                />
+                            }
+                        />
+                    )}
+                </OptionField>
+            </div>
+            <div className="columnDivider controllPanelEditChild">
+                <div className="optionFieldSpacer">
                     <OptionField label="Navigation">
                         <DavitButtonLabel onClick={createAnother} label="Create another" />
                         <DavitButtonIcon onClick={saveData} icon="reply" />
                     </OptionField>
                 </div>
-            </div>
-            <div className="columnDivider optionFieldSpacer">
-                <OptionField label="Data - Options">
-                    <DavitDeleteButton onClick={deleteData} />
-                </OptionField>
+                <div className="optionFieldSpacer">
+                    <OptionField label="Sequence - Options">
+                        <DavitDeleteButton onClick={deleteData} />
+                    </OptionField>
+                </div>
             </div>
         </ControllPanelEditSub>
     );
@@ -134,6 +160,14 @@ const useControllPanelEditDataViewModel = () => {
         }
     };
 
+    const saveNote = (text: string) => {
+        if (!DavitUtil.isNullOrUndefined(dataToEdit) && text !== "") {
+            const copyDataToEdit: DataCTO = DavitUtil.deepCopy(dataToEdit);
+            copyDataToEdit.data.note = text;
+            dispatch(EditActions.setMode.editData(copyDataToEdit));
+        }
+    };
+
     return {
         label: "EDIT * " + (dataToEdit?.data.name || ""),
         name: dataToEdit?.data.name,
@@ -146,5 +180,7 @@ const useControllPanelEditDataViewModel = () => {
         instances: dataToEdit?.data.instances ? dataToEdit.data.instances : [],
         editOrAddInstance,
         id: dataToEdit?.data.id || -1,
+        note: dataToEdit ? dataToEdit.data.note : "",
+        saveNote,
     };
 };

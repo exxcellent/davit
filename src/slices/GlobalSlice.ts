@@ -66,10 +66,8 @@ const downloadData = (projectName: string): AppThunk => (dispatch) => {
 };
 
 const zoomInAndSaveActorZoom = (): AppThunk => (dispatch, getState) => {
-    console.info("call zoom in thunk");
     const newZoom: number = getState().global.actorZoom + ZOOM_FACTOR;
     const response: DataAccessResponse<number> = DataAccess.setActorZoom(newZoom);
-    console.info("response: ", response);
     if (response.code === 200) {
         dispatch(globalSlice.actions.setActorZoom(newZoom));
     } else {
