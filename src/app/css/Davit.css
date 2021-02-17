@@ -215,6 +215,10 @@
     padding: var(--davit-padding);
 }
 
+.noteTextarea:focus {
+    outline: none;
+}
+
 /* -------------------------------------------- Optionfield -------------------------------------------- */
 
 .optionFieldAround {

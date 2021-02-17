@@ -4,7 +4,7 @@ import { GeometricalDataCTO } from "../access/cto/GeometraicalDataCTO";
 import { ActorTO } from "../access/to/ActorTO";
 import { DesignTO } from "../access/to/DesignTO";
 import { GroupTO } from "../access/to/GroupTO";
-import { ActorRepository } from "../repositories/ComponentRepository";
+import { ActorRepository } from "../repositories/ActorRepository";
 import { GroupRepository } from "../repositories/GroupRepository";
 import { CheckHelper } from "../util/CheckHelper";
 import { TechnicalDataAccessService } from "./TechnicalDataAccessService";

@@ -17,7 +17,7 @@ import { SequenceStepTO } from "./access/to/SequenceStepTO";
 import { SequenceTO } from "./access/to/SequenceTO";
 import { DataAccessResponse } from "./DataAccessResponse";
 import dataStore from "./DataStore";
-import { ActorDataAccessService } from "./services/ComponentDataAccessService";
+import { ActorDataAccessService } from "./services/ActorDataAccessService";
 import { DataDataAccessService } from "./services/DataDataAccessService";
 import { SequenceDataAccessService } from "./services/SequenceDataAccessService";
 import { TechnicalDataAccessService } from "./services/TechnicalDataAccessService";

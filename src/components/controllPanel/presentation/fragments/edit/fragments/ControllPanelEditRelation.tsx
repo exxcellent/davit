@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dropdown, DropdownItemProps } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
 import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
 import { DataRelationTO, Direction, RelationType } from "../../../../../../dataAccess/access/to/DataRelationTO";
 import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
@@ -11,6 +10,8 @@ import { EditRelation } from "../../../../../../slices/thunks/RelationThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
 import { DavitButtonIcon, DavitButtonLabel } from "../../../../../common/fragments/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitModal } from "../../../../../common/fragments/DavitModal";
+import { DavitNoteForm } from "../../../../../common/fragments/forms/DavitNoteForm";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { OptionField } from "../common/OptionField";
 
@@ -20,6 +21,9 @@ export interface ControllPanelEditRelationProps {
 
 export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelationProps> = (props) => {
     const { hidden } = props;
+
+    const [showNote, setShowNote] = useState<boolean>(false);
+
     const {
         label,
         data1,
@@ -35,6 +39,8 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
         createAnother,
         key,
         updateRelation,
+        note,
+        saveNote,
     } = useControllPanelEditRelationViewModel();
 
     return (
@@ -109,17 +115,36 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
                 </div>
             </div>
             <div className="columnDivider controllPanelEditChild">
-                <div>
+                <OptionField>
+                    <button onClick={() => setShowNote(true)}>Note</button>
+                    {showNote && (
+                        <DavitModal
+                            content={
+                                <DavitNoteForm
+                                    text={note}
+                                    onSubmit={(text: string) => {
+                                        setShowNote(false);
+                                        saveNote(text);
+                                    }}
+                                    onCancel={() => setShowNote(false)}
+                                />
+                            }
+                        />
+                    )}
+                </OptionField>
+            </div>
+            <div className="columnDivider controllPanelEditChild">
+                <div className="optionFieldSpacer">
                     <OptionField label="Navigation">
-                        <DavitButtonLabel onClick={createAnother} label="Create another" />
                         <DavitButtonIcon onClick={saveRelation} icon="reply" />
+                        <DavitButtonLabel onClick={createAnother} label="Create another" />
                     </OptionField>
                 </div>
-            </div>
-            <div className="columnDivider optionFieldSpacer">
-                <OptionField label="Relation options">
-                    <DavitDeleteButton onClick={deleteRelation} />
-                </OptionField>
+                <div className="optionFieldSpacer">
+                    <OptionField label="Sequence - Options">
+                        <DavitDeleteButton onClick={deleteRelation} />
+                    </OptionField>
+                </div>
             </div>
         </ControllPanelEditSub>
     );
@@ -209,10 +234,18 @@ const useControllPanelEditRelationViewModel = () => {
 
     const validRelation = (): boolean => {
         let valid: boolean = false;
-        if (!isNullOrUndefined(relationToEdit)) {
-            valid = relationToEdit.data1Fk !== -1 && relationToEdit.data2Fk !== -1;
+        if (!DavitUtil.isNullOrUndefined(relationToEdit)) {
+            valid = relationToEdit!.data1Fk !== -1 && relationToEdit!.data2Fk !== -1;
         }
         return valid;
+    };
+
+    const saveNote = (text: string) => {
+        if (!DavitUtil.isNullOrUndefined(relationToEdit) && text !== "") {
+            const relationCopy: DataRelationTO = DavitUtil.deepCopy(relationToEdit);
+            relationCopy.note = text;
+            dispatch(EditActions.setMode.editRelation(relationCopy));
+        }
     };
 
     return {
@@ -239,5 +272,7 @@ const useControllPanelEditRelationViewModel = () => {
         key,
         createAnother,
         updateRelation,
+        note: relationToEdit ? relationToEdit.note : "",
+        saveNote,
     };
 };

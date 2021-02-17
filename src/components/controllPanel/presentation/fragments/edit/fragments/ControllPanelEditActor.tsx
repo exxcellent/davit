@@ -10,7 +10,7 @@ import { DavitUtil } from "../../../../../../utils/DavitUtil";
 import { DavitButtonIcon, DavitButtonLabel } from "../../../../../common/fragments/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import { DavitModal } from "../../../../../common/fragments/DavitModal";
-import { DavitNote } from "../../../../../common/fragments/DavitNote";
+import { DavitNoteForm } from "../../../../../common/fragments/forms/DavitNoteForm";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
 import { OptionField } from "../common/OptionField";
@@ -28,16 +28,18 @@ export const ControllPanelEditActor: FunctionComponent<ControllPanelEditActorPro
         label,
         name,
         changeName,
-        saveComponent,
+        saveActor,
         deleteComponent,
         textInput,
         updateActor,
         createAnother,
         id,
+        note,
+        saveNote,
     } = useControllPanelEditActorViewModel();
 
     return (
-        <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveComponent}>
+        <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveActor}>
             <div className="optionFieldSpacer">
                 <OptionField label="Component - Name">
                     <DavitLabelTextfield
@@ -54,13 +56,15 @@ export const ControllPanelEditActor: FunctionComponent<ControllPanelEditActorPro
             </div>
             <div className="columnDivider">
                 <OptionField>
-                    <button onClick={() => setShowNote(true)}>NOTE</button>
+                    <button onClick={() => setShowNote(true)}>Note</button>
                     {showNote && (
                         <DavitModal
                             content={
-                                <DavitNote
-                                    onSubmit={() => {
+                                <DavitNoteForm
+                                    text={note}
+                                    onSubmit={(text: string) => {
                                         setShowNote(false);
+                                        saveNote(text);
                                     }}
                                     onCancel={() => setShowNote(false)}
                                 />
@@ -73,7 +77,7 @@ export const ControllPanelEditActor: FunctionComponent<ControllPanelEditActorPro
                 <div>
                     <OptionField label="Navigation">
                         <DavitButtonLabel onClick={createAnother} label="Create another" />
-                        <DavitButtonIcon onClick={saveComponent} icon="reply" />
+                        <DavitButtonIcon onClick={saveActor} icon="reply" />
                     </OptionField>
                 </div>
             </div>
@@ -102,17 +106,17 @@ const useControllPanelEditActorViewModel = () => {
     }, [actorToEdit]);
 
     const changeName = (name: string) => {
-        const copyComponentToEdit: ActorCTO = DavitUtil.deepCopy(actorToEdit);
-        copyComponentToEdit.actor.name = name;
-        dispatch(EditActions.setMode.editActor(copyComponentToEdit));
+        const copyActorToEdit: ActorCTO = DavitUtil.deepCopy(actorToEdit);
+        copyActorToEdit.actor.name = name;
+        dispatch(EditActions.setMode.editActor(copyActorToEdit));
     };
 
     const updateActor = () => {
-        const copyComponentToEdit: ActorCTO = DavitUtil.deepCopy(actorToEdit);
-        dispatch(EditActor.save(copyComponentToEdit));
+        const copyActorToEdit: ActorCTO = DavitUtil.deepCopy(actorToEdit);
+        dispatch(EditActor.save(copyActorToEdit));
     };
 
-    const saveActor = (newMode?: string) => {
+    const saveActor = () => {
         if (!DavitUtil.isNullOrUndefined(actorToEdit)) {
             if (actorToEdit?.actor.name !== "") {
                 dispatch(EditActor.save(actorToEdit!));
@@ -144,11 +148,19 @@ const useControllPanelEditActorViewModel = () => {
         }
     };
 
+    const saveNote = (text: string) => {
+        if (!DavitUtil.isNullOrUndefined(actorToEdit) && text !== "") {
+            const copyActor: ActorCTO = DavitUtil.deepCopy(actorToEdit);
+            copyActor.actor.note = text;
+            dispatch(EditActions.setMode.editActor(copyActor));
+        }
+    };
+
     return {
         label: "EDIT * " + (actorToEdit?.actor.name || ""),
         name: actorToEdit?.actor.name,
         changeName,
-        saveComponent: saveActor,
+        saveActor: saveActor,
         deleteComponent: deleteActor,
         textInput,
         setGroup,
@@ -156,5 +168,7 @@ const useControllPanelEditActorViewModel = () => {
         updateActor,
         createAnother,
         id: actorToEdit?.actor.id || -1,
+        note: actorToEdit ? actorToEdit.actor.note : "",
+        saveNote,
     };
 };

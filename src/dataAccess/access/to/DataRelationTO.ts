@@ -22,6 +22,7 @@ export class DataRelationTO extends AbstractTO {
         public direction2: Direction = Direction.LEFT,
         public type1: RelationType = RelationType.OUT,
         public type2: RelationType = RelationType.IN,
+        public note: string = "",
     ) {
         super();
     }

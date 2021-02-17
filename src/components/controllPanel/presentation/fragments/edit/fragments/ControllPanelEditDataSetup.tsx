@@ -10,7 +10,9 @@ import { EditDataSetup } from "../../../../../../slices/thunks/DataSetupThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
 import { DavitButtonIcon, DavitButtonLabel } from "../../../../../common/fragments/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitModal } from "../../../../../common/fragments/DavitModal";
 import { InitDataDropDownButton } from "../../../../../common/fragments/dropdowns/InitDataDropDown";
+import { DavitNoteForm } from "../../../../../common/fragments/forms/DavitNoteForm";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
 import { OptionField } from "../common/OptionField";
@@ -21,6 +23,9 @@ export interface ControllPanelEditDataSetupProps {
 
 export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditDataSetupProps> = (props) => {
     const { hidden } = props;
+
+    const [showNote, setShowNote] = useState<boolean>(false);
+
     const {
         label,
         name,
@@ -33,6 +38,8 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
         updateDataSetup,
         editInitData,
         createInitData,
+        note,
+        saveNote,
     } = useControllPanelEditDataSetupViewModel();
 
     return (
@@ -63,17 +70,37 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
                 </OptionField>
             </div>
             <div className="columnDivider controllPanelEditChild">
-                <div>
+                <OptionField>
+                    <button onClick={() => setShowNote(true)}>Note</button>
+                    {showNote && (
+                        <DavitModal
+                            content={
+                                <DavitNoteForm
+                                    text={note}
+                                    onSubmit={(text: string) => {
+                                        setShowNote(false);
+                                        saveNote(text);
+                                    }}
+                                    onCancel={() => setShowNote(false)}
+                                />
+                            }
+                        />
+                    )}
+                </OptionField>
+            </div>
+
+            <div className="columnDivider controllPanelEditChild">
+                <div className="optionFieldSpacer">
                     <OptionField label="Navigation">
                         <DavitButtonLabel onClick={createAnother} label="Create another" />
                         <DavitButtonIcon onClick={saveDataSetup} icon="reply" />
                     </OptionField>
                 </div>
-            </div>
-            <div className="columnDivider optionFieldSpacer">
-                <OptionField label="options">
-                    <DavitDeleteButton onClick={deleteDataSetup} />
-                </OptionField>
+                <div className="optionFieldSpacer">
+                    <OptionField label="Sequence - Options">
+                        <DavitDeleteButton onClick={deleteDataSetup} />
+                    </OptionField>
+                </div>
             </div>
         </ControllPanelEditSub>
     );
@@ -161,6 +188,14 @@ const useControllPanelEditDataSetupViewModel = () => {
         }
     };
 
+    const saveNote = (text: string) => {
+        if (!DavitUtil.isNullOrUndefined(dataSetupToEdit) && text !== "") {
+            const copyDataSetupToEdit: DataSetupCTO = DavitUtil.deepCopy(dataSetupToEdit);
+            copyDataSetupToEdit.dataSetup.note = text;
+            dispatch(EditDataSetup.update(copyDataSetupToEdit));
+        }
+    };
+
     return {
         label: "EDIT * " + (dataSetupToEdit?.dataSetup.name || ""),
         name: dataSetupToEdit?.dataSetup.name,
@@ -176,5 +211,7 @@ const useControllPanelEditDataSetupViewModel = () => {
         updateDataSetup,
         editInitData,
         createInitData,
+        note: dataSetupToEdit ? dataSetupToEdit.dataSetup.note : "",
+        saveNote,
     };
 };

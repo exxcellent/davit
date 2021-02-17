@@ -5,7 +5,6 @@ import { ChainCTO } from "../../dataAccess/access/cto/ChainCTO";
 import { ChainDecisionTO } from "../../dataAccess/access/to/ChainDecisionTO";
 import { ChainlinkTO } from "../../dataAccess/access/to/ChainlinkTO";
 import { ChainTO } from "../../dataAccess/access/to/ChainTO";
-import { SequenceTO } from "../../dataAccess/access/to/SequenceTO";
 import { DataAccess } from "../../dataAccess/DataAccess";
 import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
 import { handleError } from "../GlobalSlice";
@@ -41,7 +40,7 @@ const saveChainThunk = (chain: ChainTO): AppThunk => (dispatch) => {
 };
 
 const deleteChainThunk = (chain: ChainTO): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<SequenceTO> = DataAccess.deleteChain(chain);
+    const response: DataAccessResponse<ChainTO> = DataAccess.deleteChain(chain);
     if (response.code !== 200) {
         dispatch(handleError(response.message));
     }
