@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { DavitButtonLabel } from "./DavitButton";
+import { DavitButton } from "./DavitButton";
 
 interface DavitRootButtonProps {
     onClick: () => void;
@@ -9,5 +9,5 @@ interface DavitRootButtonProps {
 export const DavitRootButton: FunctionComponent<DavitRootButtonProps> = (props) => {
     const { onClick, isRoot } = props;
 
-    return <DavitButtonLabel onClick={onClick} label={isRoot ? "Start" : "Set as Start"} disable={isRoot} />;
+    return <DavitButton onClick={onClick} label={isRoot ? "Start" : "Set as Start"} disable={isRoot} />;
 };

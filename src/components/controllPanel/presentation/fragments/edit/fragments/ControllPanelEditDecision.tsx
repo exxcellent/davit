@@ -12,7 +12,8 @@ import { SequenceModelActions, sequenceModelSelectors } from "../../../../../../
 import { EditDecision } from "../../../../../../slices/thunks/DecisionThunks";
 import { EditSequence } from "../../../../../../slices/thunks/SequenceThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitButtonIcon } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitAddButton } from "../../../../../common/fragments/buttons/DavitAddButton";
+import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import { DavitRootButton } from "../../../../../common/fragments/buttons/DavitRootButton";
 import { DavitModal } from "../../../../../common/fragments/DavitModal";
@@ -100,7 +101,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
                     </OptionField>
                     {ifGoTo!.type === GoToTypes.STEP && (
                         <OptionField label="Create or Select next step">
-                            <DavitButtonIcon icon="add" onClick={() => createGoToStep(true)} />
+                            <DavitAddButton onClick={() => createGoToStep(true)} />
                             <StepDropDown
                                 onSelect={(step) => setGoToTypeStep(true, step)}
                                 value={ifGoTo?.type === GoToTypes.STEP ? ifGoTo.id : 1}
@@ -109,7 +110,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
                     )}
                     {ifGoTo!.type === GoToTypes.DEC && (
                         <OptionField label="Create or Select next condition">
-                            <DavitButtonIcon icon="add" onClick={() => createGoToDecision(true)} />
+                            <DavitAddButton onClick={() => createGoToDecision(true)} />
                             <DecisionDropDown
                                 onSelect={(cond) => setGoToTypeDecision(true, cond)}
                                 value={ifGoTo?.type === GoToTypes.DEC ? ifGoTo.id : 1}
@@ -129,7 +130,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
                     </OptionField>
                     {elseGoTo!.type === GoToTypes.STEP && (
                         <OptionField label="Select type of the next element">
-                            <DavitButtonIcon icon="add" onClick={() => createGoToStep(false)} />
+                            <DavitAddButton onClick={() => createGoToStep(false)} />
                             <StepDropDown
                                 onSelect={(step) => setGoToTypeStep(false, step)}
                                 value={elseGoTo?.type === GoToTypes.STEP ? elseGoTo.id : 1}
@@ -138,7 +139,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
                     )}
                     {elseGoTo!.type === GoToTypes.DEC && (
                         <OptionField label="Create or Select next condition">
-                            <DavitButtonIcon icon="add" onClick={() => createGoToDecision(false)} />
+                            <DavitAddButton onClick={() => createGoToDecision(false)} />
                             <DecisionDropDown
                                 onSelect={(cond) => setGoToTypeDecision(false, cond)}
                                 value={elseGoTo?.type === GoToTypes.DEC ? elseGoTo.id : 1}
@@ -166,7 +167,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
                                 }
                             />
                         )}
-                        <DavitButtonIcon onClick={saveDecision} icon="reply" />
+                        <DavitBackButton onClick={saveDecision} />
                     </OptionField>
                 </div>
                 <div className="controllPanelEditChild">

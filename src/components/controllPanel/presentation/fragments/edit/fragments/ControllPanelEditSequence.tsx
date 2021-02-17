@@ -10,7 +10,8 @@ import { handleError } from "../../../../../../slices/GlobalSlice";
 import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
 import { EditSequence } from "../../../../../../slices/thunks/SequenceThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitButtonIcon, DavitButtonLabel } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
+import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import { DavitModal } from "../../../../../common/fragments/DavitModal";
 import { DecisionDropDownButton } from "../../../../../common/fragments/dropdowns/DecisionDropDown";
@@ -48,8 +49,8 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
         <div className="columnDivider controllPanelEditChild">
             <div className="optionFieldSpacer">
                 <OptionField label="Navigation">
-                    <DavitButtonLabel onClick={createAnother} label="Create another" />
-                    <DavitButtonIcon onClick={saveSequence} icon="reply" />
+                    <DavitButton onClick={createAnother} label="Create another" />
+                    <DavitBackButton onClick={saveSequence} />
                 </OptionField>
             </div>
             <div className="optionFieldSpacer">

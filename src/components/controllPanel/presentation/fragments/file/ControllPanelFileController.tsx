@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { GlobalActions } from "../../../../../slices/GlobalSlice";
-import { DavitButtonLabel } from "../../../../common/fragments/buttons/DavitButton";
+import { DavitButton } from "../../../../common/fragments/buttons/DavitButton";
 import { ControllPanelEditSub } from "../edit/common/ControllPanelEditSub";
 import { DavitLabelTextfield } from "../edit/common/fragments/DavitLabelTextfield";
 import { ControllPanelFileOptions } from "./fragments/ControllPanelFileOptions";
@@ -38,7 +38,7 @@ export const ControllPanelFileController: FunctionComponent<ControllPanelFileCon
                 )}
             </div>
             <div className="columnDivider controllPanelEditChild">
-                {showExportFile && <DavitButtonLabel label="Export File" onClick={downloadData} />}
+                {showExportFile && <DavitButton label="Export File" onClick={downloadData} />}
             </div>
             <div className="columnDivider controllPanelEditChild" />
         </ControllPanelEditSub>

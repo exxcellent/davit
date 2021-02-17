@@ -7,7 +7,8 @@ import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { EditActor } from "../../../../../../slices/thunks/ActorThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitButtonIcon, DavitButtonLabel } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
+import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import { DavitModal } from "../../../../../common/fragments/DavitModal";
 import { DavitNoteForm } from "../../../../../common/fragments/forms/DavitNoteForm";
@@ -76,8 +77,8 @@ export const ControllPanelEditActor: FunctionComponent<ControllPanelEditActorPro
             <div className="columnDivider controllPanelEditChild">
                 <div>
                     <OptionField label="Navigation">
-                        <DavitButtonLabel onClick={createAnother} label="Create another" />
-                        <DavitButtonIcon onClick={saveActor} icon="reply" />
+                        <DavitButton onClick={createAnother} label="Create another" />
+                        <DavitBackButton onClick={saveActor} />
                     </OptionField>
                 </div>
             </div>

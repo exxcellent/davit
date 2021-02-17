@@ -7,7 +7,8 @@ import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { EditData } from "../../../../../../slices/thunks/DataThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitButtonIcon, DavitButtonLabel } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
+import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
@@ -52,8 +53,8 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
             <div className="columnDivider controllPanelEditChild">
                 <div>
                     <OptionField label="Navigation">
-                        <DavitButtonLabel onClick={createAnother} label="Create another" />
-                        <DavitButtonIcon onClick={goBack} icon="reply" />
+                        <DavitButton onClick={createAnother} label="Create another" />
+                        <DavitBackButton onClick={goBack} />
                     </OptionField>
                 </div>
             </div>

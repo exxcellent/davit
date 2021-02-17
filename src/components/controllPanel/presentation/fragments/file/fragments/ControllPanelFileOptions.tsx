@@ -3,7 +3,8 @@ import { useDispatch } from "react-redux";
 import { ButtonGroup } from "semantic-ui-react";
 import { EditActions } from "../../../../../../slices/EditSlice";
 import { GlobalActions } from "../../../../../../slices/GlobalSlice";
-import { DavitButtonIcon } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitDownloadButton } from "../../../../../common/fragments/buttons/DavitDownloadButton";
 import { DavitFileInput } from "../../../../../common/fragments/buttons/DavitFileInput";
 
 export interface ControllPanelFileOptionsProps {
@@ -19,8 +20,8 @@ export const ControllPanelFileOptions: FunctionComponent<ControllPanelFileOption
             <div className="optionField">
                 <ButtonGroup>
                     <DavitFileInput />
-                    <DavitButtonIcon icon="download" onClick={showDownloadFile} />
-                    <DavitButtonIcon icon="trash alternate" onClick={deleteLocalStorage} />
+                    <DavitDownloadButton onClick={showDownloadFile} />
+                    <DavitDeleteButton onClick={deleteLocalStorage} />
                 </ButtonGroup>
             </div>
             <div style={{ textAlign: "center", color: "white" }}>{"file".toUpperCase()}</div>

@@ -1,5 +1,6 @@
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { Button } from "semantic-ui-react";
+import { DavitButton } from "./DavitButton";
 
 interface DavitDeleteButtonProps {
     onClick: () => void;
@@ -26,20 +27,14 @@ export const DavitDeleteButton: FunctionComponent<DavitDeleteButtonProps> = (pro
                 justifyContent: "center",
             }}>
             {!fluid && (
-                <Button
-                    icon={disable ? "" : "trash alternate"}
+                <DavitButton
+                    iconName={faTrashAlt}
                     onClick={() => setFluid(true)}
-                    className="carv2Button"
-                    inverted
-                    color="red"
-                    disabled={disable}
+                    className={"deleteButton"}
+                    disable={disable}
                 />
             )}
-            {fluid && (
-                <Button onClick={onClick} className="deleteButton" inverted color="red" fluid>
-                    SURE?
-                </Button>
-            )}
+            {fluid && <DavitButton onClick={onClick} className="deleteButton fluid" label={"SURE?"} />}
         </div>
     );
 };

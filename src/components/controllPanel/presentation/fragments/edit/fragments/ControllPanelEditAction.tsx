@@ -1,3 +1,4 @@
+import { faReply } from "@fortawesome/free-solid-svg-icons";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ActorCTO } from "../../../../../../dataAccess/access/cto/ActorCTO";
@@ -12,7 +13,7 @@ import { MasterDataActions } from "../../../../../../slices/MasterDataSlice";
 import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
 import { EditAction } from "../../../../../../slices/thunks/ActionThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitButtonIcon, DavitButtonLabel } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import { ActionTypeDropDown } from "../../../../../common/fragments/dropdowns/ActionTypeDropDown";
 import { ActorDropDown } from "../../../../../common/fragments/dropdowns/ActorDropDown";
@@ -117,8 +118,8 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
             <div className="columnDivider controllPanelEditChild">
                 <div className="optionFieldSpacer">
                     <OptionField label="Navigation">
-                        <DavitButtonLabel onClick={createAnother} label="Create another" />
-                        <DavitButtonIcon onClick={setMode} icon="reply" />
+                        <DavitButton onClick={createAnother} label="Create another" />
+                        <DavitButton onClick={setMode} iconName={faReply} />
                     </OptionField>
                 </div>
                 <div className="optionFieldSpacer">

@@ -333,9 +333,13 @@ button:hover{
 
 .deleteButton{
     background-color: transparent;
-    box-shadow: 0 0 0 1px var(--carv2-color-secondary);
     color: white;
     animation: growDeleteButton var(--animation-time) ease-in-out 0s;
+    border-color: var(--carv2-data-delete-color);
+}
+
+.deleteButton .fluid{
+    width: 100%;
 }
 
 .carv2Button {
