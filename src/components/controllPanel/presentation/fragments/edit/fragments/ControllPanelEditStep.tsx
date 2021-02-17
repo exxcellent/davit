@@ -17,10 +17,12 @@ import { DavitUtil } from "../../../../../../utils/DavitUtil";
 import { DavitButtonIcon } from "../../../../../common/fragments/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import { DavitRootButton } from "../../../../../common/fragments/buttons/DavitRootButton";
+import { DavitModal } from "../../../../../common/fragments/DavitModal";
 import { ActionButtonDropDown } from "../../../../../common/fragments/dropdowns/ActionButtonDropDown";
 import { DecisionDropDown } from "../../../../../common/fragments/dropdowns/DecisionDropDown";
 import { GoToOptionDropDown } from "../../../../../common/fragments/dropdowns/GoToOptionDropDown";
 import { StepDropDown } from "../../../../../common/fragments/dropdowns/StepDropDown";
+import { DavitNoteForm } from "../../../../../common/fragments/forms/DavitNoteForm";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
 import { OptionField } from "../common/OptionField";
@@ -31,6 +33,9 @@ export interface ControllPanelEditStepProps {
 
 export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps> = (props) => {
     const { hidden } = props;
+
+    const [showNote, setShowNote] = useState<boolean>(false);
+
     const {
         label,
         name,
@@ -50,6 +55,8 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
         isRoot,
         key,
         stepId,
+        note,
+        saveNote,
     } = useControllPanelEditSequenceStepViewModel();
 
     return (
@@ -126,6 +133,21 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
             <div className="columnDivider controllPanelEditChild">
                 <div>
                     <OptionField label="Navigation">
+                        <button onClick={() => setShowNote(true)}>Note</button>
+                        {showNote && (
+                            <DavitModal
+                                content={
+                                    <DavitNoteForm
+                                        text={note}
+                                        onSubmit={(text: string) => {
+                                            setShowNote(false);
+                                            saveNote(text);
+                                        }}
+                                        onCancel={() => setShowNote(false)}
+                                    />
+                                }
+                            />
+                        )}
                         <DavitButtonIcon onClick={saveSequenceStep} icon="reply" />
                     </OptionField>
                 </div>
@@ -305,6 +327,16 @@ const useControllPanelEditSequenceStepViewModel = () => {
         }
     };
 
+    const saveNote = (text: string) => {
+        if (!DavitUtil.isNullOrUndefined(stepToEdit) && text !== "") {
+            const copySequenceStep: SequenceStepCTO = DavitUtil.deepCopy(stepToEdit);
+            copySequenceStep.squenceStepTO.note = text;
+            dispatch(EditActions.setMode.editStep(copySequenceStep));
+            dispatch(EditStep.save(copySequenceStep));
+            dispatch(SequenceModelActions.setCurrentSequence(copySequenceStep.squenceStepTO.sequenceFk));
+        }
+    };
+
     return {
         label: "EDIT * " + (selectedSequence?.sequenceTO.name || "") + " * " + (stepToEdit?.squenceStepTO.name || ""),
         name: stepToEdit ? stepToEdit!.squenceStepTO.name : "",
@@ -325,5 +357,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
         isRoot: stepToEdit?.squenceStepTO.root ? stepToEdit?.squenceStepTO.root : false,
         key,
         stepId: stepToEdit?.squenceStepTO.id,
+        note: stepToEdit ? stepToEdit.squenceStepTO.note : "",
+        saveNote,
     };
 };

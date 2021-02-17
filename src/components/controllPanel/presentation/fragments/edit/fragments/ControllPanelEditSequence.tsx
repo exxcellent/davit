@@ -54,6 +54,21 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
             </div>
             <div className="optionFieldSpacer">
                 <OptionField label="Sequence - Options">
+                    <button onClick={() => setShowNote(true)}>Note</button>
+                    {showNote && (
+                        <DavitModal
+                            content={
+                                <DavitNoteForm
+                                    text={note}
+                                    onSubmit={(text: string) => {
+                                        setShowNote(false);
+                                        saveNote(text);
+                                    }}
+                                    onCancel={() => setShowNote(false)}
+                                />
+                            }
+                        />
+                    )}
                     <DavitDeleteButton onClick={deleteSequence} />
                 </OptionField>
             </div>
@@ -89,21 +104,6 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
             </div>
             <div className="columnDivider optionFieldSpacer">
                 <OptionField label="Create / Edit | Sequence - Decision">
-                    <button onClick={() => setShowNote(true)}>Note</button>
-                    {showNote && (
-                        <DavitModal
-                            content={
-                                <DavitNoteForm
-                                    text={note}
-                                    onSubmit={(text: string) => {
-                                        setShowNote(false);
-                                        saveNote(text);
-                                    }}
-                                    onCancel={() => setShowNote(false)}
-                                />
-                            }
-                        />
-                    )}
                     <Button.Group>
                         <Button icon="add" inverted color="orange" onClick={() => editOrAddDecision()} />
                         <Button id="buttonGroupLabel" disabled inverted color="orange">

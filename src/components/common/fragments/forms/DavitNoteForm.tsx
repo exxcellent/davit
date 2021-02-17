@@ -34,6 +34,24 @@ export const DavitNoteForm: FunctionComponent<DavitNoteFormProps> = (props) => {
         };
     }, [onCancel]);
 
+    /**
+     * Close and Submit on Enter
+     */
+    useEffect(() => {
+        const returnButtonCall = (event: KeyboardEvent) => {
+            console.info(event.key);
+            if (event.key === "Enter") {
+                onSubmit(noteText);
+            }
+        };
+
+        document.addEventListener("keydown", returnButtonCall, false);
+
+        return () => {
+            document.removeEventListener("keydown", returnButtonCall, false);
+        };
+    }, [noteText, onSubmit]);
+
     return (
         <div className="noteCard">
             <h1>Note</h1>

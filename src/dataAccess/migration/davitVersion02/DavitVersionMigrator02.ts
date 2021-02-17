@@ -46,6 +46,7 @@ export const DavitVersionMigrator02 = {
                 name: decision.name,
                 root: decision.root,
                 sequenceFk: decision.sequenceFk,
+                note: "",
             };
         });
 

@@ -15,10 +15,12 @@ import { DavitUtil } from "../../../../../../utils/DavitUtil";
 import { DavitButtonIcon } from "../../../../../common/fragments/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import { DavitRootButton } from "../../../../../common/fragments/buttons/DavitRootButton";
+import { DavitModal } from "../../../../../common/fragments/DavitModal";
 import { ConditionDropDownButton } from "../../../../../common/fragments/dropdowns/ConditionDropDown";
 import { DecisionDropDown } from "../../../../../common/fragments/dropdowns/DecisionDropDown";
 import { GoToOptionDropDown } from "../../../../../common/fragments/dropdowns/GoToOptionDropDown";
 import { StepDropDown } from "../../../../../common/fragments/dropdowns/StepDropDown";
+import { DavitNoteForm } from "../../../../../common/fragments/forms/DavitNoteForm";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
 import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
 import { OptionField } from "../common/OptionField";
@@ -29,6 +31,9 @@ export interface ControllPanelEditDecisionProps {
 
 export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecisionProps> = (props) => {
     const { hidden } = props;
+
+    const [showNote, setShowNote] = useState<boolean>(false);
+
     const {
         label,
         name,
@@ -50,6 +55,8 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
         editOrAddCondition,
         decId,
         conditions,
+        note,
+        saveNote,
     } = useControllPanelEditConditionViewModel();
 
     return (
@@ -144,6 +151,21 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
             <div className="columnDivider controllPanelEditChild">
                 <div>
                     <OptionField label="Navigation">
+                        <button onClick={() => setShowNote(true)}>Note</button>
+                        {showNote && (
+                            <DavitModal
+                                content={
+                                    <DavitNoteForm
+                                        text={note}
+                                        onSubmit={(text: string) => {
+                                            setShowNote(false);
+                                            saveNote(text);
+                                        }}
+                                        onCancel={() => setShowNote(false)}
+                                    />
+                                }
+                            />
+                        )}
                         <DavitButtonIcon onClick={saveDecision} icon="reply" />
                     </OptionField>
                 </div>
@@ -188,6 +210,15 @@ const useControllPanelEditConditionViewModel = () => {
         if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
             const copyConditionToEdit: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
             copyConditionToEdit.name = name;
+            dispatch(EditActions.setMode.editDecision(copyConditionToEdit));
+            dispatch(SequenceModelActions.setCurrentSequence(copyConditionToEdit.sequenceFk));
+        }
+    };
+
+    const saveNote = (text: string) => {
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
+            const copyConditionToEdit: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
+            copyConditionToEdit.note = text;
             dispatch(EditActions.setMode.editDecision(copyConditionToEdit));
             dispatch(SequenceModelActions.setCurrentSequence(copyConditionToEdit.sequenceFk));
         }
@@ -332,5 +363,7 @@ const useControllPanelEditConditionViewModel = () => {
         editOrAddCondition,
         decId: decisionToEdit?.id,
         conditions: decisionToEdit?.conditions || [],
+        note: decisionToEdit ? decisionToEdit.note : "",
+        saveNote,
     };
 };
