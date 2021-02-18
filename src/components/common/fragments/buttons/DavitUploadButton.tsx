@@ -6,7 +6,7 @@ import { DavitButton } from "./DavitButton";
 
 export interface DavitFileInputProps {}
 
-export const DavitFileInput: FunctionComponent<DavitFileInputProps> = (props) => {
+export const DavitUploadButton: FunctionComponent<DavitFileInputProps> = () => {
     const dispatch = useDispatch();
     const inputFileRef = createRef<HTMLInputElement>();
 

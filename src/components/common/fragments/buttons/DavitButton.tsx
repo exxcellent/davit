@@ -13,8 +13,6 @@ interface DavitButtonLabelProps {
 export const DavitButton: FunctionComponent<DavitButtonLabelProps> = (props) => {
     const { onClick, label, disable, iconName, className } = props;
 
-    console.info("icon name: ", iconName);
-
     return (
         <button className={className} onClick={onClick} disabled={disable} style={{ opacity: disable ? "0.7" : "1" }}>
             {label && <label>{label}</label>}

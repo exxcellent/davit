@@ -1,6 +1,7 @@
 @import "Colors.css";
 @import "Atomic.css";
 @import "SemanticOverwrite.css";
+@import "Keyframes.css";
 
 .carvGridContainer {
     display: grid;
@@ -203,7 +204,7 @@
     height: 60%;
     background: var(--carv2-background-color);
     border-radius: var(--davit-border-radius);
-    padding: var(--davit-padding);
+    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
 }
 
 .noteTextarea{
@@ -212,7 +213,7 @@
     width: 100%;
     height: 80%;
     font-size: var(--davit-font-size);
-    padding: var(--davit-padding);
+    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
 }
 
 .noteTextarea:focus {
@@ -302,17 +303,31 @@ button {
     border: 2px solid var(--carv2-color-secondary);
     background-color: transparent;
     text-align: center;
-    padding: var(--davit-padding);
+    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
 }
 
 button:hover{
     background: rgba(0,0,0,.5);
+    cursor: pointer;
 }
 
 #buttonGroupLabel {
     opacity: 1 !important;
     color: var(--carv2-text-color);
 }
+
+.deleteButton{
+    background-color: transparent;
+    color: var(--davit-color-warning);
+    border-color: var(--davit-color-warning);
+}
+
+.deleteButton.fluid{
+    width: 100%;
+    animation: growDeleteButton var(--animation-time) ease-in-out 0s;
+}
+
+/*================================================================================================================*/
 
 .davitMenuLabel {
     padding-bottom: 1.5em;
@@ -331,45 +346,21 @@ button:hover{
     align-items: center;
 }
 
-.deleteButton{
-    background-color: transparent;
-    color: white;
-    animation: growDeleteButton var(--animation-time) ease-in-out 0s;
-    border-color: var(--carv2-data-delete-color);
-}
-
-.deleteButton .fluid{
-    width: 100%;
-}
-
 .carv2Button {
     background-color: transparent;
     box-shadow: 0 0 0 1px var(--carv2-color-secondary);
     color: white;
 }
 
-.carv2SidePanelButton {
-    background-color: transparent;
-    box-shadow: 0 0 0 1px var(--carv2-color-border);
-    color: white;
+.sidePanelButton {
+    border: none;
     width: 100%;
-    height: 50px;
-    padding: 1em 0 0 1.1em;
-    margin: 1px;
-    border-radius: 2px;
-    display: flex;
-    transition: background-color var(--animation-time);
+    height: 4em;
+    border-bottom: var(--davit-border-size) solid var(--carv2-color-primary);
+    border-radius: 0;
 }
-
-.carv2SidePanelButton:hover {
-    box-shadow: 0 0 0 2px var(--carv2-color-secondary);
-    color: white;
-}
-
-.SidePanelButtonActive {
-    color: black;
+.sidePanelButton.active {
     background-color: var(--carv2-color-secondary);
-    box-shadow: 0 0 0 2px var(--carv2-color-secondary);
     transition: background-color var(--animation-time);
 }
 
@@ -414,7 +405,6 @@ button:hover{
 }
 
 .Carv2CardButton {
-    box-shadow: 0 0 0 1px var(--carv2-color-border);
     animation-name: growWidth;
     animation-duration: var(--animation-time);
     display: flex;
@@ -454,14 +444,14 @@ button:hover{
     transform: rotate(180deg);
     text-align: center;
     font-size: 3em;
-    font-family: ArialRoundedMTBold, "Arial Rounded MT Bold";
+    font-family: ArialRoundedMTBold, "Arial Rounded MT Bold", serif;
     margin-left: 13px;
     margin-top: 0.5em;
     margin-bottom: 1em;
     color: #0060a9;
 }
 
-/* -------------------------------------------- Controllpanel -------------------------------------------- */
+/* -------------------------------------------- Control panel -------------------------------------------- */
 
 .verticalTab {
     writing-mode: tb-rl;
@@ -556,18 +546,6 @@ button:hover{
     color: white;
     text-overflow: ellipsis;
     overflow: hidden;
-}
-
-/* -------------------------------------------- Data -------------------------------------------- */
-
-#dataObject {
-    width: 100px;
-    height: 30px;
-    text-overflow: ellipsis;
-    margin: 0;
-    padding-top: 0px !important;
-    background-color: rgba(0, 0, 0, 0.3);
-    color: var(--carv2-text-color);
 }
 
 /* -------------------------------------------- Flussdiagram -------------------------------------------- */
@@ -713,7 +691,7 @@ button:hover{
     height: 2.7em;
 }
 
-carhHeaderText {
+.carhHeaderText {
     color: var(--carv2-text-color);
     height: 2.5em;
     transition: color var(--animation-time), height var(--animation-time);
@@ -878,6 +856,8 @@ carhHeaderText {
     transform: rotate(45deg)
 }
 
+/*===================================================================================================================*/
+
 .carv2ActorDataCHECK_FAILED {
     display: flex;
     justify-content: center;
@@ -907,7 +887,7 @@ carhHeaderText {
     height: 100%;
     background-color: var(--carv2-data-add-color) !important;
     color: var(--carv2-text-color) !important;
-    box-shadow: 0px 0px 20px rgb(255, 0, 0);
+    box-shadow: 0 0 20px rgb(255, 0, 0);
 }
 
 .carv2ActorDataERROR_DELETE {
@@ -918,7 +898,7 @@ carhHeaderText {
     height: 100%;
     background-color: var(--carv2-data-delete-color) !important;
     color: var(--carv2-text-color) !important;
-    box-shadow: 0px 0px 20px rgb(255, 0, 0);
+    box-shadow: 0 0 20px rgb(255, 0, 0);
 }
 
 .carv2ActorDataERROR_SEND {
@@ -929,7 +909,7 @@ carhHeaderText {
     height: 100%;
     background-color: var(--carv2-color-exxcellent-blue) !important;
     color: var(--carv2-text-color) !important;
-    box-shadow: 0px 0px 20px rgb(255, 0, 0);
+    box-shadow: 0 0 20px rgb(255, 0, 0);
 }
 
 /* -------------------------------------------- Table -------------------------------------------- */
@@ -1128,168 +1108,4 @@ table {
     animation-name: disapear;
     animation-duration: 3s;
     opacity: 0;
-}
-
-/* ---------------------------- KEY FRAMES ---------------------------- */
-
-@keyframes appearTabGroup {
-    0% {
-        color: transparent;
-        background-color: transparent;
-        box-shadow: 0 0 0 0 transparent;
-        height: 0;
-    }
-
-    5% {
-        color: transparent;
-        background-color: transparent;
-        box-shadow: 0 0 0 0 transparent;
-    }
-
-    5% {
-        color: var(--carv2-text-color);
-        background-color: rgba(0, 0, 0, 0.1);
-        box-shadow: 0 0 0 1px var(--carv2-color-border);
-        height: 4.4em;
-    }
-}
-
-@keyframes appearTab {
-    0% {
-        color: transparent;
-        background-color: transparent;
-        height: 0;
-        border-right: 0.5px solid transparent;
-    }
-
-    10% {
-        background-color: transparent;
-        color: transparent;
-        border-right: 0.5px solid transparent;
-    }
-
-    100% {
-        color: var(--carv2-text-color);
-        background-color: rgba(0, 0, 0, 0.2);
-        height: 2.2em;
-        border-right: 0.5px solid rgba(255, 250, 250, 0.2);
-    }
-}
-
-@keyframes growDeleteButton {
-    0%{
-        width: 0;
-        color: transparent;
-    }
-
-    80%{
-        color: transparent;
-    }
-
-    100%{
-        width: 100%;
-        color: red;
-    }
-}
-
-@keyframes appearText {
-    0% {
-        color: transparent;
-    }
-
-    100% {
-        color: black;
-    }
-}
-
-@keyframes grow {
-    from {
-        background-color: transparent;
-        box-shadow: 0 0 0 1px transparent, 0 0 5px 5px transparent;
-        color: transparent;
-        height: 0;
-    }
-
-    to {
-        background-color: var(--carv2-background-color-header);
-        box-shadow: 0 0 0 1px var(--carv2-color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
-        color: var(--carv2-text-color);
-        height: 100%;
-    }
-}
-
-@keyframes glow {
-    from {
-        box-shadow: 0 0 0 0 transparent, 0 0 0 0 transparent;
-    }
-
-    to {
-        box-shadow: 0 0 6px 2px var(--carv2-color-secondary), 0 0 5px 5px rgba(0, 0, 0, 0.199);
-    }
-}
-
-@keyframes slidein {
-    from {
-        margin-bottom: 11em;
-        /* height: 300%; */
-    }
-
-    to {
-        margin-bottom: 0%;
-        /* height: 100%; */
-    }
-}
-
-@keyframes growWidth {
-    0% {
-        width: 0;
-        color: transparent;
-    }
-
-    80% {
-        color: transparent;
-    }
-
-    100% {
-        width: 2em;
-        color: white;
-    }
-}
-
-@keyframes shrinkWidth {
-    0% {
-        width: 2em;
-        background-color: var(--carv2-background-color-slidebar);
-        border-width: 0 0 0 2px;
-    }
-
-    100% {
-        width: 0;
-        background-color: transparent;
-        border-width: 0 0 0 0;
-    }
-}
-
-@keyframes growWidth {
-    0% {
-        width: 0;
-        color: transparent !important;
-        box-shadow: 0 0 0 1px transparent !important;
-        border-color: transparent !important;
-    }
-
-    100% {
-        width: 1.2em;
-        color: white !important;
-        box-shadow: 0 0 0 1px var(--carv2-color-border) !important;
-    }
-}
-
-@keyframes disapear {
-    0%{
-        opacity: 1;
-    }
-    100%{
-        opacity: 0;
-    }
 }

@@ -11,8 +11,9 @@ export const DavitSidePanelButton: FunctionComponent<DavitButtonIconProps> = (pr
     const { onClick, icon, active } = props;
 
     return (
-        <div className={"carv2SidePanelButton" + (active ? " SidePanelButtonActive" : "")} onClick={onClick}>
+        // <button className={"sidePanelButton" + (active ? " SidePanelButtonActive" : "")} onClick={onClick}>
+        <button className={"sidePanelButton" + (active ? " active" : "")} onClick={onClick}>
             <Icon name={icon} />
-        </div>
+        </button>
     );
 };
