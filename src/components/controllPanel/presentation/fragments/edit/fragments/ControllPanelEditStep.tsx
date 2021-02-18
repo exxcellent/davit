@@ -14,7 +14,8 @@ import { EditAction } from "../../../../../../slices/thunks/ActionThunks";
 import { EditSequence } from "../../../../../../slices/thunks/SequenceThunks";
 import { EditStep } from "../../../../../../slices/thunks/StepThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitButtonIcon } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitAddButton } from "../../../../../common/fragments/buttons/DavitAddButton";
+import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import { DavitRootButton } from "../../../../../common/fragments/buttons/DavitRootButton";
 import { DavitModal } from "../../../../../common/fragments/DavitModal";
@@ -111,7 +112,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
                     </OptionField>
                     {goTo!.type === GoToTypes.STEP && (
                         <OptionField label="Create or Select next step">
-                            <DavitButtonIcon icon="add" onClick={createGoToStep} />
+                            <DavitAddButton onClick={createGoToStep} />
                             <StepDropDown
                                 onSelect={setGoToTypeStep}
                                 value={goTo?.type === GoToTypes.STEP ? goTo.id : 1}
@@ -121,7 +122,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
                     )}
                     {goTo!.type === GoToTypes.DEC && (
                         <OptionField label="Create or Select next decision">
-                            <DavitButtonIcon icon="add" onClick={createGoToDecision} />
+                            <DavitAddButton onClick={createGoToDecision} />
                             <DecisionDropDown
                                 onSelect={setGoToTypeDecision}
                                 value={goTo?.type === GoToTypes.DEC ? goTo.id : 1}
@@ -148,7 +149,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
                                 }
                             />
                         )}
-                        <DavitButtonIcon onClick={saveSequenceStep} icon="reply" />
+                        <DavitBackButton onClick={saveSequenceStep} />
                     </OptionField>
                 </div>
                 <div className="controllPanelEditChild">

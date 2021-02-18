@@ -7,7 +7,7 @@ import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { handleError } from "../../../../../../slices/GlobalSlice";
 import { EditGroup } from "../../../../../../slices/thunks/GroupThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitButtonLabel } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import { ColorDropDown } from "../../../../../common/fragments/dropdowns/ColorDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
@@ -55,8 +55,8 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
                 />
             </div>
             <div className="columnDivider controllPanelEditChild">
-                <DavitButtonLabel onClick={createAnother} label="Create another" />
-                <DavitButtonLabel onClick={saveGroup} label="OK" />
+                <DavitButton onClick={createAnother} label="Create another" />
+                <DavitButton onClick={saveGroup} label="OK" />
             </div>
             <div className="columnDivider controllPanelEditChild">
                 <DavitDeleteButton onClick={deleteGroup} />

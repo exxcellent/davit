@@ -13,7 +13,8 @@ import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSl
 import { EditChainLink } from "../../../../../../slices/thunks/ChainLinkThunks";
 import { EditChain } from "../../../../../../slices/thunks/ChainThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitButtonIcon } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitAddButton } from "../../../../../common/fragments/buttons/DavitAddButton";
+import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import { DavitRootButton } from "../../../../../common/fragments/buttons/DavitRootButton";
 import { ChainDecisionDropDown } from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
@@ -94,7 +95,7 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
                     </OptionField>
                     {goTo!.type === GoToTypesChain.LINK && (
                         <OptionField label="Create or Select next link">
-                            <DavitButtonIcon icon="add" onClick={createNewChainLink} />
+                            <DavitAddButton onClick={createNewChainLink} />
                             <ChainLinkDropDown
                                 onSelect={setNextLink}
                                 value={goTo?.type === GoToTypesChain.LINK ? goTo.id : 1}
@@ -106,7 +107,7 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
 
                     {goTo!.type === GoToTypesChain.DEC && (
                         <OptionField label="Create or Select next decision">
-                            <DavitButtonIcon icon="add" onClick={createGoToDecision} />
+                            <DavitAddButton onClick={createGoToDecision} />
                             <ChainDecisionDropDown
                                 onSelect={(cond) => setNextDecision(cond)}
                                 value={goTo?.type === GoToTypesChain.DEC ? goTo.id : 1}
@@ -119,7 +120,7 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
             <div className="columnDivider controllPanelEditChild">
                 <div>
                     <OptionField label="Navigation">
-                        <DavitButtonIcon onClick={saveChainLink} icon="reply" />
+                        <DavitBackButton onClick={saveChainLink} />
                     </OptionField>
                 </div>
                 <div className="controllPanelEditChild">

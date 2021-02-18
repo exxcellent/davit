@@ -7,7 +7,7 @@ import { handleError } from "../../../../../../slices/GlobalSlice";
 import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
 import { EditChainDecision } from "../../../../../../slices/thunks/ChainDecisionThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitButtonIcon } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
 import { DavitMenuLabel } from "../../../../../common/fragments/DavitMenuLabel";
 import { ActorDropDown } from "../../../../../common/fragments/dropdowns/ActorDropDown";
 import {
@@ -57,7 +57,7 @@ export const ControllPanelEditChainCondition: FunctionComponent<ControllPanelEdi
             </div>
             <div className="columnDivider optionFieldSpacer">
                 <OptionField label="Navigation">
-                    <DavitButtonIcon onClick={setMode} icon="reply" />
+                    <DavitBackButton onClick={setMode} />
                 </OptionField>
             </div>
         </ControllPanelEditSub>

@@ -8,7 +8,7 @@ import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSl
 import { EditCondition } from "../../../../../../slices/thunks/ConditionThunks";
 import { EditDecision } from "../../../../../../slices/thunks/DecisionThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitButtonIcon } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import { DavitMenuLabel } from "../../../../../common/fragments/DavitMenuLabel";
 import { ActorDropDown } from "../../../../../common/fragments/dropdowns/ActorDropDown";
@@ -58,7 +58,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
             <div className="columnDivider optionFieldSpacer">
                 <OptionField label="Navigation">
                     <DavitDeleteButton onClick={deleteConditionAndGoToEditDecision} />
-                    <DavitButtonIcon onClick={setMode} icon="reply" />
+                    <DavitBackButton onClick={setMode} />
                 </OptionField>
             </div>
         </ControllPanelEditSub>

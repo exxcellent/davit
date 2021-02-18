@@ -11,7 +11,8 @@ import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSl
 import { EditChain } from "../../../../../../slices/thunks/ChainThunks";
 import { EditSequence } from "../../../../../../slices/thunks/SequenceThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitButtonIcon, DavitButtonLabel } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
+import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import { ChainDecisionDropDownButton } from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
 import { ChainLinkDropDownButton } from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
@@ -82,8 +83,8 @@ export const ControllPanelEditChain: FunctionComponent<ControllPanelEditChainPro
             <div className="columnDivider controllPanelEditChild">
                 <div>
                     <OptionField label="Navigation">
-                        <DavitButtonLabel onClick={createAnother} label="Create another" />
-                        <DavitButtonIcon onClick={saveChain} icon="reply" />
+                        <DavitButton onClick={createAnother} label="Create another" />
+                        <DavitBackButton onClick={saveChain} />
                     </OptionField>
                 </div>
                 <div className="optionFieldSpacer">

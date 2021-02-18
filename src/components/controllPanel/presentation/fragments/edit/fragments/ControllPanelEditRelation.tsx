@@ -8,7 +8,8 @@ import { handleError } from "../../../../../../slices/GlobalSlice";
 import { masterDataSelectors } from "../../../../../../slices/MasterDataSlice";
 import { EditRelation } from "../../../../../../slices/thunks/RelationThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitButtonIcon, DavitButtonLabel } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
+import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import { DavitModal } from "../../../../../common/fragments/DavitModal";
 import { DavitNoteForm } from "../../../../../common/fragments/forms/DavitNoteForm";
@@ -136,8 +137,8 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
             <div className="columnDivider controllPanelEditChild">
                 <div className="optionFieldSpacer">
                     <OptionField label="Navigation">
-                        <DavitButtonIcon onClick={saveRelation} icon="reply" />
-                        <DavitButtonLabel onClick={createAnother} label="Create another" />
+                        <DavitBackButton onClick={saveRelation} />
+                        <DavitButton onClick={createAnother} label="Create another" />
                     </OptionField>
                 </div>
                 <div className="optionFieldSpacer">

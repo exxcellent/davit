@@ -1,7 +1,8 @@
+import { faShare } from "@fortawesome/free-solid-svg-icons";
 import React, { FunctionComponent } from "react";
 import { ButtonGroup } from "semantic-ui-react";
 import { ModuleRoutes } from "../../../../../../app/Davit";
-import { DavitButtonIcon } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
 
 export interface ControllPanelViewOptionsProps {}
 
@@ -12,10 +13,10 @@ export const ControllPanelViewOptions: FunctionComponent<ControllPanelViewOption
         <div>
             <div className="optionField">
                 <ButtonGroup>
-                    <DavitButtonIcon icon="share" onClick={showActorPage} />
-                    <DavitButtonIcon icon="sitemap" onClick={showDataPage} />
-                    <DavitButtonIcon icon="table" onClick={showTablePage} />
-                    <DavitButtonIcon icon="code branch" onClick={showFlowChartPage} />
+                    <DavitButton iconName={faShare} onClick={showActorPage} />
+                    <DavitButton iconName={faShare} onClick={showDataPage} />
+                    <DavitButton iconName={faShare} onClick={showTablePage} />
+                    <DavitButton iconName={faShare} onClick={showFlowChartPage} />
                 </ButtonGroup>
             </div>
             <div style={{ textAlign: "center", color: "white" }}>{"Open in new window".toUpperCase()}</div>

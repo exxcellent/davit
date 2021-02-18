@@ -1,10 +1,11 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch } from "react-redux";
-import { ButtonGroup } from "semantic-ui-react";
 import { EditActions } from "../../../../../../slices/EditSlice";
 import { GlobalActions } from "../../../../../../slices/GlobalSlice";
-import { DavitButtonIcon } from "../../../../../common/fragments/buttons/DavitButton";
-import { DavitFileInput } from "../../../../../common/fragments/buttons/DavitFileInput";
+import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitDownloadButton } from "../../../../../common/fragments/buttons/DavitDownloadButton";
+import { DavitUploadButton } from "../../../../../common/fragments/buttons/DavitUploadButton";
+import { OptionField } from "../../edit/common/OptionField";
 
 export interface ControllPanelFileOptionsProps {
     showDownloadFile: () => void;
@@ -15,15 +16,12 @@ export const ControllPanelFileOptions: FunctionComponent<ControllPanelFileOption
     const { deleteLocalStorage } = useFileOptionModelView();
 
     return (
-        <div>
-            <div className="optionField">
-                <ButtonGroup>
-                    <DavitFileInput />
-                    <DavitButtonIcon icon="download" onClick={showDownloadFile} />
-                    <DavitButtonIcon icon="trash alternate" onClick={deleteLocalStorage} />
-                </ButtonGroup>
-            </div>
-            <div style={{ textAlign: "center", color: "white" }}>{"file".toUpperCase()}</div>
+        <div className="optionFieldSpacer">
+            <OptionField label="file">
+                <DavitUploadButton />
+                <DavitDownloadButton onClick={showDownloadFile} />
+                <DavitDeleteButton onClick={deleteLocalStorage} />
+            </OptionField>
         </div>
     );
 };

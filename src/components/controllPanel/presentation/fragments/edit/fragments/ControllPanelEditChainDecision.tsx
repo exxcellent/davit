@@ -10,7 +10,8 @@ import { handleError } from "../../../../../../slices/GlobalSlice";
 import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
 import { EditChainDecision } from "../../../../../../slices/thunks/ChainDecisionThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitButtonIcon } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitAddButton } from "../../../../../common/fragments/buttons/DavitAddButton";
+import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import { ChainDecisionDropDown } from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
 import { ChainLinkDropDown } from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
@@ -82,7 +83,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
                     </OptionField>
                     {ifGoTo!.type === GoToTypesChain.LINK && (
                         <OptionField label="Create or Select next link">
-                            <DavitButtonIcon icon="add" onClick={() => createGoToStep(true)} />
+                            <DavitAddButton onClick={() => createGoToStep(true)} />
                             <ChainLinkDropDown
                                 onSelect={(link) => setGoToTypeStep(true, link)}
                                 value={ifGoTo?.type === GoToTypesChain.LINK ? ifGoTo.id : 1}
@@ -92,7 +93,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
                     )}
                     {ifGoTo!.type === GoToTypesChain.DEC && (
                         <OptionField label="Create or Select next decision">
-                            <DavitButtonIcon icon="add" onClick={() => createGoToDecision(true)} />
+                            <DavitAddButton onClick={() => createGoToDecision(true)} />
                             <ChainDecisionDropDown
                                 onSelect={(cond) => setGoToTypeDecision(true, cond)}
                                 value={ifGoTo?.type === GoToTypesChain.DEC ? ifGoTo.id : 1}
@@ -113,7 +114,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
                     </OptionField>
                     {elseGoTo!.type === GoToTypesChain.LINK && (
                         <OptionField label="Select type of the next element">
-                            <DavitButtonIcon icon="add" onClick={() => createGoToStep(false)} />
+                            <DavitAddButton onClick={() => createGoToStep(false)} />
                             <ChainLinkDropDown
                                 onSelect={(link) => setGoToTypeStep(false, link)}
                                 value={elseGoTo?.type === GoToTypesChain.LINK ? elseGoTo.id : 1}
@@ -123,7 +124,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
                     )}
                     {elseGoTo!.type === GoToTypesChain.DEC && (
                         <OptionField label="Create or Select next condition">
-                            <DavitButtonIcon icon="add" onClick={() => createGoToDecision(false)} />
+                            <DavitAddButton onClick={() => createGoToDecision(false)} />
                             <ChainDecisionDropDown
                                 onSelect={(cond) => setGoToTypeDecision(false, cond)}
                                 value={elseGoTo?.type === GoToTypesChain.DEC ? elseGoTo.id : 1}
@@ -137,7 +138,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
             <div className="columnDivider controllPanelEditChild">
                 <div className="optionFieldSpacer">
                     <OptionField label="Navigation">
-                        <DavitButtonIcon onClick={saveDecision} icon="reply" />
+                        <DavitBackButton onClick={saveDecision} />
                     </OptionField>
                 </div>
                 <div className="optionFieldSpacer">
