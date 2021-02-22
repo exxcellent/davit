@@ -10,7 +10,8 @@ export const DavitUtil = {
     isValidName(name: string): boolean {
         let valid: boolean = false;
         if (!this.isNullOrUndefined(name)) {
-            valid = name.length < 13 && name.length > 0;
+            // TODO: define rules for a valid name.
+            valid = name !== "";
         }
         return valid;
     },
