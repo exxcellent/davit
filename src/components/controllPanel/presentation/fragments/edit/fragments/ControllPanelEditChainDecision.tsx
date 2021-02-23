@@ -13,11 +13,11 @@ import { DavitUtil } from "../../../../../../utils/DavitUtil";
 import { DavitAddButton } from "../../../../../common/fragments/buttons/DavitAddButton";
 import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
 import { ChainDecisionDropDown } from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
 import { ChainLinkDropDown } from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
 import { GoToChainOptionDropDown } from "../../../../../common/fragments/dropdowns/GoToChainOptionDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditChainDecisionProps {
@@ -58,7 +58,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
                             value={name}
                             autoFocus
                             ref={textInput}
-                            unvisible={hidden}
+                            invisible={hidden}
                         />
                     </OptionField>
                     <OptionField label="Create / Edit Condition">

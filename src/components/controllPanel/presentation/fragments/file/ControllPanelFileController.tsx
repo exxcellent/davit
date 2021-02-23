@@ -2,8 +2,10 @@ import React, { FunctionComponent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { GlobalActions } from "../../../../../slices/GlobalSlice";
 import { DavitButton } from "../../../../common/fragments/buttons/DavitButton";
+import { DavitLabelTextfield } from "../../../../common/fragments/DavitLabelTextfield";
+import { DavitModal } from "../../../../common/fragments/DavitModal";
+import { DavitDownloadForm } from "../../../../common/fragments/forms/DavitDownloadForm";
 import { ControllPanelEditSub } from "../edit/common/ControllPanelEditSub";
-import { DavitLabelTextfield } from "../edit/common/fragments/DavitLabelTextfield";
 import { ControllPanelFileOptions } from "./fragments/ControllPanelFileOptions";
 
 export interface ControllPanelFileControllerProps {
@@ -33,7 +35,7 @@ export const ControllPanelFileController: FunctionComponent<ControllPanelFileCon
                         onChangeDebounced={(name: string) => setProjectName(name)}
                         value={projectName}
                         autoFocus
-                        unvisible={hidden}
+                        invisible={hidden}
                     />
                 )}
             </div>
@@ -41,6 +43,9 @@ export const ControllPanelFileController: FunctionComponent<ControllPanelFileCon
                 {showExportFile && <DavitButton label="Export File" onClick={downloadData} />}
             </div>
             <div className="columnDivider controllPanelEditChild" />
+            {showExportFile && (
+                <DavitModal content={<DavitDownloadForm onCloseCallback={() => toggleShowExportFile()} />} />
+            )}
         </ControllPanelEditSub>
     );
 };

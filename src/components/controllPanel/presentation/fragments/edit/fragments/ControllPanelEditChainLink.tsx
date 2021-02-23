@@ -17,13 +17,13 @@ import { DavitAddButton } from "../../../../../common/fragments/buttons/DavitAdd
 import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import { DavitRootButton } from "../../../../../common/fragments/buttons/DavitRootButton";
+import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
 import { ChainDecisionDropDown } from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
 import { ChainLinkDropDown } from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
 import { DataSetupDropDown } from "../../../../../common/fragments/dropdowns/DataSetupDropDown";
 import { GoToChainOptionDropDown } from "../../../../../common/fragments/dropdowns/GoToChainOptionDropDown";
 import { SequenceDropDown } from "../../../../../common/fragments/dropdowns/SequenceDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditChainLinkProps {
@@ -67,7 +67,7 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
                         value={name}
                         autoFocus
                         ref={textInput}
-                        unvisible={hidden}
+                        invisible={hidden}
                     />
                 </OptionField>
             </div>

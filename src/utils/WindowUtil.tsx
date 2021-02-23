@@ -70,7 +70,7 @@ export const useCustomZoomEvent = (
     hover?: boolean,
 ) => {
     const handleKeyDown = (wheelEvent: WheelEvent) => {
-        if (wheelEvent.ctrlKey === true) {
+        if (wheelEvent.ctrlKey) {
             wheelEvent.preventDefault();
             if (zoomCallBacks && hover) {
                 wheelEvent.deltaY < 0 && zoomCallBacks.zoomInCallBack();
@@ -80,7 +80,7 @@ export const useCustomZoomEvent = (
     };
 
     const checkZoom = (event: KeyboardEvent) => {
-        if (event.ctrlKey === true) {
+        if (event.ctrlKey) {
             if (event.key === "+" || event.key === "-") {
                 event.preventDefault();
             }

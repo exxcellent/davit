@@ -10,8 +10,8 @@ import { DavitUtil } from "../../../../../../utils/DavitUtil";
 import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
 import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditDataInstanceProps {
@@ -44,7 +44,7 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
                         value={getName()}
                         autoFocus
                         ref={textInput}
-                        unvisible={hidden}
+                        invisible={hidden}
                         onBlur={saveOnBlure}
                     />
                 </OptionField>

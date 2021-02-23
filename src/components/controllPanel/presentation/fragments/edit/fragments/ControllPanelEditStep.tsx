@@ -18,6 +18,7 @@ import { DavitAddButton } from "../../../../../common/fragments/buttons/DavitAdd
 import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import { DavitRootButton } from "../../../../../common/fragments/buttons/DavitRootButton";
+import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
 import { DavitModal } from "../../../../../common/fragments/DavitModal";
 import { ActionButtonDropDown } from "../../../../../common/fragments/dropdowns/ActionButtonDropDown";
 import { DecisionDropDown } from "../../../../../common/fragments/dropdowns/DecisionDropDown";
@@ -25,7 +26,6 @@ import { GoToOptionDropDown } from "../../../../../common/fragments/dropdowns/Go
 import { StepDropDown } from "../../../../../common/fragments/dropdowns/StepDropDown";
 import { DavitNoteForm } from "../../../../../common/fragments/forms/DavitNoteForm";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditStepProps {
@@ -73,7 +73,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
                             autoFocus
                             ref={textInput}
                             onBlur={updateStep}
-                            unvisible={hidden}
+                            invisible={hidden}
                         />
                     </OptionField>
                 </div>

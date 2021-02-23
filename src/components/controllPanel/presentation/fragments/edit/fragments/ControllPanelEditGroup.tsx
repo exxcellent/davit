@@ -9,9 +9,9 @@ import { EditGroup } from "../../../../../../slices/thunks/GroupThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
 import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
 import { ColorDropDown } from "../../../../../common/fragments/dropdowns/ColorDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
 
 export interface ControllPanelEditGroupProps {
     hidden: boolean;
@@ -51,7 +51,7 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
                     autoFocus
                     ref={textInput}
                     onBlur={() => updateGroup()}
-                    unvisible={hidden}
+                    invisible={hidden}
                 />
             </div>
             <div className="columnDivider controllPanelEditChild">

@@ -15,12 +15,12 @@ import { EditAction } from "../../../../../../slices/thunks/ActionThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
 import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
 import { ActionTypeDropDown } from "../../../../../common/fragments/dropdowns/ActionTypeDropDown";
 import { ActorDropDown } from "../../../../../common/fragments/dropdowns/ActorDropDown";
 import { DataDropDown } from "../../../../../common/fragments/dropdowns/DataDropDown";
 import { DataAndInstanceId, InstanceDropDown } from "../../../../../common/fragments/dropdowns/InstanceDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditActionProps {
@@ -70,7 +70,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
                                 onChangeDebounced={(name: string) => setTriggerLabel(name)}
                                 value={triggerlabe}
                                 autoFocus
-                                unvisible={hidden}
+                                invisible={hidden}
                             />
                         </OptionField>
                     )}

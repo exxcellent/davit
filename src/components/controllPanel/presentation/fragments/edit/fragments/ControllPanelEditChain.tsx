@@ -14,10 +14,10 @@ import { DavitUtil } from "../../../../../../utils/DavitUtil";
 import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
 import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
 import { ChainDecisionDropDownButton } from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
 import { ChainLinkDropDownButton } from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
 import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
 import { OptionField } from "../common/OptionField";
 
 export interface ControllPanelEditChainProps {
@@ -50,7 +50,7 @@ export const ControllPanelEditChain: FunctionComponent<ControllPanelEditChainPro
                         value={name}
                         autoFocus
                         ref={textInput}
-                        unvisible={hidden}
+                        invisible={hidden}
                     />
                 </OptionField>
             </div>

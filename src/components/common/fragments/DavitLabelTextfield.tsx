@@ -4,15 +4,15 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Input, InputProps } from "semantic-ui-react";
 
 interface DavitLabelTextfieldProps extends InputProps {
-    label: string;
     placeholder: string;
     value: string;
-    unvisible: boolean;
+    invisible: boolean;
     onChangeDebounced: (value: string) => void;
+    label?: string;
 }
 
 export const DavitLabelTextfield = React.forwardRef<Input, DavitLabelTextfieldProps>((props, ref) => {
-    const { label, onChangeCallBack, placeholder, value, unvisible, onChangeDebounced, ...other } = props;
+    const { label, onChangeCallBack, placeholder, value, invisible, onChangeDebounced, ...other } = props;
 
     const [stateValue, setStateValue] = useState<string>("");
 
@@ -22,9 +22,10 @@ export const DavitLabelTextfield = React.forwardRef<Input, DavitLabelTextfieldPr
 
     const inputDebounce = useCallback(debounce(onChangeDebounced, 30), []);
 
+    // TODO: remove semantic Input
     return (
         <Input
-            className={unvisible ? "slideable-hidden" : "slideable"}
+            className={invisible ? "slideable-hidden" : "slideable"}
             label={label}
             placeholder={placeholder}
             value={stateValue}

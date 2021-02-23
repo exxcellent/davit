@@ -149,10 +149,10 @@ export const ConstraintsHelper = {
     },
 
     deletePositionConstraintCheck(positionId: number, dataStore: DataStoreCTO) {
-        const geometDataExists: boolean = Array.from(dataStore.geometricalDatas.values()).some(
+        const geometricalDataExists: boolean = Array.from(dataStore.geometricalDatas.values()).some(
             (geoData) => geoData.positionFk === positionId,
         );
-        if (geometDataExists) {
+        if (geometricalDataExists) {
             throw new Error(`delete.error! position with id: ${positionId} is still connected to GeometricalData(s)!`);
         }
     },
