@@ -7,11 +7,11 @@ import { DavitDownloadButton } from "../../../../../common/fragments/buttons/Dav
 import { DavitUploadButton } from "../../../../../common/fragments/buttons/DavitUploadButton";
 import { OptionField } from "../../edit/common/OptionField";
 
-export interface ControllPanelFileOptionsProps {
+export interface ControlPanelFileOptionsProps {
     showDownloadFile: () => void;
 }
 
-export const ControllPanelFileOptions: FunctionComponent<ControllPanelFileOptionsProps> = (props) => {
+export const ControlPanelFileOptions: FunctionComponent<ControlPanelFileOptionsProps> = (props) => {
     const { showDownloadFile } = props;
     const { deleteLocalStorage } = useFileOptionModelView();
 

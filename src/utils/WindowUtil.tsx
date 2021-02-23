@@ -166,3 +166,45 @@ export const useStepAndLinkNavigation = () => {
         linkBack,
     };
 };
+
+/**
+ * Execute the given callback if the "Escape" key is press.
+ * @param callback
+ */
+export const useEscHook = (callback: () => void) => {
+
+    useEffect(() => {
+        const escButtonCall = (event: KeyboardEvent) => {
+            if (event.key === "Escape") {
+                callback();
+            }
+        };
+
+        document.addEventListener("keydown", escButtonCall, false);
+
+        return () => {
+            document.removeEventListener("keydown", escButtonCall, false);
+        };
+    }, [callback]);
+};
+
+/**
+ * Execute the given callback if the "Enter / Return" key is press.
+ * @param callback
+ */
+export const useEnterHook = (callback: () => void) => {
+
+    useEffect(() => {
+        const escButtonCall = (event: KeyboardEvent) => {
+            if (event.key === "Enter") {
+                callback();
+            }
+        };
+
+        document.addEventListener("keydown", escButtonCall, false);
+
+        return () => {
+            document.removeEventListener("keydown", escButtonCall, false);
+        };
+    }, [callback]);
+};

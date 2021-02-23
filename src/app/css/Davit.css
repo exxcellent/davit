@@ -211,6 +211,13 @@
     padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
 }
 
+.downloadForm{
+    width: 30%;
+    background: var(--carv2-background-color);
+    border-radius: var(--davit-border-radius);
+    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
+}
+
 .noteTextarea {
     border-radius: var(--davit-border-radius);
     resize: none;

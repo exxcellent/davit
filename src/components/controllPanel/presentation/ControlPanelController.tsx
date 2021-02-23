@@ -1,27 +1,27 @@
-import React, { FunctionComponent } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { EditActions, editSelectors, Mode } from "../../../slices/EditSlice";
-import { DavitUtil } from "../../../utils/DavitUtil";
-import { ControllPanelEditController } from "./fragments/edit/ControllPanelEditController";
-import { ControllPanelFileController } from "./fragments/file/ControllPanelFileController";
-import { ControllPanelTabController } from "./fragments/tabs/ControllPanelTabController";
-import { ControllPanelViewOptions } from "./fragments/view/ControllPanelViewOptions";
+import React, {FunctionComponent} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {EditActions, editSelectors, Mode} from "../../../slices/EditSlice";
+import {DavitUtil} from "../../../utils/DavitUtil";
+import {ControlPanelEditController} from "./fragments/edit/ControlPanelEditController";
+import {ControlPanelFileController} from "./fragments/file/ControlPanelFileController";
+import {ControllPanelTabController} from "./fragments/tabs/ControllPanelTabController";
+import {ControllPanelViewOptions} from "./fragments/view/ControllPanelViewOptions";
 
-export interface ControllPanelProps {}
+export interface ControlPanelProps {}
 
-export const ControllPanelController: FunctionComponent<ControllPanelProps> = (props) => {
+export const ControlPanelController: FunctionComponent<ControlPanelProps> = () => {
     const { mode } = useControllPanelViewModel();
 
     const useGetViewByMode = (mode: Mode) => {
         if (!DavitUtil.isNullOrUndefined(mode)) {
             if (mode.includes("EDIT")) {
-                return <ControllPanelEditController />;
+                return <ControlPanelEditController />;
             }
             if (mode.includes("VIEW")) {
                 return <ControllPanelViewOptions hidden={!mode.includes("VIEW")} />;
             }
             if (mode.includes("FILE")) {
-                return <ControllPanelFileController hidden={!mode.includes("FILE")} />;
+                return <ControlPanelFileController hidden={!mode.includes("FILE")} />;
             }
             if (mode.includes("TAB")) {
                 return <ControllPanelTabController hidden={!mode.includes("TAB")} />;
