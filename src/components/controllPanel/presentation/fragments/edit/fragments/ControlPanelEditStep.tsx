@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useEffect, useRef, useState} from "react";
+import React, {FunctionComponent, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Button} from "semantic-ui-react";
 import {SequenceCTO} from "../../../../../../dataAccess/access/cto/SequenceCTO";
@@ -25,15 +25,15 @@ import {DecisionDropDown} from "../../../../../common/fragments/dropdowns/Decisi
 import {GoToOptionDropDown} from "../../../../../common/fragments/dropdowns/GoToOptionDropDown";
 import {StepDropDown} from "../../../../../common/fragments/dropdowns/StepDropDown";
 import {DavitNoteForm} from "../../../../../common/fragments/forms/DavitNoteForm";
-import {ControllPanelEditSub} from "../common/ControllPanelEditSub";
+import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
 
-export interface ControllPanelEditStepProps {
+export interface ControlPanelEditStepProps {
     hidden: boolean;
 }
 
-export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps> = (props) => {
-    const { hidden } = props;
+export const ControlPanelEditStep: FunctionComponent<ControlPanelEditStepProps> = (props) => {
+    const {hidden} = props;
 
     const [showNote, setShowNote] = useState<boolean>(false);
 
@@ -43,7 +43,6 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
         changeName,
         deleteSequenceStep,
         saveSequenceStep,
-        textInput,
         editOrAddAction,
         updateStep,
         handleType,
@@ -61,7 +60,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
     } = useControllPanelEditSequenceStepViewModel();
 
     return (
-        <ControllPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveSequenceStep}>
+        <ControlPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveSequenceStep}>
             <div className="controllPanelEditChild">
                 <div className="optionField">
                     <OptionField label="Step - name">
@@ -70,7 +69,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
                             placeholder="Step Name ..."
                             onChangeDebounced={(name: string) => changeName(name)}
                             value={name}
-                            ref={textInput}
+                            focus={true}
                             onBlur={updateStep}
                         />
                     </OptionField>
@@ -106,11 +105,11 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
             <div className="columnDivider controllPanelEditChild">
                 <div className="optionField">
                     <OptionField label="Select type of the next element">
-                        <GoToOptionDropDown onSelect={handleType} value={goTo ? goTo.type : GoToTypes.ERROR} />
+                        <GoToOptionDropDown onSelect={handleType} value={goTo ? goTo.type : GoToTypes.ERROR}/>
                     </OptionField>
                     {goTo!.type === GoToTypes.STEP && (
                         <OptionField label="Create or Select next step">
-                            <DavitAddButton onClick={createGoToStep} />
+                            <DavitAddButton onClick={createGoToStep}/>
                             <StepDropDown
                                 onSelect={setGoToTypeStep}
                                 value={goTo?.type === GoToTypes.STEP ? goTo.id : 1}
@@ -120,7 +119,7 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
                     )}
                     {goTo!.type === GoToTypes.DEC && (
                         <OptionField label="Create or Select next decision">
-                            <DavitAddButton onClick={createGoToDecision} />
+                            <DavitAddButton onClick={createGoToDecision}/>
                             <DecisionDropDown
                                 onSelect={setGoToTypeDecision}
                                 value={goTo?.type === GoToTypes.DEC ? goTo.id : 1}
@@ -147,21 +146,21 @@ export const ControllPanelEditStep: FunctionComponent<ControllPanelEditStepProps
                                 }
                             />
                         )}
-                        <DavitBackButton onClick={saveSequenceStep} />
+                        <DavitBackButton onClick={saveSequenceStep}/>
                     </OptionField>
                 </div>
                 <div className="controllPanelEditChild">
                     <div>
                         <OptionField label="Sequence - Options">
-                            <DavitRootButton onClick={setRoot} isRoot={isRoot} />
+                            <DavitRootButton onClick={setRoot} isRoot={isRoot}/>
                             <div>
-                                <DavitDeleteButton onClick={deleteSequenceStep} />
+                                <DavitDeleteButton onClick={deleteSequenceStep}/>
                             </div>
                         </OptionField>
                     </div>
                 </div>
             </div>
-        </ControllPanelEditSub>
+        </ControlPanelEditSub>
     );
 };
 
@@ -169,7 +168,6 @@ const useControllPanelEditSequenceStepViewModel = () => {
     const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.selectStepToEdit);
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const dispatch = useDispatch();
-    const textInput = useRef<HTMLInputElement>(null);
     const [currentGoTo, setCurrentGoTo] = useState<GoTo>({
         type: GoToTypes.STEP,
         id: -1,
@@ -184,8 +182,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
         if (stepToEdit) {
             setCurrentGoTo(stepToEdit.squenceStepTO.goto);
         }
-        // used to focus the textfield on create another
-        textInput.current!.focus();
+
     }, [dispatch, stepToEdit]);
 
     const changeName = (name: string) => {
@@ -263,7 +260,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
     const handleType = (newGoToType?: string) => {
         if (newGoToType !== undefined) {
-            const gType = { type: (GoToTypes as any)[newGoToType] };
+            const gType = {type: (GoToTypes as any)[newGoToType]};
             setCurrentGoTo(gType);
             switch (newGoToType) {
                 case GoToTypes.ERROR:
@@ -280,14 +277,14 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
     const setGoToTypeStep = (step?: SequenceStepCTO) => {
         if (step) {
-            const newGoTo: GoTo = { type: GoToTypes.STEP, id: step.squenceStepTO.id };
+            const newGoTo: GoTo = {type: GoToTypes.STEP, id: step.squenceStepTO.id};
             saveGoToType(newGoTo);
         }
     };
 
     const setGoToTypeDecision = (decision?: DecisionTO) => {
         if (decision) {
-            const newGoTo: GoTo = { type: GoToTypes.DEC, id: decision.id };
+            const newGoTo: GoTo = {type: GoToTypes.DEC, id: decision.id};
             saveGoToType(newGoTo);
         }
     };
@@ -342,7 +339,6 @@ const useControllPanelEditSequenceStepViewModel = () => {
         changeName,
         saveSequenceStep,
         deleteSequenceStep,
-        textInput,
         validStep,
         editOrAddAction,
         updateStep,

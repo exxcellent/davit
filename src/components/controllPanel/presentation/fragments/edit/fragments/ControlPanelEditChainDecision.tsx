@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useEffect, useRef, useState} from "react";
+import React, {FunctionComponent, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Button} from "semantic-ui-react";
 import {ChainDecisionTO} from "../../../../../../dataAccess/access/to/ChainDecisionTO";
@@ -17,21 +17,20 @@ import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTex
 import {ChainDecisionDropDown} from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
 import {ChainLinkDropDown} from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
 import {GoToChainOptionDropDown} from "../../../../../common/fragments/dropdowns/GoToChainOptionDropDown";
-import {ControllPanelEditSub} from "../common/ControllPanelEditSub";
+import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
 
-export interface ControllPanelEditChainDecisionProps {
+export interface ControlPanelEditChainDecisionProps {
     hidden: boolean;
 }
 
-export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEditChainDecisionProps> = (props) => {
-    const { hidden } = props;
+export const ControlPanelEditChainDecision: FunctionComponent<ControlPanelEditChainDecisionProps> = (props) => {
+    const {hidden} = props;
     const {
         label,
         name,
         changeName,
         saveDecision,
-        textInput,
         handleType,
         ifGoTo,
         elseGoTo,
@@ -44,10 +43,10 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
         decId,
         chainId,
         editOrAddChainCondition,
-    } = useControllPanelEditChainConditionViewModel();
+    } = useControlPanelEditChainConditionViewModel();
 
     return (
-        <ControllPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveDecision}>
+        <ControlPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveDecision}>
             <div className="controllPanelEditChild">
                 <div className="optionField">
                     <OptionField label="Chain decision - name">
@@ -56,7 +55,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
                             placeholder="Chain decision name ..."
                             onChangeDebounced={(name: string) => changeName(name)}
                             value={name}
-                            ref={textInput}
+                            focus={true}
                         />
                     </OptionField>
                     <OptionField label="Create / Edit Condition">
@@ -64,13 +63,13 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
                             <Button id="buttonGroupLabel" disabled inverted color="orange">
                                 Condition
                             </Button>
-                            <Button icon="wrench" inverted color="orange" onClick={editOrAddChainCondition} />
+                            <Button icon="wrench" inverted color="orange" onClick={editOrAddChainCondition}/>
                         </Button.Group>
                     </OptionField>
                 </div>
             </div>
             <div className="columnDivider optionFieldSpacer">
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{display: "flex", justifyContent: "space-between"}}>
                     <OptionField label="Type condition true">
                         <GoToChainOptionDropDown
                             onSelect={(gt) => {
@@ -81,7 +80,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
                     </OptionField>
                     {ifGoTo!.type === GoToTypesChain.LINK && (
                         <OptionField label="Create or Select next link">
-                            <DavitAddButton onClick={() => createGoToStep(true)} />
+                            <DavitAddButton onClick={() => createGoToStep(true)}/>
                             <ChainLinkDropDown
                                 onSelect={(link) => setGoToTypeStep(true, link)}
                                 value={ifGoTo?.type === GoToTypesChain.LINK ? ifGoTo.id : 1}
@@ -91,7 +90,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
                     )}
                     {ifGoTo!.type === GoToTypesChain.DEC && (
                         <OptionField label="Create or Select next decision">
-                            <DavitAddButton onClick={() => createGoToDecision(true)} />
+                            <DavitAddButton onClick={() => createGoToDecision(true)}/>
                             <ChainDecisionDropDown
                                 onSelect={(cond) => setGoToTypeDecision(true, cond)}
                                 value={ifGoTo?.type === GoToTypesChain.DEC ? ifGoTo.id : 1}
@@ -103,7 +102,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
                 </div>
             </div>
             <div className="columnDivider optionFieldSpacer">
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{display: "flex", justifyContent: "space-between"}}>
                     <OptionField label="Type condition false">
                         <GoToChainOptionDropDown
                             onSelect={(gt) => handleType(false, gt)}
@@ -112,7 +111,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
                     </OptionField>
                     {elseGoTo!.type === GoToTypesChain.LINK && (
                         <OptionField label="Select type of the next element">
-                            <DavitAddButton onClick={() => createGoToStep(false)} />
+                            <DavitAddButton onClick={() => createGoToStep(false)}/>
                             <ChainLinkDropDown
                                 onSelect={(link) => setGoToTypeStep(false, link)}
                                 value={elseGoTo?.type === GoToTypesChain.LINK ? elseGoTo.id : 1}
@@ -122,7 +121,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
                     )}
                     {elseGoTo!.type === GoToTypesChain.DEC && (
                         <OptionField label="Create or Select next condition">
-                            <DavitAddButton onClick={() => createGoToDecision(false)} />
+                            <DavitAddButton onClick={() => createGoToDecision(false)}/>
                             <ChainDecisionDropDown
                                 onSelect={(cond) => setGoToTypeDecision(false, cond)}
                                 value={elseGoTo?.type === GoToTypesChain.DEC ? elseGoTo.id : 1}
@@ -136,26 +135,25 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
             <div className="columnDivider controllPanelEditChild">
                 <div className="optionFieldSpacer">
                     <OptionField label="Navigation">
-                        <DavitBackButton onClick={saveDecision} />
+                        <DavitBackButton onClick={saveDecision}/>
                     </OptionField>
                 </div>
                 <div className="optionFieldSpacer">
                     <OptionField label="Sequence - Options">
-                        <DavitDeleteButton onClick={deleteDecision} />
+                        <DavitDeleteButton onClick={deleteDecision}/>
                     </OptionField>
                 </div>
             </div>
-        </ControllPanelEditSub>
+        </ControlPanelEditSub>
     );
 };
 
-const useControllPanelEditChainConditionViewModel = () => {
+const useControlPanelEditChainConditionViewModel = () => {
     const decisionToEdit: ChainDecisionTO | null = useSelector(editSelectors.selectChainDecisionToEdit);
     const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
     const dispatch = useDispatch();
-    const textInput = useRef<HTMLInputElement>(null);
-    const [currentIfGoTo, setCurrentIfGoTo] = useState<GoToChain>({ type: GoToTypesChain.FIN });
-    const [currentElseGoTo, setCurrentElseGoTo] = useState<GoToChain>({ type: GoToTypesChain.ERROR });
+    const [currentIfGoTo, setCurrentIfGoTo] = useState<GoToChain>({type: GoToTypesChain.FIN});
+    const [currentElseGoTo, setCurrentElseGoTo] = useState<GoToChain>({type: GoToTypesChain.ERROR});
     const [key, setKey] = useState<number>(0);
 
     useEffect(() => {
@@ -168,8 +166,6 @@ const useControllPanelEditChainConditionViewModel = () => {
             setCurrentIfGoTo(decisionToEdit.ifGoTo);
             setCurrentElseGoTo(decisionToEdit.elseGoTo);
         }
-        // used to focus the textfield on create another
-        textInput.current!.focus();
     }, [dispatch, decisionToEdit]);
 
     const changeName = (name: string) => {
@@ -223,7 +219,7 @@ const useControllPanelEditChainConditionViewModel = () => {
 
     const handleType = (ifGoTo: boolean, newGoToType?: string) => {
         if (newGoToType !== undefined) {
-            const gType = { type: (GoToTypesChain as any)[newGoToType] };
+            const gType = {type: (GoToTypesChain as any)[newGoToType]};
             ifGoTo ? setCurrentIfGoTo(gType) : setCurrentElseGoTo(gType);
             switch (newGoToType) {
                 case GoToTypesChain.ERROR:
@@ -238,14 +234,14 @@ const useControllPanelEditChainConditionViewModel = () => {
 
     const setGoToTypeStep = (ifGoTo: boolean, link?: ChainlinkTO) => {
         if (link) {
-            const newGoTo: GoToChain = { type: GoToTypesChain.LINK, id: link.id };
+            const newGoTo: GoToChain = {type: GoToTypesChain.LINK, id: link.id};
             saveGoToType(ifGoTo, newGoTo);
         }
     };
 
     const setGoToTypeDecision = (ifGoTo: boolean, decision?: ChainDecisionTO) => {
         if (decision) {
-            const newGoTo: GoToChain = { type: GoToTypesChain.DEC, id: decision.id };
+            const newGoTo: GoToChain = {type: GoToTypesChain.DEC, id: decision.id};
             saveGoToType(ifGoTo, newGoTo);
         }
     };
@@ -280,7 +276,6 @@ const useControllPanelEditChainConditionViewModel = () => {
         name: decisionToEdit?.name,
         changeName,
         saveDecision,
-        textInput,
         validStep,
         deleteDecision,
         handleType,

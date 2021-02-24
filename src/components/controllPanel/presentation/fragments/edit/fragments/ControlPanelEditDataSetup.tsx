@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useEffect, useRef, useState} from "react";
+import React, {FunctionComponent, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Button} from "semantic-ui-react";
 import {ActorCTO} from "../../../../../../dataAccess/access/cto/ActorCTO";
@@ -15,15 +15,15 @@ import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTex
 import {DavitModal} from "../../../../../common/fragments/DavitModal";
 import {InitDataDropDownButton} from "../../../../../common/fragments/dropdowns/InitDataDropDown";
 import {DavitNoteForm} from "../../../../../common/fragments/forms/DavitNoteForm";
-import {ControllPanelEditSub} from "../common/ControllPanelEditSub";
+import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
 
-export interface ControllPanelEditDataSetupProps {
+export interface ControlPanelEditDataSetupProps {
     hidden: boolean;
 }
 
-export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditDataSetupProps> = (props) => {
-    const { hidden } = props;
+export const ControlPanelEditDataSetup: FunctionComponent<ControlPanelEditDataSetupProps> = (props) => {
+    const {hidden} = props;
 
     const [showNote, setShowNote] = useState<boolean>(false);
 
@@ -31,7 +31,6 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
         label,
         name,
         changeName,
-        textInput,
         saveDataSetup,
         deleteDataSetup,
         getInitDatas,
@@ -44,7 +43,7 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
     } = useControllPanelEditDataSetupViewModel();
 
     return (
-        <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={saveDataSetup}>
+        <ControlPanelEditSub label={label} hidden={hidden} onClickNavItem={saveDataSetup}>
             <div className="optionFieldSpacer">
                 <OptionField label="Data - SETUP NAME">
                     <DavitLabelTextfield
@@ -52,7 +51,7 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
                         placeholder="Data Setup Name ..."
                         onChangeDebounced={(name: string) => changeName(name)}
                         value={name}
-                        ref={textInput}
+                        focus={true}
                         onBlur={updateDataSetup}
                     />
                 </OptionField>
@@ -60,11 +59,11 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
             <div className="columnDivider optionFieldSpacer">
                 <OptionField label="Create / edit | Init - Data">
                     <Button.Group>
-                        <Button icon="add" inverted color="orange" onClick={createInitData} />
+                        <Button icon="add" inverted color="orange" onClick={createInitData}/>
                         <Button id="buttonGroupLabel" disabled inverted color="orange">
                             Data
                         </Button>
-                        <InitDataDropDownButton onSelect={editInitData} icon="wrench" initDatas={getInitDatas} />
+                        <InitDataDropDownButton onSelect={editInitData} icon="wrench" initDatas={getInitDatas}/>
                     </Button.Group>
                 </OptionField>
             </div>
@@ -91,17 +90,17 @@ export const ControllPanelEditDataSetup: FunctionComponent<ControllPanelEditData
             <div className="columnDivider controllPanelEditChild">
                 <div className="optionFieldSpacer">
                     <OptionField label="Navigation">
-                        <DavitButton onClick={createAnother} label="Create another" />
-                        <DavitBackButton onClick={saveDataSetup} />
+                        <DavitButton onClick={createAnother} label="Create another"/>
+                        <DavitBackButton onClick={saveDataSetup}/>
                     </OptionField>
                 </div>
                 <div className="optionFieldSpacer">
                     <OptionField label="Sequence - Options">
-                        <DavitDeleteButton onClick={deleteDataSetup} />
+                        <DavitDeleteButton onClick={deleteDataSetup}/>
                     </OptionField>
                 </div>
             </div>
-        </ControllPanelEditSub>
+        </ControlPanelEditSub>
     );
 };
 
@@ -109,7 +108,6 @@ const useControllPanelEditDataSetupViewModel = () => {
     const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.selectDataSetupToEdit);
     const dispatch = useDispatch();
     const [actorToEdit, setActorToEdit] = useState<ActorCTO | null>(null);
-    const textInput = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         // check if sequence to edit is really set or gos back to edit mode
@@ -117,8 +115,6 @@ const useControllPanelEditDataSetupViewModel = () => {
             handleError("Tried to go to edit dataSetup without dataSetupToedit specified");
             dispatch(EditActions.setMode.edit());
         }
-        // used to focus the textfield on create another
-        textInput.current!.focus();
     }, [dataSetupToEdit, dispatch]);
 
     const changeName = (name: string) => {
@@ -201,7 +197,6 @@ const useControllPanelEditDataSetupViewModel = () => {
         changeName,
         saveDataSetup,
         deleteDataSetup,
-        textInput,
         copyDataSetup,
         setActorToEdit,
         getInitDatas: dataSetupToEdit?.initDatas ? dataSetupToEdit.initDatas : [],

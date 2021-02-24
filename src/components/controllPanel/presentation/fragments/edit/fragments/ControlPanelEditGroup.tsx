@@ -1,6 +1,5 @@
-import React, {FunctionComponent, useEffect, useRef} from "react";
+import React, {FunctionComponent, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {isNullOrUndefined} from "util";
 import {GroupTO} from "../../../../../../dataAccess/access/to/GroupTO";
 import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
 import {handleError} from "../../../../../../slices/GlobalSlice";
@@ -10,18 +9,17 @@ import {DavitButton} from "../../../../../common/fragments/buttons/DavitButton";
 import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
 import {ColorDropDown} from "../../../../../common/fragments/dropdowns/ColorDropDown";
-import {ControllPanelEditSub} from "../common/ControllPanelEditSub";
+import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 
-export interface ControllPanelEditGroupProps {
+export interface ControlPanelEditGroupProps {
     hidden: boolean;
 }
 
-export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupProps> = (props) => {
-    const { hidden } = props;
+export const ControlPanelEditGroup: FunctionComponent<ControlPanelEditGroupProps> = (props) => {
+    const {hidden} = props;
     const {
         label,
         name,
-        textInput,
         changeName,
         saveGroup,
         deleteGroup,
@@ -30,10 +28,10 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
         createAnother,
         updateGroup,
         id,
-    } = useControllPanelEditGroupViewModel();
+    } = useControlPanelEditGroupViewModel();
 
     return (
-        <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveGroup}>
+        <ControlPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveGroup}>
             <div className="controllPanelEditChild">
                 <ColorDropDown
                     onSelect={setGroupColor}
@@ -47,25 +45,24 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
                     placeholder="Group Name ..."
                     onChangeDebounced={(name: string) => changeName(name)}
                     value={name}
-                    ref={textInput}
+                    focus={true}
                     onBlur={() => updateGroup()}
                 />
             </div>
             <div className="columnDivider controllPanelEditChild">
-                <DavitButton onClick={createAnother} label="Create another" />
-                <DavitButton onClick={saveGroup} label="OK" />
+                <DavitButton onClick={createAnother} label="Create another"/>
+                <DavitButton onClick={saveGroup} label="OK"/>
             </div>
             <div className="columnDivider controllPanelEditChild">
-                <DavitDeleteButton onClick={deleteGroup} />
+                <DavitDeleteButton onClick={deleteGroup}/>
             </div>
-        </ControllPanelEditSub>
+        </ControlPanelEditSub>
     );
 };
 
-const useControllPanelEditGroupViewModel = () => {
+const useControlPanelEditGroupViewModel = () => {
     const groupToEdit: GroupTO | null = useSelector(editSelectors.selectGroupToEdit);
     const dispatch = useDispatch();
-    const textInput = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         // check if sequence to edit is really set or gos back to edit mode
@@ -73,8 +70,7 @@ const useControllPanelEditGroupViewModel = () => {
             handleError("Tried to go to edit group without groupToEdit specified");
             dispatch(EditActions.setMode.edit());
         }
-        // used to focus the textfield on create another
-        textInput.current!.focus();
+
     }, [groupToEdit, dispatch]);
 
     const changeName = (name: string) => {
@@ -113,7 +109,7 @@ const useControllPanelEditGroupViewModel = () => {
     };
 
     const setGroupColor = (color: string | undefined) => {
-        if (!isNullOrUndefined(groupToEdit)) {
+        if (!DavitUtil.isNullOrUndefined(groupToEdit)) {
             const copyGroupToEdit: GroupTO = DavitUtil.deepCopy(groupToEdit);
             if (color !== undefined) {
                 copyGroupToEdit.color = color;
@@ -128,7 +124,6 @@ const useControllPanelEditGroupViewModel = () => {
         changeName,
         saveGroup,
         deleteGroup,
-        textInput,
         getGroupColor,
         setGroupColor,
         createAnother,

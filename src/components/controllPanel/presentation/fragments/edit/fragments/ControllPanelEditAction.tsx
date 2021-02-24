@@ -20,7 +20,7 @@ import {ActionTypeDropDown} from "../../../../../common/fragments/dropdowns/Acti
 import {ActorDropDown} from "../../../../../common/fragments/dropdowns/ActorDropDown";
 import {DataDropDown} from "../../../../../common/fragments/dropdowns/DataDropDown";
 import {DataAndInstanceId, InstanceDropDown} from "../../../../../common/fragments/dropdowns/InstanceDropDown";
-import {ControllPanelEditSub} from "../common/ControllPanelEditSub";
+import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
 
 export interface ControllPanelEditActionProps {
@@ -49,7 +49,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
     } = useControllPanelEditActionViewModel();
 
     return (
-        <ControllPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={setMode}>
+        <ControlPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={setMode}>
             <div className="optionFieldSpacer">
                 <OptionField>
                     <OptionField label="Select action to execute">
@@ -126,7 +126,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
                     </OptionField>
                 </div>
             </div>
-        </ControllPanelEditSub>
+        </ControlPanelEditSub>
     );
 };
 

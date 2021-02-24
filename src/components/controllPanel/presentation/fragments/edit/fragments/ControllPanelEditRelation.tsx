@@ -1,27 +1,27 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Dropdown, DropdownItemProps } from "semantic-ui-react";
-import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
-import { DataRelationTO, Direction, RelationType } from "../../../../../../dataAccess/access/to/DataRelationTO";
-import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
-import { handleError } from "../../../../../../slices/GlobalSlice";
-import { masterDataSelectors } from "../../../../../../slices/MasterDataSlice";
-import { EditRelation } from "../../../../../../slices/thunks/RelationThunks";
-import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
-import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
-import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
-import { DavitModal } from "../../../../../common/fragments/DavitModal";
-import { DavitNoteForm } from "../../../../../common/fragments/forms/DavitNoteForm";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { OptionField } from "../common/OptionField";
+import React, {FunctionComponent, useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {Dropdown, DropdownItemProps} from "semantic-ui-react";
+import {DataCTO} from "../../../../../../dataAccess/access/cto/DataCTO";
+import {DataRelationTO, Direction, RelationType} from "../../../../../../dataAccess/access/to/DataRelationTO";
+import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
+import {handleError} from "../../../../../../slices/GlobalSlice";
+import {masterDataSelectors} from "../../../../../../slices/MasterDataSlice";
+import {EditRelation} from "../../../../../../slices/thunks/RelationThunks";
+import {DavitUtil} from "../../../../../../utils/DavitUtil";
+import {DavitBackButton} from "../../../../../common/fragments/buttons/DavitBackButton";
+import {DavitButton} from "../../../../../common/fragments/buttons/DavitButton";
+import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import {DavitModal} from "../../../../../common/fragments/DavitModal";
+import {DavitNoteForm} from "../../../../../common/fragments/forms/DavitNoteForm";
+import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
+import {OptionField} from "../common/OptionField";
 
 export interface ControllPanelEditRelationProps {
     hidden: boolean;
 }
 
 export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelationProps> = (props) => {
-    const { hidden } = props;
+    const {hidden} = props;
 
     const [showNote, setShowNote] = useState<boolean>(false);
 
@@ -45,7 +45,7 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
     } = useControllPanelEditRelationViewModel();
 
     return (
-        <ControllPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveRelation}>
+        <ControlPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveRelation}>
             <div className="optionFieldSpacer">
                 <div className="optionField">
                     <OptionField label="Select first relation data">
@@ -137,17 +137,17 @@ export const ControllPanelEditRelation: FunctionComponent<ControllPanelEditRelat
             <div className="columnDivider controllPanelEditChild">
                 <div className="optionFieldSpacer">
                     <OptionField label="Navigation">
-                        <DavitBackButton onClick={saveRelation} />
-                        <DavitButton onClick={createAnother} label="Create another" />
+                        <DavitBackButton onClick={saveRelation}/>
+                        <DavitButton onClick={createAnother} label="Create another"/>
                     </OptionField>
                 </div>
                 <div className="optionFieldSpacer">
                     <OptionField label="Sequence - Options">
-                        <DavitDeleteButton onClick={deleteRelation} />
+                        <DavitDeleteButton onClick={deleteRelation}/>
                     </OptionField>
                 </div>
             </div>
-        </ControllPanelEditSub>
+        </ControlPanelEditSub>
     );
 };
 

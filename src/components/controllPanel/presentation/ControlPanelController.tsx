@@ -4,34 +4,35 @@ import {EditActions, editSelectors, Mode} from "../../../slices/EditSlice";
 import {DavitUtil} from "../../../utils/DavitUtil";
 import {ControlPanelEditController} from "./fragments/edit/ControlPanelEditController";
 import {ControlPanelFileController} from "./fragments/file/ControlPanelFileController";
-import {ControllPanelTabController} from "./fragments/tabs/ControllPanelTabController";
+import {ControlPanelTabController} from "./fragments/tabs/ControlPanelTabController";
 import {ControllPanelViewOptions} from "./fragments/view/ControllPanelViewOptions";
 
-export interface ControlPanelProps {}
+export interface ControlPanelProps {
+}
 
 export const ControlPanelController: FunctionComponent<ControlPanelProps> = () => {
-    const { mode } = useControllPanelViewModel();
+    const {mode} = useControllPanelViewModel();
 
     const useGetViewByMode = (mode: Mode) => {
         if (!DavitUtil.isNullOrUndefined(mode)) {
             if (mode.includes("EDIT")) {
-                return <ControlPanelEditController />;
+                return <ControlPanelEditController/>;
             }
             if (mode.includes("VIEW")) {
-                return <ControllPanelViewOptions hidden={!mode.includes("VIEW")} />;
+                return <ControllPanelViewOptions hidden={!mode.includes("VIEW")}/>;
             }
             if (mode.includes("FILE")) {
-                return <ControlPanelFileController hidden={!mode.includes("FILE")} />;
+                return <ControlPanelFileController hidden={!mode.includes("FILE")}/>;
             }
             if (mode.includes("TAB")) {
-                return <ControllPanelTabController hidden={!mode.includes("TAB")} />;
+                return <ControlPanelTabController hidden={!mode.includes("TAB")}/>;
             }
         }
     };
 
     return (
         <div className="controllerHeader">
-            <div style={{ display: "flex", width: "100%", padding: "0" }}>
+            <div style={{display: "flex", width: "100%", padding: "0"}}>
                 {/* {getModesDivs(mode, onClickNavItem)} */}
                 {/* <ControllPanelEditController />
       <ControllPanelSequenceOptions hidden={mode.includes("VIEW")} />
@@ -79,5 +80,5 @@ const useControllPanelViewModel = () => {
         }
     };
 
-    return { mode, onClickNavItem };
+    return {mode, onClickNavItem};
 };

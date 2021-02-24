@@ -1,27 +1,27 @@
-import React, { FunctionComponent, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
-import { ConditionTO } from "../../../../../../dataAccess/access/to/ConditionTO";
-import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
-import { handleError } from "../../../../../../slices/GlobalSlice";
-import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
-import { EditCondition } from "../../../../../../slices/thunks/ConditionThunks";
-import { EditDecision } from "../../../../../../slices/thunks/DecisionThunks";
-import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
-import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
-import { DavitMenuLabel } from "../../../../../common/fragments/DavitMenuLabel";
-import { ActorDropDown } from "../../../../../common/fragments/dropdowns/ActorDropDown";
-import { DataAndInstanceId, InstanceDropDown } from "../../../../../common/fragments/dropdowns/InstanceDropDown";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { OptionField } from "../common/OptionField";
+import React, {FunctionComponent, useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {SequenceCTO} from "../../../../../../dataAccess/access/cto/SequenceCTO";
+import {ConditionTO} from "../../../../../../dataAccess/access/to/ConditionTO";
+import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
+import {handleError} from "../../../../../../slices/GlobalSlice";
+import {sequenceModelSelectors} from "../../../../../../slices/SequenceModelSlice";
+import {EditCondition} from "../../../../../../slices/thunks/ConditionThunks";
+import {EditDecision} from "../../../../../../slices/thunks/DecisionThunks";
+import {DavitUtil} from "../../../../../../utils/DavitUtil";
+import {DavitBackButton} from "../../../../../common/fragments/buttons/DavitBackButton";
+import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import {DavitMenuLabel} from "../../../../../common/fragments/DavitMenuLabel";
+import {ActorDropDown} from "../../../../../common/fragments/dropdowns/ActorDropDown";
+import {DataAndInstanceId, InstanceDropDown} from "../../../../../common/fragments/dropdowns/InstanceDropDown";
+import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
+import {OptionField} from "../common/OptionField";
 
 export interface ControllPanelEditConditionProps {
     hidden: boolean;
 }
 
 export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditConditionProps> = (props) => {
-    const { hidden } = props;
+    const {hidden} = props;
     const {
         label,
         setMode,
@@ -33,7 +33,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
     } = useControllPanelEditConditionViewModel();
 
     return (
-        <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={setMode}>
+        <ControlPanelEditSub label={label} hidden={hidden} onClickNavItem={setMode}>
             <div className="optionFieldSpacer">
                 <OptionField label="Select Actor">
                     <ActorDropDown
@@ -43,7 +43,7 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
                 </OptionField>
             </div>
             <div className="columnDivider optionFieldSpacer">
-                <DavitMenuLabel text="HAS" />
+                <DavitMenuLabel text="HAS"/>
             </div>
             <div className="columnDivider optionFieldSpacer">
                 <OptionField label="Select data for actor">
@@ -57,11 +57,11 @@ export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditCond
             </div>
             <div className="columnDivider optionFieldSpacer">
                 <OptionField label="Navigation">
-                    <DavitDeleteButton onClick={deleteConditionAndGoToEditDecision} />
-                    <DavitBackButton onClick={setMode} />
+                    <DavitDeleteButton onClick={deleteConditionAndGoToEditDecision}/>
+                    <DavitBackButton onClick={setMode}/>
                 </OptionField>
             </div>
-        </ControllPanelEditSub>
+        </ControlPanelEditSub>
     );
 };
 
@@ -152,7 +152,7 @@ const useControllPanelEditConditionViewModel = () => {
         actorFk: conditionToEdit?.actorFk,
         setActorFk,
         setData,
-        selectedData: { dataFk: conditionToEdit?.dataFk, instanceId: conditionToEdit?.instanceFk },
+        selectedData: {dataFk: conditionToEdit?.dataFk, instanceId: conditionToEdit?.instanceFk},
         deleteConditionAndGoToEditDecision,
     };
 };

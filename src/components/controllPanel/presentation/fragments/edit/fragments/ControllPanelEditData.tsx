@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useEffect, useRef, useState} from "react";
+import React, {FunctionComponent, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Button} from "semantic-ui-react";
 import {DataCTO} from "../../../../../../dataAccess/access/cto/DataCTO";
@@ -13,7 +13,7 @@ import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTex
 import {DavitModal} from "../../../../../common/fragments/DavitModal";
 import {DataInstanceDropDownButton} from "../../../../../common/fragments/dropdowns/DataInstanceDropDown";
 import {DavitNoteForm} from "../../../../../common/fragments/forms/DavitNoteForm";
-import {ControllPanelEditSub} from "../common/ControllPanelEditSub";
+import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
 
 export interface ControllPanelEditDataProps {
@@ -21,13 +21,12 @@ export interface ControllPanelEditDataProps {
 }
 
 export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps> = (props) => {
-    const { hidden } = props;
+    const {hidden} = props;
 
     const [showModal, setShowModal] = useState<boolean>(false);
 
     const {
         label,
-        textInput,
         changeName,
         deleteData,
         name,
@@ -39,10 +38,10 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
         id,
         note,
         saveNote,
-    } = useControllPanelEditDataViewModel();
+    } = useControlPanelEditDataViewModel();
 
     return (
-        <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveData}>
+        <ControlPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveData}>
             <div className="optionFieldSpacer">
                 <OptionField label="Data - Name">
                     <DavitLabelTextfield
@@ -50,7 +49,7 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
                         placeholder="Data Name"
                         onChangeDebounced={changeName}
                         value={name}
-                        ref={textInput}
+                        focus={true}
                         onBlur={updateData}
                     />
                 </OptionField>
@@ -58,7 +57,7 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
             <div className="columnDivider optionFieldSpacer">
                 <OptionField label="create / edit | Data - Instance">
                     <Button.Group>
-                        <Button icon="add" inverted color="orange" onClick={() => editOrAddInstance()} />
+                        <Button icon="add" inverted color="orange" onClick={() => editOrAddInstance()}/>
                         <Button id="buttonGroupLabel" disabled inverted color="orange">
                             Instance
                         </Button>
@@ -92,29 +91,23 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
             <div className="columnDivider controllPanelEditChild">
                 <div className="optionFieldSpacer">
                     <OptionField label="Navigation">
-                        <DavitButton onClick={createAnother} label="Create another" />
-                        <DavitBackButton onClick={saveData} />
+                        <DavitButton onClick={createAnother} label="Create another"/>
+                        <DavitBackButton onClick={saveData}/>
                     </OptionField>
                 </div>
                 <div className="optionFieldSpacer">
                     <OptionField label="Sequence - Options">
-                        <DavitDeleteButton onClick={deleteData} />
+                        <DavitDeleteButton onClick={deleteData}/>
                     </OptionField>
                 </div>
             </div>
-        </ControllPanelEditSub>
+        </ControlPanelEditSub>
     );
 };
 
-const useControllPanelEditDataViewModel = () => {
+const useControlPanelEditDataViewModel = () => {
     const dataToEdit: DataCTO | null = useSelector(editSelectors.selectDataToEdit);
     const dispatch = useDispatch();
-    const textInput = useRef<HTMLInputElement>(null);
-
-    useEffect(() => {
-        // used to focus the textfield on create another
-        textInput.current!.focus();
-    }, [dataToEdit]);
 
     useEffect(() => {
         // check if component to edit is really set or gso back to edit mode
@@ -173,7 +166,6 @@ const useControllPanelEditDataViewModel = () => {
         changeName,
         saveData,
         deleteData,
-        textInput,
         updateData,
         createAnother,
         instances: dataToEdit?.data.instances ? dataToEdit.data.instances : [],

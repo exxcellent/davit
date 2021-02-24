@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useEffect, useRef, useState} from "react";
+import React, {FunctionComponent, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Button} from "semantic-ui-react";
 import {ChainDecisionTO} from "../../../../../../dataAccess/access/to/ChainDecisionTO";
@@ -17,19 +17,18 @@ import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDe
 import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
 import {ChainDecisionDropDownButton} from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
 import {ChainLinkDropDownButton} from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
-import {ControllPanelEditSub} from "../common/ControllPanelEditSub";
+import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
 
-export interface ControllPanelEditChainProps {
+export interface ControlPanelEditChainProps {
     hidden: boolean;
 }
 
-export const ControllPanelEditChain: FunctionComponent<ControllPanelEditChainProps> = (props) => {
-    const { hidden } = props;
+export const ControlPanelEditChain: FunctionComponent<ControlPanelEditChainProps> = (props) => {
+    const {hidden} = props;
     const {
         label,
         name,
-        textInput,
         changeName,
         createAnother,
         editOrAddDecision,
@@ -37,10 +36,10 @@ export const ControllPanelEditChain: FunctionComponent<ControllPanelEditChainPro
         deleteChain,
         id,
         editOrAddChainLink,
-    } = useControllPanelEditChainViewModel();
+    } = useControlPanelEditChainViewModel();
 
     return (
-        <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={saveChain}>
+        <ControlPanelEditSub label={label} hidden={hidden} onClickNavItem={saveChain}>
             <div className="optionFieldSpacer">
                 <OptionField label="Chain - name">
                     <DavitLabelTextfield
@@ -48,14 +47,14 @@ export const ControllPanelEditChain: FunctionComponent<ControllPanelEditChainPro
                         placeholder="Chain Name..."
                         onChangeDebounced={(name: string) => changeName(name)}
                         value={name}
-                        ref={textInput}
+                        focus={true}
                     />
                 </OptionField>
             </div>
             <div className="columnDivider optionFieldSpacer">
                 <OptionField label="Create / Edit | Chain - Link">
                     <Button.Group>
-                        <Button icon="add" inverted color="orange" onClick={() => editOrAddChainLink()} />
+                        <Button icon="add" inverted color="orange" onClick={() => editOrAddChainLink()}/>
                         <Button id="buttonGroupLabel" disabled inverted color="orange">
                             Link
                         </Button>
@@ -70,39 +69,38 @@ export const ControllPanelEditChain: FunctionComponent<ControllPanelEditChainPro
             <div className="columnDivider optionFieldSpacer">
                 <OptionField label="Create / Edit | Chain - Decision">
                     <Button.Group>
-                        <Button icon="add" inverted color="orange" onClick={() => editOrAddDecision()} />
+                        <Button icon="add" inverted color="orange" onClick={() => editOrAddDecision()}/>
                         <Button id="buttonGroupLabel" disabled inverted color="orange">
                             Decision
                         </Button>
-                        <ChainDecisionDropDownButton onSelect={editOrAddDecision} icon="wrench" chainId={id} />
+                        <ChainDecisionDropDownButton onSelect={editOrAddDecision} icon="wrench" chainId={id}/>
                     </Button.Group>
                 </OptionField>
             </div>
             <div className="columnDivider controllPanelEditChild">
                 <div>
                     <OptionField label="Navigation">
-                        <DavitButton onClick={createAnother} label="Create another" />
-                        <DavitBackButton onClick={saveChain} />
+                        <DavitButton onClick={createAnother} label="Create another"/>
+                        <DavitBackButton onClick={saveChain}/>
                     </OptionField>
                 </div>
                 <div className="optionFieldSpacer">
                     <div>
                         <OptionField label="Sequence - Options">
-                            <DavitDeleteButton onClick={deleteChain} />
+                            <DavitDeleteButton onClick={deleteChain}/>
                         </OptionField>
                     </div>
                 </div>
             </div>
-        </ControllPanelEditSub>
+        </ControlPanelEditSub>
     );
 };
 
-const useControllPanelEditChainViewModel = () => {
+const useControlPanelEditChainViewModel = () => {
     const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
     const dispatch = useDispatch();
     const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
     const isFirst: boolean = useSelector(masterDataSelectors.isFirstChainElement(selectedChain?.id || -1));
-    const textInput = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         // check if sequence to edit is really set or gos back to edit mode
@@ -113,8 +111,6 @@ const useControllPanelEditChainViewModel = () => {
         if (selectedChain?.id !== -1) {
             setIsCreateAnother(false);
         }
-        // used to focus the textfield on create another
-        textInput.current!.focus();
     }, [selectedChain, dispatch]);
 
     const changeName = (name: string) => {
@@ -190,7 +186,6 @@ const useControllPanelEditChainViewModel = () => {
         changeName,
         saveChain,
         deleteChain,
-        textInput,
         validateInput,
         createAnother,
         updateSequence,

@@ -12,7 +12,7 @@ import {DataDropDownButton} from "../../../../../common/fragments/dropdowns/Data
 import {DataSetupDropDownButton} from "../../../../../common/fragments/dropdowns/DataSetupDropDown";
 import {RelationDropDownButton} from "../../../../../common/fragments/dropdowns/RelationDropDown";
 import {SequenceDropDownButton} from "../../../../../common/fragments/dropdowns/SequenceDropDown";
-import {ControllPanelEditSub} from "../common/ControllPanelEditSub";
+import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
 
 export interface ControlPanelEditMenuProps {
@@ -39,7 +39,7 @@ export const ControlPanelEditMenu: FunctionComponent<ControlPanelEditMenuProps> 
     } = props;
 
     return (
-        <ControllPanelEditSub
+        <ControlPanelEditSub
             label="EDIT"
             hidden={hidden}
             onClickNavItem={() => {
@@ -113,6 +113,6 @@ export const ControlPanelEditMenu: FunctionComponent<ControlPanelEditMenuProps> 
                     </Button.Group>
                 </OptionField>
             </div>
-        </ControllPanelEditSub>
+        </ControlPanelEditSub>
     );
 };

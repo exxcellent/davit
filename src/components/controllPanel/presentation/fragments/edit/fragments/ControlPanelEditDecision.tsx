@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useEffect, useRef, useState} from "react";
+import React, {FunctionComponent, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Button} from "semantic-ui-react";
 import {SequenceCTO} from "../../../../../../dataAccess/access/cto/SequenceCTO";
@@ -23,15 +23,15 @@ import {DecisionDropDown} from "../../../../../common/fragments/dropdowns/Decisi
 import {GoToOptionDropDown} from "../../../../../common/fragments/dropdowns/GoToOptionDropDown";
 import {StepDropDown} from "../../../../../common/fragments/dropdowns/StepDropDown";
 import {DavitNoteForm} from "../../../../../common/fragments/forms/DavitNoteForm";
-import {ControllPanelEditSub} from "../common/ControllPanelEditSub";
+import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
 
-export interface ControllPanelEditDecisionProps {
+export interface ControlPanelEditDecisionProps {
     hidden: boolean;
 }
 
-export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecisionProps> = (props) => {
-    const { hidden } = props;
+export const ControlPanelEditDecision: FunctionComponent<ControlPanelEditDecisionProps> = (props) => {
+    const {hidden} = props;
 
     const [showNote, setShowNote] = useState<boolean>(false);
 
@@ -40,7 +40,6 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
         name,
         changeName,
         saveDecision,
-        textInput,
         handleType,
         ifGoTo,
         elseGoTo,
@@ -58,10 +57,10 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
         conditions,
         note,
         saveNote,
-    } = useControllPanelEditConditionViewModel();
+    } = useControlPanelEditConditionViewModel();
 
     return (
-        <ControllPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveDecision}>
+        <ControlPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveDecision}>
             <div className="controllPanelEditChild">
                 <div className="optionField">
                     <OptionField label="Decision - name">
@@ -70,13 +69,13 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
                             placeholder="Decision name ..."
                             onChangeDebounced={(name: string) => changeName(name)}
                             value={name}
-                            ref={textInput}
+                            focus={true}
                             onBlur={updateDecision}
                         />
                     </OptionField>
                     <OptionField label="Create / Edit Condition">
                         <Button.Group>
-                            <Button icon="add" inverted color="orange" onClick={() => editOrAddCondition()} />
+                            <Button icon="add" inverted color="orange" onClick={() => editOrAddCondition()}/>
                             <Button id="buttonGroupLabel" disabled inverted color="orange">
                                 Condition
                             </Button>
@@ -90,7 +89,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
                 </div>
             </div>
             <div className="columnDivider optionFieldSpacer">
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{display: "flex", justifyContent: "space-between"}}>
                     <OptionField label="Type condition true">
                         <GoToOptionDropDown
                             onSelect={(gt) => handleType(true, gt)}
@@ -99,7 +98,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
                     </OptionField>
                     {ifGoTo!.type === GoToTypes.STEP && (
                         <OptionField label="Create or Select next step">
-                            <DavitAddButton onClick={() => createGoToStep(true)} />
+                            <DavitAddButton onClick={() => createGoToStep(true)}/>
                             <StepDropDown
                                 onSelect={(step) => setGoToTypeStep(true, step)}
                                 value={ifGoTo?.type === GoToTypes.STEP ? ifGoTo.id : 1}
@@ -108,7 +107,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
                     )}
                     {ifGoTo!.type === GoToTypes.DEC && (
                         <OptionField label="Create or Select next condition">
-                            <DavitAddButton onClick={() => createGoToDecision(true)} />
+                            <DavitAddButton onClick={() => createGoToDecision(true)}/>
                             <DecisionDropDown
                                 onSelect={(cond) => setGoToTypeDecision(true, cond)}
                                 value={ifGoTo?.type === GoToTypes.DEC ? ifGoTo.id : 1}
@@ -119,7 +118,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
                 </div>
             </div>
             <div className="columnDivider optionFieldSpacer">
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{display: "flex", justifyContent: "space-between"}}>
                     <OptionField label="Type condition false">
                         <GoToOptionDropDown
                             onSelect={(gt) => handleType(false, gt)}
@@ -128,7 +127,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
                     </OptionField>
                     {elseGoTo!.type === GoToTypes.STEP && (
                         <OptionField label="Select type of the next element">
-                            <DavitAddButton onClick={() => createGoToStep(false)} />
+                            <DavitAddButton onClick={() => createGoToStep(false)}/>
                             <StepDropDown
                                 onSelect={(step) => setGoToTypeStep(false, step)}
                                 value={elseGoTo?.type === GoToTypes.STEP ? elseGoTo.id : 1}
@@ -137,7 +136,7 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
                     )}
                     {elseGoTo!.type === GoToTypes.DEC && (
                         <OptionField label="Create or Select next condition">
-                            <DavitAddButton onClick={() => createGoToDecision(false)} />
+                            <DavitAddButton onClick={() => createGoToDecision(false)}/>
                             <DecisionDropDown
                                 onSelect={(cond) => setGoToTypeDecision(false, cond)}
                                 value={elseGoTo?.type === GoToTypes.DEC ? elseGoTo.id : 1}
@@ -165,31 +164,30 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
                                 }
                             />
                         )}
-                        <DavitBackButton onClick={saveDecision} />
+                        <DavitBackButton onClick={saveDecision}/>
                     </OptionField>
                 </div>
                 <div className="controllPanelEditChild">
                     <div>
                         <OptionField label="Sequence - Options">
-                            <DavitRootButton onClick={setRoot} isRoot={isRoot} />
+                            <DavitRootButton onClick={setRoot} isRoot={isRoot}/>
                             <div>
-                                <DavitDeleteButton onClick={deleteDecision} />
+                                <DavitDeleteButton onClick={deleteDecision}/>
                             </div>
                         </OptionField>
                     </div>
                 </div>
             </div>
-        </ControllPanelEditSub>
+        </ControlPanelEditSub>
     );
 };
 
-const useControllPanelEditConditionViewModel = () => {
+const useControlPanelEditConditionViewModel = () => {
     const decisionToEdit: DecisionTO | null = useSelector(editSelectors.selectDecisionToEdit);
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const dispatch = useDispatch();
-    const textInput = useRef<HTMLInputElement>(null);
-    const [currentIfGoTo, setCurrentIfGoTo] = useState<GoTo>({ type: GoToTypes.STEP, id: -1 });
-    const [currentElseGoTo, setCurrentElseGoTo] = useState<GoTo>({ type: GoToTypes.STEP, id: -1 });
+    const [currentIfGoTo, setCurrentIfGoTo] = useState<GoTo>({type: GoToTypes.STEP, id: -1});
+    const [currentElseGoTo, setCurrentElseGoTo] = useState<GoTo>({type: GoToTypes.STEP, id: -1});
     const [key, setKey] = useState<number>(0);
 
     useEffect(() => {
@@ -201,8 +199,7 @@ const useControllPanelEditConditionViewModel = () => {
             setCurrentIfGoTo(decisionToEdit.ifGoTo);
             setCurrentElseGoTo(decisionToEdit.elseGoTo);
         }
-        // used to focus the textfield on create another
-        textInput.current!.focus();
+
     }, [dispatch, decisionToEdit]);
 
     const changeName = (name: string) => {
@@ -272,7 +269,7 @@ const useControllPanelEditConditionViewModel = () => {
 
     const handleType = (ifGoTo: Boolean, newGoToType?: string) => {
         if (newGoToType !== undefined) {
-            const gType = { type: (GoToTypes as any)[newGoToType] };
+            const gType = {type: (GoToTypes as any)[newGoToType]};
             ifGoTo ? setCurrentIfGoTo(gType) : setCurrentElseGoTo(gType);
             switch (newGoToType) {
                 case GoToTypes.ERROR:
@@ -290,14 +287,14 @@ const useControllPanelEditConditionViewModel = () => {
 
     const setGoToTypeStep = (ifGoTo: Boolean, step?: SequenceStepCTO) => {
         if (step) {
-            const newGoTo: GoTo = { type: GoToTypes.STEP, id: step.squenceStepTO.id };
+            const newGoTo: GoTo = {type: GoToTypes.STEP, id: step.squenceStepTO.id};
             saveGoToType(ifGoTo, newGoTo);
         }
     };
 
     const setGoToTypeDecision = (ifGoTo: Boolean, decision?: DecisionTO) => {
         if (decision) {
-            const newGoTo: GoTo = { type: GoToTypes.DEC, id: decision.id };
+            const newGoTo: GoTo = {type: GoToTypes.DEC, id: decision.id};
             saveGoToType(ifGoTo, newGoTo);
         }
     };
@@ -345,7 +342,6 @@ const useControllPanelEditConditionViewModel = () => {
         name: decisionToEdit?.name,
         changeName,
         saveDecision,
-        textInput,
         validStep,
         updateDecision,
         deleteDecision,

@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useEffect, useRef, useState} from "react";
+import React, {FunctionComponent, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {ChainDecisionTO} from "../../../../../../dataAccess/access/to/ChainDecisionTO";
 import {ChainlinkTO} from "../../../../../../dataAccess/access/to/ChainlinkTO";
@@ -22,20 +22,19 @@ import {ChainLinkDropDown} from "../../../../../common/fragments/dropdowns/Chain
 import {DataSetupDropDown} from "../../../../../common/fragments/dropdowns/DataSetupDropDown";
 import {GoToChainOptionDropDown} from "../../../../../common/fragments/dropdowns/GoToChainOptionDropDown";
 import {SequenceDropDown} from "../../../../../common/fragments/dropdowns/SequenceDropDown";
-import {ControllPanelEditSub} from "../common/ControllPanelEditSub";
+import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
 
-export interface ControllPanelEditChainLinkProps {
+export interface ControlPanelEditChainLinkProps {
     hidden: boolean;
 }
 
-export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChainLinkProps> = (props) => {
-    const { hidden } = props;
+export const ControlPanelEditChainLink: FunctionComponent<ControlPanelEditChainLinkProps> = (props) => {
+    const {hidden} = props;
     const {
         label,
         name,
         changeName,
-        textInput,
         goTo,
         isRoot,
         currentDataSetup,
@@ -53,10 +52,10 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
         createGoToDecision,
         setRoot,
         id,
-    } = useControllPanelEditChainStepViewModel();
+    } = useControlPanelEditChainStepViewModel();
 
     return (
-        <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveChainLink}>
+        <ControlPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveChainLink}>
             <div className="optionFieldSpacer">
                 <OptionField label="Chainlink - name">
                     <DavitLabelTextfield
@@ -64,7 +63,7 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
                         placeholder="Chainlink Name ..."
                         onChangeDebounced={(name: string) => changeName(name)}
                         value={name}
-                        ref={textInput}
+                        focus={true}
                     />
                 </OptionField>
             </div>
@@ -78,12 +77,12 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
                         />
                     </OptionField>
                     <OptionField label="Select Sequence">
-                        <SequenceDropDown onSelect={(seqModel) => setSequenceModel(seqModel)} value={currentSequence} />
+                        <SequenceDropDown onSelect={(seqModel) => setSequenceModel(seqModel)} value={currentSequence}/>
                     </OptionField>
                 </OptionField>
             </div>
             <div className="optionFieldSpacer columnDivider">
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{display: "flex", justifyContent: "space-between"}}>
                     <OptionField label="Select type of the next">
                         <GoToChainOptionDropDown
                             onSelect={handleType}
@@ -92,7 +91,7 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
                     </OptionField>
                     {goTo!.type === GoToTypesChain.LINK && (
                         <OptionField label="Create or Select next link">
-                            <DavitAddButton onClick={createNewChainLink} />
+                            <DavitAddButton onClick={createNewChainLink}/>
                             <ChainLinkDropDown
                                 onSelect={setNextLink}
                                 value={goTo?.type === GoToTypesChain.LINK ? goTo.id : 1}
@@ -104,7 +103,7 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
 
                     {goTo!.type === GoToTypesChain.DEC && (
                         <OptionField label="Create or Select next decision">
-                            <DavitAddButton onClick={createGoToDecision} />
+                            <DavitAddButton onClick={createGoToDecision}/>
                             <ChainDecisionDropDown
                                 onSelect={(cond) => setNextDecision(cond)}
                                 value={goTo?.type === GoToTypesChain.DEC ? goTo.id : 1}
@@ -117,30 +116,29 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
             <div className="columnDivider controllPanelEditChild">
                 <div>
                     <OptionField label="Navigation">
-                        <DavitBackButton onClick={saveChainLink} />
+                        <DavitBackButton onClick={saveChainLink}/>
                     </OptionField>
                 </div>
                 <div className="controllPanelEditChild">
                     <div>
                         <OptionField label="Sequence - Options">
-                            <DavitRootButton onClick={setRoot} isRoot={isRoot} />
+                            <DavitRootButton onClick={setRoot} isRoot={isRoot}/>
                             <div>
-                                <DavitDeleteButton onClick={deleteChainLink} disable={isRoot} />
+                                <DavitDeleteButton onClick={deleteChainLink} disable={isRoot}/>
                             </div>
                         </OptionField>
                     </div>
                 </div>
             </div>
-        </ControllPanelEditSub>
+        </ControlPanelEditSub>
     );
 };
 
-const useControllPanelEditChainStepViewModel = () => {
+const useControlPanelEditChainStepViewModel = () => {
     const chainLinkToEdit: ChainlinkTO | null = useSelector(editSelectors.selectChainLinkToEdit);
     const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
     const dispatch = useDispatch();
-    const textInput = useRef<HTMLInputElement>(null);
-    const [currentGoTo, setCurrentGoTo] = useState<GoToChain>({ type: GoToTypesChain.LINK, id: -1 });
+    const [currentGoTo, setCurrentGoTo] = useState<GoToChain>({type: GoToTypesChain.LINK, id: -1});
 
     useEffect(() => {
         if (DavitUtil.isNullOrUndefined(chainLinkToEdit)) {
@@ -150,8 +148,6 @@ const useControllPanelEditChainStepViewModel = () => {
         if (chainLinkToEdit) {
             setCurrentGoTo(chainLinkToEdit.goto);
         }
-        // used to focus the textfield on create another
-        textInput.current!.focus();
     }, [dispatch, chainLinkToEdit]);
 
     const changeName = (name: string) => {
@@ -196,7 +192,7 @@ const useControllPanelEditChainStepViewModel = () => {
 
     const handleType = (newGoToType?: string) => {
         if (newGoToType !== undefined) {
-            const gType = { type: (GoToTypesChain as any)[newGoToType] };
+            const gType = {type: (GoToTypesChain as any)[newGoToType]};
             setCurrentGoTo(gType);
             switch (newGoToType) {
                 case GoToTypesChain.ERROR:
@@ -211,14 +207,14 @@ const useControllPanelEditChainStepViewModel = () => {
 
     const setNextLink = (link?: ChainlinkTO) => {
         if (link) {
-            const newGoTo: GoToChain = { type: GoToTypesChain.LINK, id: link.id };
+            const newGoTo: GoToChain = {type: GoToTypesChain.LINK, id: link.id};
             saveGoToType(newGoTo);
         }
     };
 
     const setNextDecision = (decision?: ChainDecisionTO) => {
         if (decision) {
-            const newGoTo: GoToChain = { type: GoToTypesChain.DEC, id: decision.id };
+            const newGoTo: GoToChain = {type: GoToTypesChain.DEC, id: decision.id};
             saveGoToType(newGoTo);
         }
     };
@@ -280,7 +276,6 @@ const useControllPanelEditChainStepViewModel = () => {
         changeName,
         saveChainLink,
         deleteChainLink,
-        textInput,
         goTo: currentGoTo,
         isRoot: chainLinkToEdit?.root ? chainLinkToEdit.root : false,
         stepId: chainLinkToEdit?.id,

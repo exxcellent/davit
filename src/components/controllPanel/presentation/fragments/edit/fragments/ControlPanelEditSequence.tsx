@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useEffect, useRef, useState} from "react";
+import React, {FunctionComponent, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Button} from "semantic-ui-react";
 import {SequenceCTO} from "../../../../../../dataAccess/access/cto/SequenceCTO";
@@ -18,21 +18,20 @@ import {DavitModal} from "../../../../../common/fragments/DavitModal";
 import {DecisionDropDownButton} from "../../../../../common/fragments/dropdowns/DecisionDropDown";
 import {StepDropDownButton} from "../../../../../common/fragments/dropdowns/StepDropDown";
 import {DavitNoteForm} from "../../../../../common/fragments/forms/DavitNoteForm";
-import {ControllPanelEditSub} from "../common/ControllPanelEditSub";
+import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
 
-export interface ControllPanelEditSequenceProps {
+export interface ControlPanelEditSequenceProps {
     hidden: boolean;
 }
 
-export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSequenceProps> = (props) => {
-    const { hidden } = props;
+export const ControlPanelEditSequence: FunctionComponent<ControlPanelEditSequenceProps> = (props) => {
+    const {hidden} = props;
     const [showNote, setShowNote] = useState<boolean>(false);
 
     const {
         label,
         name,
-        textInput,
         changeName,
         deleteSequence,
         saveSequence,
@@ -43,14 +42,14 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
         id,
         note,
         saveNote,
-    } = useControllPanelEditSequenceViewModel();
+    } = useControlPanelEditSequenceViewModel();
 
     const menuButtons = (
         <div className="columnDivider controllPanelEditChild">
             <div className="optionFieldSpacer">
                 <OptionField label="Navigation">
-                    <DavitButton onClick={createAnother} label="Create another" />
-                    <DavitBackButton onClick={saveSequence} />
+                    <DavitButton onClick={createAnother} label="Create another"/>
+                    <DavitBackButton onClick={saveSequence}/>
                 </OptionField>
             </div>
             <div className="optionFieldSpacer">
@@ -70,14 +69,14 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
                             }
                         />
                     )}
-                    <DavitDeleteButton onClick={deleteSequence} />
+                    <DavitDeleteButton onClick={deleteSequence}/>
                 </OptionField>
             </div>
         </div>
     );
 
     return (
-        <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveSequence}>
+        <ControlPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveSequence}>
             <div className="optionFieldSpacer">
                 <OptionField label="Sequence - name">
                     <DavitLabelTextfield
@@ -85,7 +84,7 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
                         placeholder="Sequence Name..."
                         onChangeDebounced={(name: string) => changeName(name)}
                         value={name}
-                        ref={textInput}
+                        focus={true}
                         onBlur={updateSequence}
                     />
                 </OptionField>
@@ -93,36 +92,35 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
             <div className="columnDivider optionFieldSpacer">
                 <OptionField label="Create / Edit | Sequence - Step">
                     <Button.Group>
-                        <Button icon="add" inverted color="orange" onClick={() => editOrAddSequenceStep()} />
+                        <Button icon="add" inverted color="orange" onClick={() => editOrAddSequenceStep()}/>
                         <Button id="buttonGroupLabel" disabled inverted color="orange">
                             Step
                         </Button>
-                        <StepDropDownButton onSelect={editOrAddSequenceStep} icon="wrench" />
+                        <StepDropDownButton onSelect={editOrAddSequenceStep} icon="wrench"/>
                     </Button.Group>
                 </OptionField>
             </div>
             <div className="columnDivider optionFieldSpacer">
                 <OptionField label="Create / Edit | Sequence - Decision">
                     <Button.Group>
-                        <Button icon="add" inverted color="orange" onClick={() => editOrAddDecision()} />
+                        <Button icon="add" inverted color="orange" onClick={() => editOrAddDecision()}/>
                         <Button id="buttonGroupLabel" disabled inverted color="orange">
                             Decision
                         </Button>
-                        <DecisionDropDownButton onSelect={editOrAddDecision} icon="wrench" />
+                        <DecisionDropDownButton onSelect={editOrAddDecision} icon="wrench"/>
                     </Button.Group>
                 </OptionField>
             </div>
             {menuButtons}
-        </ControllPanelEditSub>
+        </ControlPanelEditSub>
     );
 };
 
-const useControllPanelEditSequenceViewModel = () => {
+const useControlPanelEditSequenceViewModel = () => {
     const sequenceToEdit: SequenceTO | null = useSelector(editSelectors.selectSequenceToEdit);
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const dispatch = useDispatch();
     const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
-    const textInput = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         // check if sequence to edit is really set or gos back to edit mode
@@ -133,8 +131,6 @@ const useControllPanelEditSequenceViewModel = () => {
         if (sequenceToEdit?.id !== -1) {
             setIsCreateAnother(false);
         }
-        // used to focus the textfield on create another
-        textInput.current!.focus();
     }, [sequenceToEdit, dispatch]);
 
     const changeName = (name: string) => {
@@ -225,7 +221,6 @@ const useControllPanelEditSequenceViewModel = () => {
         changeName,
         saveSequence,
         deleteSequence,
-        textInput,
         editOrAddSequenceStep,
         validateInput,
         copySequence,

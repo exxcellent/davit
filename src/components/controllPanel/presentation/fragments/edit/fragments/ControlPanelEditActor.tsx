@@ -1,4 +1,4 @@
-import React, {FunctionComponent, Ref, useEffect, useRef, useState} from "react";
+import React, {FunctionComponent, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {ActorCTO} from "../../../../../../dataAccess/access/cto/ActorCTO";
 import {GroupTO} from "../../../../../../dataAccess/access/to/GroupTO";
@@ -12,7 +12,7 @@ import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDe
 import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
 import {DavitModal} from "../../../../../common/fragments/DavitModal";
 import {DavitNoteForm} from "../../../../../common/fragments/forms/DavitNoteForm";
-import {ControllPanelEditSub} from "../common/ControllPanelEditSub";
+import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
 
 export interface ControlPanelEditActorProps {
@@ -24,14 +24,6 @@ export const ControlPanelEditActor: FunctionComponent<ControlPanelEditActorProps
 
     const [showNote, setShowNote] = useState<boolean>(false);
 
-    const textInput: Ref<HTMLInputElement> = useRef<HTMLInputElement>(null);
-
-    // focus on input field on render.
-    useEffect(() => {
-        if (textInput !== null && textInput.current !== null) {
-            textInput.current.focus();
-        }
-    }, [textInput]);
 
     const {
         label,
@@ -47,7 +39,7 @@ export const ControlPanelEditActor: FunctionComponent<ControlPanelEditActorProps
     } = useControllPanelEditActorViewModel();
 
     return (
-        <ControllPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveActor}>
+        <ControlPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveActor}>
             <div className="optionFieldSpacer">
                 <OptionField label="Component - Name">
                     <DavitLabelTextfield
@@ -56,7 +48,7 @@ export const ControlPanelEditActor: FunctionComponent<ControlPanelEditActorProps
                         onChangeDebounced={(name: string) => changeName(name)}
                         onBlur={updateActor}
                         value={name}
-                        ref={textInput}
+                        focus
                     />
                 </OptionField>
             </div>
@@ -92,7 +84,7 @@ export const ControlPanelEditActor: FunctionComponent<ControlPanelEditActorProps
                     <DavitDeleteButton onClick={deleteComponent}/>
                 </OptionField>
             </div>
-        </ControllPanelEditSub>
+        </ControlPanelEditSub>
     );
 };
 

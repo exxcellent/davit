@@ -9,21 +9,21 @@ import {GroupTO} from "../../../../../dataAccess/access/to/GroupTO";
 import {EditActions, editSelectors, Mode} from "../../../../../slices/EditSlice";
 import {ControllPanelEditAction} from "./fragments/ControllPanelEditAction";
 import {ControlPanelEditActor} from "./fragments/ControlPanelEditActor";
-import {ControllPanelEditChain} from "./fragments/ControllPanelEditChain";
+import {ControlPanelEditChain} from "./fragments/ControlPanelEditChain";
 import {ControllPanelEditChainCondition} from "./fragments/ControllPanelEditChainCondition";
-import {ControllPanelEditChainDecision} from "./fragments/ControllPanelEditChainDecision";
-import {ControllPanelEditChainLink} from "./fragments/ControllPanelEditChainLink";
+import {ControlPanelEditChainDecision} from "./fragments/ControlPanelEditChainDecision";
+import {ControlPanelEditChainLink} from "./fragments/ControlPanelEditChainLink";
 import {ControllPanelEditCondition} from "./fragments/ControllPanelEditCondition";
 import {ControllPanelEditData} from "./fragments/ControllPanelEditData";
-import {ControllPanelEditDataInstance} from "./fragments/ControllPanelEditDataInstance";
-import {ControllPanelEditDataSetup} from "./fragments/ControllPanelEditDataSetup";
-import {ControllPanelEditDecision} from "./fragments/ControllPanelEditDecision";
-import {ControllPanelEditGroup} from "./fragments/ControllPanelEditGroup";
+import {ControlPanelEditDataInstance} from "./fragments/ControlPanelEditDataInstance";
+import {ControlPanelEditDataSetup} from "./fragments/ControlPanelEditDataSetup";
+import {ControlPanelEditDecision} from "./fragments/ControlPanelEditDecision";
+import {ControlPanelEditGroup} from "./fragments/ControlPanelEditGroup";
 import {ControllPanelEditInitData} from "./fragments/ControllPanelEditInitData";
 import {ControlPanelEditMenu} from "./fragments/ControlPanelEditMenu";
 import {ControllPanelEditRelation} from "./fragments/ControllPanelEditRelation";
-import {ControllPanelEditSequence} from "./fragments/ControllPanelEditSequence";
-import {ControllPanelEditStep} from "./fragments/ControllPanelEditStep";
+import {ControlPanelEditSequence} from "./fragments/ControlPanelEditSequence";
+import {ControlPanelEditStep} from "./fragments/ControlPanelEditStep";
 
 export interface ControlPanelEditControllerProps {
 }
@@ -46,33 +46,33 @@ export const ControlPanelEditController: FunctionComponent<ControlPanelEditContr
             case Mode.EDIT_ACTOR:
                 return <ControlPanelEditActor hidden={mode !== Mode.EDIT_ACTOR}/>;
             case Mode.EDIT_GROUP:
-                return <ControllPanelEditGroup hidden={mode !== Mode.EDIT_GROUP}/>;
+                return <ControlPanelEditGroup hidden={mode !== Mode.EDIT_GROUP}/>;
             case Mode.EDIT_DATA:
                 return <ControllPanelEditData hidden={mode !== Mode.EDIT_DATA}/>;
             case Mode.EDIT_DATA_INSTANCE:
-                return <ControllPanelEditDataInstance hidden={mode !== Mode.EDIT_DATA_INSTANCE}/>;
+                return <ControlPanelEditDataInstance hidden={mode !== Mode.EDIT_DATA_INSTANCE}/>;
             case Mode.EDIT_RELATION:
                 return <ControllPanelEditRelation hidden={mode !== Mode.EDIT_RELATION}/>;
             case Mode.EDIT_SEQUENCE:
-                return <ControllPanelEditSequence hidden={mode !== Mode.EDIT_SEQUENCE}/>;
+                return <ControlPanelEditSequence hidden={mode !== Mode.EDIT_SEQUENCE}/>;
             case Mode.EDIT_SEQUENCE_STEP:
-                return <ControllPanelEditStep hidden={mode !== Mode.EDIT_SEQUENCE_STEP}/>;
+                return <ControlPanelEditStep hidden={mode !== Mode.EDIT_SEQUENCE_STEP}/>;
             case Mode.EDIT_SEQUENCE_DECISION:
-                return <ControllPanelEditDecision hidden={mode !== Mode.EDIT_SEQUENCE_DECISION}/>;
+                return <ControlPanelEditDecision hidden={mode !== Mode.EDIT_SEQUENCE_DECISION}/>;
             case Mode.EDIT_SEQUENCE_DECISION_CONDITION:
                 return <ControllPanelEditCondition hidden={mode !== Mode.EDIT_SEQUENCE_DECISION_CONDITION}/>;
             case Mode.EDIT_SEQUENCE_STEP_ACTION:
                 return <ControllPanelEditAction hidden={mode !== Mode.EDIT_SEQUENCE_STEP_ACTION}/>;
             case Mode.EDIT_DATASETUP:
-                return <ControllPanelEditDataSetup hidden={mode !== Mode.EDIT_DATASETUP}/>;
+                return <ControlPanelEditDataSetup hidden={mode !== Mode.EDIT_DATASETUP}/>;
             case Mode.EDIT_DATASETUP_INITDATA:
                 return <ControllPanelEditInitData hidden={mode !== Mode.EDIT_DATASETUP_INITDATA}/>;
             case Mode.EDIT_CHAIN:
-                return <ControllPanelEditChain hidden={mode !== Mode.EDIT_CHAIN}/>;
+                return <ControlPanelEditChain hidden={mode !== Mode.EDIT_CHAIN}/>;
             case Mode.EDIT_CHAIN_LINK:
-                return <ControllPanelEditChainLink hidden={mode !== Mode.EDIT_CHAIN_LINK}/>;
+                return <ControlPanelEditChainLink hidden={mode !== Mode.EDIT_CHAIN_LINK}/>;
             case Mode.EDIT_CHAIN_DECISION:
-                return <ControllPanelEditChainDecision hidden={mode !== Mode.EDIT_CHAIN_DECISION}/>;
+                return <ControlPanelEditChainDecision hidden={mode !== Mode.EDIT_CHAIN_DECISION}/>;
             case Mode.EDIT_CHAIN_DECISION_CONDITION:
                 return <ControllPanelEditChainCondition hidden={mode !== Mode.EDIT_CHAIN_DECISION_CONDITION}/>;
             default:
