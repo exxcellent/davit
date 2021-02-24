@@ -14,12 +14,11 @@ import {DavitBackButton} from "../../../../../common/fragments/buttons/DavitBack
 import {DavitButton} from "../../../../../common/fragments/buttons/DavitButton";
 import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
-import {DavitModal} from "../../../../../common/fragments/DavitModal";
 import {DecisionDropDownButton} from "../../../../../common/fragments/dropdowns/DecisionDropDown";
 import {StepDropDownButton} from "../../../../../common/fragments/dropdowns/StepDropDown";
-import {DavitNoteForm} from "../../../../../common/fragments/forms/DavitNoteForm";
 import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
+import {DavitCommentButton} from "../../../../../common/fragments/buttons/DavitCommentButton";
 
 export interface ControlPanelEditSequenceProps {
     hidden: boolean;
@@ -27,7 +26,6 @@ export interface ControlPanelEditSequenceProps {
 
 export const ControlPanelEditSequence: FunctionComponent<ControlPanelEditSequenceProps> = (props) => {
     const {hidden} = props;
-    const [showNote, setShowNote] = useState<boolean>(false);
 
     const {
         label,
@@ -54,21 +52,7 @@ export const ControlPanelEditSequence: FunctionComponent<ControlPanelEditSequenc
             </div>
             <div className="optionFieldSpacer">
                 <OptionField label="Sequence - Options">
-                    <button onClick={() => setShowNote(true)}>Note</button>
-                    {showNote && (
-                        <DavitModal
-                            content={
-                                <DavitNoteForm
-                                    text={note}
-                                    onSubmit={(text: string) => {
-                                        setShowNote(false);
-                                        saveNote(text);
-                                    }}
-                                    onCancel={() => setShowNote(false)}
-                                />
-                            }
-                        />
-                    )}
+                    <DavitCommentButton onSaveCallback={saveNote} comment={note}/>
                     <DavitDeleteButton onClick={deleteSequence}/>
                 </OptionField>
             </div>

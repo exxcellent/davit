@@ -1,19 +1,18 @@
-import React, {FunctionComponent, useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {ActorCTO} from "../../../../../../dataAccess/access/cto/ActorCTO";
-import {GroupTO} from "../../../../../../dataAccess/access/to/GroupTO";
-import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
-import {handleError} from "../../../../../../slices/GlobalSlice";
-import {EditActor} from "../../../../../../slices/thunks/ActorThunks";
-import {DavitUtil} from "../../../../../../utils/DavitUtil";
+import React, {FunctionComponent, useEffect} from "react";
 import {DavitBackButton} from "../../../../../common/fragments/buttons/DavitBackButton";
 import {DavitButton} from "../../../../../common/fragments/buttons/DavitButton";
 import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
-import {DavitModal} from "../../../../../common/fragments/DavitModal";
-import {DavitNoteForm} from "../../../../../common/fragments/forms/DavitNoteForm";
 import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
+import {DavitCommentButton} from "../../../../../common/fragments/buttons/DavitCommentButton";
+import {DavitUtil} from "../../../../../../utils/DavitUtil";
+import {ActorCTO} from "../../../../../../dataAccess/access/cto/ActorCTO";
+import {EditActor} from "../../../../../../slices/thunks/ActorThunks";
+import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {GroupTO} from "../../../../../../dataAccess/access/to/GroupTO";
+import {handleError} from "../../../../../../slices/GlobalSlice";
 
 export interface ControlPanelEditActorProps {
     hidden: boolean;
@@ -21,9 +20,6 @@ export interface ControlPanelEditActorProps {
 
 export const ControlPanelEditActor: FunctionComponent<ControlPanelEditActorProps> = (props) => {
     const {hidden} = props;
-
-    const [showNote, setShowNote] = useState<boolean>(false);
-
 
     const {
         label,
@@ -36,7 +32,7 @@ export const ControlPanelEditActor: FunctionComponent<ControlPanelEditActorProps
         id,
         note,
         saveNote,
-    } = useControllPanelEditActorViewModel();
+    } = useControlPanelEditActorViewModel();
 
     return (
         <ControlPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveActor}>
@@ -54,21 +50,7 @@ export const ControlPanelEditActor: FunctionComponent<ControlPanelEditActorProps
             </div>
             <div className="columnDivider">
                 <OptionField>
-                    <button onClick={() => setShowNote(true)}>Note</button>
-                    {showNote && (
-                        <DavitModal
-                            content={
-                                <DavitNoteForm
-                                    text={note}
-                                    onSubmit={(text: string) => {
-                                        setShowNote(false);
-                                        saveNote(text);
-                                    }}
-                                    onCancel={() => setShowNote(false)}
-                                />
-                            }
-                        />
-                    )}
+                    <DavitCommentButton onSaveCallback={saveNote} comment={note}/>
                 </OptionField>
             </div>
             <div className="columnDivider controllPanelEditChild">
@@ -88,15 +70,15 @@ export const ControlPanelEditActor: FunctionComponent<ControlPanelEditActorProps
     );
 };
 
-const useControllPanelEditActorViewModel = () => {
+const useControlPanelEditActorViewModel = () => {
     const actorToEdit: ActorCTO | null = useSelector(editSelectors.selectActorToEdit);
     const dispatch = useDispatch();
 
 
     useEffect(() => {
-        // check if component to edit is really set or gos back to edit mode
+// check if component to edit is really set or gos back to edit mode
         if (DavitUtil.isNullOrUndefined(actorToEdit)) {
-            handleError("Tried to go to edit component without componentToedit specified");
+            handleError("Tried to go to edit component without component To edit specified");
             EditActions.setMode.edit();
         }
     }, [actorToEdit]);
@@ -145,7 +127,7 @@ const useControllPanelEditActorViewModel = () => {
     };
 
     const saveNote = (text: string) => {
-        if (!DavitUtil.isNullOrUndefined(actorToEdit) && text !== "") {
+        if (!DavitUtil.isNullOrUndefined(actorToEdit)) {
             const copyActor: ActorCTO = DavitUtil.deepCopy(actorToEdit);
             copyActor.actor.note = text;
             dispatch(EditActions.setMode.editActor(copyActor));

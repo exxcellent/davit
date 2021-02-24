@@ -16,11 +16,11 @@ import {DataAndInstanceId, InstanceDropDown} from "../../../../../common/fragmen
 import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
 
-export interface ControllPanelEditConditionProps {
+export interface ControlPanelEditConditionProps {
     hidden: boolean;
 }
 
-export const ControllPanelEditCondition: FunctionComponent<ControllPanelEditConditionProps> = (props) => {
+export const ControlPanelEditCondition: FunctionComponent<ControlPanelEditConditionProps> = (props) => {
     const {hidden} = props;
     const {
         label,

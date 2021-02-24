@@ -13,15 +13,15 @@ import {ControlPanelEditChain} from "./fragments/ControlPanelEditChain";
 import {ControllPanelEditChainCondition} from "./fragments/ControllPanelEditChainCondition";
 import {ControlPanelEditChainDecision} from "./fragments/ControlPanelEditChainDecision";
 import {ControlPanelEditChainLink} from "./fragments/ControlPanelEditChainLink";
-import {ControllPanelEditCondition} from "./fragments/ControllPanelEditCondition";
-import {ControllPanelEditData} from "./fragments/ControllPanelEditData";
+import {ControlPanelEditCondition} from "./fragments/ControlPanelEditCondition";
+import {ControlPanelEditData} from "./fragments/ControlPanelEditData";
 import {ControlPanelEditDataInstance} from "./fragments/ControlPanelEditDataInstance";
 import {ControlPanelEditDataSetup} from "./fragments/ControlPanelEditDataSetup";
 import {ControlPanelEditDecision} from "./fragments/ControlPanelEditDecision";
 import {ControlPanelEditGroup} from "./fragments/ControlPanelEditGroup";
 import {ControllPanelEditInitData} from "./fragments/ControllPanelEditInitData";
 import {ControlPanelEditMenu} from "./fragments/ControlPanelEditMenu";
-import {ControllPanelEditRelation} from "./fragments/ControllPanelEditRelation";
+import {ControlPanelEditRelation} from "./fragments/ControlPanelEditRelation";
 import {ControlPanelEditSequence} from "./fragments/ControlPanelEditSequence";
 import {ControlPanelEditStep} from "./fragments/ControlPanelEditStep";
 
@@ -48,11 +48,11 @@ export const ControlPanelEditController: FunctionComponent<ControlPanelEditContr
             case Mode.EDIT_GROUP:
                 return <ControlPanelEditGroup hidden={mode !== Mode.EDIT_GROUP}/>;
             case Mode.EDIT_DATA:
-                return <ControllPanelEditData hidden={mode !== Mode.EDIT_DATA}/>;
+                return <ControlPanelEditData hidden={mode !== Mode.EDIT_DATA}/>;
             case Mode.EDIT_DATA_INSTANCE:
                 return <ControlPanelEditDataInstance hidden={mode !== Mode.EDIT_DATA_INSTANCE}/>;
             case Mode.EDIT_RELATION:
-                return <ControllPanelEditRelation hidden={mode !== Mode.EDIT_RELATION}/>;
+                return <ControlPanelEditRelation hidden={mode !== Mode.EDIT_RELATION}/>;
             case Mode.EDIT_SEQUENCE:
                 return <ControlPanelEditSequence hidden={mode !== Mode.EDIT_SEQUENCE}/>;
             case Mode.EDIT_SEQUENCE_STEP:
@@ -60,7 +60,7 @@ export const ControlPanelEditController: FunctionComponent<ControlPanelEditContr
             case Mode.EDIT_SEQUENCE_DECISION:
                 return <ControlPanelEditDecision hidden={mode !== Mode.EDIT_SEQUENCE_DECISION}/>;
             case Mode.EDIT_SEQUENCE_DECISION_CONDITION:
-                return <ControllPanelEditCondition hidden={mode !== Mode.EDIT_SEQUENCE_DECISION_CONDITION}/>;
+                return <ControlPanelEditCondition hidden={mode !== Mode.EDIT_SEQUENCE_DECISION_CONDITION}/>;
             case Mode.EDIT_SEQUENCE_STEP_ACTION:
                 return <ControllPanelEditAction hidden={mode !== Mode.EDIT_SEQUENCE_STEP_ACTION}/>;
             case Mode.EDIT_DATASETUP:

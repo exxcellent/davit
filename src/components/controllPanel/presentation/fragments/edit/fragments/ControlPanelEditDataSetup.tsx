@@ -12,11 +12,10 @@ import {DavitBackButton} from "../../../../../common/fragments/buttons/DavitBack
 import {DavitButton} from "../../../../../common/fragments/buttons/DavitButton";
 import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
-import {DavitModal} from "../../../../../common/fragments/DavitModal";
 import {InitDataDropDownButton} from "../../../../../common/fragments/dropdowns/InitDataDropDown";
-import {DavitNoteForm} from "../../../../../common/fragments/forms/DavitNoteForm";
 import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
+import {DavitCommentButton} from "../../../../../common/fragments/buttons/DavitCommentButton";
 
 export interface ControlPanelEditDataSetupProps {
     hidden: boolean;
@@ -24,8 +23,6 @@ export interface ControlPanelEditDataSetupProps {
 
 export const ControlPanelEditDataSetup: FunctionComponent<ControlPanelEditDataSetupProps> = (props) => {
     const {hidden} = props;
-
-    const [showNote, setShowNote] = useState<boolean>(false);
 
     const {
         label,
@@ -69,21 +66,7 @@ export const ControlPanelEditDataSetup: FunctionComponent<ControlPanelEditDataSe
             </div>
             <div className="columnDivider controllPanelEditChild">
                 <OptionField>
-                    <button onClick={() => setShowNote(true)}>Note</button>
-                    {showNote && (
-                        <DavitModal
-                            content={
-                                <DavitNoteForm
-                                    text={note}
-                                    onSubmit={(text: string) => {
-                                        setShowNote(false);
-                                        saveNote(text);
-                                    }}
-                                    onCancel={() => setShowNote(false)}
-                                />
-                            }
-                        />
-                    )}
+                    <DavitCommentButton onSaveCallback={saveNote} comment={note}/>
                 </OptionField>
             </div>
 

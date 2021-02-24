@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useEffect, useState} from "react";
+import React, {FunctionComponent, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Button} from "semantic-ui-react";
 import {DataCTO} from "../../../../../../dataAccess/access/cto/DataCTO";
@@ -10,20 +10,17 @@ import {DavitBackButton} from "../../../../../common/fragments/buttons/DavitBack
 import {DavitButton} from "../../../../../common/fragments/buttons/DavitButton";
 import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
-import {DavitModal} from "../../../../../common/fragments/DavitModal";
 import {DataInstanceDropDownButton} from "../../../../../common/fragments/dropdowns/DataInstanceDropDown";
-import {DavitNoteForm} from "../../../../../common/fragments/forms/DavitNoteForm";
 import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
+import {DavitCommentButton} from "../../../../../common/fragments/buttons/DavitCommentButton";
 
-export interface ControllPanelEditDataProps {
+export interface ControlPanelEditDataProps {
     hidden: boolean;
 }
 
-export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps> = (props) => {
+export const ControlPanelEditData: FunctionComponent<ControlPanelEditDataProps> = (props) => {
     const {hidden} = props;
-
-    const [showModal, setShowModal] = useState<boolean>(false);
 
     const {
         label,
@@ -71,21 +68,7 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
             </div>
             <div className="columnDivider controllPanelEditChild">
                 <OptionField>
-                    <button onClick={() => setShowModal(true)}>Note</button>
-                    {showModal && (
-                        <DavitModal
-                            content={
-                                <DavitNoteForm
-                                    text={note}
-                                    onSubmit={(text: string) => {
-                                        setShowModal(false);
-                                        saveNote(text);
-                                    }}
-                                    onCancel={() => setShowModal(false)}
-                                />
-                            }
-                        />
-                    )}
+                    <DavitCommentButton onSaveCallback={saveNote} comment={note}/>
                 </OptionField>
             </div>
             <div className="columnDivider controllPanelEditChild">
