@@ -1,26 +1,24 @@
-import React, { FunctionComponent } from "react";
-import { useDispatch } from "react-redux";
-import { EditActions } from "../../../../../../slices/EditSlice";
-import { GlobalActions } from "../../../../../../slices/GlobalSlice";
-import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
-import { DavitDownloadButton } from "../../../../../common/fragments/buttons/DavitDownloadButton";
-import { DavitUploadButton } from "../../../../../common/fragments/buttons/DavitUploadButton";
-import { OptionField } from "../../edit/common/OptionField";
+import React, {FunctionComponent} from "react";
+import {useDispatch} from "react-redux";
+import {EditActions} from "../../../../../../slices/EditSlice";
+import {GlobalActions} from "../../../../../../slices/GlobalSlice";
+import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import {DavitDownloadButton} from "../../../../../common/fragments/buttons/DavitDownloadButton";
+import {DavitUploadButton} from "../../../../../common/fragments/buttons/DavitUploadButton";
+import {OptionField} from "../../edit/common/OptionField";
 
 export interface ControlPanelFileOptionsProps {
-    showDownloadFile: () => void;
 }
 
-export const ControlPanelFileOptions: FunctionComponent<ControlPanelFileOptionsProps> = (props) => {
-    const { showDownloadFile } = props;
-    const { deleteLocalStorage } = useFileOptionModelView();
+export const ControlPanelFileOptions: FunctionComponent<ControlPanelFileOptionsProps> = () => {
+    const {deleteLocalStorage} = useFileOptionModelView();
 
     return (
         <div className="optionFieldSpacer">
             <OptionField label="file">
-                <DavitUploadButton />
-                <DavitDownloadButton onClick={showDownloadFile} />
-                <DavitDeleteButton onClick={deleteLocalStorage} />
+                <DavitUploadButton/>
+                <DavitDownloadButton/>
+                <DavitDeleteButton onClick={deleteLocalStorage}/>
             </OptionField>
         </div>
     );
