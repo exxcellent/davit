@@ -30,8 +30,6 @@ export const DavitDownloadForm: FunctionComponent<DavitDownloadFormProps> = (pro
                 placeholder="project name..."
                 onChangeDebounced={(name: string) => setProjectName(name)}
                 value={projectName}
-                autoFocus
-                invisible={false}
             />
             <div style={{ display: "flex", justifyContent: "space-around", paddingTop: "var(--davit-padding-top-bottom)" }}>
                 <button onClick={() => onCloseCallback()}>cancel</button>

@@ -1,7 +1,7 @@
 :root {
     --davit-border-radius: 5px;
-    --davit-border-size: 1px;
-    --davit-padding-top-bottom: 0.7em;
+    --davit-border-size: 2px;
+    --davit-padding-top-bottom: 0.5em;
     --davit-padding-right-left: 0.9em;
     --davit-font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
     --davit-font-size: 16px;

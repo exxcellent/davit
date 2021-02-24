@@ -1,20 +1,20 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Input } from "semantic-ui-react";
-import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
-import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
-import { handleError } from "../../../../../../slices/GlobalSlice";
-import { EditData } from "../../../../../../slices/thunks/DataThunks";
-import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
-import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
-import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
-import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
-import { DavitModal } from "../../../../../common/fragments/DavitModal";
-import { DataInstanceDropDownButton } from "../../../../../common/fragments/dropdowns/DataInstanceDropDown";
-import { DavitNoteForm } from "../../../../../common/fragments/forms/DavitNoteForm";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { OptionField } from "../common/OptionField";
+import React, {FunctionComponent, useEffect, useRef, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {Button} from "semantic-ui-react";
+import {DataCTO} from "../../../../../../dataAccess/access/cto/DataCTO";
+import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
+import {handleError} from "../../../../../../slices/GlobalSlice";
+import {EditData} from "../../../../../../slices/thunks/DataThunks";
+import {DavitUtil} from "../../../../../../utils/DavitUtil";
+import {DavitBackButton} from "../../../../../common/fragments/buttons/DavitBackButton";
+import {DavitButton} from "../../../../../common/fragments/buttons/DavitButton";
+import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
+import {DavitModal} from "../../../../../common/fragments/DavitModal";
+import {DataInstanceDropDownButton} from "../../../../../common/fragments/dropdowns/DataInstanceDropDown";
+import {DavitNoteForm} from "../../../../../common/fragments/forms/DavitNoteForm";
+import {ControllPanelEditSub} from "../common/ControllPanelEditSub";
+import {OptionField} from "../common/OptionField";
 
 export interface ControllPanelEditDataProps {
     hidden: boolean;
@@ -50,10 +50,8 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
                         placeholder="Data Name"
                         onChangeDebounced={changeName}
                         value={name}
-                        autoFocus
                         ref={textInput}
                         onBlur={updateData}
-                        invisible={hidden}
                     />
                 </OptionField>
             </div>
@@ -111,7 +109,7 @@ export const ControllPanelEditData: FunctionComponent<ControllPanelEditDataProps
 const useControllPanelEditDataViewModel = () => {
     const dataToEdit: DataCTO | null = useSelector(editSelectors.selectDataToEdit);
     const dispatch = useDispatch();
-    const textInput = useRef<Input>(null);
+    const textInput = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         // used to focus the textfield on create another

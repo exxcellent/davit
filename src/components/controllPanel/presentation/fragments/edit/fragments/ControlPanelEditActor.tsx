@@ -1,29 +1,37 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Input } from "semantic-ui-react";
-import { ActorCTO } from "../../../../../../dataAccess/access/cto/ActorCTO";
-import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
-import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
-import { handleError } from "../../../../../../slices/GlobalSlice";
-import { EditActor } from "../../../../../../slices/thunks/ActorThunks";
-import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
-import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
-import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
-import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
-import { DavitModal } from "../../../../../common/fragments/DavitModal";
-import { DavitNoteForm } from "../../../../../common/fragments/forms/DavitNoteForm";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { OptionField } from "../common/OptionField";
+import React, {FunctionComponent, Ref, useEffect, useRef, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {ActorCTO} from "../../../../../../dataAccess/access/cto/ActorCTO";
+import {GroupTO} from "../../../../../../dataAccess/access/to/GroupTO";
+import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
+import {handleError} from "../../../../../../slices/GlobalSlice";
+import {EditActor} from "../../../../../../slices/thunks/ActorThunks";
+import {DavitUtil} from "../../../../../../utils/DavitUtil";
+import {DavitBackButton} from "../../../../../common/fragments/buttons/DavitBackButton";
+import {DavitButton} from "../../../../../common/fragments/buttons/DavitButton";
+import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
+import {DavitModal} from "../../../../../common/fragments/DavitModal";
+import {DavitNoteForm} from "../../../../../common/fragments/forms/DavitNoteForm";
+import {ControllPanelEditSub} from "../common/ControllPanelEditSub";
+import {OptionField} from "../common/OptionField";
 
-export interface ControllPanelEditActorProps {
+export interface ControlPanelEditActorProps {
     hidden: boolean;
 }
 
-export const ControllPanelEditActor: FunctionComponent<ControllPanelEditActorProps> = (props) => {
-    const { hidden } = props;
+export const ControlPanelEditActor: FunctionComponent<ControlPanelEditActorProps> = (props) => {
+    const {hidden} = props;
 
     const [showNote, setShowNote] = useState<boolean>(false);
+
+    const textInput: Ref<HTMLInputElement> = useRef<HTMLInputElement>(null);
+
+    // focus on input field on render.
+    useEffect(() => {
+        if (textInput !== null && textInput.current !== null) {
+            textInput.current.focus();
+        }
+    }, [textInput]);
 
     const {
         label,
@@ -31,7 +39,6 @@ export const ControllPanelEditActor: FunctionComponent<ControllPanelEditActorPro
         changeName,
         saveActor,
         deleteComponent,
-        textInput,
         updateActor,
         createAnother,
         id,
@@ -49,9 +56,7 @@ export const ControllPanelEditActor: FunctionComponent<ControllPanelEditActorPro
                         onChangeDebounced={(name: string) => changeName(name)}
                         onBlur={updateActor}
                         value={name}
-                        autoFocus
                         ref={textInput}
-                        invisible={hidden}
                     />
                 </OptionField>
             </div>
@@ -77,14 +82,14 @@ export const ControllPanelEditActor: FunctionComponent<ControllPanelEditActorPro
             <div className="columnDivider controllPanelEditChild">
                 <div>
                     <OptionField label="Navigation">
-                        <DavitButton onClick={createAnother} label="Create another" />
-                        <DavitBackButton onClick={saveActor} />
+                        <DavitButton onClick={createAnother} label="Create another"/>
+                        <DavitBackButton onClick={saveActor}/>
                     </OptionField>
                 </div>
             </div>
             <div className="optionFieldSpacer columnDivider">
                 <OptionField label="Component - Options">
-                    <DavitDeleteButton onClick={deleteComponent} />
+                    <DavitDeleteButton onClick={deleteComponent}/>
                 </OptionField>
             </div>
         </ControllPanelEditSub>
@@ -94,7 +99,7 @@ export const ControllPanelEditActor: FunctionComponent<ControllPanelEditActorPro
 const useControllPanelEditActorViewModel = () => {
     const actorToEdit: ActorCTO | null = useSelector(editSelectors.selectActorToEdit);
     const dispatch = useDispatch();
-    const textInput = useRef<Input>(null);
+
 
     useEffect(() => {
         // check if component to edit is really set or gos back to edit mode
@@ -102,8 +107,6 @@ const useControllPanelEditActorViewModel = () => {
             handleError("Tried to go to edit component without componentToedit specified");
             EditActions.setMode.edit();
         }
-        // used to focus the textfield on create another
-        textInput.current!.focus();
     }, [actorToEdit]);
 
     const changeName = (name: string) => {
@@ -163,7 +166,6 @@ const useControllPanelEditActorViewModel = () => {
         changeName,
         saveActor: saveActor,
         deleteComponent: deleteActor,
-        textInput,
         setGroup,
         compGroup: actorToEdit?.actor.groupFks !== -1 ? actorToEdit?.actor.groupFks : undefined,
         updateActor,

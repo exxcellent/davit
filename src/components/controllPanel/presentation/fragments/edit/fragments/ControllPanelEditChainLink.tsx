@@ -1,30 +1,29 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Input } from "semantic-ui-react";
-import { ChainDecisionTO } from "../../../../../../dataAccess/access/to/ChainDecisionTO";
-import { ChainlinkTO } from "../../../../../../dataAccess/access/to/ChainlinkTO";
-import { ChainTO } from "../../../../../../dataAccess/access/to/ChainTO";
-import { DataSetupTO } from "../../../../../../dataAccess/access/to/DataSetupTO";
-import { SequenceTO } from "../../../../../../dataAccess/access/to/SequenceTO";
-import { GoToChain, GoToTypesChain } from "../../../../../../dataAccess/access/types/GoToTypeChain";
-import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
-import { handleError } from "../../../../../../slices/GlobalSlice";
-import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
-import { EditChainLink } from "../../../../../../slices/thunks/ChainLinkThunks";
-import { EditChain } from "../../../../../../slices/thunks/ChainThunks";
-import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitAddButton } from "../../../../../common/fragments/buttons/DavitAddButton";
-import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
-import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
-import { DavitRootButton } from "../../../../../common/fragments/buttons/DavitRootButton";
-import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
-import { ChainDecisionDropDown } from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
-import { ChainLinkDropDown } from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
-import { DataSetupDropDown } from "../../../../../common/fragments/dropdowns/DataSetupDropDown";
-import { GoToChainOptionDropDown } from "../../../../../common/fragments/dropdowns/GoToChainOptionDropDown";
-import { SequenceDropDown } from "../../../../../common/fragments/dropdowns/SequenceDropDown";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { OptionField } from "../common/OptionField";
+import React, {FunctionComponent, useEffect, useRef, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {ChainDecisionTO} from "../../../../../../dataAccess/access/to/ChainDecisionTO";
+import {ChainlinkTO} from "../../../../../../dataAccess/access/to/ChainlinkTO";
+import {ChainTO} from "../../../../../../dataAccess/access/to/ChainTO";
+import {DataSetupTO} from "../../../../../../dataAccess/access/to/DataSetupTO";
+import {SequenceTO} from "../../../../../../dataAccess/access/to/SequenceTO";
+import {GoToChain, GoToTypesChain} from "../../../../../../dataAccess/access/types/GoToTypeChain";
+import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
+import {handleError} from "../../../../../../slices/GlobalSlice";
+import {sequenceModelSelectors} from "../../../../../../slices/SequenceModelSlice";
+import {EditChainLink} from "../../../../../../slices/thunks/ChainLinkThunks";
+import {EditChain} from "../../../../../../slices/thunks/ChainThunks";
+import {DavitUtil} from "../../../../../../utils/DavitUtil";
+import {DavitAddButton} from "../../../../../common/fragments/buttons/DavitAddButton";
+import {DavitBackButton} from "../../../../../common/fragments/buttons/DavitBackButton";
+import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import {DavitRootButton} from "../../../../../common/fragments/buttons/DavitRootButton";
+import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
+import {ChainDecisionDropDown} from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
+import {ChainLinkDropDown} from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
+import {DataSetupDropDown} from "../../../../../common/fragments/dropdowns/DataSetupDropDown";
+import {GoToChainOptionDropDown} from "../../../../../common/fragments/dropdowns/GoToChainOptionDropDown";
+import {SequenceDropDown} from "../../../../../common/fragments/dropdowns/SequenceDropDown";
+import {ControllPanelEditSub} from "../common/ControllPanelEditSub";
+import {OptionField} from "../common/OptionField";
 
 export interface ControllPanelEditChainLinkProps {
     hidden: boolean;
@@ -65,9 +64,7 @@ export const ControllPanelEditChainLink: FunctionComponent<ControllPanelEditChai
                         placeholder="Chainlink Name ..."
                         onChangeDebounced={(name: string) => changeName(name)}
                         value={name}
-                        autoFocus
                         ref={textInput}
-                        invisible={hidden}
                     />
                 </OptionField>
             </div>
@@ -142,7 +139,7 @@ const useControllPanelEditChainStepViewModel = () => {
     const chainLinkToEdit: ChainlinkTO | null = useSelector(editSelectors.selectChainLinkToEdit);
     const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
     const dispatch = useDispatch();
-    const textInput = useRef<Input>(null);
+    const textInput = useRef<HTMLInputElement>(null);
     const [currentGoTo, setCurrentGoTo] = useState<GoToChain>({ type: GoToTypesChain.LINK, id: -1 });
 
     useEffect(() => {

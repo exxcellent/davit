@@ -1,18 +1,17 @@
-import React, { FunctionComponent, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Input } from "semantic-ui-react";
-import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
-import { DataInstanceTO } from "../../../../../../dataAccess/access/to/DataInstanceTO";
-import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
-import { handleError } from "../../../../../../slices/GlobalSlice";
-import { EditData } from "../../../../../../slices/thunks/DataThunks";
-import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
-import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
-import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
-import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { OptionField } from "../common/OptionField";
+import React, {FunctionComponent, useEffect, useRef} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {DataCTO} from "../../../../../../dataAccess/access/cto/DataCTO";
+import {DataInstanceTO} from "../../../../../../dataAccess/access/to/DataInstanceTO";
+import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
+import {handleError} from "../../../../../../slices/GlobalSlice";
+import {EditData} from "../../../../../../slices/thunks/DataThunks";
+import {DavitUtil} from "../../../../../../utils/DavitUtil";
+import {DavitBackButton} from "../../../../../common/fragments/buttons/DavitBackButton";
+import {DavitButton} from "../../../../../common/fragments/buttons/DavitButton";
+import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
+import {ControllPanelEditSub} from "../common/ControllPanelEditSub";
+import {OptionField} from "../common/OptionField";
 
 export interface ControllPanelEditDataInstanceProps {
     hidden: boolean;
@@ -42,9 +41,7 @@ export const ControllPanelEditDataInstance: FunctionComponent<ControllPanelEditD
                         placeholder="Data Instance Name"
                         onChangeDebounced={(name: string) => changeName(name)}
                         value={getName()}
-                        autoFocus
                         ref={textInput}
-                        invisible={hidden}
                         onBlur={saveOnBlure}
                     />
                 </OptionField>
@@ -71,7 +68,7 @@ const useControllPanelEditDataInstanceViewModel = () => {
     const dataToEdit: DataCTO | null = useSelector(editSelectors.selectDataToEdit);
     const instanceId: number | null = useSelector(editSelectors.selectInstanceIdToEdit);
     const dispatch = useDispatch();
-    const textInput = useRef<Input>(null);
+    const textInput = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         // used to focus the textfield on create another

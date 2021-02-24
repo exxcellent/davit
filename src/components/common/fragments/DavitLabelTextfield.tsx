@@ -1,42 +1,42 @@
 /* eslint-disable react/display-name */
 import debounce from "lodash.debounce";
-import React, { useCallback, useEffect, useState } from "react";
-import { Input, InputProps } from "semantic-ui-react";
+import React, {FunctionComponent, Ref, useCallback, useEffect, useState} from "react";
 
-interface DavitLabelTextfieldProps extends InputProps {
-    placeholder: string;
-    value: string;
-    invisible: boolean;
+export interface DavitLabelTextfieldProps {
     onChangeDebounced: (value: string) => void;
+    onBlur?: () => void;
+    placeholder?: string;
+    value?: string;
     label?: string;
+    ref?: Ref<HTMLInputElement>
 }
 
-export const DavitLabelTextfield = React.forwardRef<Input, DavitLabelTextfieldProps>((props, ref) => {
-    const { label, onChangeCallBack, placeholder, value, invisible, onChangeDebounced, ...other } = props;
+export const DavitLabelTextfield: FunctionComponent<DavitLabelTextfieldProps> = (props) => {
+    const {label, placeholder, value, onChangeDebounced, ref, onBlur} = props;
 
     const [stateValue, setStateValue] = useState<string>("");
 
     useEffect(() => {
-        setStateValue(value);
+        setStateValue(value ? value : "");
     }, [value]);
 
     const inputDebounce = useCallback(debounce(onChangeDebounced, 30), []);
 
-    // TODO: remove semantic Input
     return (
-        <Input
-            className={invisible ? "slideable-hidden" : "slideable"}
-            label={label}
-            placeholder={placeholder}
-            value={stateValue}
-            inverted
-            color="orange"
-            ref={ref}
-            onChange={(event) => {
-                setStateValue(event.target.value);
-                inputDebounce(event.target.value);
-            }}
-            {...other}
-        />
+        <span>
+                <label className={"inputLabel"}>{label}</label>
+                <input
+                    className={label ? "input label" : ""}
+                    type={"text"}
+                    placeholder={placeholder}
+                    value={stateValue}
+                    ref={ref}
+                    onChange={(event) => {
+                        setStateValue(event.target.value);
+                        inputDebounce(event.target.value);
+                    }}
+                    onBlur={onBlur}
+                />
+            </span>
     );
-});
+};

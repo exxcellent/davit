@@ -1,24 +1,24 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Input } from "semantic-ui-react";
-import { ChainDecisionTO } from "../../../../../../dataAccess/access/to/ChainDecisionTO";
-import { ChainlinkTO } from "../../../../../../dataAccess/access/to/ChainlinkTO";
-import { ChainTO } from "../../../../../../dataAccess/access/to/ChainTO";
-import { GoToChain, GoToTypesChain } from "../../../../../../dataAccess/access/types/GoToTypeChain";
-import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
-import { handleError } from "../../../../../../slices/GlobalSlice";
-import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
-import { EditChainDecision } from "../../../../../../slices/thunks/ChainDecisionThunks";
-import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitAddButton } from "../../../../../common/fragments/buttons/DavitAddButton";
-import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
-import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
-import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
-import { ChainDecisionDropDown } from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
-import { ChainLinkDropDown } from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
-import { GoToChainOptionDropDown } from "../../../../../common/fragments/dropdowns/GoToChainOptionDropDown";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { OptionField } from "../common/OptionField";
+import React, {FunctionComponent, useEffect, useRef, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {Button} from "semantic-ui-react";
+import {ChainDecisionTO} from "../../../../../../dataAccess/access/to/ChainDecisionTO";
+import {ChainlinkTO} from "../../../../../../dataAccess/access/to/ChainlinkTO";
+import {ChainTO} from "../../../../../../dataAccess/access/to/ChainTO";
+import {GoToChain, GoToTypesChain} from "../../../../../../dataAccess/access/types/GoToTypeChain";
+import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
+import {handleError} from "../../../../../../slices/GlobalSlice";
+import {sequenceModelSelectors} from "../../../../../../slices/SequenceModelSlice";
+import {EditChainDecision} from "../../../../../../slices/thunks/ChainDecisionThunks";
+import {DavitUtil} from "../../../../../../utils/DavitUtil";
+import {DavitAddButton} from "../../../../../common/fragments/buttons/DavitAddButton";
+import {DavitBackButton} from "../../../../../common/fragments/buttons/DavitBackButton";
+import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
+import {ChainDecisionDropDown} from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
+import {ChainLinkDropDown} from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
+import {GoToChainOptionDropDown} from "../../../../../common/fragments/dropdowns/GoToChainOptionDropDown";
+import {ControllPanelEditSub} from "../common/ControllPanelEditSub";
+import {OptionField} from "../common/OptionField";
 
 export interface ControllPanelEditChainDecisionProps {
     hidden: boolean;
@@ -56,9 +56,7 @@ export const ControllPanelEditChainDecision: FunctionComponent<ControllPanelEdit
                             placeholder="Chain decision name ..."
                             onChangeDebounced={(name: string) => changeName(name)}
                             value={name}
-                            autoFocus
                             ref={textInput}
-                            invisible={hidden}
                         />
                     </OptionField>
                     <OptionField label="Create / Edit Condition">
@@ -155,7 +153,7 @@ const useControllPanelEditChainConditionViewModel = () => {
     const decisionToEdit: ChainDecisionTO | null = useSelector(editSelectors.selectChainDecisionToEdit);
     const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
     const dispatch = useDispatch();
-    const textInput = useRef<Input>(null);
+    const textInput = useRef<HTMLInputElement>(null);
     const [currentIfGoTo, setCurrentIfGoTo] = useState<GoToChain>({ type: GoToTypesChain.FIN });
     const [currentElseGoTo, setCurrentElseGoTo] = useState<GoToChain>({ type: GoToTypesChain.ERROR });
     const [key, setKey] = useState<number>(0);

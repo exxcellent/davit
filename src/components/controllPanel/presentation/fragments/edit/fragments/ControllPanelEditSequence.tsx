@@ -1,25 +1,25 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Input } from "semantic-ui-react";
-import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
-import { DecisionTO } from "../../../../../../dataAccess/access/to/DecisionTO";
-import { SequenceTO } from "../../../../../../dataAccess/access/to/SequenceTO";
-import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
-import { handleError } from "../../../../../../slices/GlobalSlice";
-import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
-import { EditSequence } from "../../../../../../slices/thunks/SequenceThunks";
-import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
-import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
-import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
-import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
-import { DavitModal } from "../../../../../common/fragments/DavitModal";
-import { DecisionDropDownButton } from "../../../../../common/fragments/dropdowns/DecisionDropDown";
-import { StepDropDownButton } from "../../../../../common/fragments/dropdowns/StepDropDown";
-import { DavitNoteForm } from "../../../../../common/fragments/forms/DavitNoteForm";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { OptionField } from "../common/OptionField";
+import React, {FunctionComponent, useEffect, useRef, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {Button} from "semantic-ui-react";
+import {SequenceCTO} from "../../../../../../dataAccess/access/cto/SequenceCTO";
+import {SequenceStepCTO} from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
+import {DecisionTO} from "../../../../../../dataAccess/access/to/DecisionTO";
+import {SequenceTO} from "../../../../../../dataAccess/access/to/SequenceTO";
+import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
+import {handleError} from "../../../../../../slices/GlobalSlice";
+import {sequenceModelSelectors} from "../../../../../../slices/SequenceModelSlice";
+import {EditSequence} from "../../../../../../slices/thunks/SequenceThunks";
+import {DavitUtil} from "../../../../../../utils/DavitUtil";
+import {DavitBackButton} from "../../../../../common/fragments/buttons/DavitBackButton";
+import {DavitButton} from "../../../../../common/fragments/buttons/DavitButton";
+import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
+import {DavitModal} from "../../../../../common/fragments/DavitModal";
+import {DecisionDropDownButton} from "../../../../../common/fragments/dropdowns/DecisionDropDown";
+import {StepDropDownButton} from "../../../../../common/fragments/dropdowns/StepDropDown";
+import {DavitNoteForm} from "../../../../../common/fragments/forms/DavitNoteForm";
+import {ControllPanelEditSub} from "../common/ControllPanelEditSub";
+import {OptionField} from "../common/OptionField";
 
 export interface ControllPanelEditSequenceProps {
     hidden: boolean;
@@ -85,10 +85,8 @@ export const ControllPanelEditSequence: FunctionComponent<ControllPanelEditSeque
                         placeholder="Sequence Name..."
                         onChangeDebounced={(name: string) => changeName(name)}
                         value={name}
-                        autoFocus
                         ref={textInput}
                         onBlur={updateSequence}
-                        invisible={hidden}
                     />
                 </OptionField>
             </div>
@@ -124,7 +122,7 @@ const useControllPanelEditSequenceViewModel = () => {
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const dispatch = useDispatch();
     const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
-    const textInput = useRef<Input>(null);
+    const textInput = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         // check if sequence to edit is really set or gos back to edit mode

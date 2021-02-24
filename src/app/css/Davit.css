@@ -211,7 +211,7 @@
     padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
 }
 
-.downloadForm{
+.downloadForm {
     width: 30%;
     background: var(--carv2-background-color);
     border-radius: var(--davit-border-radius);
@@ -714,10 +714,43 @@
     transition: background-color var(--animation-time);
 }
 
+input {
+    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
+    border-radius: var(--davit-border-radius);
+    border-color: var(--carv2-color-secondary);
+    background-color: transparent;
+    border-style: solid;
+    border-width: var(--davit-border-size);
+    color: var(--carv2-text-color);
+    font-family: var(--davit-font-family);
+    font-size: var(--davit-font-size);
+}
+
+input:focus {
+    outline: none;
+}
+
+input.label {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.inputLabel {
+    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
+    border-bottom-left-radius: var(--davit-border-radius);
+    border-top-left-radius: var(--davit-border-radius);
+    border: var(--davit-border-size) solid var(--carv2-color-secondary);
+    border-bottom: var(--davit-border-size) solid var(--carv2-color-secondary);
+    background-color: var(--carv2-color-secondary);
+    color: var(--carv2-text-color);
+    font-family: var(--davit-font-family);
+    font-size: var(--davit-font-size);
+}
+
 button {
     color: var(--carv2-text-color);
     border-radius: var(--davit-border-radius);
-    border: 2px solid var(--carv2-color-secondary);
+    border: var(--davit-border-size) solid var(--carv2-color-secondary);
     background-color: transparent;
     text-align: center;
     padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);

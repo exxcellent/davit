@@ -1,24 +1,24 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Input } from "semantic-ui-react";
-import { ChainDecisionTO } from "../../../../../../dataAccess/access/to/ChainDecisionTO";
-import { ChainlinkTO } from "../../../../../../dataAccess/access/to/ChainlinkTO";
-import { ChainTO } from "../../../../../../dataAccess/access/to/ChainTO";
-import { SequenceTO } from "../../../../../../dataAccess/access/to/SequenceTO";
-import { EditActions } from "../../../../../../slices/EditSlice";
-import { masterDataSelectors } from "../../../../../../slices/MasterDataSlice";
-import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
-import { EditChain } from "../../../../../../slices/thunks/ChainThunks";
-import { EditSequence } from "../../../../../../slices/thunks/SequenceThunks";
-import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
-import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
-import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
-import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
-import { ChainDecisionDropDownButton } from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
-import { ChainLinkDropDownButton } from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { OptionField } from "../common/OptionField";
+import React, {FunctionComponent, useEffect, useRef, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {Button} from "semantic-ui-react";
+import {ChainDecisionTO} from "../../../../../../dataAccess/access/to/ChainDecisionTO";
+import {ChainlinkTO} from "../../../../../../dataAccess/access/to/ChainlinkTO";
+import {ChainTO} from "../../../../../../dataAccess/access/to/ChainTO";
+import {SequenceTO} from "../../../../../../dataAccess/access/to/SequenceTO";
+import {EditActions} from "../../../../../../slices/EditSlice";
+import {masterDataSelectors} from "../../../../../../slices/MasterDataSlice";
+import {sequenceModelSelectors} from "../../../../../../slices/SequenceModelSlice";
+import {EditChain} from "../../../../../../slices/thunks/ChainThunks";
+import {EditSequence} from "../../../../../../slices/thunks/SequenceThunks";
+import {DavitUtil} from "../../../../../../utils/DavitUtil";
+import {DavitBackButton} from "../../../../../common/fragments/buttons/DavitBackButton";
+import {DavitButton} from "../../../../../common/fragments/buttons/DavitButton";
+import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
+import {ChainDecisionDropDownButton} from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
+import {ChainLinkDropDownButton} from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
+import {ControllPanelEditSub} from "../common/ControllPanelEditSub";
+import {OptionField} from "../common/OptionField";
 
 export interface ControllPanelEditChainProps {
     hidden: boolean;
@@ -48,9 +48,7 @@ export const ControllPanelEditChain: FunctionComponent<ControllPanelEditChainPro
                         placeholder="Chain Name..."
                         onChangeDebounced={(name: string) => changeName(name)}
                         value={name}
-                        autoFocus
                         ref={textInput}
-                        invisible={hidden}
                     />
                 </OptionField>
             </div>
@@ -104,7 +102,7 @@ const useControllPanelEditChainViewModel = () => {
     const dispatch = useDispatch();
     const [isCreateAnother, setIsCreateAnother] = useState<boolean>(false);
     const isFirst: boolean = useSelector(masterDataSelectors.isFirstChainElement(selectedChain?.id || -1));
-    const textInput = useRef<Input>(null);
+    const textInput = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         // check if sequence to edit is really set or gos back to edit mode

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { ErrorNotification } from "../components/common/fragments/ErrorNotification";
-import { ControllPanelController } from "../components/controllPanel/presentation/ControllPanelController";
+import { ControlPanelController } from "../components/controllPanel/presentation/ControlPanelController";
 import { ActorModelController } from "../components/metaActorModel/presentation/ActorModelController";
 import { DataModelController } from "../components/metaDataModel/DataModelController";
 import { FlowChartController } from "../components/sequenceModel/FlowChartController";
@@ -37,7 +37,7 @@ export function Davit() {
             <Switch>
                 <Route exact path={ModuleRoutes.home}>
                     <div className="carvGridContainer">
-                        <ControllPanelController />
+                        <ControlPanelController />
                         <ActorModelController />
                         <DataModelController />
                         <SidePanelController />

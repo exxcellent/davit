@@ -1,30 +1,30 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Input } from "semantic-ui-react";
-import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
-import { ConditionTO } from "../../../../../../dataAccess/access/to/ConditionTO";
-import { DecisionTO } from "../../../../../../dataAccess/access/to/DecisionTO";
-import { GoTo, GoToTypes } from "../../../../../../dataAccess/access/types/GoToType";
-import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
-import { handleError } from "../../../../../../slices/GlobalSlice";
-import { SequenceModelActions, sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
-import { EditDecision } from "../../../../../../slices/thunks/DecisionThunks";
-import { EditSequence } from "../../../../../../slices/thunks/SequenceThunks";
-import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitAddButton } from "../../../../../common/fragments/buttons/DavitAddButton";
-import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
-import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
-import { DavitRootButton } from "../../../../../common/fragments/buttons/DavitRootButton";
-import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
-import { DavitModal } from "../../../../../common/fragments/DavitModal";
-import { ConditionDropDownButton } from "../../../../../common/fragments/dropdowns/ConditionDropDown";
-import { DecisionDropDown } from "../../../../../common/fragments/dropdowns/DecisionDropDown";
-import { GoToOptionDropDown } from "../../../../../common/fragments/dropdowns/GoToOptionDropDown";
-import { StepDropDown } from "../../../../../common/fragments/dropdowns/StepDropDown";
-import { DavitNoteForm } from "../../../../../common/fragments/forms/DavitNoteForm";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { OptionField } from "../common/OptionField";
+import React, {FunctionComponent, useEffect, useRef, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {Button} from "semantic-ui-react";
+import {SequenceCTO} from "../../../../../../dataAccess/access/cto/SequenceCTO";
+import {SequenceStepCTO} from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
+import {ConditionTO} from "../../../../../../dataAccess/access/to/ConditionTO";
+import {DecisionTO} from "../../../../../../dataAccess/access/to/DecisionTO";
+import {GoTo, GoToTypes} from "../../../../../../dataAccess/access/types/GoToType";
+import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
+import {handleError} from "../../../../../../slices/GlobalSlice";
+import {SequenceModelActions, sequenceModelSelectors} from "../../../../../../slices/SequenceModelSlice";
+import {EditDecision} from "../../../../../../slices/thunks/DecisionThunks";
+import {EditSequence} from "../../../../../../slices/thunks/SequenceThunks";
+import {DavitUtil} from "../../../../../../utils/DavitUtil";
+import {DavitAddButton} from "../../../../../common/fragments/buttons/DavitAddButton";
+import {DavitBackButton} from "../../../../../common/fragments/buttons/DavitBackButton";
+import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import {DavitRootButton} from "../../../../../common/fragments/buttons/DavitRootButton";
+import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
+import {DavitModal} from "../../../../../common/fragments/DavitModal";
+import {ConditionDropDownButton} from "../../../../../common/fragments/dropdowns/ConditionDropDown";
+import {DecisionDropDown} from "../../../../../common/fragments/dropdowns/DecisionDropDown";
+import {GoToOptionDropDown} from "../../../../../common/fragments/dropdowns/GoToOptionDropDown";
+import {StepDropDown} from "../../../../../common/fragments/dropdowns/StepDropDown";
+import {DavitNoteForm} from "../../../../../common/fragments/forms/DavitNoteForm";
+import {ControllPanelEditSub} from "../common/ControllPanelEditSub";
+import {OptionField} from "../common/OptionField";
 
 export interface ControllPanelEditDecisionProps {
     hidden: boolean;
@@ -70,10 +70,8 @@ export const ControllPanelEditDecision: FunctionComponent<ControllPanelEditDecis
                             placeholder="Decision name ..."
                             onChangeDebounced={(name: string) => changeName(name)}
                             value={name}
-                            autoFocus
                             ref={textInput}
                             onBlur={updateDecision}
-                            invisible={hidden}
                         />
                     </OptionField>
                     <OptionField label="Create / Edit Condition">
@@ -189,7 +187,7 @@ const useControllPanelEditConditionViewModel = () => {
     const decisionToEdit: DecisionTO | null = useSelector(editSelectors.selectDecisionToEdit);
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const dispatch = useDispatch();
-    const textInput = useRef<Input>(null);
+    const textInput = useRef<HTMLInputElement>(null);
     const [currentIfGoTo, setCurrentIfGoTo] = useState<GoTo>({ type: GoToTypes.STEP, id: -1 });
     const [currentElseGoTo, setCurrentElseGoTo] = useState<GoTo>({ type: GoToTypes.STEP, id: -1 });
     const [key, setKey] = useState<number>(0);

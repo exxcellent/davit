@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
-import { ChainTO } from "../dataAccess/access/to/ChainTO";
-import { editSelectors, Mode } from "../slices/EditSlice";
-import { SequenceModelActions, sequenceModelSelectors } from "../slices/SequenceModelSlice";
-import { DavitUtil } from "./DavitUtil";
+import {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {SequenceCTO} from "../dataAccess/access/cto/SequenceCTO";
+import {ChainTO} from "../dataAccess/access/to/ChainTO";
+import {editSelectors, Mode} from "../slices/EditSlice";
+import {SequenceModelActions, sequenceModelSelectors} from "../slices/SequenceModelSlice";
+import {DavitUtil} from "./DavitUtil";
 
 const getWidth = () => window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 const getHeight = () => window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
@@ -88,7 +88,7 @@ export const useCustomZoomEvent = (
     };
 
     useEffect(() => {
-        document.addEventListener("wheel", handleKeyDown, { passive: false });
+        document.addEventListener("wheel", handleKeyDown, {passive: false});
         document.addEventListener("keydown", checkZoom);
 
         return () => {
@@ -208,3 +208,4 @@ export const useEnterHook = (callback: () => void) => {
         };
     }, [callback]);
 };
+

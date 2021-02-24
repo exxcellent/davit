@@ -1,17 +1,16 @@
-import React, { FunctionComponent, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Input } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
-import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
-import { handleError } from "../../../../../../slices/GlobalSlice";
-import { EditGroup } from "../../../../../../slices/thunks/GroupThunks";
-import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
-import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
-import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
-import { ColorDropDown } from "../../../../../common/fragments/dropdowns/ColorDropDown";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
+import React, {FunctionComponent, useEffect, useRef} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {isNullOrUndefined} from "util";
+import {GroupTO} from "../../../../../../dataAccess/access/to/GroupTO";
+import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
+import {handleError} from "../../../../../../slices/GlobalSlice";
+import {EditGroup} from "../../../../../../slices/thunks/GroupThunks";
+import {DavitUtil} from "../../../../../../utils/DavitUtil";
+import {DavitButton} from "../../../../../common/fragments/buttons/DavitButton";
+import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
+import {ColorDropDown} from "../../../../../common/fragments/dropdowns/ColorDropDown";
+import {ControllPanelEditSub} from "../common/ControllPanelEditSub";
 
 export interface ControllPanelEditGroupProps {
     hidden: boolean;
@@ -48,10 +47,8 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
                     placeholder="Group Name ..."
                     onChangeDebounced={(name: string) => changeName(name)}
                     value={name}
-                    autoFocus
                     ref={textInput}
                     onBlur={() => updateGroup()}
-                    invisible={hidden}
                 />
             </div>
             <div className="columnDivider controllPanelEditChild">
@@ -68,7 +65,7 @@ export const ControllPanelEditGroup: FunctionComponent<ControllPanelEditGroupPro
 const useControllPanelEditGroupViewModel = () => {
     const groupToEdit: GroupTO | null = useSelector(editSelectors.selectGroupToEdit);
     const dispatch = useDispatch();
-    const textInput = useRef<Input>(null);
+    const textInput = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         // check if sequence to edit is really set or gos back to edit mode
