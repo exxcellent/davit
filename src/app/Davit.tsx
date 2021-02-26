@@ -1,15 +1,15 @@
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { ErrorNotification } from "../components/common/fragments/ErrorNotification";
-import { ControlPanelController } from "../components/controllPanel/presentation/ControlPanelController";
-import { ActorModelController } from "../components/metaActorModel/presentation/ActorModelController";
-import { DataModelController } from "../components/metaDataModel/DataModelController";
-import { FlowChartController } from "../components/sequenceModel/FlowChartController";
-import { SequenceTableModelController } from "../components/sequenceTableModel/presentation/SequenceTableModelController";
-import { SidePanelController } from "../components/sidePanel/SidePanelController";
-import { GlobalActions } from "../slices/GlobalSlice";
-import { MasterDataActions } from "../slices/MasterDataSlice";
+import React, {useEffect} from "react";
+import {useDispatch} from "react-redux";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
+import {ErrorNotification} from "../components/common/fragments/ErrorNotification";
+import {ControlPanelController} from "../components/controllPanel/presentation/ControlPanelController";
+import {ActorModelController} from "../components/metaActorModel/presentation/ActorModelController";
+import {DataModelController} from "../components/metaDataModel/DataModelController";
+import {FlowChartController} from "../components/sequenceModel/FlowChartController";
+import {SequenceTableModelController} from "../components/sequenceTableModel/presentation/SequenceTableModelController";
+import {SidePanelController} from "../components/sidePanel/SidePanelController";
+import {GlobalActions} from "../slices/GlobalSlice";
+import {MasterDataActions} from "../slices/MasterDataSlice";
 import "./css/Davit.css";
 
 // electron needs HashRouter
@@ -37,40 +37,40 @@ export function Davit() {
             <Switch>
                 <Route exact path={ModuleRoutes.home}>
                     <div className="carvGridContainer">
-                        <ControlPanelController />
-                        <ActorModelController />
-                        <DataModelController />
-                        <SidePanelController />
-                        <FlowChartController />
-                        <SequenceTableModelController />
-                        <ErrorNotification />
+                        <ControlPanelController/>
+                        <ActorModelController/>
+                        <DataModelController/>
+                        <SidePanelController/>
+                        <FlowChartController/>
+                        <SequenceTableModelController/>
+                        <ErrorNotification/>
                     </div>
                 </Route>
                 <Route exact path={ModuleRoutes.actor}>
                     <div className="Carv2">
                         <div className="componentPage">
-                            <ActorModelController fullScreen />
+                            <ActorModelController fullScreen/>
                         </div>
                     </div>
                 </Route>
                 <Route exact path={ModuleRoutes.data}>
                     <div className="Carv2">
                         <div className="componentPage">
-                            <DataModelController fullScreen />
+                            <DataModelController fullScreen/>
                         </div>
                     </div>
                 </Route>
                 <Route exact path={ModuleRoutes.table}>
                     <div className="Carv2">
                         <div className="componentPage">
-                            <SequenceTableModelController fullScreen />
+                            <SequenceTableModelController fullScreen/>
                         </div>
                     </div>
                 </Route>
                 <Route exact path={ModuleRoutes.flowChart}>
                     <div className="Carv2">
                         <div className="componentPage">
-                            <FlowChartController fullScreen />
+                            <FlowChartController fullScreen/>
                         </div>
                     </div>
                 </Route>

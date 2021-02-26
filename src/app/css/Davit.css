@@ -32,14 +32,6 @@
     grid-template-areas: "compModel";
 }
 
-.notificationPanel {
-    grid-column-start: 2;
-    grid-column-end: 4;
-    grid-row-start: 4;
-    grid-row-end: 4;
-    justify-self: center;
-}
-
 .leftPanel {
     grid-area: leftBar;
     justify-self: center;
@@ -770,4 +762,19 @@ button:hover {
 .deleteButton.fluid {
     width: 100%;
     animation: growDeleteButton var(--animation-time) ease-in-out 0s;
+}
+
+.notificationCard {
+    width: 30em;
+    min-height: 6em;
+    background-color: var(--carv2-background-color);
+    border-radius: var(--davit-border-radius);
+    border: var(--davit-border-size) solid var(--carv2-color-border);
+    display: flex;
+    align-items: center;
+    z-index: 99;
+    position: absolute;
+    right: 0;
+    top: 0;
+    animation: notificationSlideIn var(--animation-time) ease-in-out 0s;
 }

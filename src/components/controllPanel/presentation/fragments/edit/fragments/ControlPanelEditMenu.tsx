@@ -14,6 +14,8 @@ import {RelationDropDownButton} from "../../../../../common/fragments/dropdowns/
 import {SequenceDropDownButton} from "../../../../../common/fragments/dropdowns/SequenceDropDown";
 import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
+import {handleError} from "../../../../../../slices/GlobalSlice";
+import {useDispatch} from "react-redux";
 
 export interface ControlPanelEditMenuProps {
     editOrAddActor: (actor?: ActorCTO) => void;
@@ -28,6 +30,9 @@ export interface ControlPanelEditMenuProps {
 
 export const ControlPanelEditMenu: FunctionComponent<ControlPanelEditMenuProps> = (props) => {
     const {hidden} = props;
+
+    const dispatch = useDispatch();
+
     const {
         editOrAddActor,
         editOrAddData,
@@ -47,6 +52,7 @@ export const ControlPanelEditMenu: FunctionComponent<ControlPanelEditMenuProps> 
             }}>
             <div className="optionFieldSpacer">
                 <OptionField label="actor">
+                    <button onClick={() => dispatch(handleError("TEST ERROR!"))}>Add error</button>
                     <Button.Group>
                         <Button icon="add" inverted color="orange" onClick={() => editOrAddActor()}/>
                         <Button id="buttonGroupLabel" disabled inverted color="orange">

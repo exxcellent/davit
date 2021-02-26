@@ -16,13 +16,8 @@ export const useCurrentWitdh = () => {
     // in this case useEffect will execute only once because
     // it does not have any dependencies.
     useEffect(() => {
-        // timeoutId for debounce mechanism
-        let timeoutId: number | undefined = undefined;
         const resizeListener = () => {
-            // prevent execution of previous setTimeout
-            clearTimeout(timeoutId);
-            // change width from the state object after 150 milliseconds
-            timeoutId = setTimeout(() => setWidth(getWidth()), 150);
+            setTimeout(() => setWidth(getWidth()), 150);
         };
         // set resize listener
         window.addEventListener("resize", resizeListener);
@@ -44,13 +39,8 @@ export const useCurrentHeight = () => {
     // in this case useEffect will execute only once because
     // it does not have any dependencies.
     useEffect(() => {
-        // timeoutId for debounce mechanism
-        let timeoutId: number | undefined = undefined;
         const resizeListener = () => {
-            // prevent execution of previous setTimeout
-            clearTimeout(timeoutId);
-            // change width from the state object after 150 milliseconds
-            timeoutId = setTimeout(() => setHeight(getHeight()), 150);
+            setTimeout(() => setHeight(getHeight()), 150);
         };
         // set resize listener
         window.addEventListener("resize", resizeListener);

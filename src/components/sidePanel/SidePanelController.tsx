@@ -1,30 +1,31 @@
-import React, { FunctionComponent } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { DAVIT_VERISON } from "../../app/DavitConstants";
+import React, {FunctionComponent} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {DAVIT_VERISON} from "../../app/DavitConstants";
 import logo from "../../icons/logo200.png";
-import { EditActions, editSelectors, Mode } from "../../slices/EditSlice";
-import { DavitSidePanelButton } from "../common/fragments/buttons/DavitSidePanelButton";
+import {EditActions, editSelectors, Mode} from "../../slices/EditSlice";
+import {DavitSidePanelButton} from "../common/fragments/buttons/DavitSidePanelButton";
 
-export interface SidePanelProps {}
+export interface SidePanelProps {
+}
 
 export const SidePanelController: FunctionComponent<SidePanelProps> = () => {
-    const { setModeToEdit, setModeToFile, setModeToView, mode } = useSidePanelViewModel();
+    const {setModeToEdit, setModeToFile, setModeToView, mode} = useSidePanelViewModel();
 
     return (
         <div className="leftPanel">
-            <DavitSidePanelButton icon="write" onClick={setModeToEdit} active={mode.includes(Mode.EDIT.toString())} />
-            <DavitSidePanelButton icon="eye" onClick={setModeToView} active={mode === Mode.VIEW} />
-            <DavitSidePanelButton icon="file" onClick={setModeToFile} active={mode === Mode.FILE} />
+            <DavitSidePanelButton icon="write" onClick={setModeToEdit} active={mode.includes(Mode.EDIT.toString())}/>
+            <DavitSidePanelButton icon="eye" onClick={setModeToView} active={mode === Mode.VIEW}/>
+            <DavitSidePanelButton icon="file" onClick={setModeToFile} active={mode === Mode.FILE}/>
             {/*TODO: enable wenn tabs are fixed!*/}
             {/*<DavitSidePanelButton icon="external alternate" onClick={setModeToTab} active={mode === Mode.TAB} />*/}
 
-            <div style={{ position: "absolute", bottom: "1em" }}>
-                <img src={logo} alt="fireSpot" />
+            <div style={{position: "absolute", bottom: "1em"}}>
+                <img src={logo} alt="fireSpot"/>
                 <div className="verticalLabel">DAVIT by</div>
+                <label style={{color: "white", position: "absolute", bottom: "0"}}>
+                    v {DAVIT_VERISON}
+                </label>
             </div>
-            <label style={{ color: "white", position: "absolute", bottom: "0.5em", marginLeft: "5px" }}>
-                {DAVIT_VERISON}
-            </label>
         </div>
     );
 };
