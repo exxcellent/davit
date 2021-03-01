@@ -32,7 +32,7 @@ export const DavitLabelTextfield: FunctionComponent<DavitLabelTextfieldProps> = 
     const inputDebounce = useCallback(debounce(onChangeDebounced, 30), []);
 
     return (
-        <span>
+        <div style={{display: "flex"}}>
                 <label className={"inputLabel"}>{label}</label>
                 <input
                     className={label ? "input label" : ""}
@@ -46,6 +46,6 @@ export const DavitLabelTextfield: FunctionComponent<DavitLabelTextfieldProps> = 
                     }}
                     onBlur={onBlur}
                 />
-            </span>
+        </div>
     );
 };
