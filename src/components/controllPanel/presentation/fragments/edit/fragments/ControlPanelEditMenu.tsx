@@ -1,19 +1,19 @@
-import React, {FunctionComponent} from "react";
-import {Button} from "semantic-ui-react";
-import {ActorCTO} from "../../../../../../dataAccess/access/cto/ActorCTO";
-import {DataCTO} from "../../../../../../dataAccess/access/cto/DataCTO";
-import {ChainTO} from "../../../../../../dataAccess/access/to/ChainTO";
-import {DataRelationTO} from "../../../../../../dataAccess/access/to/DataRelationTO";
-import {DataSetupTO} from "../../../../../../dataAccess/access/to/DataSetupTO";
-import {GroupTO} from "../../../../../../dataAccess/access/to/GroupTO";
-import {ActorDropDownButton} from "../../../../../common/fragments/dropdowns/ActorDropDown";
-import {ChainDropDownButton} from "../../../../../common/fragments/dropdowns/ChainDropDown";
-import {DataDropDownButton} from "../../../../../common/fragments/dropdowns/DataDropDown";
-import {DataSetupDropDownButton} from "../../../../../common/fragments/dropdowns/DataSetupDropDown";
-import {RelationDropDownButton} from "../../../../../common/fragments/dropdowns/RelationDropDown";
-import {SequenceDropDownButton} from "../../../../../common/fragments/dropdowns/SequenceDropDown";
-import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
-import {OptionField} from "../common/OptionField";
+import React, { FunctionComponent } from 'react';
+import { ActorCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
+import { DataCTO } from '../../../../../../dataAccess/access/cto/DataCTO';
+import { ChainTO } from '../../../../../../dataAccess/access/to/ChainTO';
+import { DataRelationTO } from '../../../../../../dataAccess/access/to/DataRelationTO';
+import { DataSetupTO } from '../../../../../../dataAccess/access/to/DataSetupTO';
+import { GroupTO } from '../../../../../../dataAccess/access/to/GroupTO';
+import { ActorDropDownButton } from '../../../../../common/fragments/dropdowns/ActorDropDown';
+import { DataDropDownButton } from '../../../../../common/fragments/dropdowns/DataDropDown';
+import { DataSetupDropDownButton } from '../../../../../common/fragments/dropdowns/DataSetupDropDown';
+import { RelationDropDownButton } from '../../../../../common/fragments/dropdowns/RelationDropDown';
+import { SequenceDropDownButton } from '../../../../../common/fragments/dropdowns/SequenceDropDown';
+import { ControlPanelEditSub } from '../common/ControlPanelEditSub';
+import { OptionField } from '../common/OptionField';
+import { AddOrEdit } from '../../../../../common/fragments/AddOrEdit';
+
 
 export interface ControlPanelEditMenuProps {
     editOrAddActor: (actor?: ActorCTO) => void;
@@ -27,7 +27,7 @@ export interface ControlPanelEditMenuProps {
 }
 
 export const ControlPanelEditMenu: FunctionComponent<ControlPanelEditMenuProps> = (props) => {
-    const {hidden} = props;
+    const { hidden } = props;
 
     const {
         editOrAddActor,
@@ -41,77 +41,39 @@ export const ControlPanelEditMenu: FunctionComponent<ControlPanelEditMenuProps> 
 
     return (
         <ControlPanelEditSub
-            label="EDIT"
+            label='EDIT'
             hidden={hidden}
             onClickNavItem={() => {
                 return;
             }}>
-            <div className="optionFieldSpacer">
-                <OptionField label="actor">
-                    <Button.Group>
-                        <Button icon="add" inverted color="orange" onClick={() => editOrAddActor()}/>
-                        <Button id="buttonGroupLabel" disabled inverted color="orange">
-                            Actor
-                        </Button>
-                        <ActorDropDownButton onSelect={editOrAddActor} icon="wrench"/>
-                    </Button.Group>
-                    {/* <Button.Group>
-            <Button icon="add" inverted color="orange" onClick={() => editOrAddGroup()} />
-            <Button id="buttonGroupLabel" disabled inverted color="orange">
-              Group
-            </Button>
-            <GroupDropDownButton onSelect={editOrAddGroup} icon="wrench" />
-          </Button.Group> */}
+            <div className='optionFieldSpacer'>
+                <OptionField label='actor'>
+                    <AddOrEdit label={'Actor'} addCallBack={() => editOrAddActor()}
+                               dropDown={<ActorDropDownButton onSelect={editOrAddActor} icon='wrench' />} />
                 </OptionField>
             </div>
-            <div className="optionFieldSpacer columnDivider">
-                <OptionField label="Data">
-                    <Button.Group>
-                        <Button icon="add" inverted color="orange" onClick={() => editOrAddData()}/>
-                        <Button id="buttonGroupLabel" disabled inverted color="orange">
-                            Data
-                        </Button>
-                        <DataDropDownButton onSelect={editOrAddData} icon={"wrench"}/>
-                    </Button.Group>
-                    <Button.Group>
-                        <Button icon="add" inverted color="orange" onClick={() => editOrAddRelation()}/>
-                        <Button id="buttonGroupLabel" disabled inverted color="orange">
-                            Relation
-                        </Button>
-                        <RelationDropDownButton onSelect={editOrAddRelation} icon={"wrench"}/>
-                    </Button.Group>
+            <div className='optionFieldSpacer columnDivider'>
+                <OptionField label='Data'>
+                    <AddOrEdit label={'Data'} addCallBack={() => editOrAddData()}
+                               dropDown={<DataDropDownButton onSelect={editOrAddData} icon='wrench' />} />
+                    <AddOrEdit label={'Relation'} addCallBack={() => editOrAddRelation()}
+                               dropDown={<RelationDropDownButton onSelect={editOrAddRelation} icon='wrench' />} />
                 </OptionField>
             </div>
-            <div className="optionFieldSpacer columnDivider">
-                <OptionField label="Data - Setup">
-                    <Button.Group>
-                        <Button icon="add" inverted color="orange" onClick={() => editOrAddDataSetup()}/>
-                        <Button id="buttonGroupLabel" disabled inverted color="orange">
-                            Data Setup
-                        </Button>
-                        <DataSetupDropDownButton onSelect={editOrAddDataSetup} icon={"wrench"}/>
-                    </Button.Group>
+            <div className='optionFieldSpacer columnDivider'>
+                <OptionField label='Data - Setup'>
+                    <AddOrEdit label={'Data Setup'} addCallBack={() => editOrAddDataSetup()}
+                               dropDown={<DataSetupDropDownButton onSelect={editOrAddDataSetup} icon='wrench' />} />
                 </OptionField>
             </div>
-            <div className="optionFieldSpacer columnDivider">
-                <OptionField label="sequence">
-                    <Button.Group>
-                        <Button icon="add" inverted color="orange" onClick={() => editOrAddSequence()}/>
-                        <Button id="buttonGroupLabel" disabled inverted color="orange">
-                            Sequence
-                        </Button>
-                        <SequenceDropDownButton
-                            onSelect={(sequenceTO) => editOrAddSequence(sequenceTO?.id)}
-                            icon="wrench"
-                        />
-                    </Button.Group>
-                    <Button.Group>
-                        <Button icon="add" inverted color="orange" onClick={() => editOrAddChain()}/>
-                        <Button id="buttonGroupLabel" disabled inverted color="orange">
-                            Chain
-                        </Button>
-                        <ChainDropDownButton onSelect={(chain) => editOrAddChain(chain)} icon="wrench"/>
-                    </Button.Group>
+            <div className='optionFieldSpacer columnDivider'>
+                <OptionField label='sequence'>
+                    <AddOrEdit label={'Sequence'} addCallBack={() => editOrAddSequence()}
+                               dropDown={<SequenceDropDownButton
+                                   onSelect={(sequenceTO) => editOrAddSequence(sequenceTO?.id)} icon='wrench' />} />
+                    <AddOrEdit label={'Chain'} addCallBack={() => editOrAddChain()}
+                               dropDown={<SequenceDropDownButton onSelect={(chain) => editOrAddChain(chain)}
+                                                                 icon='wrench' />} />
                 </OptionField>
             </div>
         </ControlPanelEditSub>

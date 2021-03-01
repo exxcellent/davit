@@ -1,24 +1,24 @@
-import React, {FunctionComponent, useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {Button} from "semantic-ui-react";
-import {ChainDecisionTO} from "../../../../../../dataAccess/access/to/ChainDecisionTO";
-import {ChainlinkTO} from "../../../../../../dataAccess/access/to/ChainlinkTO";
-import {ChainTO} from "../../../../../../dataAccess/access/to/ChainTO";
-import {SequenceTO} from "../../../../../../dataAccess/access/to/SequenceTO";
-import {EditActions} from "../../../../../../slices/EditSlice";
-import {masterDataSelectors} from "../../../../../../slices/MasterDataSlice";
-import {sequenceModelSelectors} from "../../../../../../slices/SequenceModelSlice";
-import {EditChain} from "../../../../../../slices/thunks/ChainThunks";
-import {EditSequence} from "../../../../../../slices/thunks/SequenceThunks";
-import {DavitUtil} from "../../../../../../utils/DavitUtil";
-import {DavitBackButton} from "../../../../../common/fragments/buttons/DavitBackButton";
-import {DavitButton} from "../../../../../common/fragments/buttons/DavitButton";
-import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
-import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
-import {ChainDecisionDropDownButton} from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
-import {ChainLinkDropDownButton} from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
-import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
-import {OptionField} from "../common/OptionField";
+import React, { FunctionComponent, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { ChainDecisionTO } from '../../../../../../dataAccess/access/to/ChainDecisionTO';
+import { ChainlinkTO } from '../../../../../../dataAccess/access/to/ChainlinkTO';
+import { ChainTO } from '../../../../../../dataAccess/access/to/ChainTO';
+import { SequenceTO } from '../../../../../../dataAccess/access/to/SequenceTO';
+import { EditActions } from '../../../../../../slices/EditSlice';
+import { masterDataSelectors } from '../../../../../../slices/MasterDataSlice';
+import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
+import { EditChain } from '../../../../../../slices/thunks/ChainThunks';
+import { EditSequence } from '../../../../../../slices/thunks/SequenceThunks';
+import { DavitUtil } from '../../../../../../utils/DavitUtil';
+import { DavitBackButton } from '../../../../../common/fragments/buttons/DavitBackButton';
+import { DavitButton } from '../../../../../common/fragments/buttons/DavitButton';
+import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
+import { DavitLabelTextfield } from '../../../../../common/fragments/DavitLabelTextfield';
+import { ChainDecisionDropDownButton } from '../../../../../common/fragments/dropdowns/ChainDecisionDropDown';
+import { ChainLinkDropDownButton } from '../../../../../common/fragments/dropdowns/ChainLinkDropDown';
+import { ControlPanelEditSub } from '../common/ControlPanelEditSub';
+import { OptionField } from '../common/OptionField';
+import { AddOrEdit } from '../../../../../common/fragments/AddOrEdit';
 
 export interface ControlPanelEditChainProps {
     hidden: boolean;
@@ -31,7 +31,7 @@ export const ControlPanelEditChain: FunctionComponent<ControlPanelEditChainProps
         name,
         changeName,
         createAnother,
-        editOrAddDecision,
+        editOrAddChainDecision,
         saveChain,
         deleteChain,
         id,
@@ -53,28 +53,16 @@ export const ControlPanelEditChain: FunctionComponent<ControlPanelEditChainProps
             </div>
             <div className="columnDivider optionFieldSpacer">
                 <OptionField label="Create / Edit | Chain - Link">
-                    <Button.Group>
-                        <Button icon="add" inverted color="orange" onClick={() => editOrAddChainLink()}/>
-                        <Button id="buttonGroupLabel" disabled inverted color="orange">
-                            Link
-                        </Button>
-                        <ChainLinkDropDownButton
-                            onSelect={(link) => editOrAddChainLink(link)}
-                            icon="wrench"
-                            chainId={id}
-                        />
-                    </Button.Group>
+                    <AddOrEdit addCallBack={editOrAddChainLink} label={"Link"} dropDown={  <ChainLinkDropDownButton
+                        onSelect={(link) => editOrAddChainLink(link)}
+                        icon="wrench"
+                        chainId={id}
+                    />} />
                 </OptionField>
             </div>
             <div className="columnDivider optionFieldSpacer">
                 <OptionField label="Create / Edit | Chain - Decision">
-                    <Button.Group>
-                        <Button icon="add" inverted color="orange" onClick={() => editOrAddDecision()}/>
-                        <Button id="buttonGroupLabel" disabled inverted color="orange">
-                            Decision
-                        </Button>
-                        <ChainDecisionDropDownButton onSelect={editOrAddDecision} icon="wrench" chainId={id}/>
-                    </Button.Group>
+                    <AddOrEdit addCallBack={editOrAddChainDecision} label={"Decision"} dropDown={  <ChainDecisionDropDownButton onSelect={editOrAddChainDecision} icon="wrench" chainId={id}/>} />
                 </OptionField>
             </div>
             <div className="columnDivider controllPanelEditChild">
@@ -189,7 +177,7 @@ const useControlPanelEditChainViewModel = () => {
         validateInput,
         createAnother,
         updateSequence,
-        editOrAddDecision: editOrAddChainDecision,
+        editOrAddChainDecision,
         editOrAddChainLink,
     };
 };

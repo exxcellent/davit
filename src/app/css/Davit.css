@@ -753,6 +753,14 @@ button:hover {
     cursor: pointer;
 }
 
+.labelField{
+    color: var(--carv2-text-color);
+    border: var(--davit-border-size) solid var(--carv2-color-secondary);
+    background-color: transparent;
+    text-align: center;
+    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
+}
+
 .deleteButton {
     background-color: transparent;
     color: var(--davit-color-warning);
@@ -778,3 +786,4 @@ button:hover {
     top: 0;
     animation: notificationSlideIn var(--animation-time) ease-in-out 0s;
 }
+

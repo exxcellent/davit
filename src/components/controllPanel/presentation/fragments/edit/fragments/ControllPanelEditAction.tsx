@@ -45,7 +45,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
         setDataAndInstance,
         dataAndInstance,
         setTriggerLabel,
-        triggerlabe,
+        triggerLabel,
     } = useControllPanelEditActionViewModel();
 
     return (
@@ -68,7 +68,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
                             <DavitLabelTextfield
                                 placeholder="Trigger text ..."
                                 onChangeDebounced={(name: string) => setTriggerLabel(name)}
-                                value={triggerlabe}
+                                value={triggerLabel}
                             />
                         </OptionField>
                     )}
@@ -283,6 +283,6 @@ const useControllPanelEditActionViewModel = () => {
             instanceId: actionToEdit?.instanceFk,
         }),
         setTriggerLabel,
-        triggerlabe: actionToEdit?.actionType === ActionType.TRIGGER ? actionToEdit.triggerText : "",
+        triggerLabel: actionToEdit?.actionType === ActionType.TRIGGER ? actionToEdit.triggerText : "",
     };
 };

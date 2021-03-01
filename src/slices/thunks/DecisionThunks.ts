@@ -1,17 +1,17 @@
 // ----------------------------------------------- DECISION -----------------------------------------------
 
-import { AppThunk } from "../../app/store";
-import { SequenceCTO } from "../../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
-import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
-import { GoToTypes } from "../../dataAccess/access/types/GoToType";
-import { DataAccess } from "../../dataAccess/DataAccess";
-import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
-import { DavitUtil } from "../../utils/DavitUtil";
-import { editActions, Mode } from "../EditSlice";
-import { handleError } from "../GlobalSlice";
-import { MasterDataActions } from "../MasterDataSlice";
-import { EditStep } from "./StepThunks";
+import { AppThunk } from '../../app/store';
+import { SequenceCTO } from '../../dataAccess/access/cto/SequenceCTO';
+import { SequenceStepCTO } from '../../dataAccess/access/cto/SequenceStepCTO';
+import { DecisionTO } from '../../dataAccess/access/to/DecisionTO';
+import { GoToTypes } from '../../dataAccess/access/types/GoToType';
+import { DataAccess } from '../../dataAccess/DataAccess';
+import { DataAccessResponse } from '../../dataAccess/DataAccessResponse';
+import { DavitUtil } from '../../utils/DavitUtil';
+import { editActions, Mode } from '../EditSlice';
+import { handleError } from '../GlobalSlice';
+import { MasterDataActions } from '../MasterDataSlice';
+import { EditStep } from './StepThunks';
 
 const createDecisionThunk = (decision: DecisionTO, from?: SequenceStepCTO | DecisionTO, ifGoTo?: Boolean): AppThunk => (
     dispatch,
@@ -81,8 +81,7 @@ const findDecisionTOThunk = (decisionId: number): DecisionTO => {
     if (response.code !== 200) {
         handleError(response.message);
     }
-    const copyObject: DecisionTO = DavitUtil.deepCopy(response.object);
-    return copyObject;
+    return DavitUtil.deepCopy(response.object);
 };
 
 const setDecisionToEditThunk = (decision: DecisionTO): AppThunk => (dispatch, getState) => {
