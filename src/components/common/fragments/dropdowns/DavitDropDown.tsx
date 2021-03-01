@@ -46,12 +46,13 @@ export const DavitIconDropDown: FunctionComponent<DavitIconDropDownProps> = (pro
 
     return (
         <Dropdown
-            icon={dropdownItems.length > 0 ? icon : ""}
+            // icon={dropdownItems.length > 0 ? icon : ""}
+            icon={icon}
             selectOnBlur={false}
             className="button icon"
             trigger={<React.Fragment />}
             scrolling
-            disabled={dropdownItems.length < 1}
+            // disabled={dropdownItems.length < 1}
             options={dropdownItems.sort((a, b) => {
                 return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
             })}
@@ -60,10 +61,10 @@ export const DavitIconDropDown: FunctionComponent<DavitIconDropDownProps> = (pro
     );
 };
 
-function parsDataToDavitDropDownItemProps(data: any): DavitDropDownItemProps {
+const parsDataToDavitDropDownItemProps = (data: any): DavitDropDownItemProps => {
     return {
         key: data.key ? data.key : -1,
         text: data.text ? data.text : "",
         value: data.value ? data.value.toString() : "",
     };
-}
+};
