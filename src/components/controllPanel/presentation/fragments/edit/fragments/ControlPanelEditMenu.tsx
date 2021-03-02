@@ -13,6 +13,7 @@ import { SequenceDropDownButton } from '../../../../../common/fragments/dropdown
 import { ControlPanelEditSub } from '../common/ControlPanelEditSub';
 import { OptionField } from '../common/OptionField';
 import { AddOrEdit } from '../../../../../common/fragments/AddOrEdit';
+import { ChainDropDownButton } from '../../../../../common/fragments/dropdowns/ChainDropDown';
 
 
 export interface ControlPanelEditMenuProps {
@@ -72,8 +73,8 @@ export const ControlPanelEditMenu: FunctionComponent<ControlPanelEditMenuProps> 
                                dropDown={<SequenceDropDownButton
                                    onSelect={(sequenceTO) => editOrAddSequence(sequenceTO?.id)} icon='wrench' />} />
                     <AddOrEdit label={'Chain'} addCallBack={() => editOrAddChain()}
-                               dropDown={<SequenceDropDownButton onSelect={(chain) => editOrAddChain(chain)}
-                                                                 icon='wrench' />} />
+                               dropDown={<ChainDropDownButton onSelect={(chain) => editOrAddChain(chain)}
+                                                              icon='wrench' />} />
                 </OptionField>
             </div>
         </ControlPanelEditSub>
