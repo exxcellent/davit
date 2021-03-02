@@ -66,7 +66,7 @@
     }
 
     100% {
-        width: 100%;
+        width: 8em;
         color: red;
     }
 }

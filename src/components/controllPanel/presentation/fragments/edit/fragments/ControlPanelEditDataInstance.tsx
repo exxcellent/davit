@@ -3,62 +3,50 @@ import {useDispatch, useSelector} from "react-redux";
 import {DataCTO} from "../../../../../../dataAccess/access/cto/DataCTO";
 import {DataInstanceTO} from "../../../../../../dataAccess/access/to/DataInstanceTO";
 import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
-import {handleError} from "../../../../../../slices/GlobalSlice";
 import {EditData} from "../../../../../../slices/thunks/DataThunks";
 import {DavitUtil} from "../../../../../../utils/DavitUtil";
 import {DavitBackButton} from "../../../../../common/fragments/buttons/DavitBackButton";
 import {DavitButton} from "../../../../../common/fragments/buttons/DavitButton";
 import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
-import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
+import {GlobalActions} from "../../../../../../slices/GlobalSlice";
 
 export interface ControlPanelEditDataInstanceProps {
     hidden: boolean;
 }
 
-export const ControlPanelEditDataInstance: FunctionComponent<ControlPanelEditDataInstanceProps> = (props) => {
-    const {hidden} = props;
+export const ControlPanelEditDataInstance: FunctionComponent<ControlPanelEditDataInstanceProps> = () => {
     const {
-        label,
         changeName,
         getName,
         goBack,
         deleteDataInstance,
         createAnother,
-        key,
         isDeletButtonDisable,
         saveOnBlure,
     } = useControlPanelEditDataInstanceViewModel();
 
     return (
-        <ControlPanelEditSub key={key} label={label} hidden={hidden} onClickNavItem={goBack}>
-            <div className="optionFieldSpacer">
-                <OptionField label="Instance - Name">
-                    <DavitLabelTextfield
-                        label="Name:"
-                        placeholder="Data Instance Name"
-                        onChangeDebounced={(name: string) => changeName(name)}
-                        value={getName()}
-                        onBlur={saveOnBlure}
-                    />
-                </OptionField>
-            </div>
-            <div className="columnDivider controllPanelEditChild"/>
-            <div className="columnDivider controllPanelEditChild">
-                <div>
-                    <OptionField label="Navigation">
-                        <DavitButton onClick={createAnother} label="Create another"/>
-                        <DavitBackButton onClick={goBack}/>
-                    </OptionField>
-                </div>
-            </div>
-            <div className="columnDivider optionFieldSpacer">
-                <OptionField label="Data - Options">
-                    <DavitDeleteButton onClick={deleteDataInstance} disable={isDeletButtonDisable()}/>
-                </OptionField>
-            </div>
-        </ControlPanelEditSub>
+        <div className="headerGrid">
+            <OptionField label="Instance - Name">
+                <DavitLabelTextfield
+                    label="Name:"
+                    placeholder="Data Instance Name"
+                    onChangeDebounced={(name: string) => changeName(name)}
+                    value={getName()}
+                    onBlur={saveOnBlure}
+                />
+            </OptionField>
+            <OptionField divider={true}/>
+            <OptionField label="Navigation" divider={true}>
+                <DavitButton onClick={createAnother} label="Create another"/>
+                <DavitBackButton onClick={goBack}/>
+            </OptionField>
+            <OptionField label="Data - Options" divider={true}>
+                <DavitDeleteButton onClick={deleteDataInstance} disable={isDeletButtonDisable()}/>
+            </OptionField>
+        </div>
     );
 };
 
@@ -70,7 +58,7 @@ const useControlPanelEditDataInstanceViewModel = () => {
     useEffect(() => {
         // check if component to edit is really set or go back to edit mode
         if (dataToEdit === null && instanceId === -1) {
-            handleError("Tried to go to edit data without data to edit specified");
+            dispatch(GlobalActions.handleError("Tried to go to edit data without data to edit specified"));
             dispatch(EditActions.setMode.edit());
         }
     });

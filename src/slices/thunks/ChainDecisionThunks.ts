@@ -1,13 +1,13 @@
-import { AppThunk } from "../../app/store";
-import { ChainDecisionTO } from "../../dataAccess/access/to/ChainDecisionTO";
-import { ChainlinkTO } from "../../dataAccess/access/to/ChainlinkTO";
-import { GoToTypesChain } from "../../dataAccess/access/types/GoToTypeChain";
-import { DataAccess } from "../../dataAccess/DataAccess";
-import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
-import { editActions, Mode } from "../EditSlice";
-import { handleError } from "../GlobalSlice";
-import { MasterDataActions } from "../MasterDataSlice";
-import { EditChainLink } from "./ChainLinkThunks";
+import {AppThunk} from "../../app/store";
+import {ChainDecisionTO} from "../../dataAccess/access/to/ChainDecisionTO";
+import {ChainlinkTO} from "../../dataAccess/access/to/ChainlinkTO";
+import {GoToTypesChain} from "../../dataAccess/access/types/GoToTypeChain";
+import {DataAccess} from "../../dataAccess/DataAccess";
+import {DataAccessResponse} from "../../dataAccess/DataAccessResponse";
+import {editActions, Mode} from "../EditSlice";
+import {MasterDataActions} from "../MasterDataSlice";
+import {EditChainLink} from "./ChainLinkThunks";
+import {GlobalActions} from "../GlobalSlice";
 
 const createChainDecisionThunk = (
     decision: ChainDecisionTO,
@@ -16,18 +16,18 @@ const createChainDecisionThunk = (
 ): AppThunk => (dispatch) => {
     const response: DataAccessResponse<ChainDecisionTO> = DataAccess.saveChaindecision(decision);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     } else {
         if (from !== undefined) {
             if ((from as ChainlinkTO).dataSetupFk !== undefined) {
-                (from as ChainlinkTO).goto = { type: GoToTypesChain.DEC, id: response.object.id };
+                (from as ChainlinkTO).goto = {type: GoToTypesChain.DEC, id: response.object.id};
                 dispatch(EditChainLink.save(from as ChainlinkTO));
             }
             if ((from as ChainDecisionTO).elseGoTo !== undefined) {
                 if (ifGoTO) {
-                    (from as ChainDecisionTO).ifGoTo = { type: GoToTypesChain.DEC, id: response.object.id };
+                    (from as ChainDecisionTO).ifGoTo = {type: GoToTypesChain.DEC, id: response.object.id};
                 } else {
-                    (from as ChainDecisionTO).elseGoTo = { type: GoToTypesChain.DEC, id: response.object.id };
+                    (from as ChainDecisionTO).elseGoTo = {type: GoToTypesChain.DEC, id: response.object.id};
                 }
                 dispatch(saveChainDecisionThunk(from as ChainDecisionTO));
             }
@@ -39,7 +39,7 @@ const createChainDecisionThunk = (
 const saveChainDecisionThunk = (decision: ChainDecisionTO): AppThunk => (dispatch) => {
     const response: DataAccessResponse<ChainDecisionTO> = DataAccess.saveChaindecision(decision);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadChainDecisionsFromBackend());
 };
@@ -47,7 +47,7 @@ const saveChainDecisionThunk = (decision: ChainDecisionTO): AppThunk => (dispatc
 const deleteChainDecisionThunk = (decision: ChainDecisionTO): AppThunk => (dispatch) => {
     const response: DataAccessResponse<ChainDecisionTO> = DataAccess.deleteChaindecision(decision);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadChainDecisionsFromBackend());
 };
@@ -55,7 +55,8 @@ const deleteChainDecisionThunk = (decision: ChainDecisionTO): AppThunk => (dispa
 const findChainDecisionThunk = (id: number): ChainDecisionTO => {
     const response: DataAccessResponse<ChainDecisionTO> = DataAccess.findChainDecision(id);
     if (response.code !== 200) {
-        handleError(response.message);
+        // TODO: This should be called with: "dispatch(GlobalActions.handleError".
+        console.warn(response.message);
     }
     return response.object;
 };
@@ -66,7 +67,7 @@ const setChainDecisionToEditThunk = (decision: ChainDecisionTO): AppThunk => (di
     if (mode === Mode.EDIT_CHAIN_DECISION || mode === Mode.EDIT_CHAIN_DECISION_CONDITION) {
         dispatch(editActions.setChainDecisionToEdit(decision));
     } else {
-        handleError("Try to set chain step to edit in mode: " + mode);
+        dispatch(GlobalActions.handleError("Try to set chain step to edit in mode: " + mode));
     }
 };
 

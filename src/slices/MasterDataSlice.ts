@@ -1,19 +1,19 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk, RootState } from "../app/store";
-import { ActorCTO } from "../dataAccess/access/cto/ActorCTO";
-import { DataCTO } from "../dataAccess/access/cto/DataCTO";
-import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
-import { ChainDecisionTO } from "../dataAccess/access/to/ChainDecisionTO";
-import { ChainlinkTO } from "../dataAccess/access/to/ChainlinkTO";
-import { ChainTO } from "../dataAccess/access/to/ChainTO";
-import { DataRelationTO } from "../dataAccess/access/to/DataRelationTO";
-import { DataSetupTO } from "../dataAccess/access/to/DataSetupTO";
-import { GroupTO } from "../dataAccess/access/to/GroupTO";
-import { SequenceTO } from "../dataAccess/access/to/SequenceTO";
-import { DataAccess } from "../dataAccess/DataAccess";
-import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
-import { DavitUtil } from "../utils/DavitUtil";
-import { handleError } from "./GlobalSlice";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {AppThunk, RootState} from "../app/store";
+import {ActorCTO} from "../dataAccess/access/cto/ActorCTO";
+import {DataCTO} from "../dataAccess/access/cto/DataCTO";
+import {SequenceStepCTO} from "../dataAccess/access/cto/SequenceStepCTO";
+import {ChainDecisionTO} from "../dataAccess/access/to/ChainDecisionTO";
+import {ChainlinkTO} from "../dataAccess/access/to/ChainlinkTO";
+import {ChainTO} from "../dataAccess/access/to/ChainTO";
+import {DataRelationTO} from "../dataAccess/access/to/DataRelationTO";
+import {DataSetupTO} from "../dataAccess/access/to/DataSetupTO";
+import {GroupTO} from "../dataAccess/access/to/GroupTO";
+import {SequenceTO} from "../dataAccess/access/to/SequenceTO";
+import {DataAccess} from "../dataAccess/DataAccess";
+import {DataAccessResponse} from "../dataAccess/DataAccessResponse";
+import {DavitUtil} from "../utils/DavitUtil";
+import {GlobalActions} from "./GlobalSlice";
 
 interface MasterDataState {
     actors: ActorCTO[];
@@ -80,7 +80,7 @@ const loadGroupsFromBackend = (): AppThunk => async (dispatch) => {
     if (response.code === 200) {
         dispatch(MasterDataSlice.actions.setGroups(response.object));
     } else {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
 };
 
@@ -89,7 +89,7 @@ const loadActorsFromBackend = (): AppThunk => async (dispatch) => {
     if (response.code === 200) {
         dispatch(MasterDataSlice.actions.setActors(response.object));
     } else {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
 };
 
@@ -98,7 +98,7 @@ const loadDatasFromBackend = (): AppThunk => (dispatch) => {
     if (response.code === 200) {
         dispatch(MasterDataSlice.actions.setDatas(response.object));
     } else {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
 };
 
@@ -107,7 +107,7 @@ const loadRelationsFromBackend = (): AppThunk => (dispatch) => {
     if (response.code === 200) {
         dispatch(MasterDataSlice.actions.setRelations(response.object));
     } else {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
 };
 
@@ -116,7 +116,7 @@ const loadSequencesFromBackend = (): AppThunk => (dispatch) => {
     if (response.code === 200) {
         dispatch(MasterDataSlice.actions.setSequences(response.object));
     } else {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
 };
 
@@ -125,7 +125,7 @@ const loadDataSetupsFromBackend = (): AppThunk => (dispatch) => {
     if (response.code === 200) {
         dispatch(MasterDataSlice.actions.setDataSetups(response.object));
     } else {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
 };
 
@@ -134,7 +134,7 @@ const loadChainsFromBackend = (): AppThunk => (dispatch) => {
     if (response.code === 200) {
         dispatch(MasterDataSlice.actions.setChains(response.object));
     } else {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
 };
 
@@ -143,7 +143,7 @@ const loadChainLinksFromBackend = (): AppThunk => (dispatch) => {
     if (response.code === 200) {
         dispatch(MasterDataSlice.actions.setChainLinks(response.object));
     } else {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
 };
 
@@ -152,7 +152,7 @@ const loadChainDecisionsFromBackend = (): AppThunk => (dispatch) => {
     if (response.code === 200) {
         dispatch(MasterDataSlice.actions.setChainDecisions(response.object));
     } else {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
 };
 

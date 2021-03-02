@@ -6,7 +6,6 @@ import {ChainlinkTO} from "../../../../../../dataAccess/access/to/ChainlinkTO";
 import {ChainTO} from "../../../../../../dataAccess/access/to/ChainTO";
 import {GoToChain, GoToTypesChain} from "../../../../../../dataAccess/access/types/GoToTypeChain";
 import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
-import {handleError} from "../../../../../../slices/GlobalSlice";
 import {sequenceModelSelectors} from "../../../../../../slices/SequenceModelSlice";
 import {EditChainDecision} from "../../../../../../slices/thunks/ChainDecisionThunks";
 import {DavitUtil} from "../../../../../../utils/DavitUtil";
@@ -19,6 +18,7 @@ import {ChainLinkDropDown} from "../../../../../common/fragments/dropdowns/Chain
 import {GoToChainOptionDropDown} from "../../../../../common/fragments/dropdowns/GoToChainOptionDropDown";
 import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
+import {GlobalActions} from "../../../../../../slices/GlobalSlice";
 
 export interface ControlPanelEditChainDecisionProps {
     hidden: boolean;
@@ -158,7 +158,7 @@ const useControlPanelEditChainConditionViewModel = () => {
 
     useEffect(() => {
         if (DavitUtil.isNullOrUndefined(decisionToEdit)) {
-            dispatch(handleError("Tried to go to edit condition step without conditionToEdit specified"));
+            dispatch(GlobalActions.handleError("Tried to go to edit condition step without conditionToEdit specified"));
             dispatch(EditActions.setMode.edit());
         }
         if (decisionToEdit) {

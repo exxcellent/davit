@@ -11,7 +11,7 @@ export interface ControlPanelProps {
 }
 
 export const ControlPanelController: FunctionComponent<ControlPanelProps> = () => {
-    const {mode} = useControllPanelViewModel();
+    const {mode} = useControlPanelViewModel();
 
     const useGetViewByMode = (mode: Mode) => {
         if (!DavitUtil.isNullOrUndefined(mode)) {
@@ -32,19 +32,12 @@ export const ControlPanelController: FunctionComponent<ControlPanelProps> = () =
 
     return (
         <div className="controllerHeader">
-            <div style={{display: "flex", width: "100%", padding: "0"}}>
-                {/* {getModesDivs(mode, onClickNavItem)} */}
-                {/* <ControllPanelEditController />
-      <ControllPanelSequenceOptions hidden={mode.includes("VIEW")} />
-      <ControllPanelFileController hidden={!mode.includes("FILE")} />
-      <ControllPanelTabController hidden={mode.includes("TAB")} /> */}
-                {useGetViewByMode(mode)}
-            </div>
+            {useGetViewByMode(mode)}
         </div>
     );
 };
 
-const useControllPanelViewModel = () => {
+const useControlPanelViewModel = () => {
     const mode: Mode = useSelector(editSelectors.selectMode);
     const dispatch = useDispatch();
 

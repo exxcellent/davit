@@ -8,7 +8,6 @@ import {SequenceStepCTO} from "../../../../../../dataAccess/access/cto/SequenceS
 import {ActionTO} from "../../../../../../dataAccess/access/to/ActionTO";
 import {ActionType} from "../../../../../../dataAccess/access/types/ActionType";
 import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
-import {handleError} from "../../../../../../slices/GlobalSlice";
 import {MasterDataActions} from "../../../../../../slices/MasterDataSlice";
 import {sequenceModelSelectors} from "../../../../../../slices/SequenceModelSlice";
 import {EditAction} from "../../../../../../slices/thunks/ActionThunks";
@@ -20,17 +19,16 @@ import {ActionTypeDropDown} from "../../../../../common/fragments/dropdowns/Acti
 import {ActorDropDown} from "../../../../../common/fragments/dropdowns/ActorDropDown";
 import {DataDropDown} from "../../../../../common/fragments/dropdowns/DataDropDown";
 import {DataAndInstanceId, InstanceDropDown} from "../../../../../common/fragments/dropdowns/InstanceDropDown";
-import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
+import {GlobalActions} from "../../../../../../slices/GlobalSlice";
 
-export interface ControllPanelEditActionProps {
+export interface ControlPanelEditActionProps {
     hidden: boolean;
 }
 
-export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionProps> = (props) => {
-    const {hidden} = props;
+export const ControlPanelEditAction: FunctionComponent<ControlPanelEditActionProps> = () => {
+
     const {
-        label,
         setActor,
         setAction,
         setData,
@@ -41,96 +39,81 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
         actionType,
         setMode,
         createAnother,
-        key,
         setDataAndInstance,
         dataAndInstance,
         setTriggerLabel,
         triggerLabel,
-    } = useControllPanelEditActionViewModel();
+    } = useControlPanelEditActionViewModel();
 
     return (
-        <ControlPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={setMode}>
-            <div className="optionFieldSpacer">
-                <OptionField>
-                    <OptionField label="Select action to execute">
-                        <ActionTypeDropDown onSelect={setAction} value={actionType}/>
-                    </OptionField>
-                    {actionType !== ActionType.TRIGGER && (
-                        <OptionField label="Data">
-                            {actionType === ActionType.ADD && (
-                                <InstanceDropDown onSelect={setDataAndInstance} value={dataAndInstance}/>
-                            )}
-                            {actionType !== ActionType.ADD && <DataDropDown onSelect={setData} value={dataId}/>}
-                        </OptionField>
-                    )}
-                    {actionType === ActionType.TRIGGER && (
-                        <OptionField label="LABEL">
-                            <DavitLabelTextfield
-                                placeholder="Trigger text ..."
-                                onChangeDebounced={(name: string) => setTriggerLabel(name)}
-                                value={triggerLabel}
-                            />
-                        </OptionField>
-                    )}
+        <div className="headerGrid">
+            <OptionField>
+                <OptionField label="Select action to execute">
+                    <ActionTypeDropDown onSelect={setAction} value={actionType}/>
                 </OptionField>
-            </div>
-            <div className="optionFieldSpacer">
+                {actionType !== ActionType.TRIGGER && (
+                    <OptionField label="Data">
+                        {actionType === ActionType.ADD && (
+                            <InstanceDropDown onSelect={setDataAndInstance} value={dataAndInstance}/>
+                        )}
+                        {actionType !== ActionType.ADD && <DataDropDown onSelect={setData} value={dataId}/>}
+                    </OptionField>
+                )}
+                {actionType === ActionType.TRIGGER && (
+                    <OptionField label="LABEL">
+                        <DavitLabelTextfield
+                            placeholder="Trigger text ..."
+                            onChangeDebounced={(name: string) => setTriggerLabel(name)}
+                            value={triggerLabel}
+                        />
+                    </OptionField>
+                )}
+            </OptionField>
+            <OptionField>
+                <label className="optionFieldLabel" style={{paddingTop: "1em"}}>
+                    {actionType === ActionType.ADD ? "TO" : "FROM"}
+                </label>
+                <OptionField
+                    label={
+                        actionType?.includes("SEND") || actionType === ActionType.TRIGGER
+                            ? "Select sending Actor"
+                            : "Actor"
+                    }>
+                    <ActorDropDown
+                        onSelect={(actor) =>
+                            setActor(actor, actionType?.includes("SEND") || actionType === ActionType.TRIGGER)
+                        }
+                        value={
+                            actionType?.includes("SEND") || actionType === ActionType.TRIGGER
+                                ? sendingActorId?.toString()
+                                : receivingActorId?.toString()
+                        }
+                    />
+                </OptionField>
+            </OptionField>
+            {(actionType?.includes("SEND") || actionType === ActionType.TRIGGER) && (
                 <OptionField label=" ">
                     <label className="optionFieldLabel" style={{paddingTop: "1em"}}>
-                        {actionType === ActionType.ADD ? "TO" : "FROM"}
+                        TO
                     </label>
-                    <OptionField
-                        label={
-                            actionType?.includes("SEND") || actionType === ActionType.TRIGGER
-                                ? "Select sending Actor"
-                                : "Actor"
-                        }>
+                    <OptionField label="Select receiving Actor">
                         <ActorDropDown
-                            onSelect={(actor) =>
-                                setActor(actor, actionType?.includes("SEND") || actionType === ActionType.TRIGGER)
-                            }
-                            value={
-                                actionType?.includes("SEND") || actionType === ActionType.TRIGGER
-                                    ? sendingActorId?.toString()
-                                    : receivingActorId?.toString()
-                            }
+                            onSelect={(actor) => setActor(actor, false)}
+                            value={receivingActorId?.toString()}
                         />
                     </OptionField>
                 </OptionField>
-            </div>
-            <div className="optionFieldSpacer">
-                {(actionType?.includes("SEND") || actionType === ActionType.TRIGGER) && (
-                    <OptionField label=" ">
-                        <label className="optionFieldLabel" style={{paddingTop: "1em"}}>
-                            TO
-                        </label>
-                        <OptionField label="Select receiving Actor">
-                            <ActorDropDown
-                                onSelect={(actor) => setActor(actor, false)}
-                                value={receivingActorId?.toString()}
-                            />
-                        </OptionField>
-                    </OptionField>
-                )}
-            </div>
-            <div className="columnDivider controllPanelEditChild">
-                <div className="optionFieldSpacer">
-                    <OptionField label="Navigation">
-                        <DavitButton onClick={createAnother} label="Create another"/>
-                        <DavitButton onClick={setMode} iconName={faReply}/>
-                    </OptionField>
-                </div>
-                <div className="optionFieldSpacer">
-                    <OptionField label="Sequence - Options">
-                        <DavitDeleteButton onClick={deleteAction}/>
-                    </OptionField>
-                </div>
-            </div>
-        </ControlPanelEditSub>
+            )}
+            <OptionField label="Options">
+                <DavitButton onClick={createAnother} label="Create another"/>
+                <DavitButton onClick={setMode} iconName={faReply}/>
+                <DavitDeleteButton onClick={deleteAction}/>
+            </OptionField>
+        </div>
     );
 };
 
-const useControllPanelEditActionViewModel = () => {
+const useControlPanelEditActionViewModel = () => {
     const actionToEdit: ActionTO | null = useSelector(editSelectors.selectActionToEdit);
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const dispatch = useDispatch();
@@ -140,7 +123,7 @@ const useControllPanelEditActionViewModel = () => {
     useEffect(() => {
         // check if actor to edit is really set or gos back to edit mode
         if (actionToEdit === null || actionToEdit === undefined) {
-            dispatch(handleError("Tried to go to edit action without actionToEdit specified"));
+            dispatch(GlobalActions.handleError("Tried to go to edit action without actionToEdit specified"));
             dispatch(EditActions.setMode.edit());
         }
         // used to focus the textfield on create another
@@ -158,7 +141,7 @@ const useControllPanelEditActionViewModel = () => {
                 dispatch(EditActions.setMode.editStep(step));
             } else {
                 // should never happend but as fallback savty.
-                dispatch(handleError("Step not found!"));
+                dispatch(GlobalActions.handleError("Step not found!"));
                 dispatch(EditActions.setMode.edit());
             }
         }

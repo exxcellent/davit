@@ -1,19 +1,17 @@
-// ----------------------------------------------- ACTION -----------------------------------------------
-
-import { AppThunk } from "../../app/store";
-import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
-import { ActionTO } from "../../dataAccess/access/to/ActionTO";
-import { DataAccess } from "../../dataAccess/DataAccess";
-import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
-import { editActions, EditActions, Mode } from "../EditSlice";
-import { handleError } from "../GlobalSlice";
-import { MasterDataActions } from "../MasterDataSlice";
-import { EditStep } from "./StepThunks";
+import {AppThunk} from "../../app/store";
+import {SequenceStepCTO} from "../../dataAccess/access/cto/SequenceStepCTO";
+import {ActionTO} from "../../dataAccess/access/to/ActionTO";
+import {DataAccess} from "../../dataAccess/DataAccess";
+import {DataAccessResponse} from "../../dataAccess/DataAccessResponse";
+import {editActions, EditActions, Mode} from "../EditSlice";
+import {MasterDataActions} from "../MasterDataSlice";
+import {EditStep} from "./StepThunks";
+import {GlobalActions} from "../GlobalSlice";
 
 const createActionThunk = (action: ActionTO): AppThunk => (dispatch) => {
     const response: DataAccessResponse<ActionTO> = DataAccess.saveActionTO(action);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(EditActions.setMode.editAction(response.object));
 };
@@ -21,7 +19,7 @@ const createActionThunk = (action: ActionTO): AppThunk => (dispatch) => {
 const saveActionThunk = (action: ActionTO): AppThunk => (dispatch) => {
     const response: DataAccessResponse<ActionTO> = DataAccess.saveActionTO(action);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
 };
 
@@ -30,7 +28,7 @@ const deleteActionThunk = (action: ActionTO): AppThunk => (dispatch) => {
 
     const response: DataAccessResponse<ActionTO> = DataAccess.deleteActionTO(action);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
 
     const stepToUpdateActionIndexes: SequenceStepCTO | undefined = MasterDataActions.find.findSequenceStepCTO(
@@ -56,7 +54,7 @@ const setActionToEditThunk = (action: ActionTO): AppThunk => (dispatch, getState
     if (mode === Mode.EDIT_SEQUENCE_STEP_ACTION) {
         dispatch(editActions.setActionToEdit(action));
     } else {
-        handleError("Try to set action to edit in mode: " + mode);
+        dispatch(GlobalActions.handleError("Try to set action to edit in mode: " + mode));
     }
 };
 

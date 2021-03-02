@@ -7,7 +7,6 @@ import {DataSetupTO} from "../../../../../../dataAccess/access/to/DataSetupTO";
 import {SequenceTO} from "../../../../../../dataAccess/access/to/SequenceTO";
 import {GoToChain, GoToTypesChain} from "../../../../../../dataAccess/access/types/GoToTypeChain";
 import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
-import {handleError} from "../../../../../../slices/GlobalSlice";
 import {sequenceModelSelectors} from "../../../../../../slices/SequenceModelSlice";
 import {EditChainLink} from "../../../../../../slices/thunks/ChainLinkThunks";
 import {EditChain} from "../../../../../../slices/thunks/ChainThunks";
@@ -24,6 +23,7 @@ import {GoToChainOptionDropDown} from "../../../../../common/fragments/dropdowns
 import {SequenceDropDown} from "../../../../../common/fragments/dropdowns/SequenceDropDown";
 import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
+import {GlobalActions} from "../../../../../../slices/GlobalSlice";
 
 export interface ControlPanelEditChainLinkProps {
     hidden: boolean;
@@ -142,7 +142,7 @@ const useControlPanelEditChainStepViewModel = () => {
 
     useEffect(() => {
         if (DavitUtil.isNullOrUndefined(chainLinkToEdit)) {
-            handleError("Tried to go to edit sequence step without sequenceStepToEdit specified");
+            dispatch(GlobalActions.handleError("Tried to go to edit sequence step without sequenceStepToEdit specified"));
             dispatch(EditActions.setMode.edit());
         }
         if (chainLinkToEdit) {

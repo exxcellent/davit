@@ -2,7 +2,6 @@ import React, {FunctionComponent, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {GroupTO} from "../../../../../../dataAccess/access/to/GroupTO";
 import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
-import {handleError} from "../../../../../../slices/GlobalSlice";
 import {EditGroup} from "../../../../../../slices/thunks/GroupThunks";
 import {DavitUtil} from "../../../../../../utils/DavitUtil";
 import {DavitButton} from "../../../../../common/fragments/buttons/DavitButton";
@@ -10,6 +9,7 @@ import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDe
 import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
 import {ColorDropDown} from "../../../../../common/fragments/dropdowns/ColorDropDown";
 import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
+import {GlobalActions} from "../../../../../../slices/GlobalSlice";
 
 export interface ControlPanelEditGroupProps {
     hidden: boolean;
@@ -67,7 +67,7 @@ const useControlPanelEditGroupViewModel = () => {
     useEffect(() => {
         // check if sequence to edit is really set or gos back to edit mode
         if (DavitUtil.isNullOrUndefined(groupToEdit)) {
-            handleError("Tried to go to edit group without groupToEdit specified");
+            dispatch(GlobalActions.handleError("Tried to go to edit group without groupToEdit specified"));
             dispatch(EditActions.setMode.edit());
         }
 

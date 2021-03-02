@@ -42,6 +42,7 @@
 .controllerHeader {
     grid-area: header;
     background-color: var(--carv2-background-color-header);
+    color: var(--carv2-text-color);
     border-style: solid;
     border-width: 0 0 5px 0;
     border-image: linear-gradient(to bottom, var(--carv2-background-color-shadow), var(--carv2-background-color)) 1 1 100%;
@@ -225,42 +226,26 @@
 
 /* -------------------------------------------- Optionfield -------------------------------------------- */
 
-.optionFieldAround {
-    width: 100%;
-    height: 100%;
-    justify-content: space-around;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-}
-
-.innerOptionFieldSpacer {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .optionField {
     width: 100%;
-    display: flex;
-    justify-content: space-around;
-}
-
-.optionFieldLabel {
-    display: flex;
-    justify-content: center;
-    min-width: 10em;
-    text-align: center;
-    color: var(--carv2-text-color);
-    font-size: 0.8em;
-}
-
-.optionFieldSpacer {
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    align-items: center;
     padding: 1em;
+}
+
+.optionFieldChildArea {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.columnDivider {
+    border-style: solid;
+    border-width: 0 0 0 2px;
+    border-image: linear-gradient(to bottom, transparent, #e0e1e2, #e0e1e2, #e0e1e2, transparent) 0 100%;
 }
 
 #buttonGroupLabel {
@@ -460,12 +445,6 @@
     width: 100%;
 }
 
-.columnDivider {
-    display: flex;
-    border-style: solid;
-    border-width: 0 0 0 2px;
-    border-image: linear-gradient(to bottom, transparent, #e0e1e2, #e0e1e2, #e0e1e2, #e0e1e2, transparent) 0 100%;
-}
 
 #innerCard {
     width: 100px;
@@ -753,7 +732,7 @@ button:hover {
     cursor: pointer;
 }
 
-.labelField{
+.labelField {
     color: var(--carv2-text-color);
     border: var(--davit-border-size) solid var(--carv2-color-secondary);
     background-color: transparent;
@@ -768,7 +747,7 @@ button:hover {
 }
 
 .deleteButton.fluid {
-    width: 100%;
+    width: 8em;
     animation: growDeleteButton var(--animation-time) ease-in-out 0s;
 }
 
@@ -785,5 +764,12 @@ button:hover {
     right: 0;
     top: 0;
     animation: notificationSlideIn var(--animation-time) ease-in-out 0s;
+}
+
+.headerGrid {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    align-items: center;
+    height: 100%;
 }
 

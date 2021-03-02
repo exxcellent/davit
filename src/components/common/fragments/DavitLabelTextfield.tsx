@@ -33,19 +33,19 @@ export const DavitLabelTextfield: FunctionComponent<DavitLabelTextfieldProps> = 
 
     return (
         <div style={{display: "flex"}}>
-                <label className={"inputLabel"}>{label}</label>
-                <input
-                    className={label ? "input label" : ""}
-                    type={"text"}
-                    placeholder={placeholder}
-                    value={stateValue}
-                    ref={inputRef}
-                    onChange={(event) => {
-                        setStateValue(event.target.value);
-                        inputDebounce(event.target.value);
-                    }}
-                    onBlur={onBlur}
-                />
+            {label && <label className={"inputLabel"}>{label}</label>}
+            <input
+                className={label ? "input label" : ""}
+                type={"text"}
+                placeholder={placeholder}
+                value={stateValue}
+                ref={inputRef}
+                onChange={(event) => {
+                    setStateValue(event.target.value);
+                    inputDebounce(event.target.value);
+                }}
+                onBlur={onBlur}
+            />
         </div>
     );
 };

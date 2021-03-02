@@ -1,17 +1,17 @@
-import { AppThunk } from "../../app/store";
-import { DataRelationTO } from "../../dataAccess/access/to/DataRelationTO";
-import { DataAccess } from "../../dataAccess/DataAccess";
-import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
-import { editActions, Mode } from "../EditSlice";
-import { handleError } from "../GlobalSlice";
-import { MasterDataActions } from "../MasterDataSlice";
+import {AppThunk} from "../../app/store";
+import {DataRelationTO} from "../../dataAccess/access/to/DataRelationTO";
+import {DataAccess} from "../../dataAccess/DataAccess";
+import {DataAccessResponse} from "../../dataAccess/DataAccessResponse";
+import {editActions, Mode} from "../EditSlice";
+import {GlobalActions} from "../GlobalSlice";
+import {MasterDataActions} from "../MasterDataSlice";
 
 const createRelationThunk = (): AppThunk => (dispatch) => {
     const relation: DataRelationTO = new DataRelationTO();
     const response: DataAccessResponse<DataRelationTO> = DataAccess.saveDataRelationCTO(relation);
     if (response.code !== 200) {
         console.log(response);
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadRelationsFromBackend());
     dispatch(setRelationToEditThunk(response.object));
@@ -21,7 +21,7 @@ const saveRelationThunk = (relation: DataRelationTO): AppThunk => async (dispatc
     const response: DataAccessResponse<DataRelationTO> = await DataAccess.saveDataRelationCTO(relation);
     if (response.code !== 200) {
         console.log(response);
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadRelationsFromBackend());
 };
@@ -30,7 +30,7 @@ const deleteRelationThunk = (relation: DataRelationTO): AppThunk => async (dispa
     const response: DataAccessResponse<DataRelationTO> = await DataAccess.deleteDataRelation(relation);
     if (response.code !== 200) {
         console.log(response);
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadRelationsFromBackend());
 };
@@ -40,7 +40,7 @@ const setRelationToEditThunk = (relation: DataRelationTO): AppThunk => (dispatch
     if (mode === Mode.EDIT_RELATION) {
         dispatch(editActions.setRelationToEdit(relation));
     } else {
-        handleError("Try to set relation to edit in mode: " + mode);
+        dispatch(GlobalActions.handleError("Try to set relation to edit in mode: " + mode));
     }
 };
 

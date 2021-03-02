@@ -1,41 +1,38 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { SequenceCTO } from '../../../../../../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../../../../../../dataAccess/access/cto/SequenceStepCTO';
-import { ActionTO } from '../../../../../../dataAccess/access/to/ActionTO';
-import { DecisionTO } from '../../../../../../dataAccess/access/to/DecisionTO';
-import { GoTo, GoToTypes } from '../../../../../../dataAccess/access/types/GoToType';
-import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
-import { handleError } from '../../../../../../slices/GlobalSlice';
-import { MasterDataActions } from '../../../../../../slices/MasterDataSlice';
-import { SequenceModelActions, sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
-import { EditAction } from '../../../../../../slices/thunks/ActionThunks';
-import { EditSequence } from '../../../../../../slices/thunks/SequenceThunks';
-import { EditStep } from '../../../../../../slices/thunks/StepThunks';
-import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { DavitAddButton } from '../../../../../common/fragments/buttons/DavitAddButton';
-import { DavitBackButton } from '../../../../../common/fragments/buttons/DavitBackButton';
-import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
-import { DavitRootButton } from '../../../../../common/fragments/buttons/DavitRootButton';
-import { DavitLabelTextfield } from '../../../../../common/fragments/DavitLabelTextfield';
-import { ActionButtonDropDown } from '../../../../../common/fragments/dropdowns/ActionButtonDropDown';
-import { DecisionDropDown } from '../../../../../common/fragments/dropdowns/DecisionDropDown';
-import { GoToOptionDropDown } from '../../../../../common/fragments/dropdowns/GoToOptionDropDown';
-import { StepDropDown } from '../../../../../common/fragments/dropdowns/StepDropDown';
-import { ControlPanelEditSub } from '../common/ControlPanelEditSub';
-import { OptionField } from '../common/OptionField';
-import { DavitCommentButton } from '../../../../../common/fragments/buttons/DavitCommentButton';
-import { AddOrEdit } from '../../../../../common/fragments/AddOrEdit';
+import React, {FunctionComponent, useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {SequenceCTO} from '../../../../../../dataAccess/access/cto/SequenceCTO';
+import {SequenceStepCTO} from '../../../../../../dataAccess/access/cto/SequenceStepCTO';
+import {ActionTO} from '../../../../../../dataAccess/access/to/ActionTO';
+import {DecisionTO} from '../../../../../../dataAccess/access/to/DecisionTO';
+import {GoTo, GoToTypes} from '../../../../../../dataAccess/access/types/GoToType';
+import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
+import {MasterDataActions} from '../../../../../../slices/MasterDataSlice';
+import {SequenceModelActions, sequenceModelSelectors} from '../../../../../../slices/SequenceModelSlice';
+import {EditAction} from '../../../../../../slices/thunks/ActionThunks';
+import {EditSequence} from '../../../../../../slices/thunks/SequenceThunks';
+import {EditStep} from '../../../../../../slices/thunks/StepThunks';
+import {DavitUtil} from '../../../../../../utils/DavitUtil';
+import {DavitAddButton} from '../../../../../common/fragments/buttons/DavitAddButton';
+import {DavitBackButton} from '../../../../../common/fragments/buttons/DavitBackButton';
+import {DavitDeleteButton} from '../../../../../common/fragments/buttons/DavitDeleteButton';
+import {DavitRootButton} from '../../../../../common/fragments/buttons/DavitRootButton';
+import {DavitLabelTextfield} from '../../../../../common/fragments/DavitLabelTextfield';
+import {ActionButtonDropDown} from '../../../../../common/fragments/dropdowns/ActionButtonDropDown';
+import {DecisionDropDown} from '../../../../../common/fragments/dropdowns/DecisionDropDown';
+import {GoToOptionDropDown} from '../../../../../common/fragments/dropdowns/GoToOptionDropDown';
+import {StepDropDown} from '../../../../../common/fragments/dropdowns/StepDropDown';
+import {OptionField} from '../common/OptionField';
+import {DavitCommentButton} from '../../../../../common/fragments/buttons/DavitCommentButton';
+import {AddOrEdit} from '../../../../../common/fragments/AddOrEdit';
+import {GlobalActions} from "../../../../../../slices/GlobalSlice";
 
 export interface ControlPanelEditStepProps {
     hidden: boolean;
 }
 
-export const ControlPanelEditStep: FunctionComponent<ControlPanelEditStepProps> = (props) => {
-    const { hidden } = props;
+export const ControlPanelEditStep: FunctionComponent<ControlPanelEditStepProps> = () => {
 
     const {
-        label,
         name,
         changeName,
         deleteSequenceStep,
@@ -50,93 +47,71 @@ export const ControlPanelEditStep: FunctionComponent<ControlPanelEditStepProps> 
         createGoToDecision,
         setRoot,
         isRoot,
-        key,
         stepId,
         note,
         saveNote,
-    } = useControllPanelEditSequenceStepViewModel();
+    } = useControlPanelEditSequenceStepViewModel();
 
     return (
-        <ControlPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveSequenceStep}>
-            <div className='controllPanelEditChild'>
-                <div className='optionField'>
-                    <OptionField label='Step - name'>
-                        <DavitLabelTextfield
-                            label='Name:'
-                            placeholder='Step Name ...'
-                            onChangeDebounced={(name: string) => changeName(name)}
-                            value={name}
-                            focus={true}
-                            onBlur={updateStep}
-                        />
-                    </OptionField>
-                </div>
-            </div>
-            <div className='columnDivider controllPanelEditChild'>
-                <div>
-                    <OptionField label='Create / Edit | Step - Action'>
-                        <AddOrEdit addCallBack={() => {
-                            editOrAddAction();
+        <div className='headerGrid'>
+            <OptionField>
+                <OptionField label='Step - name'>
+                    <DavitLabelTextfield
+                        label='Name:'
+                        placeholder='Step Name ...'
+                        onChangeDebounced={(name: string) => changeName(name)}
+                        value={name}
+                        focus={true}
+                        onBlur={updateStep}
+                    />
+                </OptionField>
+                <OptionField label='Create / Edit | Step - Action'>
+                    <AddOrEdit addCallBack={() => {
+                        editOrAddAction();
+                        updateStep();
+                    }} label={'Action'} dropDown={<ActionButtonDropDown
+                        onSelect={(action) => {
+                            editOrAddAction(action);
                             updateStep();
-                        }} label={'Action'} dropDown={<ActionButtonDropDown
-                            onSelect={(action) => {
-                                editOrAddAction(action);
-                                updateStep();
-                            }}
-                            icon={'wrench'}
-                        />} />
-                    </OptionField>
-                </div>
-            </div>
-            <div className='columnDivider controllPanelEditChild'>
-                <div className='optionField'>
-                    <OptionField label='Select type of the next element'>
-                        <GoToOptionDropDown onSelect={handleType} value={goTo ? goTo.type : GoToTypes.ERROR} />
-                    </OptionField>
-                    {goTo!.type === GoToTypes.STEP && (
-                        <OptionField label='Create or Select next step'>
-                            <DavitAddButton onClick={createGoToStep} />
-                            <StepDropDown
-                                onSelect={setGoToTypeStep}
-                                value={goTo?.type === GoToTypes.STEP ? goTo.id : 1}
-                                exclude={stepId}
-                            />
-                        </OptionField>
-                    )}
-                    {goTo!.type === GoToTypes.DEC && (
-                        <OptionField label='Create or Select next decision'>
-                            <DavitAddButton onClick={createGoToDecision} />
-                            <DecisionDropDown
-                                onSelect={setGoToTypeDecision}
-                                value={goTo?.type === GoToTypes.DEC ? goTo.id : 1}
-                            />
-                        </OptionField>
-                    )}
-                </div>
-            </div>
-            <div className='columnDivider controllPanelEditChild'>
-                <div>
-                    <OptionField label='Navigation'>
-                        <DavitCommentButton onSaveCallback={saveNote} comment={note} />
-                        <DavitBackButton onClick={saveSequenceStep} />
-                    </OptionField>
-                </div>
-                <div className='controllPanelEditChild'>
-                    <div>
-                        <OptionField label='Sequence - Options'>
-                            <DavitRootButton onClick={setRoot} isRoot={isRoot} />
-                            <div>
-                                <DavitDeleteButton onClick={deleteSequenceStep} />
-                            </div>
-                        </OptionField>
-                    </div>
-                </div>
-            </div>
-        </ControlPanelEditSub>
+                        }}
+                        icon={'wrench'}
+                    />}/>
+                </OptionField>
+            </OptionField>
+            <OptionField label='Select type of the next element' divider={true}>
+                <GoToOptionDropDown onSelect={handleType} value={goTo ? goTo.type : GoToTypes.ERROR}/>
+            </OptionField>
+            {/*TODO: make this in one component or function*/}
+            {goTo!.type === GoToTypes.STEP && (
+                <OptionField label='Create or Select next step'>
+                    <DavitAddButton onClick={createGoToStep}/>
+                    <StepDropDown
+                        onSelect={setGoToTypeStep}
+                        value={goTo?.type === GoToTypes.STEP ? goTo.id : 1}
+                        exclude={stepId}
+                    />
+                </OptionField>
+            )}
+            {goTo!.type === GoToTypes.DEC && (
+                <OptionField label='Create or Select next decision'>
+                    <DavitAddButton onClick={createGoToDecision}/>
+                    <DecisionDropDown
+                        onSelect={setGoToTypeDecision}
+                        value={goTo?.type === GoToTypes.DEC ? goTo.id : 1}
+                    />
+                </OptionField>
+            )}
+            <OptionField label='Options' divider={true}>
+                <DavitCommentButton onSaveCallback={saveNote} comment={note}/>
+                <DavitBackButton onClick={saveSequenceStep}/>
+                <DavitRootButton onClick={setRoot} isRoot={isRoot}/>
+                <DavitDeleteButton onClick={deleteSequenceStep}/>
+            </OptionField>
+        </div>
     );
 };
 
-const useControllPanelEditSequenceStepViewModel = () => {
+const useControlPanelEditSequenceStepViewModel = () => {
     const stepToEdit: SequenceStepCTO | null = useSelector(editSelectors.selectStepToEdit);
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const dispatch = useDispatch();
@@ -148,7 +123,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
     useEffect(() => {
         if (stepToEdit === undefined || null) {
-            handleError('Tried to go to edit sequence step without sequenceStepToEdit specified');
+            dispatch(GlobalActions.handleError('Tried to go to edit sequence step without sequenceStepToEdit specified'));
             dispatch(EditActions.setMode.edit());
         }
         if (stepToEdit) {
@@ -232,7 +207,7 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
     const handleType = (newGoToType?: string) => {
         if (newGoToType !== undefined) {
-            const gType = { type: (GoToTypes as any)[newGoToType] };
+            const gType = {type: (GoToTypes as any)[newGoToType]};
             setCurrentGoTo(gType);
             switch (newGoToType) {
                 case GoToTypes.ERROR:
@@ -249,14 +224,14 @@ const useControllPanelEditSequenceStepViewModel = () => {
 
     const setGoToTypeStep = (step?: SequenceStepCTO) => {
         if (step) {
-            const newGoTo: GoTo = { type: GoToTypes.STEP, id: step.squenceStepTO.id };
+            const newGoTo: GoTo = {type: GoToTypes.STEP, id: step.squenceStepTO.id};
             saveGoToType(newGoTo);
         }
     };
 
     const setGoToTypeDecision = (decision?: DecisionTO) => {
         if (decision) {
-            const newGoTo: GoTo = { type: GoToTypes.DEC, id: decision.id };
+            const newGoTo: GoTo = {type: GoToTypes.DEC, id: decision.id};
             saveGoToType(newGoTo);
         }
     };

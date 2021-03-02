@@ -33,11 +33,8 @@ export const ControlPanelEditSub: FunctionComponent<ControlPanelEditProps> = (pr
     return (
         <div style={{display: "flex", width: "100%", height: "8em"}}>
             {getModesDivs(mode, onClickNavItem)}
-            <div
-                className={"optionFieldSpacer " + (hidden ? "slideable-hidden" : "slideable")}
-                style={{padding: "10px"}}>
-                <div className="controllPanelEdit">{children}</div>
-            </div>
+
+            <div className="controllPanelEdit">{children}</div>
         </div>
     );
 };

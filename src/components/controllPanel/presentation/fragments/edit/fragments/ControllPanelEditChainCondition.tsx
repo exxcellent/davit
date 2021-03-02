@@ -3,7 +3,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {ChainDecisionTO} from "../../../../../../dataAccess/access/to/ChainDecisionTO";
 import {ChainTO} from "../../../../../../dataAccess/access/to/ChainTO";
 import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
-import {handleError} from "../../../../../../slices/GlobalSlice";
 import {sequenceModelSelectors} from "../../../../../../slices/SequenceModelSlice";
 import {EditChainDecision} from "../../../../../../slices/thunks/ChainDecisionThunks";
 import {DavitUtil} from "../../../../../../utils/DavitUtil";
@@ -16,6 +15,7 @@ import {
 } from "../../../../../common/fragments/dropdowns/InstanceDropDown";
 import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
+import {GlobalActions} from "../../../../../../slices/GlobalSlice";
 
 export interface ControllPanelEditChainConditionProps {
     hidden: boolean;
@@ -71,7 +71,7 @@ const useControllPanelEditConditionViewModel = () => {
 
     useEffect(() => {
         if (DavitUtil.isNullOrUndefined(decisionToEdit)) {
-            dispatch(handleError("Tried to go to edit chain decision without decisionToEdit specified"));
+            dispatch(GlobalActions.handleError("Tried to go to edit chain decision without decisionToEdit specified"));
             dispatch(EditActions.setMode.edit());
         }
     }, [dispatch, decisionToEdit]);

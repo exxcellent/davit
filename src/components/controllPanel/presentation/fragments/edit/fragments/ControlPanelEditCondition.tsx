@@ -3,7 +3,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {SequenceCTO} from "../../../../../../dataAccess/access/cto/SequenceCTO";
 import {ConditionTO} from "../../../../../../dataAccess/access/to/ConditionTO";
 import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
-import {handleError} from "../../../../../../slices/GlobalSlice";
 import {sequenceModelSelectors} from "../../../../../../slices/SequenceModelSlice";
 import {EditCondition} from "../../../../../../slices/thunks/ConditionThunks";
 import {EditDecision} from "../../../../../../slices/thunks/DecisionThunks";
@@ -15,6 +14,7 @@ import {ActorDropDown} from "../../../../../common/fragments/dropdowns/ActorDrop
 import {DataAndInstanceId, InstanceDropDown} from "../../../../../common/fragments/dropdowns/InstanceDropDown";
 import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
+import {GlobalActions} from "../../../../../../slices/GlobalSlice";
 
 export interface ControlPanelEditConditionProps {
     hidden: boolean;
@@ -72,7 +72,7 @@ const useControllPanelEditConditionViewModel = () => {
 
     useEffect(() => {
         if (DavitUtil.isNullOrUndefined(conditionToEdit)) {
-            dispatch(handleError("Tried to go to edit condition without conditoin to edit specified"));
+            dispatch(GlobalActions.handleError("Tried to go to edit condition without conditoin to edit specified"));
             dispatch(EditActions.setMode.edit());
         }
     }, [conditionToEdit, dispatch]);

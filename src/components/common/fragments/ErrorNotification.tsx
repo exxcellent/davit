@@ -11,7 +11,7 @@ export const ErrorNotification: FunctionComponent<ErrorNotificationProps> = () =
         const dispatch = useDispatch();
 
         const buildMessage = (message: string, index: number): JSX.Element => {
-            return <DavitNotification header={"Error"} text={message} level={NotificationLevel.error}
+            return <DavitNotification key={index} header={"Error"} text={message} level={NotificationLevel.error}
                                       onCloseCallback={() => dispatch(globalSlice.actions.removeErrorAtIndex(index))}/>;
         };
 

@@ -1,21 +1,21 @@
 // ----------------------------------------------- CHAIN -----------------------------------------------
 
-import { AppThunk } from "../../app/store";
-import { ChainCTO } from "../../dataAccess/access/cto/ChainCTO";
-import { ChainDecisionTO } from "../../dataAccess/access/to/ChainDecisionTO";
-import { ChainlinkTO } from "../../dataAccess/access/to/ChainlinkTO";
-import { ChainTO } from "../../dataAccess/access/to/ChainTO";
-import { DataAccess } from "../../dataAccess/DataAccess";
-import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
-import { handleError } from "../GlobalSlice";
-import { MasterDataActions } from "../MasterDataSlice";
-import { SequenceModelActions } from "../SequenceModelSlice";
+import {AppThunk} from "../../app/store";
+import {ChainCTO} from "../../dataAccess/access/cto/ChainCTO";
+import {ChainDecisionTO} from "../../dataAccess/access/to/ChainDecisionTO";
+import {ChainlinkTO} from "../../dataAccess/access/to/ChainlinkTO";
+import {ChainTO} from "../../dataAccess/access/to/ChainTO";
+import {DataAccess} from "../../dataAccess/DataAccess";
+import {DataAccessResponse} from "../../dataAccess/DataAccessResponse";
+import {MasterDataActions} from "../MasterDataSlice";
+import {SequenceModelActions} from "../SequenceModelSlice";
+import {GlobalActions} from "../GlobalSlice";
 
 const createChainThunk = (): AppThunk => (dispatch) => {
     const chain: ChainTO = new ChainTO();
     const response: DataAccessResponse<ChainTO> = DataAccess.saveChainTO(chain);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadChainsFromBackend());
     dispatch(SequenceModelActions.setCurrentChain(response.object));
@@ -33,7 +33,7 @@ const getChainCTO = (chain: ChainTO): ChainCTO => {
 const saveChainThunk = (chain: ChainTO): AppThunk => (dispatch) => {
     const response: DataAccessResponse<ChainTO> = DataAccess.saveChainTO(chain);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadChainsFromBackend());
     dispatch(SequenceModelActions.setCurrentChain(response.object));
@@ -42,7 +42,7 @@ const saveChainThunk = (chain: ChainTO): AppThunk => (dispatch) => {
 const deleteChainThunk = (chain: ChainTO): AppThunk => (dispatch) => {
     const response: DataAccessResponse<ChainTO> = DataAccess.deleteChain(chain);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadChainsFromBackend());
     dispatch(MasterDataActions.loadChainDecisionsFromBackend());
@@ -56,7 +56,7 @@ const setChainRootThunk = (chainId: number, rootId: number, isDecision: boolean)
         isDecision,
     );
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadChainsFromBackend());
     dispatch(MasterDataActions.loadChainLinksFromBackend());

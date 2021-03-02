@@ -50,7 +50,7 @@ const storefileData = (fileData: string): AppThunk => async (dispatch) => {
     if (response.code === 200) {
         window.location.reload();
     } else {
-        dispatch(handleError(response.message));
+        dispatch(globalSlice.actions.handleError(response.message));
     }
 };
 
@@ -59,14 +59,14 @@ const createNewProject = (): AppThunk => (dispatch) => {
     if (response.code === 200) {
         window.location.reload();
     } else {
-        dispatch(handleError(response.message));
+        dispatch(globalSlice.actions.handleError(response.message));
     }
 };
 
 const downloadData = (projectName: string): AppThunk => (dispatch) => {
     const response: DataAccessResponse<void> = DataAccess.downloadData(projectName);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(globalSlice.actions.handleError(response.message));
     }
 };
 
@@ -76,7 +76,7 @@ const zoomInAndSaveActorZoom = (): AppThunk => (dispatch, getState) => {
     if (response.code === 200) {
         dispatch(globalSlice.actions.setActorZoom(newZoom));
     } else {
-        dispatch(handleError("Could not save zoom!"));
+        dispatch(globalSlice.actions.handleError("Could not save zoom!"));
     }
 };
 
@@ -86,7 +86,7 @@ const zoomOutAndSaveActorZoom = (): AppThunk => (dispatch, getState) => {
     if (response.code === 200) {
         dispatch(globalSlice.actions.setActorZoom(newZoom));
     } else {
-        dispatch(handleError("Could not save zoom!"));
+        dispatch(globalSlice.actions.handleError("Could not save zoom!"));
     }
 };
 
@@ -96,7 +96,7 @@ const zoomInAndSaveDataZoom = (): AppThunk => (dispatch, getState) => {
     if (response.code === 200) {
         dispatch(globalSlice.actions.setDataZoom(newZoom));
     } else {
-        dispatch(handleError("Could not save zoom!"));
+        dispatch(globalSlice.actions.handleError("Could not save zoom!"));
     }
 };
 
@@ -106,7 +106,7 @@ const zoomOutAndSaveDataZoom = (): AppThunk => (dispatch, getState) => {
     if (response.code === 200) {
         dispatch(globalSlice.actions.setDataZoom(newZoom));
     } else {
-        dispatch(handleError("Could not save zoom!"));
+        dispatch(globalSlice.actions.handleError("Could not save zoom!"));
     }
 };
 
@@ -115,7 +115,7 @@ const loadActorZoomFromBackend = (): AppThunk => (dispatch) => {
     if (response.code === 200) {
         dispatch(globalSlice.actions.setActorZoom(response.object));
     } else {
-        dispatch(handleError("Could not save zoom!"));
+        dispatch(globalSlice.actions.handleError("Could not save zoom!"));
     }
 };
 
@@ -124,7 +124,7 @@ const loadDataZoomFromBackend = (): AppThunk => (dispatch) => {
     if (response.code === 200) {
         dispatch(globalSlice.actions.setDataZoom(response.object));
     } else {
-        dispatch(handleError("Could not save zoom!"));
+        dispatch(globalSlice.actions.handleError("Could not save zoom!"));
     }
 };
 
@@ -140,6 +140,7 @@ export const GlobalActions = {
     dataZoomOut: zoomOutAndSaveDataZoom,
     loadActorZoomFromBackend,
     loadDataZoomFromBackend,
+    handleError: globalSlice.actions.handleError
 };
 
 // -------------------------------------- Selectors --------------------------------------
@@ -156,7 +157,5 @@ export const globalSelectors = {
         return state.global.dataZoom;
     },
 };
-
-export const {handleError} = globalSlice.actions;
 
 export const globalReducer = globalSlice.reducer;

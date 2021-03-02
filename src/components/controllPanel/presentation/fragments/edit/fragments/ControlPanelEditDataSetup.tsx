@@ -1,31 +1,28 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { ActorCTO } from '../../../../../../dataAccess/access/cto/ActorCTO';
-import { DataSetupCTO } from '../../../../../../dataAccess/access/cto/DataSetupCTO';
-import { InitDataTO } from '../../../../../../dataAccess/access/to/InitDataTO';
-import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
-import { handleError } from '../../../../../../slices/GlobalSlice';
-import { EditDataSetup } from '../../../../../../slices/thunks/DataSetupThunks';
-import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { DavitBackButton } from '../../../../../common/fragments/buttons/DavitBackButton';
-import { DavitButton } from '../../../../../common/fragments/buttons/DavitButton';
-import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
-import { DavitLabelTextfield } from '../../../../../common/fragments/DavitLabelTextfield';
-import { InitDataDropDownButton } from '../../../../../common/fragments/dropdowns/InitDataDropDown';
-import { ControlPanelEditSub } from '../common/ControlPanelEditSub';
-import { OptionField } from '../common/OptionField';
-import { DavitCommentButton } from '../../../../../common/fragments/buttons/DavitCommentButton';
-import { AddOrEdit } from '../../../../../common/fragments/AddOrEdit';
+import React, {FunctionComponent, useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {ActorCTO} from '../../../../../../dataAccess/access/cto/ActorCTO';
+import {DataSetupCTO} from '../../../../../../dataAccess/access/cto/DataSetupCTO';
+import {InitDataTO} from '../../../../../../dataAccess/access/to/InitDataTO';
+import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
+import {EditDataSetup} from '../../../../../../slices/thunks/DataSetupThunks';
+import {DavitUtil} from '../../../../../../utils/DavitUtil';
+import {DavitBackButton} from '../../../../../common/fragments/buttons/DavitBackButton';
+import {DavitButton} from '../../../../../common/fragments/buttons/DavitButton';
+import {DavitDeleteButton} from '../../../../../common/fragments/buttons/DavitDeleteButton';
+import {DavitLabelTextfield} from '../../../../../common/fragments/DavitLabelTextfield';
+import {InitDataDropDownButton} from '../../../../../common/fragments/dropdowns/InitDataDropDown';
+import {OptionField} from '../common/OptionField';
+import {DavitCommentButton} from '../../../../../common/fragments/buttons/DavitCommentButton';
+import {AddOrEdit} from '../../../../../common/fragments/AddOrEdit';
+import {GlobalActions} from "../../../../../../slices/GlobalSlice";
 
 export interface ControlPanelEditDataSetupProps {
     hidden: boolean;
 }
 
-export const ControlPanelEditDataSetup: FunctionComponent<ControlPanelEditDataSetupProps> = (props) => {
-    const { hidden } = props;
+export const ControlPanelEditDataSetup: FunctionComponent<ControlPanelEditDataSetupProps> = () => {
 
     const {
-        label,
         name,
         changeName,
         saveDataSetup,
@@ -37,53 +34,39 @@ export const ControlPanelEditDataSetup: FunctionComponent<ControlPanelEditDataSe
         createInitData,
         note,
         saveNote,
-    } = useControllPanelEditDataSetupViewModel();
+    } = useControlPanelEditDataSetupViewModel();
 
     return (
-        <ControlPanelEditSub label={label} hidden={hidden} onClickNavItem={saveDataSetup}>
-            <div className='optionFieldSpacer'>
-                <OptionField label='Data - SETUP NAME'>
-                    <DavitLabelTextfield
-                        label='Name:'
-                        placeholder='Data Setup Name ...'
-                        onChangeDebounced={(name: string) => changeName(name)}
-                        value={name}
-                        focus={true}
-                        onBlur={updateDataSetup}
-                    />
-                </OptionField>
-            </div>
-            <div className='columnDivider optionFieldSpacer'>
-                <OptionField label='Create / edit | Init - Data'>
-                    <AddOrEdit addCallBack={createInitData} label={'Data'}
-                               dropDown={<InitDataDropDownButton onSelect={editInitData} icon='wrench'
-                                                                 initDatas={getInitDatas} />} />
-                </OptionField>
-            </div>
-            <div className='columnDivider controllPanelEditChild'>
-                <OptionField>
-                    <DavitCommentButton onSaveCallback={saveNote} comment={note} />
-                </OptionField>
-            </div>
+        <div className='headerGrid'>
+            <OptionField label='Data - SETUP NAME'>
+                <DavitLabelTextfield
+                    label='Name:'
+                    placeholder='Data Setup Name ...'
+                    onChangeDebounced={(name: string) => changeName(name)}
+                    value={name}
+                    focus={true}
+                    onBlur={updateDataSetup}
+                />
+            </OptionField>
+            <OptionField label='Create / edit | Init - Data' divider={true}>
+                <AddOrEdit addCallBack={createInitData} label={'Data'}
+                           dropDown={<InitDataDropDownButton onSelect={editInitData} icon='wrench'
+                                                             initDatas={getInitDatas}/>}/>
+            </OptionField>
+            <OptionField label={"Note"} divider={true}>
+                <DavitCommentButton onSaveCallback={saveNote} comment={note}/>
+            </OptionField>
 
-            <div className='columnDivider controllPanelEditChild'>
-                <div className='optionFieldSpacer'>
-                    <OptionField label='Navigation'>
-                        <DavitButton onClick={createAnother} label='Create another' />
-                        <DavitBackButton onClick={saveDataSetup} />
-                    </OptionField>
-                </div>
-                <div className='optionFieldSpacer'>
-                    <OptionField label='Sequence - Options'>
-                        <DavitDeleteButton onClick={deleteDataSetup} />
-                    </OptionField>
-                </div>
-            </div>
-        </ControlPanelEditSub>
+            <OptionField label='Options' divider={true}>
+                <DavitButton onClick={createAnother} label='Create another'/>
+                <DavitBackButton onClick={saveDataSetup}/>
+                <DavitDeleteButton onClick={deleteDataSetup}/>
+            </OptionField>
+        </div>
     );
 };
 
-const useControllPanelEditDataSetupViewModel = () => {
+const useControlPanelEditDataSetupViewModel = () => {
     const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.selectDataSetupToEdit);
     const dispatch = useDispatch();
     const [actorToEdit, setActorToEdit] = useState<ActorCTO | null>(null);
@@ -91,7 +74,7 @@ const useControllPanelEditDataSetupViewModel = () => {
     useEffect(() => {
         // check if sequence to edit is really set or gos back to edit mode
         if (DavitUtil.isNullOrUndefined(dataSetupToEdit)) {
-            handleError('Tried to go to edit dataSetup without dataSetupToedit specified');
+            dispatch(GlobalActions.handleError('Tried to go to edit dataSetup without dataSetupToedit specified'));
             dispatch(EditActions.setMode.edit());
         }
     }, [dataSetupToEdit, dispatch]);

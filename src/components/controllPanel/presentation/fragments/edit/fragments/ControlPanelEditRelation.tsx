@@ -4,26 +4,23 @@ import {Dropdown, DropdownItemProps} from "semantic-ui-react";
 import {DataCTO} from "../../../../../../dataAccess/access/cto/DataCTO";
 import {DataRelationTO, Direction, RelationType} from "../../../../../../dataAccess/access/to/DataRelationTO";
 import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
-import {handleError} from "../../../../../../slices/GlobalSlice";
 import {masterDataSelectors} from "../../../../../../slices/MasterDataSlice";
 import {EditRelation} from "../../../../../../slices/thunks/RelationThunks";
 import {DavitUtil} from "../../../../../../utils/DavitUtil";
 import {DavitBackButton} from "../../../../../common/fragments/buttons/DavitBackButton";
 import {DavitButton} from "../../../../../common/fragments/buttons/DavitButton";
 import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
-import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
 import {DavitCommentButton} from "../../../../../common/fragments/buttons/DavitCommentButton";
+import {GlobalActions} from "../../../../../../slices/GlobalSlice";
 
 export interface ControlPanelEditRelationProps {
     hidden: boolean;
 }
 
-export const ControlPanelEditRelation: FunctionComponent<ControlPanelEditRelationProps> = (props) => {
-    const {hidden} = props;
+export const ControlPanelEditRelation: FunctionComponent<ControlPanelEditRelationProps> = () => {
 
     const {
-        label,
         data1,
         data2,
         direction1,
@@ -35,102 +32,75 @@ export const ControlPanelEditRelation: FunctionComponent<ControlPanelEditRelatio
         dataOptions,
         directionOptions,
         createAnother,
-        key,
         updateRelation,
         note,
         saveNote,
     } = useControllPanelEditRelationViewModel();
 
     return (
-        <ControlPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveRelation}>
-            <div className="optionFieldSpacer">
-                <div className="optionField">
-                    <OptionField label="Select first relation data">
-                        <Dropdown
-                            placeholder="Select Data..."
-                            selection
-                            selectOnBlur={false}
-                            options={dataOptions}
-                            onChange={(event, data) => {
-                                setData(Number(data.value));
-                            }}
-                            value={data1}
-                            onBlur={() => updateRelation()}
-                        />
-                    </OptionField>
-
-                    <OptionField label="Select line ''out'' direction">
-                        <Dropdown
-                            placeholder="Select Direction1"
-                            selection
-                            options={directionOptions}
-                            onChange={(event, data) => setDirection(Direction[data.value as Direction])}
-                            value={direction1}
-                            onBlur={() => updateRelation()}
-                        />
-                    </OptionField>
-                </div>
-            </div>
-            <div className="columnDivider controllPanelEditChild">
-                <div className="optionField">
-                    <OptionField label="Select second relation data">
-                        <div
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "center",
-                            }}>
-                            <Dropdown
-                                placeholder="Select Data..."
-                                selection
-                                selectOnBlur={false}
-                                options={dataOptions}
-                                onChange={(event, data) => {
-                                    setData(Number(data.value), true);
-                                }}
-                                value={data2}
-                                onBlur={() => updateRelation()}
-                            />
-                        </div>
-                    </OptionField>
-                    <OptionField label="Selct line ''in'' direction">
-                        <div
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "center",
-                            }}>
-                            <Dropdown
-                                placeholder="Select Direction2"
-                                selection
-                                options={directionOptions}
-                                onChange={(event, data) => setDirection(Direction[data.value as Direction], true)}
-                                value={direction2}
-                                onBlur={() => updateRelation()}
-                            />
-                        </div>
-                    </OptionField>
-                </div>
-            </div>
-            <div className="columnDivider controllPanelEditChild">
-                <OptionField>
-                    <DavitCommentButton onSaveCallback={saveNote} comment={note}/>
+        <div className="headerGrid">
+            <OptionField>
+                <OptionField label="Select first relation data">
+                    <Dropdown
+                        placeholder="Select Data..."
+                        selection
+                        selectOnBlur={false}
+                        options={dataOptions}
+                        onChange={(event, data) => {
+                            setData(Number(data.value));
+                        }}
+                        value={data1}
+                        onBlur={() => updateRelation()}
+                    />
                 </OptionField>
-            </div>
-            <div className="columnDivider controllPanelEditChild">
-                <div className="optionFieldSpacer">
-                    <OptionField label="Navigation">
-                        <DavitBackButton onClick={saveRelation}/>
-                        <DavitButton onClick={createAnother} label="Create another"/>
-                    </OptionField>
-                </div>
-                <div className="optionFieldSpacer">
-                    <OptionField label="Sequence - Options">
-                        <DavitDeleteButton onClick={deleteRelation}/>
-                    </OptionField>
-                </div>
-            </div>
-        </ControlPanelEditSub>
+                <OptionField label="Select line ''out'' direction" divider={true}>
+                    <Dropdown
+                        placeholder="Select Direction1"
+                        selection
+                        options={directionOptions}
+                        onChange={(event, data) => setDirection(Direction[data.value as Direction])}
+                        value={direction1}
+                        onBlur={() => updateRelation()}
+                    />
+                </OptionField>
+            </OptionField>
+
+            <OptionField divider={true}>
+                <OptionField label="Select second relation data">
+                    <Dropdown
+                        placeholder="Select Data..."
+                        selection
+                        selectOnBlur={false}
+                        options={dataOptions}
+                        onChange={(event, data) => {
+                            setData(Number(data.value), true);
+                        }}
+                        value={data2}
+                        onBlur={() => updateRelation()}
+                    />
+                </OptionField>
+                <OptionField label="Selct line ''in'' direction" divider={true}>
+                    <Dropdown
+                        placeholder="Select Direction2"
+                        selection
+                        options={directionOptions}
+                        onChange={(event, data) => setDirection(Direction[data.value as Direction], true)}
+                        value={direction2}
+                        onBlur={() => updateRelation()}
+                    />
+                </OptionField>
+            </OptionField>
+
+            <OptionField label={"Note"} divider={true}>
+                <DavitCommentButton onSaveCallback={saveNote} comment={note}/>
+            </OptionField>
+
+            <OptionField label="Options" divider={true}>
+                <DavitButton onClick={createAnother} label="Create another"/>
+                <DavitBackButton onClick={saveRelation}/>
+                <DavitDeleteButton onClick={deleteRelation}/>
+            </OptionField>
+        </div>
     );
 };
 
@@ -144,7 +114,7 @@ const useControllPanelEditRelationViewModel = () => {
         // check if component to edit is really set or go back to edit mode
         if (DavitUtil.isNullOrUndefined(relationToEdit)) {
             dispatch(EditActions.setMode.edit());
-            handleError("Tried to go to edit relation without relationToedit specified");
+            dispatch(GlobalActions.handleError("Tried to go to edit relation without relationToedit specified"));
         }
     }, [relationToEdit, dispatch]);
 

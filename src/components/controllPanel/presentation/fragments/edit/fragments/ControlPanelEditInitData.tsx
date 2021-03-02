@@ -5,7 +5,6 @@ import {DataInstanceTO} from "../../../../../../dataAccess/access/to/DataInstanc
 import {DataSetupTO} from "../../../../../../dataAccess/access/to/DataSetupTO";
 import {InitDataTO} from "../../../../../../dataAccess/access/to/InitDataTO";
 import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
-import {handleError} from "../../../../../../slices/GlobalSlice";
 import {masterDataSelectors} from "../../../../../../slices/MasterDataSlice";
 import {EditInitData} from "../../../../../../slices/thunks/InitDataThunks";
 import {DavitUtil} from "../../../../../../utils/DavitUtil";
@@ -14,17 +13,15 @@ import {DavitButton} from "../../../../../common/fragments/buttons/DavitButton";
 import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import {ActorDropDown} from "../../../../../common/fragments/dropdowns/ActorDropDown";
 import {DataAndInstanceId, InstanceDropDown} from "../../../../../common/fragments/dropdowns/InstanceDropDown";
-import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
+import {GlobalActions} from "../../../../../../slices/GlobalSlice";
 
-export interface ControllPanelEditInitDataProps {
+export interface ControlPanelEditInitDataProps {
     hidden: boolean;
 }
 
-export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitDataProps> = (props) => {
-    const {hidden} = props;
+export const ControlPanelEditInitData: FunctionComponent<ControlPanelEditInitDataProps> = () => {
     const {
-        label,
         saveInitData,
         deleteInitData,
         data,
@@ -32,46 +29,34 @@ export const ControllPanelEditInitData: FunctionComponent<ControllPanelEditInitD
         setActorId,
         setInstance,
         createAnother,
-        key,
-        // getInstances,
-    } = useControllPanelEditDataSetupViewModel();
+    } = useControlPanelEditDataSetupViewModel();
 
     return (
-        <ControlPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={saveInitData}>
-            <div className="optionFieldSpacer">
-                <OptionField label="Select Actor to which data will be added">
-                    <ActorDropDown
-                        onSelect={(actor) => (actor ? setActorId(actor.actor.id) : setActorId(-1))}
-                        placeholder="Select Actor..."
-                        onBlur={() => {
-                        }}
-                        value={actor?.toString()}
-                    />
-                </OptionField>
-            </div>
-            <div className="columnDivider optionFieldSpacer">
-                <OptionField label="Select Data which will be added">
-                    <InstanceDropDown onSelect={setInstance} value={data}/>
-                </OptionField>
-            </div>
-            <div className="columnDivider controllPanelEditChild" style={{paddingLeft: "10px", paddingRight: "10px"}}>
-                <div>
-                    <OptionField label="Navigation">
-                        <DavitButton onClick={createAnother} label="Create another"/>
-                        <DavitBackButton onClick={saveInitData}/>
-                    </OptionField>
-                </div>
-            </div>
-            <div className="columnDivider optionFieldSpacer">
-                <OptionField label="options">
-                    <DavitDeleteButton onClick={deleteInitData}/>
-                </OptionField>
-            </div>
-        </ControlPanelEditSub>
+        <div className="headerGrid">
+            <OptionField label="Select Actor to which data will be added">
+                <ActorDropDown
+                    onSelect={(actor) => (actor ? setActorId(actor.actor.id) : setActorId(-1))}
+                    placeholder="Select Actor..."
+                    onBlur={() => {
+                    }}
+                    value={actor?.toString()}
+                />
+            </OptionField>
+            <OptionField label="Select Data which will be added" divider={true}>
+                <InstanceDropDown onSelect={setInstance} value={data}/>
+            </OptionField>
+            <OptionField label="Navigation" divider={true}>
+                <DavitButton onClick={createAnother} label="Create another"/>
+                <DavitBackButton onClick={saveInitData}/>
+            </OptionField>
+            <OptionField label={"Options"} divider={true}>
+                <DavitDeleteButton onClick={deleteInitData}/>
+            </OptionField>
+        </div>
     );
 };
 
-const useControllPanelEditDataSetupViewModel = () => {
+const useControlPanelEditDataSetupViewModel = () => {
     const initDataToEdit: InitDataTO | null = useSelector(editSelectors.selectInitDataToEdit);
     const dataSetup: DataSetupTO | null = useSelector(
         masterDataSelectors.selectDataSetupToById(initDataToEdit?.dataSetupFk || -1),
@@ -83,7 +68,7 @@ const useControllPanelEditDataSetupViewModel = () => {
     useEffect(() => {
         // check if sequence to edit is really set or gos back to edit mode
         if (initDataToEdit === null) {
-            handleError("Tried to go to edit initData without initDataToedit specified");
+            dispatch(GlobalActions.handleError("Tried to go to edit initData without initDataToedit specified"));
             dispatch(EditActions.setMode.edit());
         }
         // used to focus the textfield on create another

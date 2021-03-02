@@ -1,17 +1,17 @@
-import { AppThunk } from "../../app/store";
-import { GroupTO } from "../../dataAccess/access/to/GroupTO";
-import { DataAccess } from "../../dataAccess/DataAccess";
-import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
-import { editActions, Mode } from "../EditSlice";
-import { handleError } from "../GlobalSlice";
-import { MasterDataActions } from "../MasterDataSlice";
+import {AppThunk} from "../../app/store";
+import {GroupTO} from "../../dataAccess/access/to/GroupTO";
+import {DataAccess} from "../../dataAccess/DataAccess";
+import {DataAccessResponse} from "../../dataAccess/DataAccessResponse";
+import {editActions, Mode} from "../EditSlice";
+import {MasterDataActions} from "../MasterDataSlice";
+import {GlobalActions} from "../GlobalSlice";
 
 const createGroupThunk = (): AppThunk => (dispatch) => {
     const group: GroupTO = new GroupTO();
     const response: DataAccessResponse<GroupTO> = DataAccess.saveGroup(group);
     if (response.code !== 200) {
         console.log(response);
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadGroupsFromBackend());
     dispatch(setGroupToEditThunk(response.object));
@@ -21,7 +21,7 @@ const saveGroupThunk = (group: GroupTO): AppThunk => (dispatch) => {
     const response: DataAccessResponse<GroupTO> = DataAccess.saveGroup(group);
     if (response.code !== 200) {
         console.log(response);
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadGroupsFromBackend());
 };
@@ -30,7 +30,7 @@ const deleteGroupThunk = (group: GroupTO): AppThunk => (dispatch) => {
     const response: DataAccessResponse<GroupTO> = DataAccess.deleteGroupTO(group);
     if (response.code !== 200) {
         console.log(response);
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadGroupsFromBackend());
     dispatch(MasterDataActions.loadActorsFromBackend());
@@ -41,7 +41,7 @@ const setGroupToEditThunk = (group: GroupTO): AppThunk => (dispatch, getState) =
     if (mode === Mode.EDIT_DATA || mode === Mode.EDIT_DATA_INSTANCE) {
         dispatch(editActions.setGroupToEdit(group));
     } else {
-        handleError("Try to set data to edit in mode: " + mode);
+        dispatch(GlobalActions.handleError("Try to set data to edit in mode: " + mode));
     }
 };
 

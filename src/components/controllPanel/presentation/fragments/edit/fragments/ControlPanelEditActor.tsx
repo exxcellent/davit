@@ -3,7 +3,6 @@ import {DavitBackButton} from "../../../../../common/fragments/buttons/DavitBack
 import {DavitButton} from "../../../../../common/fragments/buttons/DavitButton";
 import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
-import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
 import {OptionField} from "../common/OptionField";
 import {DavitCommentButton} from "../../../../../common/fragments/buttons/DavitCommentButton";
 import {DavitUtil} from "../../../../../../utils/DavitUtil";
@@ -12,61 +11,48 @@ import {EditActor} from "../../../../../../slices/thunks/ActorThunks";
 import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {GroupTO} from "../../../../../../dataAccess/access/to/GroupTO";
-import {handleError} from "../../../../../../slices/GlobalSlice";
+import {GlobalActions} from "../../../../../../slices/GlobalSlice";
 
 export interface ControlPanelEditActorProps {
     hidden: boolean;
 }
 
-export const ControlPanelEditActor: FunctionComponent<ControlPanelEditActorProps> = (props) => {
-    const {hidden} = props;
+export const ControlPanelEditActor: FunctionComponent<ControlPanelEditActorProps> = () => {
 
     const {
-        label,
         name,
         changeName,
         saveActor,
         deleteComponent,
         updateActor,
         createAnother,
-        id,
         note,
         saveNote,
     } = useControlPanelEditActorViewModel();
 
     return (
-        <ControlPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveActor}>
-            <div className="optionFieldSpacer">
-                <OptionField label="Component - Name">
-                    <DavitLabelTextfield
-                        label="Name:"
-                        placeholder="Component Name"
-                        onChangeDebounced={(name: string) => changeName(name)}
-                        onBlur={updateActor}
-                        value={name}
-                        focus
-                    />
-                </OptionField>
-            </div>
-            <div className="columnDivider">
-                <OptionField>
-                    <DavitCommentButton onSaveCallback={saveNote} comment={note}/>
-                </OptionField>
-            </div>
-            <div className="columnDivider controllPanelEditChild">
-                <div>
-                    <OptionField label="Navigation">
-                        <DavitButton onClick={createAnother} label="Create another"/>
-                        <DavitBackButton onClick={saveActor}/>
-                    </OptionField>
-                </div>
-            </div>
-            <div className="optionFieldSpacer columnDivider">
-                <OptionField label="Component - Options">
-                    <DavitDeleteButton onClick={deleteComponent}/>
-                </OptionField>
-            </div>
-        </ControlPanelEditSub>
+        <div className={"headerGrid"}>
+            <OptionField label="Component - Name">
+                <DavitLabelTextfield
+                    label="Name:"
+                    placeholder="Component Name"
+                    onChangeDebounced={(name: string) => changeName(name)}
+                    onBlur={updateActor}
+                    value={name}
+                    focus
+                />
+            </OptionField>
+            <OptionField label={"Note"} divider={true}>
+                <DavitCommentButton onSaveCallback={saveNote} comment={note}/>
+            </OptionField>
+            <OptionField label="Navigation" divider={true}>
+                <DavitButton onClick={createAnother} label="Create another"/>
+                <DavitBackButton onClick={saveActor}/>
+            </OptionField>
+            <OptionField label="Component - Options" divider={true}>
+                <DavitDeleteButton onClick={deleteComponent}/>
+            </OptionField>
+        </div>
     );
 };
 
@@ -78,10 +64,10 @@ const useControlPanelEditActorViewModel = () => {
     useEffect(() => {
 // check if component to edit is really set or gos back to edit mode
         if (DavitUtil.isNullOrUndefined(actorToEdit)) {
-            handleError("Tried to go to edit component without component To edit specified");
+            dispatch(GlobalActions.handleError("Tried to go to edit component without component To edit specified"));
             EditActions.setMode.edit();
         }
-    }, [actorToEdit]);
+    }, [actorToEdit, dispatch]);
 
     const changeName = (name: string) => {
         const copyActorToEdit: ActorCTO = DavitUtil.deepCopy(actorToEdit);
