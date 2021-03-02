@@ -1,6 +1,6 @@
 import { IconDefinition } from "@fortawesome/fontawesome-common-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { FunctionComponent } from "react";
+import React, { CSSProperties, FunctionComponent } from 'react';
 
 interface DavitButtonLabelProps {
     onClick: () => void;
@@ -8,13 +8,14 @@ interface DavitButtonLabelProps {
     disable?: boolean;
     iconName?: IconDefinition;
     className?: string;
+    style?: CSSProperties;
 }
 
 export const DavitButton: FunctionComponent<DavitButtonLabelProps> = (props) => {
-    const { onClick, label, disable, iconName, className } = props;
+    const { onClick, label, disable, iconName, className, style } = props;
 
     return (
-        <button className={className} onClick={onClick} disabled={disable} style={{ opacity: disable ? "0.7" : "1" }}>
+        <button className={className} onClick={onClick} disabled={disable} style={style}>
             {label && <label>{label}</label>}
             {iconName && <FontAwesomeIcon icon={iconName} />}
         </button>

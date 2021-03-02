@@ -1,7 +1,7 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk, RootState } from "../app/store";
-import { DataAccess } from "../dataAccess/DataAccess";
-import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {AppThunk, RootState} from "../app/store";
+import {DataAccess} from "../dataAccess/DataAccess";
+import {DataAccessResponse} from "../dataAccess/DataAccessResponse";
 
 interface GlobalState {
     errors: string[];
@@ -28,6 +28,11 @@ export const globalSlice = createSlice({
         },
         clearErrors: (state) => {
             state.errors = [];
+        },
+        removeErrorAtIndex: (state, action: PayloadAction<number>) => {
+            if (action.payload > -1 && action.payload < state.errors.length) {
+                state.errors = state.errors.filter((error, index) => index !== action.payload);
+            }
         },
         setActorZoom: (state, action: PayloadAction<number>) => {
             state.actorZoom = action.payload;
@@ -152,6 +157,6 @@ export const globalSelectors = {
     },
 };
 
-export const { handleError } = globalSlice.actions;
+export const {handleError} = globalSlice.actions;
 
 export const globalReducer = globalSlice.reducer;

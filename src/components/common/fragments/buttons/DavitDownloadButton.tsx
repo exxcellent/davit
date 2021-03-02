@@ -1,13 +1,18 @@
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
-import React, { FunctionComponent } from "react";
-import { DavitButton } from "./DavitButton";
+import {faDownload} from "@fortawesome/free-solid-svg-icons";
+import React, {FunctionComponent, useState} from "react";
+import {DavitButton} from "./DavitButton";
+import {DavitDownloadModal} from "../modals/DavitDownlaodModal";
 
-interface DavitDownloadButtonProps {
-    onClick: () => void;
+export interface DavitDownloadButtonProps {
 }
 
-export const DavitDownloadButton: FunctionComponent<DavitDownloadButtonProps> = (props) => {
-    const { onClick } = props;
+export const DavitDownloadButton: FunctionComponent<DavitDownloadButtonProps> = () => {
+    const [showForm, setShowForm] = useState<boolean>(false);
 
-    return <DavitButton onClick={onClick} iconName={faDownload} />;
+    return (
+        <>
+            <DavitButton onClick={() => setShowForm(true)} iconName={faDownload}/>
+            {showForm && <DavitDownloadModal closeCallback={() => setShowForm(false)}/>}
+        </>
+    );
 };

@@ -1,26 +1,26 @@
-import React, { FunctionComponent } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button } from "semantic-ui-react";
-import { DataSetupCTO } from "../../../../../dataAccess/access/cto/DataSetupCTO";
-import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
-import { ChainTO } from "../../../../../dataAccess/access/to/ChainTO";
-import { DataSetupTO } from "../../../../../dataAccess/access/to/DataSetupTO";
-import { SequenceTO } from "../../../../../dataAccess/access/to/SequenceTO";
-import { SequenceModelActions, sequenceModelSelectors } from "../../../../../slices/SequenceModelSlice";
-import { DavitUtil } from "../../../../../utils/DavitUtil";
-import { useStepAndLinkNavigation } from "../../../../../utils/WindowUtil";
-import { ChainDropDown } from "../../../../common/fragments/dropdowns/ChainDropDown";
-import { DataSetupDropDown } from "../../../../common/fragments/dropdowns/DataSetupDropDown";
-import { SequenceDropDown } from "../../../../common/fragments/dropdowns/SequenceDropDown";
-import { ControllPanelEditSub } from "../edit/common/ControllPanelEditSub";
-import { OptionField } from "../edit/common/OptionField";
+import React, {FunctionComponent} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {Button} from "semantic-ui-react";
+import {DataSetupCTO} from "../../../../../dataAccess/access/cto/DataSetupCTO";
+import {SequenceCTO} from "../../../../../dataAccess/access/cto/SequenceCTO";
+import {ChainTO} from "../../../../../dataAccess/access/to/ChainTO";
+import {DataSetupTO} from "../../../../../dataAccess/access/to/DataSetupTO";
+import {SequenceTO} from "../../../../../dataAccess/access/to/SequenceTO";
+import {SequenceModelActions, sequenceModelSelectors} from "../../../../../slices/SequenceModelSlice";
+import {DavitUtil} from "../../../../../utils/DavitUtil";
+import {useStepAndLinkNavigation} from "../../../../../utils/WindowUtil";
+import {ChainDropDown} from "../../../../common/fragments/dropdowns/ChainDropDown";
+import {DataSetupDropDown} from "../../../../common/fragments/dropdowns/DataSetupDropDown";
+import {SequenceDropDown} from "../../../../common/fragments/dropdowns/SequenceDropDown";
+import {ControlPanelEditSub} from "../edit/common/ControlPanelEditSub";
+import {OptionField} from "../edit/common/OptionField";
 
 export interface ControllPanelViewOptionsProps {
     hidden: boolean;
 }
 
 export const ControllPanelViewOptions: FunctionComponent<ControllPanelViewOptionsProps> = (props) => {
-    const { hidden } = props;
+    const {hidden} = props;
 
     const {
         label,
@@ -35,17 +35,16 @@ export const ControllPanelViewOptions: FunctionComponent<ControllPanelViewOption
         selectChain,
     } = useControllPanelSequenceOptionsViewModel();
 
-    const { stepBack, stepNext, linkBack, linkNext } = useStepAndLinkNavigation();
+    const {stepBack, stepNext, linkBack, linkNext} = useStepAndLinkNavigation();
 
     const getIndex = (): string => {
         const link: string = (linkIndex + 1).toString() || "0";
         const step: string = stepIndex.toString() || "0";
-        const index: string = link + " / " + step;
-        return index;
+        return link + " / " + step;
     };
 
     return (
-        <ControllPanelEditSub label={label} hidden={hidden}>
+        <ControlPanelEditSub label={label} hidden={hidden}>
             <div className="optionFieldSpacer">
                 <OptionField>
                     <OptionField label="Data - Setup">
@@ -56,13 +55,13 @@ export const ControllPanelViewOptions: FunctionComponent<ControllPanelViewOption
                         />
                     </OptionField>
                     <OptionField label="SEQUENCE">
-                        <SequenceDropDown onSelect={selectSequence} value={currentSequence} />
+                        <SequenceDropDown onSelect={selectSequence} value={currentSequence}/>
                     </OptionField>
                 </OptionField>
             </div>
             <div className="optionFieldSpacer columnDivider">
                 <OptionField label="CHAIN">
-                    <ChainDropDown onSelect={selectChain} value={currentChain} />
+                    <ChainDropDown onSelect={selectChain} value={currentChain}/>
                 </OptionField>
             </div>
             <div className="optionFieldSpacer columnDivider">
@@ -84,7 +83,7 @@ export const ControllPanelViewOptions: FunctionComponent<ControllPanelViewOption
                             disabled={DavitUtil.isNullOrUndefined(sequence)}
                             onClick={stepBack}
                         />
-                        <Button inverted color="orange" content={getIndex()} disabled={true} />
+                        <Button inverted color="orange" content={getIndex()} disabled={true}/>
                         <Button
                             inverted
                             color="orange"
@@ -105,9 +104,9 @@ export const ControllPanelViewOptions: FunctionComponent<ControllPanelViewOption
                 </OptionField>
             </div>
             <div className="optionFieldSpacer columnDivider">
-                <OptionField />
+                <OptionField/>
             </div>
-        </ControllPanelEditSub>
+        </ControlPanelEditSub>
     );
 };
 

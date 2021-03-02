@@ -1,28 +1,28 @@
-import React, { FunctionComponent, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { ChainDecisionTO } from "../../../../../../dataAccess/access/to/ChainDecisionTO";
-import { ChainTO } from "../../../../../../dataAccess/access/to/ChainTO";
-import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
-import { handleError } from "../../../../../../slices/GlobalSlice";
-import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
-import { EditChainDecision } from "../../../../../../slices/thunks/ChainDecisionThunks";
-import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
-import { DavitMenuLabel } from "../../../../../common/fragments/DavitMenuLabel";
-import { ActorDropDown } from "../../../../../common/fragments/dropdowns/ActorDropDown";
+import React, {FunctionComponent, useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {ChainDecisionTO} from "../../../../../../dataAccess/access/to/ChainDecisionTO";
+import {ChainTO} from "../../../../../../dataAccess/access/to/ChainTO";
+import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
+import {handleError} from "../../../../../../slices/GlobalSlice";
+import {sequenceModelSelectors} from "../../../../../../slices/SequenceModelSlice";
+import {EditChainDecision} from "../../../../../../slices/thunks/ChainDecisionThunks";
+import {DavitUtil} from "../../../../../../utils/DavitUtil";
+import {DavitBackButton} from "../../../../../common/fragments/buttons/DavitBackButton";
+import {DavitMenuLabel} from "../../../../../common/fragments/DavitMenuLabel";
+import {ActorDropDown} from "../../../../../common/fragments/dropdowns/ActorDropDown";
 import {
     DataAndInstanceId,
     InstanceDropDownMultiselect,
 } from "../../../../../common/fragments/dropdowns/InstanceDropDown";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { OptionField } from "../common/OptionField";
+import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
+import {OptionField} from "../common/OptionField";
 
 export interface ControllPanelEditChainConditionProps {
     hidden: boolean;
 }
 
 export const ControllPanelEditChainCondition: FunctionComponent<ControllPanelEditChainConditionProps> = (props) => {
-    const { hidden } = props;
+    const {hidden} = props;
     const {
         label,
         setMode,
@@ -33,7 +33,7 @@ export const ControllPanelEditChainCondition: FunctionComponent<ControllPanelEdi
     } = useControllPanelEditConditionViewModel();
 
     return (
-        <ControllPanelEditSub label={label} hidden={hidden} onClickNavItem={setMode}>
+        <ControlPanelEditSub label={label} hidden={hidden} onClickNavItem={setMode}>
             <div className="controllPanelEditChild">
                 <OptionField label="Select Actor">
                     <ActorDropDown
@@ -43,7 +43,7 @@ export const ControllPanelEditChainCondition: FunctionComponent<ControllPanelEdi
                 </OptionField>
             </div>
             <div className="columnDivider optionFieldSpacer">
-                <DavitMenuLabel text="HAS" />
+                <DavitMenuLabel text="HAS"/>
             </div>
             <div className="columnDivider optionFieldSpacer">
                 <OptionField label="Select data for actor">
@@ -57,10 +57,10 @@ export const ControllPanelEditChainCondition: FunctionComponent<ControllPanelEdi
             </div>
             <div className="columnDivider optionFieldSpacer">
                 <OptionField label="Navigation">
-                    <DavitBackButton onClick={setMode} />
+                    <DavitBackButton onClick={setMode}/>
                 </OptionField>
             </div>
-        </ControllPanelEditSub>
+        </ControlPanelEditSub>
     );
 };
 

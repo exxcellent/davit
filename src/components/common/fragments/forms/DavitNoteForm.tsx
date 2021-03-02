@@ -1,4 +1,5 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import React, {FunctionComponent, useEffect, useRef, useState} from "react";
+import {useEnterHook, useEscHook} from "../../../../utils/WindowUtil";
 
 interface DavitNoteFormProps {
     subHeader?: string;
@@ -8,7 +9,7 @@ interface DavitNoteFormProps {
 }
 
 export const DavitNoteForm: FunctionComponent<DavitNoteFormProps> = (props) => {
-    const { subHeader, onCancel, onSubmit, text } = props;
+    const {subHeader, onCancel, onSubmit, text} = props;
     const textAreRef = useRef<HTMLTextAreaElement>(null);
     const [noteText, setNoteText] = useState<string>("");
 
@@ -17,40 +18,11 @@ export const DavitNoteForm: FunctionComponent<DavitNoteFormProps> = (props) => {
         textAreRef.current!.focus();
     }, [text]);
 
-    /**
-     * Close the form on ESC push.
-     */
-    useEffect(() => {
-        const escButtonCall = (event: KeyboardEvent) => {
-            if (event.key === "Escape") {
-                onCancel();
-            }
-        };
+    // Close the form on ESC push.
+    useEscHook(onCancel);
 
-        document.addEventListener("keydown", escButtonCall, false);
-
-        return () => {
-            document.removeEventListener("keydown", escButtonCall, false);
-        };
-    }, [onCancel]);
-
-    /**
-     * Close and Submit on Enter
-     */
-    useEffect(() => {
-        const returnButtonCall = (event: KeyboardEvent) => {
-            console.info(event.key);
-            if (event.key === "Enter") {
-                onSubmit(noteText);
-            }
-        };
-
-        document.addEventListener("keydown", returnButtonCall, false);
-
-        return () => {
-            document.removeEventListener("keydown", returnButtonCall, false);
-        };
-    }, [noteText, onSubmit]);
+    // Close and Submit on Enter
+    useEnterHook(() => onSubmit(noteText));
 
     return (
         <div className="noteCard">
@@ -62,7 +34,11 @@ export const DavitNoteForm: FunctionComponent<DavitNoteFormProps> = (props) => {
                 value={noteText}
                 ref={textAreRef}
             />
-            <div style={{ display: "flex", justifyContent: "space-around", paddingTop: "var(--davit-padding)" }}>
+            <div style={{
+                display: "flex",
+                justifyContent: "space-around",
+                paddingTop: "var(--davit-padding-top-bottom)"
+            }}>
                 <button onClick={() => onCancel()}>cancel</button>
                 <button onClick={() => onSubmit(noteText)}>save</button>
             </div>

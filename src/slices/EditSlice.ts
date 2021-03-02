@@ -471,7 +471,7 @@ const setModeToEditConditionThunk = (decision: DecisionTO, condition?: Condition
 
 // TODO: this method is copied from sequencemodelslice! remove one and mage the other reachable in both slices
 const getArrowsForStepFk = (sequenceStepCTO: SequenceStepCTO, rootState: RootState): Arrow[] => {
-    let arrows: Arrow[] = [];
+    let arrows: Arrow[];
     arrows = mapActionsToArrows(sequenceStepCTO.actions, rootState);
     return arrows;
 };
@@ -646,7 +646,7 @@ export const editSelectors = {
     },
     selectDecisionToEdit: (state: RootState): DecisionTO | null => {
         return (state.edit.mode === Mode.EDIT_SEQUENCE_DECISION || Mode.EDIT_SEQUENCE_DECISION_CONDITION) &&
-            (state.edit.objectToEdit as DecisionTO).elseGoTo
+            (state.edit.objectToEdit as DecisionTO).conditions
             ? (state.edit.objectToEdit as DecisionTO)
             : null;
     },

@@ -1,34 +1,34 @@
-import { faReply } from "@fortawesome/free-solid-svg-icons";
-import React, { FunctionComponent, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { ActorCTO } from "../../../../../../dataAccess/access/cto/ActorCTO";
-import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
-import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
-import { ActionTO } from "../../../../../../dataAccess/access/to/ActionTO";
-import { ActionType } from "../../../../../../dataAccess/access/types/ActionType";
-import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
-import { handleError } from "../../../../../../slices/GlobalSlice";
-import { MasterDataActions } from "../../../../../../slices/MasterDataSlice";
-import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
-import { EditAction } from "../../../../../../slices/thunks/ActionThunks";
-import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
-import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
-import { ActionTypeDropDown } from "../../../../../common/fragments/dropdowns/ActionTypeDropDown";
-import { ActorDropDown } from "../../../../../common/fragments/dropdowns/ActorDropDown";
-import { DataDropDown } from "../../../../../common/fragments/dropdowns/DataDropDown";
-import { DataAndInstanceId, InstanceDropDown } from "../../../../../common/fragments/dropdowns/InstanceDropDown";
-import { ControllPanelEditSub } from "../common/ControllPanelEditSub";
-import { DavitLabelTextfield } from "../common/fragments/DavitLabelTextfield";
-import { OptionField } from "../common/OptionField";
+import {faReply} from "@fortawesome/free-solid-svg-icons";
+import React, {FunctionComponent, useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {ActorCTO} from "../../../../../../dataAccess/access/cto/ActorCTO";
+import {DataCTO} from "../../../../../../dataAccess/access/cto/DataCTO";
+import {SequenceCTO} from "../../../../../../dataAccess/access/cto/SequenceCTO";
+import {SequenceStepCTO} from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
+import {ActionTO} from "../../../../../../dataAccess/access/to/ActionTO";
+import {ActionType} from "../../../../../../dataAccess/access/types/ActionType";
+import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
+import {handleError} from "../../../../../../slices/GlobalSlice";
+import {MasterDataActions} from "../../../../../../slices/MasterDataSlice";
+import {sequenceModelSelectors} from "../../../../../../slices/SequenceModelSlice";
+import {EditAction} from "../../../../../../slices/thunks/ActionThunks";
+import {DavitUtil} from "../../../../../../utils/DavitUtil";
+import {DavitButton} from "../../../../../common/fragments/buttons/DavitButton";
+import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
+import {ActionTypeDropDown} from "../../../../../common/fragments/dropdowns/ActionTypeDropDown";
+import {ActorDropDown} from "../../../../../common/fragments/dropdowns/ActorDropDown";
+import {DataDropDown} from "../../../../../common/fragments/dropdowns/DataDropDown";
+import {DataAndInstanceId, InstanceDropDown} from "../../../../../common/fragments/dropdowns/InstanceDropDown";
+import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
+import {OptionField} from "../common/OptionField";
 
 export interface ControllPanelEditActionProps {
     hidden: boolean;
 }
 
 export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionProps> = (props) => {
-    const { hidden } = props;
+    const {hidden} = props;
     const {
         label,
         setActor,
@@ -45,22 +45,22 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
         setDataAndInstance,
         dataAndInstance,
         setTriggerLabel,
-        triggerlabe,
+        triggerLabel,
     } = useControllPanelEditActionViewModel();
 
     return (
-        <ControllPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={setMode}>
+        <ControlPanelEditSub label={label} key={key} hidden={hidden} onClickNavItem={setMode}>
             <div className="optionFieldSpacer">
                 <OptionField>
                     <OptionField label="Select action to execute">
-                        <ActionTypeDropDown onSelect={setAction} value={actionType} />
+                        <ActionTypeDropDown onSelect={setAction} value={actionType}/>
                     </OptionField>
                     {actionType !== ActionType.TRIGGER && (
                         <OptionField label="Data">
                             {actionType === ActionType.ADD && (
-                                <InstanceDropDown onSelect={setDataAndInstance} value={dataAndInstance} />
+                                <InstanceDropDown onSelect={setDataAndInstance} value={dataAndInstance}/>
                             )}
-                            {actionType !== ActionType.ADD && <DataDropDown onSelect={setData} value={dataId} />}
+                            {actionType !== ActionType.ADD && <DataDropDown onSelect={setData} value={dataId}/>}
                         </OptionField>
                     )}
                     {actionType === ActionType.TRIGGER && (
@@ -68,9 +68,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
                             <DavitLabelTextfield
                                 placeholder="Trigger text ..."
                                 onChangeDebounced={(name: string) => setTriggerLabel(name)}
-                                value={triggerlabe}
-                                autoFocus
-                                unvisible={hidden}
+                                value={triggerLabel}
                             />
                         </OptionField>
                     )}
@@ -78,7 +76,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
             </div>
             <div className="optionFieldSpacer">
                 <OptionField label=" ">
-                    <label className="optionFieldLabel" style={{ paddingTop: "1em" }}>
+                    <label className="optionFieldLabel" style={{paddingTop: "1em"}}>
                         {actionType === ActionType.ADD ? "TO" : "FROM"}
                     </label>
                     <OptionField
@@ -103,7 +101,7 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
             <div className="optionFieldSpacer">
                 {(actionType?.includes("SEND") || actionType === ActionType.TRIGGER) && (
                     <OptionField label=" ">
-                        <label className="optionFieldLabel" style={{ paddingTop: "1em" }}>
+                        <label className="optionFieldLabel" style={{paddingTop: "1em"}}>
                             TO
                         </label>
                         <OptionField label="Select receiving Actor">
@@ -118,17 +116,17 @@ export const ControllPanelEditAction: FunctionComponent<ControllPanelEditActionP
             <div className="columnDivider controllPanelEditChild">
                 <div className="optionFieldSpacer">
                     <OptionField label="Navigation">
-                        <DavitButton onClick={createAnother} label="Create another" />
-                        <DavitButton onClick={setMode} iconName={faReply} />
+                        <DavitButton onClick={createAnother} label="Create another"/>
+                        <DavitButton onClick={setMode} iconName={faReply}/>
                     </OptionField>
                 </div>
                 <div className="optionFieldSpacer">
                     <OptionField label="Sequence - Options">
-                        <DavitDeleteButton onClick={deleteAction} />
+                        <DavitDeleteButton onClick={deleteAction}/>
                     </OptionField>
                 </div>
             </div>
-        </ControllPanelEditSub>
+        </ControlPanelEditSub>
     );
 };
 
@@ -218,7 +216,7 @@ const useControllPanelEditActionViewModel = () => {
     };
 
     const validAction = (action: ActionTO): boolean => {
-        let valid: boolean = false;
+        let valid: boolean;
         switch (action.actionType) {
             case ActionType.TRIGGER:
                 valid = action.receivingActorFk !== -1 && action.sendingActorFk !== -1;
@@ -285,6 +283,6 @@ const useControllPanelEditActionViewModel = () => {
             instanceId: actionToEdit?.instanceFk,
         }),
         setTriggerLabel,
-        triggerlabe: actionToEdit?.actionType === ActionType.TRIGGER ? actionToEdit.triggerText : "",
+        triggerLabel: actionToEdit?.actionType === ActionType.TRIGGER ? actionToEdit.triggerText : "",
     };
 };

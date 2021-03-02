@@ -2,6 +2,15 @@
 @import "Atomic.css";
 @import "SemanticOverwrite.css";
 
+@keyframes notificationSlideIn {
+    0% {
+        right: -30em;
+    }
+    100% {
+        right: 0;
+    }
+}
+
 @keyframes appearTabGroup {
     0% {
         color: transparent;
@@ -47,16 +56,16 @@
 }
 
 @keyframes growDeleteButton {
-    0%{
+    0% {
         width: 0;
         color: transparent;
     }
 
-    80%{
+    80% {
         color: transparent;
     }
 
-    100%{
+    100% {
         width: 100%;
         color: red;
     }
@@ -156,10 +165,10 @@
 }
 
 @keyframes disapear {
-    0%{
+    0% {
         opacity: 1;
     }
-    100%{
+    100% {
         opacity: 0;
     }
 }

@@ -32,14 +32,6 @@
     grid-template-areas: "compModel";
 }
 
-.notificationPanel {
-    grid-column-start: 2;
-    grid-column-end: 4;
-    grid-row-start: 4;
-    grid-row-end: 4;
-    justify-self: center;
-}
-
 .leftPanel {
     grid-area: leftBar;
     justify-self: center;
@@ -206,6 +198,13 @@
 .noteCard {
     width: 30%;
     height: 60%;
+    background: var(--carv2-background-color);
+    border-radius: var(--davit-border-radius);
+    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
+}
+
+.downloadForm {
+    width: 30%;
     background: var(--carv2-background-color);
     border-radius: var(--davit-border-radius);
     padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
@@ -707,10 +706,43 @@
     transition: background-color var(--animation-time);
 }
 
+input {
+    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
+    border-radius: var(--davit-border-radius);
+    border-color: var(--carv2-color-secondary);
+    background-color: transparent;
+    border-style: solid;
+    border-width: var(--davit-border-size);
+    color: var(--carv2-text-color);
+    font-family: var(--davit-font-family);
+    font-size: var(--davit-font-size);
+}
+
+input:focus {
+    outline: none;
+}
+
+input.label {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.inputLabel {
+    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
+    border-bottom-left-radius: var(--davit-border-radius);
+    border-top-left-radius: var(--davit-border-radius);
+    border: var(--davit-border-size) solid var(--carv2-color-secondary);
+    border-bottom: var(--davit-border-size) solid var(--carv2-color-secondary);
+    background-color: var(--carv2-color-secondary);
+    color: var(--carv2-text-color);
+    font-family: var(--davit-font-family);
+    font-size: var(--davit-font-size);
+}
+
 button {
     color: var(--carv2-text-color);
     border-radius: var(--davit-border-radius);
-    border: 2px solid var(--carv2-color-secondary);
+    border: var(--davit-border-size) solid var(--carv2-color-secondary);
     background-color: transparent;
     text-align: center;
     padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
@@ -719,6 +751,14 @@ button {
 button:hover {
     background: rgba(0, 0, 0, .5);
     cursor: pointer;
+}
+
+.labelField{
+    color: var(--carv2-text-color);
+    border: var(--davit-border-size) solid var(--carv2-color-secondary);
+    background-color: transparent;
+    text-align: center;
+    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
 }
 
 .deleteButton {
@@ -731,3 +771,19 @@ button:hover {
     width: 100%;
     animation: growDeleteButton var(--animation-time) ease-in-out 0s;
 }
+
+.notificationCard {
+    width: 30em;
+    min-height: 6em;
+    background-color: var(--carv2-background-color);
+    border-radius: var(--davit-border-radius);
+    border: var(--davit-border-size) solid var(--carv2-color-border);
+    display: flex;
+    align-items: center;
+    z-index: 99;
+    position: absolute;
+    right: 0;
+    top: 0;
+    animation: notificationSlideIn var(--animation-time) ease-in-out 0s;
+}
+
