@@ -3,7 +3,7 @@ import {useDispatch} from "react-redux";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import {ErrorNotification} from "../components/common/fragments/ErrorNotification";
 import {ControlPanelController} from "../components/controllPanel/presentation/ControlPanelController";
-import {ActorModelController} from "../components/metaActorModel/presentation/ActorModelController";
+import {ActorModelController} from "../components/metaActorModel/ActorModelController";
 import {DataModelController} from "../components/metaDataModel/DataModelController";
 import {FlowChartController} from "../components/sequenceModel/FlowChartController";
 import {SequenceTableModelController} from "../components/sequenceTableModel/presentation/SequenceTableModelController";
