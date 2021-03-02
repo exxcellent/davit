@@ -46,7 +46,7 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
     const {key, constraintsRef, height, width, paths} = useDnDBoxViewModel(svgElements);
 
     const [mouseOver, setMouseOver] = useState<boolean>(false);
-    // TODO: activate if arrows draw with ref's.
+    
     useCustomZoomEvent({zoomInCallBack: zoomIn, zoomOutCallBack: zoomOut}, mouseOver);
 
     const createDavitPath = (paths: DavitPathProps[]): JSX.Element[] => {
