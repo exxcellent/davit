@@ -1,11 +1,11 @@
-import { motion } from "framer-motion";
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { ASPECT_RATIO, WINDOW_FACTOR } from "../../../../app/DavitConstants";
-import { GeometricalDataTO } from "../../../../dataAccess/access/to/GeometricalDataTO";
-import { PositionTO } from "../../../../dataAccess/access/to/PositionTO";
-import { useCurrentHeight, useCurrentWitdh, useCustomZoomEvent } from "../../../../utils/WindowUtil";
-import { createDnDItem } from "../../../common/fragments/DnDWrapper";
-import { DavitPath, DavitPathProps } from "../../../common/fragments/svg/DavitPath";
+import {motion} from "framer-motion";
+import React, {FunctionComponent, useEffect, useRef, useState} from "react";
+import {ASPECT_RATIO, WINDOW_FACTOR} from "../../../app/DavitConstants";
+import {GeometricalDataTO} from "../../../dataAccess/access/to/GeometricalDataTO";
+import {PositionTO} from "../../../dataAccess/access/to/PositionTO";
+import {useCurrentHeight, useCurrentWitdh, useCustomZoomEvent} from "../../../utils/WindowUtil";
+import {createDnDItem} from "./DnDWrapper";
+import {DavitPath, DavitPathProps} from "./svg/DavitPath";
 
 export interface DnDBoxElement {
     element: JSX.Element;
@@ -43,15 +43,15 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
         onGeoUpdate,
     } = props;
 
-    const { key, constraintsRef, height, width, paths } = useDnDBoxViewModel(svgElements);
+    const {key, constraintsRef, height, width, paths} = useDnDBoxViewModel(svgElements);
 
     const [mouseOver, setMouseOver] = useState<boolean>(false);
     // TODO: activate if arrows draw with ref's.
-    useCustomZoomEvent({ zoomInCallBack: zoomIn, zoomOutCallBack: zoomOut }, mouseOver);
+    useCustomZoomEvent({zoomInCallBack: zoomIn, zoomOutCallBack: zoomOut}, mouseOver);
 
     const createDavitPath = (paths: DavitPathProps[]): JSX.Element[] => {
         return paths.map((svg, index) => {
-            return <DavitPath {...svg} key={index} />;
+            return <DavitPath {...svg} key={index}/>;
         });
     };
 
@@ -69,10 +69,10 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
 
     return (
         <motion.div
-            onMouseEnter={(event) => setMouseOver(true)}
-            onMouseLeave={(event) => setMouseOver(false)}
+            onMouseEnter={() => setMouseOver(true)}
+            onMouseLeave={() => setMouseOver(false)}
             ref={constraintsRef}
-            style={fullScreen ? { height: height, maxWidth: width } : {}}
+            style={fullScreen ? {height: height, maxWidth: width} : {}}
             className={fullScreen ? type.toString() + "Fullscreen" : type.toString()}
             key={key}>
             {toDnDElements.map(wrappItem)}

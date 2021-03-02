@@ -1,11 +1,11 @@
-import React, { FunctionComponent, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { DataInstanceTO } from "../../../../dataAccess/access/to/DataInstanceTO";
-import { EditActions } from "../../../../slices/EditSlice";
-import { Filter, SequenceModelActions, sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
-import { createViewFragment, ViewFragmentProps } from "../../../../viewDataTypes/ViewFragment";
-import { DavitCardButton } from "../../../common/fragments/buttons/DavitCardButton";
-import { DavitCardMainButton } from "../../../common/fragments/buttons/DavitCardMainButton";
+import React, {FunctionComponent, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {DataInstanceTO} from "../../../dataAccess/access/to/DataInstanceTO";
+import {EditActions} from "../../../slices/EditSlice";
+import {Filter, SequenceModelActions, sequenceModelSelectors} from "../../../slices/SequenceModelSlice";
+import {createViewFragment, ViewFragmentProps} from "../../../viewDataTypes/ViewFragment";
+import {DavitCardButton} from "./buttons/DavitCardButton";
+import {DavitCardMainButton} from "./buttons/DavitCardMainButton";
 
 /**
  *  Prop: initWidth / initHeight
@@ -25,9 +25,9 @@ export interface DavitCardProps {
 }
 
 export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
-    const { id, initName, initWidth, initHeigth, dataFragments, instances, zoomFactor, type } = props;
+    const {id, initName, initWidth, initHeigth, dataFragments, instances, zoomFactor, type} = props;
 
-    const { onClickEdit, onClickFilter, showMenu, setShowMenu, isActiveFilter } = useCarv2CardViewModel(type, id);
+    const {onClickEdit, onClickFilter, showMenu, setShowMenu, isActiveFilter} = useCarv2CardViewModel(type, id);
 
     const createInstances = (id: number, instanceName: string, actors: ViewFragmentProps[]) => {
         return (
@@ -63,8 +63,8 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
                 <div className={showMenu ? "cardHeaderButtons" : "cardHeader"}>
                     <div className={showMenu ? "carhHeaderTextInvisible" : "cardHeaderText"}>{initName}</div>
                     {showMenu && (
-                        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                            <DavitCardButton icon="wrench" onClick={() => onClickEdit(id, type)} />
+                        <div style={{display: "flex", justifyContent: "flex-end"}}>
+                            <DavitCardButton icon="wrench" onClick={() => onClickEdit(id, type)}/>
                             <DavitCardButton
                                 icon="filter"
                                 onClick={() => onClickFilter(id, type)}
@@ -80,7 +80,7 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
                 />
             </div>
             {instances && (
-                <div style={{ display: "flex", alignItems: "start" }}>
+                <div style={{display: "flex", alignItems: "start"}}>
                     {instances.map((instance, index) =>
                         createInstances(
                             index,
