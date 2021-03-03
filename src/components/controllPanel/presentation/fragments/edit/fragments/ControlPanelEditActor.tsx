@@ -32,10 +32,10 @@ export const ControlPanelEditActor: FunctionComponent<ControlPanelEditActorProps
 
     return (
         <div className={"headerGrid"}>
-            <OptionField label="Component - Name">
+            <OptionField label="Actor - Name">
                 <DavitLabelTextfield
                     label="Name:"
-                    placeholder="Component Name"
+                    placeholder="Actor Name"
                     onChangeDebounced={(name: string) => changeName(name)}
                     onBlur={updateActor}
                     value={name}
@@ -49,7 +49,7 @@ export const ControlPanelEditActor: FunctionComponent<ControlPanelEditActorProps
                 <DavitButton onClick={createAnother} label="Create another"/>
                 <DavitBackButton onClick={saveActor}/>
             </OptionField>
-            <OptionField label="Component - Options" divider={true}>
+            <OptionField label="Options" divider={true}>
                 <DavitDeleteButton onClick={deleteComponent}/>
             </OptionField>
         </div>
