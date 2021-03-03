@@ -183,6 +183,8 @@
     margin: 10px;
 }
 
+/* -------------------------------------------- Modal -------------------------------------------- */
+
 .davitModal {
     position: fixed;
     top: 0;
@@ -196,16 +198,20 @@
     z-index: 99;
 }
 
-.noteCard {
-    width: 30%;
-    height: 60%;
+/* -------------------------------------------- Forms -------------------------------------------- */
+
+.form{
     background: var(--carv2-background-color);
     border-radius: var(--davit-border-radius);
     padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
-.downloadForm {
+.noteCard {
     width: 30%;
+    height: 60%;
     background: var(--carv2-background-color);
     border-radius: var(--davit-border-radius);
     padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
@@ -224,6 +230,12 @@
     outline: none;
 }
 
+.downloadForm {
+    width: 30%;
+    background: var(--carv2-background-color);
+    border-radius: var(--davit-border-radius);
+    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
+}
 /* -------------------------------------------- Optionfield -------------------------------------------- */
 
 .optionField {
