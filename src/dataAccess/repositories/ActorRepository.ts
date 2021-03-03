@@ -30,7 +30,6 @@ export const ActorRepository = {
                 ...actor,
                 id: DataAccessUtil.determineNewId(this.findAll()),
             };
-            console.info("set new actor id: " + actorTO.id);
         } else {
             actorTO = { ...actor };
         }
