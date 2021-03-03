@@ -671,7 +671,7 @@ export const EditActions = {
         editData: setModeToEditDataThunk,
         editDataById: setModeToEditDataByIdThunk,
         editDataInstance: setModeToEditDataInstanceThunk,
-        editInstaceById: editDataInstanceByIdThunk,
+        editInstanceById: editDataInstanceByIdThunk,
         editGroup: setModeToEditGroupThunk,
         editRelation: setModeToEditRelationThunk,
         editSequence: setModeToEditSequenceThunk,
