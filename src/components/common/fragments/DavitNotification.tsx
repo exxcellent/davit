@@ -39,7 +39,7 @@ export const DavitNotification: FunctionComponent<DavitNotificationProps> = (pro
             case "warning":
                 return "orange";
             case "error":
-                return "red";
+                return "var(--carv2-data-delete-color)";
             default:
                 return "white";
         }
@@ -53,7 +53,7 @@ export const DavitNotification: FunctionComponent<DavitNotificationProps> = (pro
             </button>
             <div>
                 <h3 style={{color: getIconColor()}}>{header}</h3>
-                <label>{text}</label>
+                <label style={{color: "var(--carv2-text-color)"}}>{text}</label>
             </div>
         </div>
     );
