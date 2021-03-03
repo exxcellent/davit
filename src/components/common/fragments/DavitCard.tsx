@@ -115,7 +115,7 @@ const useCarv2CardViewModel = (type: "DATA" | "ACTOR" | "INSTANCE", id: number) 
                 dispatch(EditActions.setMode.editDataById(currentId));
                 break;
             case "INSTANCE":
-                dispatch(EditActions.setMode.editInstaceById(currentId));
+                dispatch(EditActions.setMode.editInstanceById(currentId));
         }
         setShowMenu(false);
     };
