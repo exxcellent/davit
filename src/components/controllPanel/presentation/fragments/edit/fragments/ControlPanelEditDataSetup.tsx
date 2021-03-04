@@ -42,7 +42,7 @@ export const ControlPanelEditDataSetup: FunctionComponent<ControlPanelEditDataSe
                 <DavitLabelTextfield
                     label='Name:'
                     placeholder='Data Setup Name ...'
-                    onChangeDebounced={(name: string) => changeName(name)}
+                    onChangeCallback={(name: string) => changeName(name)}
                     value={name}
                     focus={true}
                     onBlur={updateDataSetup}

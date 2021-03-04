@@ -1,7 +1,7 @@
-import React, { FunctionComponent, useState } from "react";
-import { useDispatch } from "react-redux";
-import { GlobalActions } from "../../../../slices/GlobalSlice";
-import { DavitLabelTextfield } from "../DavitLabelTextfield";
+import React, {FunctionComponent, useState} from "react";
+import {useDispatch} from "react-redux";
+import {GlobalActions} from "../../../../slices/GlobalSlice";
+import {DavitLabelTextfield} from "../DavitLabelTextfield";
 import {useEnterHook, useEscHook} from "../../../../utils/WindowUtil";
 
 interface DavitDownloadFormProps {
@@ -9,7 +9,7 @@ interface DavitDownloadFormProps {
 }
 
 export const DavitDownloadForm: FunctionComponent<DavitDownloadFormProps> = (props) => {
-    const { onCloseCallback } = props;
+    const {onCloseCallback} = props;
     const dispatch = useDispatch();
     const [projectName, setProjectName] = useState<string>("");
 
@@ -28,10 +28,14 @@ export const DavitDownloadForm: FunctionComponent<DavitDownloadFormProps> = (pro
             <DavitLabelTextfield
                 label="File name:"
                 placeholder="project name..."
-                onChangeDebounced={(name: string) => setProjectName(name)}
+                onChangeCallback={(name: string) => setProjectName(name)}
                 value={projectName}
             />
-            <div style={{ display: "flex", justifyContent: "space-around", paddingTop: "var(--davit-padding-top-bottom)" }}>
+            <div style={{
+                display: "flex",
+                justifyContent: "space-around",
+                paddingTop: "var(--davit-padding-top-bottom)"
+            }}>
                 <button onClick={() => onCloseCallback()}>cancel</button>
                 <button onClick={() => onSubmit()}>download</button>
             </div>

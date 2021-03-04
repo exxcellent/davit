@@ -1,15 +1,15 @@
-import React, { FunctionComponent, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { DataCTO } from '../../../../../../dataAccess/access/cto/DataCTO';
-import { DataInstanceTO } from '../../../../../../dataAccess/access/to/DataInstanceTO';
-import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
-import { EditData } from '../../../../../../slices/thunks/DataThunks';
-import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { DavitBackButton } from '../../../../../common/fragments/buttons/DavitBackButton';
-import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
-import { DavitLabelTextfield } from '../../../../../common/fragments/DavitLabelTextfield';
-import { OptionField } from '../common/OptionField';
-import { GlobalActions } from '../../../../../../slices/GlobalSlice';
+import React, {FunctionComponent, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {DataCTO} from '../../../../../../dataAccess/access/cto/DataCTO';
+import {DataInstanceTO} from '../../../../../../dataAccess/access/to/DataInstanceTO';
+import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
+import {EditData} from '../../../../../../slices/thunks/DataThunks';
+import {DavitUtil} from '../../../../../../utils/DavitUtil';
+import {DavitBackButton} from '../../../../../common/fragments/buttons/DavitBackButton';
+import {DavitDeleteButton} from '../../../../../common/fragments/buttons/DavitDeleteButton';
+import {DavitLabelTextfield} from '../../../../../common/fragments/DavitLabelTextfield';
+import {OptionField} from '../common/OptionField';
+import {GlobalActions} from '../../../../../../slices/GlobalSlice';
 
 export interface ControlPanelEditDataInstanceProps {
     hidden: boolean;
@@ -31,18 +31,18 @@ export const ControlPanelEditDataInstance: FunctionComponent<ControlPanelEditDat
                 <DavitLabelTextfield
                     label='Name:'
                     placeholder='Data Instance Name'
-                    onChangeDebounced={(name: string) => changeName(name)}
+                    onChangeCallback={(name: string) => changeName(name)}
                     value={getName()}
                     onBlur={saveOnBlur}
                     focus
                 />
             </OptionField>
-            <OptionField divider={true} />
+            <OptionField divider={true}/>
             <OptionField label='Navigation' divider={true}>
-                <DavitBackButton onClick={goBack} />
+                <DavitBackButton onClick={goBack}/>
             </OptionField>
             <OptionField label='Data - Options' divider={true}>
-                <DavitDeleteButton onClick={deleteDataInstance} disable={isDeleteButtonDisable()} />
+                <DavitDeleteButton onClick={deleteDataInstance} disable={isDeleteButtonDisable()}/>
             </OptionField>
         </div>
     );

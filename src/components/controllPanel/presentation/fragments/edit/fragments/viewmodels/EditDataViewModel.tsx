@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { DataCTO } from '../../../../../../../dataAccess/access/cto/DataCTO';
-import { EditActions, editSelectors } from '../../../../../../../slices/EditSlice';
-import { EditData } from '../../../../../../../slices/thunks/DataThunks';
-import { DavitUtil } from '../../../../../../../utils/DavitUtil';
-import { GlobalActions } from '../../../../../../../slices/GlobalSlice';
+import {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {DataCTO} from '../../../../../../../dataAccess/access/cto/DataCTO';
+import {EditActions, editSelectors} from '../../../../../../../slices/EditSlice';
+import {EditData} from '../../../../../../../slices/thunks/DataThunks';
+import {DavitUtil} from '../../../../../../../utils/DavitUtil';
+import {GlobalActions} from '../../../../../../../slices/GlobalSlice';
 
 export const useEditDataViewModel = () => {
     const dataToEdit: DataCTO | null = useSelector(editSelectors.selectDataToEdit);
@@ -18,10 +18,18 @@ export const useEditDataViewModel = () => {
         }
     });
 
-    const changeName = (name: string) => {
+    const changeDataName = (name: string) => {
         const copyDataToEdit: DataCTO = DavitUtil.deepCopy(dataToEdit);
         copyDataToEdit.data.name = name;
         dispatch(EditActions.setMode.editData(copyDataToEdit));
+    };
+
+    const changeInstanceName = (name: string, instanceIndex: number) => {
+        if (dataToEdit !== null && instanceIndex !== null) {
+            const copyData: DataCTO = DavitUtil.deepCopy(dataToEdit);
+            copyData.data.instances[instanceIndex].name = name;
+            dispatch(EditActions.setMode.editData(copyData));
+        }
     };
 
     const updateData = () => {
@@ -49,11 +57,6 @@ export const useEditDataViewModel = () => {
         dispatch(EditActions.setMode.editData());
     };
 
-    const editOrAddInstance = (id?: number) => {
-        if (dataToEdit !== null) {
-            dispatch(EditActions.setMode.editDataInstance(id));
-        }
-    };
 
     const saveNote = (text: string) => {
         if (!DavitUtil.isNullOrUndefined(dataToEdit) && text !== '') {
@@ -63,18 +66,36 @@ export const useEditDataViewModel = () => {
         }
     };
 
+    const createInstance = () => {
+        if (!DavitUtil.isNullOrUndefined(dataToEdit)) {
+            const copyData: DataCTO = DavitUtil.deepCopy(dataToEdit);
+            copyData.data.instances.push({id: -1, name: ""});
+            dispatch(EditActions.setMode.editData(copyData));
+        }
+    };
+
+    const deleteInstance = (indexToDelete: number) => {
+        if (!DavitUtil.isNullOrUndefined(dataToEdit)) {
+            const copyData: DataCTO = DavitUtil.deepCopy(dataToEdit);
+            copyData.data.instances.splice(indexToDelete, 1);
+            dispatch(EditActions.setMode.editData(copyData));
+        }
+    };
+
     return {
         label: 'EDIT * ' + (dataToEdit?.data.name || ''),
         name: dataToEdit?.data.name,
-        changeName,
+        changeName: changeDataName,
         saveData,
         deleteData,
         updateData,
         createAnother,
         instances: dataToEdit?.data.instances ? dataToEdit.data.instances : [],
-        editOrAddInstance,
         id: dataToEdit?.data.id || -1,
         note: dataToEdit ? dataToEdit.data.note : '',
         saveNote,
+        changeInstanceName,
+        createInstance,
+        deleteInstance
     };
 };

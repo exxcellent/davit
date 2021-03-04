@@ -63,7 +63,7 @@ export const ControlPanelEditAction: FunctionComponent<ControlPanelEditActionPro
                     <OptionField label="LABEL">
                         <DavitLabelTextfield
                             placeholder="Trigger text ..."
-                            onChangeDebounced={(name: string) => setTriggerLabel(name)}
+                            onChangeCallback={(name: string) => setTriggerLabel(name)}
                             value={triggerLabel}
                         />
                     </OptionField>

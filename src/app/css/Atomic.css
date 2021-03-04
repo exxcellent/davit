@@ -3,11 +3,21 @@
     --davit-border-size: 2px;
     --davit-padding-top-bottom: 0.5em;
     --davit-padding-right-left: 0.9em;
-    --davit-font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+    --davit-margin-top-bottom: 1em;
+    --davit-font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
     --davit-font-size: 16px;
 }
 
-html{
+.border {
+    border: var(--davit-border-size) solid var(--carv2-color-secondary);
+    border-radius: var(--davit-border-radius);
+}
+
+.padding {
+    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
+}
+
+html {
     font-size: var(--davit-font-size);
     font-family: var(--davit-font-family);
     color: var(--carv2-text-color);

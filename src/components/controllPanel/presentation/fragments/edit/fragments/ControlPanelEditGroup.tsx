@@ -43,7 +43,7 @@ export const ControlPanelEditGroup: FunctionComponent<ControlPanelEditGroupProps
                 <DavitLabelTextfield
                     label="Name:"
                     placeholder="Group Name ..."
-                    onChangeDebounced={(name: string) => changeName(name)}
+                    onChangeCallback={(name: string) => changeName(name)}
                     value={name}
                     focus={true}
                     onBlur={() => updateGroup()}

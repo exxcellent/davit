@@ -61,7 +61,7 @@ export const ControlPanelEditChainLink: FunctionComponent<ControlPanelEditChainL
                     <DavitLabelTextfield
                         label="Name:"
                         placeholder="Chainlink Name ..."
-                        onChangeDebounced={(name: string) => changeName(name)}
+                        onChangeCallback={(name: string) => changeName(name)}
                         value={name}
                         focus={true}
                     />

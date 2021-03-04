@@ -61,7 +61,7 @@ export const ControlPanelEditSequence: FunctionComponent<ControlPanelEditSequenc
                 <DavitLabelTextfield
                     label='Name:'
                     placeholder='Sequence Name...'
-                    onChangeDebounced={(name: string) => changeName(name)}
+                    onChangeCallback={(name: string) => changeName(name)}
                     value={name}
                     focus={true}
                     onBlur={updateSequence}

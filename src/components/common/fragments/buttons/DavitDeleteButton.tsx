@@ -5,10 +5,11 @@ import {DavitButton} from "./DavitButton";
 interface DavitDeleteButtonProps {
     onClick: () => void;
     disable?: boolean;
+    noConfirm?: boolean;
 }
 
 export const DavitDeleteButton: FunctionComponent<DavitDeleteButtonProps> = (props) => {
-    const {onClick, disable} = props;
+    const {onClick, disable, noConfirm} = props;
 
     const SHRINK_DELAY: number = 3000;
 
@@ -19,10 +20,18 @@ export const DavitDeleteButton: FunctionComponent<DavitDeleteButtonProps> = (pro
         if (fluid) setTimeout(() => setFluid(false), SHRINK_DELAY);
     }, [fluid]);
 
+    const clickEventHandler = () => {
+        if (fluid || noConfirm) {
+            onClick();
+        } else {
+            setFluid(true);
+        }
+    };
+
     return (
         <DavitButton
             iconName={fluid ? undefined : faTrashAlt}
-            onClick={() => (fluid ? onClick() : setFluid(true))}
+            onClick={clickEventHandler}
             className={fluid ? "deleteButton fluid" : "deleteButton"}
             disable={disable}
             label={fluid ? "SURE" : undefined}
