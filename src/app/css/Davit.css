@@ -213,7 +213,7 @@
 .formLine {
     display: flex;
     justify-content: space-around;
-    width: 22em;
+    min-width: 22em;
     margin-bottom: var(--davit-margin-top-bottom);
 }
 

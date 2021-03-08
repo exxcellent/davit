@@ -51,7 +51,6 @@ export const DataForm: FunctionComponent<DataFormProps> = () => {
         return (
             <Form key={key}>
                 <FormLine>
-
                     <DavitLabelTextfield
                         label='Name:'
                         placeholder='Data Name'
@@ -63,7 +62,6 @@ export const DataForm: FunctionComponent<DataFormProps> = () => {
                 </FormLine>
 
                 <FormLine>
-
                     <DavitDeleteButton onClick={deleteData}/>
                     <DavitCommentButton onSaveCallback={saveNote} comment={note}/>
                     <DavitButton onClick={() => {
@@ -74,7 +72,7 @@ export const DataForm: FunctionComponent<DataFormProps> = () => {
                 </FormLine>
 
                 <FormLine>
-                    <table className={"border"}>
+                    <table className={"border"} style={{width: "22em"}}>
                         <thead>
                         <tr>
                             <td style={{textAlign: "center"}}>Instances</td>
