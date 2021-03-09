@@ -7,7 +7,6 @@ import { ControlPanelEditChainDecision } from './fragments/ControlPanelEditChain
 import { ControlPanelEditChainLink } from './fragments/ControlPanelEditChainLink';
 import { ControlPanelEditCondition } from './fragments/ControlPanelEditCondition';
 import { ControlPanelEditDataInstance } from './fragments/ControlPanelEditDataInstance';
-import { ControlPanelEditDecision } from './fragments/ControlPanelEditDecision';
 import { ControlPanelEditGroup } from './fragments/ControlPanelEditGroup';
 import { ControlPanelEditInitData } from './fragments/ControlPanelEditInitData';
 import { ControlPanelEditMenu } from './fragments/ControlPanelEditMenu';
@@ -18,6 +17,7 @@ import { EditDataModal } from './fragments/modals/EditDataModal';
 import { EditDataRelationModal } from './fragments/modals/EditDataRelationModal';
 import { EditDataSetupModal } from './fragments/modals/EditDataSetupModal';
 import { EditActionModal } from './fragments/modals/EditActionModal';
+import { EditDecisionModal } from './fragments/modals/EditDecisionModal';
 
 export interface ControlPanelEditControllerProps {
 }
@@ -43,7 +43,7 @@ export const ControlPanelEditController: FunctionComponent<ControlPanelEditContr
             case Mode.EDIT_SEQUENCE_STEP:
                 return <ControlPanelEditStep hidden={mode !== Mode.EDIT_SEQUENCE_STEP} />;
             case Mode.EDIT_SEQUENCE_DECISION:
-                return <ControlPanelEditDecision hidden={mode !== Mode.EDIT_SEQUENCE_DECISION} />;
+                return <EditDecisionModal />;
             case Mode.EDIT_SEQUENCE_DECISION_CONDITION:
                 return <ControlPanelEditCondition hidden={mode !== Mode.EDIT_SEQUENCE_DECISION_CONDITION} />;
             case Mode.EDIT_SEQUENCE_STEP_ACTION:

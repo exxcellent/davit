@@ -1,143 +1,18 @@
-import React, {FunctionComponent, useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {SequenceCTO} from '../../../../../../dataAccess/access/cto/SequenceCTO';
-import {SequenceStepCTO} from '../../../../../../dataAccess/access/cto/SequenceStepCTO';
-import {ConditionTO} from '../../../../../../dataAccess/access/to/ConditionTO';
-import {DecisionTO} from '../../../../../../dataAccess/access/to/DecisionTO';
-import {GoTo, GoToTypes} from '../../../../../../dataAccess/access/types/GoToType';
-import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
-import {SequenceModelActions, sequenceModelSelectors} from '../../../../../../slices/SequenceModelSlice';
-import {EditDecision} from '../../../../../../slices/thunks/DecisionThunks';
-import {EditSequence} from '../../../../../../slices/thunks/SequenceThunks';
-import {DavitUtil} from '../../../../../../utils/DavitUtil';
-import {DavitAddButton} from '../../../../../common/fragments/buttons/DavitAddButton';
-import {DavitBackButton} from '../../../../../common/fragments/buttons/DavitBackButton';
-import {DavitDeleteButton} from '../../../../../common/fragments/buttons/DavitDeleteButton';
-import {DavitRootButton} from '../../../../../common/fragments/buttons/DavitRootButton';
-import {DavitLabelTextfield} from '../../../../../common/fragments/DavitLabelTextfield';
-import {ConditionDropDownButton} from '../../../../../common/fragments/dropdowns/ConditionDropDown';
-import {DecisionDropDown} from '../../../../../common/fragments/dropdowns/DecisionDropDown';
-import {GoToOptionDropDown} from '../../../../../common/fragments/dropdowns/GoToOptionDropDown';
-import {StepDropDown} from '../../../../../common/fragments/dropdowns/StepDropDown';
-import {OptionField} from '../common/OptionField';
-import {DavitCommentButton} from '../../../../../common/fragments/buttons/DavitCommentButton';
-import {AddOrEdit} from '../../../../../common/fragments/AddOrEdit';
-import {GlobalActions} from '../../../../../../slices/GlobalSlice';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { SequenceCTO } from '../../../../../../../dataAccess/access/cto/SequenceCTO';
+import { SequenceStepCTO } from '../../../../../../../dataAccess/access/cto/SequenceStepCTO';
+import { ConditionTO } from '../../../../../../../dataAccess/access/to/ConditionTO';
+import { DecisionTO } from '../../../../../../../dataAccess/access/to/DecisionTO';
+import { GoTo, GoToTypes } from '../../../../../../../dataAccess/access/types/GoToType';
+import { EditActions, editSelectors } from '../../../../../../../slices/EditSlice';
+import { SequenceModelActions, sequenceModelSelectors } from '../../../../../../../slices/SequenceModelSlice';
+import { EditDecision } from '../../../../../../../slices/thunks/DecisionThunks';
+import { EditSequence } from '../../../../../../../slices/thunks/SequenceThunks';
+import { DavitUtil } from '../../../../../../../utils/DavitUtil';
+import { GlobalActions } from '../../../../../../../slices/GlobalSlice';
 
-export interface ControlPanelEditDecisionProps {
-    hidden: boolean;
-}
-
-export const ControlPanelEditDecision: FunctionComponent<ControlPanelEditDecisionProps> = () => {
-
-    const {
-        name,
-        changeName,
-        saveDecision,
-        handleType,
-        ifGoTo,
-        elseGoTo,
-        setGoToTypeStep,
-        createGoToStep,
-        setRoot,
-        isRoot,
-        updateDecision,
-        deleteDecision,
-        createGoToDecision,
-        setGoToTypeDecision,
-        editOrAddCondition,
-        decId,
-        conditions,
-        note,
-        saveNote,
-    } = useControlPanelEditConditionViewModel();
-
-    return (
-        <div className='headerGrid'>
-            <OptionField>
-                <OptionField label='Decision - name'>
-                    <DavitLabelTextfield
-                        label='Name:'
-                        placeholder='Decision name ...'
-                        onChangeCallback={(name: string) => changeName(name)}
-                        value={name}
-                        focus={true}
-                        onBlur={updateDecision}
-                    />
-                </OptionField>
-                <OptionField label='Create / Edit Condition'>
-                    <AddOrEdit addCallBack={editOrAddCondition} label={'Condition'}
-                               dropDown={<ConditionDropDownButton
-                                   conditions={conditions}
-                                   icon='wrench'
-                                   onSelect={editOrAddCondition}
-                               />}/>
-                </OptionField>
-            </OptionField>
-            <OptionField label='Type condition true' divider={true}>
-                <GoToOptionDropDown
-                    onSelect={(gt) => handleType(true, gt)}
-                    value={ifGoTo ? ifGoTo.type : GoToTypes.FIN}
-                />
-            </OptionField>
-            {ifGoTo!.type === GoToTypes.STEP && (
-                <OptionField label='Create or Select next step'>
-                    <DavitAddButton onClick={() => createGoToStep(true)}/>
-                    <StepDropDown
-                        onSelect={(step) => setGoToTypeStep(true, step)}
-                        value={ifGoTo?.type === GoToTypes.STEP ? ifGoTo.id : 1}
-                    />
-                </OptionField>
-            )}
-            {ifGoTo!.type === GoToTypes.DEC && (
-                <OptionField label='Create or Select next condition'>
-                    <DavitAddButton onClick={() => createGoToDecision(true)}/>
-                    <DecisionDropDown
-                        onSelect={(cond) => setGoToTypeDecision(true, cond)}
-                        value={ifGoTo?.type === GoToTypes.DEC ? ifGoTo.id : 1}
-                        exclude={decId}
-                    />
-                </OptionField>
-            )}
-            <OptionField label='Type condition false' divider={true}>
-                <OptionField>
-
-                    <GoToOptionDropDown
-                        onSelect={(gt) => handleType(false, gt)}
-                        value={elseGoTo ? elseGoTo.type : GoToTypes.ERROR}
-                    />
-                </OptionField>
-                {elseGoTo!.type === GoToTypes.STEP && (
-                    <OptionField label='Select type of the next element'>
-                        <DavitAddButton onClick={() => createGoToStep(false)}/>
-                        <StepDropDown
-                            onSelect={(step) => setGoToTypeStep(false, step)}
-                            value={elseGoTo?.type === GoToTypes.STEP ? elseGoTo.id : 1}
-                        />
-                    </OptionField>
-                )}
-                {elseGoTo!.type === GoToTypes.DEC && (
-                    <OptionField label='Create or Select next condition'>
-                        <DavitAddButton onClick={() => createGoToDecision(false)}/>
-                        <DecisionDropDown
-                            onSelect={(cond) => setGoToTypeDecision(false, cond)}
-                            value={elseGoTo?.type === GoToTypes.DEC ? elseGoTo.id : 1}
-                            exclude={decId}
-                        />
-                    </OptionField>
-                )}
-            </OptionField>
-            <OptionField label='Options' divider={true}>
-                <DavitCommentButton onSaveCallback={saveNote} comment={note}/>
-                <DavitBackButton onClick={saveDecision}/>
-                <DavitRootButton onClick={setRoot} isRoot={isRoot}/>
-                <DavitDeleteButton onClick={deleteDecision}/>
-            </OptionField>
-        </div>
-    );
-};
-
-const useControlPanelEditConditionViewModel = () => {
+export const useEditConditionViewModel = () => {
     const decisionToEdit: DecisionTO | null = useSelector(editSelectors.selectDecisionToEdit);
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const dispatch = useDispatch();

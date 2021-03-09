@@ -10,7 +10,7 @@ import { DavitButton } from '../../../../../../common/fragments/buttons/DavitBut
 import { faReply } from '@fortawesome/free-solid-svg-icons';
 import { DavitDeleteButton } from '../../../../../../common/fragments/buttons/DavitDeleteButton';
 import { FormLine } from './fragments/FormLine';
-import { useEditActionViewModel } from '../ControlPanelEditAction';
+import { useEditActionViewModel } from '../viewmodels/EditActionViewModel';
 import { FormLabel, FormlabelAlign } from './fragments/FormLabel';
 
 interface ActionFormProps {

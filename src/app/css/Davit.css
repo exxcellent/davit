@@ -215,6 +215,7 @@
     justify-content: space-around;
     min-width: 22em;
     margin-bottom: var(--davit-margin-top-bottom);
+    width: 100%;
 }
 
 .formLabel{
@@ -222,6 +223,14 @@
     align-items: center;
     justify-content: flex-start;
     min-width: 10em;
+}
+
+.formDivider{
+    display: flex;
+    width: 100%;
+    border-top: var(--davit-border-size) solid var(--carv2-text-color);
+    border-radius: var(--davit-border-radius);
+    margin: var(--davit-margin-top-bottom);
 }
 
 .noteCard {

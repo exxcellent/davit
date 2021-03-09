@@ -1,117 +1,19 @@
-import {faReply} from "@fortawesome/free-solid-svg-icons";
-import React, {FunctionComponent, useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {ActorCTO} from "../../../../../../dataAccess/access/cto/ActorCTO";
-import {DataCTO} from "../../../../../../dataAccess/access/cto/DataCTO";
-import {SequenceCTO} from "../../../../../../dataAccess/access/cto/SequenceCTO";
-import {SequenceStepCTO} from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
-import {ActionTO} from "../../../../../../dataAccess/access/to/ActionTO";
-import {ActionType} from "../../../../../../dataAccess/access/types/ActionType";
-import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
-import {MasterDataActions} from "../../../../../../slices/MasterDataSlice";
-import {sequenceModelSelectors} from "../../../../../../slices/SequenceModelSlice";
-import {EditAction} from "../../../../../../slices/thunks/ActionThunks";
-import {DavitUtil} from "../../../../../../utils/DavitUtil";
-import {DavitButton} from "../../../../../common/fragments/buttons/DavitButton";
-import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
-import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
-import {ActionTypeDropDown} from "../../../../../common/fragments/dropdowns/ActionTypeDropDown";
-import {ActorDropDown} from "../../../../../common/fragments/dropdowns/ActorDropDown";
-import {DataDropDown} from "../../../../../common/fragments/dropdowns/DataDropDown";
-import {DataAndInstanceId, InstanceDropDown} from "../../../../../common/fragments/dropdowns/InstanceDropDown";
-import {OptionField} from "../common/OptionField";
-import {GlobalActions} from "../../../../../../slices/GlobalSlice";
+import { useDispatch, useSelector } from 'react-redux';
+import { ActorCTO } from '../../../../../../../dataAccess/access/cto/ActorCTO';
+import { DataCTO } from '../../../../../../../dataAccess/access/cto/DataCTO';
+import { SequenceCTO } from '../../../../../../../dataAccess/access/cto/SequenceCTO';
+import { SequenceStepCTO } from '../../../../../../../dataAccess/access/cto/SequenceStepCTO';
+import { ActionTO } from '../../../../../../../dataAccess/access/to/ActionTO';
+import { ActionType } from '../../../../../../../dataAccess/access/types/ActionType';
+import { EditActions, editSelectors } from '../../../../../../../slices/EditSlice';
+import { MasterDataActions } from '../../../../../../../slices/MasterDataSlice';
+import { sequenceModelSelectors } from '../../../../../../../slices/SequenceModelSlice';
+import { EditAction } from '../../../../../../../slices/thunks/ActionThunks';
+import { DavitUtil } from '../../../../../../../utils/DavitUtil';
+import { DataAndInstanceId } from '../../../../../../common/fragments/dropdowns/InstanceDropDown';
+import { GlobalActions } from '../../../../../../../slices/GlobalSlice';
+import { useEffect, useState } from 'react';
 
-export interface ControlPanelEditActionProps {
-    hidden: boolean;
-}
-
-export const ControlPanelEditAction: FunctionComponent<ControlPanelEditActionProps> = () => {
-
-    const {
-        setActor,
-        setAction,
-        setData,
-        deleteAction,
-        sendingActorId,
-        receivingActorId,
-        dataId,
-        actionType,
-        setMode,
-        createAnother,
-        setDataAndInstance,
-        dataAndInstance,
-        setTriggerLabel,
-        triggerLabel,
-    } = useEditActionViewModel();
-
-    return (
-        <div className="headerGrid">
-            <OptionField>
-                <OptionField label="Select action to execute">
-                    <ActionTypeDropDown onSelect={setAction} value={actionType}/>
-                </OptionField>
-                {actionType !== ActionType.TRIGGER && (
-                    <OptionField label="Data">
-                        {actionType === ActionType.ADD && (
-                            <InstanceDropDown onSelect={setDataAndInstance} value={dataAndInstance}/>
-                        )}
-                        {actionType !== ActionType.ADD && <DataDropDown onSelect={setData} value={dataId}/>}
-                    </OptionField>
-                )}
-                {actionType === ActionType.TRIGGER && (
-                    <OptionField label="LABEL">
-                        <DavitLabelTextfield
-                            placeholder="Trigger text ..."
-                            onChangeCallback={(name: string) => setTriggerLabel(name)}
-                            value={triggerLabel}
-                        />
-                    </OptionField>
-                )}
-            </OptionField>
-            <OptionField>
-                <label className="optionFieldLabel" style={{paddingTop: "1em"}}>
-                    {actionType === ActionType.ADD ? "TO" : "FROM"}
-                </label>
-                <OptionField
-                    label={
-                        actionType?.includes("SEND") || actionType === ActionType.TRIGGER
-                            ? "Select sending Actor"
-                            : "Actor"
-                    }>
-                    <ActorDropDown
-                        onSelect={(actor) =>
-                            setActor(actor, actionType?.includes("SEND") || actionType === ActionType.TRIGGER)
-                        }
-                        value={
-                            actionType?.includes("SEND") || actionType === ActionType.TRIGGER
-                                ? sendingActorId
-                                : receivingActorId
-                        }
-                    />
-                </OptionField>
-            </OptionField>
-            {(actionType?.includes("SEND") || actionType === ActionType.TRIGGER) && (
-                <OptionField label=" ">
-                    <label className="optionFieldLabel" style={{paddingTop: "1em"}}>
-                        TO
-                    </label>
-                    <OptionField label="Select receiving Actor">
-                        <ActorDropDown
-                            onSelect={(actor) => setActor(actor, false)}
-                            value={receivingActorId}
-                        />
-                    </OptionField>
-                </OptionField>
-            )}
-            <OptionField label="Options">
-                <DavitButton onClick={createAnother} label="Create another"/>
-                <DavitButton onClick={setMode} iconName={faReply}/>
-                <DavitDeleteButton onClick={deleteAction}/>
-            </OptionField>
-        </div>
-    );
-};
 
 export const useEditActionViewModel = () => {
     const actionToEdit: ActionTO | null = useSelector(editSelectors.selectActionToEdit);
