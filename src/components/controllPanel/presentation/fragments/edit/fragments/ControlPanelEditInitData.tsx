@@ -25,7 +25,7 @@ export const ControlPanelEditInitData: FunctionComponent<ControlPanelEditInitDat
         saveInitData,
         deleteInitData,
         data,
-        actor,
+        actorFk,
         setActorId,
         setInstance,
         createAnother,
@@ -39,7 +39,7 @@ export const ControlPanelEditInitData: FunctionComponent<ControlPanelEditInitDat
                     placeholder="Select Actor..."
                     onBlur={() => {
                     }}
-                    value={actor?.toString()}
+                    value={actorFk}
                 />
             </OptionField>
             <OptionField label="Select Data which will be added" divider={true}>
@@ -149,7 +149,7 @@ const useControlPanelEditDataSetupViewModel = () => {
             instanceId: initDataToEdit?.instanceFk,
         }),
         getInstances,
-        actor: initDataToEdit?.actorFk,
+        actorFk: initDataToEdit?.actorFk,
         deleteInitData,
         saveInitData,
         setActorId,

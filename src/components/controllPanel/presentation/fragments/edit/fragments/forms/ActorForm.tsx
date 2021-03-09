@@ -1,12 +1,12 @@
-import React, {FunctionComponent, useState} from 'react';
-import {DavitLabelTextfield} from '../../../../../../common/fragments/DavitLabelTextfield';
-import {DavitCommentButton} from '../../../../../../common/fragments/buttons/DavitCommentButton';
-import {DavitButton} from '../../../../../../common/fragments/buttons/DavitButton';
-import {DavitBackButton} from '../../../../../../common/fragments/buttons/DavitBackButton';
-import {DavitDeleteButton} from '../../../../../../common/fragments/buttons/DavitDeleteButton';
-import {useEditActorViewModel} from '../viewmodels/EditActorViewModel';
-import {FormLine} from "./FormLine";
-import {Form} from "../../../../../../common/fragments/forms/Form";
+import React, { FunctionComponent, useState } from 'react';
+import { DavitLabelTextfield } from '../../../../../../common/fragments/DavitLabelTextfield';
+import { DavitCommentButton } from '../../../../../../common/fragments/buttons/DavitCommentButton';
+import { DavitButton } from '../../../../../../common/fragments/buttons/DavitButton';
+import { DavitBackButton } from '../../../../../../common/fragments/buttons/DavitBackButton';
+import { DavitDeleteButton } from '../../../../../../common/fragments/buttons/DavitDeleteButton';
+import { useEditActorViewModel } from '../viewmodels/EditActorViewModel';
+import { FormLine } from './fragments/FormLine';
+import { Form } from '../../../../../../common/fragments/forms/Form';
 
 interface ActorFormProps {
 }
@@ -29,6 +29,10 @@ export const ActorForm: FunctionComponent<ActorFormProps> = () => {
     return (
         <Form key={key}>
             <FormLine>
+                <h2>Actor</h2>
+            </FormLine>
+
+            <FormLine>
                 <DavitLabelTextfield
                     label='Name:'
                     placeholder='Actor Name'
@@ -39,13 +43,13 @@ export const ActorForm: FunctionComponent<ActorFormProps> = () => {
                 />
             </FormLine>
             <FormLine>
-                <DavitDeleteButton onClick={deleteActor}/>
-                <DavitCommentButton onSaveCallback={saveNote} comment={note}/>
+                <DavitDeleteButton onClick={deleteActor} />
+                <DavitCommentButton onSaveCallback={saveNote} comment={note} />
                 <DavitButton onClick={() => {
                     createAnother();
                     setKey(key + 1);
-                }} label='Create another'/>
-                <DavitBackButton onClick={saveActor}/>
+                }} label='Create another' />
+                <DavitBackButton onClick={saveActor} />
             </FormLine>
         </Form>
     );

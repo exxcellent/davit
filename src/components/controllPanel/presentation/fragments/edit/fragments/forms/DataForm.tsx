@@ -8,7 +8,7 @@ import {DavitButton} from "../../../../../../common/fragments/buttons/DavitButto
 import {DavitBackButton} from "../../../../../../common/fragments/buttons/DavitBackButton";
 import {DavitAddButton} from "../../../../../../common/fragments/buttons/DavitAddButton";
 import {Form} from "../../../../../../common/fragments/forms/Form";
-import {FormLine} from "./FormLine";
+import {FormLine} from "./fragments/FormLine";
 
 interface DataFormProps {
 }
@@ -50,6 +50,11 @@ export const DataForm: FunctionComponent<DataFormProps> = () => {
 
         return (
             <Form key={key}>
+
+                <FormLine>
+                    <h2>Data</h2>
+                </FormLine>
+
                 <FormLine>
                     <DavitLabelTextfield
                         label='Name:'

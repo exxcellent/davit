@@ -37,7 +37,7 @@ export const ControllPanelEditChainCondition: FunctionComponent<ControllPanelEdi
             <div className="controllPanelEditChild">
                 <OptionField label="Select Actor">
                     <ActorDropDown
-                        value={actorFk?.toString()}
+                        value={actorFk}
                         onSelect={(actor) => setActorFk(actor?.actor.id || -1)}
                     />
                 </OptionField>

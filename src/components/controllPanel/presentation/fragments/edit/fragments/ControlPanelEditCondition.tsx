@@ -37,7 +37,7 @@ export const ControlPanelEditCondition: FunctionComponent<ControlPanelEditCondit
             <div className="optionFieldSpacer">
                 <OptionField label="Select Actor">
                     <ActorDropDown
-                        value={actorFk?.toString()}
+                        value={actorFk}
                         onSelect={(actor) => setActorFk(actor?.actor.id || -1)}
                     />
                 </OptionField>

@@ -217,6 +217,13 @@
     margin-bottom: var(--davit-margin-top-bottom);
 }
 
+.formLabel{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 10em;
+}
+
 .noteCard {
     width: 30%;
     height: 60%;

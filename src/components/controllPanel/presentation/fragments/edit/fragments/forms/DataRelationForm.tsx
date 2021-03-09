@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from 'react';
 import { Form } from '../../../../../../common/fragments/forms/Form';
-import { FormLine } from './FormLine';
+import { FormLine } from './fragments/FormLine';
 import { Dropdown } from 'semantic-ui-react';
 import { Direction } from '../../../../../../../dataAccess/access/to/DataRelationTO';
 import { DavitCommentButton } from '../../../../../../common/fragments/buttons/DavitCommentButton';
@@ -8,6 +8,7 @@ import { DavitButton } from '../../../../../../common/fragments/buttons/DavitBut
 import { DavitBackButton } from '../../../../../../common/fragments/buttons/DavitBackButton';
 import { DavitDeleteButton } from '../../../../../../common/fragments/buttons/DavitDeleteButton';
 import { useEditDataRelationViewModel } from '../viewmodels/EditDataRelationViewModel';
+import { FormLabel, FormlabelAlign } from './fragments/FormLabel';
 
 interface DataRelationFormProps {
 
@@ -37,6 +38,12 @@ export const DataRelationForm: FunctionComponent<DataRelationFormProps> = () => 
     return (
         <Form key={key}>
             <FormLine>
+                <h2>Data Relation</h2>
+            </FormLine>
+            <FormLine>
+                <FormLabel align={FormlabelAlign.center}>FROM</FormLabel>
+            </FormLine>
+            <FormLine>
                 <Dropdown
                     placeholder='Select Data...'
                     selection
@@ -56,6 +63,9 @@ export const DataRelationForm: FunctionComponent<DataRelationFormProps> = () => 
                     value={direction1}
                     onBlur={() => updateRelation()}
                 />
+            </FormLine>
+            <FormLine>
+                <FormLabel align={FormlabelAlign.center}>TO</FormLabel>
             </FormLine>
             <FormLine>
                 <Dropdown

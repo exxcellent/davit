@@ -9,7 +9,7 @@ import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./Davi
 interface ActorDropDownProps extends DropdownProps {
     onSelect: (actor: ActorCTO | undefined) => void;
     placeholder?: string;
-    value?: string;
+    value?: number;
 }
 
 interface ActorDropDownButtonProps extends DropdownProps {
@@ -26,7 +26,7 @@ export const ActorDropDown: FunctionComponent<ActorDropDownProps> = (props) => {
             dropdownItems={actors.map((actor) => actorToOption(actor))}
             onSelect={(item) => onSelect(selectActor(Number(item.value), actors))}
             placeholder={placeholder}
-            value={value}
+            value={value?.toString()}
         />
     );
 };

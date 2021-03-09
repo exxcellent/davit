@@ -1,14 +1,12 @@
 import React, { FunctionComponent } from 'react';
 import { useSelector } from 'react-redux';
 import { editSelectors, Mode } from '../../../../../slices/EditSlice';
-import { ControlPanelEditAction } from './fragments/ControlPanelEditAction';
 import { ControlPanelEditChain } from './fragments/ControlPanelEditChain';
 import { ControllPanelEditChainCondition } from './fragments/ControllPanelEditChainCondition';
 import { ControlPanelEditChainDecision } from './fragments/ControlPanelEditChainDecision';
 import { ControlPanelEditChainLink } from './fragments/ControlPanelEditChainLink';
 import { ControlPanelEditCondition } from './fragments/ControlPanelEditCondition';
 import { ControlPanelEditDataInstance } from './fragments/ControlPanelEditDataInstance';
-import { ControlPanelEditDataSetup } from './fragments/ControlPanelEditDataSetup';
 import { ControlPanelEditDecision } from './fragments/ControlPanelEditDecision';
 import { ControlPanelEditGroup } from './fragments/ControlPanelEditGroup';
 import { ControlPanelEditInitData } from './fragments/ControlPanelEditInitData';
@@ -18,6 +16,8 @@ import { ControlPanelEditStep } from './fragments/ControlPanelEditStep';
 import { EditActorModal } from './fragments/modals/EditActorModal';
 import { EditDataModal } from './fragments/modals/EditDataModal';
 import { EditDataRelationModal } from './fragments/modals/EditDataRelationModal';
+import { EditDataSetupModal } from './fragments/modals/EditDataSetupModal';
+import { EditActionModal } from './fragments/modals/EditActionModal';
 
 export interface ControlPanelEditControllerProps {
 }
@@ -47,9 +47,9 @@ export const ControlPanelEditController: FunctionComponent<ControlPanelEditContr
             case Mode.EDIT_SEQUENCE_DECISION_CONDITION:
                 return <ControlPanelEditCondition hidden={mode !== Mode.EDIT_SEQUENCE_DECISION_CONDITION} />;
             case Mode.EDIT_SEQUENCE_STEP_ACTION:
-                return <ControlPanelEditAction hidden={mode !== Mode.EDIT_SEQUENCE_STEP_ACTION} />;
+                return <EditActionModal />;
             case Mode.EDIT_DATASETUP:
-                return <ControlPanelEditDataSetup hidden={mode !== Mode.EDIT_DATASETUP} />;
+                return <EditDataSetupModal />;
             case Mode.EDIT_DATASETUP_INITDATA:
                 return <ControlPanelEditInitData hidden={mode !== Mode.EDIT_DATASETUP_INITDATA} />;
             case Mode.EDIT_CHAIN:

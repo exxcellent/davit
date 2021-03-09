@@ -43,7 +43,7 @@ export const ControlPanelEditAction: FunctionComponent<ControlPanelEditActionPro
         dataAndInstance,
         setTriggerLabel,
         triggerLabel,
-    } = useControlPanelEditActionViewModel();
+    } = useEditActionViewModel();
 
     return (
         <div className="headerGrid">
@@ -85,8 +85,8 @@ export const ControlPanelEditAction: FunctionComponent<ControlPanelEditActionPro
                         }
                         value={
                             actionType?.includes("SEND") || actionType === ActionType.TRIGGER
-                                ? sendingActorId?.toString()
-                                : receivingActorId?.toString()
+                                ? sendingActorId
+                                : receivingActorId
                         }
                     />
                 </OptionField>
@@ -99,7 +99,7 @@ export const ControlPanelEditAction: FunctionComponent<ControlPanelEditActionPro
                     <OptionField label="Select receiving Actor">
                         <ActorDropDown
                             onSelect={(actor) => setActor(actor, false)}
-                            value={receivingActorId?.toString()}
+                            value={receivingActorId}
                         />
                     </OptionField>
                 </OptionField>
@@ -113,7 +113,7 @@ export const ControlPanelEditAction: FunctionComponent<ControlPanelEditActionPro
     );
 };
 
-const useControlPanelEditActionViewModel = () => {
+export const useEditActionViewModel = () => {
     const actionToEdit: ActionTO | null = useSelector(editSelectors.selectActionToEdit);
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const dispatch = useDispatch();

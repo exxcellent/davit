@@ -9,10 +9,8 @@ interface EditDataRelationModalProps {
 export const EditDataRelationModal: FunctionComponent<EditDataRelationModalProps> = () => {
 
     return (
-        <DavitModal
-            content={
-                <DataRelationForm />
-            }
-        />
+        <DavitModal>
+            <DataRelationForm />
+        </DavitModal>
     );
 };

@@ -1,72 +1,15 @@
-import React, {FunctionComponent, useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {ActorCTO} from '../../../../../../dataAccess/access/cto/ActorCTO';
-import {DataSetupCTO} from '../../../../../../dataAccess/access/cto/DataSetupCTO';
-import {InitDataTO} from '../../../../../../dataAccess/access/to/InitDataTO';
-import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
-import {EditDataSetup} from '../../../../../../slices/thunks/DataSetupThunks';
-import {DavitUtil} from '../../../../../../utils/DavitUtil';
-import {DavitBackButton} from '../../../../../common/fragments/buttons/DavitBackButton';
-import {DavitButton} from '../../../../../common/fragments/buttons/DavitButton';
-import {DavitDeleteButton} from '../../../../../common/fragments/buttons/DavitDeleteButton';
-import {DavitLabelTextfield} from '../../../../../common/fragments/DavitLabelTextfield';
-import {InitDataDropDownButton} from '../../../../../common/fragments/dropdowns/InitDataDropDown';
-import {OptionField} from '../common/OptionField';
-import {DavitCommentButton} from '../../../../../common/fragments/buttons/DavitCommentButton';
-import {AddOrEdit} from '../../../../../common/fragments/AddOrEdit';
-import {GlobalActions} from "../../../../../../slices/GlobalSlice";
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { ActorCTO } from '../../../../../../../dataAccess/access/cto/ActorCTO';
+import { DataSetupCTO } from '../../../../../../../dataAccess/access/cto/DataSetupCTO';
+import { InitDataTO } from '../../../../../../../dataAccess/access/to/InitDataTO';
+import { EditActions, editSelectors } from '../../../../../../../slices/EditSlice';
+import { EditDataSetup } from '../../../../../../../slices/thunks/DataSetupThunks';
+import { DavitUtil } from '../../../../../../../utils/DavitUtil';
+import { GlobalActions } from '../../../../../../../slices/GlobalSlice';
+import { EditInitData } from '../../../../../../../slices/thunks/InitDataThunks';
 
-export interface ControlPanelEditDataSetupProps {
-    hidden: boolean;
-}
-
-export const ControlPanelEditDataSetup: FunctionComponent<ControlPanelEditDataSetupProps> = () => {
-
-    const {
-        name,
-        changeName,
-        saveDataSetup,
-        deleteDataSetup,
-        getInitDatas,
-        createAnother,
-        updateDataSetup,
-        editInitData,
-        createInitData,
-        note,
-        saveNote,
-    } = useControlPanelEditDataSetupViewModel();
-
-    return (
-        <div className='headerGrid'>
-            <OptionField label='Data - SETUP NAME'>
-                <DavitLabelTextfield
-                    label='Name:'
-                    placeholder='Data Setup Name ...'
-                    onChangeCallback={(name: string) => changeName(name)}
-                    value={name}
-                    focus={true}
-                    onBlur={updateDataSetup}
-                />
-            </OptionField>
-            <OptionField label='Create / edit | Init - Data' divider={true}>
-                <AddOrEdit addCallBack={createInitData} label={'Data'}
-                           dropDown={<InitDataDropDownButton onSelect={editInitData} icon='wrench'
-                                                             initDatas={getInitDatas}/>}/>
-            </OptionField>
-            <OptionField label={"Note"} divider={true}>
-                <DavitCommentButton onSaveCallback={saveNote} comment={note}/>
-            </OptionField>
-
-            <OptionField label='Options' divider={true}>
-                <DavitButton onClick={createAnother} label='Create another'/>
-                <DavitBackButton onClick={saveDataSetup}/>
-                <DavitDeleteButton onClick={deleteDataSetup}/>
-            </OptionField>
-        </div>
-    );
-};
-
-const useControlPanelEditDataSetupViewModel = () => {
+export const useEditDataSetupViewModel = () => {
     const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.selectDataSetupToEdit);
     const dispatch = useDispatch();
     const [actorToEdit, setActorToEdit] = useState<ActorCTO | null>(null);
@@ -141,7 +84,25 @@ const useControlPanelEditDataSetupViewModel = () => {
         if (!DavitUtil.isNullOrUndefined(dataSetupToEdit)) {
             const initData: InitDataTO = new InitDataTO();
             initData.dataSetupFk = dataSetupToEdit!.dataSetup.id;
-            editInitData(initData);
+            dispatch(EditInitData.save(initData));
+            dispatch(EditActions.setMode.editDataSetup(dataSetupToEdit!.dataSetup?.id));
+        }
+    };
+
+    const saveInitData = (initData: InitDataTO) => {
+            console.info(initData);
+        if (!DavitUtil.isNullOrUndefined(initData) && !DavitUtil.isNullOrUndefined(dataSetupToEdit)) {
+            let copyInitData: InitDataTO = DavitUtil.deepCopy(initData);
+            console.info(copyInitData);
+            dispatch(EditInitData.save(copyInitData));
+            dispatch(EditActions.setMode.editDataSetup(dataSetupToEdit!.dataSetup?.id));
+        }
+    };
+
+    const deleteInitData = (initData: InitDataTO) => {
+        if (!DavitUtil.isNullOrUndefined(initData) && !DavitUtil.isNullOrUndefined(dataSetupToEdit)) {
+            dispatch(EditInitData.delete(initData.id));
+            dispatch(EditActions.setMode.editDataSetup(dataSetupToEdit!.dataSetup?.id));
         }
     };
 
@@ -169,5 +130,8 @@ const useControlPanelEditDataSetupViewModel = () => {
         createInitData,
         note: dataSetupToEdit ? dataSetupToEdit.dataSetup.note : '',
         saveNote,
+        initDatas: dataSetupToEdit?.initDatas || [],
+        saveInitData,
+        deleteInitData
     };
 };

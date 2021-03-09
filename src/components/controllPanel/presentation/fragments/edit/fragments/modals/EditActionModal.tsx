@@ -1,16 +1,16 @@
 import React, { FunctionComponent } from 'react';
+import { ActionForm } from '../forms/ActionForm';
 import { DavitModal } from '../../../../../../common/fragments/modals/DavitModal';
-import { DataForm } from '../forms/DataForm';
 
-interface EditDataModalProps {
+interface EditActionModalProps {
 
 }
 
-export const EditDataModal: FunctionComponent<EditDataModalProps> = () => {
+export const EditActionModal: FunctionComponent<EditActionModalProps> = () => {
 
     return (
         <DavitModal>
-            <DataForm />
+            <ActionForm />
         </DavitModal>
     );
 };
