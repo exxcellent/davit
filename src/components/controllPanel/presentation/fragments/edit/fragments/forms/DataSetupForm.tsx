@@ -12,6 +12,7 @@ import { ActorDropDown } from '../../../../../../common/fragments/dropdowns/Acto
 import { InstanceDropDown } from '../../../../../../common/fragments/dropdowns/InstanceDropDown';
 import { InitDataTO } from '../../../../../../../dataAccess/access/to/InitDataTO';
 import { DavitUtil } from '../../../../../../../utils/DavitUtil';
+import { FormDivider } from './fragments/FormDivider';
 
 interface DataSetupFormProps {
 
@@ -76,6 +77,7 @@ export const DataSetupForm: FunctionComponent<DataSetupFormProps> = () => {
             <FormLine>
                 <h2>Data Setup</h2>
             </FormLine>
+
             <FormLine>
                 <DavitLabelTextfield
                     label='Name:'
@@ -87,12 +89,16 @@ export const DataSetupForm: FunctionComponent<DataSetupFormProps> = () => {
                 />
             </FormLine>
 
+            <FormDivider/>
+
             <FormLine>
                 <DavitDeleteButton onClick={deleteDataSetup} />
                 <DavitCommentButton onSaveCallback={saveNote} comment={note} />
                 <DavitButton onClick={createAnother} label='Create another' />
                 <DavitBackButton onClick={saveDataSetup} />
             </FormLine>
+
+            <FormDivider/>
 
             <FormLine>
                 <table className={'border'} style={{ width: '40em', minHeight: '40em' }}>

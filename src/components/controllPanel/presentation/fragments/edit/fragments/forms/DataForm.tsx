@@ -9,6 +9,7 @@ import {DavitBackButton} from "../../../../../../common/fragments/buttons/DavitB
 import {DavitAddButton} from "../../../../../../common/fragments/buttons/DavitAddButton";
 import {Form} from "../../../../../../common/fragments/forms/Form";
 import {FormLine} from "./fragments/FormLine";
+import { FormDivider } from './fragments/FormDivider';
 
 interface DataFormProps {
 }
@@ -66,6 +67,8 @@ export const DataForm: FunctionComponent<DataFormProps> = () => {
                     />
                 </FormLine>
 
+                <FormDivider/>
+
                 <FormLine>
                     <DavitDeleteButton onClick={deleteData}/>
                     <DavitCommentButton onSaveCallback={saveNote} comment={note}/>
@@ -75,6 +78,8 @@ export const DataForm: FunctionComponent<DataFormProps> = () => {
                     }} label='Create another'/>
                     <DavitBackButton onClick={saveData}/>
                 </FormLine>
+
+                <FormDivider/>
 
                 <FormLine>
                     <table className={"border"} style={{width: "22em"}}>

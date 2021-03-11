@@ -7,6 +7,7 @@ import { DavitDeleteButton } from '../../../../../../common/fragments/buttons/Da
 import { useEditActorViewModel } from '../viewmodels/EditActorViewModel';
 import { FormLine } from './fragments/FormLine';
 import { Form } from '../../../../../../common/fragments/forms/Form';
+import { FormDivider } from './fragments/FormDivider';
 
 interface ActorFormProps {
 }
@@ -42,6 +43,9 @@ export const ActorForm: FunctionComponent<ActorFormProps> = () => {
                     focus
                 />
             </FormLine>
+
+            <FormDivider/>
+
             <FormLine>
                 <DavitDeleteButton onClick={deleteActor} />
                 <DavitCommentButton onSaveCallback={saveNote} comment={note} />

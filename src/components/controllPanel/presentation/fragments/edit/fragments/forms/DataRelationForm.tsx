@@ -9,6 +9,7 @@ import { DavitBackButton } from '../../../../../../common/fragments/buttons/Davi
 import { DavitDeleteButton } from '../../../../../../common/fragments/buttons/DavitDeleteButton';
 import { useEditDataRelationViewModel } from '../viewmodels/EditDataRelationViewModel';
 import { FormLabel, FormlabelAlign } from './fragments/FormLabel';
+import { FormDivider } from './fragments/FormDivider';
 
 interface DataRelationFormProps {
 
@@ -40,9 +41,11 @@ export const DataRelationForm: FunctionComponent<DataRelationFormProps> = () => 
             <FormLine>
                 <h2>Data Relation</h2>
             </FormLine>
+
             <FormLine>
                 <FormLabel align={FormlabelAlign.center}>FROM</FormLabel>
             </FormLine>
+
             <FormLine>
                 <Dropdown
                     placeholder='Select Data...'
@@ -64,6 +67,9 @@ export const DataRelationForm: FunctionComponent<DataRelationFormProps> = () => 
                     onBlur={() => updateRelation()}
                 />
             </FormLine>
+
+            <FormDivider/>
+
             <FormLine>
                 <FormLabel align={FormlabelAlign.center}>TO</FormLabel>
             </FormLine>
@@ -88,14 +94,17 @@ export const DataRelationForm: FunctionComponent<DataRelationFormProps> = () => 
                     onBlur={() => updateRelation()}
                 />
             </FormLine>
+
+            <FormDivider/>
+
             <FormLine>
+                <DavitDeleteButton onClick={deleteRelation} />
                 <DavitCommentButton onSaveCallback={saveNote} comment={note} />
                 <DavitButton onClick={() => {
                     createAnother();
                     setKey(key + 1);
                 }} label='Create another' />
                 <DavitBackButton onClick={saveRelation} />
-                <DavitDeleteButton onClick={deleteRelation} />
             </FormLine>
         </Form>
     );

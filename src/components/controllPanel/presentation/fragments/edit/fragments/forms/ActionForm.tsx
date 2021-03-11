@@ -12,6 +12,7 @@ import { DavitDeleteButton } from '../../../../../../common/fragments/buttons/Da
 import { FormLine } from './fragments/FormLine';
 import { useEditActionViewModel } from '../viewmodels/EditActionViewModel';
 import { FormLabel, FormlabelAlign } from './fragments/FormLabel';
+import { FormDivider } from './fragments/FormDivider';
 
 interface ActionFormProps {
 
@@ -38,12 +39,16 @@ export const ActionForm: FunctionComponent<ActionFormProps> = () => {
 
     return <Form>
 
-        <h2>Action</h2>
+        <FormLine>
+            <h2>Action</h2>
+        </FormLine>
 
         <FormLine>
             <FormLabel>Select Action</FormLabel>
             <ActionTypeDropDown onSelect={setAction} value={actionType} />
         </FormLine>
+
+        <FormDivider/>
 
         {actionType !== ActionType.TRIGGER && <FormLine>
 
@@ -113,6 +118,9 @@ export const ActionForm: FunctionComponent<ActionFormProps> = () => {
                 </FormLine>
             </>
         }
+
+        <FormDivider/>
+
         <FormLine>
             <DavitDeleteButton onClick={deleteAction} />
             <DavitButton onClick={createAnother} label='Create another' />
