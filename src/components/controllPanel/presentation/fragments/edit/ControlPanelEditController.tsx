@@ -11,13 +11,13 @@ import { ControlPanelEditGroup } from './fragments/ControlPanelEditGroup';
 import { ControlPanelEditInitData } from './fragments/ControlPanelEditInitData';
 import { ControlPanelEditMenu } from './fragments/ControlPanelEditMenu';
 import { ControlPanelEditSequence } from './fragments/ControlPanelEditSequence';
-import { ControlPanelEditStep } from './fragments/ControlPanelEditStep';
 import { EditActorModal } from './fragments/modals/EditActorModal';
 import { EditDataModal } from './fragments/modals/EditDataModal';
 import { EditDataRelationModal } from './fragments/modals/EditDataRelationModal';
 import { EditDataSetupModal } from './fragments/modals/EditDataSetupModal';
 import { EditActionModal } from './fragments/modals/EditActionModal';
 import { EditDecisionModal } from './fragments/modals/EditDecisionModal';
+import { EditStepModal } from './fragments/modals/EditStepModal';
 
 export interface ControlPanelEditControllerProps {
 }
@@ -41,7 +41,7 @@ export const ControlPanelEditController: FunctionComponent<ControlPanelEditContr
             case Mode.EDIT_SEQUENCE:
                 return <ControlPanelEditSequence hidden={mode !== Mode.EDIT_SEQUENCE} />;
             case Mode.EDIT_SEQUENCE_STEP:
-                return <ControlPanelEditStep hidden={mode !== Mode.EDIT_SEQUENCE_STEP} />;
+                return <EditStepModal />;
             case Mode.EDIT_SEQUENCE_DECISION:
                 return <EditDecisionModal />;
             case Mode.EDIT_SEQUENCE_DECISION_CONDITION:

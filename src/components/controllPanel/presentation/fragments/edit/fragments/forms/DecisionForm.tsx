@@ -14,7 +14,7 @@ import { DavitBackButton } from '../../../../../../common/fragments/buttons/Davi
 import { DavitRootButton } from '../../../../../../common/fragments/buttons/DavitRootButton';
 import { DavitDeleteButton } from '../../../../../../common/fragments/buttons/DavitDeleteButton';
 import { FormLine } from './fragments/FormLine';
-import { FormLabel } from './fragments/FormLabel';
+import { FormLabel, FormlabelAlign } from './fragments/FormLabel';
 import { FormDivider } from './fragments/FormDivider';
 
 interface DecisionFormProps {
@@ -54,8 +54,10 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
 
     return (
         <Form>
-            <FormLine><h2>Decision {name}</h2></FormLine>
+            <FormLine><h2>Decision</h2></FormLine>
+
             <FormDivider />
+
             <FormLine>
                 <DavitLabelTextfield
                     label='Name:'
@@ -79,6 +81,13 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
             {/*------------------------- If option -------------------------*/}
 
             <FormDivider />
+
+            <FormLine>
+                <FormLabel align={FormlabelAlign.center}>
+                    {/* eslint-disable-next-line react/no-unescaped-entities */}
+                    <h3>If condition's are true</h3>
+                </FormLabel>
+            </FormLine>
 
             <FormLine>
                 <FormLabel>{labelTypeIf}</FormLabel>
@@ -123,6 +132,13 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
 
             {/*------------------------- Else option -------------------------*/}
             <FormDivider />
+
+            <FormLine>
+                <FormLabel align={FormlabelAlign.center}>
+                    {/* eslint-disable-next-line react/no-unescaped-entities */}
+                    <h3>If condition's are false</h3>
+                </FormLabel>
+            </FormLine>
 
             <FormLine>
                 <FormLabel>{labelTypeElse}</FormLabel>
