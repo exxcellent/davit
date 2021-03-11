@@ -248,6 +248,8 @@
     height: 80%;
     font-size: var(--davit-font-size);
     padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
+    background-color: var(--carv2-background-color);
+    color: var(--carv2-text-color);
 }
 
 .noteTextarea:focus {

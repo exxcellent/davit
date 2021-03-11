@@ -29,7 +29,7 @@ export const DavitNoteForm: FunctionComponent<DavitNoteFormProps> = (props) => {
             <h1>Note</h1>
             {subHeader && <h2>{subHeader}</h2>}
             <textarea
-                className={"noteTextarea"}
+                className={"noteTextarea border"}
                 onChange={(e) => setNoteText(e.target.value)}
                 value={noteText}
                 ref={textAreRef}
