@@ -8,6 +8,8 @@ import { useEditActorViewModel } from '../viewmodels/EditActorViewModel';
 import { FormLine } from './fragments/FormLine';
 import { Form } from '../../../../../../common/fragments/forms/Form';
 import { FormDivider } from './fragments/FormDivider';
+import { FormHeader } from '../../../../../../common/fragments/forms/FormHeader';
+import { FormBody } from '../../../../../../common/fragments/forms/FormBody';
 
 interface ActorFormProps {
 }
@@ -29,22 +31,28 @@ export const ActorForm: FunctionComponent<ActorFormProps> = () => {
 
     return (
         <Form key={key}>
-            <FormLine>
+            <FormHeader>
                 <h2>Actor</h2>
-            </FormLine>
+            </FormHeader>
 
-            <FormLine>
-                <DavitLabelTextfield
-                    label='Name:'
-                    placeholder='Actor Name'
-                    onChangeCallback={(name: string) => changeName(name)}
-                    onBlur={updateActor}
-                    value={name}
-                    focus
-                />
-            </FormLine>
+            <FormDivider />
 
-            <FormDivider/>
+            <FormBody>
+
+                <FormLine>
+                    <DavitLabelTextfield
+                        label='Name:'
+                        placeholder='Actor Name'
+                        onChangeCallback={(name: string) => changeName(name)}
+                        onBlur={updateActor}
+                        value={name}
+                        focus
+                    />
+                </FormLine>
+
+            </FormBody>
+
+            <FormDivider />
 
             <FormLine>
                 <DavitDeleteButton onClick={deleteActor} />
@@ -55,6 +63,8 @@ export const ActorForm: FunctionComponent<ActorFormProps> = () => {
                 }} label='Create another' />
                 <DavitBackButton onClick={saveActor} />
             </FormLine>
+
+
         </Form>
     );
 };

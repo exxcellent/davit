@@ -13,6 +13,9 @@ import { InstanceDropDown } from '../../../../../../common/fragments/dropdowns/I
 import { InitDataTO } from '../../../../../../../dataAccess/access/to/InitDataTO';
 import { DavitUtil } from '../../../../../../../utils/DavitUtil';
 import { FormDivider } from './fragments/FormDivider';
+import { FormHeader } from '../../../../../../common/fragments/forms/FormHeader';
+import { FormBody } from '../../../../../../common/fragments/forms/FormBody';
+import { FormFooter } from '../../../../../../common/fragments/forms/FormFooter';
 
 interface DataSetupFormProps {
 
@@ -46,7 +49,7 @@ export const DataSetupForm: FunctionComponent<DataSetupFormProps> = () => {
                                 copyInitData.actorFk = actor ? actor.actor.id : -1;
                                 saveInitData(copyInitData);
                             }}
-                            placeholder={"Select Actor..."}
+                            placeholder={'Select Actor...'}
                             value={copyInitData.actorFk}
                         />
                         <InstanceDropDown
@@ -57,7 +60,7 @@ export const DataSetupForm: FunctionComponent<DataSetupFormProps> = () => {
                                     saveInitData(copyInitData);
                                 }
                             }}
-                            placeholder={"Select Data Instance..."}
+                            placeholder={'Select Data Instance...'}
                             value={JSON.stringify({
                                 dataFk: copyInitData!.dataFk,
                                 instanceId: copyInitData!.instanceFk,
@@ -74,46 +77,52 @@ export const DataSetupForm: FunctionComponent<DataSetupFormProps> = () => {
 
     return (
         <Form>
-            <FormLine>
+            <FormHeader>
                 <h2>Data Setup</h2>
-            </FormLine>
+            </FormHeader>
 
-            <FormLine>
-                <DavitLabelTextfield
-                    label='Name:'
-                    placeholder='Data Setup Name ...'
-                    onChangeCallback={(name: string) => changeName(name)}
-                    value={name}
-                    focus={true}
-                    onBlur={updateDataSetup}
-                />
-            </FormLine>
+            <FormDivider />
 
-            <FormDivider/>
+            <FormBody>
 
-            <FormLine>
+                <FormLine>
+                    <DavitLabelTextfield
+                        label='Name:'
+                        placeholder='Data Setup Name ...'
+                        onChangeCallback={(name: string) => changeName(name)}
+                        value={name}
+                        focus={true}
+                        onBlur={updateDataSetup}
+                    />
+                </FormLine>
+
+                <FormDivider />
+
+
+                <FormLine>
+                    <table className={'border'} style={{ width: '40em', minHeight: '30vh' }}>
+                        <thead>
+                        <tr>
+                            <td style={{ textAlign: 'center' }}>Actor</td>
+                            <td style={{ textAlign: 'center' }}>Data Instance</td>
+                            <td style={{ textAlign: 'end' }}><DavitAddButton onClick={createInitData} /></td>
+                        </tr>
+                        </thead>
+                        <tbody style={{ maxHeight: '40vh' }}>
+                        {initDatas.map(buildActorDataTableRow)}
+                        </tbody>
+                    </table>
+                </FormLine>
+            </FormBody>
+
+            <FormDivider />
+            
+            <FormFooter>
                 <DavitDeleteButton onClick={deleteDataSetup} />
                 <DavitCommentButton onSaveCallback={saveNote} comment={note} />
                 <DavitButton onClick={createAnother} label='Create another' />
                 <DavitBackButton onClick={saveDataSetup} />
-            </FormLine>
-
-            <FormDivider/>
-
-            <FormLine>
-                <table className={'border'} style={{ width: '40em', minHeight: '40em' }}>
-                    <thead>
-                    <tr>
-                        <td style={{ textAlign: 'center' }}>Actor</td>
-                        <td style={{ textAlign: 'center' }}>Data Instance</td>
-                        <td style={{ textAlign: 'end' }}><DavitAddButton onClick={createInitData} /></td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {initDatas.map(buildActorDataTableRow)}
-                    </tbody>
-                </table>
-            </FormLine>
+            </FormFooter>
 
         </Form>
     );

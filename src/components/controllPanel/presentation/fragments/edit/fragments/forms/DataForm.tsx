@@ -10,6 +10,9 @@ import {DavitAddButton} from "../../../../../../common/fragments/buttons/DavitAd
 import {Form} from "../../../../../../common/fragments/forms/Form";
 import {FormLine} from "./fragments/FormLine";
 import { FormDivider } from './fragments/FormDivider';
+import { FormHeader } from '../../../../../../common/fragments/forms/FormHeader';
+import { FormBody } from '../../../../../../common/fragments/forms/FormBody';
+import { FormFooter } from '../../../../../../common/fragments/forms/FormFooter';
 
 interface DataFormProps {
 }
@@ -52,9 +55,14 @@ export const DataForm: FunctionComponent<DataFormProps> = () => {
         return (
             <Form key={key}>
 
-                <FormLine>
+                <FormHeader>
                     <h2>Data</h2>
-                </FormLine>
+                </FormHeader>
+
+                <FormDivider/>
+
+                <FormBody>
+
 
                 <FormLine>
                     <DavitLabelTextfield
@@ -67,22 +75,11 @@ export const DataForm: FunctionComponent<DataFormProps> = () => {
                     />
                 </FormLine>
 
-                <FormDivider/>
-
-                <FormLine>
-                    <DavitDeleteButton onClick={deleteData}/>
-                    <DavitCommentButton onSaveCallback={saveNote} comment={note}/>
-                    <DavitButton onClick={() => {
-                        createAnother();
-                        setKey(key + 1);
-                    }} label='Create another'/>
-                    <DavitBackButton onClick={saveData}/>
-                </FormLine>
 
                 <FormDivider/>
 
                 <FormLine>
-                    <table className={"border"} style={{width: "22em"}}>
+                    <table className={"border"} style={{width: "40em"}}>
                         <thead>
                         <tr>
                             <td style={{textAlign: "center"}}>Instances</td>
@@ -94,6 +91,21 @@ export const DataForm: FunctionComponent<DataFormProps> = () => {
                         </tbody>
                     </table>
                 </FormLine>
+
+                </FormBody>
+
+                <FormDivider/>
+
+                <FormFooter>
+                    <DavitDeleteButton onClick={deleteData}/>
+                    <DavitCommentButton onSaveCallback={saveNote} comment={note}/>
+                    <DavitButton onClick={() => {
+                        createAnother();
+                        setKey(key + 1);
+                    }} label='Create another'/>
+                    <DavitBackButton onClick={saveData}/>
+                </FormFooter>
+
 
             </Form>
         );

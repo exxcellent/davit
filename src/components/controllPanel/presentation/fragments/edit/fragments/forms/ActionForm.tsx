@@ -24,7 +24,7 @@ export const ActionForm: FunctionComponent<ActionFormProps> = () => {
         setActor,
         setAction,
         setData,
-        deleteAction,
+        deleteActionToEdit,
         sendingActorId,
         receivingActorId,
         dataId,
@@ -122,7 +122,7 @@ export const ActionForm: FunctionComponent<ActionFormProps> = () => {
         <FormDivider/>
 
         <FormLine>
-            <DavitDeleteButton onClick={deleteAction} />
+            <DavitDeleteButton onClick={deleteActionToEdit} />
             <DavitButton onClick={createAnother} label='Create another' />
             <DavitButton onClick={setMode} iconName={faReply} />
         </FormLine>

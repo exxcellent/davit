@@ -16,6 +16,9 @@ import { DavitDeleteButton } from '../../../../../../common/fragments/buttons/Da
 import { FormLine } from './fragments/FormLine';
 import { FormLabel, FormlabelAlign } from './fragments/FormLabel';
 import { FormDivider } from './fragments/FormDivider';
+import { FormHeader } from '../../../../../../common/fragments/forms/FormHeader';
+import { FormBody } from '../../../../../../common/fragments/forms/FormBody';
+import { FormFooter } from '../../../../../../common/fragments/forms/FormFooter';
 
 interface DecisionFormProps {
 
@@ -54,141 +57,142 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
 
     return (
         <Form>
-            <FormLine><h2>Decision</h2></FormLine>
+            <FormHeader><h2>Decision</h2></FormHeader>
 
             <FormDivider />
 
-            <FormLine>
-                <DavitLabelTextfield
-                    label='Name:'
-                    placeholder='Decision name ...'
-                    onChangeCallback={(name: string) => changeName(name)}
-                    value={name}
-                    focus={true}
-                    onBlur={updateDecision}
-                />
-            </FormLine>
+            <FormBody>
 
-            <FormLine>
-                <AddOrEdit addCallBack={editOrAddCondition} label={'Condition'}
-                           dropDown={<ConditionDropDownButton
-                               conditions={conditions}
-                               icon='wrench'
-                               onSelect={editOrAddCondition}
-                           />} />
-            </FormLine>
-
-            {/*------------------------- If option -------------------------*/}
-
-            <FormDivider />
-
-            <FormLine>
-                <FormLabel align={FormlabelAlign.center}>
-                    {/* eslint-disable-next-line react/no-unescaped-entities */}
-                    <h3>If condition's are true</h3>
-                </FormLabel>
-            </FormLine>
-
-            <FormLine>
-                <FormLabel>{labelTypeIf}</FormLabel>
-                <GoToOptionDropDown
-                    onSelect={(gt) => handleType(true, gt)}
-                    value={ifGoTo ? ifGoTo.type : GoToTypes.FIN}
-                />
-            </FormLine>
-
-            {ifGoTo!.type === GoToTypes.STEP && (
-                <>
                 <FormLine>
-                    <FormLabel>{labelStep}</FormLabel>
-                    <StepDropDown
-                        onSelect={(step) => setGoToTypeStep(true, step)}
-                        value={ifGoTo?.type === GoToTypes.STEP ? ifGoTo.id : 1}
+                    <DavitLabelTextfield
+                        label='Name:'
+                        placeholder='Decision name ...'
+                        onChangeCallback={(name: string) => changeName(name)}
+                        value={name}
+                        focus={true}
+                        onBlur={updateDecision}
                     />
                 </FormLine>
+
                 <FormLine>
-                    <FormLabel>{labelCreateStep}</FormLabel>
-                    <DavitAddButton onClick={() => createGoToStep(true)} />
+                    <AddOrEdit addCallBack={editOrAddCondition} label={'Condition'}
+                               dropDown={<ConditionDropDownButton
+                                   conditions={conditions}
+                                   icon='wrench'
+                                   onSelect={editOrAddCondition}
+                               />} />
                 </FormLine>
-                </>
-            )}
 
-            {ifGoTo!.type === GoToTypes.DEC && (
-                <>
-                    <FormLine>
-                        <FormLabel>{labelDecision}</FormLabel>
-                        <DecisionDropDown
-                            onSelect={(cond) => setGoToTypeDecision(true, cond)}
-                            value={ifGoTo?.type === GoToTypes.DEC ? ifGoTo.id : 1}
-                            exclude={decId}
-                        />
-                    </FormLine>
-                    <FormLine>
-                        <FormLabel>{labelCreateDecision}</FormLabel>
-                        <DavitAddButton onClick={() => createGoToDecision(true)} />
-                    </FormLine>
-                </>
-            )}
+                {/*------------------------- If option -------------------------*/}
 
-            {/*------------------------- Else option -------------------------*/}
+                <FormDivider />
+
+                <FormLine>
+                    <FormLabel align={FormlabelAlign.center}>
+                        {/* eslint-disable-next-line react/no-unescaped-entities */}
+                        <h3>If condition's are true</h3>
+                    </FormLabel>
+                </FormLine>
+
+                <FormLine>
+                    <FormLabel>{labelTypeIf}</FormLabel>
+                    <GoToOptionDropDown
+                        onSelect={(gt) => handleType(true, gt)}
+                        value={ifGoTo ? ifGoTo.type : GoToTypes.FIN}
+                    />
+                </FormLine>
+
+                {ifGoTo!.type === GoToTypes.STEP && (
+                    <>
+                        <FormLine>
+                            <FormLabel>{labelStep}</FormLabel>
+                            <StepDropDown
+                                onSelect={(step) => setGoToTypeStep(true, step)}
+                                value={ifGoTo?.type === GoToTypes.STEP ? ifGoTo.id : 1}
+                            />
+                        </FormLine>
+                        <FormLine>
+                            <FormLabel>{labelCreateStep}</FormLabel>
+                            <DavitAddButton onClick={() => createGoToStep(true)} />
+                        </FormLine>
+                    </>
+                )}
+
+                {ifGoTo!.type === GoToTypes.DEC && (
+                    <>
+                        <FormLine>
+                            <FormLabel>{labelDecision}</FormLabel>
+                            <DecisionDropDown
+                                onSelect={(cond) => setGoToTypeDecision(true, cond)}
+                                value={ifGoTo?.type === GoToTypes.DEC ? ifGoTo.id : 1}
+                                exclude={decId}
+                            />
+                        </FormLine>
+                        <FormLine>
+                            <FormLabel>{labelCreateDecision}</FormLabel>
+                            <DavitAddButton onClick={() => createGoToDecision(true)} />
+                        </FormLine>
+                    </>
+                )}
+
+                {/*------------------------- Else option -------------------------*/}
+                <FormDivider />
+
+                <FormLine>
+                    <FormLabel align={FormlabelAlign.center}>
+                        {/* eslint-disable-next-line react/no-unescaped-entities */}
+                        <h3>If condition's are false</h3>
+                    </FormLabel>
+                </FormLine>
+
+                <FormLine>
+                    <FormLabel>{labelTypeElse}</FormLabel>
+                    <GoToOptionDropDown
+                        onSelect={(gt) => handleType(false, gt)}
+                        value={elseGoTo ? elseGoTo.type : GoToTypes.ERROR}
+                    />
+                </FormLine>
+
+                {elseGoTo!.type === GoToTypes.STEP && (
+                    <>
+                        <FormLine>
+                            <FormLabel>{labelStep}</FormLabel>
+                            <StepDropDown
+                                onSelect={(step) => setGoToTypeStep(false, step)}
+                                value={elseGoTo?.type === GoToTypes.STEP ? elseGoTo.id : 1}
+                            />
+                        </FormLine>
+                        <FormLine>
+                            <FormLabel>{labelCreateStep}</FormLabel>
+                            <DavitAddButton onClick={() => createGoToStep(false)} />
+                        </FormLine>
+                    </>
+                )}
+
+                {elseGoTo!.type === GoToTypes.DEC && (
+                    <>
+                        <FormLine>
+                            <FormLabel>{labelDecision}</FormLabel>
+                            <DecisionDropDown
+                                onSelect={(cond) => setGoToTypeDecision(false, cond)}
+                                value={elseGoTo?.type === GoToTypes.DEC ? elseGoTo.id : 1}
+                                exclude={decId}
+                            />
+                        </FormLine>
+                        <FormLine>
+                            <FormLabel>{labelCreateDecision}</FormLabel>
+                            <DavitAddButton onClick={() => createGoToDecision(false)} />
+                        </FormLine>
+                    </>
+                )}
+            </FormBody>
             <FormDivider />
-
-            <FormLine>
-                <FormLabel align={FormlabelAlign.center}>
-                    {/* eslint-disable-next-line react/no-unescaped-entities */}
-                    <h3>If condition's are false</h3>
-                </FormLabel>
-            </FormLine>
-
-            <FormLine>
-                <FormLabel>{labelTypeElse}</FormLabel>
-                <GoToOptionDropDown
-                    onSelect={(gt) => handleType(false, gt)}
-                    value={elseGoTo ? elseGoTo.type : GoToTypes.ERROR}
-                />
-            </FormLine>
-
-            {elseGoTo!.type === GoToTypes.STEP && (
-                <>
-                    <FormLine>
-                        <FormLabel>{labelStep}</FormLabel>
-                        <StepDropDown
-                            onSelect={(step) => setGoToTypeStep(false, step)}
-                            value={elseGoTo?.type === GoToTypes.STEP ? elseGoTo.id : 1}
-                        />
-                    </FormLine>
-                    <FormLine>
-                        <FormLabel>{labelCreateStep}</FormLabel>
-                        <DavitAddButton onClick={() => createGoToStep(false)} />
-                    </FormLine>
-                </>
-            )}
-
-            {elseGoTo!.type === GoToTypes.DEC && (
-                <>
-                    <FormLine>
-                        <FormLabel>{labelDecision}</FormLabel>
-                        <DecisionDropDown
-                            onSelect={(cond) => setGoToTypeDecision(false, cond)}
-                            value={elseGoTo?.type === GoToTypes.DEC ? elseGoTo.id : 1}
-                            exclude={decId}
-                        />
-                    </FormLine>
-                    <FormLine>
-                        <FormLabel>{labelCreateDecision}</FormLabel>
-                        <DavitAddButton onClick={() => createGoToDecision(false)} />
-                    </FormLine>
-                </>
-            )}
-
-            <FormDivider />
-
-            <FormLine>
+            <FormFooter>
                 <DavitDeleteButton onClick={deleteDecision} />
                 <DavitCommentButton onSaveCallback={saveNote} comment={note} />
                 <DavitRootButton onClick={setRoot} isRoot={isRoot} />
                 <DavitBackButton onClick={saveDecision} />
-            </FormLine>
+            </FormFooter>
 
         </Form>
     );

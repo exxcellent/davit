@@ -189,7 +189,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100vw;
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -204,17 +204,42 @@
     background: var(--carv2-background-color);
     border-radius: var(--davit-border-radius);
     padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*justify-content: space-around;*/
+    /*align-items: center;*/
+    min-width: 50em;
+}
+
+.formHeader{
     display: flex;
-    flex-direction: column;
     justify-content: space-around;
-    align-items: center;
+    padding-bottom: var(--davit-margin-top-bottom);
+    padding-top: var(--davit-margin-top-bottom);
+    width: 100%;
+}
+
+.formFooter{
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: var(--davit-margin-top-bottom);
+    padding-top: var(--davit-margin-top-bottom);
+    width: 100%;
+}
+
+.formBody{
+    max-height: 70vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 1.5em;
 }
 
 .formLine {
     display: flex;
     justify-content: space-around;
     min-width: 22em;
-    margin-bottom: var(--davit-margin-top-bottom);
+    padding-bottom: var(--davit-margin-top-bottom);
+    padding-top: var(--davit-margin-top-bottom);
     width: 100%;
 }
 
@@ -227,7 +252,6 @@
 
 .formDivider{
     display: flex;
-    width: 100%;
     border-top: var(--davit-border-size) solid var(--carv2-text-color);
     border-radius: var(--davit-border-radius);
     margin: var(--davit-margin-top-bottom);

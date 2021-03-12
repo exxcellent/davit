@@ -110,7 +110,7 @@ export const useStepViewModel = () => {
 
     const handleType = (newGoToType?: string) => {
         if (newGoToType !== undefined) {
-            const gType = {type: (GoToTypes as any)[newGoToType]};
+            const gType = { type: (GoToTypes as any)[newGoToType] };
             setCurrentGoTo(gType);
             switch (newGoToType) {
                 case GoToTypes.ERROR:
@@ -127,14 +127,14 @@ export const useStepViewModel = () => {
 
     const setGoToTypeStep = (step?: SequenceStepCTO) => {
         if (step) {
-            const newGoTo: GoTo = {type: GoToTypes.STEP, id: step.squenceStepTO.id};
+            const newGoTo: GoTo = { type: GoToTypes.STEP, id: step.squenceStepTO.id };
             saveGoToType(newGoTo);
         }
     };
 
     const setGoToTypeDecision = (decision?: DecisionTO) => {
         if (decision) {
-            const newGoTo: GoTo = {type: GoToTypes.DEC, id: decision.id};
+            const newGoTo: GoTo = { type: GoToTypes.DEC, id: decision.id };
             saveGoToType(newGoTo);
         }
     };
@@ -183,6 +183,29 @@ export const useStepViewModel = () => {
         }
     };
 
+    const switchIndexesAndSave = (indexToUpdate: number, increment: boolean) => {
+        const newIndex: number = increment ? indexToUpdate + 1 : indexToUpdate - 1;
+        const copyStep: SequenceStepCTO = DavitUtil.deepCopy(stepToEdit);
+
+        if (newIndex >= 0 && newIndex <= copyStep.actions.length - 1) {
+            const action1: ActionTO = copyStep.actions[indexToUpdate];
+            action1.index = newIndex;
+            const action2: ActionTO = copyStep.actions[newIndex];
+            action2.index = indexToUpdate;
+            copyStep.actions[indexToUpdate] = action2;
+            copyStep.actions[newIndex] = action1;
+
+            // save step
+            dispatch(EditStep.save(copyStep));
+
+            // load sequence from backend
+            dispatch(SequenceModelActions.setCurrentSequence(copyStep.squenceStepTO.sequenceFk));
+
+            // update current step if object to edit
+            dispatch(EditStep.update(copyStep));
+        }
+    };
+
     return {
         label: 'EDIT * ' + (selectedSequence?.sequenceTO.name || '') + ' * ' + (stepToEdit?.squenceStepTO.name || ''),
         name: stepToEdit ? stepToEdit!.squenceStepTO.name : '',
@@ -204,5 +227,7 @@ export const useStepViewModel = () => {
         stepId: stepToEdit?.squenceStepTO.id,
         note: stepToEdit ? stepToEdit.squenceStepTO.note : '',
         saveNote,
+        actions: stepToEdit?.actions || [],
+        switchIndexesAndSave,
     };
 };

@@ -12,7 +12,7 @@ import { EditAction } from '../../../../../../../slices/thunks/ActionThunks';
 import { DavitUtil } from '../../../../../../../utils/DavitUtil';
 import { DataAndInstanceId } from '../../../../../../common/fragments/dropdowns/InstanceDropDown';
 import { GlobalActions } from '../../../../../../../slices/GlobalSlice';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 
 export const useEditActionViewModel = () => {
@@ -22,30 +22,27 @@ export const useEditActionViewModel = () => {
 
     const [key, setKey] = useState<number>(0);
 
-    useEffect(() => {
-        // check if actor to edit is really set or gos back to edit mode
-        if (actionToEdit === null || actionToEdit === undefined) {
-            dispatch(GlobalActions.handleError("Tried to go to edit action without actionToEdit specified"));
-            dispatch(EditActions.setMode.edit());
-        }
-        // used to focus the textfield on create another
-    }, [dispatch, actionToEdit]);
-
-    const deleteAction = () => {
-        if (actionToEdit !== null) {
-            dispatch(EditAction.delete(actionToEdit));
+    const deleteAction = (action: ActionTO) => {
+        if (action !== null) {
+            dispatch(EditAction.delete(action));
 
             const step: SequenceStepCTO | undefined = MasterDataActions.find.findSequenceStepCTO(
-                actionToEdit.sequenceStepFk,
+                action.sequenceStepFk,
             );
 
             if (step) {
                 dispatch(EditActions.setMode.editStep(step));
             } else {
                 // should never happend but as fallback savty.
-                dispatch(GlobalActions.handleError("Step not found!"));
+                dispatch(GlobalActions.handleError('Step not found!'));
                 dispatch(EditActions.setMode.edit());
             }
+        }
+    };
+
+    const deleteActionToEdit = () => {
+        if (!DavitUtil.isNullOrUndefined(actionToEdit)) {
+            deleteAction(actionToEdit!);
         }
     };
 
@@ -64,8 +61,8 @@ export const useEditActionViewModel = () => {
         if (newActionType !== undefined && selectedSequence !== null && actionToEdit !== null) {
             const copyActionToEdit: ActionTO = DavitUtil.deepCopy(actionToEdit);
             copyActionToEdit.actionType = newActionType;
-            copyActionToEdit.sendingActorFk = newActionType.includes("SEND") ? actionToEdit.sendingActorFk : -1;
-            copyActionToEdit.receivingActorFk = newActionType.includes("SEND") ? actionToEdit.receivingActorFk : -1;
+            copyActionToEdit.sendingActorFk = newActionType.includes('SEND') ? actionToEdit.sendingActorFk : -1;
+            copyActionToEdit.receivingActorFk = newActionType.includes('SEND') ? actionToEdit.receivingActorFk : -1;
             dispatch(EditAction.update(copyActionToEdit));
             dispatch(EditAction.save(copyActionToEdit));
         }
@@ -121,11 +118,11 @@ export const useEditActionViewModel = () => {
     const setMode = (newMode?: string) => {
         if (!DavitUtil.isNullOrUndefined(actionToEdit)) {
             if (!validAction(actionToEdit!)) {
-                deleteAction();
+                deleteAction(actionToEdit!);
             }
-            if (newMode && newMode === "EDIT") {
+            if (newMode && newMode === 'EDIT') {
                 dispatch(EditActions.setMode.edit());
-            } else if (newMode && newMode === "SEQUENCE") {
+            } else if (newMode && newMode === 'SEQUENCE') {
                 dispatch(EditActions.setMode.editSequence(selectedSequence?.sequenceTO.id));
             } else {
                 const step: SequenceStepCTO | undefined = MasterDataActions.find.findSequenceStepCTO(
@@ -149,7 +146,7 @@ export const useEditActionViewModel = () => {
     };
 
     return {
-        label: "EDIT * SEQUENCE * STEP * ACTION",
+        label: 'EDIT * SEQUENCE * STEP * ACTION',
         action: actionToEdit,
         setActor,
         setAction,
@@ -159,6 +156,7 @@ export const useEditActionViewModel = () => {
         dataId: actionToEdit?.dataFk === -1 ? undefined : actionToEdit?.dataFk,
         actionType: actionToEdit?.actionType,
         deleteAction,
+        deleteActionToEdit,
         setMode,
         createAnother,
         key,
@@ -168,6 +166,6 @@ export const useEditActionViewModel = () => {
             instanceId: actionToEdit?.instanceFk,
         }),
         setTriggerLabel,
-        triggerLabel: actionToEdit?.actionType === ActionType.TRIGGER ? actionToEdit.triggerText : "",
+        triggerLabel: actionToEdit?.actionType === ActionType.TRIGGER ? actionToEdit.triggerText : '',
     };
 };
