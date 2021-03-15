@@ -39,7 +39,9 @@ export const useEditDataViewModel = () => {
 
     const saveData = () => {
         if (dataToEdit?.data.name !== '') {
-            dispatch(EditData.save(dataToEdit!));
+            const copyData: DataCTO = DavitUtil.deepCopy(dataToEdit);
+            copyData.data.instances = copyData.data.instances.filter(instance => instance.name !== "");
+            dispatch(EditData.save(copyData!));
         } else {
             deleteData();
         }
