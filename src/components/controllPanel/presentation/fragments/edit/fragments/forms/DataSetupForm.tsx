@@ -41,7 +41,8 @@ export const DataSetupForm: FunctionComponent<DataSetupFormProps> = () => {
     const buildActorDataTableRow = (initData: InitDataTO): JSX.Element => {
         let copyInitData: InitDataTO = DavitUtil.deepCopy(initData);
 
-        return (<tr key={copyInitData.id}>
+        return (
+            <tr key={copyInitData.id}>
                 <td>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <ActorDropDown
@@ -98,7 +99,6 @@ export const DataSetupForm: FunctionComponent<DataSetupFormProps> = () => {
 
                 <FormDivider />
 
-
                 <FormLine>
                     <table className={'border'} style={{ width: '40em', minHeight: '30vh' }}>
                         <thead>
@@ -116,7 +116,7 @@ export const DataSetupForm: FunctionComponent<DataSetupFormProps> = () => {
             </FormBody>
 
             <FormDivider />
-            
+
             <FormFooter>
                 <DavitDeleteButton onClick={deleteDataSetup} />
                 <DavitCommentButton onSaveCallback={saveNote} comment={note} />
