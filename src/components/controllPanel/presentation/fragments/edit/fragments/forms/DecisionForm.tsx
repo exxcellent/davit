@@ -2,8 +2,6 @@ import React, { FunctionComponent } from 'react';
 import { useEditConditionViewModel } from '../viewmodels/EditDecisionViewModel';
 import { Form } from '../../../../../../common/fragments/forms/Form';
 import { DavitLabelTextfield } from '../../../../../../common/fragments/DavitLabelTextfield';
-import { AddOrEdit } from '../../../../../../common/fragments/AddOrEdit';
-import { ConditionDropDownButton } from '../../../../../../common/fragments/dropdowns/ConditionDropDown';
 import { GoToOptionDropDown } from '../../../../../../common/fragments/dropdowns/GoToOptionDropDown';
 import { GoToTypes } from '../../../../../../../dataAccess/access/types/GoToType';
 import { DavitAddButton } from '../../../../../../common/fragments/buttons/DavitAddButton';
@@ -19,6 +17,10 @@ import { FormDivider } from './fragments/FormDivider';
 import { FormHeader } from '../../../../../../common/fragments/forms/FormHeader';
 import { FormBody } from '../../../../../../common/fragments/forms/FormBody';
 import { FormFooter } from '../../../../../../common/fragments/forms/FormFooter';
+import { DavitUtil } from '../../../../../../../utils/DavitUtil';
+import { ActorDropDown } from '../../../../../../common/fragments/dropdowns/ActorDropDown';
+import { InstanceDropDown } from '../../../../../../common/fragments/dropdowns/InstanceDropDown';
+import { ConditionTO } from '../../../../../../../dataAccess/access/to/ConditionTO';
 
 interface DecisionFormProps {
 
@@ -29,7 +31,6 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
     const {
         name,
         changeName,
-        saveDecision,
         handleType,
         ifGoTo,
         elseGoTo,
@@ -37,16 +38,19 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
         createGoToStep,
         setRoot,
         isRoot,
-        updateDecision,
         deleteDecision,
         createGoToDecision,
         setGoToTypeDecision,
-        editOrAddCondition,
+        createCondition,
         decId,
         conditions,
         note,
         saveNote,
+        deleteCondition,
+        saveCondition,
+        saveAndGoBack,
     } = useEditConditionViewModel();
+
 
     const labelDecision: string = 'Select next decision';
     const labelCreateDecision: string = 'Create new / next decision';
@@ -54,6 +58,47 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
     const labelCreateStep: string = 'Create new /next step';
     const labelTypeIf: string = 'Type condition true';
     const labelTypeElse: string = 'Type condition false';
+    const labelIfLabel: string = "If condition's are true";
+    const labelElseLabel: string = "If condition's are false";
+
+
+    const buildConditionTableRow = (condition: ConditionTO): JSX.Element => {
+        let copyCondition: ConditionTO = DavitUtil.deepCopy(condition);
+
+        return (
+            <tr key={copyCondition.id}>
+                <td>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <ActorDropDown
+                            onSelect={(actor) => {
+                                copyCondition.actorFk = actor ? actor.actor.id : -1;
+                                saveCondition(copyCondition);
+                            }}
+                            placeholder={'Select actor...'}
+                            value={copyCondition.actorFk}
+                        />
+                        <InstanceDropDown
+                            onSelect={(dataAndInstance) => {
+                                if (!DavitUtil.isNullOrUndefined(dataAndInstance)) {
+                                    copyCondition.dataFk = dataAndInstance!.dataFk;
+                                    copyCondition.instanceFk = dataAndInstance!.instanceId;
+                                    saveCondition(copyCondition);
+                                }
+                            }}
+                            placeholder={'Select data instance ...'}
+                            value={JSON.stringify({
+                                dataFk: copyCondition!.dataFk,
+                                instanceId: copyCondition!.instanceFk,
+                            })
+                            } />
+                        {copyCondition.id !== -1 && <DavitDeleteButton onClick={() => {
+                            deleteCondition(copyCondition.id);
+                        }} noConfirm />}
+                    </div>
+                </td>
+            </tr>
+        );
+    };
 
     return (
         <Form>
@@ -70,17 +115,24 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
                         onChangeCallback={(name: string) => changeName(name)}
                         value={name}
                         focus={true}
-                        onBlur={updateDecision}
                     />
                 </FormLine>
 
+                {/*------------------------- Condition -------------------------*/}
+
                 <FormLine>
-                    <AddOrEdit addCallBack={editOrAddCondition} label={'Condition'}
-                               dropDown={<ConditionDropDownButton
-                                   conditions={conditions}
-                                   icon='wrench'
-                                   onSelect={editOrAddCondition}
-                               />} />
+                    <table className={'border'} style={{ width: '40em', minHeight: '30vh' }}>
+                        <thead>
+                        <tr>
+                            <td style={{ textAlign: 'center' }}>Actor</td>
+                            <td style={{ textAlign: 'center' }}>Data Instance</td>
+                            <td style={{ textAlign: 'end' }}><DavitAddButton onClick={createCondition} /></td>
+                        </tr>
+                        </thead>
+                        <tbody style={{ maxHeight: '40vh' }}>
+                        {conditions.map(buildConditionTableRow)}
+                        </tbody>
+                    </table>
                 </FormLine>
 
                 {/*------------------------- If option -------------------------*/}
@@ -89,8 +141,7 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
 
                 <FormLine>
                     <FormLabel align={FormlabelAlign.center}>
-                        {/* eslint-disable-next-line react/no-unescaped-entities */}
-                        <h3>If condition's are true</h3>
+                        <h3>{labelIfLabel}</h3>
                     </FormLabel>
                 </FormLine>
 
@@ -140,8 +191,7 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
 
                 <FormLine>
                     <FormLabel align={FormlabelAlign.center}>
-                        {/* eslint-disable-next-line react/no-unescaped-entities */}
-                        <h3>If condition's are false</h3>
+                        <h3>{labelElseLabel}</h3>
                     </FormLabel>
                 </FormLine>
 
@@ -191,7 +241,7 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
                 <DavitDeleteButton onClick={deleteDecision} />
                 <DavitCommentButton onSaveCallback={saveNote} comment={note} />
                 <DavitRootButton onClick={setRoot} isRoot={isRoot} />
-                <DavitBackButton onClick={saveDecision} />
+                <DavitBackButton onClick={saveAndGoBack} />
             </FormFooter>
 
         </Form>

@@ -16,8 +16,6 @@ export const useEditConditionViewModel = () => {
     const decisionToEdit: DecisionTO | null = useSelector(editSelectors.selectDecisionToEdit);
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const dispatch = useDispatch();
-    const [currentIfGoTo, setCurrentIfGoTo] = useState<GoTo>({type: GoToTypes.STEP, id: -1});
-    const [currentElseGoTo, setCurrentElseGoTo] = useState<GoTo>({type: GoToTypes.STEP, id: -1});
     const [key, setKey] = useState<number>(0);
 
     useEffect(() => {
@@ -25,17 +23,13 @@ export const useEditConditionViewModel = () => {
             dispatch(GlobalActions.handleError('Tried to go to edit condition step without conditionToEdit specified'));
             dispatch(EditActions.setMode.edit());
         }
-        if (decisionToEdit) {
-            setCurrentIfGoTo(decisionToEdit.ifGoTo);
-            setCurrentElseGoTo(decisionToEdit.elseGoTo);
-        }
-
     }, [dispatch, decisionToEdit]);
 
     const changeName = (name: string) => {
         if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
             const copyConditionToEdit: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
             copyConditionToEdit.name = name;
+            // TODO: das geht einfacher!
             dispatch(EditActions.setMode.editDecision(copyConditionToEdit));
             dispatch(SequenceModelActions.setCurrentSequence(copyConditionToEdit.sequenceFk));
         }
@@ -50,17 +44,10 @@ export const useEditConditionViewModel = () => {
         }
     };
 
-    const saveDecision = (newMode?: string) => {
-        if (!DavitUtil.isNullOrUndefined(decisionToEdit) && !DavitUtil.isNullOrUndefined(selectedSequence)) {
+    const saveDecision = (decision: DecisionTO) => {
+        if (!DavitUtil.isNullOrUndefined(decision)) {
             if (decisionToEdit!.name !== '') {
-                dispatch(EditDecision.save(decisionToEdit!));
-            } else {
-                dispatch(EditDecision.delete(decisionToEdit!, selectedSequence!));
-            }
-            if (newMode && newMode === 'EDIT') {
-                dispatch(EditActions.setMode.edit());
-            } else {
-                dispatch(EditActions.setMode.editSequence(decisionToEdit!.sequenceFk));
+                dispatch(EditDecision.save(decision!));
             }
         }
     };
@@ -72,9 +59,14 @@ export const useEditConditionViewModel = () => {
         }
     };
 
-    const updateDecision = () => {
-        const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
-        dispatch(EditDecision.save(copyDecision));
+    const updateDecision = (newDecision: DecisionTO) => {
+        if (!DavitUtil.isNullOrUndefined(newDecision)) {
+
+            const copyDecision: DecisionTO = DavitUtil.deepCopy(newDecision);
+            // TODO: maybe to delete...
+            dispatch(EditDecision.save(copyDecision));
+            dispatch(EditDecision.update(copyDecision));
+        }
     };
 
     const validStep = (): boolean => {
@@ -87,20 +79,18 @@ export const useEditConditionViewModel = () => {
         return valid;
     };
 
-    const saveGoToType = (ifGoTo: Boolean, goTo: GoTo) => {
+    const saveGoToType = (ifGoTo: boolean, goTo: GoTo) => {
         if (goTo !== undefined) {
             const copyDecisionToEdit: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
             ifGoTo ? (copyDecisionToEdit.ifGoTo = goTo) : (copyDecisionToEdit.elseGoTo = goTo);
-            dispatch(EditDecision.update(copyDecisionToEdit));
-            dispatch(EditDecision.save(copyDecisionToEdit));
+            updateDecision(copyDecisionToEdit);
             dispatch(SequenceModelActions.setCurrentSequence(copyDecisionToEdit.sequenceFk));
         }
     };
 
-    const handleType = (ifGoTo: Boolean, newGoToType?: string) => {
+    const handleType = (ifGoTo: boolean, newGoToType?: string) => {
         if (newGoToType !== undefined) {
-            const gType = {type: (GoToTypes as any)[newGoToType]};
-            ifGoTo ? setCurrentIfGoTo(gType) : setCurrentElseGoTo(gType);
+            const gType = { type: (GoToTypes as any)[newGoToType] };
             switch (newGoToType) {
                 case GoToTypes.ERROR:
                     saveGoToType(ifGoTo, gType);
@@ -111,20 +101,26 @@ export const useEditConditionViewModel = () => {
                 case GoToTypes.IDLE:
                     saveGoToType(ifGoTo, gType);
                     break;
+                case GoToTypes.STEP:
+                    saveGoToType(ifGoTo, gType);
+                    break;
+                case GoToTypes.DEC:
+                    saveGoToType(ifGoTo, gType);
+                    break;
             }
         }
     };
 
-    const setGoToTypeStep = (ifGoTo: Boolean, step?: SequenceStepCTO) => {
+    const setGoToTypeStep = (ifGoTo: boolean, step?: SequenceStepCTO) => {
         if (step) {
-            const newGoTo: GoTo = {type: GoToTypes.STEP, id: step.squenceStepTO.id};
+            const newGoTo: GoTo = { type: GoToTypes.STEP, id: step.squenceStepTO.id };
             saveGoToType(ifGoTo, newGoTo);
         }
     };
 
-    const setGoToTypeDecision = (ifGoTo: Boolean, decision?: DecisionTO) => {
+    const setGoToTypeDecision = (ifGoTo: boolean, decision?: DecisionTO) => {
         if (decision) {
-            const newGoTo: GoTo = {type: GoToTypes.DEC, id: decision.id};
+            const newGoTo: GoTo = { type: GoToTypes.DEC, id: decision.id };
             saveGoToType(ifGoTo, newGoTo);
         }
     };
@@ -138,7 +134,7 @@ export const useEditConditionViewModel = () => {
         }
     };
 
-    const createGoToDecision = (ifGoTo: Boolean) => {
+    const createGoToDecision = (ifGoTo: boolean) => {
         if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
             const goToDecision: DecisionTO = new DecisionTO();
             goToDecision.sequenceFk = decisionToEdit!.sequenceFk;
@@ -155,15 +151,67 @@ export const useEditConditionViewModel = () => {
         }
     };
 
-    const editOrAddCondition = (conditionId?: number) => {
-        let conditionToEdit: ConditionTO | undefined;
+    const createCondition = () => {
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
+            const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
+            copyDecision.conditions.push({
+                decisionFk: copyDecision.id,
+                id: -1,
+                actorFk: -1,
+                instanceFk: -1,
+                dataFk: -1,
+            });
+            updateDecision(copyDecision);
 
-        if (decisionToEdit !== null) {
-            if (!DavitUtil.isNullOrUndefined(conditionId)) {
-                conditionToEdit = decisionToEdit.conditions.find((condition) => condition.id === conditionId);
+        }
+    };
+
+    const deleteCondition = (conditionId: number) => {
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
+            const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
+            copyDecision.conditions = copyDecision.conditions.filter(condition => condition.id !== conditionId);
+            updateDecision(copyDecision);
+        }
+    };
+
+    const saveCondition = (conditionToSave: ConditionTO) => {
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
+            const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
+            // TODO: ConditonThunk soll das machen.
+            let conditionToUpdate: ConditionTO | undefined = copyDecision.conditions.find(condition => condition.id === conditionToSave.id);
+            if (conditionToUpdate) {
+                let filteredConditions: ConditionTO[] = copyDecision.conditions.filter(condition => condition.id !== conditionToSave.id);
+                filteredConditions.push(conditionToSave);
+                copyDecision.conditions = filteredConditions;
+            } else {
+                copyDecision.conditions.push(conditionToSave);
             }
+            updateDecision(copyDecision);
+        }
+    };
 
-            dispatch(EditActions.setMode.editCondition(decisionToEdit, conditionToEdit));
+    const checkGoTos = (goto: GoTo): GoTo => {
+        const copyGoto: GoTo = DavitUtil.deepCopy(goto);
+
+        if ((goto.type === GoToTypes.STEP || goto.type === GoToTypes.DEC) && (goto.id === -1 || goto.id === undefined)) {
+            copyGoto.type = GoToTypes.ERROR;
+        }
+
+        return copyGoto;
+    };
+
+    const saveAndGoBack = () => {
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit) && !DavitUtil.isNullOrUndefined(selectedSequence)) {
+            const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
+            if (copyDecision!.name !== '') {
+                copyDecision.ifGoTo = checkGoTos(copyDecision.ifGoTo);
+                copyDecision.elseGoTo = checkGoTos(copyDecision.elseGoTo);
+
+                dispatch(EditDecision.save(copyDecision!));
+                dispatch(EditActions.setMode.editSequence(selectedSequence!.sequenceTO.id));
+            } else {
+                dispatch((EditDecision.delete(copyDecision!, selectedSequence!)));
+            }
         }
     };
 
@@ -178,17 +226,20 @@ export const useEditConditionViewModel = () => {
         handleType,
         setGoToTypeStep,
         setGoToTypeDecision,
-        ifGoTo: currentIfGoTo,
-        elseGoTo: currentElseGoTo,
+        ifGoTo: decisionToEdit?.ifGoTo,
+        elseGoTo: decisionToEdit?.elseGoTo,
         createGoToStep,
         createGoToDecision,
         setRoot,
         isRoot: decisionToEdit?.root ? decisionToEdit.root : false,
         key,
-        editOrAddCondition,
+        createCondition,
         decId: decisionToEdit?.id,
         conditions: decisionToEdit?.conditions || [],
         note: decisionToEdit ? decisionToEdit.note : '',
         saveNote,
+        deleteCondition,
+        saveCondition,
+        saveAndGoBack,
     };
 };

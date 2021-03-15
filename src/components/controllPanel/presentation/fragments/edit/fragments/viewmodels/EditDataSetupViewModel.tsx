@@ -31,10 +31,15 @@ export const useEditDataSetupViewModel = () => {
     };
 
     const saveDataSetup = () => {
-        if (dataSetupToEdit?.dataSetup.name !== '') {
-            dispatch(EditDataSetup.save(dataSetupToEdit!));
-        } else {
-            deleteDataSetup();
+        if (!DavitUtil.isNullOrUndefined(dataSetupToEdit)) {
+
+            if (dataSetupToEdit!.dataSetup.name !== '') {
+                const copyDataSetup: DataSetupCTO = DavitUtil.deepCopy(dataSetupToEdit);
+                copyDataSetup!.initDatas = copyDataSetup!.initDatas!.filter(initData => initData.dataFk !== -1 && initData.instanceFk !== -1 && initData.actorFk !== -1);
+                dispatch(EditDataSetup.save(copyDataSetup!));
+            } else {
+                deleteDataSetup();
+            }
         }
         dispatch(EditActions.setMode.edit());
     };
@@ -90,7 +95,7 @@ export const useEditDataSetupViewModel = () => {
     };
 
     const saveInitData = (initData: InitDataTO) => {
-            console.info(initData);
+        console.info(initData);
         if (!DavitUtil.isNullOrUndefined(initData) && !DavitUtil.isNullOrUndefined(dataSetupToEdit)) {
             let copyInitData: InitDataTO = DavitUtil.deepCopy(initData);
             console.info(copyInitData);
@@ -132,6 +137,6 @@ export const useEditDataSetupViewModel = () => {
         saveNote,
         initDatas: dataSetupToEdit?.initDatas || [],
         saveInitData,
-        deleteInitData
+        deleteInitData,
     };
 };

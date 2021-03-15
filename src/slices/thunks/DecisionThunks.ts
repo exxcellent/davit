@@ -1,5 +1,3 @@
-// ----------------------------------------------- DECISION -----------------------------------------------
-
 import {AppThunk} from '../../app/store';
 import {SequenceCTO} from '../../dataAccess/access/cto/SequenceCTO';
 import {SequenceStepCTO} from '../../dataAccess/access/cto/SequenceStepCTO';
@@ -89,7 +87,7 @@ const setDecisionToEditThunk = (decision: DecisionTO): AppThunk => (dispatch, ge
     const mode: Mode = getState().edit.mode;
 
     if (mode === Mode.EDIT_SEQUENCE_DECISION || Mode.EDIT_SEQUENCE_DECISION_CONDITION) {
-        dispatch(editActions.setDecisionToEdit(decision));
+        dispatch(editActions.setDecisionToEdit(findDecisionTOThunk(decision.id)));
     } else {
         dispatch(GlobalActions.handleError("Try to set decision to edit in mode: " + mode));
     }
