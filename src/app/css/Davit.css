@@ -90,7 +90,7 @@
     transparent) 1 1 100%;
 }
 
-.sequencModel {
+.flowChartModel {
     grid-area: seqModel;
     min-height: 0;
     overflow: hidden;
@@ -211,7 +211,7 @@
     min-width: 50em;
 }
 
-.formHeader{
+.formHeader {
     display: flex;
     justify-content: space-around;
     padding-bottom: var(--davit-margin-top-bottom);
@@ -219,7 +219,7 @@
     width: 100%;
 }
 
-.formFooter{
+.formFooter {
     display: flex;
     justify-content: space-around;
     padding-bottom: var(--davit-margin-top-bottom);
@@ -227,7 +227,7 @@
     width: 100%;
 }
 
-.formBody{
+.formBody {
     max-height: 70vh;
     overflow-y: auto;
     overflow-x: hidden;
@@ -243,23 +243,22 @@
     width: 100%;
 }
 
-.formLabel{
+.formLabel {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     min-width: 10em;
 }
 
-.formDivider{
+.formDivider {
     display: flex;
     border-top: var(--davit-border-size) solid var(--carv2-text-color);
     border-radius: var(--davit-border-radius);
     margin: var(--davit-margin-top-bottom);
 }
 
-.noteCard {
+.noteForm {
     width: 30%;
-    height: 60%;
     background: var(--carv2-background-color);
     border-radius: var(--davit-border-radius);
     padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
@@ -269,7 +268,6 @@
     border-radius: var(--davit-border-radius);
     resize: none;
     width: 100%;
-    height: 80%;
     font-size: var(--davit-font-size);
     padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
     background-color: var(--carv2-background-color);
@@ -746,6 +744,15 @@
 .sidePanelButton.active {
     background-color: var(--carv2-color-secondary);
     transition: background-color var(--animation-time);
+}
+
+.viewPlaceholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    color: var(--carv2-text-color);
 }
 
 input {

@@ -5,8 +5,8 @@ import {ErrorNotification} from "../components/common/fragments/ErrorNotificatio
 import {ControlPanelController} from "../components/controllPanel/presentation/ControlPanelController";
 import {ActorModelController} from "../components/metaActorModel/ActorModelController";
 import {DataModelController} from "../components/metaDataModel/DataModelController";
-import {FlowChartController} from "../components/sequenceModel/FlowChartController";
-import {SequenceTableModelController} from "../components/sequenceTableModel/presentation/SequenceTableModelController";
+import {FlowChartController} from "../components/flowChartModel/FlowChartController";
+import {TableModelController} from "../components/tableModel/presentation/TableModelController";
 import {SidePanelController} from "../components/sidePanel/SidePanelController";
 import {GlobalActions} from "../slices/GlobalSlice";
 import {MasterDataActions} from "../slices/MasterDataSlice";
@@ -42,7 +42,7 @@ export function Davit() {
                         <DataModelController/>
                         <SidePanelController/>
                         <FlowChartController/>
-                        <SequenceTableModelController/>
+                        <TableModelController/>
                         <ErrorNotification/>
                     </div>
                 </Route>
@@ -63,7 +63,7 @@ export function Davit() {
                 <Route exact path={ModuleRoutes.table}>
                     <div className="Carv2">
                         <div className="componentPage">
-                            <SequenceTableModelController fullScreen/>
+                            <TableModelController fullScreen/>
                         </div>
                     </div>
                 </Route>

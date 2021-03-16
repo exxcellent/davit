@@ -46,7 +46,7 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
     const {key, constraintsRef, height, width, paths} = useDnDBoxViewModel(svgElements);
 
     const [mouseOver, setMouseOver] = useState<boolean>(false);
-    
+
     useCustomZoomEvent({zoomInCallBack: zoomIn, zoomOutCallBack: zoomOut}, mouseOver);
 
     const createDavitPath = (paths: DavitPathProps[]): JSX.Element[] => {
@@ -55,7 +55,7 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
         });
     };
 
-    const wrappItem = (toDnDElement: DnDBoxElement): JSX.Element => {
+    const wrapItem = (toDnDElement: DnDBoxElement): JSX.Element => {
         return createDnDItem(
             toDnDElement.position,
             onPositionUpdate,
@@ -75,7 +75,7 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
             style={fullScreen ? {height: height, maxWidth: width} : {}}
             className={fullScreen ? type.toString() + "Fullscreen" : type.toString()}
             key={key}>
-            {toDnDElements.map(wrappItem)}
+            {toDnDElements.map(wrapItem)}
             <motion.label className="zoomLabel" key={zoom ? zoom : ""}>
                 {zoom ? Math.round(zoom * 100) + "%" : ""}
             </motion.label>

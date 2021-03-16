@@ -1,29 +1,26 @@
-import React, {FunctionComponent} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {Button} from "semantic-ui-react";
-import {DataSetupCTO} from "../../../../../dataAccess/access/cto/DataSetupCTO";
-import {SequenceCTO} from "../../../../../dataAccess/access/cto/SequenceCTO";
-import {ChainTO} from "../../../../../dataAccess/access/to/ChainTO";
-import {DataSetupTO} from "../../../../../dataAccess/access/to/DataSetupTO";
-import {SequenceTO} from "../../../../../dataAccess/access/to/SequenceTO";
-import {SequenceModelActions, sequenceModelSelectors} from "../../../../../slices/SequenceModelSlice";
-import {DavitUtil} from "../../../../../utils/DavitUtil";
-import {useStepAndLinkNavigation} from "../../../../../utils/WindowUtil";
-import {ChainDropDown} from "../../../../common/fragments/dropdowns/ChainDropDown";
-import {DataSetupDropDown} from "../../../../common/fragments/dropdowns/DataSetupDropDown";
-import {SequenceDropDown} from "../../../../common/fragments/dropdowns/SequenceDropDown";
-import {ControlPanelEditSub} from "../edit/common/ControlPanelEditSub";
-import {OptionField} from "../edit/common/OptionField";
+import React, { FunctionComponent } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button } from 'semantic-ui-react';
+import { DataSetupCTO } from '../../../../../dataAccess/access/cto/DataSetupCTO';
+import { SequenceCTO } from '../../../../../dataAccess/access/cto/SequenceCTO';
+import { ChainTO } from '../../../../../dataAccess/access/to/ChainTO';
+import { DataSetupTO } from '../../../../../dataAccess/access/to/DataSetupTO';
+import { SequenceTO } from '../../../../../dataAccess/access/to/SequenceTO';
+import { SequenceModelActions, sequenceModelSelectors } from '../../../../../slices/SequenceModelSlice';
+import { DavitUtil } from '../../../../../utils/DavitUtil';
+import { useStepAndLinkNavigation } from '../../../../../utils/WindowUtil';
+import { ChainDropDown } from '../../../../common/fragments/dropdowns/ChainDropDown';
+import { DataSetupDropDown } from '../../../../common/fragments/dropdowns/DataSetupDropDown';
+import { SequenceDropDown } from '../../../../common/fragments/dropdowns/SequenceDropDown';
+import { OptionField } from '../edit/common/OptionField';
 
-export interface ControllPanelViewOptionsProps {
+export interface ControlPanelViewOptionsProps {
     hidden: boolean;
 }
 
-export const ControllPanelViewOptions: FunctionComponent<ControllPanelViewOptionsProps> = (props) => {
-    const {hidden} = props;
+export const ControlPanelViewOptions: FunctionComponent<ControlPanelViewOptionsProps> = () => {
 
     const {
-        label,
         sequence,
         stepIndex,
         linkIndex,
@@ -35,78 +32,76 @@ export const ControllPanelViewOptions: FunctionComponent<ControllPanelViewOption
         selectChain,
     } = useControllPanelSequenceOptionsViewModel();
 
-    const {stepBack, stepNext, linkBack, linkNext} = useStepAndLinkNavigation();
+    const { stepBack, stepNext, linkBack, linkNext } = useStepAndLinkNavigation();
 
     const getIndex = (): string => {
-        const link: string = (linkIndex + 1).toString() || "0";
-        const step: string = stepIndex.toString() || "0";
-        return link + " / " + step;
+        const link: string = (linkIndex + 1).toString() || '0';
+        const step: string = stepIndex.toString() || '0';
+        return link + ' / ' + step;
     };
 
     return (
-        <ControlPanelEditSub label={label} hidden={hidden}>
-            <div className="optionFieldSpacer">
-                <OptionField>
-                    <OptionField label="Data - Setup">
-                        <DataSetupDropDown
-                            onSelect={selectDataSetup}
-                            placeholder="Select Data Setup ..."
-                            value={currentDataSetup}
-                        />
-                    </OptionField>
-                    <OptionField label="SEQUENCE">
-                        <SequenceDropDown onSelect={selectSequence} value={currentSequence}/>
-                    </OptionField>
+        <div className={'headerGrid'}>
+
+            <OptionField>
+                <OptionField label='Data - Setup'>
+                    <DataSetupDropDown
+                        onSelect={selectDataSetup}
+                        placeholder='Select Data Setup ...'
+                        value={currentDataSetup}
+                    />
                 </OptionField>
-            </div>
-            <div className="optionFieldSpacer columnDivider">
-                <OptionField label="CHAIN">
-                    <ChainDropDown onSelect={selectChain} value={currentChain}/>
+
+                <OptionField label='SEQUENCE'>
+                    <SequenceDropDown onSelect={selectSequence} value={currentSequence} />
                 </OptionField>
-            </div>
-            <div className="optionFieldSpacer columnDivider">
-                <OptionField label="STEP">
-                    <Button.Group inverted color="orange">
-                        <Button
-                            inverted
-                            color="orange"
-                            icon="fast backward"
-                            disabled={DavitUtil.isNullOrUndefined(sequence)}
-                            onClick={linkBack}
-                        />
-                        <Button
-                            inverted
-                            color="orange"
-                            icon="left arrow"
-                            content="BACK"
-                            labelPosition="left"
-                            disabled={DavitUtil.isNullOrUndefined(sequence)}
-                            onClick={stepBack}
-                        />
-                        <Button inverted color="orange" content={getIndex()} disabled={true}/>
-                        <Button
-                            inverted
-                            color="orange"
-                            icon="right arrow"
-                            content="NEXT"
-                            labelPosition="right"
-                            disabled={DavitUtil.isNullOrUndefined(sequence)}
-                            onClick={stepNext}
-                        />
-                        <Button
-                            inverted
-                            color="orange"
-                            icon="fast forward"
-                            disabled={DavitUtil.isNullOrUndefined(sequence)}
-                            onClick={linkNext}
-                        />
-                    </Button.Group>
-                </OptionField>
-            </div>
-            <div className="optionFieldSpacer columnDivider">
-                <OptionField/>
-            </div>
-        </ControlPanelEditSub>
+            </OptionField>
+
+            <OptionField label='CHAIN' divider={true}>
+                <ChainDropDown onSelect={selectChain} value={currentChain} />
+            </OptionField>
+
+            <OptionField label='STEP' divider={true}>
+                {/*TODO: semantic ui => button group selber bauen*/}
+                <Button.Group inverted color='orange'>
+                    <Button
+                        inverted
+                        color='orange'
+                        icon='fast backward'
+                        disabled={DavitUtil.isNullOrUndefined(sequence)}
+                        onClick={linkBack}
+                    />
+                    <Button
+                        inverted
+                        color='orange'
+                        icon='left arrow'
+                        content='BACK'
+                        labelPosition='left'
+                        disabled={DavitUtil.isNullOrUndefined(sequence)}
+                        onClick={stepBack}
+                    />
+                    <Button inverted color='orange' content={getIndex()} disabled={true} />
+                    <Button
+                        inverted
+                        color='orange'
+                        icon='right arrow'
+                        content='NEXT'
+                        labelPosition='right'
+                        disabled={DavitUtil.isNullOrUndefined(sequence)}
+                        onClick={stepNext}
+                    />
+                    <Button
+                        inverted
+                        color='orange'
+                        icon='fast forward'
+                        disabled={DavitUtil.isNullOrUndefined(sequence)}
+                        onClick={linkNext}
+                    />
+                </Button.Group>
+
+            </OptionField>
+
+        </div>
     );
 };
 
@@ -148,33 +143,33 @@ const useControllPanelSequenceOptionsViewModel = () => {
 
     const getDataSetupName = (): string => {
         if (selectedDataSetup) {
-            return " * " + selectDataSetup.name;
+            return ' * ' + selectDataSetup.name;
         } else {
-            return "";
+            return '';
         }
     };
 
     const getSequenceName = (): string => {
         if (sequence) {
-            return " * " + sequence.sequenceTO.name;
+            return ' * ' + sequence.sequenceTO.name;
         } else {
-            return "";
+            return '';
         }
     };
 
     const getStepName = (): string => {
         if (stepIndex && sequence) {
             return (
-                " * " +
+                ' * ' +
                 sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.id === stepIndex)?.squenceStepTO.name
             );
         } else {
-            return "";
+            return '';
         }
     };
 
     return {
-        label: "VIEW" + getDataSetupName() + getSequenceName() + getStepName(),
+        label: 'VIEW' + getDataSetupName() + getSequenceName() + getStepName(),
         sequence,
         stepIndex,
         linkIndex,
