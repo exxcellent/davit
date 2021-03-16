@@ -134,11 +134,11 @@ const useMetaDataModelViewModel = () =>
                 ? mapActionToActorDatas(actionToEdit)
                 : undefined;
             const actorDataFromInitDataToEdit: ViewFragmentProps | undefined = initDataToEdit
-                ? mapInitDataToCompData(initDataToEdit)
+                ? mapInitDataToActorData(initDataToEdit)
                 : undefined;
-            const actorDataFromDecisionToEdit: ViewFragmentProps[] = mapDecisionToCompData(decisionToEdit);
+            const actorDataFromDecisionToEdit: ViewFragmentProps[] = mapDecisionToActorData(decisionToEdit);
             const actorDatasFromDataSetup: ViewFragmentProps[] = dataSetupToEdit
-                ? dataSetupToEdit.initDatas.map(mapInitDataToCompData)
+                ? dataSetupToEdit.initDatas.map(mapInitDataToActorData)
                 : [];
             actorDatas.push(...actorDatasFromStepToEdit);
             actorDatas.push(...actorDataFromDecisionToEdit);
@@ -150,7 +150,7 @@ const useMetaDataModelViewModel = () =>
                 actorDatas.push(actorDataFromInitDataToEdit);
             }
             if (conditionToEdit) {
-                actorDatas.push(mapConditionToCompData(conditionToEdit));
+                actorDatas.push(mapConditionToActorData(conditionToEdit));
             }
             return actorDatas;
         };
@@ -173,19 +173,19 @@ const useMetaDataModelViewModel = () =>
             };
         };
 
-        const mapDecisionToCompData = (decision: DecisionTO | null): ViewFragmentProps[] => {
+        const mapDecisionToActorData = (decision: DecisionTO | null): ViewFragmentProps[] => {
             let props: ViewFragmentProps[] = [];
             if (decision) {
                 if (decision.conditions !== undefined && decision.conditions.length > 0) {
                     props = decision.conditions.map((condition) => {
-                        return mapConditionToCompData(condition);
+                        return mapConditionToActorData(condition);
                     });
                 }
             }
             return props;
         };
 
-        const mapConditionToCompData = (condition: ConditionTO): ViewFragmentProps => {
+        const mapConditionToActorData = (condition: ConditionTO): ViewFragmentProps => {
             return {
                 parentId: { dataId: condition.dataFk, instanceId: condition.instanceFk },
                 name: getActorNameById(condition.actorFk),
@@ -193,7 +193,7 @@ const useMetaDataModelViewModel = () =>
             };
         };
 
-        const mapInitDataToCompData = (initData: InitDataTO): ViewFragmentProps => {
+        const mapInitDataToActorData = (initData: InitDataTO): ViewFragmentProps => {
             return {
                 parentId:
                     initData.instanceFk > 1

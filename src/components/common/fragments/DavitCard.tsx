@@ -27,7 +27,7 @@ export interface DavitCardProps {
 export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
     const {id, initName, initWidth, initHeigth, dataFragments, instances, zoomFactor, type} = props;
 
-    const {onClickEdit, onClickFilter, showMenu, setShowMenu, isActiveFilter} = useCarv2CardViewModel(type, id);
+    const {onClickEdit, onClickFilter, showMenu, setShowMenu, isActiveFilter} = useDavitCardViewModel(type, id);
 
     const createInstances = (id: number, instanceName: string, actors: ViewFragmentProps[]) => {
         return (
@@ -101,7 +101,7 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
     );
 };
 
-const useCarv2CardViewModel = (type: "DATA" | "ACTOR" | "INSTANCE", id: number) => {
+const useDavitCardViewModel = (type: "DATA" | "ACTOR" | "INSTANCE", id: number) => {
     const activeFilters: Filter[] = useSelector(sequenceModelSelectors.activeFilters);
     const [showMenu, setShowMenu] = useState<boolean>(false);
     const dispatch = useDispatch();

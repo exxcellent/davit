@@ -98,13 +98,13 @@ const useViewModel = () => {
             const actorDatas: ViewFragmentProps[] = [];
             const actorDatasFromErros: ViewFragmentProps[] = errors.map(mapErrorToActorDatas);
 
-            const actorDatasFromCompDatas: ViewFragmentProps[] = currentActorDatas
-                .map(mapActorDataToViewFramgent)
+            const actorDatasFromCurrentActorDatas: ViewFragmentProps[] = currentActorDatas
+                .map(mapActorDataToViewFragment)
                 .sort((a, b) => a.name.localeCompare(b.name));
             actorDatas.push(...actorDatasFromErros);
 
             actorDatas.push(
-                ...actorDatasFromCompDatas.filter(
+                ...actorDatasFromCurrentActorDatas.filter(
                     (actorDataFromActorData) => !actorDatas.some((cp) => actorDataExists(cp, actorDataFromActorData)),
                 ),
             );
@@ -184,7 +184,7 @@ const useViewModel = () => {
             };
         };
 
-        const mapActorDataToViewFramgent = (actorData: ActorData): ViewFragmentProps => {
+        const mapActorDataToViewFragment = (actorData: ActorData): ViewFragmentProps => {
             return {
                 name: getDataNameById(actorData.dataFk, actorData.instanceFk),
                 parentId: actorData.actorFk,
