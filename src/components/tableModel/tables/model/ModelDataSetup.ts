@@ -6,8 +6,8 @@ import { DavitTableRowData } from "../../../common/fragments/DavitTable";
 
 export const useGetDataSetupTableData = (dataSetups: DataSetupTO[]) => {
     const dispatch = useDispatch();
-    let bodyData: DavitTableRowData[] = [];
-    bodyData = dataSetups.map((dataSetup, index) => {
+    let bodyData: DavitTableRowData[];
+    bodyData = dataSetups.map((dataSetup) => {
         const onClickEdit = () => dispatch(EditActions.setMode.editDataSetup(dataSetup.id));
         const onClickSelect = () => {
             dispatch(SequenceModelActions.setCurrentDataSetup(dataSetup.id));
