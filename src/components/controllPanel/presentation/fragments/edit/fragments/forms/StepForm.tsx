@@ -13,7 +13,7 @@ import { DavitAddButton } from '../../../../../../common/fragments/buttons/Davit
 import { StepDropDown } from '../../../../../../common/fragments/dropdowns/StepDropDown';
 import { DecisionDropDown } from '../../../../../../common/fragments/dropdowns/DecisionDropDown';
 import { DavitRootButton } from '../../../../../../common/fragments/buttons/DavitRootButton';
-import { useStepViewModel } from '../viewmodels/EditStepViewModel';
+import { useStepViewModel } from '../viewmodels/StepViewModel';
 import { FormLabel } from './fragments/FormLabel';
 import { DavitShowMoreButton } from '../../../../../../common/fragments/buttons/DavitShowMoreButton';
 import { ActionTO } from '../../../../../../../dataAccess/access/to/ActionTO';
@@ -21,7 +21,7 @@ import { DavitButton } from '../../../../../../common/fragments/buttons/DavitBut
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons/faAngleDown';
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons/faAngleUp';
 import { DavitEditButton } from '../../../../../../common/fragments/buttons/DavitEditButton';
-import { useEditActionViewModel } from '../viewmodels/EditActionViewModel';
+import { useActionViewModel } from '../viewmodels/ActionViewModel';
 import { FormHeader } from '../../../../../../common/fragments/forms/FormHeader';
 import { FormBody } from '../../../../../../common/fragments/forms/FormBody';
 import { FormFooter } from '../../../../../../common/fragments/forms/FormFooter';
@@ -53,7 +53,7 @@ export const StepForm: FunctionComponent<StepFormProps> = () => {
         switchIndexesAndSave,
     } = useStepViewModel();
 
-    const {deleteAction} = useEditActionViewModel();
+    const {deleteAction} = useActionViewModel();
 
     const { getOptionText } = useActionDropDownViewModel();
 

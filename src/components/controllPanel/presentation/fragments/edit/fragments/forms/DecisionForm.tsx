@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { useEditConditionViewModel } from '../viewmodels/EditDecisionViewModel';
+import { useDecisionViewModel } from '../viewmodels/DecisionViewModel';
 import { Form } from '../../../../../../common/fragments/forms/Form';
 import { DavitLabelTextfield } from '../../../../../../common/fragments/DavitLabelTextfield';
 import { GoToOptionDropDown } from '../../../../../../common/fragments/dropdowns/GoToOptionDropDown';
@@ -49,7 +49,7 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
         deleteCondition,
         saveCondition,
         saveAndGoBack,
-    } = useEditConditionViewModel();
+    } = useDecisionViewModel();
 
 
     const labelDecision: string = 'Select next decision';

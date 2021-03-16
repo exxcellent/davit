@@ -9,7 +9,7 @@ import { EditRelation } from '../../../../../../../slices/thunks/RelationThunks'
 import { DavitUtil } from '../../../../../../../utils/DavitUtil';
 import { GlobalActions } from '../../../../../../../slices/GlobalSlice';
 
-export const useEditDataRelationViewModel = () => {
+export const useDataRelationViewModel = () => {
     const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
     const relationToEdit: DataRelationTO | null = useSelector(editSelectors.selectRelationToEdit);
     const dispatch = useDispatch();

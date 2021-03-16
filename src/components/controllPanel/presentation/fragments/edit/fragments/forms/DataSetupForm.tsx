@@ -6,7 +6,7 @@ import { DavitCommentButton } from '../../../../../../common/fragments/buttons/D
 import { DavitButton } from '../../../../../../common/fragments/buttons/DavitButton';
 import { DavitBackButton } from '../../../../../../common/fragments/buttons/DavitBackButton';
 import { DavitDeleteButton } from '../../../../../../common/fragments/buttons/DavitDeleteButton';
-import { useEditDataSetupViewModel } from '../viewmodels/EditDataSetupViewModel';
+import { useDataSetupViewModel } from '../viewmodels/DataSetupViewModel';
 import { DavitAddButton } from '../../../../../../common/fragments/buttons/DavitAddButton';
 import { ActorDropDown } from '../../../../../../common/fragments/dropdowns/ActorDropDown';
 import { InstanceDropDown } from '../../../../../../common/fragments/dropdowns/InstanceDropDown';
@@ -36,7 +36,7 @@ export const DataSetupForm: FunctionComponent<DataSetupFormProps> = () => {
         initDatas,
         saveInitData,
         deleteInitData,
-    } = useEditDataSetupViewModel();
+    } = useDataSetupViewModel();
 
     const buildActorDataTableRow = (initData: InitDataTO): JSX.Element => {
         let copyInitData: InitDataTO = DavitUtil.deepCopy(initData);

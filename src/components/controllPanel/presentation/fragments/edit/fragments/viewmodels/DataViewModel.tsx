@@ -6,7 +6,7 @@ import {EditData} from '../../../../../../../slices/thunks/DataThunks';
 import {DavitUtil} from '../../../../../../../utils/DavitUtil';
 import {GlobalActions} from '../../../../../../../slices/GlobalSlice';
 
-export const useEditDataViewModel = () => {
+export const useDataViewModel = () => {
     const dataToEdit: DataCTO | null = useSelector(editSelectors.selectDataToEdit);
     const dispatch = useDispatch();
 

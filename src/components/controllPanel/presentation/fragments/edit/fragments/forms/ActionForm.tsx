@@ -10,7 +10,7 @@ import { DavitButton } from '../../../../../../common/fragments/buttons/DavitBut
 import { faReply } from '@fortawesome/free-solid-svg-icons';
 import { DavitDeleteButton } from '../../../../../../common/fragments/buttons/DavitDeleteButton';
 import { FormLine } from './fragments/FormLine';
-import { useEditActionViewModel } from '../viewmodels/EditActionViewModel';
+import { useActionViewModel } from '../viewmodels/ActionViewModel';
 import { FormLabel, FormlabelAlign } from './fragments/FormLabel';
 import { FormDivider } from './fragments/FormDivider';
 
@@ -35,7 +35,7 @@ export const ActionForm: FunctionComponent<ActionFormProps> = () => {
         dataAndInstance,
         setTriggerLabel,
         triggerLabel,
-    } = useEditActionViewModel();
+    } = useActionViewModel();
 
     return <Form>
 

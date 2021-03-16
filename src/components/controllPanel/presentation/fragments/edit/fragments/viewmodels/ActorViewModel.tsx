@@ -6,7 +6,7 @@ import { DavitUtil } from '../../../../../../../utils/DavitUtil';
 import { GlobalActions } from '../../../../../../../slices/GlobalSlice';
 import { EditActor } from '../../../../../../../slices/thunks/ActorThunks';
 
-export const useEditActorViewModel = () => {
+export const useActorViewModel = () => {
 
     const actorToEdit: ActorCTO | null = useSelector(editSelectors.selectActorToEdit);
     const dispatch = useDispatch();

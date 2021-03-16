@@ -12,7 +12,7 @@ import { EditSequence } from '../../../../../../../slices/thunks/SequenceThunks'
 import { DavitUtil } from '../../../../../../../utils/DavitUtil';
 import { GlobalActions } from '../../../../../../../slices/GlobalSlice';
 
-export const useEditConditionViewModel = () => {
+export const useDecisionViewModel = () => {
     const decisionToEdit: DecisionTO | null = useSelector(editSelectors.selectDecisionToEdit);
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const dispatch = useDispatch();

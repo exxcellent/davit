@@ -7,7 +7,7 @@ import { DavitCommentButton } from '../../../../../../common/fragments/buttons/D
 import { DavitButton } from '../../../../../../common/fragments/buttons/DavitButton';
 import { DavitBackButton } from '../../../../../../common/fragments/buttons/DavitBackButton';
 import { DavitDeleteButton } from '../../../../../../common/fragments/buttons/DavitDeleteButton';
-import { useEditDataRelationViewModel } from '../viewmodels/EditDataRelationViewModel';
+import { useDataRelationViewModel } from '../viewmodels/DataRelationViewModel';
 import { FormLabel, FormlabelAlign } from './fragments/FormLabel';
 import { FormDivider } from './fragments/FormDivider';
 import { FormHeader } from '../../../../../../common/fragments/forms/FormHeader';
@@ -37,7 +37,7 @@ export const DataRelationForm: FunctionComponent<DataRelationFormProps> = () => 
         updateRelation,
         note,
         saveNote,
-    } = useEditDataRelationViewModel();
+    } = useDataRelationViewModel();
 
     return (
         <Form key={key}>

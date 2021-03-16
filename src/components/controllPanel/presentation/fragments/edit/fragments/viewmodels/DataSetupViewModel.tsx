@@ -9,7 +9,7 @@ import { DavitUtil } from '../../../../../../../utils/DavitUtil';
 import { GlobalActions } from '../../../../../../../slices/GlobalSlice';
 import { EditInitData } from '../../../../../../../slices/thunks/InitDataThunks';
 
-export const useEditDataSetupViewModel = () => {
+export const useDataSetupViewModel = () => {
     const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.selectDataSetupToEdit);
     const dispatch = useDispatch();
     const [actorToEdit, setActorToEdit] = useState<ActorCTO | null>(null);

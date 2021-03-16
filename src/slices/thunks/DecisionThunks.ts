@@ -44,7 +44,7 @@ const saveDecisionThunk = (decision: DecisionTO): AppThunk => (dispatch) => {
 };
 
 const deleteDecisionThunk = (decision: DecisionTO, sequenceCTO?: SequenceCTO): AppThunk => (dispatch) => {
-    // update forent gotos.
+    // update forwent goto.
     if (sequenceCTO) {
         const copySequence: SequenceCTO = DavitUtil.deepCopy(sequenceCTO);
         // update steps

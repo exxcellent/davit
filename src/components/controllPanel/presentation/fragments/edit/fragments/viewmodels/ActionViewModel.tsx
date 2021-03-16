@@ -15,7 +15,7 @@ import { GlobalActions } from '../../../../../../../slices/GlobalSlice';
 import { useState } from 'react';
 
 
-export const useEditActionViewModel = () => {
+export const useActionViewModel = () => {
     const actionToEdit: ActionTO | null = useSelector(editSelectors.selectActionToEdit);
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const dispatch = useDispatch();

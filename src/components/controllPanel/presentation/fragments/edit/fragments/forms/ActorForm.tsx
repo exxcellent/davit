@@ -4,7 +4,7 @@ import { DavitCommentButton } from '../../../../../../common/fragments/buttons/D
 import { DavitButton } from '../../../../../../common/fragments/buttons/DavitButton';
 import { DavitBackButton } from '../../../../../../common/fragments/buttons/DavitBackButton';
 import { DavitDeleteButton } from '../../../../../../common/fragments/buttons/DavitDeleteButton';
-import { useEditActorViewModel } from '../viewmodels/EditActorViewModel';
+import { useActorViewModel } from '../viewmodels/ActorViewModel';
 import { FormLine } from './fragments/FormLine';
 import { Form } from '../../../../../../common/fragments/forms/Form';
 import { FormDivider } from './fragments/FormDivider';
@@ -27,7 +27,7 @@ export const ActorForm: FunctionComponent<ActorFormProps> = () => {
         saveActor,
         name,
         note,
-    } = useEditActorViewModel();
+    } = useActorViewModel();
 
     return (
         <Form key={key}>

@@ -1,7 +1,7 @@
 import React, {FunctionComponent, useState} from 'react';
 import {DavitLabelTextfield} from '../../../../../../common/fragments/DavitLabelTextfield';
 import {DavitDeleteButton} from '../../../../../../common/fragments/buttons/DavitDeleteButton';
-import {useEditDataViewModel} from '../viewmodels/EditDataViewModel';
+import {useDataViewModel} from '../viewmodels/DataViewModel';
 import {DataInstanceTO} from '../../../../../../../dataAccess/access/to/DataInstanceTO';
 import {DavitCommentButton} from "../../../../../../common/fragments/buttons/DavitCommentButton";
 import {DavitButton} from "../../../../../../common/fragments/buttons/DavitButton";
@@ -34,7 +34,7 @@ export const DataForm: FunctionComponent<DataFormProps> = () => {
             changeInstanceName,
             createInstance,
             deleteInstance
-        } = useEditDataViewModel();
+        } = useDataViewModel();
 
         const createInstanceRow = (instance: DataInstanceTO, index: number): JSX.Element => {
             return (<tr key={index}>
