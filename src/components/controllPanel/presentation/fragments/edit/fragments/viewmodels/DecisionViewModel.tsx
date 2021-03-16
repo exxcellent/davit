@@ -210,7 +210,7 @@ export const useDecisionViewModel = () => {
                 dispatch(EditDecision.save(copyDecision!));
                 dispatch(EditActions.setMode.editSequence(selectedSequence!.sequenceTO.id));
             } else {
-                dispatch((EditDecision.delete(copyDecision!, selectedSequence!)));
+                deleteDecision();
             }
         }
     };

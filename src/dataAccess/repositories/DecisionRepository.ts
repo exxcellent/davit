@@ -43,8 +43,8 @@ export const DecisionRepository = {
     },
 
     delete(decision: DecisionTO) {
-        const sucess: boolean = dataStore.getDataStore().decisions.delete(decision.id);
-        if (!sucess) {
+        const success: boolean = dataStore.getDataStore().decisions.delete(decision.id);
+        if (!success) {
             throw Error("could not delete decision with id: " + decision.id);
         } else {
             return decision;
