@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from 'semantic-ui-react';
 import { DataSetupCTO } from '../../../../../dataAccess/access/cto/DataSetupCTO';
 import { SequenceCTO } from '../../../../../dataAccess/access/cto/SequenceCTO';
 import { ChainTO } from '../../../../../dataAccess/access/to/ChainTO';
@@ -13,6 +12,7 @@ import { ChainDropDown } from '../../../../common/fragments/dropdowns/ChainDropD
 import { DataSetupDropDown } from '../../../../common/fragments/dropdowns/DataSetupDropDown';
 import { SequenceDropDown } from '../../../../common/fragments/dropdowns/SequenceDropDown';
 import { OptionField } from '../edit/common/OptionField';
+import { ViewNavigator } from './fragments/ViewNavigator';
 
 export interface ControlPanelViewOptionsProps {
     hidden: boolean;
@@ -21,7 +21,6 @@ export interface ControlPanelViewOptionsProps {
 export const ControlPanelViewOptions: FunctionComponent<ControlPanelViewOptionsProps> = () => {
 
     const {
-        sequence,
         stepIndex,
         linkIndex,
         selectSequence,
@@ -62,43 +61,7 @@ export const ControlPanelViewOptions: FunctionComponent<ControlPanelViewOptionsP
             </OptionField>
 
             <OptionField label='STEP' divider={true}>
-                {/*TODO: semantic ui => button group selber bauen*/}
-                <Button.Group inverted color='orange'>
-                    <Button
-                        inverted
-                        color='orange'
-                        icon='fast backward'
-                        disabled={DavitUtil.isNullOrUndefined(sequence)}
-                        onClick={linkBack}
-                    />
-                    <Button
-                        inverted
-                        color='orange'
-                        icon='left arrow'
-                        content='BACK'
-                        labelPosition='left'
-                        disabled={DavitUtil.isNullOrUndefined(sequence)}
-                        onClick={stepBack}
-                    />
-                    <Button inverted color='orange' content={getIndex()} disabled={true} />
-                    <Button
-                        inverted
-                        color='orange'
-                        icon='right arrow'
-                        content='NEXT'
-                        labelPosition='right'
-                        disabled={DavitUtil.isNullOrUndefined(sequence)}
-                        onClick={stepNext}
-                    />
-                    <Button
-                        inverted
-                        color='orange'
-                        icon='fast forward'
-                        disabled={DavitUtil.isNullOrUndefined(sequence)}
-                        onClick={linkNext}
-                    />
-                </Button.Group>
-
+                <ViewNavigator fastBackward={linkBack} fastForward={linkNext} backward={stepBack} forward={stepNext} index={getIndex()} />
             </OptionField>
 
         </div>

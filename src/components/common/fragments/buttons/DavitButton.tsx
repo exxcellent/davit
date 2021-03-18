@@ -1,23 +1,25 @@
-import {IconDefinition} from "@fortawesome/fontawesome-common-types";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import React, {CSSProperties, FunctionComponent} from 'react';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { CSSProperties, FunctionComponent } from 'react';
 
 interface DavitButtonProps {
     onClick: () => void;
     label?: string;
     disable?: boolean;
     iconName?: IconDefinition;
+    iconLeft?: boolean;
     className?: string;
     style?: CSSProperties;
 }
 
 export const DavitButton: FunctionComponent<DavitButtonProps> = (props) => {
-    const {onClick, label, disable, iconName, className, style} = props;
+    const { onClick, label, disable, iconName, iconLeft, className, style } = props;
 
     return (
         <button className={className} onClick={onClick} disabled={disable} style={style}>
-            {label && <label>{label}</label>}
-            {iconName && <FontAwesomeIcon icon={iconName}/>}
+            {iconName && iconLeft && <FontAwesomeIcon icon={iconName} />}
+            {label && <label className={"padding"}>{label}</label>}
+            {iconName && !iconLeft && <FontAwesomeIcon icon={iconName} />}
         </button>
     );
 };

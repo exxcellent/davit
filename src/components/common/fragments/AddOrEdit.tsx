@@ -13,7 +13,7 @@ export const AddOrEdit: FunctionComponent<AddOrEditProps> = (props) => {
     return (
         <div style={{display: "flex"}}>
             <DavitAddButton onClick={() => addCallBack()} style={{borderTopRightRadius: 0, borderBottomRightRadius: 0}}/>
-            <div className={"labelField"} >
+            <div className={"labelField border"} >
                 <label>{label}</label>
             </div>
             {dropDown}
