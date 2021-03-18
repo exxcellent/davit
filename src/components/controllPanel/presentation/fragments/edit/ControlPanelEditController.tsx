@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { useSelector } from 'react-redux';
 import { editSelectors, Mode } from '../../../../../slices/EditSlice';
 import { ControlPanelEditChain } from './fragments/ControlPanelEditChain';
-import { ControllPanelEditChainCondition } from './fragments/ControllPanelEditChainCondition';
+import { ControlPanelEditChainCondition } from './fragments/ControlPanelEditChainCondition';
 import { ControlPanelEditChainDecision } from './fragments/ControlPanelEditChainDecision';
 import { ControlPanelEditChainLink } from './fragments/ControlPanelEditChainLink';
 import { ControlPanelEditGroup } from './fragments/ControlPanelEditGroup';
@@ -47,13 +47,13 @@ export const ControlPanelEditController: FunctionComponent<ControlPanelEditContr
             case Mode.EDIT_DATASETUP_INITDATA:
                 return <ControlPanelEditInitData hidden={mode !== Mode.EDIT_DATASETUP_INITDATA} />;
             case Mode.EDIT_CHAIN:
-                return <ControlPanelEditChain hidden={mode !== Mode.EDIT_CHAIN} />;
+                return <ControlPanelEditChain />;
             case Mode.EDIT_CHAIN_LINK:
                 return <ControlPanelEditChainLink hidden={mode !== Mode.EDIT_CHAIN_LINK} />;
             case Mode.EDIT_CHAIN_DECISION:
-                return <ControlPanelEditChainDecision hidden={mode !== Mode.EDIT_CHAIN_DECISION} />;
+                return <ControlPanelEditChainDecision />;
             case Mode.EDIT_CHAIN_DECISION_CONDITION:
-                return <ControllPanelEditChainCondition hidden={mode !== Mode.EDIT_CHAIN_DECISION_CONDITION} />;
+                return <ControlPanelEditChainCondition />;
             default:
                 return <ControlPanelEditMenu />;
         }

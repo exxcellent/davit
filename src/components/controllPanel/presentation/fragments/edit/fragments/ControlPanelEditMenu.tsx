@@ -15,6 +15,7 @@ import {AddOrEdit} from '../../../../../common/fragments/AddOrEdit';
 import {ChainDropDownButton} from '../../../../../common/fragments/dropdowns/ChainDropDown';
 import {useDispatch, useSelector} from "react-redux";
 import {EditActions, editSelectors, Mode} from "../../../../../../slices/EditSlice";
+import { ControlPanel } from '../common/ControlPanel';
 
 
 export interface ControlPanelEditMenuProps {
@@ -32,7 +33,7 @@ export const ControlPanelEditMenu: FunctionComponent<ControlPanelEditMenuProps> 
     } = useControlPanelEditMenuViewModel();
 
     return (
-        <div className={"headerGrid"}>
+        <ControlPanel>
             <OptionField label='actor'>
                 <AddOrEdit label={'Actor'} addCallBack={() => editOrAddActor()}
                            dropDown={<ActorDropDownButton onSelect={editOrAddActor} icon='wrench'/>}/>
@@ -55,7 +56,7 @@ export const ControlPanelEditMenu: FunctionComponent<ControlPanelEditMenuProps> 
                            dropDown={<ChainDropDownButton onSelect={(chain) => editOrAddChain(chain)}
                                                           icon='wrench'/>}/>
             </OptionField>
-        </div>
+        </ControlPanel>
     );
 };
 

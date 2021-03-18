@@ -756,7 +756,11 @@
 }
 
 .inputLabel {
-    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: var(--davit-padding-right-left);
+    padding-left: var(--davit-padding-right-left);
     border-bottom-left-radius: var(--davit-border-radius);
     border-top-left-radius: var(--davit-border-radius);
     border: var(--davit-border-size) solid var(--carv2-color-secondary);

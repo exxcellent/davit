@@ -32,7 +32,7 @@ export const DavitLabelTextfield: FunctionComponent<DavitLabelTextfieldProps> = 
         <div style={{display: "flex"}}>
             {label && <label className={"inputLabel"}>{label}</label>}
             <input
-                className={label ? "input label" : ""}
+                className={label ? "input label" : undefined}
                 type={"text"}
                 placeholder={placeholder}
                 value={stateValue}
