@@ -17,6 +17,14 @@
     padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
 }
 
+.centeredFlex {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 html {
     font-size: var(--davit-font-size);
     font-family: var(--davit-font-family);

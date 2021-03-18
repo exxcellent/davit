@@ -16,6 +16,7 @@ import { TabFragment } from '../tableModel/fragments/TabFragment';
 import { TabGroupFragment } from '../tableModel/fragments/TabGroupFragment';
 import { FlowChartlabel } from './FlowChartlabel';
 import { ViewPlaceholder } from '../common/fragments/ViewPlaceholder';
+import { CenteredFlex } from '../common/fragments/CenteredFlex';
 
 interface FlowChartControllerProps {
     fullScreen?: boolean;
@@ -171,7 +172,11 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
 
         return (
             <div className={fullScreen ? 'fullscreen' : 'flowChartModel'} ref={parentRef}>
-                {!renderFlowChart() && <ViewPlaceholder text={'Select a sequence or chain to see the flow chart'} />}
+                {!renderFlowChart() &&
+                <CenteredFlex>
+                    <ViewPlaceholder
+                        text={'Select a sequence or chain to see the flow chart'} />
+                </CenteredFlex>}
                 {renderFlowChart() && <>
                     <div style={{ display: 'flex', position: 'absolute', zIndex: 1, width: '47vw' }}>
                         {chain && (
