@@ -13,7 +13,7 @@ export interface DnDBoxElement {
     geometricalData?: GeometricalDataTO;
 }
 
-interface DnDBox {
+export interface DnDBox {
     toDnDElements: DnDBoxElement[];
     svgElements: DavitPathProps[];
     fullScreen?: boolean;
@@ -28,6 +28,7 @@ interface DnDBox {
 export enum DnDBoxType {
     actor = "actorModel",
     data = "dataModel",
+    fullscreen = "fullscreen"
 }
 
 export const DnDBox: FunctionComponent<DnDBox> = (props) => {
