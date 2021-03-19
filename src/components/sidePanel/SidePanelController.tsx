@@ -1,9 +1,10 @@
-import React, {FunctionComponent} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {DAVIT_VERISON} from "../../app/DavitConstants";
-import logo from "../../icons/logo200.png";
-import {EditActions, editSelectors, Mode} from "../../slices/EditSlice";
-import {DavitSidePanelButton} from "../common/fragments/buttons/DavitSidePanelButton";
+import React, { FunctionComponent } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { DAVIT_VERISON } from '../../app/DavitConstants';
+import logo from '../../icons/logo200.png';
+import { EditActions, editSelectors, Mode } from '../../slices/EditSlice';
+import { DavitSidePanelButton } from '../common/fragments/buttons/DavitSidePanelButton';
+import { DavitIcons } from '../common/IconSet';
 
 export interface SidePanelProps {
 }
@@ -13,9 +14,9 @@ export const SidePanelController: FunctionComponent<SidePanelProps> = () => {
 
     return (
         <div className="leftPanel">
-            <DavitSidePanelButton icon="write" onClick={setModeToEdit} active={mode.includes(Mode.EDIT.toString())}/>
-            <DavitSidePanelButton icon="eye" onClick={setModeToView} active={mode === Mode.VIEW}/>
-            <DavitSidePanelButton icon="file" onClick={setModeToFile} active={mode === Mode.FILE}/>
+            <DavitSidePanelButton icon={DavitIcons.pencil} onClick={setModeToEdit} active={mode.includes(Mode.EDIT.toString())}/>
+            <DavitSidePanelButton icon={DavitIcons.eye} onClick={setModeToView} active={mode === Mode.VIEW}/>
+            <DavitSidePanelButton icon={DavitIcons.file} onClick={setModeToFile} active={mode === Mode.FILE}/>
             {/*TODO: enable wenn tabs are fixed!*/}
             {/*<DavitSidePanelButton icon="external alternate" onClick={setModeToTab} active={mode === Mode.TAB} />*/}
 

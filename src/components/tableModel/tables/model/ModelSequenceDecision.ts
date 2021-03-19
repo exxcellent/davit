@@ -5,6 +5,7 @@ import { DecisionTO } from "../../../../dataAccess/access/to/DecisionTO";
 import { GoTo, GoToTypes, Intermediate } from "../../../../dataAccess/access/types/GoToType";
 import { EditActions } from "../../../../slices/EditSlice";
 import { DavitTableRowData } from "../../../common/fragments/DavitTable";
+import { DavitIcons } from '../../../common/IconSet';
 
 export const useGetModelSequenceDecisionTableData = (selectedSequence: SequenceCTO | null) => {
     const dispatch = useDispatch();
@@ -42,7 +43,7 @@ const createDecisionColumn = (
     );
     const root: string = decision.root ? "start" : "";
     const trClass = "carv2Tr";
-    const editAction = { icon: "wrench", callback: editCallback };
+    const editAction = { icon: DavitIcons.wrench, callback: editCallback };
 
     return {
         trClass,

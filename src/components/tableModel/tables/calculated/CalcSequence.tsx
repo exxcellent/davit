@@ -1,11 +1,12 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Icon } from "semantic-ui-react";
-import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
-import { Terminal } from "../../../../dataAccess/access/types/GoToType";
-import { CalculatedStep } from "../../../../services/SequenceService";
-import { SequenceModelActions, sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
-import { DavitTableRowData } from "../../../common/fragments/DavitTable";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { SequenceCTO } from '../../../../dataAccess/access/cto/SequenceCTO';
+import { Terminal } from '../../../../dataAccess/access/types/GoToType';
+import { CalculatedStep } from '../../../../services/SequenceService';
+import { SequenceModelActions, sequenceModelSelectors } from '../../../../slices/SequenceModelSlice';
+import { DavitTableRowData } from '../../../common/fragments/DavitTable';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { DavitIcons } from '../../../common/IconSet';
 
 export const useGetCalcSequenceTableData = (calcSteps: CalculatedStep[], selectedSequence: SequenceCTO | null) => {
     const dispatch = useDispatch();
@@ -68,15 +69,11 @@ const createCalcSequenceStepColumn = (
             index.toString(),
             getModelElementName(step, selectedSequence, terminal),
             step.type,
-            hasError ? getWarningIcon() : "",
+            hasError ? <FontAwesomeIcon icon={DavitIcons.warning} /> : "",
         ],
         trClass: "clickable " + trClass,
         onClick: clickEvent,
     };
-};
-
-const getWarningIcon = (): JSX.Element => {
-    return <Icon name="warning sign" color="red" />;
 };
 
 function getModelElementName(step: CalculatedStep, selectSequence: SequenceCTO | null, terminal: Terminal | null) {

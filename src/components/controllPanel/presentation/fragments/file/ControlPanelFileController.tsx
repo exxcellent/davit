@@ -1,19 +1,18 @@
-import React, {FunctionComponent} from "react";
-import {ControlPanelEditSub} from "../edit/common/ControlPanelEditSub";
-import {ControlPanelFileOptions} from "./fragments/ControlPanelFileOptions";
+import React, { FunctionComponent } from 'react';
+import { ControlPanelFileOptions } from './fragments/ControlPanelFileOptions';
+import { ControlPanel } from '../edit/common/ControlPanel';
+import { OptionField } from '../edit/common/OptionField';
 
 export interface ControlPanelFileControllerProps {
-    hidden: boolean;
 }
 
-export const ControlPanelFileController: FunctionComponent<ControlPanelFileControllerProps> = (props) => {
-    const {hidden} = props;
+export const ControlPanelFileController: FunctionComponent<ControlPanelFileControllerProps> = () => {
 
     return (
-        <ControlPanelEditSub label="FILE" hidden={hidden}>
-            <div className="optionFieldSpacer">
+        <ControlPanel>
+            <OptionField>
                 <ControlPanelFileOptions/>
-            </div>
-        </ControlPanelEditSub>
+            </OptionField>
+        </ControlPanel>
     );
 };

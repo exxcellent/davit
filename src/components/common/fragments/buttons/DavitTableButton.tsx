@@ -1,16 +1,17 @@
-import React, { FunctionComponent } from "react";
-import { Button, IconProps, SemanticShorthandItem } from "semantic-ui-react";
+import React, { FunctionComponent } from 'react';
+import { DavitButton } from './DavitButton';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 
 interface DavitTableButtonProps {
     onClick: () => void;
     disable?: boolean;
-    icon?: SemanticShorthandItem<IconProps>;
+    icon?: IconDefinition;
 }
 
 export const DavitTableButton: FunctionComponent<DavitTableButtonProps> = (props) => {
     const { onClick, icon, disable } = props;
 
     return (
-        <Button icon={icon} onClick={onClick} className="carv2TableButton" inverted color="orange" disabled={disable} />
+        <DavitButton iconName={icon} onClick={onClick} disable={disable} />
     );
 };

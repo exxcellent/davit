@@ -7,6 +7,7 @@ import { EditActions, editSelectors } from "../../../../slices/EditSlice";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 import { EditDecision } from "../../../../slices/thunks/DecisionThunks";
 import { DavitTableRowData } from "../../../common/fragments/DavitTable";
+import { DavitIcons } from '../../../common/IconSet';
 
 export const useGetModelSequenceConditionTableData = (
     decision: DecisionTO | null,
@@ -72,7 +73,7 @@ const createConditionColumn = (
     marked?: boolean,
 ): DavitTableRowData => {
     const trClass = marked ? "carv2TrMarked" : "carv2Tr";
-    const editAction = { icon: "wrench", callback: editCallback };
+    const editAction = { icon: DavitIcons.wrench, callback: editCallback };
 
     return {
         trClass,

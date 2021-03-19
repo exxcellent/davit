@@ -1,9 +1,10 @@
-import { useDispatch } from "react-redux";
-import { ChainlinkCTO } from "../../../../dataAccess/access/cto/ChainlinkCTO";
-import { ChainDecisionTO } from "../../../../dataAccess/access/to/ChainDecisionTO";
-import { EditActions } from "../../../../slices/EditSlice";
-import { DavitTableRowData } from "../../../common/fragments/DavitTable";
-import { getChainGotoName } from "../../util/TableUtil";
+import { useDispatch } from 'react-redux';
+import { ChainlinkCTO } from '../../../../dataAccess/access/cto/ChainlinkCTO';
+import { ChainDecisionTO } from '../../../../dataAccess/access/to/ChainDecisionTO';
+import { EditActions } from '../../../../slices/EditSlice';
+import { DavitTableRowData } from '../../../common/fragments/DavitTable';
+import { getChainGotoName } from '../../util/TableUtil';
+import { DavitIcons } from '../../../common/IconSet';
 
 export const useGetModelChainLinkTableData = (
     selectedChainlinks: ChainlinkCTO[],
@@ -22,7 +23,7 @@ export const useGetModelChainLinkTableData = (
     };
 };
 
-const header = ["NAME", "SEQUENCE", "DATASETUP", "GOTO", "ACTIONS", "START"];
+const header = ['NAME', 'SEQUENCE', 'DATASETUP', 'GOTO', 'ACTIONS', 'START'];
 
 const createLinkColumn = (
     link: ChainlinkCTO,
@@ -34,9 +35,9 @@ const createLinkColumn = (
     const sequenceName: string = link.sequence.sequenceTO.name;
     const dataSetupName: string = link.dataSetup.dataSetup.name;
     const gotoName: string = getChainGotoName(link.chainLink.goto, selectedChainlinks, selectedChainDecisions);
-    const root: string = link.chainLink.root ? "start" : "";
-    const trClass = "carv2Tr";
-    const editAction = { icon: "wrench", callback: editCallback };
+    const root: string = link.chainLink.root ? 'start' : '';
+    const trClass = 'carv2Tr';
+    const editAction = { icon: DavitIcons.wrench, callback: editCallback };
 
     return {
         trClass,

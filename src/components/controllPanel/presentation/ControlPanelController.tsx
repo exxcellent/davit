@@ -22,7 +22,7 @@ export const ControlPanelController: FunctionComponent<ControlPanelProps> = () =
                 return <ControlPanelViewOptions hidden={!mode.includes("VIEW")}/>;
             }
             if (mode.includes("FILE")) {
-                return <ControlPanelFileController hidden={!mode.includes("FILE")}/>;
+                return <ControlPanelFileController />;
             }
             if (mode.includes("TAB")) {
                 return <ControlPanelTabController hidden={!mode.includes("TAB")}/>;

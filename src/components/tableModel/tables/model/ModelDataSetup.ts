@@ -1,8 +1,9 @@
-import { useDispatch } from "react-redux";
-import { DataSetupTO } from "../../../../dataAccess/access/to/DataSetupTO";
-import { EditActions } from "../../../../slices/EditSlice";
-import { SequenceModelActions } from "../../../../slices/SequenceModelSlice";
-import { DavitTableRowData } from "../../../common/fragments/DavitTable";
+import { useDispatch } from 'react-redux';
+import { DataSetupTO } from '../../../../dataAccess/access/to/DataSetupTO';
+import { EditActions } from '../../../../slices/EditSlice';
+import { SequenceModelActions } from '../../../../slices/SequenceModelSlice';
+import { DavitTableRowData } from '../../../common/fragments/DavitTable';
+import { DavitIcons } from '../../../common/IconSet';
 
 export const useGetDataSetupTableData = (dataSetups: DataSetupTO[]) => {
     const dispatch = useDispatch();
@@ -21,7 +22,7 @@ export const useGetDataSetupTableData = (dataSetups: DataSetupTO[]) => {
     };
 };
 
-const header = ["NAME", "ACTIONS"];
+const header = ['NAME', 'ACTIONS'];
 
 const createModelDataSetupColumn = (
     dataSetup: DataSetupTO,
@@ -29,9 +30,9 @@ const createModelDataSetupColumn = (
     selectCallback: () => void,
 ): DavitTableRowData => {
     const name: string = dataSetup.name;
-    const trClass = "carv2Tr";
-    const editAction = { icon: "wrench", callback: editCallback };
-    const selectAction = { icon: "hand pointer", callback: selectCallback };
+    const trClass = 'carv2Tr';
+    const editAction = { icon: DavitIcons.wrench, callback: editCallback };
+    const selectAction = { icon: DavitIcons.handPointer, callback: selectCallback };
 
     return {
         trClass,

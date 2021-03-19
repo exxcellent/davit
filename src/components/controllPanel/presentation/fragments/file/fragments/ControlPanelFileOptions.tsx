@@ -14,13 +14,11 @@ export const ControlPanelFileOptions: FunctionComponent<ControlPanelFileOptionsP
     const {deleteLocalStorage} = useFileOptionModelView();
 
     return (
-        <div className="optionFieldSpacer">
             <OptionField label="file">
                 <DavitUploadButton/>
                 <DavitDownloadButton/>
                 <DavitDeleteButton onClick={deleteLocalStorage}/>
             </OptionField>
-        </div>
     );
 };
 

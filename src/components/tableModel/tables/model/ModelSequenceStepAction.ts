@@ -1,15 +1,16 @@
-import { useDispatch, useSelector } from "react-redux";
-import { ActorCTO } from "../../../../dataAccess/access/cto/ActorCTO";
-import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
-import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
-import { ActionTO } from "../../../../dataAccess/access/to/ActionTO";
-import { ActionType } from "../../../../dataAccess/access/types/ActionType";
-import { EditActions, editSelectors, Mode } from "../../../../slices/EditSlice";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
-import { SequenceModelActions } from "../../../../slices/SequenceModelSlice";
-import { EditStep } from "../../../../slices/thunks/StepThunks";
-import { DavitUtil } from "../../../../utils/DavitUtil";
-import { DavitTableRowData } from "../../../common/fragments/DavitTable";
+import { useDispatch, useSelector } from 'react-redux';
+import { ActorCTO } from '../../../../dataAccess/access/cto/ActorCTO';
+import { DataCTO } from '../../../../dataAccess/access/cto/DataCTO';
+import { SequenceStepCTO } from '../../../../dataAccess/access/cto/SequenceStepCTO';
+import { ActionTO } from '../../../../dataAccess/access/to/ActionTO';
+import { ActionType } from '../../../../dataAccess/access/types/ActionType';
+import { EditActions, editSelectors, Mode } from '../../../../slices/EditSlice';
+import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
+import { SequenceModelActions } from '../../../../slices/SequenceModelSlice';
+import { EditStep } from '../../../../slices/thunks/StepThunks';
+import { DavitUtil } from '../../../../utils/DavitUtil';
+import { DavitTableRowData } from '../../../common/fragments/DavitTable';
+import { DavitIcons } from '../../../common/IconSet';
 
 export const useGetStepActionTableData = (
     selectedStep: SequenceStepCTO | null,
@@ -125,9 +126,9 @@ const createModelActionColumn = (
         data: [actionIndex, actionType, dataName, toActorName, fromActorName],
         trClass,
         actions: [
-            { icon: "angle up", callback: indexDecrementCallback, disable: arrayIndex === 0 },
-            { icon: "angle down", callback: indexIncrementCallback, disable: arrayIndex >= arrayLength - 1 },
-            { icon: "wrench", callback: editCallback },
+            { icon: DavitIcons.angleUp, callback: indexDecrementCallback, disable: arrayIndex === 0 },
+            { icon: DavitIcons.angleDown, callback: indexIncrementCallback, disable: arrayIndex >= arrayLength - 1 },
+            { icon: DavitIcons.wrench, callback: editCallback },
         ],
     };
 };

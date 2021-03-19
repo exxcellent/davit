@@ -1,7 +1,8 @@
-import React, {FunctionComponent} from "react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faInfoCircle, faMinusCircle, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
-import {IconDefinition} from "@fortawesome/fontawesome-common-types";
+import React, { FunctionComponent } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { DavitIcons } from '../IconSet';
 
 export enum NotificationLevel {
     info = "info",
@@ -22,11 +23,11 @@ export const DavitNotification: FunctionComponent<DavitNotificationProps> = (pro
     const getNotificationIcon = (): IconDefinition => {
         switch (level) {
             case "info":
-                return faInfoCircle;
+                return DavitIcons.info;
             case "warning":
-                return faTimesCircle;
+                return DavitIcons.warning;
             case "error":
-                return faMinusCircle;
+                return DavitIcons.error;
             default:
                 return faInfoCircle;
         }

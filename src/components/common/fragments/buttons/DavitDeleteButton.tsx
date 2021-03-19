@@ -1,6 +1,6 @@
-import {faTrashAlt} from "@fortawesome/free-solid-svg-icons/faTrashAlt";
-import React, {FunctionComponent, useEffect, useState} from "react";
-import {DavitButton} from "./DavitButton";
+import React, { FunctionComponent, useEffect, useState } from 'react';
+import { DavitButton } from './DavitButton';
+import { DavitIcons } from '../../IconSet';
 
 interface DavitDeleteButtonProps {
     onClick: () => void;
@@ -30,7 +30,7 @@ export const DavitDeleteButton: FunctionComponent<DavitDeleteButtonProps> = (pro
 
     return (
         <DavitButton
-            iconName={fluid ? undefined : faTrashAlt}
+            iconName={fluid ? undefined : DavitIcons.trash}
             onClick={clickEventHandler}
             className={fluid ? "deleteButton fluid" : "deleteButton"}
             disable={disable}

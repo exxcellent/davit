@@ -7,10 +7,11 @@ interface DavitMoreButtonProps {
     onClick: () => void;
     style?: CSSProperties;
     show?: boolean
+    className?: string
 }
 
 export const DavitShowMoreButton: FunctionComponent<DavitMoreButtonProps> = (props) => {
-    const { onClick, style, show } = props;
+    const { onClick, style, show, className } = props;
 
     const [showMore, setShowMore] = useState(false);
 
@@ -23,5 +24,5 @@ export const DavitShowMoreButton: FunctionComponent<DavitMoreButtonProps> = (pro
     return <DavitButton onClick={() => {
         onClick();
         setShowMore(!showMore);
-    }} iconName={showMore ? faAngleDown : faAngleRight} style={style}/>;
+    }} className={className ? className : undefined} iconName={showMore ? faAngleDown : faAngleRight} style={style}/>;
 };

@@ -1,6 +1,6 @@
-import { faReply } from "@fortawesome/free-solid-svg-icons";
-import React, { FunctionComponent } from "react";
-import { DavitButton } from "./DavitButton";
+import React, { FunctionComponent } from 'react';
+import { DavitButton } from './DavitButton';
+import { DavitIcons } from '../../IconSet';
 
 interface DavitBackButtonProps {
     onClick: () => void;
@@ -9,5 +9,5 @@ interface DavitBackButtonProps {
 export const DavitBackButton: FunctionComponent<DavitBackButtonProps> = (props) => {
     const { onClick } = props;
 
-    return <DavitButton onClick={onClick} iconName={faReply} />;
+    return <DavitButton onClick={onClick} iconName={DavitIcons.back} />;
 };

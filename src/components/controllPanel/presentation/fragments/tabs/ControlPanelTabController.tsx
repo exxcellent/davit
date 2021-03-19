@@ -1,21 +1,43 @@
-import React, {FunctionComponent} from "react";
-import {ControlPanelEditSub} from "../edit/common/ControlPanelEditSub";
-import {ControllPanelViewOptions} from "./fragments/ControllPanelViewOptions";
+import React, { FunctionComponent } from 'react';
+import { ControlPanel } from '../edit/common/ControlPanel';
+import { OptionField } from '../edit/common/OptionField';
+import { DavitButton } from '../../../../common/fragments/buttons/DavitButton';
+import { faShare } from '@fortawesome/free-solid-svg-icons';
+import { ModuleRoutes } from '../../../../../app/Davit';
 
 export interface ControlPanelTabControllerProps {
     hidden: boolean;
 }
 
-export const ControlPanelTabController: FunctionComponent<ControlPanelTabControllerProps> = (props) => {
-    const {hidden} = props;
+export const ControlPanelTabController: FunctionComponent<ControlPanelTabControllerProps> = () => {
+
+    const {showActorPage, showDataPage, showFlowChartPage, showTablePage} = useFileOptionModelView();
+
     return (
-        <ControlPanelEditSub label="Windows" hidden={hidden}>
-            <div className="optionFieldSpacer">
-                <ControllPanelViewOptions/>
-            </div>
-            <div className="columnDivider controllPanelEditChild"/>
-            <div className="columnDivider controllPanelEditChild"/>
-            <div className="columnDivider controllPanelEditChild"/>
-        </ControlPanelEditSub>
+        <ControlPanel>
+            <OptionField>
+                <DavitButton iconName={faShare} onClick={showActorPage} />
+                <DavitButton iconName={faShare} onClick={showDataPage} />
+                <DavitButton iconName={faShare} onClick={showTablePage} />
+                <DavitButton iconName={faShare} onClick={showFlowChartPage} />
+            </OptionField>
+        </ControlPanel>
     );
+};
+
+const useFileOptionModelView = () => {
+    const showActorPage = () => {
+        window.open(ModuleRoutes.actor, "_blank", "toolbar=no,top=0,left=0");
+    };
+    const showDataPage = () => {
+        window.open(ModuleRoutes.data, "_blank", "toolbar=no,top=0,left=0");
+    };
+    const showTablePage = () => {
+        window.open(ModuleRoutes.table, "_blank", "toolbar=no,top=0,left=0");
+    };
+    const showFlowChartPage = () => {
+        window.open(ModuleRoutes.flowChart, "_blank", "toolbar=no,top=0,left=0");
+    };
+
+    return { showActorPage, showDataPage, showTablePage, showFlowChartPage };
 };

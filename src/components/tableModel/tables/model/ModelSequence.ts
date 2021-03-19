@@ -3,6 +3,7 @@ import { SequenceTO } from "../../../../dataAccess/access/to/SequenceTO";
 import { EditActions } from "../../../../slices/EditSlice";
 import { SequenceModelActions } from "../../../../slices/SequenceModelSlice";
 import { DavitTableAction, DavitTableRowData } from "../../../common/fragments/DavitTable";
+import { DavitIcons } from '../../../common/IconSet';
 
 export const useGetSequenceModelsTableBody = (sequences: SequenceTO[]) => {
     const dispatch = useDispatch();
@@ -34,8 +35,8 @@ const createSequenceModelColumn = (
 ): DavitTableRowData => {
     const name = sequence.name;
     const trClass = "carv2Tr";
-    const editAction: DavitTableAction = { icon: "wrench", callback: editCallback };
-    const selectAction: DavitTableAction = { icon: "hand pointer", callback: selectCallback };
+    const editAction: DavitTableAction = { icon: DavitIcons.wrench, callback: editCallback };
+    const selectAction: DavitTableAction = { icon: DavitIcons.handPointer, callback: selectCallback };
 
     return {
         data: [name],

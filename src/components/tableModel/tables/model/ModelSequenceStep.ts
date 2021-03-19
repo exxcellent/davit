@@ -5,6 +5,7 @@ import { DecisionTO } from "../../../../dataAccess/access/to/DecisionTO";
 import { GoTo, GoToTypes, Intermediate } from "../../../../dataAccess/access/types/GoToType";
 import { EditActions } from "../../../../slices/EditSlice";
 import { DavitTableRowData } from "../../../common/fragments/DavitTable";
+import { DavitIcons } from '../../../common/IconSet';
 
 export const useGetStepTableData = (
     selectedSequence: SequenceCTO | null,
@@ -43,7 +44,7 @@ const createModelStepColumn = (
     return {
         data: [name, gotoName, start],
         trClass,
-        actions: [{ icon: "wrench", callback: editCallback }],
+        actions: [{ icon: DavitIcons.wrench, callback: editCallback }],
     };
 };
 
