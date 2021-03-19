@@ -21,7 +21,6 @@ import { GlobalActions } from '../../../../../../slices/GlobalSlice';
 import { ControlPanel } from '../common/ControlPanel';
 
 export interface ControlPanelEditSequenceProps {
-    hidden: boolean;
 }
 
 export const ControlPanelEditSequence: FunctionComponent<ControlPanelEditSequenceProps> = () => {

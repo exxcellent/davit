@@ -6,7 +6,6 @@ import { ControlPanelEditChainCondition } from './fragments/ControlPanelEditChai
 import { ControlPanelEditChainDecision } from './fragments/ControlPanelEditChainDecision';
 import { ControlPanelEditChainLink } from './fragments/ControlPanelEditChainLink';
 import { ControlPanelEditGroup } from './fragments/ControlPanelEditGroup';
-import { ControlPanelEditInitData } from './fragments/ControlPanelEditInitData';
 import { ControlPanelEditMenu } from './fragments/ControlPanelEditMenu';
 import { ControlPanelEditSequence } from './fragments/ControlPanelEditSequence';
 import { EditActorModal } from './fragments/modals/EditActorModal';
@@ -29,13 +28,13 @@ export const ControlPanelEditController: FunctionComponent<ControlPanelEditContr
             case Mode.EDIT_ACTOR:
                 return <EditActorModal />;
             case Mode.EDIT_GROUP:
-                return <ControlPanelEditGroup hidden={mode !== Mode.EDIT_GROUP} />;
+                return <ControlPanelEditGroup />;
             case Mode.EDIT_DATA:
                 return <EditDataModal />;
             case Mode.EDIT_RELATION:
                 return <EditDataRelationModal />;
             case Mode.EDIT_SEQUENCE:
-                return <ControlPanelEditSequence hidden={mode !== Mode.EDIT_SEQUENCE} />;
+                return <ControlPanelEditSequence />;
             case Mode.EDIT_SEQUENCE_STEP:
                 return <EditStepModal />;
             case Mode.EDIT_SEQUENCE_DECISION:
@@ -44,12 +43,10 @@ export const ControlPanelEditController: FunctionComponent<ControlPanelEditContr
                 return <EditActionModal />;
             case Mode.EDIT_DATASETUP:
                 return <EditDataSetupModal />;
-            case Mode.EDIT_DATASETUP_INITDATA:
-                return <ControlPanelEditInitData hidden={mode !== Mode.EDIT_DATASETUP_INITDATA} />;
             case Mode.EDIT_CHAIN:
                 return <ControlPanelEditChain />;
             case Mode.EDIT_CHAIN_LINK:
-                return <ControlPanelEditChainLink hidden={mode !== Mode.EDIT_CHAIN_LINK} />;
+                return <ControlPanelEditChainLink />;
             case Mode.EDIT_CHAIN_DECISION:
                 return <ControlPanelEditChainDecision />;
             case Mode.EDIT_CHAIN_DECISION_CONDITION:

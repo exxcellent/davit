@@ -1,38 +1,35 @@
-import React, {FunctionComponent, useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {ChainDecisionTO} from "../../../../../../dataAccess/access/to/ChainDecisionTO";
-import {ChainlinkTO} from "../../../../../../dataAccess/access/to/ChainlinkTO";
-import {ChainTO} from "../../../../../../dataAccess/access/to/ChainTO";
-import {DataSetupTO} from "../../../../../../dataAccess/access/to/DataSetupTO";
-import {SequenceTO} from "../../../../../../dataAccess/access/to/SequenceTO";
-import {GoToChain, GoToTypesChain} from "../../../../../../dataAccess/access/types/GoToTypeChain";
-import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
-import {sequenceModelSelectors} from "../../../../../../slices/SequenceModelSlice";
-import {EditChainLink} from "../../../../../../slices/thunks/ChainLinkThunks";
-import {EditChain} from "../../../../../../slices/thunks/ChainThunks";
-import {DavitUtil} from "../../../../../../utils/DavitUtil";
-import {DavitAddButton} from "../../../../../common/fragments/buttons/DavitAddButton";
-import {DavitBackButton} from "../../../../../common/fragments/buttons/DavitBackButton";
-import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
-import {DavitRootButton} from "../../../../../common/fragments/buttons/DavitRootButton";
-import {DavitLabelTextfield} from "../../../../../common/fragments/DavitLabelTextfield";
-import {ChainDecisionDropDown} from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
-import {ChainLinkDropDown} from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
-import {DataSetupDropDown} from "../../../../../common/fragments/dropdowns/DataSetupDropDown";
-import {GoToChainOptionDropDown} from "../../../../../common/fragments/dropdowns/GoToChainOptionDropDown";
-import {SequenceDropDown} from "../../../../../common/fragments/dropdowns/SequenceDropDown";
-import {ControlPanelEditSub} from "../common/ControlPanelEditSub";
-import {OptionField} from "../common/OptionField";
-import {GlobalActions} from "../../../../../../slices/GlobalSlice";
+import React, { FunctionComponent, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { ChainDecisionTO } from '../../../../../../dataAccess/access/to/ChainDecisionTO';
+import { ChainlinkTO } from '../../../../../../dataAccess/access/to/ChainlinkTO';
+import { ChainTO } from '../../../../../../dataAccess/access/to/ChainTO';
+import { DataSetupTO } from '../../../../../../dataAccess/access/to/DataSetupTO';
+import { SequenceTO } from '../../../../../../dataAccess/access/to/SequenceTO';
+import { GoToChain, GoToTypesChain } from '../../../../../../dataAccess/access/types/GoToTypeChain';
+import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
+import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
+import { EditChainLink } from '../../../../../../slices/thunks/ChainLinkThunks';
+import { EditChain } from '../../../../../../slices/thunks/ChainThunks';
+import { DavitUtil } from '../../../../../../utils/DavitUtil';
+import { DavitAddButton } from '../../../../../common/fragments/buttons/DavitAddButton';
+import { DavitBackButton } from '../../../../../common/fragments/buttons/DavitBackButton';
+import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
+import { DavitRootButton } from '../../../../../common/fragments/buttons/DavitRootButton';
+import { DavitLabelTextfield } from '../../../../../common/fragments/DavitLabelTextfield';
+import { ChainDecisionDropDown } from '../../../../../common/fragments/dropdowns/ChainDecisionDropDown';
+import { ChainLinkDropDown } from '../../../../../common/fragments/dropdowns/ChainLinkDropDown';
+import { DataSetupDropDown } from '../../../../../common/fragments/dropdowns/DataSetupDropDown';
+import { GoToChainOptionDropDown } from '../../../../../common/fragments/dropdowns/GoToChainOptionDropDown';
+import { SequenceDropDown } from '../../../../../common/fragments/dropdowns/SequenceDropDown';
+import { OptionField } from '../common/OptionField';
+import { GlobalActions } from '../../../../../../slices/GlobalSlice';
+import { ControlPanel } from '../common/ControlPanel';
 
 export interface ControlPanelEditChainLinkProps {
-    hidden: boolean;
 }
 
-export const ControlPanelEditChainLink: FunctionComponent<ControlPanelEditChainLinkProps> = (props) => {
-    const {hidden} = props;
+export const ControlPanelEditChainLink: FunctionComponent<ControlPanelEditChainLinkProps> = () => {
     const {
-        label,
         name,
         changeName,
         goTo,
@@ -51,86 +48,63 @@ export const ControlPanelEditChainLink: FunctionComponent<ControlPanelEditChainL
         createNewChainLink,
         createGoToDecision,
         setRoot,
-        id,
     } = useControlPanelEditChainStepViewModel();
 
     return (
-        <ControlPanelEditSub key={id} label={label} hidden={hidden} onClickNavItem={saveChainLink}>
-            <div className="optionFieldSpacer">
-                <OptionField label="Chainlink - name">
-                    <DavitLabelTextfield
-                        label="Name:"
-                        placeholder="Chainlink Name ..."
-                        onChangeCallback={(name: string) => changeName(name)}
-                        value={name}
-                        focus={true}
+        <ControlPanel>
+            <OptionField label='Chainlink - name'>
+                <DavitLabelTextfield
+                    label='Name:'
+                    placeholder='Chainlink Name ...'
+                    onChangeCallback={(name: string) => changeName(name)}
+                    value={name}
+                    focus={true}
+                />
+            </OptionField>
+            <OptionField label='Select Data Setup' divider={true}>
+                <DataSetupDropDown
+                    onSelect={(dataSetup) => setDataSetup(dataSetup)}
+                    placeholder='Select Data Setup ...'
+                    value={currentDataSetup}
+                />
+            </OptionField>
+            <OptionField label='Select Sequence' divider={true}>
+                <SequenceDropDown onSelect={(seqModel) => setSequenceModel(seqModel)} value={currentSequence} />
+            </OptionField>
+            <OptionField label='Select type of the next' divider={true}>
+                <GoToChainOptionDropDown
+                    onSelect={handleType}
+                    value={goTo ? goTo.type : GoToTypesChain.ERROR}
+                />
+            </OptionField>
+            {goTo!.type === GoToTypesChain.LINK && (
+                <OptionField label='Create or Select next link'>
+                    <DavitAddButton onClick={createNewChainLink} />
+                    <ChainLinkDropDown
+                        onSelect={setNextLink}
+                        value={goTo?.type === GoToTypesChain.LINK ? goTo.id : 1}
+                        chainId={chainId}
+                        exclude={linkId}
                     />
                 </OptionField>
-            </div>
-            <div className="optionFieldSpacer columnDivider">
-                <OptionField>
-                    <OptionField label="Select Data Setup">
-                        <DataSetupDropDown
-                            onSelect={(dataSetup) => setDataSetup(dataSetup)}
-                            placeholder="Select Data Setup ..."
-                            value={currentDataSetup}
-                        />
-                    </OptionField>
-                    <OptionField label="Select Sequence">
-                        <SequenceDropDown onSelect={(seqModel) => setSequenceModel(seqModel)} value={currentSequence}/>
-                    </OptionField>
-                </OptionField>
-            </div>
-            <div className="optionFieldSpacer columnDivider">
-                <div style={{display: "flex", justifyContent: "space-between"}}>
-                    <OptionField label="Select type of the next">
-                        <GoToChainOptionDropDown
-                            onSelect={handleType}
-                            value={goTo ? goTo.type : GoToTypesChain.ERROR}
-                        />
-                    </OptionField>
-                    {goTo!.type === GoToTypesChain.LINK && (
-                        <OptionField label="Create or Select next link">
-                            <DavitAddButton onClick={createNewChainLink}/>
-                            <ChainLinkDropDown
-                                onSelect={setNextLink}
-                                value={goTo?.type === GoToTypesChain.LINK ? goTo.id : 1}
-                                chainId={chainId}
-                                exclude={linkId}
-                            />
-                        </OptionField>
-                    )}
+            )}
 
-                    {goTo!.type === GoToTypesChain.DEC && (
-                        <OptionField label="Create or Select next decision">
-                            <DavitAddButton onClick={createGoToDecision}/>
-                            <ChainDecisionDropDown
-                                onSelect={(cond) => setNextDecision(cond)}
-                                value={goTo?.type === GoToTypesChain.DEC ? goTo.id : 1}
-                                chainId={chainId}
-                            />
-                        </OptionField>
-                    )}
-                </div>
-            </div>
-            <div className="columnDivider controllPanelEditChild">
-                <div>
-                    <OptionField label="Navigation">
-                        <DavitBackButton onClick={saveChainLink}/>
-                    </OptionField>
-                </div>
-                <div className="controllPanelEditChild">
-                    <div>
-                        <OptionField label="Sequence - Options">
-                            <DavitRootButton onClick={setRoot} isRoot={isRoot}/>
-                            <div>
-                                <DavitDeleteButton onClick={deleteChainLink} disable={isRoot}/>
-                            </div>
-                        </OptionField>
-                    </div>
-                </div>
-            </div>
-        </ControlPanelEditSub>
+            {goTo!.type === GoToTypesChain.DEC && (
+                <OptionField label='Create or Select next decision'>
+                    <DavitAddButton onClick={createGoToDecision} />
+                    <ChainDecisionDropDown
+                        onSelect={(cond) => setNextDecision(cond)}
+                        value={goTo?.type === GoToTypesChain.DEC ? goTo.id : 1}
+                        chainId={chainId}
+                    />
+                </OptionField>
+            )}
+            <OptionField label='Options' divider={true}>
+                <DavitBackButton onClick={saveChainLink} />
+                <DavitRootButton onClick={setRoot} isRoot={isRoot} />
+                <DavitDeleteButton onClick={deleteChainLink} disable={isRoot} />
+            </OptionField>;
+        </ControlPanel>
     );
 };
 
@@ -138,11 +112,11 @@ const useControlPanelEditChainStepViewModel = () => {
     const chainLinkToEdit: ChainlinkTO | null = useSelector(editSelectors.selectChainLinkToEdit);
     const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
     const dispatch = useDispatch();
-    const [currentGoTo, setCurrentGoTo] = useState<GoToChain>({type: GoToTypesChain.LINK, id: -1});
+    const [currentGoTo, setCurrentGoTo] = useState<GoToChain>({ type: GoToTypesChain.LINK, id: -1 });
 
     useEffect(() => {
         if (DavitUtil.isNullOrUndefined(chainLinkToEdit)) {
-            dispatch(GlobalActions.handleError("Tried to go to edit sequence step without sequenceStepToEdit specified"));
+            dispatch(GlobalActions.handleError('Tried to go to edit sequence step without sequenceStepToEdit specified'));
             dispatch(EditActions.setMode.edit());
         }
         if (chainLinkToEdit) {
@@ -161,12 +135,12 @@ const useControlPanelEditChainStepViewModel = () => {
 
     const saveChainLink = (newMode?: string) => {
         if (!DavitUtil.isNullOrUndefined(chainLinkToEdit) && !DavitUtil.isNullOrUndefined(selectedChain)) {
-            if (chainLinkToEdit!.name !== "") {
+            if (chainLinkToEdit!.name !== '') {
                 dispatch(EditChainLink.save(chainLinkToEdit!));
             } else {
                 dispatch(EditChainLink.delete(chainLinkToEdit!));
             }
-            if (newMode && newMode === "EDIT") {
+            if (newMode && newMode === 'EDIT') {
                 dispatch(EditActions.setMode.edit());
             } else {
                 dispatch(EditActions.setMode.editChain(selectedChain!));
@@ -192,7 +166,7 @@ const useControlPanelEditChainStepViewModel = () => {
 
     const handleType = (newGoToType?: string) => {
         if (newGoToType !== undefined) {
-            const gType = {type: (GoToTypesChain as any)[newGoToType]};
+            const gType = { type: (GoToTypesChain as any)[newGoToType] };
             setCurrentGoTo(gType);
             switch (newGoToType) {
                 case GoToTypesChain.ERROR:
@@ -207,14 +181,14 @@ const useControlPanelEditChainStepViewModel = () => {
 
     const setNextLink = (link?: ChainlinkTO) => {
         if (link) {
-            const newGoTo: GoToChain = {type: GoToTypesChain.LINK, id: link.id};
+            const newGoTo: GoToChain = { type: GoToTypesChain.LINK, id: link.id };
             saveGoToType(newGoTo);
         }
     };
 
     const setNextDecision = (decision?: ChainDecisionTO) => {
         if (decision) {
-            const newGoTo: GoToChain = {type: GoToTypesChain.DEC, id: decision.id};
+            const newGoTo: GoToChain = { type: GoToTypesChain.DEC, id: decision.id };
             saveGoToType(newGoTo);
         }
     };
@@ -271,8 +245,8 @@ const useControlPanelEditChainStepViewModel = () => {
     };
 
     return {
-        label: "EDIT * " + (selectedChain?.name || "") + " * " + (chainLinkToEdit?.name || ""),
-        name: chainLinkToEdit ? chainLinkToEdit.name : "",
+        label: 'EDIT * ' + (selectedChain?.name || '') + ' * ' + (chainLinkToEdit?.name || ''),
+        name: chainLinkToEdit ? chainLinkToEdit.name : '',
         changeName,
         saveChainLink,
         deleteChainLink,

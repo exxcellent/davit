@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
-import { DavitModal } from '../../../../../../common/fragments/modals/DavitModal';
 import { DataSetupForm } from '../forms/DataSetupForm';
+import { DavitDraggableModal } from '../../../../../../common/fragments/modals/DavitDraggableModal';
 
 interface EditDataSetupModalProps {
 
@@ -9,8 +9,6 @@ interface EditDataSetupModalProps {
 export const EditDataSetupModal: FunctionComponent<EditDataSetupModalProps> = () => {
 
     return (
-        <DavitModal>
-            <DataSetupForm />
-        </DavitModal>
+        <DavitDraggableModal form={<DataSetupForm />}/>
     );
 };
