@@ -18,7 +18,6 @@ export const ChainDecisionRepository = {
     },
 
     delete(decision: ChainDecisionTO) {
-        // ConstraintsHelper.deleteStepConstraintCheck(step.id, dataStore.getDataStore());
         const success = dataStore.getDataStore().chaindecisions.delete(decision.id);
         if (!success) {
             throw new Error("dataAccess.repository.error.notExists");
