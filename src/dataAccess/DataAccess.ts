@@ -279,7 +279,7 @@ export const DataAccess = {
         return makeTransactional(() => SequenceDataAccessService.deleteChainTO(step));
     },
 
-    saveChaindecision(decision: ChainDecisionTO): DataAccessResponse<ChainDecisionTO> {
+    saveChainDecision(decision: ChainDecisionTO): DataAccessResponse<ChainDecisionTO> {
         return makeTransactional(() => SequenceDataAccessService.saveChainDecision(decision));
     },
 

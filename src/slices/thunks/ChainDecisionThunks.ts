@@ -14,7 +14,7 @@ const createChainDecisionThunk = (
     from?: ChainDecisionTO | ChainlinkTO,
     ifGoTO?: boolean,
 ): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<ChainDecisionTO> = DataAccess.saveChaindecision(decision);
+    const response: DataAccessResponse<ChainDecisionTO> = DataAccess.saveChainDecision(decision);
     if (response.code !== 200) {
         dispatch(GlobalActions.handleError(response.message));
     } else {
@@ -37,7 +37,7 @@ const createChainDecisionThunk = (
 };
 
 const saveChainDecisionThunk = (decision: ChainDecisionTO): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<ChainDecisionTO> = DataAccess.saveChaindecision(decision);
+    const response: DataAccessResponse<ChainDecisionTO> = DataAccess.saveChainDecision(decision);
     if (response.code !== 200) {
         dispatch(GlobalActions.handleError(response.message));
     }
@@ -76,4 +76,5 @@ export const EditChainDecision = {
     save: saveChainDecisionThunk,
     delete: deleteChainDecisionThunk,
     find: findChainDecisionThunk,
+    update: setChainDecisionToEditThunk,
 };

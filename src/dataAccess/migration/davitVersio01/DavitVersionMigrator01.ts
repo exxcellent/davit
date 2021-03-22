@@ -22,6 +22,7 @@ import { ChainDecisionTO01 } from "./to/ChainDecisionTO01";
 import { DataTO01 } from "./to/DataTO01";
 import { DecisionTO01 } from "./to/DecisionTO01";
 import { StoreTO01 } from "./to/StoreTO01";
+import { ConditionTO } from '../../access/to/ConditionTO';
 
 export const DavitVersionMigrator01 = {
     migrate(dataStoreObject: StoreTO): StoreTO01 {
@@ -72,14 +73,17 @@ export const DavitVersionMigrator01 = {
             };
         });
 
+        const buildConditionFromDataAndInstance = (dataInstanceId: DataAndInstanceId, actorFk: number, decisionFk: number): ConditionTO => {
+            return {id: -1, actorFk: actorFk, decisionFk: decisionFk, dataFk: dataInstanceId.dataFk, instanceFk: dataInstanceId.instanceId};
+        };
+
         const chaindecisions: ChainDecisionTO[] = (dataStoreObject.chaindecisions as ChainDecisionTO01[]).map(
             (chainDecision) => {
                 return {
                     id: chainDecision.id,
                     name: chainDecision.name,
                     chainFk: chainDecision.chainFk,
-                    actorFk: chainDecision.actorFk,
-                    dataAndInstanceIds: chainDecision.dataAndInstaceIds,
+                    conditions: chainDecision.dataAndInstaceIds.map(dataInstanceId => buildConditionFromDataAndInstance(dataInstanceId, chainDecision.actorFk, chainDecision.id)),
                     ifGoTo: chainDecision.ifGoTo,
                     elseGoTo: chainDecision.elseGoTo,
                 };
