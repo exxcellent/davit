@@ -7,6 +7,7 @@
   "build": {
     "appId": "carv_2"
   },
+  "license": "EPL-2.0",
   "homepage": "./",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
@@ -32,6 +33,7 @@
     "framer-motion": "^1.10.3",
     "fs.extra": "^1.3.2",
     "immutable": "^4.0.0-rc.12",
+    "intl-messageformat-parser": "6.0",
     "react": "^16.13.1",
     "react-archer": "^2.0.2",
     "react-dom": "^16.13.1",
