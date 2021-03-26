@@ -24,3 +24,4 @@ yarn-error.log*
 .vscode/launch.json
 dist
 /.idea/
+/yarn.lock
