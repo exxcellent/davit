@@ -6,6 +6,7 @@ export class ActorTO extends AbstractTO {
         public geometricalDataFk: number = -1,
         public designFk: number = -1,
         public groupFks: number = -1,
+        public note: string = "",
     ) {
         super();
     }

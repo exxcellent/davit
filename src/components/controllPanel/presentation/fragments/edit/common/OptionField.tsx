@@ -1,16 +1,17 @@
-import React, { FunctionComponent } from "react";
+import React, {FunctionComponent} from "react";
 
 export interface OptionFieldProps {
     label?: string;
+    divider?: boolean;
 }
 
 export const OptionField: FunctionComponent<OptionFieldProps> = (props) => {
-    const { label, children } = props;
+    const {label, children, divider} = props;
 
     return (
-        <div className="optionFieldAround">
-            <div className="optionField">{children}</div>
-            {label && <div className="optionFieldLabel">{label.toUpperCase()}</div>}
+        <div className={"optionField" + (divider ? " columnDivider" : "")}>
+            <div className={"optionFieldChildArea"}>{children}</div>
+            {label?.toUpperCase()}
         </div>
     );
 };

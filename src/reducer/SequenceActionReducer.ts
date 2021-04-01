@@ -123,7 +123,7 @@ export const SequenceActionReducer = {
          * Remove with status "deleted" and "check failed"
          * Change rest to status "persistent".
          * */
-        const updatedActorDatas: ActorData[] = actorDatas
+        let updatedActorDatas: ActorData[] = actorDatas
             .filter((actorData) => !isTransiantState(actorData.state))
             .map((actorData) => {
                 return { ...actorData, state: ActorDataState.PERSISTENT };
@@ -133,7 +133,7 @@ export const SequenceActionReducer = {
 
         decision.conditions.forEach((condition) => {
             const actorDataToCheck: ActorData | undefined = updatedActorDatas.find(
-                (actorData) => actorData.actorFk === condition.actorFk && actorData.instanceFk === condition.instanceFk,
+                (actorData) => actorData.actorFk === condition.actorFk && actorData.dataFk === condition.dataFk && actorData.instanceFk === condition.instanceFk,
             );
 
             if (actorDataToCheck) {

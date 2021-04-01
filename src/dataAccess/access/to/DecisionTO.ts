@@ -10,6 +10,7 @@ export class DecisionTO extends AbstractTO {
         public ifGoTo: GoTo = { type: GoToTypes.FIN },
         public elseGoTo: GoTo = { type: GoToTypes.ERROR },
         public root: boolean = false,
+        public note: string = "",
     ) {
         super();
     }

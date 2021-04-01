@@ -1,16 +1,16 @@
-import { AppThunk } from "../../app/store";
-import { DataSetupCTO } from "../../dataAccess/access/cto/DataSetupCTO";
-import { DataAccess } from "../../dataAccess/DataAccess";
-import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
-import { editActions, Mode } from "../EditSlice";
-import { handleError } from "../GlobalSlice";
-import { MasterDataActions } from "../MasterDataSlice";
+import {AppThunk} from "../../app/store";
+import {DataSetupCTO} from "../../dataAccess/access/cto/DataSetupCTO";
+import {DataAccess} from "../../dataAccess/DataAccess";
+import {DataAccessResponse} from "../../dataAccess/DataAccessResponse";
+import {editActions, Mode} from "../EditSlice";
+import {MasterDataActions} from "../MasterDataSlice";
+import {GlobalActions} from "../GlobalSlice";
 
 const createDataSetupThunk = (): AppThunk => (dispatch) => {
     const dataSetup: DataSetupCTO = new DataSetupCTO();
     const response: DataAccessResponse<DataSetupCTO> = DataAccess.saveDataSetupCTO(dataSetup);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadDataSetupsFromBackend());
     dispatch(setDataSetupThunk(response.object));
@@ -19,7 +19,7 @@ const createDataSetupThunk = (): AppThunk => (dispatch) => {
 const saveDataSetupThunk = (dataSetup: DataSetupCTO): AppThunk => (dispatch) => {
     const response: DataAccessResponse<DataSetupCTO> = DataAccess.saveDataSetupCTO(dataSetup);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadDataSetupsFromBackend());
 };
@@ -27,7 +27,7 @@ const saveDataSetupThunk = (dataSetup: DataSetupCTO): AppThunk => (dispatch) => 
 const deleteDataSetupThunk = (dataSetup: DataSetupCTO): AppThunk => (dispatch) => {
     const response: DataAccessResponse<DataSetupCTO> = DataAccess.deleteDataSetup(dataSetup);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadDataSetupsFromBackend());
 };
@@ -38,7 +38,7 @@ const setDataSetupThunk = (dataSetup: DataSetupCTO): AppThunk => (dispatch, getS
     if (mode === Mode.EDIT_DATASETUP) {
         dispatch(editActions.setDataSetupToEdit(dataSetup));
     } else {
-        handleError("Try to set dataSetup to edit in mode: " + mode);
+        dispatch(GlobalActions.handleError("Try to set dataSetup to edit in mode: " + mode));
     }
 };
 

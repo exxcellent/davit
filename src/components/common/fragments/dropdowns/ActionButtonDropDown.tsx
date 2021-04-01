@@ -1,14 +1,14 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { DropdownProps } from "semantic-ui-react";
-import { ActorCTO } from "../../../../dataAccess/access/cto/ActorCTO";
-import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
-import { ActionTO } from "../../../../dataAccess/access/to/ActionTO";
-import { ActionType } from "../../../../dataAccess/access/types/ActionType";
-import { editSelectors } from "../../../../slices/EditSlice";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
-import { DavitUtil } from "../../../../utils/DavitUtil";
-import { DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
+import React, { FunctionComponent } from 'react';
+import { useSelector } from 'react-redux';
+import { DropdownProps } from 'semantic-ui-react';
+import { ActorCTO } from '../../../../dataAccess/access/cto/ActorCTO';
+import { DataCTO } from '../../../../dataAccess/access/cto/DataCTO';
+import { ActionTO } from '../../../../dataAccess/access/to/ActionTO';
+import { ActionType } from '../../../../dataAccess/access/types/ActionType';
+import { editSelectors } from '../../../../slices/EditSlice';
+import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
+import { DavitUtil } from '../../../../utils/DavitUtil';
+import { DavitDropDownItemProps, DavitIconDropDown } from './DavitDropDown';
 
 interface ActionDropDownProps extends DropdownProps {
     onSelect: (action: ActionTO | undefined) => void;
@@ -35,8 +35,7 @@ const getActorName = (actorId: number, actors: ActorCTO[]): string => {
 
 const getDataName = (dataId: number, datas: DataCTO[]): string => {
     const data: DataCTO | undefined = datas.find((data) => data.data.id === dataId);
-    const name: string = data ? data?.data.name : "data is null";
-    return name;
+    return data ? data?.data.name : "data is null";
 };
 
 const getActionTypeLabel = (type: ActionType): string => {
@@ -61,7 +60,7 @@ const getActionTypeLabel = (type: ActionType): string => {
     return label;
 };
 
-const useActionDropDownViewModel = () => {
+export const useActionDropDownViewModel = () => {
     const actions: ActionTO[] = useSelector(editSelectors.selectStepToEdit)?.actions || [];
     const actors: ActorCTO[] = useSelector(masterDataSelectors.selectActors);
     const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
@@ -75,7 +74,7 @@ const useActionDropDownViewModel = () => {
     };
 
     const getOptionText = (action: ActionTO): string => {
-        let text: string = "";
+        let text: string;
         if (action.actionType !== ActionType.TRIGGER) {
             text = `${getActorName(action.receivingActorFk, actors)} - ${getActionTypeLabel(
                 action.actionType,
@@ -95,5 +94,5 @@ const useActionDropDownViewModel = () => {
         return undefined;
     };
 
-    return { actions, actionToOption, selectAction };
+    return { actions, actionToOption, selectAction, getOptionText };
 };

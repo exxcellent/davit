@@ -1,7 +1,7 @@
-import { ChainDecisionTO } from "../access/to/ChainDecisionTO";
-import dataStore from "../DataStore";
-import { CheckHelper } from "../util/CheckHelper";
-import { DataAccessUtil } from "../util/DataAccessUtil";
+import { ChainDecisionTO } from '../access/to/ChainDecisionTO';
+import dataStore from '../DataStore';
+import { CheckHelper } from '../util/CheckHelper';
+import { DataAccessUtil } from '../util/DataAccessUtil';
 
 export const ChainDecisionRepository = {
     find(id: number): ChainDecisionTO | undefined {
@@ -14,12 +14,10 @@ export const ChainDecisionRepository = {
 
     findAllForChain(id: number): ChainDecisionTO[] {
         const all: ChainDecisionTO[] = this.findAll();
-        const filtered: ChainDecisionTO[] = all.filter((dec) => dec.chainFk === id);
-        return filtered;
+        return all.filter((dec) => dec.chainFk === id);
     },
 
     delete(decision: ChainDecisionTO) {
-        // ConstraintsHelper.deleteStepConstraintCheck(step.id, dataStore.getDataStore());
         const success = dataStore.getDataStore().chaindecisions.delete(decision.id);
         if (!success) {
             throw new Error("dataAccess.repository.error.notExists");
@@ -29,16 +27,16 @@ export const ChainDecisionRepository = {
 
     save(decision: ChainDecisionTO): ChainDecisionTO {
         CheckHelper.nullCheck(decision, "decision");
-        let chaindecisionTO: ChainDecisionTO;
+        let chainDecisionTO: ChainDecisionTO;
         if (decision.id === -1) {
-            chaindecisionTO = {
+            chainDecisionTO = {
                 ...decision,
                 id: DataAccessUtil.determineNewId(this.findAll()),
             };
         } else {
-            chaindecisionTO = { ...decision };
+            chainDecisionTO = { ...decision };
         }
-        dataStore.getDataStore().chaindecisions.set(chaindecisionTO.id!, chaindecisionTO);
-        return chaindecisionTO;
+        dataStore.getDataStore().chaindecisions.set(chainDecisionTO.id!, chainDecisionTO);
+        return chainDecisionTO;
     },
 };

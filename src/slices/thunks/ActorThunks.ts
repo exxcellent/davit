@@ -1,17 +1,17 @@
-import { AppThunk } from "../../app/store";
-import { ActorCTO } from "../../dataAccess/access/cto/ActorCTO";
-import { DataAccess } from "../../dataAccess/DataAccess";
-import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
-import { editActions, Mode } from "../EditSlice";
-import { handleError } from "../GlobalSlice";
-import { MasterDataActions } from "../MasterDataSlice";
+import {AppThunk} from "../../app/store";
+import {ActorCTO} from "../../dataAccess/access/cto/ActorCTO";
+import {DataAccess} from "../../dataAccess/DataAccess";
+import {DataAccessResponse} from "../../dataAccess/DataAccessResponse";
+import {editActions, Mode} from "../EditSlice";
+import {MasterDataActions} from "../MasterDataSlice";
+import {GlobalActions} from "../GlobalSlice";
 
 const createActorThunk = (): AppThunk => (dispatch) => {
     const actor: ActorCTO = new ActorCTO();
     const response: DataAccessResponse<ActorCTO> = DataAccess.saveActorCTO(actor);
     if (response.code !== 200) {
         console.log(response);
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadActorsFromBackend());
     dispatch(setActorToEditThunk(response.object));
@@ -21,7 +21,7 @@ const saveActorThunk = (actor: ActorCTO): AppThunk => (dispatch) => {
     const response: DataAccessResponse<ActorCTO> = DataAccess.saveActorCTO(actor);
     if (response.code !== 200) {
         console.log(response);
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadActorsFromBackend());
 };
@@ -30,7 +30,7 @@ const deleteActorThunk = (actor: ActorCTO): AppThunk => async (dispatch) => {
     const response: DataAccessResponse<ActorCTO> = await DataAccess.deleteActorCTO(actor);
     if (response.code !== 200) {
         console.log(response);
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadActorsFromBackend());
 };
@@ -40,7 +40,7 @@ const setActorToEditThunk = (actor: ActorCTO): AppThunk => (dispatch, getState) 
     if (mode === Mode.EDIT_ACTOR) {
         dispatch(editActions.setActorToEdit(actor));
     } else {
-        handleError("Try to set actor to edit in mode: " + mode);
+        dispatch(GlobalActions.handleError("Try to set actor to edit in mode: " + mode));
     }
 };
 

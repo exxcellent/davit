@@ -1,15 +1,15 @@
-import { AppThunk } from "../../app/store";
-import { SequenceCTO } from "../../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
-import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
-import { GoToTypes } from "../../dataAccess/access/types/GoToType";
-import { DataAccess } from "../../dataAccess/DataAccess";
-import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
-import { DavitUtil } from "../../utils/DavitUtil";
-import { editActions, Mode } from "../EditSlice";
-import { handleError } from "../GlobalSlice";
-import { MasterDataActions } from "../MasterDataSlice";
-import { EditDecision } from "./DecisionThunks";
+import {AppThunk} from "../../app/store";
+import {SequenceCTO} from "../../dataAccess/access/cto/SequenceCTO";
+import {SequenceStepCTO} from "../../dataAccess/access/cto/SequenceStepCTO";
+import {DecisionTO} from "../../dataAccess/access/to/DecisionTO";
+import {GoToTypes} from "../../dataAccess/access/types/GoToType";
+import {DataAccess} from "../../dataAccess/DataAccess";
+import {DataAccessResponse} from "../../dataAccess/DataAccessResponse";
+import {DavitUtil} from "../../utils/DavitUtil";
+import {editActions, Mode} from "../EditSlice";
+import {MasterDataActions} from "../MasterDataSlice";
+import {EditDecision} from "./DecisionThunks";
+import {GlobalActions} from "../GlobalSlice";
 
 const createSequenceStepThunk = (
     step: SequenceStepCTO,
@@ -18,7 +18,7 @@ const createSequenceStepThunk = (
 ): AppThunk => (dispatch) => {
     const response: DataAccessResponse<SequenceStepCTO> = DataAccess.saveSequenceStepCTO(step);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     } else {
         if (from !== undefined) {
             if ((from as SequenceStepCTO).squenceStepTO !== undefined) {
@@ -30,9 +30,9 @@ const createSequenceStepThunk = (
             }
             if ((from as DecisionTO).elseGoTo !== undefined) {
                 if (ifGoTO) {
-                    (from as DecisionTO).ifGoTo = { type: GoToTypes.STEP, id: response.object.squenceStepTO.id };
+                    (from as DecisionTO).ifGoTo = {type: GoToTypes.STEP, id: response.object.squenceStepTO.id};
                 } else {
-                    (from as DecisionTO).elseGoTo = { type: GoToTypes.STEP, id: response.object.squenceStepTO.id };
+                    (from as DecisionTO).elseGoTo = {type: GoToTypes.STEP, id: response.object.squenceStepTO.id};
                 }
                 dispatch(EditDecision.save(from as DecisionTO));
             }
@@ -51,18 +51,18 @@ const deleteSequenceStepThunk = (step: SequenceStepCTO, sequenceCTO?: SequenceCT
                 item.squenceStepTO.goto.type === GoToTypes.STEP &&
                 item.squenceStepTO.goto.id === step.squenceStepTO.id
             ) {
-                item.squenceStepTO.goto = { type: GoToTypes.ERROR };
+                item.squenceStepTO.goto = {type: GoToTypes.ERROR};
                 dispatch(saveSequenceStepThunk(item));
             }
         });
         // update decision
         copySequence.decisions.forEach((cond) => {
             if (cond.ifGoTo.type === GoToTypes.STEP && cond.ifGoTo.id === step.squenceStepTO.id) {
-                cond.ifGoTo = { type: GoToTypes.ERROR };
+                cond.ifGoTo = {type: GoToTypes.ERROR};
                 dispatch(EditDecision.save(cond));
             }
             if (cond.elseGoTo.type === GoToTypes.STEP && cond.elseGoTo.id === step.squenceStepTO.id) {
-                cond.elseGoTo = { type: GoToTypes.ERROR };
+                cond.elseGoTo = {type: GoToTypes.ERROR};
                 dispatch(EditDecision.save(cond));
             }
         });
@@ -70,7 +70,7 @@ const deleteSequenceStepThunk = (step: SequenceStepCTO, sequenceCTO?: SequenceCT
     // delete step.
     const response: DataAccessResponse<SequenceStepCTO> = DataAccess.deleteSequenceStepCTO(step);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadSequencesFromBackend());
 };
@@ -78,7 +78,7 @@ const deleteSequenceStepThunk = (step: SequenceStepCTO, sequenceCTO?: SequenceCT
 const saveSequenceStepThunk = (step: SequenceStepCTO): AppThunk => (dispatch) => {
     const response: DataAccessResponse<SequenceStepCTO> = DataAccess.saveSequenceStepCTO(step);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadSequencesFromBackend());
 };
@@ -89,7 +89,7 @@ const setStepToEditThunk = (step: SequenceStepCTO): AppThunk => (dispatch, getSt
     if (mode.startsWith(Mode.EDIT_SEQUENCE_STEP)) {
         dispatch(editActions.setStepToEdit(step));
     } else {
-        handleError("Try to set step to edit in mode: " + mode);
+        dispatch(GlobalActions.handleError("Try to set step to edit in mode: " + mode));
     }
 };
 

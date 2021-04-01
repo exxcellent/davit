@@ -79,7 +79,7 @@ export const SequenceChainService = {
                     if (type === GoToTypesChain.DEC) {
                         const decision: ChainDecisionTO = step as ChainDecisionTO;
 
-                        const goTo: GoToChain = executeDecisionCheck(decision, actorDatas);
+                        const goTo: GoToChain = executeChainDecisionCheck(decision, actorDatas);
                         step = getNext(goTo, sequenceChain);
                         type = getType(step);
 
@@ -98,20 +98,20 @@ export const SequenceChainService = {
     },
 };
 
-const executeDecisionCheck = (decision: ChainDecisionTO, actorDatas: ActorData[]): GoToChain => {
-    const filteredCompData: ActorData[] = actorDatas.filter((actorData) => actorData.actorFk === decision.actorFk);
+const executeChainDecisionCheck = (chainDecision: ChainDecisionTO, actorDatas: ActorData[]): GoToChain => {
+    // const filteredCompData: ActorData[] = actorDatas.filter((actorData) => actorData.actorFk === chainDecision.actorFk);
     let goTo: GoToChain | undefined;
-    if (decision.dataAndInstanceIds !== undefined) {
-        decision.dataAndInstanceIds.forEach((dataAndInstaceId) => {
-            const isIncluded: boolean = filteredCompData.some(
-                (cd) => cd.dataFk === dataAndInstaceId.dataFk && cd.instanceFk === dataAndInstaceId.instanceId,
+    if (chainDecision.conditions !== []) {
+        chainDecision.conditions.forEach((condition) => {
+            const isIncluded: boolean = actorDatas.some(
+                (cd) => cd.dataFk === condition.dataFk && cd.instanceFk === condition.instanceFk && cd.actorFk === condition.actorFk,
             );
             if (!isIncluded) {
-                goTo = decision.elseGoTo;
+                goTo = chainDecision.elseGoTo;
             }
         });
     }
-    return goTo || decision.ifGoTo;
+    return goTo || chainDecision.ifGoTo;
 };
 
 const getLinkFromChain = (linkId: number, chain: ChainCTO): ChainlinkCTO | undefined => {
@@ -125,7 +125,7 @@ const getDecisionFromChain = (id: number, chain: ChainCTO): ChainDecisionTO | un
 export const getRoot = (chain: ChainCTO | null): ChainlinkCTO | null => {
     let rootLink: ChainlinkCTO | null = null;
     if (!DavitUtil.isNullOrUndefined(chain)) {
-        rootLink = chain!.links.find((link) => link.chainLink.root === true) || null;
+        rootLink = chain!.links.find((link) => link.chainLink.root) || null;
     }
     return rootLink;
 };

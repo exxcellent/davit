@@ -1,14 +1,14 @@
-import { AppThunk } from "../../app/store";
-import { SequenceCTO } from "../../dataAccess/access/cto/SequenceCTO";
-import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
-import { SequenceStepTO } from "../../dataAccess/access/to/SequenceStepTO";
-import { SequenceTO } from "../../dataAccess/access/to/SequenceTO";
-import { DataAccess } from "../../dataAccess/DataAccess";
-import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
-import { editActions, Mode } from "../EditSlice";
-import { handleError } from "../GlobalSlice";
-import { MasterDataActions } from "../MasterDataSlice";
-import { SequenceModelActions } from "../SequenceModelSlice";
+import {AppThunk} from "../../app/store";
+import {SequenceCTO} from "../../dataAccess/access/cto/SequenceCTO";
+import {DecisionTO} from "../../dataAccess/access/to/DecisionTO";
+import {SequenceStepTO} from "../../dataAccess/access/to/SequenceStepTO";
+import {SequenceTO} from "../../dataAccess/access/to/SequenceTO";
+import {DataAccess} from "../../dataAccess/DataAccess";
+import {DataAccessResponse} from "../../dataAccess/DataAccessResponse";
+import {editActions, Mode} from "../EditSlice";
+import {MasterDataActions} from "../MasterDataSlice";
+import {SequenceModelActions} from "../SequenceModelSlice";
+import {GlobalActions} from "../GlobalSlice";
 
 const createSequenceThunk = (): AppThunk => (dispatch) => {
     const sequence: SequenceTO = new SequenceTO();
@@ -18,7 +18,7 @@ const createSequenceThunk = (): AppThunk => (dispatch) => {
 const saveSequenceThunk = (sequence: SequenceTO): AppThunk => (dispatch) => {
     const response: DataAccessResponse<SequenceTO> = DataAccess.saveSequenceTO(sequence);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadSequencesFromBackend());
     dispatch(setSequenceToEditThunk(response.object));
@@ -32,7 +32,7 @@ const deleteSequenceThunk = (sequence: SequenceTO): AppThunk => (dispatch, getSt
         const response: DataAccessResponse<SequenceCTO> = DataAccess.deleteSequenceCTO(sequenceCTOToDelete);
 
         if (response.code !== 200) {
-            dispatch(handleError(response.message));
+            dispatch(GlobalActions.handleError(response.message));
         }
 
         if (getState().sequenceModel.selectedSequenceModel?.sequenceTO?.id === sequence.id) {
@@ -58,7 +58,7 @@ const setRootThunk = (sequenceId: number, rootId: number, isDecision: boolean): 
         isDecision,
     );
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadSequencesFromBackend());
 };
@@ -69,7 +69,7 @@ const setSequenceToEditThunk = (sequence: SequenceTO): AppThunk => (dispatch, ge
     if (mode === Mode.EDIT_SEQUENCE) {
         dispatch(editActions.setSequenceToEdit(sequence));
     } else {
-        handleError("Try to set sequence to edit in mode: " + mode);
+        dispatch(GlobalActions.handleError("Try to set sequence to edit in mode: " + mode));
     }
 };
 

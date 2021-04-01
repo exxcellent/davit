@@ -1,7 +1,7 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk, RootState } from "../app/store";
-import { DataAccess } from "../dataAccess/DataAccess";
-import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {AppThunk, RootState} from "../app/store";
+import {DataAccess} from "../dataAccess/DataAccess";
+import {DataAccessResponse} from "../dataAccess/DataAccessResponse";
 
 interface GlobalState {
     errors: string[];
@@ -29,6 +29,11 @@ export const globalSlice = createSlice({
         clearErrors: (state) => {
             state.errors = [];
         },
+        removeErrorAtIndex: (state, action: PayloadAction<number>) => {
+            if (action.payload > -1 && action.payload < state.errors.length) {
+                state.errors = state.errors.filter((error, index) => index !== action.payload);
+            }
+        },
         setActorZoom: (state, action: PayloadAction<number>) => {
             state.actorZoom = action.payload;
         },
@@ -45,7 +50,7 @@ const storefileData = (fileData: string): AppThunk => async (dispatch) => {
     if (response.code === 200) {
         window.location.reload();
     } else {
-        dispatch(handleError(response.message));
+        dispatch(globalSlice.actions.handleError(response.message));
     }
 };
 
@@ -54,26 +59,24 @@ const createNewProject = (): AppThunk => (dispatch) => {
     if (response.code === 200) {
         window.location.reload();
     } else {
-        dispatch(handleError(response.message));
+        dispatch(globalSlice.actions.handleError(response.message));
     }
 };
 
 const downloadData = (projectName: string): AppThunk => (dispatch) => {
     const response: DataAccessResponse<void> = DataAccess.downloadData(projectName);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(globalSlice.actions.handleError(response.message));
     }
 };
 
 const zoomInAndSaveActorZoom = (): AppThunk => (dispatch, getState) => {
-    console.info("call zoom in thunk");
     const newZoom: number = getState().global.actorZoom + ZOOM_FACTOR;
     const response: DataAccessResponse<number> = DataAccess.setActorZoom(newZoom);
-    console.info("response: ", response);
     if (response.code === 200) {
         dispatch(globalSlice.actions.setActorZoom(newZoom));
     } else {
-        dispatch(handleError("Could not save zoom!"));
+        dispatch(globalSlice.actions.handleError("Could not save zoom!"));
     }
 };
 
@@ -83,7 +86,7 @@ const zoomOutAndSaveActorZoom = (): AppThunk => (dispatch, getState) => {
     if (response.code === 200) {
         dispatch(globalSlice.actions.setActorZoom(newZoom));
     } else {
-        dispatch(handleError("Could not save zoom!"));
+        dispatch(globalSlice.actions.handleError("Could not save zoom!"));
     }
 };
 
@@ -93,7 +96,7 @@ const zoomInAndSaveDataZoom = (): AppThunk => (dispatch, getState) => {
     if (response.code === 200) {
         dispatch(globalSlice.actions.setDataZoom(newZoom));
     } else {
-        dispatch(handleError("Could not save zoom!"));
+        dispatch(globalSlice.actions.handleError("Could not save zoom!"));
     }
 };
 
@@ -103,7 +106,7 @@ const zoomOutAndSaveDataZoom = (): AppThunk => (dispatch, getState) => {
     if (response.code === 200) {
         dispatch(globalSlice.actions.setDataZoom(newZoom));
     } else {
-        dispatch(handleError("Could not save zoom!"));
+        dispatch(globalSlice.actions.handleError("Could not save zoom!"));
     }
 };
 
@@ -112,7 +115,7 @@ const loadActorZoomFromBackend = (): AppThunk => (dispatch) => {
     if (response.code === 200) {
         dispatch(globalSlice.actions.setActorZoom(response.object));
     } else {
-        dispatch(handleError("Could not save zoom!"));
+        dispatch(globalSlice.actions.handleError("Could not save zoom!"));
     }
 };
 
@@ -121,7 +124,7 @@ const loadDataZoomFromBackend = (): AppThunk => (dispatch) => {
     if (response.code === 200) {
         dispatch(globalSlice.actions.setDataZoom(response.object));
     } else {
-        dispatch(handleError("Could not save zoom!"));
+        dispatch(globalSlice.actions.handleError("Could not save zoom!"));
     }
 };
 
@@ -137,6 +140,7 @@ export const GlobalActions = {
     dataZoomOut: zoomOutAndSaveDataZoom,
     loadActorZoomFromBackend,
     loadDataZoomFromBackend,
+    handleError: globalSlice.actions.handleError
 };
 
 // -------------------------------------- Selectors --------------------------------------
@@ -153,7 +157,5 @@ export const globalSelectors = {
         return state.global.dataZoom;
     },
 };
-
-export const { handleError } = globalSlice.actions;
 
 export const globalReducer = globalSlice.reducer;

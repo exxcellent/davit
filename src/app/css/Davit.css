@@ -1,5 +1,11 @@
 @import "Colors.css";
+@import "Atomic.css";
 @import "SemanticOverwrite.css";
+@import "Keyframes.css";
+@import "Icons.css";
+@import "Flowchart.css";
+@import "Path.css";
+@import "Table.css";
 
 .carvGridContainer {
     display: grid;
@@ -26,14 +32,6 @@
     grid-template-areas: "compModel";
 }
 
-.notificationPanel {
-    grid-column-start: 2;
-    grid-column-end: 4;
-    grid-row-start: 4;
-    grid-row-end: 4;
-    justify-self: center;
-}
-
 .leftPanel {
     grid-area: leftBar;
     justify-self: center;
@@ -44,6 +42,7 @@
 .controllerHeader {
     grid-area: header;
     background-color: var(--carv2-background-color-header);
+    color: var(--carv2-text-color);
     border-style: solid;
     border-width: 0 0 5px 0;
     border-image: linear-gradient(to bottom, var(--carv2-background-color-shadow), var(--carv2-background-color)) 1 1 100%;
@@ -91,7 +90,7 @@
     transparent) 1 1 100%;
 }
 
-.sequencModel {
+.flowChartModel {
     grid-area: seqModel;
     min-height: 0;
     overflow: hidden;
@@ -184,101 +183,138 @@
     margin: 10px;
 }
 
-/* -------------------------------------------- Optionfield -------------------------------------------- */
+/* -------------------------------------------- Modal -------------------------------------------- */
 
-.optionFieldAround {
-    width: 100%;
-    height: 100%;
-    justify-content: space-around;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-}
-
-.innerOptionFieldSpacer {
-    width: 100%;
+.davitModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 99;
 }
+
+/* -------------------------------------------- Forms -------------------------------------------- */
+
+.form {
+    background: var(--carv2-background-color);
+    border-radius: var(--davit-border-radius);
+    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*justify-content: space-around;*/
+    /*align-items: center;*/
+    min-width: 50em;
+}
+
+.formHeader {
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: var(--davit-margin-top-bottom);
+    padding-top: var(--davit-margin-top-bottom);
+    width: 100%;
+}
+
+.formFooter {
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: var(--davit-margin-top-bottom);
+    padding-top: var(--davit-margin-top-bottom);
+    width: 100%;
+}
+
+.formBody {
+    max-height: 70vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 1.5em;
+}
+
+.formLine {
+    display: flex;
+    justify-content: space-around;
+    min-width: 22em;
+    padding-bottom: var(--davit-margin-top-bottom);
+    padding-top: var(--davit-margin-top-bottom);
+    width: 100%;
+}
+
+.formLabel {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 10em;
+}
+
+.formDivider {
+    display: flex;
+    border-top: var(--davit-border-size) solid var(--carv2-text-color);
+    border-radius: var(--davit-border-radius);
+    margin: var(--davit-margin-top-bottom);
+}
+
+.noteForm {
+    width: 30%;
+    background: var(--carv2-background-color);
+    border-radius: var(--davit-border-radius);
+    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
+}
+
+.noteTextarea {
+    border-radius: var(--davit-border-radius);
+    resize: none;
+    width: 100%;
+    font-size: var(--davit-font-size);
+    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
+    background-color: var(--carv2-background-color);
+    color: var(--carv2-text-color);
+}
+
+.noteTextarea:focus {
+    outline: none;
+}
+
+.downloadForm {
+    width: 30%;
+    background: var(--carv2-background-color);
+    border-radius: var(--davit-border-radius);
+    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
+}
+
+/* -------------------------------------------- Optionfield -------------------------------------------- */
 
 .optionField {
     width: 100%;
-    display: flex;
-    justify-content: space-around;
-}
-
-.optionFieldLabel {
-    display: flex;
-    justify-content: center;
-    min-width: 10em;
-    text-align: center;
-    color: var(--carv2-text-color);
-    font-size: 0.8em;
-}
-
-.optionFieldSpacer {
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    align-items: center;
     padding: 1em;
 }
 
-/* -------------------------------------------- PATH -------------------------------------------- */
-
-.carvPath {
-    stroke-width: 2px;
-    fill: transparent;
-    position: absolute;
+.optionFieldChildArea {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
 }
 
-.carvPath.SEND {
-    stroke: var(--carv2-color-exxcellent-blue);
-}
-
-.carvPath.TRIGGER {
-    stroke: black;
-    stroke-dasharray: 5, 5;
-}
-
-.carvStrokeDasharray {
-    stroke-dasharray: 0.5em;
-    stroke-width: 3px;
-}
-
-.carvArrowMarker {
-    fill: black;
-}
-
-.davitArrowText {
-    fill: var(--carv2-text-color);
-}
-
-.davitArrowTextBG {
-    stroke: var(--carv2-background-color-header);
-    stroke-width: 0.3em;
-}
-
-/* -------------------------------------------- BUTTON -------------------------------------------- */
-
-button {
-    color: var(--carv2-text-color);
-    border: none;
-    border-radius: 5px;
-    border: 2px solid var(--carv2-color-secondary);
-    background-color: transparent;
-    font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    font-weight: 700;
-    line-height: 1em;
-    font-style: normal;
-    text-align: center;
-    padding: 0.5em;
+.columnDivider {
+    border-style: solid;
+    border-width: 0 0 0 2px;
+    border-image: linear-gradient(to bottom, transparent, #e0e1e2, #e0e1e2, #e0e1e2, transparent) 0 100%;
 }
 
 #buttonGroupLabel {
     opacity: 1 !important;
     color: var(--carv2-text-color);
 }
+
+/*================================================================================================================*/
 
 .davitMenuLabel {
     padding-bottom: 1.5em;
@@ -297,43 +333,12 @@ button {
     align-items: center;
 }
 
-.deleteButton{
-    background-color: transparent;
-    box-shadow: 0 0 0 1px var(--carv2-color-secondary);
-    color: white;
-    animation: growDeleteButton var(--animation-time) ease-in-out 0s;
-}
-
 .carv2Button {
     background-color: transparent;
     box-shadow: 0 0 0 1px var(--carv2-color-secondary);
     color: white;
 }
 
-.carv2SidePanelButton {
-    background-color: transparent;
-    box-shadow: 0 0 0 1px var(--carv2-color-border);
-    color: white;
-    width: 100%;
-    height: 50px;
-    padding: 1em 0 0 1.1em;
-    margin: 1px;
-    border-radius: 2px;
-    display: flex;
-    transition: background-color var(--animation-time);
-}
-
-.carv2SidePanelButton:hover {
-    box-shadow: 0 0 0 2px var(--carv2-color-secondary);
-    color: white;
-}
-
-.SidePanelButtonActive {
-    color: black;
-    background-color: var(--carv2-color-secondary);
-    box-shadow: 0 0 0 2px var(--carv2-color-secondary);
-    transition: background-color var(--animation-time);
-}
 
 .carv2TableButton {
     background-color: var(--carv2-background-color) !important;
@@ -376,7 +381,6 @@ button {
 }
 
 .Carv2CardButton {
-    box-shadow: 0 0 0 1px var(--carv2-color-border);
     animation-name: growWidth;
     animation-duration: var(--animation-time);
     display: flex;
@@ -416,14 +420,14 @@ button {
     transform: rotate(180deg);
     text-align: center;
     font-size: 3em;
-    font-family: ArialRoundedMTBold, "Arial Rounded MT Bold";
+    font-family: ArialRoundedMTBold, "Arial Rounded MT Bold", serif;
     margin-left: 13px;
     margin-top: 0.5em;
     margin-bottom: 1em;
     color: #0060a9;
 }
 
-/* -------------------------------------------- Controllpanel -------------------------------------------- */
+/* -------------------------------------------- Control panel -------------------------------------------- */
 
 .verticalTab {
     writing-mode: tb-rl;
@@ -502,12 +506,6 @@ button {
     width: 100%;
 }
 
-.columnDivider {
-    display: flex;
-    border-style: solid;
-    border-width: 0 0 0 2px;
-    border-image: linear-gradient(to bottom, transparent, #e0e1e2, #e0e1e2, #e0e1e2, #e0e1e2, transparent) 0 100%;
-}
 
 #innerCard {
     width: 100px;
@@ -520,128 +518,8 @@ button {
     overflow: hidden;
 }
 
-/* -------------------------------------------- Data -------------------------------------------- */
 
-#dataObject {
-    width: 100px;
-    height: 30px;
-    text-overflow: ellipsis;
-    margin: 0;
-    padding-top: 0px !important;
-    background-color: rgba(0, 0, 0, 0.3);
-    color: var(--carv2-text-color);
-}
-
-/* -------------------------------------------- Flussdiagram -------------------------------------------- */
-
-.STEP {
-    background-color: var(--carv2-background-color-header);
-    color: var(--carv2-text-color);
-    min-height: 2.4em;
-    min-width: 6em;
-    max-width: 15em;
-    border-radius: 0.3em;
-    padding: 6px;
-    text-align: center;
-    box-shadow: 0 0 0 1px var(--carv2-color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
-}
-
-.LINK {
-    background-color: var(--carv2-background-color-header);
-    color: var(--carv2-text-color);
-    min-height: 2.4em;
-    min-width: 6em;
-    max-width: 15em;
-    border-radius: 0.3em;
-    padding: 6px;
-    text-align: center;
-    box-shadow: 0 0 0 1px var(--carv2-color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
-}
-
-.COND {
-    z-index: 2;
-    width: 2em;
-    height: 2em;
-    background-color: var(--carv2-background-color-shadow);
-    transform: translateY(0.8em) rotate(45deg);
-    box-shadow: 0 0 0 1px var(--carv2-color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
-}
-
-.DEC {
-    z-index: 2;
-    width: 2em;
-    height: 2em;
-    background-color: var(--carv2-background-color-shadow);
-    transform: translateY(0.8em) rotate(45deg);
-    box-shadow: 0 0 0 1px var(--carv2-color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
-}
-
-.condLabel {
-    z-index: 1;
-    color: black;
-    background-color: var(--carv2-background-color);
-    transform: translateY(0.8em);
-    padding-left: 3px;
-    padding-right: 3px;
-    border-radius: 3px;
-    box-shadow: 0 0 0 1px var(--carv2-color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
-}
-
-.FIN {
-    border-radius: 50%;
-    width: 2em;
-    height: 2em;
-    background-color: var(--carv2-data-add-color);
-    border: 0.2em solid var(--carv2-background-color);
-    box-shadow: 0 0 0 0.2em var(--carv2-data-add-color), 0 0 6px 6px rgba(0, 0, 0, 0.199);
-    transform: translateY(0.2em);
-}
-
-.IDLE {
-    border-radius: 50%;
-    width: 2em;
-    height: 2em;
-    background-color: var(--carv2-color-exxcellent-blue);
-    border: 0.2em solid var(--carv2-background-color);
-    box-shadow: 0 0 0 0.2em var(--carv2-color-exxcellent-blue), 0 0 6px 6px rgba(0, 0, 0, 0.199);
-    transform: translateY(0.2em);
-}
-
-.ERROR {
-    border-radius: 50%;
-    width: 2em;
-    height: 2em;
-    background-color: var(--carv2-data-delete-color);
-    border: 0.2em solid var(--carv2-background-color);
-    box-shadow: 0 0 0 0.2em var(--carv2-data-delete-color), 0 0 6px 6px rgba(0, 0, 0, 0.199);
-    transform: translateY(0.2em);
-}
-
-.ROOT {
-    border-radius: 50%;
-    width: 2em;
-    height: 2em;
-    background-color: var(--carv2-background-color-header);
-    margin: 0.2em;
-    padding: 0.2em;
-    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.199);
-}
-
-.flowChartFlex {
-    display: flex;
-    justify-content: space-around;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-#flowChartCurrentStep {
-    box-shadow: 0 0 6px 2px var(--carv2-color-secondary), 0 0 5px 5px rgba(0, 0, 0, 0.199);
-    animation-duration: 0.5s;
-    animation-name: glow;
-}
-
-/* -------------------------------------------- Acrot -------------------------------------------- */
+/* -------------------------------------------- Actor -------------------------------------------- */
 
 .card {
     display: flex;
@@ -675,7 +553,7 @@ button {
     height: 2.7em;
 }
 
-carhHeaderText {
+.carhHeaderText {
     color: var(--carv2-text-color);
     height: 2.5em;
     transition: color var(--animation-time), height var(--animation-time);
@@ -791,55 +669,6 @@ carhHeaderText {
     color: var(--carv2-data-text-color) !important;
 }
 
-/* ----------------------------------- Icons ------------------------------------*/
-.gg-close-o {
-    box-sizing: border-box;
-    position: relative;
-    display: block;
-    width: 22px;
-    height: 22px;
-}
-.gg-close-o::after,
-.gg-close-o::before {
-    content: "";
-    display: block;
-    box-sizing: border-box;
-    position: absolute;
-    width: 12px;
-    height: 2px;
-    background: currentColor;
-    transform: rotate(45deg);
-    border-radius: 5px;
-    top: 8px;
-    left: 3px
-}
-.gg-close-o::after {
-    transform: rotate(-45deg)
-}
-
-.gg-check-o {
-    box-sizing: border-box;
-    position: relative;
-    display: block;
-    width: 22px;
-    height: 22px;
-}
-.gg-check-o::after {
-    content: "";
-    display: block;
-    box-sizing: border-box;
-    position: absolute;
-    left: 3px;
-    top: -1px;
-    width: 6px;
-    height: 10px;
-    border-color: currentColor;
-    border-width: 0 2px 2px 0;
-    border-style: solid;
-    transform-origin: bottom left;
-    transform: rotate(45deg)
-}
-
 .carv2ActorDataCHECK_FAILED {
     display: flex;
     justify-content: center;
@@ -869,7 +698,7 @@ carhHeaderText {
     height: 100%;
     background-color: var(--carv2-data-add-color) !important;
     color: var(--carv2-text-color) !important;
-    box-shadow: 0px 0px 20px rgb(255, 0, 0);
+    box-shadow: 0 0 20px rgb(255, 0, 0);
 }
 
 .carv2ActorDataERROR_DELETE {
@@ -880,7 +709,7 @@ carhHeaderText {
     height: 100%;
     background-color: var(--carv2-data-delete-color) !important;
     color: var(--carv2-text-color) !important;
-    box-shadow: 0px 0px 20px rgb(255, 0, 0);
+    box-shadow: 0 0 20px rgb(255, 0, 0);
 }
 
 .carv2ActorDataERROR_SEND {
@@ -891,200 +720,12 @@ carhHeaderText {
     height: 100%;
     background-color: var(--carv2-color-exxcellent-blue) !important;
     color: var(--carv2-text-color) !important;
-    box-shadow: 0px 0px 20px rgb(255, 0, 0);
+    box-shadow: 0 0 20px rgb(255, 0, 0);
 }
 
-/* -------------------------------------------- Table -------------------------------------------- */
+/*========================================== NEW DAVIT CSS ==========================================================*/
 
-td {
-    border-style: solid;
-    border-width: 0 2px 2px 0;
-    border-image: linear-gradient(to bottom,
-    transparent,
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    transparent) 0 100%;
-}
-
-td:last-child {
-    border: none;
-}
-
-tr {
-    color: var(--carv2-text-color);
-}
-
-tbody {
-    display: block;
-    width: 100%;
-    overflow-y: scroll;
-}
-
-th {
-    text-align: start;
-    padding-left: 1em;
-}
-
-thead,
-tbody tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
-    /* even columns width , fix width of table too*/
-}
-
-thead {
-    background-color: var(--carv2-background-color-header);
-    color: var(--carv2-text-color);
-    animation-name: appearText;
-    animation-duration: 0.2s;
-    padding-right: 1em;
-}
-
-table {
-    width: 100%;
-}
-
-.carv2Tr {
-    background-color: var(--carv2-data-table-row-color);
-    color: black;
-    height: 2.5em;
-    text-align: start;
-    animation-name: appearText;
-    animation-duration: 0.2s;
-}
-
-.carv2Tr:nth-child(odd) {
-    background-color: var(--carv2-data-table-row-odd-color);
-}
-
-.clickable:hover {
-    background-color: var(--carv2-data-table-row-odd-hover);
-    transition: background-color 0.4s;
-}
-
-.clickable {
-    cursor: pointer;
-}
-
-.tableBorder {
-    margin: 0.5em;
-    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.199);
-    border-radius: 5px;
-    border: 2px solid var(--carv2-background-color-header);
-}
-
-.tabs {
-    background-color: var(--carv2-background-color-header);
-    display: flex;
-    justify-content: flex-start;
-    border-bottom: 1px solid black;
-    height: 4.4em;
-}
-
-.tab-group {
-    display: flex;
-    flex-direction: column;
-    background-color: rgba(0, 0, 0, 0.1);
-    box-shadow: 0 0 0 1px var(--carv2-color-border);
-    border-radius: 0.28571429rem;
-    animation-duration: var(--animation-time);
-    animation-timing-function: ease-in-out;
-    animation-name: appearTabGroup;
-    overflow: hidden;
-    height: 4.4em;
-}
-
-.tab-aggregator {
-    color: var(--carv2-text-color);
-    padding: 0.5em;
-    text-align: center;
-    animation-duration: var(--animation-time);
-    animation-timing-function: ease-in-out;
-    animation-name: appearTab;
-    overflow: hidden;
-    height: 2.2em;
-}
-
-.tab {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-width: 7em;
-    border-right: 0.5px solid rgba(255, 250, 250, 0.2);
-    background-color: rgba(0, 0, 0, 0.2);
-    color: var(--carv2-text-color);
-    padding: 0.5em;
-    animation-duration: var(--animation-time);
-    animation-timing-function: ease-out;
-    animation-name: appearTab;
-    overflow: hidden;
-    height: 2.2em;
-}
-
-.tab:hover {
-    background-color: rgba(0, 0, 0, 0.4);
-    cursor: pointer;
-}
-
-.active {
-    background-color: var(--carv2-color-secondary) !important;
-    color: black !important;
-    transition: background-color var(--animation-time), color var(--animation-time);
-}
-
-.carv2TrMarked {
-    height: 2.5em;
-}
-
-.carv2TrTerminalERROR.davitTrTerminalMarked {
-    opacity: 1;
-}
-
-.carv2TrTerminalIDLE.davitTrTerminalMarked {
-    opacity: 1;
-}
-
-.carv2TrTerminalFIN.davitTrTerminalMarked {
-    opacity: 1;
-}
-
-.carv2TrTerminalERROR.clickable:hover {
-    background-color: var(--carv2-data-delete-color);
-    opacity: 1;
-}
-
-.carv2TrTerminalFIN.clickable:hover {
-    background-color: var(--carv2-data-add-color);
-    opacity: 1;
-}
-
-.carv2TrTerminalIDLE.clickable:hover {
-    background-color: var(--carv2-color-exxcellent-blue);
-    opacity: 1;
-}
-
-.carv2TrTerminalERROR {
-    background-color: var(--carv2-data-delete-color);
-    opacity: 0.75;
-    height: 2.5em;
-}
-
-.carv2TrTerminalFIN {
-    background-color: var(--carv2-data-add-color);
-    height: 2.5em;
-    opacity: 0.75;
-}
-
-.carv2TrTerminalIDLE {
-    background-color: var(--carv2-color-exxcellent-blue);
-    height: 2.5em;
-    opacity: 0.75;
-}
-
-.zoomLabel{
+.zoomLabel {
     color: var(--carv2-text-color);
     font-size: 0.7em;
     animation-name: disapear;
@@ -1092,166 +733,88 @@ table {
     opacity: 0;
 }
 
-/* ---------------------------- KEY FRAMES ---------------------------- */
-
-@keyframes appearTabGroup {
-    0% {
-        color: transparent;
-        background-color: transparent;
-        box-shadow: 0 0 0 0 transparent;
-        height: 0;
-    }
-
-    5% {
-        color: transparent;
-        background-color: transparent;
-        box-shadow: 0 0 0 0 transparent;
-    }
-
-    5% {
-        color: var(--carv2-text-color);
-        background-color: rgba(0, 0, 0, 0.1);
-        box-shadow: 0 0 0 1px var(--carv2-color-border);
-        height: 4.4em;
-    }
+.sidePanelButton {
+    border: none;
+    width: 100%;
+    height: 4em;
+    border-bottom: var(--davit-border-size) solid var(--carv2-color-primary);
+    border-radius: 0;
 }
 
-@keyframes appearTab {
-    0% {
-        color: transparent;
-        background-color: transparent;
-        height: 0;
-        border-right: 0.5px solid transparent;
-    }
-
-    10% {
-        background-color: transparent;
-        color: transparent;
-        border-right: 0.5px solid transparent;
-    }
-
-    100% {
-        color: var(--carv2-text-color);
-        background-color: rgba(0, 0, 0, 0.2);
-        height: 2.2em;
-        border-right: 0.5px solid rgba(255, 250, 250, 0.2);
-    }
+.sidePanelButton.active {
+    background-color: var(--carv2-color-secondary);
+    transition: background-color var(--animation-time);
 }
 
-@keyframes growDeleteButton {
-    0%{
-        width: 0;
-        color: transparent;
-    }
-
-    80%{
-        color: transparent;
-    }
-
-    100%{
-        width: 100%;
-        color: red;
-    }
+.viewPlaceholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    color: var(--carv2-text-color);
 }
 
-@keyframes appearText {
-    0% {
-        color: transparent;
-    }
-
-    100% {
-        color: black;
-    }
+.inputLabel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: var(--davit-padding-right-left);
+    padding-left: var(--davit-padding-right-left);
+    border-bottom-left-radius: var(--davit-border-radius);
+    border-top-left-radius: var(--davit-border-radius);
+    border: var(--davit-border-size) solid var(--carv2-color-secondary);
+    border-bottom: var(--davit-border-size) solid var(--carv2-color-secondary);
+    background-color: var(--carv2-color-secondary);
+    color: var(--carv2-text-color);
+    font-family: var(--davit-font-family);
+    font-size: var(--davit-font-size);
 }
 
-@keyframes grow {
-    from {
-        background-color: transparent;
-        box-shadow: 0 0 0 1px transparent, 0 0 5px 5px transparent;
-        color: transparent;
-        height: 0;
-    }
-
-    to {
-        background-color: var(--carv2-background-color-header);
-        box-shadow: 0 0 0 1px var(--carv2-color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
-        color: var(--carv2-text-color);
-        height: 100%;
-    }
+.labelField {
+    color: var(--carv2-text-color);
+    background-color: transparent;
+    text-align: center;
+    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
+    min-width: 8em;
+    border-radius: 0;
 }
 
-@keyframes glow {
-    from {
-        box-shadow: 0 0 0 0 transparent, 0 0 0 0 transparent;
-    }
-
-    to {
-        box-shadow: 0 0 6px 2px var(--carv2-color-secondary), 0 0 5px 5px rgba(0, 0, 0, 0.199);
-    }
+.deleteButton {
+    background-color: transparent;
+    color: var(--davit-color-warning);
+    border-color: var(--davit-color-warning);
 }
 
-@keyframes slidein {
-    from {
-        margin-bottom: 11em;
-        /* height: 300%; */
-    }
-
-    to {
-        margin-bottom: 0%;
-        /* height: 100%; */
-    }
+.deleteButton.fluid {
+    width: 8em;
+    animation: growDeleteButton var(--animation-time) ease-in-out 0s;
 }
 
-@keyframes growWidth {
-    0% {
-        width: 0;
-        color: transparent;
-    }
-
-    80% {
-        color: transparent;
-    }
-
-    100% {
-        width: 2em;
-        color: white;
-    }
+.notificationCard {
+    width: 30em;
+    min-height: 6em;
+    background-color: var(--carv2-background-color);
+    border-radius: var(--davit-border-radius);
+    border: var(--davit-border-size) solid var(--carv2-color-border);
+    display: flex;
+    align-items: center;
+    z-index: 99;
+    position: absolute;
+    right: 0;
+    top: 0;
+    animation: notificationSlideIn var(--animation-time) ease-in-out 0s;
 }
 
-@keyframes shrinkWidth {
-    0% {
-        width: 2em;
-        background-color: var(--carv2-background-color-slidebar);
-        border-width: 0 0 0 2px;
-    }
-
-    100% {
-        width: 0;
-        background-color: transparent;
-        border-width: 0 0 0 0;
-    }
+.headerGrid {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    align-items: center;
+    height: 100%;
 }
 
-@keyframes growWidth {
-    0% {
-        width: 0;
-        color: transparent !important;
-        box-shadow: 0 0 0 1px transparent !important;
-        border-color: transparent !important;
-    }
-
-    100% {
-        width: 1.2em;
-        color: white !important;
-        box-shadow: 0 0 0 1px var(--carv2-color-border) !important;
-    }
+.fullscreen{
+    width: 100vw;
+    height: 100vh;
 }
 
-@keyframes disapear {
-    0%{
-        opacity: 1;
-    }
-    100%{
-        opacity: 0;
-    }
-}

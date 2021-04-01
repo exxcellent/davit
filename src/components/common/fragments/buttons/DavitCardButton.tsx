@@ -1,10 +1,11 @@
-import React, { FunctionComponent } from "react";
-import { Icon, SemanticICONS } from "semantic-ui-react";
+import React, { FunctionComponent } from 'react';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface DavitCardButtonProps {
     onClick: () => void;
     disable?: boolean;
-    icon?: SemanticICONS;
+    icon: IconDefinition;
     isActive?: boolean;
 }
 
@@ -16,7 +17,7 @@ export const DavitCardButton: FunctionComponent<DavitCardButtonProps> = (props) 
             onClick={onClick}
             className={"Carv2CardButton" + (isActive ? " activeButton" : "") + (disable ? " disabled" : "")}
             disabled={disable}>
-            <Icon size="small" name={icon} />
+            <FontAwesomeIcon icon={icon} />
         </button>
     );
 };

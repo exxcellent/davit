@@ -1,7 +1,7 @@
-import React, { FunctionComponent } from "react";
-import { IconProps } from "semantic-ui-react";
-import { SemanticShorthandItem } from "semantic-ui-react/dist/commonjs/generic";
-import { DavitTableButton } from "./buttons/DavitTableButton";
+import React, { FunctionComponent } from 'react';
+import { DavitTableButton } from './buttons/DavitTableButton';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { DavitIcons } from '../IconSet';
 
 export interface DavitTableProps {
     header: string[];
@@ -12,7 +12,7 @@ export interface DavitTableProps {
 
 export interface DavitTableAction {
     callback: () => void;
-    icon: SemanticShorthandItem<IconProps>;
+    icon: IconDefinition;
     disable?: boolean;
 }
 
@@ -77,7 +77,7 @@ export const DavitTable: FunctionComponent<DavitTableProps> = (props) => {
                 {bodyData.map(createRow)}
                 {addFunction && (
                     <tr>
-                        <td>{createButton({ icon: "add", callback: addFunction }, 0)}</td>
+                        <td>{createButton({ icon: DavitIcons.plus, callback: addFunction }, 0)}</td>
                     </tr>
                 )}
                 {fillWithEmptyRows()}

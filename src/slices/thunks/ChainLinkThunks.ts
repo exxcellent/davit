@@ -1,31 +1,31 @@
-import { AppThunk } from "../../app/store";
-import { ChainDecisionTO } from "../../dataAccess/access/to/ChainDecisionTO";
-import { ChainlinkTO } from "../../dataAccess/access/to/ChainlinkTO";
-import { GoToTypesChain } from "../../dataAccess/access/types/GoToTypeChain";
-import { DataAccess } from "../../dataAccess/DataAccess";
-import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
-import { editActions, Mode } from "../EditSlice";
-import { handleError } from "../GlobalSlice";
-import { MasterDataActions } from "../MasterDataSlice";
-import { EditChainDecision } from "./ChainDecisionThunks";
+import {AppThunk} from "../../app/store";
+import {ChainDecisionTO} from "../../dataAccess/access/to/ChainDecisionTO";
+import {ChainlinkTO} from "../../dataAccess/access/to/ChainlinkTO";
+import {GoToTypesChain} from "../../dataAccess/access/types/GoToTypeChain";
+import {DataAccess} from "../../dataAccess/DataAccess";
+import {DataAccessResponse} from "../../dataAccess/DataAccessResponse";
+import {editActions, Mode} from "../EditSlice";
+import {MasterDataActions} from "../MasterDataSlice";
+import {EditChainDecision} from "./ChainDecisionThunks";
+import {GlobalActions} from "../GlobalSlice";
 
 const createChainLinkThunk = (link: ChainlinkTO, from?: ChainlinkTO | ChainDecisionTO, ifGoTO?: boolean): AppThunk => (
     dispatch,
 ) => {
     const response: DataAccessResponse<ChainlinkTO> = DataAccess.saveChainlink(link);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     } else {
         if (from !== undefined) {
             if ((from as ChainlinkTO).dataSetupFk !== undefined) {
-                (from as ChainlinkTO).goto = { type: GoToTypesChain.LINK, id: response.object.id };
+                (from as ChainlinkTO).goto = {type: GoToTypesChain.LINK, id: response.object.id};
                 dispatch(saveChainLinkThunk(from as ChainlinkTO));
             }
             if ((from as ChainDecisionTO).ifGoTo !== undefined) {
                 if (ifGoTO) {
-                    (from as ChainDecisionTO).ifGoTo = { type: GoToTypesChain.LINK, id: response.object.id };
+                    (from as ChainDecisionTO).ifGoTo = {type: GoToTypesChain.LINK, id: response.object.id};
                 } else {
-                    (from as ChainDecisionTO).elseGoTo = { type: GoToTypesChain.LINK, id: response.object.id };
+                    (from as ChainDecisionTO).elseGoTo = {type: GoToTypesChain.LINK, id: response.object.id};
                 }
                 dispatch(EditChainDecision.save(from as ChainDecisionTO));
             }
@@ -37,7 +37,7 @@ const createChainLinkThunk = (link: ChainlinkTO, from?: ChainlinkTO | ChainDecis
 const saveChainLinkThunk = (link: ChainlinkTO): AppThunk => (dispatch) => {
     const response: DataAccessResponse<ChainlinkTO> = DataAccess.saveChainlink(link);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadChainLinksFromBackend());
 };
@@ -45,7 +45,7 @@ const saveChainLinkThunk = (link: ChainlinkTO): AppThunk => (dispatch) => {
 const deleteChainLinkThunk = (link: ChainlinkTO): AppThunk => (dispatch) => {
     const response: DataAccessResponse<ChainlinkTO> = DataAccess.deleteChainLink(link);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadChainLinksFromBackend());
 };
@@ -53,7 +53,8 @@ const deleteChainLinkThunk = (link: ChainlinkTO): AppThunk => (dispatch) => {
 const findChainLinkThunk = (id: number): ChainlinkTO => {
     const response: DataAccessResponse<ChainlinkTO> = DataAccess.findChainLink(id);
     if (response.code !== 200) {
-        handleError(response.message);
+        // TODO: call this with "disptach(GlobalActions.handleError)".
+        console.warn(response.message);
     }
     return response.object;
 };

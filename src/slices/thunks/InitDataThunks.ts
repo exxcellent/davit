@@ -1,15 +1,15 @@
-import { AppThunk } from "../../app/store";
-import { InitDataTO } from "../../dataAccess/access/to/InitDataTO";
-import { DataAccess } from "../../dataAccess/DataAccess";
-import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
-import { editActions, EditActions, Mode } from "../EditSlice";
-import { handleError } from "../GlobalSlice";
-import { MasterDataActions } from "../MasterDataSlice";
+import {AppThunk} from "../../app/store";
+import {InitDataTO} from "../../dataAccess/access/to/InitDataTO";
+import {DataAccess} from "../../dataAccess/DataAccess";
+import {DataAccessResponse} from "../../dataAccess/DataAccessResponse";
+import {editActions, EditActions, Mode} from "../EditSlice";
+import {MasterDataActions} from "../MasterDataSlice";
+import {GlobalActions} from "../GlobalSlice";
 
 const saveInitDataThunk = (initData: InitDataTO): AppThunk => (dispatch) => {
     const response: DataAccessResponse<InitDataTO> = DataAccess.saveInitData(initData);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(EditActions.setMode.editInitData(response.object));
 };
@@ -17,7 +17,7 @@ const saveInitDataThunk = (initData: InitDataTO): AppThunk => (dispatch) => {
 const deleteInitDataThunk = (initDataId: number): AppThunk => (dispatch) => {
     const response: DataAccessResponse<InitDataTO> = DataAccess.deleteInitData(initDataId);
     if (response.code !== 200) {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadDataSetupsFromBackend());
 };
@@ -28,7 +28,7 @@ const setInitDataToEditThunk = (initData: InitDataTO): AppThunk => (dispatch, ge
     if (mode === Mode.EDIT_DATASETUP_INITDATA) {
         dispatch(editActions.setInitDataToEdit(initData));
     } else {
-        handleError("Try to set initData to edit in mode: " + mode);
+        dispatch(GlobalActions.handleError("Try to set initData to edit in mode: " + mode));
     }
 };
 

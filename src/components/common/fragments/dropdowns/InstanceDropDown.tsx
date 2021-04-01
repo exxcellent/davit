@@ -1,10 +1,10 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { Dropdown, DropdownProps } from "semantic-ui-react";
-import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
-import { DataInstanceTO } from "../../../../dataAccess/access/to/DataInstanceTO";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
+import React, { FunctionComponent } from 'react';
+import { useSelector } from 'react-redux';
+import { Dropdown, DropdownProps } from 'semantic-ui-react';
+import { DataCTO } from '../../../../dataAccess/access/cto/DataCTO';
+import { DataInstanceTO } from '../../../../dataAccess/access/to/DataInstanceTO';
+import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
+import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from './DavitDropDown';
 
 export interface DataAndInstanceId {
     dataFk: number;
@@ -71,7 +71,7 @@ export const InstanceDropDownMultiselect: FunctionComponent<InstanceDropDownMult
             }}
             value={selected.map((select) => JSON.stringify(select))}
             scrolling
-            disabled={createOptions().length > 0 ? false : true}
+            disabled={createOptions().length <= 0}
         />
     );
 };
@@ -81,8 +81,7 @@ const useInstanceDropDownViewModel = () => {
 
     const selectInstance = (optionItemString: string): DataAndInstanceId | undefined => {
         if (optionItemString !== null && datas !== null) {
-            const optionItem: DataAndInstanceId = JSON.parse(optionItemString);
-            return optionItem;
+            return JSON.parse(optionItemString);
         }
         return undefined;
     };

@@ -1,30 +1,25 @@
-import React, { FunctionComponent } from "react";
-import { Button } from "semantic-ui-react";
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { CSSProperties, FunctionComponent } from 'react';
 
-interface DavitButtonIconProps {
+interface DavitButtonProps {
     onClick: () => void;
-    icon?: string;
+    label?: string;
     disable?: boolean;
+    iconName?: IconDefinition;
+    iconLeft?: boolean;
+    className?: string;
+    style?: CSSProperties;
 }
 
-interface DavitButtonLabelProps {
-    onClick: () => void;
-    label: string;
-    disable?: boolean;
-}
-
-export const DavitButtonIcon: FunctionComponent<DavitButtonIconProps> = (props) => {
-    const { onClick, icon, disable } = props;
-
-    return <Button icon={icon} onClick={onClick} className="carv2Button" inverted color="orange" disabled={disable} />;
-};
-
-export const DavitButtonLabel: FunctionComponent<DavitButtonLabelProps> = (props) => {
-    const { onClick, label, disable } = props;
+export const DavitButton: FunctionComponent<DavitButtonProps> = (props) => {
+    const { onClick, label, disable, iconName, iconLeft, className, style } = props;
 
     return (
-        <button onClick={onClick} disabled={disable} style={{ opacity: disable ? "0.7" : "1" }}>
-            <label>{label}</label>
+        <button className={className} onClick={onClick} disabled={disable} style={style}>
+            {iconName && iconLeft && <FontAwesomeIcon icon={iconName} />}
+            {label && <label className={"padding"}>{label}</label>}
+            {iconName && !iconLeft && <FontAwesomeIcon icon={iconName} />}
         </button>
     );
 };

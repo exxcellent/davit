@@ -18,6 +18,7 @@
 
     --carv2-color-pink: #93019b;
     --carv2-color-dark-purple: #540058;
+    --davit-color-warning: #F53B1B;
 
     --carv2-background-color-slidebar: rgba(0, 0, 0, 0.8);
     --carv2-text-color: white;
@@ -26,6 +27,8 @@
     --carv2-data-delete-color: #af0837;
     --carv2-data-text-color: black;
     --carv2-data-persistent-color: #a7a5a5;
+
+    --davit-card-color: white;
 
     --carv2-data-table-row-color: #c8c8c8;
     --carv2-data-table-row-odd-color: #bdbbbb;

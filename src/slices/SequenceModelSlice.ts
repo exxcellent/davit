@@ -1,24 +1,24 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk, RootState } from "../app/store";
-import { Arrow, ArrowType } from "../components/common/fragments/svg/DavitPath";
-import { ChainCTO } from "../dataAccess/access/cto/ChainCTO";
-import { ChainlinkCTO } from "../dataAccess/access/cto/ChainlinkCTO";
-import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
-import { GeometricalDataCTO } from "../dataAccess/access/cto/GeometraicalDataCTO";
-import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
-import { ActionTO } from "../dataAccess/access/to/ActionTO";
-import { ChainDecisionTO } from "../dataAccess/access/to/ChainDecisionTO";
-import { ChainTO } from "../dataAccess/access/to/ChainTO";
-import { ActionType } from "../dataAccess/access/types/ActionType";
-import { Terminal } from "../dataAccess/access/types/GoToType";
-import { DataAccess } from "../dataAccess/DataAccess";
-import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
-import { CalcChain, getRoot, SequenceChainService } from "../services/SequenceChainService";
-import { CalcSequence, CalculatedStep, SequenceService } from "../services/SequenceService";
-import { ActorData } from "../viewDataTypes/ActorData";
-import { Mode } from "./EditSlice";
-import { handleError } from "./GlobalSlice";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {AppThunk, RootState} from "../app/store";
+import {Arrow, ArrowType} from "../components/common/fragments/svg/DavitPath";
+import {ChainCTO} from "../dataAccess/access/cto/ChainCTO";
+import {ChainlinkCTO} from "../dataAccess/access/cto/ChainlinkCTO";
+import {DataSetupCTO} from "../dataAccess/access/cto/DataSetupCTO";
+import {GeometricalDataCTO} from "../dataAccess/access/cto/GeometraicalDataCTO";
+import {SequenceCTO} from "../dataAccess/access/cto/SequenceCTO";
+import {SequenceStepCTO} from "../dataAccess/access/cto/SequenceStepCTO";
+import {ActionTO} from "../dataAccess/access/to/ActionTO";
+import {ChainDecisionTO} from "../dataAccess/access/to/ChainDecisionTO";
+import {ChainTO} from "../dataAccess/access/to/ChainTO";
+import {ActionType} from "../dataAccess/access/types/ActionType";
+import {Terminal} from "../dataAccess/access/types/GoToType";
+import {DataAccess} from "../dataAccess/DataAccess";
+import {DataAccessResponse} from "../dataAccess/DataAccessResponse";
+import {CalcChain, getRoot, SequenceChainService} from "../services/SequenceChainService";
+import {CalcSequence, CalculatedStep, SequenceService} from "../services/SequenceService";
+import {ActorData} from "../viewDataTypes/ActorData";
+import {Mode} from "./EditSlice";
+import {GlobalActions} from "./GlobalSlice";
 
 export interface Filter {
     type: "ACTOR" | "DATA";
@@ -110,7 +110,7 @@ const SequenceModelSlice = createSlice({
             }
         },
         addDataFilter: (state, action: PayloadAction<number>) => {
-            state.activeFilter = [...state.activeFilter, { type: "DATA", id: action.payload }];
+            state.activeFilter = [...state.activeFilter, {type: "DATA", id: action.payload}];
             state.currentStepIndex = 0;
         },
         removeDataFilter: (state, action: PayloadAction<number>) => {
@@ -120,7 +120,7 @@ const SequenceModelSlice = createSlice({
             state.currentStepIndex = 0;
         },
         addActorFilters: (state, action: PayloadAction<number>) => {
-            state.activeFilter = [...state.activeFilter, { type: "ACTOR", id: action.payload }];
+            state.activeFilter = [...state.activeFilter, {type: "ACTOR", id: action.payload}];
             state.currentStepIndex = 0;
         },
         removeActorFilter: (state, action: PayloadAction<number>) => {
@@ -260,7 +260,7 @@ const getDataSetupCTOFromBackend = (dataSetupId: number): AppThunk => (dispatch)
     if (response.code === 200) {
         dispatch(SequenceModelSlice.actions.setSelectedDataSetup(response.object));
     } else {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
 };
 
@@ -269,19 +269,19 @@ const getSequenceCTOFromBackend = (sequenceId: number): AppThunk => (dispatch) =
     if (response.code === 200) {
         dispatch(SequenceModelSlice.actions.setSelectedSequence(response.object));
     } else {
-        dispatch(handleError(response.message));
+        dispatch(GlobalActions.handleError(response.message));
     }
 };
 
 const handleActorClickEvent = (actorId: number): AppThunk => (dispatch) => {
     const filter: Filter[] = [];
-    filter.push({ type: "ACTOR", id: actorId });
+    filter.push({type: "ACTOR", id: actorId});
     dispatch(SequenceModelSlice.actions.setFilter(filter));
 };
 
 const handleDataClickEvent = (dataId: number): AppThunk => (dispatch) => {
     const filter: Filter[] = [];
-    filter.push({ type: "DATA", id: dataId });
+    filter.push({type: "DATA", id: dataId});
     dispatch(SequenceModelSlice.actions.setFilter(filter));
 };
 
@@ -414,8 +414,8 @@ export const sequenceModelSelectors = {
         const stepId: number | undefined = filteredSteps[state.sequenceModel.currentStepIndex]?.modelElementFk;
         return stepId
             ? getCurrentSequenceModel(state.sequenceModel)?.sequenceStepCTOs.find(
-                  (step) => step.squenceStepTO.id === stepId,
-              )?.actions || []
+            (step) => step.squenceStepTO.id === stepId,
+        )?.actions || []
             : [];
     },
     selectCurrentStepIndex: (state: RootState): number => state.sequenceModel.currentStepIndex,
@@ -486,10 +486,10 @@ export const SequenceModelActions = {
 function getFilteredSteps(state: RootState) {
     return state.edit.mode === Mode.VIEW
         ? filterSteps(
-              getCurrentCalcSequence(state.sequenceModel)?.calculatedSteps || [],
-              state.sequenceModel.activeFilter,
-              getCurrentSequenceModel(state.sequenceModel)?.sequenceStepCTOs || [],
-          )
+            getCurrentCalcSequence(state.sequenceModel)?.calculatedSteps || [],
+            state.sequenceModel.activeFilter,
+            getCurrentSequenceModel(state.sequenceModel)?.sequenceStepCTOs || [],
+        )
         : [];
 }
 
