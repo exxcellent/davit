@@ -1,80 +1,67 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
-import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
+import { DropdownProps } from "semantic-ui-react";
 import { GroupTO } from "../../../../dataAccess/access/to/GroupTO";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import { DavitUtil } from "../../../../utils/DavitUtil";
+import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
 
 interface GroupDropDownProps extends DropdownProps {
-  onSelect: (group: GroupTO | undefined) => void;
-  placeholder?: string;
-  value?: number;
+    onSelect: (group: GroupTO | undefined) => void;
+    placeholder?: string;
+    value?: number;
 }
 
 interface GroupDropDownPropsButton extends DropdownProps {
-  onSelect: (group: GroupTO | undefined) => void;
-  icon?: string;
+    onSelect: (group: GroupTO | undefined) => void;
+    icon?: string;
 }
 
 export const GroupDropDown: FunctionComponent<GroupDropDownProps> = (props) => {
-  const { onSelect, placeholder, value } = props;
-  const { groups, groupToOption, selectGroup } = useGroupDropDownViewModel();
+    const { onSelect, placeholder, value } = props;
+    const { groups, groupToOption, selectGroup } = useGroupDropDownViewModel();
 
-  return (
-    <Dropdown
-      options={groups.map(groupToOption).sort((a, b) => {
-        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
-      })}
-      selection
-      selectOnBlur={false}
-      placeholder={placeholder || "Select Group ..."}
-      onChange={(event, data) => onSelect(selectGroup(Number(data.value), groups))}
-      scrolling
-      clearable
-      value={value}
-      disabled={groups.length > 0 ? false : true}
-    />
-  );
+    return (
+        <DavitDropDown
+            dropdownItems={groups.map(groupToOption)}
+            placeholder={placeholder}
+            onSelect={(group) => onSelect(selectGroup(Number(group.value), groups))}
+            clearable
+            value={value?.toString()}
+        />
+    );
 };
 
 export const GroupDropDownButton: FunctionComponent<GroupDropDownPropsButton> = (props) => {
-  const { onSelect, icon } = props;
-  const { groups, groupToOption, selectGroup } = useGroupDropDownViewModel();
+    const { onSelect, icon } = props;
+    const { groups, groupToOption, selectGroup } = useGroupDropDownViewModel();
 
-  return (
-    <Dropdown
-      options={groups.map(groupToOption).sort((a, b) => {
-        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
-      })}
-      icon={groups.length > 0 ? icon : ""}
-      selectOnBlur={false}
-      onChange={(event, data) => onSelect(selectGroup(Number(data.value), groups))}
-      className="button icon"
-      floating
-      trigger={<React.Fragment />}
-      scrolling
-      disabled={groups.length > 0 ? false : true}
-    />
-  );
+    return (
+        <DavitIconDropDown
+            dropdownItems={groups.map(groupToOption)}
+            icon={icon}
+            onSelect={(group) => onSelect(selectGroup(Number(group.value), groups))}
+        />
+    );
 };
 
 const useGroupDropDownViewModel = () => {
-  const groups: GroupTO[] = useSelector(masterDataSelectors.groups);
+    const groups: GroupTO[] = useSelector(masterDataSelectors.selectGroups);
 
-  const groupToOption = (group: GroupTO): DropdownItemProps => {
-    return {
-      key: group.id,
-      value: group.id,
-      text: group.name,
+    const groupToOption = (group: GroupTO): DavitDropDownItemProps => {
+        return {
+            key: group.id,
+            value: group.id.toString(),
+            text: group.name,
+        };
     };
-  };
 
-  const selectGroup = (groupId: number, groups: GroupTO[]): GroupTO | undefined => {
-    if (!isNullOrUndefined(groups) && !isNullOrUndefined(groupId)) {
-      return groups.find((group) => group.id === groupId);
-    }
-    return undefined;
-  };
+    const selectGroup = (groupId: number, groups: GroupTO[]): GroupTO | undefined => {
+        if (!DavitUtil.isNullOrUndefined(groups) && !DavitUtil.isNullOrUndefined(groupId)) {
+            return groups.find((group) => group.id === groupId);
+        }
+        return undefined;
+    };
 
-  return { groups, groupToOption, selectGroup };
+    return { groups, groupToOption, selectGroup };
 };

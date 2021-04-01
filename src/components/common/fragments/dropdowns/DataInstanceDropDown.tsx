@@ -1,72 +1,63 @@
 import React, { FunctionComponent } from "react";
-import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { DataInstanceTO } from "../../../../dataAccess/access/to/DataTO";
+import { DropdownProps } from "semantic-ui-react";
+import { DataInstanceTO } from "../../../../dataAccess/access/to/DataInstanceTO";
+import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
 
 interface DataInstanceDropDownProps extends DropdownProps {
-  onSelect: (instanc: number | undefined) => void;
-  instances: DataInstanceTO[];
-  placeholder?: string;
-  value?: number;
+    onSelect: (id: number | undefined) => void;
+    instances: DataInstanceTO[];
+    placeholder?: string;
+    value?: number;
 }
 
 interface DataInstanceDropDownButtonProps extends DropdownProps {
-  onSelect: (instancIndex: number | undefined) => void;
-  instances: DataInstanceTO[];
-  icon?: string;
+    onSelect: (id: number | undefined) => void;
+    instances: DataInstanceTO[];
+    icon?: string;
 }
 
+/**
+ * List's all instances of a data object.
+ */
 export const DataInstanceDropDown: FunctionComponent<DataInstanceDropDownProps> = (props) => {
-  const { onSelect, placeholder, value, instances } = props;
-  const { selectDataInstance, dataInstacesToOption } = useDataDropDownViewModel();
+    const { onSelect, placeholder, value, instances } = props;
+    const { dataInstacesToOption } = useDataInstanceDropDownViewModel();
 
-  return (
-    <Dropdown
-      options={dataInstacesToOption(instances)}
-      placeholder={placeholder || "Select Data Instance ..."}
-      onChange={(event, data) => onSelect(selectDataInstance(Number(data.value)))}
-      selectOnBlur={false}
-      scrolling
-      selection
-      value={value === -1 ? undefined : value}
-      disabled={instances.length > 0 ? false : true}
-    />
-  );
+    return (
+        <DavitDropDown
+            dropdownItems={dataInstacesToOption(instances)}
+            onSelect={(instance) => onSelect(Number(instance.value))}
+            placeholder={placeholder}
+            value={value?.toString()}
+        />
+    );
 };
 
 export const DataInstanceDropDownButton: FunctionComponent<DataInstanceDropDownButtonProps> = (props) => {
-  const { onSelect, instances, icon } = props;
-  const { selectDataInstance, dataInstacesToOption } = useDataDropDownViewModel();
+    const { onSelect, instances, icon } = props;
+    const { dataInstacesToOption } = useDataInstanceDropDownViewModel();
 
-  return (
-    <Dropdown
-      options={dataInstacesToOption(instances)}
-      icon={instances.length > 0 ? icon : ""}
-      onChange={(event, data) => onSelect(selectDataInstance(Number(data.value)))}
-      className="button icon"
-      inverted="true"
-      color="orange"
-      floating
-      selectOnBlur={false}
-      trigger={<React.Fragment />}
-      scrolling
-      disabled={instances.length > 0 ? false : true}
-    />
-  );
+    return (
+        <DavitIconDropDown
+            dropdownItems={dataInstacesToOption(instances)}
+            onSelect={(instance) => onSelect(Number(instance.value))}
+            icon={icon}
+        />
+    );
 };
 
-const useDataDropDownViewModel = () => {
-  const selectDataInstance = (instanceIndex: number): number | undefined => {
-    if (!isNullOrUndefined(instanceIndex)) {
-      return instanceIndex;
-    }
-  };
+const useDataInstanceDropDownViewModel = () => {
+    const dataInstacesToOption = (instances: DataInstanceTO[]): DavitDropDownItemProps[] => {
+        const dropdownItemProps: DavitDropDownItemProps[] = [];
+        instances.forEach((instanc) =>
+            dropdownItemProps.push({
+                key: instanc.id,
+                value: instanc.id.toString(),
+                text: instanc.name,
+            }),
+        );
+        return dropdownItemProps;
+    };
 
-  const dataInstacesToOption = (instances: DataInstanceTO[]): DropdownItemProps[] => {
-    const dropdownItemProps: DropdownItemProps[] = [];
-    instances.forEach((instanc, i) => dropdownItemProps.push({ key: i, value: instanc.id, text: instanc.name }));
-    return dropdownItemProps;
-  };
-
-  return { selectDataInstance, dataInstacesToOption };
+    return { dataInstacesToOption };
 };

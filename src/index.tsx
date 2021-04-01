@@ -1,34 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { IntlProvider } from "react-intl";
-import { Provider } from "react-redux";
-// import { BrowserRouter } from 'react-router-dom';
-import { HashRouter as BrowserRouter } from "react-router-dom";
+import {Provider} from "react-redux";
 import "semantic-ui-css/semantic.min.css";
-import { Carv2 } from "./app/Carv2";
-import { store } from "./app/store";
+import {Davit} from "./app/Davit";
+import {store} from "./app/store";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
-import { languages } from "./translations/languages";
-
-// TODO: if we rollout to english countries, this must be redefined (changing the locale "de" to "en" already works)
-/* support variables for languages */
-// const locale = navigator.language;
-// DE
-const locale = "de";
-// EN
-// const locale = 'en';
-const localeData = languages[locale];
 
 ReactDOM.render(
-  <Provider store={store}>
-    <IntlProvider locale={locale} messages={localeData}>
-      <BrowserRouter>
-        <Carv2 />
-      </BrowserRouter>
-    </IntlProvider>
-  </Provider>,
-  document.getElementById("root")
+    <Provider store={store}>
+        <Davit/>
+    </Provider>,
+    document.getElementById("root"),
 );
 
 // If you want your app to work offline and load faster, you can change

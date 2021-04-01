@@ -1,92 +1,88 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
-import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
-import { ComponentCTO } from "../../../../dataAccess/access/cto/ComponentCTO";
+import { DropdownProps } from "semantic-ui-react";
+import { ActorCTO } from "../../../../dataAccess/access/cto/ActorCTO";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { InitDataTO } from "../../../../dataAccess/access/to/InitDataTO";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import { DavitUtil } from "../../../../utils/DavitUtil";
+import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
 
 interface InitDataDropDownDownProps extends DropdownProps {
-  initDatas: InitDataTO[];
-  onSelect: (initData: InitDataTO | undefined) => void;
-  placeholder?: string;
-  value?: number;
+    initDatas: InitDataTO[];
+    onSelect: (initData: InitDataTO | undefined) => void;
+    placeholder?: string;
+    value?: number;
 }
 
 interface InitDataDropDownPropsButton extends DropdownProps {
-  initDatas: InitDataTO[];
-  onSelect: (initData: InitDataTO | undefined) => void;
-  icon?: string;
+    initDatas: InitDataTO[];
+    onSelect: (initData: InitDataTO | undefined) => void;
+    icon?: string;
 }
 
 export const InitDataDropDown: FunctionComponent<InitDataDropDownDownProps> = (props) => {
-  const { onSelect, placeholder, value, initDatas } = props;
-  const { initDataToOption, selectInitData } = useDataSetupDropDownViewModel();
+    const { onSelect, placeholder, value, initDatas } = props;
+    const { initDataToOption, selectInitData } = useDataSetupDropDownViewModel();
 
-  return (
-    <Dropdown
-      options={initDatas.map(initDataToOption).sort(function (a, b) {
-        return ("" + a.attr).localeCompare(b.attr);
-      })}
-      selection
-      selectOnBlur={false}
-      placeholder={placeholder || "Select Data ..."}
-      onChange={(event, data) => onSelect(selectInitData(Number(data.value), initDatas))}
-      scrolling
-      clearable={true}
-      value={value}
-      disabled={initDatas.length > 0 ? false : true}
-    />
-  );
+    return (
+        <DavitDropDown
+            dropdownItems={initDatas.map(initDataToOption)}
+            placeholder={placeholder}
+            onSelect={(initData) => onSelect(selectInitData(Number(initData.value), initDatas))}
+            clearable
+            value={value?.toString()}
+        />
+    );
 };
 
 export const InitDataDropDownButton: FunctionComponent<InitDataDropDownPropsButton> = (props) => {
-  const { onSelect, icon, initDatas } = props;
-  const { initDataToOption, selectInitData } = useDataSetupDropDownViewModel();
+    const { onSelect, icon, initDatas } = props;
+    const { initDataToOption, selectInitData } = useDataSetupDropDownViewModel();
 
-  return (
-    <Dropdown
-      options={initDatas.map(initDataToOption).sort(function (a, b) {
-        return ("" + a.attr).localeCompare(b.attr);
-      })}
-      icon={initDatas.length > 0 ? icon : ""}
-      selectOnBlur={false}
-      onChange={(event, data) => onSelect(selectInitData(Number(data.value), initDatas))}
-      className="button icon"
-      trigger={<React.Fragment />}
-      scrolling
-      disabled={initDatas.length > 0 ? false : true}
-    />
-  );
+    return (
+        <DavitIconDropDown
+            dropdownItems={initDatas.map(initDataToOption)}
+            icon={icon}
+            onSelect={(initData) => onSelect(selectInitData(Number(initData.value), initDatas))}
+        />
+    );
 };
 
 const useDataSetupDropDownViewModel = () => {
-  const components: ComponentCTO[] = useSelector(masterDataSelectors.components);
-  const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
+    const actors: ActorCTO[] = useSelector(masterDataSelectors.selectActors);
+    const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
 
-  const getComponentName = (compId: number): string => {
-    return components.find((comp) => comp.component.id === compId)?.component.name || "";
-  };
-
-  const getDataName = (id: number): string => {
-    return datas.find((data) => data.data.id === id)?.data.name || "";
-  };
-
-  const initDataToOption = (initData: InitDataTO): DropdownItemProps => {
-    return {
-      key: initData.id,
-      value: initData.id,
-      text: getComponentName(initData.componentFk) + " - " + getDataName(initData.dataFk),
+    const getActorName = (actorId: number): string => {
+        return actors.find((actor) => actor.actor.id === actorId)?.actor.name || "";
     };
-  };
 
-  const selectInitData = (initDataId: number, initDatas: InitDataTO[]): InitDataTO | undefined => {
-    if (!isNullOrUndefined(initDataId) && !isNullOrUndefined(initDatas)) {
-      return initDatas.find((initData) => initData.id === initDataId);
-    }
-    return undefined;
-  };
+    const getDataName = (dataId: number, instanceId?: number): string => {
+        let dataName: string = "";
+        let instanceName: string = "";
+        const data: DataCTO | undefined = datas.find((data) => data.data.id === dataId);
+        dataName = data?.data.name || "";
+        if (data && instanceId && instanceId > 1) {
+            instanceName = data.data.instances.find((inst) => inst.id === instanceId)?.name || "";
+            dataName = dataName + " - " + instanceName;
+        }
+        return dataName;
+    };
 
-  return { initDataToOption, selectInitData };
+    const initDataToOption = (initData: InitDataTO): DavitDropDownItemProps => {
+        return {
+            key: initData.id,
+            value: initData.id.toString(),
+            text: getActorName(initData.actorFk) + " + " + getDataName(initData.dataFk, initData.instanceFk),
+        };
+    };
+
+    const selectInitData = (initDataId: number, initDatas: InitDataTO[]): InitDataTO | undefined => {
+        if (!DavitUtil.isNullOrUndefined(initDataId) && !DavitUtil.isNullOrUndefined(initDatas)) {
+            return initDatas.find((initData) => initData.id === initDataId);
+        }
+        return undefined;
+    };
+
+    return { initDataToOption, selectInitData };
 };

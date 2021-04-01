@@ -1,90 +1,175 @@
-import { isNullOrUndefined } from "util";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
 import { DecisionTO } from "../dataAccess/access/to/DecisionTO";
 import { ActionType } from "../dataAccess/access/types/ActionType";
 import { GoTo } from "../dataAccess/access/types/GoToType";
-import { Carv2Util } from "../utils/Carv2Util";
-import { ComponentData } from "../viewDataTypes/ComponentData";
+import { ActorData } from "../viewDataTypes/ActorData";
+import { ActorDataState } from "../viewDataTypes/ActorDataState";
+
+// ----------------------------------------------------- INTERFACES ----------------------------------------------------------
 
 export interface SequenceActionResult {
-  componenDatas: ComponentData[];
-  errors: ActionTO[];
+    actorDatas: ActorData[];
+    errors: ActionTO[];
 }
 
+export interface SequenceDecisionResult {
+    actorDatas: ActorData[];
+    goto: GoTo;
+}
+
+// ----------------------------------------------------- PUBLIC FUNCTION -----------------------------------------------------
+
 export const SequenceActionReducer = {
-  executeActionsOnComponentDatas(actions: ActionTO[], componentDatas: ComponentData[]): SequenceActionResult {
-    let newComponentDatas: ComponentData[] = Carv2Util.deepCopy(componentDatas);
-    let errors: ActionTO[] = [];
+    executeActionsOnActorDatas(actions: ActionTO[], actorDatas: ActorData[]): SequenceActionResult {
+        // copy actorDatas and set all to state PERSISTENT
+        const newActorDatas: ActorData[] = actorDatas
+            .filter((actorData) => !isTransiantState(actorData.state))
+            .map((actorData) => {
+                return { ...actorData, state: ActorDataState.PERSISTENT };
+            });
+        const errors: ActionTO[] = [];
 
-    actions.forEach((action) => {
-      const index: number = findComponentDataIndex(action.componentFk, action.dataFk, newComponentDatas);
-      // modification
-      let result: { compData: ComponentData | undefined; errorItem: ActionTO | null };
-      if (index > -1) {
-        // comData exists => check => do nothing or delete => delete the element
-        result = executeActionOnComponentData(action, newComponentDatas[index]);
-        if (isNullOrUndefined(result.compData)) {
-          newComponentDatas.splice(index, 1);
-        }
-      } else {
-        result = executeActionOnComponentData(action);
-        if (!isNullOrUndefined(result.compData)) {
-          newComponentDatas.push(result.compData);
-        }
-      }
-      if (!isNullOrUndefined(result.errorItem)) {
-        errors.push(result.errorItem);
-      }
-    });
-    return { componenDatas: newComponentDatas, errors };
-  },
+        actions.forEach((action) => {
+            const indexActorDataReceiving: number = findActorDataIndex(
+                action.receivingActorFk,
+                action.dataFk,
+                newActorDatas,
+            );
 
-  executeDecisionCheck(decision: DecisionTO, componenDatas: ComponentData[]): GoTo {
-    const filteredCompData: ComponentData[] = componenDatas.filter(
-      (compData) => compData.componentFk === decision.componentFk
+            const indexActorDataSending: number = findActorDataIndex(
+                action.sendingActorFk,
+                action.dataFk,
+                newActorDatas,
+            );
+
+            switch (action.actionType) {
+                case ActionType.ADD:
+                    if (!actorDataIsPresent(indexActorDataReceiving)) {
+                        newActorDatas.push({
+                            actorFk: action.receivingActorFk,
+                            dataFk: action.dataFk,
+                            instanceFk: action.instanceFk,
+                            state: ActorDataState.NEW,
+                        });
+                    } else if (newActorDatas[indexActorDataReceiving].instanceFk !== action.instanceFk) {
+                        newActorDatas.push({
+                            actorFk: action.receivingActorFk,
+                            dataFk: action.dataFk,
+                            instanceFk: action.instanceFk,
+                            state: ActorDataState.UPDATED_TO,
+                        });
+                        newActorDatas[indexActorDataReceiving] = {
+                            ...newActorDatas[indexActorDataReceiving],
+                            state: ActorDataState.UPDATED_FROM,
+                        };
+                    } else {
+                        errors.push(action);
+                    }
+                    break;
+                case ActionType.DELETE:
+                    actorDataIsPresent(indexActorDataReceiving)
+                        ? (newActorDatas[indexActorDataReceiving].state = ActorDataState.DELETED)
+                        : errors.push(action);
+                    break;
+                case ActionType.SEND:
+                    if (actorDataIsPresent(indexActorDataSending)) {
+                        const actorData: ActorData = {
+                            actorFk: action.receivingActorFk,
+                            dataFk: action.dataFk,
+                            instanceFk: newActorDatas[indexActorDataSending].instanceFk,
+                            state: ActorDataState.SENT,
+                        };
+                        newActorDatas[indexActorDataSending].state = ActorDataState.SENT;
+                        if (actorDataIsPresent(indexActorDataReceiving)) {
+                            newActorDatas.push({
+                                actorFk: action.receivingActorFk,
+                                dataFk: action.dataFk,
+                                instanceFk: newActorDatas[indexActorDataReceiving].instanceFk,
+                                state: ActorDataState.UPDATED_FROM,
+                            });
+                            newActorDatas[indexActorDataReceiving] = { ...actorData, state: ActorDataState.UPDATED_TO };
+                        } else {
+                            newActorDatas.push(actorData);
+                        }
+                    } else {
+                        errors.push(action);
+                    }
+                    break;
+                case ActionType.SEND_AND_DELETE:
+                    if (actorDataIsPresent(indexActorDataSending)) {
+                        const actorData: ActorData = {
+                            actorFk: action.receivingActorFk,
+                            dataFk: action.dataFk,
+                            instanceFk: newActorDatas[indexActorDataSending].instanceFk,
+                            state: ActorDataState.SENT,
+                        };
+                        newActorDatas[indexActorDataSending].state = ActorDataState.DELETED;
+                        if (actorDataIsPresent(indexActorDataReceiving)) {
+                            newActorDatas[indexActorDataReceiving] = { ...actorData, state: ActorDataState.UPDATED_TO };
+                        } else {
+                            newActorDatas.push(actorData);
+                        }
+                    } else {
+                        errors.push(action);
+                    }
+                    break;
+            }
+        });
+        return { actorDatas: newActorDatas, errors };
+    },
+
+    executeDecisionCheck(decision: DecisionTO, actorDatas: ActorData[]): SequenceDecisionResult {
+        /**
+         * Remove with status "deleted" and "check failed"
+         * Change rest to status "persistent".
+         * */
+        let updatedActorDatas: ActorData[] = actorDatas
+            .filter((actorData) => !isTransiantState(actorData.state))
+            .map((actorData) => {
+                return { ...actorData, state: ActorDataState.PERSISTENT };
+            });
+
+        let goTo = decision.ifGoTo;
+
+        decision.conditions.forEach((condition) => {
+            const actorDataToCheck: ActorData | undefined = updatedActorDatas.find(
+                (actorData) => actorData.actorFk === condition.actorFk && actorData.dataFk === condition.dataFk && actorData.instanceFk === condition.instanceFk,
+            );
+
+            if (actorDataToCheck) {
+                actorDataToCheck.state = ActorDataState.CHECKED;
+            } else {
+                updatedActorDatas.push({
+                    actorFk: condition.actorFk,
+                    dataFk: condition.dataFk,
+                    instanceFk: condition.instanceFk,
+                    state: ActorDataState.CHECK_FAILED,
+                });
+                goTo = decision.elseGoTo;
+            }
+        });
+
+        return { actorDatas: updatedActorDatas, goto: goTo };
+    },
+};
+
+// ------------------------------------------------------------ PRIVATE FUNCTIONS ------------------------------------------------------------
+
+const findActorDataIndex = (actorId: number, dataId: number, actorDatas: ActorData[]): number => {
+    return actorDatas.findIndex(
+        (actorData) =>
+            actorData.actorFk === actorId && actorData.dataFk === dataId && !isTransiantState(actorData.state),
     );
-    let goTo: GoTo | undefined;
-    decision.dataFks.forEach((dataFk) => {
-      let isIncluded: boolean = filteredCompData.some((cd) => cd.dataFk === dataFk);
-      if (decision.has !== isIncluded) {
-        goTo = decision.elseGoTo;
-      }
-    });
-    return goTo || decision.ifGoTo;
-  },
 };
 
-const findComponentDataIndex = (compId: number, dataId: number, componentDatas: ComponentData[]): number => {
-  return componentDatas.findIndex((compData) => compData.componentFk === compId && compData.dataFk === dataId);
+const isTransiantState = (state: ActorDataState) => {
+    return (
+        state === ActorDataState.DELETED ||
+        state === ActorDataState.UPDATED_FROM ||
+        state === ActorDataState.CHECK_FAILED
+    );
 };
 
-const executeActionOnComponentData = (
-  action: ActionTO,
-  componentData?: ComponentData
-): { compData: ComponentData | undefined; errorItem: ActionTO | null } => {
-  let newCompData: ComponentData | undefined = Carv2Util.deepCopy(componentData);
-  let errorItem: ActionTO | null = null;
-
-  // create as default an error compData and set the state if its no error
-  switch (action.actionType) {
-    case ActionType.ADD:
-      if (componentData === undefined) {
-        newCompData = {
-          componentFk: action.componentFk,
-          dataFk: action.dataFk,
-        };
-      } else {
-        errorItem = Carv2Util.deepCopy(action);
-      }
-      break;
-    case ActionType.DELETE:
-      if (componentData !== undefined) {
-        newCompData = undefined;
-      } else {
-        errorItem = Carv2Util.deepCopy(action);
-      }
-      break;
-  }
-
-  return { compData: newCompData, errorItem };
-};
+function actorDataIsPresent(indexActorDataToEdit: number) {
+    return indexActorDataToEdit !== -1;
+}

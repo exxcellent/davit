@@ -9,5 +9,5 @@ export function createStorageListener(store: any) {
             delete wrappedAction.source;
             store.dispatch(wrappedAction);
         }
-    }
+    };
 }

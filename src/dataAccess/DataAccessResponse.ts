@@ -1,10 +1,10 @@
 export interface DataAccessResponse<T> {
-  object: T;
-  message: string;
-  code: Code;
+    object: T;
+    message: string;
+    code: Code;
 }
 
 export enum Code {
-  OK = 200,
-  ERROR = 500,
+    OK = 200,
+    ERROR = 500,
 }

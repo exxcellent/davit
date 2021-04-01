@@ -1,5 +1,5 @@
+import { ActorCTO } from "./access/cto/ActorCTO";
 import { ChainCTO } from "./access/cto/ChainCTO";
-import { ComponentCTO } from "./access/cto/ComponentCTO";
 import { DataCTO } from "./access/cto/DataCTO";
 import { DataSetupCTO } from "./access/cto/DataSetupCTO";
 import { SequenceCTO } from "./access/cto/SequenceCTO";
@@ -10,7 +10,6 @@ import { ChainlinkTO } from "./access/to/ChainlinkTO";
 import { ChainTO } from "./access/to/ChainTO";
 import { DataRelationTO } from "./access/to/DataRelationTO";
 import { DataSetupTO } from "./access/to/DataSetupTO";
-import { DataInstanceTO } from "./access/to/DataTO";
 import { DecisionTO } from "./access/to/DecisionTO";
 import { GroupTO } from "./access/to/GroupTO";
 import { InitDataTO } from "./access/to/InitDataTO";
@@ -18,284 +17,310 @@ import { SequenceStepTO } from "./access/to/SequenceStepTO";
 import { SequenceTO } from "./access/to/SequenceTO";
 import { DataAccessResponse } from "./DataAccessResponse";
 import dataStore from "./DataStore";
-import { ComponentDataAccessService } from "./services/ComponentDataAccessService";
+import { ActorDataAccessService } from "./services/ActorDataAccessService";
 import { DataDataAccessService } from "./services/DataDataAccessService";
 import { SequenceDataAccessService } from "./services/SequenceDataAccessService";
+import { TechnicalDataAccessService } from "./services/TechnicalDataAccessService";
 
 export const DataAccess = {
-  // ========================================= FILE =========================================
+    // ========================================= FILE =========================================
 
-  storeFileData(fileData: string): DataAccessResponse<void> {
-    let response: DataAccessResponse<void> = {
-      object: undefined,
-      message: "",
-      code: 500,
-    };
-    try {
-      dataStore.storeFileData(fileData);
-      return { ...response, code: 200 };
-    } catch (error) {
-      return { ...response, message: error.message };
-    }
-  },
+    storeFileData(fileData: string): DataAccessResponse<void> {
+        const response: DataAccessResponse<void> = {
+            object: undefined,
+            message: "",
+            code: 500,
+        };
+        try {
+            dataStore.storeFileData(fileData);
+            return { ...response, code: 200 };
+        } catch (error) {
+            return { ...response, message: error.message };
+        }
+    },
 
-  downloadData(projectName: string): DataAccessResponse<void> {
-    let response: DataAccessResponse<void> = {
-      object: undefined,
-      message: "",
-      code: 500,
-    };
-    try {
-      dataStore.downloadData(projectName);
-      return { ...response, code: 200 };
-    } catch (error) {
-      return { ...response, message: error.message };
-    }
-  },
+    createNewProject(): DataAccessResponse<void> {
+        const response: DataAccessResponse<void> = {
+            object: undefined,
+            message: "",
+            code: 500,
+        };
+        try {
+            dataStore.createNewProject();
+            return { ...response, code: 200 };
+        } catch (error) {
+            return { ...response, message: error.message };
+        }
+    },
 
-  // ========================================= COMPONENT =========================================
+    downloadData(projectName: string): DataAccessResponse<void> {
+        const response: DataAccessResponse<void> = {
+            object: undefined,
+            message: "",
+            code: 500,
+        };
+        makeTransactional(() => TechnicalDataAccessService.saveProjectName(projectName));
+        try {
+            dataStore.downloadData(projectName);
+            return { ...response, code: 200 };
+        } catch (error) {
+            return { ...response, message: error.message };
+        }
+    },
 
-  findAllComponents(): DataAccessResponse<ComponentCTO[]> {
-    return makeTransactional(ComponentDataAccessService.findAll);
-  },
+    // ========================================= ZOOM =========================================
 
-  saveComponentCTO(component: ComponentCTO): DataAccessResponse<ComponentCTO> {
-    return makeTransactional(() => ComponentDataAccessService.saveCTO(component));
-  },
+    setActorZoom(zoom: number): DataAccessResponse<number> {
+        return makeTransactional(() => TechnicalDataAccessService.saveActorZoom(zoom));
+    },
 
-  deleteComponentCTO(component: ComponentCTO): DataAccessResponse<ComponentCTO> {
-    return makeTransactional(() => ComponentDataAccessService.delete(component));
-  },
+    setDataZoom(zoom: number): DataAccessResponse<number> {
+        return makeTransactional(() => TechnicalDataAccessService.saveDataZoom(zoom));
+    },
 
-  // ========================================= SEQUENCE =========================================
+    loadActorZoom(): DataAccessResponse<number> {
+        return makeTransactional(TechnicalDataAccessService.getActorZoom);
+    },
 
-  deleteSequenceCTO(sequence: SequenceCTO): DataAccessResponse<SequenceCTO> {
-    return makeTransactional(() => SequenceDataAccessService.deleteSequenceCTO(sequence));
-  },
+    loadDataZoom(): DataAccessResponse<number> {
+        return makeTransactional(TechnicalDataAccessService.getDataZoom);
+    },
 
-  deleteSequenceTO(sequenceTO: SequenceTO): DataAccessResponse<SequenceTO> {
-    return makeTransactional(() => SequenceDataAccessService.deleteSequenceTO(sequenceTO));
-  },
+    // ========================================= ACTOR =========================================
 
-  findAllSequences(): DataAccessResponse<SequenceTO[]> {
-    return makeTransactional(SequenceDataAccessService.findAll);
-  },
+    findAllActors(): DataAccessResponse<ActorCTO[]> {
+        return makeTransactional(ActorDataAccessService.findAll);
+    },
 
-  findSequenceCTO(sequenceId: number): DataAccessResponse<SequenceCTO> {
-    return makeTransactional(() => SequenceDataAccessService.findSequenceCTO(sequenceId));
-  },
+    saveActorCTO(actor: ActorCTO): DataAccessResponse<ActorCTO> {
+        return makeTransactional(() => ActorDataAccessService.saveCTO(actor));
+    },
 
-  saveSequenceCTO(sequence: SequenceCTO): DataAccessResponse<SequenceCTO> {
-    return makeTransactional(() => SequenceDataAccessService.saveSequenceCTO(sequence));
-  },
+    deleteActorCTO(actor: ActorCTO): DataAccessResponse<ActorCTO> {
+        return makeTransactional(() => ActorDataAccessService.delete(actor));
+    },
 
-  saveSequenceTO(sequence: SequenceTO): DataAccessResponse<SequenceTO> {
-    return makeTransactional(() => SequenceDataAccessService.saveSequenceTO(sequence));
-  },
+    // ========================================= SEQUENCE =========================================
 
-  setRoot(sequenceId: number, id: number, isDecision: boolean): DataAccessResponse<SequenceStepTO | DecisionTO> {
-    return makeTransactional(() => SequenceDataAccessService.setRoot(sequenceId, id, isDecision));
-  },
+    deleteSequenceCTO(sequence: SequenceCTO): DataAccessResponse<SequenceCTO> {
+        return makeTransactional(() => SequenceDataAccessService.deleteSequenceCTO(sequence));
+    },
 
-  // ========================================= STEP =========================================
+    deleteSequenceTO(sequenceTO: SequenceTO): DataAccessResponse<SequenceTO> {
+        return makeTransactional(() => SequenceDataAccessService.deleteSequenceTO(sequenceTO));
+    },
 
-  saveSequenceStepCTO(sequenceStep: SequenceStepCTO): DataAccessResponse<SequenceStepCTO> {
-    return makeTransactional(() => SequenceDataAccessService.saveSequenceStep(sequenceStep));
-  },
+    findAllSequences(): DataAccessResponse<SequenceTO[]> {
+        return makeTransactional(SequenceDataAccessService.findAll);
+    },
 
-  deleteSequenceStepCTO(sequenceStep: SequenceStepCTO): DataAccessResponse<SequenceStepCTO> {
-    return makeTransactional(() => SequenceDataAccessService.deleteSequenceStep(sequenceStep));
-  },
+    findSequenceCTO(sequenceId: number): DataAccessResponse<SequenceCTO> {
+        return makeTransactional(() => SequenceDataAccessService.findSequenceCTO(sequenceId));
+    },
 
-  findSequenceStepCTO(id: number): DataAccessResponse<SequenceStepCTO> {
-    return makeTransactional(() => SequenceDataAccessService.findSequenceStepCTO(id));
-  },
+    saveSequenceCTO(sequence: SequenceCTO): DataAccessResponse<SequenceCTO> {
+        return makeTransactional(() => SequenceDataAccessService.saveSequenceCTO(sequence));
+    },
 
-  // ========================================= DATA SETUP =========================================
+    saveSequenceTO(sequence: SequenceTO): DataAccessResponse<SequenceTO> {
+        return makeTransactional(() => SequenceDataAccessService.saveSequenceTO(sequence));
+    },
 
-  findAllDataSetups(): DataAccessResponse<DataSetupTO[]> {
-    return makeTransactional(SequenceDataAccessService.findAllDataSetup);
-  },
+    setRoot(sequenceId: number, id: number, isDecision: boolean): DataAccessResponse<SequenceStepTO | DecisionTO> {
+        return makeTransactional(() => SequenceDataAccessService.setRoot(sequenceId, id, isDecision));
+    },
 
-  findDataSetupCTO(dataSetupId: number): DataAccessResponse<DataSetupCTO> {
-    return makeTransactional(() => SequenceDataAccessService.findDatSetupCTO(dataSetupId));
-  },
+    // ========================================= STEP =========================================
 
-  saveDataSetup(dataSetup: DataSetupTO): DataAccessResponse<DataSetupTO> {
-    return makeTransactional(() => SequenceDataAccessService.saveDataSetup(dataSetup));
-  },
+    saveSequenceStepCTO(sequenceStep: SequenceStepCTO): DataAccessResponse<SequenceStepCTO> {
+        return makeTransactional(() => SequenceDataAccessService.saveSequenceStep(sequenceStep));
+    },
 
-  deleteDataSetup(dataSetup: DataSetupCTO): DataAccessResponse<DataSetupCTO> {
-    return makeTransactional(() => SequenceDataAccessService.deleteDataSetup(dataSetup));
-  },
+    deleteSequenceStepCTO(sequenceStep: SequenceStepCTO): DataAccessResponse<SequenceStepCTO> {
+        return makeTransactional(() => SequenceDataAccessService.deleteSequenceStep(sequenceStep));
+    },
 
-  saveDataSetupCTO(dataSetup: DataSetupCTO): DataAccessResponse<DataSetupCTO> {
-    return makeTransactional(() => SequenceDataAccessService.saveDataSetupCTO(dataSetup));
-  },
+    findSequenceStepCTO(id: number): DataAccessResponse<SequenceStepCTO> {
+        return makeTransactional(() => SequenceDataAccessService.findSequenceStepCTO(id));
+    },
 
-  // ========================================= INIT DATA =========================================
+    // ========================================= DATA SETUP =========================================
 
-  findAllInitDatas(): DataAccessResponse<InitDataTO[]> {
-    return makeTransactional(SequenceDataAccessService.findAllInitDatas);
-  },
+    findAllDataSetups(): DataAccessResponse<DataSetupTO[]> {
+        return makeTransactional(SequenceDataAccessService.findAllDataSetup);
+    },
 
-  findInitData(id: number): DataAccessResponse<InitDataTO> {
-    return makeTransactional(() => SequenceDataAccessService.findInitData(id));
-  },
+    findDataSetupCTO(dataSetupId: number): DataAccessResponse<DataSetupCTO> {
+        return makeTransactional(() => SequenceDataAccessService.findDatSetupCTO(dataSetupId));
+    },
 
-  saveInitData(initData: InitDataTO): DataAccessResponse<InitDataTO> {
-    return makeTransactional(() => SequenceDataAccessService.saveInitData(initData));
-  },
+    saveDataSetup(dataSetup: DataSetupTO): DataAccessResponse<DataSetupTO> {
+        return makeTransactional(() => SequenceDataAccessService.saveDataSetup(dataSetup));
+    },
 
-  deleteInitData(id: number): DataAccessResponse<InitDataTO> {
-    return makeTransactional(() => SequenceDataAccessService.deleteInitData(id));
-  },
-  // ========================================= DATA =========================================
+    deleteDataSetup(dataSetup: DataSetupCTO): DataAccessResponse<DataSetupCTO> {
+        return makeTransactional(() => SequenceDataAccessService.deleteDataSetup(dataSetup));
+    },
 
-  findAllDatas(): DataAccessResponse<DataCTO[]> {
-    return makeTransactional(DataDataAccessService.findAllDatas);
-  },
+    saveDataSetupCTO(dataSetup: DataSetupCTO): DataAccessResponse<DataSetupCTO> {
+        return makeTransactional(() => SequenceDataAccessService.saveDataSetupCTO(dataSetup));
+    },
 
-  saveDataCTO(dataCTO: DataCTO): DataAccessResponse<DataCTO> {
-    return makeTransactional(() => DataDataAccessService.saveDataCTO(dataCTO));
-  },
+    // ========================================= INIT DATA =========================================
 
-  saveDataInstanceTO(dataInstanceTO: DataInstanceTO): DataAccessResponse<DataCTO> {
-    return makeTransactional(() => DataDataAccessService.saveDataInstanceTO(dataInstanceTO));
-  },
+    findAllInitDatas(): DataAccessResponse<InitDataTO[]> {
+        return makeTransactional(SequenceDataAccessService.findAllInitDatas);
+    },
 
-  deleteDataCTO(dataCTO: DataCTO): DataAccessResponse<DataCTO> {
-    return makeTransactional(() => DataDataAccessService.deleteDataCTO(dataCTO));
-  },
+    findInitData(id: number): DataAccessResponse<InitDataTO> {
+        return makeTransactional(() => SequenceDataAccessService.findInitData(id));
+    },
 
-  // ========================================= RELATION =========================================
+    saveInitData(initData: InitDataTO): DataAccessResponse<InitDataTO> {
+        return makeTransactional(() => SequenceDataAccessService.saveInitData(initData));
+    },
 
-  deleteDataRelation(dataRelationCTO: DataRelationTO): DataAccessResponse<DataRelationTO> {
-    return makeTransactional(() => DataDataAccessService.deleteDataRelationCTO(dataRelationCTO));
-  },
+    deleteInitData(id: number): DataAccessResponse<InitDataTO> {
+        return makeTransactional(() => SequenceDataAccessService.deleteInitData(id));
+    },
+    // ========================================= DATA =========================================
 
-  findAllDataRelations(): DataAccessResponse<DataRelationTO[]> {
-    return makeTransactional(DataDataAccessService.findAllDataRelationTOs);
-  },
+    findAllDatas(): DataAccessResponse<DataCTO[]> {
+        return makeTransactional(DataDataAccessService.findAllDatas);
+    },
 
-  saveDataRelationCTO(dataRelation: DataRelationTO): DataAccessResponse<DataRelationTO> {
-    return makeTransactional(() => DataDataAccessService.saveDataRelation(dataRelation));
-  },
+    saveDataCTO(dataCTO: DataCTO): DataAccessResponse<DataCTO> {
+        return makeTransactional(() => DataDataAccessService.saveDataCTO(dataCTO));
+    },
 
-  // ========================================= GROUP =========================================
+    deleteDataCTO(dataCTO: DataCTO): DataAccessResponse<DataCTO> {
+        return makeTransactional(() => DataDataAccessService.deleteDataCTO(dataCTO));
+    },
 
-  findAllGroups(): DataAccessResponse<GroupTO[]> {
-    return makeTransactional(ComponentDataAccessService.findAllGroups);
-  },
+    // ========================================= RELATION =========================================
 
-  saveGroup(group: GroupTO): DataAccessResponse<GroupTO> {
-    return makeTransactional(() => ComponentDataAccessService.saveGroup(group));
-  },
+    deleteDataRelation(dataRelationCTO: DataRelationTO): DataAccessResponse<DataRelationTO> {
+        return makeTransactional(() => DataDataAccessService.deleteDataRelationCTO(dataRelationCTO));
+    },
 
-  deleteGroupTO(group: GroupTO): DataAccessResponse<GroupTO> {
-    return makeTransactional(() => ComponentDataAccessService.deleteGroup(group));
-  },
+    findAllDataRelations(): DataAccessResponse<DataRelationTO[]> {
+        return makeTransactional(DataDataAccessService.findAllDataRelationTOs);
+    },
 
-  // ========================================= ACTION =========================================
+    saveDataRelationCTO(dataRelation: DataRelationTO): DataAccessResponse<DataRelationTO> {
+        return makeTransactional(() => DataDataAccessService.saveDataRelation(dataRelation));
+    },
 
-  deleteActionCTO(action: ActionTO): DataAccessResponse<ActionTO> {
-    return makeTransactional(() => SequenceDataAccessService.deleteAction(action));
-  },
+    // ========================================= GROUP =========================================
 
-  saveActionTO(action: ActionTO): DataAccessResponse<ActionTO> {
-    return makeTransactional(() => SequenceDataAccessService.saveActionTO(action));
-  },
+    findAllGroups(): DataAccessResponse<GroupTO[]> {
+        return makeTransactional(ActorDataAccessService.findAllGroups);
+    },
 
-  // ========================================= DECISION =========================================
+    saveGroup(group: GroupTO): DataAccessResponse<GroupTO> {
+        return makeTransactional(() => ActorDataAccessService.saveGroup(group));
+    },
 
-  saveDecision(decision: DecisionTO): DataAccessResponse<DecisionTO> {
-    return makeTransactional(() => SequenceDataAccessService.saveDecision(decision));
-  },
+    deleteGroupTO(group: GroupTO): DataAccessResponse<GroupTO> {
+        return makeTransactional(() => ActorDataAccessService.deleteGroup(group));
+    },
 
-  deleteDecision(decision: DecisionTO): DataAccessResponse<DecisionTO> {
-    return makeTransactional(() => SequenceDataAccessService.deleteDecision(decision));
-  },
+    // ========================================= ACTION =========================================
 
-  findDecision(id: number): DataAccessResponse<DecisionTO> {
-    return makeTransactional(() => SequenceDataAccessService.findDecision(id));
-  },
+    deleteActionTO(action: ActionTO): DataAccessResponse<ActionTO> {
+        return makeTransactional(() => SequenceDataAccessService.deleteAction(action));
+    },
 
-  // ========================================= CHAIN =========================================
+    saveActionTO(action: ActionTO): DataAccessResponse<ActionTO> {
+        return makeTransactional(() => SequenceDataAccessService.saveActionTO(action));
+    },
 
-  findAllChains(): DataAccessResponse<ChainTO[]> {
-    return makeTransactional(SequenceDataAccessService.findAllChains);
-  },
+    // ========================================= DECISION =========================================
 
-  getChainCTO(chain: ChainTO): DataAccessResponse<ChainCTO> {
-    return makeTransactional(() => SequenceDataAccessService.getChainCTO(chain));
-  },
+    saveDecision(decision: DecisionTO): DataAccessResponse<DecisionTO> {
+        return makeTransactional(() => SequenceDataAccessService.saveDecision(decision));
+    },
 
-  saveChainTO(chain: ChainTO): DataAccessResponse<ChainTO> {
-    return makeTransactional(() => SequenceDataAccessService.saveChainTO(chain));
-  },
+    deleteDecision(decision: DecisionTO): DataAccessResponse<DecisionTO> {
+        return makeTransactional(() => SequenceDataAccessService.deleteDecision(decision));
+    },
 
-  deleteChain(chain: ChainTO): DataAccessResponse<ChainTO> {
-    return makeTransactional(() => SequenceDataAccessService.deleteChain(chain));
-  },
+    findDecision(id: number): DataAccessResponse<DecisionTO> {
+        return makeTransactional(() => SequenceDataAccessService.findDecision(id));
+    },
 
-  saveChainlink(link: ChainlinkTO): DataAccessResponse<ChainlinkTO> {
-    return makeTransactional(() => SequenceDataAccessService.saveChainlink(link));
-  },
+    // ========================================= CHAIN =========================================
 
-  findAllChainLinks(): DataAccessResponse<ChainlinkTO[]> {
-    return makeTransactional(SequenceDataAccessService.findAllChainLinks);
-  },
+    findAllChains(): DataAccessResponse<ChainTO[]> {
+        return makeTransactional(SequenceDataAccessService.findAllChains);
+    },
 
-  deleteChainLink(step: ChainlinkTO): DataAccessResponse<ChainlinkTO> {
-    return makeTransactional(() => SequenceDataAccessService.deleteChainTO(step));
-  },
+    getChainCTO(chain: ChainTO): DataAccessResponse<ChainCTO> {
+        return makeTransactional(() => SequenceDataAccessService.getChainCTO(chain));
+    },
 
-  saveChaindecision(decision: ChainDecisionTO): DataAccessResponse<ChainDecisionTO> {
-    return makeTransactional(() => SequenceDataAccessService.saveChainDecision(decision));
-  },
+    saveChainTO(chain: ChainTO): DataAccessResponse<ChainTO> {
+        return makeTransactional(() => SequenceDataAccessService.saveChainTO(chain));
+    },
 
-  findAllChainDecisions(): DataAccessResponse<ChainDecisionTO[]> {
-    return makeTransactional(SequenceDataAccessService.findAllChainDecisions);
-  },
+    deleteChain(chain: ChainTO): DataAccessResponse<ChainTO> {
+        return makeTransactional(() => SequenceDataAccessService.deleteChain(chain));
+    },
 
-  deleteChaindecision(decision: ChainDecisionTO): DataAccessResponse<ChainDecisionTO> {
-    return makeTransactional(() => SequenceDataAccessService.deleteChainDecision(decision));
-  },
+    saveChainlink(link: ChainlinkTO): DataAccessResponse<ChainlinkTO> {
+        return makeTransactional(() => SequenceDataAccessService.saveChainlink(link));
+    },
 
-  setChainRoot(chainId: number, id: number, isDecision: boolean): DataAccessResponse<ChainlinkTO | ChainDecisionTO> {
-    return makeTransactional(() => SequenceDataAccessService.setChainRoot(chainId, id, isDecision));
-  },
+    findAllChainLinks(): DataAccessResponse<ChainlinkTO[]> {
+        return makeTransactional(SequenceDataAccessService.findAllChainLinks);
+    },
 
-  findChainDecision(id: number): DataAccessResponse<ChainDecisionTO> {
-    return makeTransactional(() => SequenceDataAccessService.findChainDecision(id));
-  },
+    deleteChainLink(step: ChainlinkTO): DataAccessResponse<ChainlinkTO> {
+        return makeTransactional(() => SequenceDataAccessService.deleteChainTO(step));
+    },
 
-  findChainLink(id: number): DataAccessResponse<ChainlinkTO> {
-    return makeTransactional(() => SequenceDataAccessService.findChainLink(id));
-  },
+    saveChainDecision(decision: ChainDecisionTO): DataAccessResponse<ChainDecisionTO> {
+        return makeTransactional(() => SequenceDataAccessService.saveChainDecision(decision));
+    },
+
+    findAllChainDecisions(): DataAccessResponse<ChainDecisionTO[]> {
+        return makeTransactional(SequenceDataAccessService.findAllChainDecisions);
+    },
+
+    deleteChaindecision(decision: ChainDecisionTO): DataAccessResponse<ChainDecisionTO> {
+        return makeTransactional(() => SequenceDataAccessService.deleteChainDecision(decision));
+    },
+
+    setChainRoot(chainId: number, id: number, isDecision: boolean): DataAccessResponse<ChainlinkTO | ChainDecisionTO> {
+        return makeTransactional(() => SequenceDataAccessService.setChainRoot(chainId, id, isDecision));
+    },
+
+    findChainDecision(id: number): DataAccessResponse<ChainDecisionTO> {
+        return makeTransactional(() => SequenceDataAccessService.findChainDecision(id));
+    },
+
+    findChainLink(id: number): DataAccessResponse<ChainlinkTO> {
+        return makeTransactional(() => SequenceDataAccessService.findChainLink(id));
+    },
 };
 
 // ========================================= PRIVATE =========================================
 
 function makeTransactional<T>(callback: () => T): DataAccessResponse<T> {
-  let response: DataAccessResponse<T> = {
-    object: {} as T,
-    message: "",
-    code: 500,
-  };
-  try {
-    const object = callback();
-    response.object =
-      typeof object === "undefined"
-        ? undefined
-        : // : JSON.parse(JSON.stringify(callback()));
-          JSON.parse(JSON.stringify(object));
-    response.code = 200;
-    dataStore.commitChanges();
-  } catch (error) {
-    console.warn(error);
-    response.message = error.message;
-    dataStore.roleBack();
-  }
-  return response;
+    const response: DataAccessResponse<T> = {
+        object: {} as T,
+        message: "",
+        code: 500,
+    };
+    try {
+        const object = callback();
+        response.object = typeof object === "undefined" ? undefined : JSON.parse(JSON.stringify(object));
+        response.code = 200;
+        dataStore.commitChanges();
+    } catch (error) {
+        console.warn(error);
+        response.message = error.message;
+        dataStore.roleBack();
+    }
+    return response;
 }

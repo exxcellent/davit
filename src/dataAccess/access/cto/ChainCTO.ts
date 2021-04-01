@@ -3,9 +3,9 @@ import { ChainTO } from "../to/ChainTO";
 import { ChainlinkCTO } from "./ChainlinkCTO";
 
 export class ChainCTO {
-  constructor(
-    public chain: ChainTO = new ChainTO(),
-    public links: ChainlinkCTO[] = [],
-    public decisions: ChainDecisionTO[] = []
-  ) {}
+    constructor(
+        public chain: ChainTO = new ChainTO(),
+        public links: ChainlinkCTO[] = [],
+        public decisions: ChainDecisionTO[] = [],
+    ) {}
 }

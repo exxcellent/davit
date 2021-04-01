@@ -1,81 +1,66 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
-import { Dropdown, DropdownItemProps, DropdownProps } from "semantic-ui-react";
-import { isNullOrUndefined } from "util";
+import { DropdownProps } from "semantic-ui-react";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import { DavitUtil } from "../../../../utils/DavitUtil";
+import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
 
 interface DataDropDownProps extends DropdownProps {
-  onSelect: (data: DataCTO | undefined) => void;
-  placeholder?: string;
-  value?: number;
+    onSelect: (data: DataCTO | undefined) => void;
+    placeholder?: string;
+    value?: number;
 }
 
 interface DataDropDownButtonProps extends DropdownProps {
-  onSelect: (data: DataCTO | undefined) => void;
-  icon?: string;
+    onSelect: (data: DataCTO | undefined) => void;
+    icon?: string;
 }
 
 export const DataDropDown: FunctionComponent<DataDropDownProps> = (props) => {
-  const { onSelect, placeholder, value } = props;
-  const { datas, selectData, dataToOption } = useDataDropDownViewModel();
+    const { onSelect, placeholder, value } = props;
+    const { datas, selectData, dataToOption } = useDataDropDownViewModel();
 
-  return (
-    <Dropdown
-      options={datas.map(dataToOption).sort((a, b) => {
-        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
-      })}
-      placeholder={placeholder || "Select Data ..."}
-      onChange={(event, data) => onSelect(selectData(Number(data.value), datas))}
-      selectOnBlur={false}
-      scrolling
-      selection
-      value={value === -1 ? undefined : value}
-      disabled={datas.length > 0 ? false : true}
-    />
-  );
+    return (
+        <DavitDropDown
+            dropdownItems={datas.map(dataToOption)}
+            placeholder={placeholder}
+            value={value?.toString()}
+            onSelect={(data) => onSelect(selectData(Number(data.value), datas))}
+        />
+    );
 };
 
 export const DataDropDownButton: FunctionComponent<DataDropDownButtonProps> = (props) => {
-  const { onSelect, icon } = props;
-  const { datas, selectData, dataToOption } = useDataDropDownViewModel();
+    const { onSelect, icon } = props;
+    const { datas, selectData, dataToOption } = useDataDropDownViewModel();
 
-  return (
-    <Dropdown
-      options={datas.map(dataToOption).sort((a, b) => {
-        return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
-      })}
-      icon={datas.length > 0 ? icon : ""}
-      onChange={(event, data) => onSelect(selectData(Number(data.value), datas))}
-      className="button icon"
-      inverted="true"
-      color="orange"
-      floating
-      selectOnBlur={false}
-      trigger={<React.Fragment />}
-      scrolling
-      disabled={datas.length > 0 ? false : true}
-    />
-  );
+    return (
+        <DavitIconDropDown
+            dropdownItems={datas.map(dataToOption)}
+            onSelect={(data) => onSelect(selectData(Number(data.value), datas))}
+            icon={icon}
+        />
+    );
 };
 
 const useDataDropDownViewModel = () => {
-  const datas: DataCTO[] = useSelector(masterDataSelectors.datas);
+    const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
 
-  const selectData = (dataId: number, datas: DataCTO[]): DataCTO | undefined => {
-    if (!isNullOrUndefined(dataId) && !isNullOrUndefined(datas)) {
-      return datas.find((data) => data.data.id === dataId);
-    }
-    return undefined;
-  };
-
-  const dataToOption = (data: DataCTO): DropdownItemProps => {
-    return {
-      key: data.data.id,
-      value: data.data.id,
-      text: data.data.name,
+    const selectData = (dataId: number, datas: DataCTO[]): DataCTO | undefined => {
+        if (!DavitUtil.isNullOrUndefined(dataId) && !DavitUtil.isNullOrUndefined(datas)) {
+            return datas.find((data) => data.data.id === dataId);
+        }
+        return undefined;
     };
-  };
 
-  return { datas, selectData, dataToOption };
+    const dataToOption = (data: DataCTO): DavitDropDownItemProps => {
+        return {
+            key: data.data.id,
+            value: data.data.id.toString(),
+            text: data.data.name,
+        };
+    };
+
+    return { datas, selectData, dataToOption };
 };

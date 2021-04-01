@@ -1,77 +1,61 @@
-import React, { FunctionComponent } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import logo from "../../icons/logo200.png";
-import { EditActions, editSelectors, Mode } from "../../slices/EditSlice";
-import { Carv2ButtonGroup } from "../common/fragments/buttons/Carv2ButtonGroup";
-import { Carv2SidePanelButton } from "../common/fragments/buttons/Carv2SidePanelButton";
+import React, { FunctionComponent } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { DAVIT_VERISON } from '../../app/DavitConstants';
+import logo from '../../icons/logo200.png';
+import { EditActions, editSelectors, Mode } from '../../slices/EditSlice';
+import { DavitSidePanelButton } from '../common/fragments/buttons/DavitSidePanelButton';
+import { DavitIcons } from '../common/IconSet';
 
-export interface SidePanelProps { }
+export interface SidePanelProps {
+}
 
-export const SidePanelController: FunctionComponent<SidePanelProps> = (props) => {
-  const { setModeToEdit, setModeToFile, setModeToView, setModeToTab, mode } = useSidePanelViewModel();
+export const SidePanelController: FunctionComponent<SidePanelProps> = () => {
+    const {setModeToEdit, setModeToFile, setModeToView, mode} = useSidePanelViewModel();
 
-  return (
-    <div className="leftPanel">
-      <Carv2ButtonGroup>
-        <Carv2SidePanelButton icon="write" onClick={setModeToEdit} active={mode.includes(Mode.EDIT.toString())} />
-        <Carv2SidePanelButton icon="eye" onClick={setModeToView} active={mode === Mode.VIEW} />
-        <Carv2SidePanelButton icon="file" onClick={setModeToFile} active={mode === Mode.FILE} />
-        <Carv2SidePanelButton icon="external alternate" onClick={setModeToTab} active={mode === Mode.TAB} />
-      </Carv2ButtonGroup>
+    return (
+        <div className="leftPanel">
+            <DavitSidePanelButton icon={DavitIcons.pencil} onClick={setModeToEdit} active={mode.includes(Mode.EDIT.toString())}/>
+            <DavitSidePanelButton icon={DavitIcons.eye} onClick={setModeToView} active={mode === Mode.VIEW}/>
+            <DavitSidePanelButton icon={DavitIcons.file} onClick={setModeToFile} active={mode === Mode.FILE}/>
+            {/*TODO: enable wenn tabs are fixed!*/}
+            {/*<DavitSidePanelButton icon="external alternate" onClick={setModeToTab} active={mode === Mode.TAB} />*/}
 
-      {/* <Button.Group basic vertical size="big" inverted color="orange">
-        <Button inverted color="orange" icon="write" onClick={setModeToEdit} />
-        <Button inverted color="orange" icon="eye" onClick={setModeToView} />
-        <Button inverted color="orange" icon="file" onClick={setModeToFile} />
-        <Button inverted color="orange" icon="external alternate" onClick={setModeToTab} />
-      </Button.Group> */}
-      <div style={{ position: "absolute", bottom: "1em" }}>
-        <img src={logo} alt="fireSpot" />
-        <div
-          className="verticalLabel"
-        // style={{
-        //   writingMode: "sideways-lr",
-        //   textOrientation: "upright",
-        //   fontSize: "3em",
-        //   fontFamily: "Arial Rounded MT Bold",
-        //   paddingLeft: "15px",
-        //   marginTop: "0.5em",
-        //   marginBottom: "1em",
-        //   color: "#0060A9",
-        // }}
-        >
-          DAVIT by
+            <div style={{position: "absolute", bottom: "1em"}}>
+                <img src={logo} alt="fireSpot"/>
+                <div className="verticalLabel">DAVIT by</div>
+                <label style={{color: "white", position: "absolute", bottom: "0"}}>
+                    v {DAVIT_VERISON}
+                </label>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 const useSidePanelViewModel = () => {
-  const dispatch = useDispatch();
-  const mode = useSelector(editSelectors.mode);
+    const dispatch = useDispatch();
+    const mode = useSelector(editSelectors.selectMode);
 
-  const setModeToEdit = () => {
-    dispatch(EditActions.setMode.edit());
-  };
+    const setModeToEdit = () => {
+        dispatch(EditActions.setMode.edit());
+    };
 
-  const setModeToView = () => {
-    dispatch(EditActions.setMode.view());
-  };
+    const setModeToView = () => {
+        dispatch(EditActions.setMode.view());
+    };
 
-  const setModeToFile = () => {
-    dispatch(EditActions.setMode.file());
-  };
+    const setModeToFile = () => {
+        dispatch(EditActions.setMode.file());
+    };
 
-  const setModeToTab = () => {
-    dispatch(EditActions.setMode.tab());
-  };
+    const setModeToTab = () => {
+        dispatch(EditActions.setMode.tab());
+    };
 
-  return {
-    setModeToEdit,
-    setModeToView,
-    setModeToFile,
-    setModeToTab,
-    mode,
-  };
+    return {
+        setModeToEdit,
+        setModeToView,
+        setModeToFile,
+        setModeToTab,
+        mode,
+    };
 };

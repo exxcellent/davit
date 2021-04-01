@@ -1,24 +1,28 @@
-import React, { FunctionComponent } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Message, Transition } from "semantic-ui-react";
-import { globalSlice, selectGlobalErrorState } from "../../../slices/GlobalSlice";
+import React, {FunctionComponent} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {globalSelectors, globalSlice} from "../../../slices/GlobalSlice";
+import {DavitNotification, NotificationLevel} from "./DavitNotification";
 
-export interface ErrorNotificationProps {}
+export interface ErrorNotificationProps {
+}
 
-export const ErrorNotification: FunctionComponent<ErrorNotificationProps> = (props) => {
-  const errorMessages: string[] = useSelector(selectGlobalErrorState);
-  const dispatch = useDispatch();
-  const { clearErrors } = globalSlice.actions;
+export const ErrorNotification: FunctionComponent<ErrorNotificationProps> = () => {
+        const errorMessages: string[] = useSelector(globalSelectors.selectGlobalErrorState);
+        const dispatch = useDispatch();
 
-  return (
-    <div className="notificationPanel">
-      <Transition visible={errorMessages.length > 0} animate="slide up" duration={1000}>
-        <Message error compact>
-          <Message.Header>Error</Message.Header>
-          <Button icon="close" size="mini" onClick={() => dispatch(clearErrors())} />
-          {errorMessages}
-        </Message>
-      </Transition>
-    </div>
-  );
-};
+        const buildMessage = (message: string, index: number): JSX.Element => {
+            return <DavitNotification key={index} header={"Error"} text={message} level={NotificationLevel.error}
+                                      onCloseCallback={() => dispatch(globalSlice.actions.removeErrorAtIndex(index))}/>;
+        };
+
+        return (
+            <>
+                {
+                    errorMessages.length > 0 &&
+                    errorMessages.map((error, index) => buildMessage(error, index))
+                }
+            </>
+        );
+
+    }
+;
