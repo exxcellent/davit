@@ -1,27 +1,27 @@
 {
   "files": {
-    "main.css": "/github-actions-test/v1/static/css/main.c1854e32.chunk.css",
-    "main.js": "/github-actions-test/v1/static/js/main.381345eb.chunk.js",
-    "main.js.map": "/github-actions-test/v1/static/js/main.381345eb.chunk.js.map",
-    "runtime-main.js": "/github-actions-test/v1/static/js/runtime-main.02b5af2b.js",
-    "runtime-main.js.map": "/github-actions-test/v1/static/js/runtime-main.02b5af2b.js.map",
-    "static/css/2.6b601eae.chunk.css": "/github-actions-test/v1/static/css/2.6b601eae.chunk.css",
-    "static/js/2.316b9fa3.chunk.js": "/github-actions-test/v1/static/js/2.316b9fa3.chunk.js",
-    "static/js/2.316b9fa3.chunk.js.map": "/github-actions-test/v1/static/js/2.316b9fa3.chunk.js.map",
-    "index.html": "/github-actions-test/v1/index.html",
-    "precache-manifest.d532be382deeb5421768551cd3b4fd8f.js": "/github-actions-test/v1/precache-manifest.d532be382deeb5421768551cd3b4fd8f.js",
-    "service-worker.js": "/github-actions-test/v1/service-worker.js",
-    "static/css/2.6b601eae.chunk.css.map": "/github-actions-test/v1/static/css/2.6b601eae.chunk.css.map",
-    "static/css/main.c1854e32.chunk.css.map": "/github-actions-test/v1/static/css/main.c1854e32.chunk.css.map",
-    "static/js/2.316b9fa3.chunk.js.LICENSE.txt": "/github-actions-test/v1/static/js/2.316b9fa3.chunk.js.LICENSE.txt",
-    "static/media/semantic.min.css": "/github-actions-test/v1/static/media/outline-icons.ef60a4f6.woff",
-    "static/media/logo200.png": "/github-actions-test/v1/static/media/logo200.d20fbb57.png"
+    "main.css": "/davit/v1/static/css/main.c1854e32.chunk.css",
+    "main.js": "/davit/v1/static/js/main.c214eb7d.chunk.js",
+    "main.js.map": "/davit/v1/static/js/main.c214eb7d.chunk.js.map",
+    "runtime-main.js": "/davit/v1/static/js/runtime-main.55f6af0b.js",
+    "runtime-main.js.map": "/davit/v1/static/js/runtime-main.55f6af0b.js.map",
+    "static/css/2.f4cfde27.chunk.css": "/davit/v1/static/css/2.f4cfde27.chunk.css",
+    "static/js/2.316b9fa3.chunk.js": "/davit/v1/static/js/2.316b9fa3.chunk.js",
+    "static/js/2.316b9fa3.chunk.js.map": "/davit/v1/static/js/2.316b9fa3.chunk.js.map",
+    "index.html": "/davit/v1/index.html",
+    "precache-manifest.807ae44a774fa773e42b8afbee006b3b.js": "/davit/v1/precache-manifest.807ae44a774fa773e42b8afbee006b3b.js",
+    "service-worker.js": "/davit/v1/service-worker.js",
+    "static/css/2.f4cfde27.chunk.css.map": "/davit/v1/static/css/2.f4cfde27.chunk.css.map",
+    "static/css/main.c1854e32.chunk.css.map": "/davit/v1/static/css/main.c1854e32.chunk.css.map",
+    "static/js/2.316b9fa3.chunk.js.LICENSE.txt": "/davit/v1/static/js/2.316b9fa3.chunk.js.LICENSE.txt",
+    "static/media/semantic.min.css": "/davit/v1/static/media/outline-icons.ef60a4f6.woff",
+    "static/media/logo200.png": "/davit/v1/static/media/logo200.d20fbb57.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.02b5af2b.js",
-    "static/css/2.6b601eae.chunk.css",
+    "static/js/runtime-main.55f6af0b.js",
+    "static/css/2.f4cfde27.chunk.css",
     "static/js/2.316b9fa3.chunk.js",
     "static/css/main.c1854e32.chunk.css",
-    "static/js/main.381345eb.chunk.js"
+    "static/js/main.c214eb7d.chunk.js"
   ]
 }
