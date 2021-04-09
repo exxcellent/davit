@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/davit/dev/static/css/main.c1854e32.chunk.css",
+    "main.js": "/davit/dev/static/js/main.4e3aaa4d.chunk.js",
+    "main.js.map": "/davit/dev/static/js/main.4e3aaa4d.chunk.js.map",
+    "runtime-main.js": "/davit/dev/static/js/runtime-main.8e25331c.js",
+    "runtime-main.js.map": "/davit/dev/static/js/runtime-main.8e25331c.js.map",
+    "static/css/2.402a6b83.chunk.css": "/davit/dev/static/css/2.402a6b83.chunk.css",
+    "static/js/2.d1562d70.chunk.js": "/davit/dev/static/js/2.d1562d70.chunk.js",
+    "static/js/2.d1562d70.chunk.js.map": "/davit/dev/static/js/2.d1562d70.chunk.js.map",
+    "index.html": "/davit/dev/index.html",
+    "precache-manifest.a02ccb2019b658d80d431e70701ddc29.js": "/davit/dev/precache-manifest.a02ccb2019b658d80d431e70701ddc29.js",
+    "service-worker.js": "/davit/dev/service-worker.js",
+    "static/css/2.402a6b83.chunk.css.map": "/davit/dev/static/css/2.402a6b83.chunk.css.map",
+    "static/css/main.c1854e32.chunk.css.map": "/davit/dev/static/css/main.c1854e32.chunk.css.map",
+    "static/js/2.d1562d70.chunk.js.LICENSE.txt": "/davit/dev/static/js/2.d1562d70.chunk.js.LICENSE.txt",
+    "static/media/semantic.min.css": "/davit/dev/static/media/outline-icons.ef60a4f6.woff",
+    "static/media/logo200.png": "/davit/dev/static/media/logo200.d20fbb57.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.8e25331c.js",
+    "static/css/2.402a6b83.chunk.css",
+    "static/js/2.d1562d70.chunk.js",
+    "static/css/main.c1854e32.chunk.css",
+    "static/js/main.4e3aaa4d.chunk.js"
+  ]
+}
