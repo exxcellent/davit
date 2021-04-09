@@ -62,15 +62,7 @@ jobs:
         uses: CultureHQ/actions-yarn@v1.0.1
         with:
           args: install
-      
-      - name: Yarn Build
-        uses: CultureHQ/actions-yarn@v1.0.1
-        with:
-          args: build
- 
-      - name: Show files
-        run: ls -la
-    
+
       - name: Get Major Version
         run: |
           # Get original release_tag based on the release event payload
@@ -80,14 +72,38 @@ jobs:
           export MAJOR_VERSION=$(echo $RELEASE_TAG | sed s/\\./\\n/g | head -1)
           echo "Set major_version=$MAJOR_VERSION"
           echo "major_version=$(echo $MAJOR_VERSION)" >> $GITHUB_ENV
+      # If the App is not deploy in the Servers root directory React needs to know where it is located.
+      #https://create-react-app.dev/docs/deployment/#building-for-relative-paths
+      - name: Set package.json homepage
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: package.json
+          field: homepage
+          value: https://exx-andreas.github.io/github-actions-test/${{ env.major_version }}
+      
+      - name: Yarn Build
+        uses: CultureHQ/actions-yarn@v1.0.1
+        with:
+          args: build
+ 
+      - name: Show files
+        run: ls -la
+    
       - name: Deploy on PROD
         uses: JamesIves/github-pages-deploy-action@3.7.1
         if: success() # && ( github.ref == 'refs/heads/prod' )
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: out # The folder the action should deploy.
+          FOLDER: build # The folder the action should deploy.
           TARGET_FOLDER: ${{ env.major_version }}
           CLEAN: true # Automatically remove deleted files from the deploy branch
           #COMMIT_MESSAGE: 'Deploy commit $GITHUB_SHA'
           SILENT: false
+
+      - name: Create Release Branch
+        uses: peterjgrainger/action-create-branch@v2.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          branch: ${{ env.major_version }}
