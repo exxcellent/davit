@@ -18,7 +18,13 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react"
+    "jsx": "react",
+    "baseUrl": ".",
+    "paths": {
+      "@exxcellent/components": [
+        "src/components/exxcellent-components/*"
+      ]
+    }
   },
   "include": [
     "src"

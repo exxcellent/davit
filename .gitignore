@@ -25,3 +25,5 @@ yarn-error.log*
 dist
 /.idea/
 /yarn.lock
+
+storybook-static
