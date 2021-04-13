@@ -55,6 +55,16 @@ jobs:
       - name: Show files
         run: ls -la
         
+      - name: Yarn Test
+        uses: CultureHQ/actions-yarn@v1.0.1
+        with:
+          args: test
+        
+      - name: Lint
+        uses: CultureHQ/actions-yarn@master
+        with:
+          args: lint
+        
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
