@@ -19,12 +19,6 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
-    "baseUrl": ".",
-    "paths": {
-      "@exxcellent/components": [
-        "src/components/exxcellent-components/*"
-      ]
-    }
   },
   "include": [
     "src"
