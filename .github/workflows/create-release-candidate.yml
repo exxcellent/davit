@@ -1,10 +1,9 @@
-name: Deploy to DEV
+name: Create Release Candidate
 
 on:
   push:
     branches: 
       - main
-      - feature*
 
 jobs:
   build:
@@ -45,7 +44,7 @@ jobs:
         with:
           file: package.json
           field: homepage
-          value: https://exxcellent.github.io/davit/dev
+          value: https://exxcellent.github.io/davit/realease-candidate
       
       - name: Yarn Build
         uses: CultureHQ/actions-yarn@v1.0.1
@@ -72,7 +71,7 @@ jobs:
           path: build
   
   deploy:
-    name: Deploy to DEV
+    name: Deploy to Release Candidate
     needs: [build]
     runs-on: ubuntu-latest
     steps:
@@ -84,14 +83,14 @@ jobs:
       - name: Show files
         run: ls -la
         
-      - name: Deploy on DEV
+      - name: Deploy on Release Candidate
         uses: JamesIves/github-pages-deploy-action@3.7.1
         if: success()
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages # The branch the action should deploy to.
           FOLDER: . # The folder the action should deploy.
-          TARGET_FOLDER: dev 
+          TARGET_FOLDER: realease-candidate
           CLEAN: true # Automatically remove deleted files from the deploy branch
           #COMMIT_MESSAGE: 'Deploy commit $GITHUB_SHA'
           SILENT: true
