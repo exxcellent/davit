@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/davit/dev/precache-manifest.b1135f47dc634fb572532102db3236a0.js"
+  "/davit/dev/precache-manifest.7745d55600cf36e32921c86fe9c97124.js"
 );
 
 self.addEventListener('message', (event) => {
