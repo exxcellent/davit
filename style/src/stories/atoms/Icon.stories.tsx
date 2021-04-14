@@ -56,11 +56,10 @@ SingleIcon.args = {
 export const IconOverview = () => (
   <>
     There are {iconList.length} icons
-    <div style={{display: "flex"}}>
+    <div style={{display: "flex", flexWrap: "wrap"}}>
       {iconList.map((key) => (
-        <div key={key} style={{display: "flex", flexDirection: "column", alignItems: "center", padding: "10px"}}>
+        <div key={key} style={{ width: "70px", display: "flex", flexDirection: "column", alignItems: "center", padding: "10px"}}>
           <span style={{ fontSize: "30px"}}>
-
             <Icon name={key as keyof typeof availableIcons} />
           </span>
           <span>{key}</span>
