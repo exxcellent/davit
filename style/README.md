@@ -1,8 +1,9 @@
+[![Deploy to PROD](https://github.com/exxcellent/davit/actions/workflows/deploy-to-prod.yml/badge.svg)](https://github.com/exxcellent/davit/actions/workflows/deploy-to-prod.yml) [![Deploy to DEV](https://github.com/exxcellent/davit/actions/workflows/deploy-to-dev.yml/badge.svg)](https://github.com/exxcellent/davit/actions/workflows/deploy-to-dev.yml)
+
 # DAVIT
 
 > Dataflow Analysis and Visualization Tool (DAVIT)
 
-[![Deploy to PROD](https://github.com/exxcellent/davit/actions/workflows/deploy-to-prod.yml/badge.svg)](https://github.com/exxcellent/davit/actions/workflows/deploy-to-prod.yml)[![Deploy to DEV](https://github.com/exxcellent/davit/actions/workflows/deploy-to-dev.yml/badge.svg)](https://github.com/exxcellent/davit/actions/workflows/deploy-to-dev.yml)
 
 ## Style Guide
 
