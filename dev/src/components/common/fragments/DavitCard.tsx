@@ -1,12 +1,12 @@
-import React, { FunctionComponent, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { DataInstanceTO } from '../../../dataAccess/access/to/DataInstanceTO';
-import { EditActions } from '../../../slices/EditSlice';
-import { Filter, SequenceModelActions, sequenceModelSelectors } from '../../../slices/SequenceModelSlice';
-import { createViewFragment, ViewFragmentProps } from '../../../viewDataTypes/ViewFragment';
-import { DavitCardButton } from './buttons/DavitCardButton';
-import { DavitIcons } from '../IconSet';
-import { DavitShowMoreButton } from './buttons/DavitShowMoreButton';
+import React, {FunctionComponent, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {DataInstanceTO} from '../../../dataAccess/access/to/DataInstanceTO';
+import {EditActions} from '../../../slices/EditSlice';
+import {Filter, SequenceModelActions, sequenceModelSelectors} from '../../../slices/SequenceModelSlice';
+import {createViewFragment, ViewFragmentProps} from '../../../viewDataTypes/ViewFragment';
+import {DavitCardButton} from './buttons/DavitCardButton';
+import {DavitIcons} from '../IconSet';
+import {DavitShowMoreButton} from './buttons/DavitShowMoreButton';
 
 /**
  *  Prop: initWidth / initHeight
@@ -65,7 +65,8 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
                     <div className={showMenu ? "carhHeaderTextInvisible" : "cardHeaderText"}>{initName}</div>
                     {showMenu && (
                         <div style={{display: "flex", justifyContent: "flex-end"}}>
-                            <DavitCardButton icon={DavitIcons.wrench} onClick={() => onClickEdit(id, type)}/>
+                            {type !== "INSTANCE" &&
+                            <DavitCardButton icon={DavitIcons.wrench} onClick={() => onClickEdit(id, type)}/>}
                             <DavitCardButton
                                 icon={DavitIcons.filter}
                                 onClick={() => onClickFilter(id, type)}
@@ -75,7 +76,7 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
                     )}
                 </div>
                 <DavitShowMoreButton className={"Carv2CardMainButton"} onClick={() => {
-                        setShowMenu(!showMenu);
+                    setShowMenu(!showMenu);
                 }}/>
             </div>
             {instances && (
