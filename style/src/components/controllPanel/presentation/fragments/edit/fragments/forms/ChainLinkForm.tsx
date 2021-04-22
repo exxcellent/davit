@@ -1,23 +1,23 @@
-import React, { FunctionComponent } from 'react';
-import { Form } from '../../../../../../common/fragments/forms/Form';
-import { FormHeader } from '../../../../../../common/fragments/forms/FormHeader';
-import { FormDivider } from './fragments/FormDivider';
-import { FormBody } from '../../../../../../common/fragments/forms/FormBody';
-import { FormLine } from './fragments/FormLine';
-import { DavitLabelTextfield } from '../../../../../../common/fragments/DavitLabelTextfield';
-import { DavitDeleteButton } from '../../../../../../common/fragments/buttons/DavitDeleteButton';
-import { DavitBackButton } from '../../../../../../common/fragments/buttons/DavitBackButton';
-import { useChainLinkViewModel } from '../viewmodels/ChainLinkViewModel';
-import { DataSetupDropDown } from '../../../../../../common/fragments/dropdowns/DataSetupDropDown';
-import { FormLabel } from './fragments/FormLabel';
-import { FormFooter } from '../../../../../../common/fragments/forms/FormFooter';
-import { DavitRootButton } from '../../../../../../common/fragments/buttons/DavitRootButton';
-import { SequenceDropDown } from '../../../../../../common/fragments/dropdowns/SequenceDropDown';
-import { GoToTypesChain } from '../../../../../../../dataAccess/access/types/GoToTypeChain';
-import { GoToChainOptionDropDown } from '../../../../../../common/fragments/dropdowns/GoToChainOptionDropDown';
-import { DavitAddButton } from '../../../../../../common/fragments/buttons/DavitAddButton';
-import { ChainLinkDropDown } from '../../../../../../common/fragments/dropdowns/ChainLinkDropDown';
-import { ChainDecisionDropDown } from '../../../../../../common/fragments/dropdowns/ChainDecisionDropDown';
+import React, {FunctionComponent} from 'react';
+import {Form} from '../../../../../../common/fragments/forms/Form';
+import {FormHeader} from '../../../../../../common/fragments/forms/FormHeader';
+import {FormDivider} from './fragments/FormDivider';
+import {FormBody} from '../../../../../../common/fragments/forms/FormBody';
+import {FormLine} from './fragments/FormLine';
+import {DavitLabelTextfield} from '../../../../../../common/fragments/DavitLabelTextfield';
+import {DavitDeleteButton} from '../../../../../../common/fragments/buttons/DavitDeleteButton';
+import {DavitBackButton} from '../../../../../../common/fragments/buttons/DavitBackButton';
+import {useChainLinkViewModel} from '../viewmodels/ChainLinkViewModel';
+import {DataSetupDropDown} from '../../../../../../common/fragments/dropdowns/DataSetupDropDown';
+import {FormLabel} from './fragments/FormLabel';
+import {FormFooter} from '../../../../../../common/fragments/forms/FormFooter';
+import {DavitRootButton} from '../../../../../../common/fragments/buttons/DavitRootButton';
+import {SequenceDropDown} from '../../../../../../common/fragments/dropdowns/SequenceDropDown';
+import {GoToTypesChain} from '../../../../../../../dataAccess/access/types/GoToTypeChain';
+import {GoToChainOptionDropDown} from '../../../../../../common/fragments/dropdowns/GoToChainOptionDropDown';
+import {DavitAddButton} from '../../../../../../common/fragments/buttons/DavitAddButton';
+import {ChainLinkDropDown} from '../../../../../../common/fragments/dropdowns/ChainLinkDropDown';
+import {ChainDecisionDropDown} from '../../../../../../common/fragments/dropdowns/ChainDecisionDropDown';
 
 interface ChainLinkFormProps {
 }
@@ -45,7 +45,7 @@ export const ChainLinkForm: FunctionComponent<ChainLinkFormProps> = () => {
         setSequenceModel,
     } = useChainLinkViewModel();
 
-    const labelDataSetup: string = 'Select data-detup';
+    const labelDataSetup: string = 'Select data-setup';
     const labelSequence: string = 'Select sequence';
     const labelGoToType: string = 'Select type of the next';
     const labelSelectLink: string = 'Select next link';
@@ -59,7 +59,7 @@ export const ChainLinkForm: FunctionComponent<ChainLinkFormProps> = () => {
                 <h2>Chain link</h2>
             </FormHeader>
 
-            <FormDivider />
+            <FormDivider/>
 
             <FormBody>
 
@@ -73,7 +73,7 @@ export const ChainLinkForm: FunctionComponent<ChainLinkFormProps> = () => {
                     />
                 </FormLine>
 
-                <FormDivider />
+                <FormDivider/>
 
                 <FormLine>
                     <FormLabel>{labelDataSetup}</FormLabel>
@@ -84,7 +84,7 @@ export const ChainLinkForm: FunctionComponent<ChainLinkFormProps> = () => {
                     />
                 </FormLine>
 
-                <FormDivider />
+                <FormDivider/>
 
                 <FormLine>
                     <FormLabel>{labelSequence}</FormLabel>
@@ -94,7 +94,7 @@ export const ChainLinkForm: FunctionComponent<ChainLinkFormProps> = () => {
                     />
                 </FormLine>
 
-                <FormDivider />
+                <FormDivider/>
 
                 <FormLine>
                     <FormLabel>{labelGoToType}</FormLabel>
@@ -106,11 +106,11 @@ export const ChainLinkForm: FunctionComponent<ChainLinkFormProps> = () => {
 
                 {goTo.type === GoToTypesChain.LINK && (
                     <>
-                        <FormDivider />
+                        <FormDivider/>
 
                         <FormLine>
                             <FormLabel>{labelSelectLink}</FormLabel>
-                            <DavitAddButton onClick={createNewChainLink} />
+                            <DavitAddButton onClick={createNewChainLink}/>
                         </FormLine>
                         <FormLine>
                             <FormLabel>{labelCreateLink}</FormLabel>
@@ -125,11 +125,11 @@ export const ChainLinkForm: FunctionComponent<ChainLinkFormProps> = () => {
                 )}
                 {goTo.type === GoToTypesChain.DEC && (
                     <>
-                        <FormDivider />
+                        <FormDivider/>
 
                         <FormLine>
                             <FormLabel>{labelSelectDecision}</FormLabel>
-                            <DavitAddButton onClick={createGoToDecision} />
+                            <DavitAddButton onClick={createGoToDecision}/>
                         </FormLine>
                         <FormLine>
                             <FormLabel>{labelCreateDecision}</FormLabel>
@@ -144,12 +144,12 @@ export const ChainLinkForm: FunctionComponent<ChainLinkFormProps> = () => {
 
             </FormBody>
 
-            <FormDivider />
+            <FormDivider/>
 
             <FormFooter>
-                <DavitDeleteButton onClick={deleteChainLink} disable={isRoot} />
-                <DavitRootButton onClick={setRoot} isRoot={isRoot} />
-                <DavitBackButton onClick={saveChainLink} />
+                <DavitDeleteButton onClick={deleteChainLink} disable={isRoot}/>
+                <DavitRootButton onClick={setRoot} isRoot={isRoot}/>
+                <DavitBackButton onClick={saveChainLink}/>
             </FormFooter>
 
 
