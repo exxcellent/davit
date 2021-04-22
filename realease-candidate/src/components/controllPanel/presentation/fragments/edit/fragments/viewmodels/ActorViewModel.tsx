@@ -1,10 +1,10 @@
-import { ActorCTO } from '../../../../../../../dataAccess/access/cto/ActorCTO';
-import { useDispatch, useSelector } from 'react-redux';
-import { EditActions, editSelectors } from '../../../../../../../slices/EditSlice';
-import { useEffect } from 'react';
-import { DavitUtil } from '../../../../../../../utils/DavitUtil';
-import { GlobalActions } from '../../../../../../../slices/GlobalSlice';
-import { EditActor } from '../../../../../../../slices/thunks/ActorThunks';
+import {ActorCTO} from '../../../../../../../dataAccess/access/cto/ActorCTO';
+import {useDispatch, useSelector} from 'react-redux';
+import {EditActions, editSelectors} from '../../../../../../../slices/EditSlice';
+import {useEffect} from 'react';
+import {DavitUtil} from '../../../../../../../utils/DavitUtil';
+import {GlobalActions} from '../../../../../../../slices/GlobalSlice';
+import {EditActor} from '../../../../../../../slices/thunks/ActorThunks';
 
 export const useActorViewModel = () => {
 
@@ -42,6 +42,7 @@ export const useActorViewModel = () => {
     };
 
     const createAnother = () => {
+        saveActor();
         dispatch(EditActions.setMode.editActor());
     };
 
