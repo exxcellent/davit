@@ -1,31 +1,43 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "178e0b89978854f05a3ac8c06b8f70c5",
+    "revision": "dd4e1b317766d7585bba8e0f25f8c5c2",
     "url": "/davit/realease-candidate/index.html"
   },
   {
-    "revision": "5c05b34d0ca8566874e3",
+    "revision": "2cc2a3512166f9cca11f",
     "url": "/davit/realease-candidate/static/css/2.7370dd06.chunk.css"
   },
   {
-    "revision": "2939943d0c5f8bacc2c9",
-    "url": "/davit/realease-candidate/static/css/main.c1854e32.chunk.css"
+    "revision": "c7d9d31225ea4de4705f",
+    "url": "/davit/realease-candidate/static/css/main.4d069168.chunk.css"
   },
   {
-    "revision": "5c05b34d0ca8566874e3",
-    "url": "/davit/realease-candidate/static/js/2.316b9fa3.chunk.js"
+    "revision": "2cc2a3512166f9cca11f",
+    "url": "/davit/realease-candidate/static/js/2.d4bad94e.chunk.js"
   },
   {
     "revision": "103ffde740e0513a23063b2cdfda6a08",
-    "url": "/davit/realease-candidate/static/js/2.316b9fa3.chunk.js.LICENSE.txt"
+    "url": "/davit/realease-candidate/static/js/2.d4bad94e.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "2939943d0c5f8bacc2c9",
+    "revision": "c7d9d31225ea4de4705f",
     "url": "/davit/realease-candidate/static/js/main.c897ebc8.chunk.js"
   },
   {
     "revision": "9722403e07a27c5c3461",
     "url": "/davit/realease-candidate/static/js/runtime-main.30416c42.js"
+  },
+  {
+    "revision": "d41d8cd98f00b204e9800998ecf8427e",
+    "url": "/davit/realease-candidate/static/media/DINOT-Bold.d41d8cd9.ttf"
+  },
+  {
+    "revision": "d41d8cd98f00b204e9800998ecf8427e",
+    "url": "/davit/realease-candidate/static/media/DINOT-Light.d41d8cd9.ttf"
+  },
+  {
+    "revision": "d41d8cd98f00b204e9800998ecf8427e",
+    "url": "/davit/realease-candidate/static/media/DINOT-Medium.d41d8cd9.ttf"
   },
   {
     "revision": "13db00b7a34fee4d819ab7f9838cc428",
