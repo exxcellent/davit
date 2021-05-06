@@ -1,20 +1,19 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { DropdownProps } from "semantic-ui-react";
-import { ActorCTO } from "../../../../dataAccess/access/cto/ActorCTO";
-import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
-import { ConditionTO } from "../../../../dataAccess/access/to/ConditionTO";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
-import { DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
+import React, {FunctionComponent} from "react";
+import {useSelector} from "react-redux";
+import {ActorCTO} from "../../../../dataAccess/access/cto/ActorCTO";
+import {DataCTO} from "../../../../dataAccess/access/cto/DataCTO";
+import {ConditionTO} from "../../../../dataAccess/access/to/ConditionTO";
+import {masterDataSelectors} from "../../../../slices/MasterDataSlice";
+import {DavitDropDownItemProps, DavitIconDropDown} from "./DavitDropDown";
 
-interface ConditionDropDownButtonProps extends DropdownProps {
+interface ConditionDropDownButtonProps {
     onSelect: (conditionId: number | undefined) => void;
     conditions: ConditionTO[];
     icon?: string;
 }
 
 export const ConditionDropDownButton: FunctionComponent<ConditionDropDownButtonProps> = (props) => {
-    const { onSelect, icon, conditions } = props;
+    const {onSelect, icon, conditions} = props;
 
     const actors: ActorCTO[] = useSelector(masterDataSelectors.selectActors);
     const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
@@ -42,7 +41,7 @@ export const ConditionDropDownButton: FunctionComponent<ConditionDropDownButtonP
 
     return (
         <DavitIconDropDown
-            dropdownItems={conditions.map((condition, index) => {
+            dropdownItems={conditions.map((condition) => {
                 return conditionToOption(condition);
             })}
             onSelect={(condition) => onSelect(Number(condition.value))}

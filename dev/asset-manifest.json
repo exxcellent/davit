@@ -1,27 +1,24 @@
 {
   "files": {
-    "main.css": "/davit/dev/static/css/main.c1854e32.chunk.css",
-    "main.js": "/davit/dev/static/js/main.72737758.chunk.js",
-    "main.js.map": "/davit/dev/static/js/main.72737758.chunk.js.map",
+    "main.css": "/davit/dev/static/css/main.8292dd86.chunk.css",
+    "main.js": "/davit/dev/static/js/main.6b6cb41c.chunk.js",
+    "main.js.map": "/davit/dev/static/js/main.6b6cb41c.chunk.js.map",
     "runtime-main.js": "/davit/dev/static/js/runtime-main.8e25331c.js",
     "runtime-main.js.map": "/davit/dev/static/js/runtime-main.8e25331c.js.map",
-    "static/css/2.402a6b83.chunk.css": "/davit/dev/static/css/2.402a6b83.chunk.css",
-    "static/js/2.316b9fa3.chunk.js": "/davit/dev/static/js/2.316b9fa3.chunk.js",
-    "static/js/2.316b9fa3.chunk.js.map": "/davit/dev/static/js/2.316b9fa3.chunk.js.map",
+    "static/js/2.bce1300e.chunk.js": "/davit/dev/static/js/2.bce1300e.chunk.js",
+    "static/js/2.bce1300e.chunk.js.map": "/davit/dev/static/js/2.bce1300e.chunk.js.map",
     "index.html": "/davit/dev/index.html",
-    "precache-manifest.bb607ae1cf662dd1803348d870e45341.js": "/davit/dev/precache-manifest.bb607ae1cf662dd1803348d870e45341.js",
+    "precache-manifest.7c25011e433647d89b0e1404d90cf052.js": "/davit/dev/precache-manifest.7c25011e433647d89b0e1404d90cf052.js",
     "service-worker.js": "/davit/dev/service-worker.js",
-    "static/css/2.402a6b83.chunk.css.map": "/davit/dev/static/css/2.402a6b83.chunk.css.map",
-    "static/css/main.c1854e32.chunk.css.map": "/davit/dev/static/css/main.c1854e32.chunk.css.map",
-    "static/js/2.316b9fa3.chunk.js.LICENSE.txt": "/davit/dev/static/js/2.316b9fa3.chunk.js.LICENSE.txt",
-    "static/media/semantic.min.css": "/davit/dev/static/media/outline-icons.ef60a4f6.woff",
+    "static/css/main.8292dd86.chunk.css.map": "/davit/dev/static/css/main.8292dd86.chunk.css.map",
+    "static/js/2.bce1300e.chunk.js.LICENSE.txt": "/davit/dev/static/js/2.bce1300e.chunk.js.LICENSE.txt",
+    "static/media/index.css": "/davit/dev/static/media/DINOT-Medium.d41d8cd9.ttf",
     "static/media/logo200.png": "/davit/dev/static/media/logo200.d20fbb57.png"
   },
   "entrypoints": [
     "static/js/runtime-main.8e25331c.js",
-    "static/css/2.402a6b83.chunk.css",
-    "static/js/2.316b9fa3.chunk.js",
-    "static/css/main.c1854e32.chunk.css",
-    "static/js/main.72737758.chunk.js"
+    "static/js/2.bce1300e.chunk.js",
+    "static/css/main.8292dd86.chunk.css",
+    "static/js/main.6b6cb41c.chunk.js"
   ]
 }
