@@ -1,6 +1,5 @@
 @import "Colors.css";
 @import "Atomic.css";
-@import "SemanticOverwrite.css";
 @import "Keyframes.css";
 @import "Icons.css";
 @import "Flowchart.css";
@@ -813,8 +812,15 @@
     height: 100%;
 }
 
-.fullscreen{
+.fullscreen {
     width: 100vw;
     height: 100vh;
 }
 
+.react-select {
+    /*min-width: 10em;*/
+    border: var(--davit-border-size) solid var(--carv2-color-secondary);
+    border-radius: var(--davit-border-radius);
+    background-color: var(--carv2-background-color);
+    color: var(--carv2-text-color);
+}

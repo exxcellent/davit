@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {Provider} from "react-redux";
-import "semantic-ui-css/semantic.min.css";
 import {Davit} from "./app/Davit";
 import {store} from "./app/store";
 import "./index.css";

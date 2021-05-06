@@ -1,6 +1,5 @@
 @import "Colors.css";
 @import "Atomic.css";
-@import "SemanticOverwrite.css";
 
 @keyframes notificationSlideIn {
     0% {
