@@ -350,26 +350,18 @@
     cursor: pointer;
 }
 
-.Carv2CardMainButton {
-    width: 1.2em;
-    height: 1.2em;
+.cardButton {
+    width: var(--davit-card-button-width);
+    height: var(--davit-card-button-height);
     padding: 0;
-    margin: 0;
+    margin: var(--davit-card-button-margin-top-bottom) var(--davit-card-button-margin-left-right);
     box-shadow: 0 0 0 1px var(--carv2-color-border);
     border: 0.2em solid transparent;
     color: var(--carv2-color-border);
-    border-radius: 0.2em;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: transparent;
-}
-
-.Carv2CardMainButton:hover {
-    background-color: var(--carv2-color-secondary);
-    transition: background-color 0.4s;
-    color: black;
-    cursor: pointer;
 }
 
 .disabled:hover {
@@ -549,7 +541,6 @@
     display: flex;
     transition: color var(--animation-time), height var(--animation-time) width var(--animation-time);
     color: white;
-    height: 2.7em;
 }
 
 .carhHeaderText {
