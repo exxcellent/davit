@@ -1,25 +1,24 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { DropdownProps } from "semantic-ui-react";
-import { SequenceTO } from "../../../../dataAccess/access/to/SequenceTO";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
-import { DavitUtil } from "../../../../utils/DavitUtil";
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
+import React, {FunctionComponent} from "react";
+import {useSelector} from "react-redux";
+import {SequenceTO} from "../../../../dataAccess/access/to/SequenceTO";
+import {masterDataSelectors} from "../../../../slices/MasterDataSlice";
+import {DavitUtil} from "../../../../utils/DavitUtil";
+import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from "./DavitDropDown";
 
-interface SequenceDropDownProps extends DropdownProps {
+interface SequenceDropDownProps {
     onSelect: (sequence: SequenceTO | undefined) => void;
     placeholder?: string;
     value?: number;
 }
 
-interface SequenceDropDownPropsButton extends DropdownProps {
+interface SequenceDropDownPropsButton {
     onSelect: (sequence: SequenceTO | undefined) => void;
     icon?: string;
 }
 
 export const SequenceDropDown: FunctionComponent<SequenceDropDownProps> = (props) => {
-    const { onSelect, placeholder, value } = props;
-    const { sequences, selectSequence, sequenceToOption } = useSequenceDropDownViewModel();
+    const {onSelect, placeholder, value} = props;
+    const {sequences, selectSequence, sequenceToOption} = useSequenceDropDownViewModel();
 
     return (
         <DavitDropDown
@@ -33,8 +32,8 @@ export const SequenceDropDown: FunctionComponent<SequenceDropDownProps> = (props
 };
 
 export const SequenceDropDownButton: FunctionComponent<SequenceDropDownPropsButton> = (props) => {
-    const { onSelect, icon } = props;
-    const { sequences, selectSequence, sequenceToOption } = useSequenceDropDownViewModel();
+    const {onSelect, icon} = props;
+    const {sequences, selectSequence, sequenceToOption} = useSequenceDropDownViewModel();
 
     return (
         <DavitIconDropDown
@@ -63,5 +62,5 @@ const useSequenceDropDownViewModel = () => {
         };
     };
 
-    return { sequences, selectSequence, sequenceToOption };
+    return {sequences, selectSequence, sequenceToOption};
 };

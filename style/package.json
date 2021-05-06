@@ -25,6 +25,7 @@
     "@types/react-dom": "^16.9.0",
     "@types/react-redux": "^7.1.7",
     "@types/react-router-dom": "^5.1.5",
+    "@types/react-select": "^4.0.15",
     "aspect.js": "^0.8.1",
     "cross-env": "^7.0.2",
     "electron-is-dev": "^1.2.0",
@@ -44,9 +45,7 @@
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.4",
-    "react-select": "^4.1.0",
-    "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.88.2",
+    "react-select": "^4.3.0",
     "typescript": "~3.8.2"
   },
   "scripts": {

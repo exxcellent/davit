@@ -1,29 +1,28 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { DropdownProps } from "semantic-ui-react";
-import { ActorCTO } from "../../../../dataAccess/access/cto/ActorCTO";
-import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
-import { InitDataTO } from "../../../../dataAccess/access/to/InitDataTO";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
-import { DavitUtil } from "../../../../utils/DavitUtil";
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
+import React, {FunctionComponent} from "react";
+import {useSelector} from "react-redux";
+import {ActorCTO} from "../../../../dataAccess/access/cto/ActorCTO";
+import {DataCTO} from "../../../../dataAccess/access/cto/DataCTO";
+import {InitDataTO} from "../../../../dataAccess/access/to/InitDataTO";
+import {masterDataSelectors} from "../../../../slices/MasterDataSlice";
+import {DavitUtil} from "../../../../utils/DavitUtil";
+import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from "./DavitDropDown";
 
-interface InitDataDropDownDownProps extends DropdownProps {
+interface InitDataDropDownDownProps {
     initDatas: InitDataTO[];
     onSelect: (initData: InitDataTO | undefined) => void;
     placeholder?: string;
     value?: number;
 }
 
-interface InitDataDropDownPropsButton extends DropdownProps {
+interface InitDataDropDownPropsButton {
     initDatas: InitDataTO[];
     onSelect: (initData: InitDataTO | undefined) => void;
     icon?: string;
 }
 
 export const InitDataDropDown: FunctionComponent<InitDataDropDownDownProps> = (props) => {
-    const { onSelect, placeholder, value, initDatas } = props;
-    const { initDataToOption, selectInitData } = useDataSetupDropDownViewModel();
+    const {onSelect, placeholder, value, initDatas} = props;
+    const {initDataToOption, selectInitData} = useDataSetupDropDownViewModel();
 
     return (
         <DavitDropDown
@@ -37,8 +36,8 @@ export const InitDataDropDown: FunctionComponent<InitDataDropDownDownProps> = (p
 };
 
 export const InitDataDropDownButton: FunctionComponent<InitDataDropDownPropsButton> = (props) => {
-    const { onSelect, icon, initDatas } = props;
-    const { initDataToOption, selectInitData } = useDataSetupDropDownViewModel();
+    const {onSelect, icon, initDatas} = props;
+    const {initDataToOption, selectInitData} = useDataSetupDropDownViewModel();
 
     return (
         <DavitIconDropDown
@@ -58,7 +57,7 @@ const useDataSetupDropDownViewModel = () => {
     };
 
     const getDataName = (dataId: number, instanceId?: number): string => {
-        let dataName: string = "";
+        let dataName: string;
         let instanceName: string = "";
         const data: DataCTO | undefined = datas.find((data) => data.data.id === dataId);
         dataName = data?.data.name || "";
@@ -84,5 +83,5 @@ const useDataSetupDropDownViewModel = () => {
         return undefined;
     };
 
-    return { initDataToOption, selectInitData };
+    return {initDataToOption, selectInitData};
 };

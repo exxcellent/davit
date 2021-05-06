@@ -75,7 +75,7 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
                         </div>
                     )}
                 </div>
-                <DavitShowMoreButton className={"Carv2CardMainButton"} onClick={() => {
+                <DavitShowMoreButton className={"button-tiny"} onClick={() => {
                     setShowMenu(!showMenu);
                 }}/>
             </div>

@@ -1,25 +1,24 @@
-import React, { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { DropdownProps } from "semantic-ui-react";
-import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
-import { DavitUtil } from "../../../../utils/DavitUtil";
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
+import React, {FunctionComponent} from "react";
+import {useSelector} from "react-redux";
+import {DataCTO} from "../../../../dataAccess/access/cto/DataCTO";
+import {masterDataSelectors} from "../../../../slices/MasterDataSlice";
+import {DavitUtil} from "../../../../utils/DavitUtil";
+import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from "./DavitDropDown";
 
-interface DataDropDownProps extends DropdownProps {
+interface DataDropDownProps {
     onSelect: (data: DataCTO | undefined) => void;
     placeholder?: string;
     value?: number;
 }
 
-interface DataDropDownButtonProps extends DropdownProps {
+interface DataDropDownButtonProps {
     onSelect: (data: DataCTO | undefined) => void;
     icon?: string;
 }
 
 export const DataDropDown: FunctionComponent<DataDropDownProps> = (props) => {
-    const { onSelect, placeholder, value } = props;
-    const { datas, selectData, dataToOption } = useDataDropDownViewModel();
+    const {onSelect, placeholder, value} = props;
+    const {datas, selectData, dataToOption} = useDataDropDownViewModel();
 
     return (
         <DavitDropDown
@@ -32,8 +31,8 @@ export const DataDropDown: FunctionComponent<DataDropDownProps> = (props) => {
 };
 
 export const DataDropDownButton: FunctionComponent<DataDropDownButtonProps> = (props) => {
-    const { onSelect, icon } = props;
-    const { datas, selectData, dataToOption } = useDataDropDownViewModel();
+    const {onSelect, icon} = props;
+    const {datas, selectData, dataToOption} = useDataDropDownViewModel();
 
     return (
         <DavitIconDropDown
@@ -62,5 +61,5 @@ const useDataDropDownViewModel = () => {
         };
     };
 
-    return { datas, selectData, dataToOption };
+    return {datas, selectData, dataToOption};
 };

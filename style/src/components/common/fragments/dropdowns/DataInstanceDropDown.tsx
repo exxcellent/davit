@@ -1,16 +1,15 @@
-import React, { FunctionComponent } from "react";
-import { DropdownProps } from "semantic-ui-react";
-import { DataInstanceTO } from "../../../../dataAccess/access/to/DataInstanceTO";
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
+import React, {FunctionComponent} from "react";
+import {DataInstanceTO} from "../../../../dataAccess/access/to/DataInstanceTO";
+import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from "./DavitDropDown";
 
-interface DataInstanceDropDownProps extends DropdownProps {
+interface DataInstanceDropDownProps {
     onSelect: (id: number | undefined) => void;
     instances: DataInstanceTO[];
     placeholder?: string;
     value?: number;
 }
 
-interface DataInstanceDropDownButtonProps extends DropdownProps {
+interface DataInstanceDropDownButtonProps {
     onSelect: (id: number | undefined) => void;
     instances: DataInstanceTO[];
     icon?: string;
@@ -20,8 +19,8 @@ interface DataInstanceDropDownButtonProps extends DropdownProps {
  * List's all instances of a data object.
  */
 export const DataInstanceDropDown: FunctionComponent<DataInstanceDropDownProps> = (props) => {
-    const { onSelect, placeholder, value, instances } = props;
-    const { dataInstacesToOption } = useDataInstanceDropDownViewModel();
+    const {onSelect, placeholder, value, instances} = props;
+    const {dataInstacesToOption} = useDataInstanceDropDownViewModel();
 
     return (
         <DavitDropDown
@@ -34,8 +33,8 @@ export const DataInstanceDropDown: FunctionComponent<DataInstanceDropDownProps> 
 };
 
 export const DataInstanceDropDownButton: FunctionComponent<DataInstanceDropDownButtonProps> = (props) => {
-    const { onSelect, instances, icon } = props;
-    const { dataInstacesToOption } = useDataInstanceDropDownViewModel();
+    const {onSelect, instances, icon} = props;
+    const {dataInstacesToOption} = useDataInstanceDropDownViewModel();
 
     return (
         <DavitIconDropDown
@@ -59,5 +58,5 @@ const useDataInstanceDropDownViewModel = () => {
         return dropdownItemProps;
     };
 
-    return { dataInstacesToOption };
+    return {dataInstacesToOption};
 };
