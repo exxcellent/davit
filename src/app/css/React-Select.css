@@ -20,18 +20,16 @@
     border-radius: var(--davit-border-radius);
 }
 
-.react-select__option.react-select__option--is-focused {
+.react-select__option.react-select__option--is-focused, .react-select__option:hover {
     color: var(--color-secondary);
+    background-color: transparent;
 }
 
-.react-select__option:hover {
-    color: var(--color-secondary);
-}
-
-.react-select__input {
+.react-select__option.react-select__option--is-selected {
+    background-color: var(--color-secondary);
     color: var(--text-color);
 }
 
-.react-select-container .react-select__single-value {
+.react-select-container .react-select__single-value, .react-select__input {
     color: var(--text-color);
 }

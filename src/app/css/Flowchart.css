@@ -20,16 +20,7 @@
     box-shadow: 0 0 0 1px var(--color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
 }
 
-.COND {
-    z-index: 2;
-    width: 2em;
-    height: 2em;
-    background-color: var(--background-color-shadow);
-    transform: translateY(0.8em) rotate(45deg);
-    box-shadow: 0 0 0 1px var(--color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
-}
-
-.DEC {
+.COND, .DEC {
     z-index: 2;
     width: 2em;
     height: 2em;
