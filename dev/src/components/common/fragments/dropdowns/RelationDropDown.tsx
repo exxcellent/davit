@@ -4,7 +4,7 @@ import {DataCTO} from "../../../../dataAccess/access/cto/DataCTO";
 import {DataRelationTO} from "../../../../dataAccess/access/to/DataRelationTO";
 import {masterDataSelectors} from "../../../../slices/MasterDataSlice";
 import {DavitUtil} from "../../../../utils/DavitUtil";
-import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from "./DavitDropDown";
+import {DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
 
 interface RelationDropDownProps {
     onSelect: (relation: DataRelationTO | undefined) => void;
@@ -34,9 +34,9 @@ export const RelationDropDownButton: FunctionComponent<RelationDropDownPropsButt
     const {relations, selectDataRelation, relationToOption} = useRelationDropDownViewModel();
 
     return (
-        <DavitIconDropDown
+        <DavitLabelDropDown
             dropdownItems={relations.map(relationToOption)}
-            icon={icon}
+            label={icon}
             onSelect={(relation) => onSelect(selectDataRelation(Number(relation.value), relations))}
         />
     );

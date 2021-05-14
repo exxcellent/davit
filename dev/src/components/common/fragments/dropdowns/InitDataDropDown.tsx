@@ -5,7 +5,7 @@ import {DataCTO} from "../../../../dataAccess/access/cto/DataCTO";
 import {InitDataTO} from "../../../../dataAccess/access/to/InitDataTO";
 import {masterDataSelectors} from "../../../../slices/MasterDataSlice";
 import {DavitUtil} from "../../../../utils/DavitUtil";
-import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from "./DavitDropDown";
+import {DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
 
 interface InitDataDropDownDownProps {
     initDatas: InitDataTO[];
@@ -40,9 +40,9 @@ export const InitDataDropDownButton: FunctionComponent<InitDataDropDownPropsButt
     const {initDataToOption, selectInitData} = useDataSetupDropDownViewModel();
 
     return (
-        <DavitIconDropDown
+        <DavitLabelDropDown
             dropdownItems={initDatas.map(initDataToOption)}
-            icon={icon}
+            label={icon}
             onSelect={(initData) => onSelect(selectInitData(Number(initData.value), initDatas))}
         />
     );
