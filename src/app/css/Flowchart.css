@@ -1,23 +1,21 @@
-.STEP {
-    background-color: var(--background-color-header);
-    color: var(--text-color);
-    min-height: 2.4em;
-    min-width: 6em;
-    max-width: 15em;
-    border-radius: 0.3em;
-    padding: 6px;
-    text-align: center;
-    box-shadow: 0 0 0 1px var(--color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
+:root {
+    --flowchart-element-min-height: 1.5rem;
+    --flowchart-element-min-width: 6rem;
+    --flowchart-element-max-width: 15rem;
+    --flowchart-padding: 6px;
 }
 
-.LINK {
-    background-color: var(--background-color-header);
+.STEP, .LINK {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: var(--text-color);
-    min-height: 2.4em;
-    min-width: 6em;
-    max-width: 15em;
-    border-radius: 0.3em;
-    padding: 6px;
+    background-color: var(--background-color-header);
+    min-height: var(--flowchart-element-min-height);
+    min-width: var(--flowchart-element-min-width);
+    max-width: var(--flowchart-element-max-width);
+    border-radius: var(--davit-border-radius);
+    padding: var(--flowchart-padding);
     text-align: center;
     box-shadow: 0 0 0 1px var(--color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
 }
