@@ -4,7 +4,7 @@ import {SequenceCTO} from "../../../../dataAccess/access/cto/SequenceCTO";
 import {DecisionTO} from "../../../../dataAccess/access/to/DecisionTO";
 import {sequenceModelSelectors} from "../../../../slices/SequenceModelSlice";
 import {DavitUtil} from "../../../../utils/DavitUtil";
-import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from "./DavitDropDown";
+import {DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
 
 interface DecisionDropDownButtonProps {
     onSelect: (decision: DecisionTO | undefined) => void;
@@ -23,10 +23,10 @@ export const DecisionDropDownButton: FunctionComponent<DecisionDropDownButtonPro
     const {sequenceToEdit, decisionOptions, selectDecision} = useDecisionDropDownViewModel();
 
     return (
-        <DavitIconDropDown
+        <DavitLabelDropDown
             dropdownItems={decisionOptions()}
             onSelect={(decision) => onSelect(selectDecision(Number(decision.value), sequenceToEdit))}
-            icon={icon}
+            label={icon}
         />
     );
 };

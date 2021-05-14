@@ -1,29 +1,29 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
-import { ArcherContainer, ArcherElement, Relation } from 'react-archer';
-import { useSelector } from 'react-redux';
-import { ChainCTO } from '../../dataAccess/access/cto/ChainCTO';
-import { ChainlinkCTO } from '../../dataAccess/access/cto/ChainlinkCTO';
-import { SequenceCTO } from '../../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../../dataAccess/access/cto/SequenceStepCTO';
-import { ChainDecisionTO } from '../../dataAccess/access/to/ChainDecisionTO';
-import { DecisionTO } from '../../dataAccess/access/to/DecisionTO';
-import { GoTo, GoToTypes, Terminal } from '../../dataAccess/access/types/GoToType';
-import { GoToChain, GoToTypesChain, TerminalChain } from '../../dataAccess/access/types/GoToTypeChain';
-import { CalcChain } from '../../services/SequenceChainService';
-import { sequenceModelSelectors } from '../../slices/SequenceModelSlice';
-import { DavitUtil } from '../../utils/DavitUtil';
-import { TabFragment } from '../tableModel/fragments/TabFragment';
-import { TabGroupFragment } from '../tableModel/fragments/TabGroupFragment';
-import { FlowChartlabel } from './FlowChartlabel';
-import { ViewPlaceholder } from '../common/fragments/ViewPlaceholder';
-import { CenteredFlex } from '../common/fragments/CenteredFlex';
+import React, {FunctionComponent, useEffect, useRef, useState} from 'react';
+import {ArcherContainer, ArcherElement, Relation} from 'react-archer';
+import {useSelector} from 'react-redux';
+import {ChainCTO} from '../../dataAccess/access/cto/ChainCTO';
+import {ChainlinkCTO} from '../../dataAccess/access/cto/ChainlinkCTO';
+import {SequenceCTO} from '../../dataAccess/access/cto/SequenceCTO';
+import {SequenceStepCTO} from '../../dataAccess/access/cto/SequenceStepCTO';
+import {ChainDecisionTO} from '../../dataAccess/access/to/ChainDecisionTO';
+import {DecisionTO} from '../../dataAccess/access/to/DecisionTO';
+import {GoTo, GoToTypes, Terminal} from '../../dataAccess/access/types/GoToType';
+import {GoToChain, GoToTypesChain, TerminalChain} from '../../dataAccess/access/types/GoToTypeChain';
+import {CalcChain} from '../../services/SequenceChainService';
+import {sequenceModelSelectors} from '../../slices/SequenceModelSlice';
+import {DavitUtil} from '../../utils/DavitUtil';
+import {TabFragment} from '../tableModel/fragments/TabFragment';
+import {TabGroupFragment} from '../tableModel/fragments/TabGroupFragment';
+import {FlowChartlabel} from './FlowChartlabel';
+import {ViewPlaceholder} from '../common/fragments/ViewPlaceholder';
+import {CenteredFlex} from '../common/fragments/CenteredFlex';
 
 interface FlowChartControllerProps {
     fullScreen?: boolean;
 }
 
 export const FlowChartController: FunctionComponent<FlowChartControllerProps> = (props) => {
-        const { fullScreen } = props;
+        const {fullScreen} = props;
         const {
             nodeModelTree,
             calcSteps,
@@ -74,7 +74,7 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
                         strokeColor:
                             calcSteps.find((step) => step === node.parentId) && calcSteps.find((step) => step === node.id)
                                 ? lineColor()
-                                : 'var(--carv2-background-color-header)',
+                                : 'var(--background-color-header)',
                         strokeWidth:
                             calcSteps.find((step) => step === node.parentId) && calcSteps.find((step) => step === node.id)
                                 ? 5
@@ -84,7 +84,7 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
             }
 
             return (
-                <div className='flowChartFlex' style={{ margin: node.id === 'root' ? '' : '50px 0' }} key={node.id}>
+                <div className='flowChartFlex' style={{margin: node.id === 'root' ? '' : '50px 0'}} key={node.id}>
                     <ArcherElement id={node.id} relations={rel}>
                         <div
                             className={node.id === 'root' ? 'ROOT' : node.leafType}
@@ -119,7 +119,7 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
                             calcLinkIds?.find((link) => link === node.parentId) &&
                             calcLinkIds.find((link) => link === node.id)
                                 ? chainLineColor()
-                                : 'var(--carv2-background-color-header)',
+                                : 'var(--background-color-header)',
                         strokeWidth:
                             calcLinkIds?.find((link) => link === node.parentId) &&
                             calcLinkIds.find((link) => link === node.id)
@@ -130,7 +130,7 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
             }
 
             return (
-                <div className='flowChartFlex' style={{ margin: node.id === 'root' ? '' : '50px 0' }} key={node.id}>
+                <div className='flowChartFlex' style={{margin: node.id === 'root' ? '' : '50px 0'}} key={node.id}>
                     <ArcherElement id={node.id} relations={rel}>
                         <div className={node.leafType} id={currentLinkId === node.id ? 'flowChartCurrentStep' : ''}>
                             {node.leafType === GoToTypesChain.DEC ? '' : node.label}
@@ -175,23 +175,23 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
                 {!renderFlowChart() &&
                 <CenteredFlex>
                     <ViewPlaceholder
-                        text={'Select a sequence or chain to see the flow chart'} />
+                        text={'Select a sequence or chain to see the flow chart'}/>
                 </CenteredFlex>}
                 {renderFlowChart() && <>
-                    <div style={{ display: 'flex', position: 'absolute', zIndex: 1, width: '47vw' }}>
+                    <div style={{display: 'flex', position: 'absolute', zIndex: 1, width: '47vw'}}>
                         {chain && (
                             <TabGroupFragment label='Mode'
-                                              style={{ backgroundColor: 'var(--carv2-background-color-header)' }}>
-                                <TabFragment label='Chain' isActive={showChain} onClick={() => setShowChain(true)} />
-                                <TabFragment label='Sequence' isActive={!showChain} onClick={() => setShowChain(false)} />
+                                              style={{backgroundColor: 'var(--background-color-header)'}}>
+                                <TabFragment label='Chain' isActive={showChain} onClick={() => setShowChain(true)}/>
+                                <TabFragment label='Sequence' isActive={!showChain} onClick={() => setShowChain(false)}/>
                             </TabGroupFragment>
                         )}
-                        <div style={{ marginLeft: 'auto' }}>
-                            <FlowChartlabel label='CHAIN:' text={chainName} />
-                            <FlowChartlabel label='SEQU.:' text={sequenceName} />
+                        <div style={{marginLeft: 'auto'}}>
+                            <FlowChartlabel label='CHAIN:' text={chainName}/>
+                            <FlowChartlabel label='SEQU.:' text={sequenceName}/>
                         </div>
                     </div>
-                    <div className='flowChart' style={{ height: tableHeight }}>
+                    <div className='flowChart' style={{height: tableHeight}}>
                         {!showChain && sequence && buildFlowChart()}
                         {showChain && chain && buildChainFlowChart()}
                     </div>
@@ -245,7 +245,7 @@ const useFlowChartViewModel = () => {
         const getRoot = (sequence: SequenceCTO | null): Node => {
             const root: Node = {
                 type: GoToTypes.ERROR,
-                value: { type: GoToTypes.ERROR },
+                value: {type: GoToTypes.ERROR},
                 isLoop: false,
             };
             if (!DavitUtil.isNullOrUndefined(sequence)) {
@@ -269,7 +269,7 @@ const useFlowChartViewModel = () => {
         const getChainRoot = (chain: ChainCTO | null): NodeChain => {
             const root: NodeChain = {
                 type: GoToTypesChain.ERROR,
-                value: { type: GoToTypesChain.ERROR },
+                value: {type: GoToTypesChain.ERROR},
                 isLoop: false,
             };
             if (!DavitUtil.isNullOrUndefined(chain)) {
@@ -388,7 +388,7 @@ const useFlowChartViewModel = () => {
         };
 
         const getDataSetup = (): Node => {
-            const initData: Node = { isLoop: false, type: GoToTypes.STEP, value: new SequenceStepCTO() };
+            const initData: Node = {isLoop: false, type: GoToTypes.STEP, value: new SequenceStepCTO()};
             if (sequence) {
                 const root: Node = getRoot(sequence);
                 if ((root.value as SequenceStepCTO).actions) {
@@ -410,7 +410,7 @@ const useFlowChartViewModel = () => {
 
         const buildNodeModelTree = (node: Node): NodeModel => {
             const parentIds: string[] = [];
-            const nodeModel: NodeModel = { id: 'root', label: '', leafType: node.type, childs: [] };
+            const nodeModel: NodeModel = {id: 'root', label: '', leafType: node.type, childs: []};
             switch (node.type) {
                 case GoToTypes.STEP:
                     parentIds.push(nodeModel.id);
@@ -431,7 +431,7 @@ const useFlowChartViewModel = () => {
 
         const buildNodeModelChainTree = (node: NodeChain): NodeModelChain => {
             const parentIds: string[] = [];
-            const nodeModel: NodeModelChain = { id: '', label: '', leafType: node.type, childs: [] };
+            const nodeModel: NodeModelChain = {id: '', label: '', leafType: node.type, childs: []};
             parentIds.push(nodeModel.id);
             if ((node.value as ChainlinkCTO).chainLink) {
                 nodeModel.id = (node.value as ChainlinkCTO).chainLink.id.toString();
@@ -451,11 +451,11 @@ const useFlowChartViewModel = () => {
             if (terminalStep) {
                 switch (terminalStep.type) {
                     case GoToTypes.ERROR:
-                        return 'var(--carv2-data-delete-color)';
+                        return 'var(--data-delete-color)';
                     case GoToTypes.FIN:
-                        return 'var(--carv2-data-add-color)';
+                        return 'var(--data-add-color)';
                     case GoToTypes.IDLE:
-                        return 'var(--carv2-color-exxcellent-blue)';
+                        return 'var(--color-exxcellent-blue)';
                 }
             } else {
                 return '#FF00FF';
@@ -466,9 +466,9 @@ const useFlowChartViewModel = () => {
             if (calcChain) {
                 switch (calcChain.terminal.type) {
                     case GoToTypesChain.ERROR:
-                        return 'var(--carv2-data-delete-color)';
+                        return 'var(--data-delete-color)';
                     case GoToTypesChain.FIN:
-                        return 'var(--carv2-data-add-color)';
+                        return 'var(--data-add-color)';
                 }
             } else {
                 return '#FF00FF';

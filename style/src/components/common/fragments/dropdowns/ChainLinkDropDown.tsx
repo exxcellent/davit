@@ -3,7 +3,7 @@ import {useSelector} from "react-redux";
 import {ChainlinkTO} from "../../../../dataAccess/access/to/ChainlinkTO";
 import {masterDataSelectors} from "../../../../slices/MasterDataSlice";
 import {DavitUtil} from "../../../../utils/DavitUtil";
-import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from "./DavitDropDown";
+import {DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
 
 interface ChainLinkDropDownButtonProps {
     onSelect: (link: ChainlinkTO | undefined) => void;
@@ -43,10 +43,10 @@ export const ChainLinkDropDownButton: FunctionComponent<ChainLinkDropDownButtonP
     const {selectChainLink, linkOptions} = useChainStepDropDownViewModel(chainId, exclude);
 
     return (
-        <DavitIconDropDown
+        <DavitLabelDropDown
             dropdownItems={linkOptions()}
             onSelect={(link) => onSelect(selectChainLink(Number(link.value)))}
-            icon={icon}
+            label={icon}
         />
     );
 };

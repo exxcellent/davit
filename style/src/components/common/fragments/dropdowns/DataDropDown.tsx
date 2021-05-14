@@ -3,7 +3,7 @@ import {useSelector} from "react-redux";
 import {DataCTO} from "../../../../dataAccess/access/cto/DataCTO";
 import {masterDataSelectors} from "../../../../slices/MasterDataSlice";
 import {DavitUtil} from "../../../../utils/DavitUtil";
-import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from "./DavitDropDown";
+import {DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
 
 interface DataDropDownProps {
     onSelect: (data: DataCTO | undefined) => void;
@@ -35,10 +35,10 @@ export const DataDropDownButton: FunctionComponent<DataDropDownButtonProps> = (p
     const {datas, selectData, dataToOption} = useDataDropDownViewModel();
 
     return (
-        <DavitIconDropDown
+        <DavitLabelDropDown
             dropdownItems={datas.map(dataToOption)}
             onSelect={(data) => onSelect(selectData(Number(data.value), datas))}
-            icon={icon}
+            label={icon}
         />
     );
 };

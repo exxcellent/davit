@@ -3,7 +3,7 @@ import {useSelector} from "react-redux";
 import {SequenceTO} from "../../../../dataAccess/access/to/SequenceTO";
 import {masterDataSelectors} from "../../../../slices/MasterDataSlice";
 import {DavitUtil} from "../../../../utils/DavitUtil";
-import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from "./DavitDropDown";
+import {DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
 
 interface SequenceDropDownProps {
     onSelect: (sequence: SequenceTO | undefined) => void;
@@ -36,9 +36,9 @@ export const SequenceDropDownButton: FunctionComponent<SequenceDropDownPropsButt
     const {sequences, selectSequence, sequenceToOption} = useSequenceDropDownViewModel();
 
     return (
-        <DavitIconDropDown
+        <DavitLabelDropDown
             dropdownItems={sequences.map(sequenceToOption)}
-            icon={icon}
+            label={icon}
             onSelect={(sequence) => onSelect(selectSequence(Number(sequence.value), sequences))}
         />
     );

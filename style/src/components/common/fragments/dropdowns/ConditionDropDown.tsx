@@ -4,7 +4,7 @@ import {ActorCTO} from "../../../../dataAccess/access/cto/ActorCTO";
 import {DataCTO} from "../../../../dataAccess/access/cto/DataCTO";
 import {ConditionTO} from "../../../../dataAccess/access/to/ConditionTO";
 import {masterDataSelectors} from "../../../../slices/MasterDataSlice";
-import {DavitDropDownItemProps, DavitIconDropDown} from "./DavitDropDown";
+import {DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
 
 interface ConditionDropDownButtonProps {
     onSelect: (conditionId: number | undefined) => void;
@@ -40,12 +40,12 @@ export const ConditionDropDownButton: FunctionComponent<ConditionDropDownButtonP
     };
 
     return (
-        <DavitIconDropDown
+        <DavitLabelDropDown
             dropdownItems={conditions.map((condition) => {
                 return conditionToOption(condition);
             })}
             onSelect={(condition) => onSelect(Number(condition.value))}
-            icon={icon}
+            label={icon}
         />
     );
 };
