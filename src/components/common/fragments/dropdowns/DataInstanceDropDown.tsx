@@ -1,6 +1,6 @@
 import React, {FunctionComponent} from "react";
 import {DataInstanceTO} from "../../../../dataAccess/access/to/DataInstanceTO";
-import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from "./DavitDropDown";
+import {DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
 
 interface DataInstanceDropDownProps {
     onSelect: (id: number | undefined) => void;
@@ -37,10 +37,10 @@ export const DataInstanceDropDownButton: FunctionComponent<DataInstanceDropDownB
     const {dataInstacesToOption} = useDataInstanceDropDownViewModel();
 
     return (
-        <DavitIconDropDown
+        <DavitLabelDropDown
             dropdownItems={dataInstacesToOption(instances)}
             onSelect={(instance) => onSelect(Number(instance.value))}
-            icon={icon}
+            label={icon}
         />
     );
 };

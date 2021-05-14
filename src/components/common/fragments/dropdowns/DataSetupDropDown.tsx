@@ -3,7 +3,7 @@ import {useSelector} from "react-redux";
 import {DataSetupTO} from "../../../../dataAccess/access/to/DataSetupTO";
 import {masterDataSelectors} from "../../../../slices/MasterDataSlice";
 import {DavitUtil} from "../../../../utils/DavitUtil";
-import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from "./DavitDropDown";
+import {DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
 
 interface DataSetupDropDownProps {
     onSelect: (dataSetup: DataSetupTO | undefined) => void;
@@ -36,9 +36,9 @@ export const DataSetupDropDownButton: FunctionComponent<DataSetupDropDownPropsBu
     const {dataSetups, selectDataSetup, dataSetupToOption} = useDataSetupDropDownViewModel();
 
     return (
-        <DavitIconDropDown
+        <DavitLabelDropDown
             dropdownItems={dataSetups.map(dataSetupToOption)}
-            icon={icon}
+            label={icon}
             onSelect={(setup) => onSelect(selectDataSetup(Number(setup.value), dataSetups))}
         />
     );

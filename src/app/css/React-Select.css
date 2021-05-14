@@ -1,5 +1,5 @@
 .react-select-container {
-    min-width: 15rem;
+    min-width: 10rem;
     border: var(--davit-border-size-medium) solid var(--color-secondary);
     border-radius: var(--davit-border-radius);
     background-color: transparent;
@@ -8,10 +8,16 @@
 
 .react-select__control {
     background-color: transparent !important;
+    border: none !important;
 }
 
 .react-select__indicator {
     color: var(--text-color) !important;
+}
+
+.react-select__menu {
+    position: absolute;
+    z-index: 99;
 }
 
 .react-select__menu-list {

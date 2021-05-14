@@ -3,7 +3,7 @@ import {useSelector} from "react-redux";
 import {GroupTO} from "../../../../dataAccess/access/to/GroupTO";
 import {masterDataSelectors} from "../../../../slices/MasterDataSlice";
 import {DavitUtil} from "../../../../utils/DavitUtil";
-import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from "./DavitDropDown";
+import {DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
 
 interface GroupDropDownProps {
     onSelect: (group: GroupTO | undefined) => void;
@@ -36,9 +36,9 @@ export const GroupDropDownButton: FunctionComponent<GroupDropDownPropsButton> = 
     const {groups, groupToOption, selectGroup} = useGroupDropDownViewModel();
 
     return (
-        <DavitIconDropDown
+        <DavitLabelDropDown
             dropdownItems={groups.map(groupToOption)}
-            icon={icon}
+            label={icon}
             onSelect={(group) => onSelect(selectGroup(Number(group.value), groups))}
         />
     );

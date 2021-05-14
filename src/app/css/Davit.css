@@ -768,8 +768,8 @@
 
 .deleteButton {
     background-color: transparent;
-    color: var(--color-warning);
-    border-color: var(--color-warning);
+    color: var(--davit-color-warning);
+    border-color: var(--davit-color-warning);
 }
 
 .deleteButton.fluid {

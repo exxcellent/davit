@@ -4,7 +4,7 @@ import {SequenceCTO} from "../../../../dataAccess/access/cto/SequenceCTO";
 import {SequenceStepCTO} from "../../../../dataAccess/access/cto/SequenceStepCTO";
 import {sequenceModelSelectors} from "../../../../slices/SequenceModelSlice";
 import {DavitUtil} from "../../../../utils/DavitUtil";
-import {DavitDropDown, DavitDropDownItemProps, DavitIconDropDown} from "./DavitDropDown";
+import {DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
 
 interface StepDropDownButtonProps {
     onSelect: (step: SequenceStepCTO | undefined) => void;
@@ -23,9 +23,9 @@ export const StepDropDownButton: FunctionComponent<StepDropDownButtonProps> = (p
     const {sequence, stepOptions, selectSequenceStep} = useStepDropDownViewModel();
 
     return (
-        <DavitIconDropDown
+        <DavitLabelDropDown
             dropdownItems={stepOptions()}
-            icon={icon}
+            label={icon}
             onSelect={(step) => onSelect(selectSequenceStep(Number(step.value), sequence))}
         />
     );
