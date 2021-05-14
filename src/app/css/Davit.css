@@ -17,7 +17,7 @@
     height: 100vh;
     max-height: 100vh;
     overflow: hidden;
-    background-color: var(--carv2-background-color);
+    background-color: var(--background-color);
 }
 
 .componentPage {
@@ -27,34 +27,34 @@
     height: 100vh;
     max-height: 100vh;
     overflow: hidden;
-    background-color: var(--carv2-background-color);
+    background-color: var(--background-color);
     grid-template-areas: "compModel";
 }
 
 .leftPanel {
     grid-area: leftBar;
     justify-self: center;
-    background-color: var(--carv2-background-color-slidebar);
+    background-color: var(--background-color-slidebar);
     width: 100%;
 }
 
 .controllerHeader {
     grid-area: header;
-    background-color: var(--carv2-background-color-header);
-    color: var(--carv2-text-color);
+    background-color: var(--background-color-header);
+    color: var(--text-color);
     border-style: solid;
     border-width: 0 0 5px 0;
-    border-image: linear-gradient(to bottom, var(--carv2-background-color-shadow), var(--carv2-background-color)) 1 1 100%;
+    border-image: linear-gradient(to bottom, var(--background-color-shadow), var(--background-color)) 1 1 100%;
 }
 
 .actorModelFullscreen {
     border: 1px solid black;
-    background-color: var(--carv2-background-color);
+    background-color: var(--background-color);
 }
 
 .dataModelFullscreen {
     border: 1px solid black;
-    background-color: var(--carv2-background-color);
+    background-color: var(--background-color);
 }
 
 .actorModel {
@@ -63,10 +63,10 @@
     border-width: 0 2px 2px 0;
     border-image: linear-gradient(to bottom,
     transparent,
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
+    var(--color-primary),
+    var(--color-primary),
+    var(--color-primary),
+    var(--color-primary),
     transparent) 0 100%;
 }
 
@@ -82,10 +82,10 @@
     border-width: 2px 0 0 0;
     border-image: linear-gradient(to right,
     transparent,
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
+    var(--color-primary),
+    var(--color-primary),
+    var(--color-primary),
+    var(--color-primary),
     transparent) 1 1 100%;
 }
 
@@ -95,10 +95,10 @@
     overflow: hidden;
     border-image: linear-gradient(to right,
     transparent,
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
+    var(--color-primary),
+    var(--color-primary),
+    var(--color-primary),
+    var(--color-primary),
     transparent) 1 1 100%;
     border-style: solid;
     border-width: 0 0 2px 0;
@@ -121,29 +121,29 @@
 .flowChartLabelLeft {
     display: flex;
     align-self: center;
-    border-left: 2px solid var(--carv2-color-secondary);
-    border-top: 2px solid var(--carv2-color-secondary);
-    border-bottom: 2px solid var(--carv2-color-secondary);
+    border-left: 2px solid var(--color-secondary);
+    border-top: 2px solid var(--color-secondary);
+    border-bottom: 2px solid var(--color-secondary);
     padding: 8px;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
     width: 20%;
-    background-color: var(--carv2-color-secondary);
+    background-color: var(--color-secondary);
     font-weight: bold;
-    color: var(--carv2-background-color-slidebar);
+    color: var(--background-color-slidebar);
 }
 
 .flowChartLabelRight {
     width: 80%;
-    border-right: 2px solid var(--carv2-color-secondary);
-    border-top: 2px solid var(--carv2-color-secondary);
-    border-bottom: 2px solid var(--carv2-color-secondary);
+    border-right: 2px solid var(--color-secondary);
+    border-top: 2px solid var(--color-secondary);
+    border-bottom: 2px solid var(--color-secondary);
     padding: 5px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     font-weight: bold;
-    color: var(--carv2-text-color);
-    background-color: var(--carv2-background-color-header);
+    color: var(--text-color);
+    background-color: var(--background-color-header);
 }
 
 .sequenceTable {
@@ -153,10 +153,10 @@
     border-width: 0 0 0 2px;
     border-image: linear-gradient(to bottom,
     transparent,
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
+    var(--color-primary),
+    var(--color-primary),
+    var(--color-primary),
+    var(--color-primary),
     transparent) 0 100%;
     padding: 2px;
     overflow: hidden;
@@ -200,7 +200,7 @@
 /* -------------------------------------------- Forms -------------------------------------------- */
 
 .form {
-    background: var(--carv2-background-color);
+    background: var(--background-color);
     border-radius: var(--davit-border-radius);
     padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
     /*display: flex;*/
@@ -251,14 +251,14 @@
 
 .formDivider {
     display: flex;
-    border-top: var(--davit-border-size-medium) solid var(--carv2-text-color);
+    border-top: var(--davit-border-size-medium) solid var(--text-color);
     border-radius: var(--davit-border-radius);
     margin: var(--davit-margin-top-bottom);
 }
 
 .noteForm {
     width: 30%;
-    background: var(--carv2-background-color);
+    background: var(--background-color);
     border-radius: var(--davit-border-radius);
     padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
 }
@@ -269,8 +269,8 @@
     width: 100%;
     font-size: var(--davit-font-size);
     padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
-    background-color: var(--carv2-background-color);
-    color: var(--carv2-text-color);
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
 .noteTextarea:focus {
@@ -279,7 +279,7 @@
 
 .downloadForm {
     width: 30%;
-    background: var(--carv2-background-color);
+    background: var(--background-color);
     border-radius: var(--davit-border-radius);
     padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
 }
@@ -309,7 +309,7 @@
 
 #buttonGroupLabel {
     opacity: 1 !important;
-    color: var(--carv2-text-color);
+    color: var(--text-color);
 }
 
 /*================================================================================================================*/
@@ -319,7 +319,7 @@
 }
 
 .carv2label {
-    color: var(--carv2-text-color) !important;
+    color: var(--text-color) !important;
 }
 
 .ButtonGroup {
@@ -333,18 +333,18 @@
 
 .carv2Button {
     background-color: transparent;
-    box-shadow: 0 0 0 1px var(--carv2-color-secondary);
+    box-shadow: 0 0 0 1px var(--color-secondary);
     color: white;
 }
 
 
 .carv2TableButton {
-    background-color: var(--carv2-background-color) !important;
+    background-color: var(--background-color) !important;
     transition: background-color 0.4s !important;
 }
 
 .carv2TableButton:hover {
-    background-color: var(--carv2-background-color-header) !important;
+    background-color: var(--background-color-header) !important;
     transition: background-color 0.4s !important;
     cursor: pointer;
 }
@@ -354,9 +354,9 @@
     height: var(--davit-button-tiny-height);
     padding: 0;
     margin: var(--davit-button-tiny-margin-top-bottom) var(--davit-button-tiny-margin-left-right);
-    box-shadow: 0 0 0 1px var(--carv2-color-border);
+    box-shadow: 0 0 0 1px var(--color-border);
     border: var(--davit-border-size-small) solid transparent;
-    color: var(--carv2-color-border);
+    color: var(--color-border);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -383,11 +383,11 @@
 }
 
 .activeButton {
-    background-color: var(--carv2-color-secondary);
+    background-color: var(--color-secondary);
 }
 
 .button-small:hover {
-    background-color: var(--carv2-color-secondary);
+    background-color: var(--color-secondary);
     transition: background-color 0.4s;
     color: black;
 }
@@ -428,7 +428,7 @@
     bottom: 0;
     width: 2em;
     height: 7.8em;
-    background-color: var(--carv2-background-color-slidebar);
+    background-color: var(--background-color-slidebar);
     color: white;
     margin: 0;
     text-align: center;
@@ -436,10 +436,10 @@
     border-width: 0 0 0 2px;
     border-image: linear-gradient(to bottom,
     transparent,
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
+    var(--color-primary),
+    var(--color-primary),
+    var(--color-primary),
+    var(--color-primary),
     transparent) 0 100%;
     animation-duration: var(--animation-time);
 }
@@ -454,10 +454,10 @@
     animation-duration: var(--animation-time);
     border-image: linear-gradient(to bottom,
     transparent,
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
+    var(--color-primary),
+    var(--color-primary),
+    var(--color-primary),
+    var(--color-primary),
     transparent);
     height: 7.8em;
 }
@@ -513,10 +513,10 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: var(--carv2-text-color);
+    color: var(--text-color);
     border-radius: 0.28571429rem;
-    box-shadow: 0 0 0 1px var(--carv2-color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
-    background-color: var(--carv2-background-color-header);
+    box-shadow: 0 0 0 1px var(--color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
+    background-color: var(--background-color-header);
     animation-duration: var(--animation-time);
     animation-name: grow;
     animation-timing-function: ease-in-out;
@@ -525,7 +525,7 @@
 }
 
 .activeFilter {
-    box-shadow: 0 0 0 3px var(--carv2-color-secondary);
+    box-shadow: 0 0 0 3px var(--color-secondary);
     transition: box-shadow var(--animation-time);
 }
 
@@ -540,7 +540,7 @@
 }
 
 .carhHeaderText {
-    color: var(--carv2-text-color);
+    color: var(--text-color);
     height: 2.5em;
     transition: color var(--animation-time), height var(--animation-time);
 }
@@ -564,7 +564,7 @@
     align-items: center;
     width: 100%;
     text-align: center;
-    border-top: 0.5px solid var(--carv2-text-color);
+    border-top: 0.5px solid var(--text-color);
     max-width: 15em;
 }
 
@@ -580,8 +580,8 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: var(--carv2-data-add-color) !important;
-    color: var(--carv2-data-text-color) !important;
+    background-color: var(--data-add-color) !important;
+    color: var(--data-text-color) !important;
 }
 
 .carv2ActorDataPERSISTENT {
@@ -590,8 +590,8 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: var(--carv2-data-persistent-color) !important;
-    color: var(--carv2-data-text-color) !important;
+    background-color: var(--data-persistent-color) !important;
+    color: var(--data-text-color) !important;
 }
 
 .carv2ActorDataSENT {
@@ -600,8 +600,8 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: var(--carv2-color-exxcellent-blue) !important;
-    color: var(--carv2-text-color) !important;
+    background-color: var(--color-exxcellent-blue) !important;
+    color: var(--text-color) !important;
 }
 
 .carv2ActorDataUPDATED_TO {
@@ -610,8 +610,8 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: var(--carv2-color-pink) !important;
-    color: var(--carv2-text-color) !important;
+    background-color: var(--color-pink) !important;
+    color: var(--text-color) !important;
 }
 
 .carv2ActorDataUPDATED_FROM {
@@ -620,8 +620,8 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: var(--carv2-color-dark-purple) !important;
-    color: var(--carv2-data-persistent-color) !important;
+    background-color: var(--color-dark-purple) !important;
+    color: var(--data-persistent-color) !important;
 }
 
 .carv2ActorDataDELETED {
@@ -630,8 +630,8 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: var(--carv2-data-delete-color) !important;
-    color: var(--carv2-text-color) !important;
+    background-color: var(--data-delete-color) !important;
+    color: var(--text-color) !important;
 }
 
 .carv2ActorDataADD {
@@ -640,9 +640,9 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: var(--carv2-background-color-header) !important;
-    color: var(--carv2-text-color) !important;
-    box-shadow: 6px 6px 10px var(--carv2-data-add-color) inset !important;
+    background-color: var(--background-color-header) !important;
+    color: var(--text-color) !important;
+    box-shadow: 6px 6px 10px var(--data-add-color) inset !important;
 }
 
 .carv2ActorDataCHECKED {
@@ -651,8 +651,8 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: var(--carv2-data-persistent-color) !important;
-    color: var(--carv2-data-text-color) !important;
+    background-color: var(--data-persistent-color) !important;
+    color: var(--data-text-color) !important;
 }
 
 .carv2ActorDataCHECK_FAILED {
@@ -661,8 +661,8 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: var(--carv2-data-persistent-color) !important;
-    color: var(--carv2-text-color) !important;
+    background-color: var(--data-persistent-color) !important;
+    color: var(--text-color) !important;
 }
 
 .carv2ActorDataDELETE {
@@ -671,9 +671,9 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: var(--carv2-background-color-header) !important;
-    color: var(--carv2-text-color) !important;
-    box-shadow: 6px 6px 10px var(--carv2-data-delete-color) inset !important;
+    background-color: var(--background-color-header) !important;
+    color: var(--text-color) !important;
+    box-shadow: 6px 6px 10px var(--data-delete-color) inset !important;
 }
 
 .carv2ActorDataERROR_ADD {
@@ -682,8 +682,8 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: var(--carv2-data-add-color) !important;
-    color: var(--carv2-text-color) !important;
+    background-color: var(--data-add-color) !important;
+    color: var(--text-color) !important;
     box-shadow: 0 0 20px rgb(255, 0, 0);
 }
 
@@ -693,8 +693,8 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: var(--carv2-data-delete-color) !important;
-    color: var(--carv2-text-color) !important;
+    background-color: var(--data-delete-color) !important;
+    color: var(--text-color) !important;
     box-shadow: 0 0 20px rgb(255, 0, 0);
 }
 
@@ -704,15 +704,15 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: var(--carv2-color-exxcellent-blue) !important;
-    color: var(--carv2-text-color) !important;
+    background-color: var(--color-exxcellent-blue) !important;
+    color: var(--text-color) !important;
     box-shadow: 0 0 20px rgb(255, 0, 0);
 }
 
 /*========================================== NEW DAVIT CSS ==========================================================*/
 
 .zoomLabel {
-    color: var(--carv2-text-color);
+    color: var(--text-color);
     font-size: 0.7em;
     animation-name: disapear;
     animation-duration: 3s;
@@ -723,12 +723,12 @@
     border: none;
     width: var(--davit-button-sidepanel-width);
     height: var(--davit-button-sidepanel-height);
-    border-bottom: var(--davit-border-size-medium) solid var(--carv2-color-primary);
+    border-bottom: var(--davit-border-size-medium) solid var(--color-primary);
     border-radius: 0;
 }
 
 .sidePanelButton.active {
-    background-color: var(--carv2-color-secondary);
+    background-color: var(--color-secondary);
     transition: background-color var(--animation-time);
 }
 
@@ -738,7 +738,7 @@
     align-items: center;
     height: 100%;
     width: 100%;
-    color: var(--carv2-text-color);
+    color: var(--text-color);
 }
 
 .inputLabel {
@@ -749,16 +749,16 @@
     padding-left: var(--davit-padding-right-left);
     border-bottom-left-radius: var(--davit-border-radius);
     border-top-left-radius: var(--davit-border-radius);
-    border: var(--davit-border-size-medium) solid var(--carv2-color-secondary);
-    border-bottom: var(--davit-border-size-medium) solid var(--carv2-color-secondary);
-    background-color: var(--carv2-color-secondary);
-    color: var(--carv2-text-color);
+    border: var(--davit-border-size-medium) solid var(--color-secondary);
+    border-bottom: var(--davit-border-size-medium) solid var(--color-secondary);
+    background-color: var(--color-secondary);
+    color: var(--text-color);
     font-family: var(--davit-font-family);
     font-size: var(--davit-font-size);
 }
 
 .labelField {
-    color: var(--carv2-text-color);
+    color: var(--text-color);
     background-color: transparent;
     text-align: center;
     padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
@@ -768,8 +768,8 @@
 
 .deleteButton {
     background-color: transparent;
-    color: var(--davit-color-warning);
-    border-color: var(--davit-color-warning);
+    color: var(--color-warning);
+    border-color: var(--color-warning);
 }
 
 .deleteButton.fluid {
@@ -780,9 +780,9 @@
 .notificationCard {
     width: 30em;
     min-height: 6em;
-    background-color: var(--carv2-background-color);
+    background-color: var(--background-color);
     border-radius: var(--davit-border-radius);
-    border: var(--davit-border-size-medium) solid var(--carv2-color-border);
+    border: var(--davit-border-size-medium) solid var(--color-border);
     display: flex;
     align-items: center;
     z-index: 99;
@@ -802,12 +802,4 @@
 .fullscreen {
     width: 100vw;
     height: 100vh;
-}
-
-.react-select {
-    /*min-width: 10em;*/
-    border: var(--davit-border-size-medium) solid var(--carv2-color-secondary);
-    border-radius: var(--davit-border-radius);
-    background-color: var(--carv2-background-color);
-    color: var(--carv2-text-color);
 }

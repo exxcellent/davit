@@ -1,0 +1,33 @@
+.react-select-container {
+    min-width: 15rem;
+    border: var(--davit-border-size-medium) solid var(--color-secondary);
+    border-radius: var(--davit-border-radius);
+    background-color: transparent;
+    color: var(--text-color);
+}
+
+.react-select__control {
+    background-color: transparent !important;
+}
+
+.react-select__indicator {
+    color: var(--text-color) !important;
+}
+
+.react-select__menu-list {
+    background-color: var(--background-color);
+    border: var(--color-secondary) solid var(--davit-border-size-medium);
+    border-radius: var(--davit-border-radius);
+}
+
+.react-select__option.react-select__option--is-focused {
+    color: var(--color-secondary);
+}
+
+.react-select__option:hover {
+    color: var(--color-secondary);
+}
+
+.react-select__input {
+    color: var(--text-color);
+}

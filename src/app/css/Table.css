@@ -10,10 +10,10 @@ td {
     border-width: 0 2px 2px 0;
     border-image: linear-gradient(to bottom,
     transparent,
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
-    var(--carv2-color-primary),
+    var(--color-primary),
+    var(--color-primary),
+    var(--color-primary),
+    var(--color-primary),
     transparent) 0 100%;
 }
 
@@ -46,8 +46,8 @@ tbody tr {
 }
 
 thead {
-    background-color: var(--carv2-background-color-header);
-    color: var(--carv2-text-color);
+    background-color: var(--background-color-header);
+    color: var(--text-color);
     animation-name: appearText;
     animation-duration: 0.2s;
     height: var(--table-header-height);
@@ -59,7 +59,7 @@ table {
 }
 
 .carv2Tr {
-    background-color: var(--carv2-data-table-row-color);
+    background-color: var(--data-table-row-color);
     color: black;
     height: 2.5em;
     text-align: start;
@@ -68,11 +68,11 @@ table {
 }
 
 .carv2Tr:nth-child(odd) {
-    background-color: var(--carv2-data-table-row-odd-color);
+    background-color: var(--data-table-row-odd-color);
 }
 
 .clickable:hover {
-    background-color: var(--carv2-data-table-row-odd-hover);
+    background-color: var(--data-table-row-odd-hover);
     transition: background-color 0.4s;
 }
 
@@ -84,11 +84,11 @@ table {
     margin: 0.5em;
     box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.199);
     border-radius: 5px;
-    border: 2px solid var(--carv2-background-color-header);
+    border: 2px solid var(--background-color-header);
 }
 
 .tabs {
-    background-color: var(--carv2-background-color-header);
+    background-color: var(--background-color-header);
     display: flex;
     justify-content: flex-start;
     border-bottom: 1px solid black;
@@ -99,7 +99,7 @@ table {
     display: flex;
     flex-direction: column;
     background-color: rgba(0, 0, 0, 0.1);
-    box-shadow: 0 0 0 1px var(--carv2-color-border);
+    box-shadow: 0 0 0 1px var(--color-border);
     border-radius: 0.28571429rem;
     animation-duration: var(--animation-time);
     animation-timing-function: ease-in-out;
@@ -109,7 +109,7 @@ table {
 }
 
 .tab-aggregator {
-    color: var(--carv2-text-color);
+    color: var(--text-color);
     padding: 0.5em;
     text-align: center;
     animation-duration: var(--animation-time);
@@ -126,7 +126,7 @@ table {
     min-width: 7em;
     border-right: 0.5px solid rgba(255, 250, 250, 0.2);
     background-color: rgba(0, 0, 0, 0.2);
-    color: var(--carv2-text-color);
+    color: var(--text-color);
     animation-duration: var(--animation-time);
     animation-timing-function: ease-out;
     animation-name: appearTab;
@@ -140,7 +140,7 @@ table {
 }
 
 .active {
-    background-color: var(--carv2-color-secondary) !important;
+    background-color: var(--color-secondary) !important;
     color: black !important;
     transition: background-color var(--animation-time), color var(--animation-time);
 }
@@ -162,34 +162,34 @@ table {
 }
 
 .carv2TrTerminalERROR.clickable:hover {
-    background-color: var(--carv2-data-delete-color);
+    background-color: var(--data-delete-color);
     opacity: 1;
 }
 
 .carv2TrTerminalFIN.clickable:hover {
-    background-color: var(--carv2-data-add-color);
+    background-color: var(--data-add-color);
     opacity: 1;
 }
 
 .carv2TrTerminalIDLE.clickable:hover {
-    background-color: var(--carv2-color-exxcellent-blue);
+    background-color: var(--color-exxcellent-blue);
     opacity: 1;
 }
 
 .carv2TrTerminalERROR {
-    background-color: var(--carv2-data-delete-color);
+    background-color: var(--data-delete-color);
     opacity: 0.75;
     height: 2.5em;
 }
 
 .carv2TrTerminalFIN {
-    background-color: var(--carv2-data-add-color);
+    background-color: var(--data-add-color);
     height: 2.5em;
     opacity: 0.75;
 }
 
 .carv2TrTerminalIDLE {
-    background-color: var(--carv2-color-exxcellent-blue);
+    background-color: var(--color-exxcellent-blue);
     height: 2.5em;
     opacity: 0.75;
 }

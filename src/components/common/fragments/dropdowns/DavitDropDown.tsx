@@ -1,6 +1,7 @@
 import React, {FunctionComponent} from "react";
 import "../../../../app/css/Davit.css";
 import Select from 'react-select';
+import "../../../../app/css/React-Select.css";
 
 export interface DavitDropDownItemProps {
     key: number;
@@ -44,12 +45,16 @@ export const DavitDropDown: FunctionComponent<DavitDropDownProps> = (props) => {
         //     {...others}
         // />
         <Select
-            className={"react-select"}
+            classNamePrefix={"react-select"}
+            className={"react-select-container"}
             isClearable={clearable}
             placeholder={placeholder}
             value={{value: value}}
             options={dropdownItems.sort((a, b) => a.text.toLowerCase().localeCompare(b.text.toLowerCase())).map(dropdownItemToOption)}
-            onChange={(event, data) => onSelect(parsDataToDavitDropDownItemProps(data))}
+            onChange={(event, data) => {
+                console.info("Call on Change in dropdown.");
+                onSelect(parsDataToDavitDropDownItemProps(data));
+            }}
         />
     );
 };
