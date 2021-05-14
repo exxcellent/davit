@@ -23,38 +23,52 @@ export interface DavitIconDropDownProps {
     icon?: string;
 }
 
+interface ReactSelectOption {
+    value: string;
+    label: string;
+}
+
 export const DavitDropDown: FunctionComponent<DavitDropDownProps> = (props) => {
     const {dropdownItems, onSelect, placeholder, value, clearable} = props;
 
-    const dropdownItemToOption = (dropdownItem: DavitDropDownItemProps) => {
+    const dropdownItemToOption = (dropdownItem: DavitDropDownItemProps): ReactSelectOption => {
         return {value: dropdownItem.value, label: dropdownItem.text};
     };
 
+    const handleOnChange = (value: any) => {
+        if (value !== null) {
+            const option: DavitDropDownItemProps = parsDataToDavitDropDownItemProps(value);
+            onSelect(option);
+        } else {
+            onSelect({key: -1, value: "", text: ""});
+        }
+    };
+
+    const getSelectedValue = (value: string | undefined): ReactSelectOption => {
+        let selectedValue: ReactSelectOption = {value: "", label: ""};
+
+        if (value) {
+
+            const option: DavitDropDownItemProps | undefined = dropdownItems.find(option => option.value === value);
+
+            if (option) {
+                selectedValue.value = option.value;
+                selectedValue.label = option.text;
+            }
+        }
+        return selectedValue;
+    };
+
+
     return (
-        // <Dropdown
-        //     selection
-        //     selectOnBlur={false}
-        //     placeholder={placeholder || ""}
-        //     scrolling
-        //     value={value}
-        //     disabled={dropdownItems.length < 1}
-        //     search
-        //     clearable={clearable ? clearable : false}
-        //     options={dropdownItems.sort((a, b) => a.text.toLowerCase().localeCompare(b.text.toLowerCase()))}
-        //     onChange={(event, data) => onSelect(parsDataToDavitDropDownItemProps(data))}
-        //     {...others}
-        // />
         <Select
             classNamePrefix={"react-select"}
             className={"react-select-container"}
             isClearable={clearable}
             placeholder={placeholder}
-            value={{value: value}}
+            value={getSelectedValue(value)}
             options={dropdownItems.sort((a, b) => a.text.toLowerCase().localeCompare(b.text.toLowerCase())).map(dropdownItemToOption)}
-            onChange={(event, data) => {
-                console.info("Call on Change in dropdown.");
-                onSelect(parsDataToDavitDropDownItemProps(data));
-            }}
+            onChange={handleOnChange}
         />
     );
 };
@@ -81,10 +95,11 @@ export const DavitIconDropDown: FunctionComponent<DavitIconDropDownProps> = (pro
     }
 ;
 
-const parsDataToDavitDropDownItemProps = (data: any): DavitDropDownItemProps => {
+const parsDataToDavitDropDownItemProps = (data: ReactSelectOption): DavitDropDownItemProps => {
+    console.info("parsing data: ", data);
     return {
-        key: data.key ? data.key : -1,
-        text: data.text ? data.text : "",
-        value: data.value ? data.value.toString() : "",
+        key: -1,
+        text: data.label ? data.label : "",
+        value: data.value ? data.value : "",
     };
 };
