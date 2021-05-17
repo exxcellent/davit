@@ -6,9 +6,9 @@ import {sequenceModelSelectors} from "../../../../slices/SequenceModelSlice";
 import {DavitUtil} from "../../../../utils/DavitUtil";
 import {DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
 
-interface DecisionDropDownButtonProps {
+interface DecisionLabelDropDownProps {
     onSelect: (decision: DecisionTO | undefined) => void;
-    icon?: string;
+    label: string;
 }
 
 interface DecisionDropDownProps {
@@ -18,15 +18,15 @@ interface DecisionDropDownProps {
     exclude?: number;
 }
 
-export const DecisionDropDownButton: FunctionComponent<DecisionDropDownButtonProps> = (props) => {
-    const {onSelect, icon} = props;
+export const DecisionLabelDropDown: FunctionComponent<DecisionLabelDropDownProps> = (props) => {
+    const {onSelect, label} = props;
     const {sequenceToEdit, decisionOptions, selectDecision} = useDecisionDropDownViewModel();
 
     return (
         <DavitLabelDropDown
             dropdownItems={decisionOptions()}
             onSelect={(decision) => onSelect(selectDecision(Number(decision.value), sequenceToEdit))}
-            label={icon}
+            label={label}
         />
     );
 };

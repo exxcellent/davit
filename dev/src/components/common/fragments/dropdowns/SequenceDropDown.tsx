@@ -11,9 +11,9 @@ interface SequenceDropDownProps {
     value?: number;
 }
 
-interface SequenceDropDownPropsButton {
+interface SequenceLabelDropDownProps {
     onSelect: (sequence: SequenceTO | undefined) => void;
-    icon?: string;
+    label: string;
 }
 
 export const SequenceDropDown: FunctionComponent<SequenceDropDownProps> = (props) => {
@@ -31,14 +31,14 @@ export const SequenceDropDown: FunctionComponent<SequenceDropDownProps> = (props
     );
 };
 
-export const SequenceDropDownButton: FunctionComponent<SequenceDropDownPropsButton> = (props) => {
-    const {onSelect, icon} = props;
+export const SequenceLabelDropDown: FunctionComponent<SequenceLabelDropDownProps> = (props) => {
+    const {onSelect, label} = props;
     const {sequences, selectSequence, sequenceToOption} = useSequenceDropDownViewModel();
 
     return (
         <DavitLabelDropDown
             dropdownItems={sequences.map(sequenceToOption)}
-            label={icon}
+            label={label}
             onSelect={(sequence) => onSelect(selectSequence(Number(sequence.value), sequences))}
         />
     );

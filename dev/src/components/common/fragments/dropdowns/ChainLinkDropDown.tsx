@@ -5,10 +5,10 @@ import {masterDataSelectors} from "../../../../slices/MasterDataSlice";
 import {DavitUtil} from "../../../../utils/DavitUtil";
 import {DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
 
-interface ChainLinkDropDownButtonProps {
+interface ChainLinkDropDownLabelProps {
     onSelect: (link: ChainlinkTO | undefined) => void;
     chainId: number;
-    icon?: string;
+    label: string;
     exclude?: number;
 }
 
@@ -38,15 +38,15 @@ export const ChainLinkDropDown: FunctionComponent<ChainLinkDropDownProps> = (pro
     );
 };
 
-export const ChainLinkDropDownButton: FunctionComponent<ChainLinkDropDownButtonProps> = (props) => {
-    const {onSelect, icon, chainId, exclude} = props;
+export const ChainLinkDropDownButton: FunctionComponent<ChainLinkDropDownLabelProps> = (props) => {
+    const {onSelect, label, chainId, exclude} = props;
     const {selectChainLink, linkOptions} = useChainStepDropDownViewModel(chainId, exclude);
 
     return (
         <DavitLabelDropDown
             dropdownItems={linkOptions()}
             onSelect={(link) => onSelect(selectChainLink(Number(link.value)))}
-            label={icon}
+            label={label}
         />
     );
 };

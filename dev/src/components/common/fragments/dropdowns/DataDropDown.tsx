@@ -11,9 +11,9 @@ interface DataDropDownProps {
     value?: number;
 }
 
-interface DataDropDownButtonProps {
+interface DataDropDownLabelProps {
     onSelect: (data: DataCTO | undefined) => void;
-    icon?: string;
+    label: string;
 }
 
 export const DataDropDown: FunctionComponent<DataDropDownProps> = (props) => {
@@ -30,15 +30,15 @@ export const DataDropDown: FunctionComponent<DataDropDownProps> = (props) => {
     );
 };
 
-export const DataDropDownButton: FunctionComponent<DataDropDownButtonProps> = (props) => {
-    const {onSelect, icon} = props;
+export const DataLabelDropDown: FunctionComponent<DataDropDownLabelProps> = (props) => {
+    const {onSelect, label} = props;
     const {datas, selectData, dataToOption} = useDataDropDownViewModel();
 
     return (
         <DavitLabelDropDown
             dropdownItems={datas.map(dataToOption)}
             onSelect={(data) => onSelect(selectData(Number(data.value), datas))}
-            label={icon}
+            label={label}
         />
     );
 };

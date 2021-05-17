@@ -13,7 +13,7 @@ interface GroupDropDownProps {
 
 interface GroupDropDownPropsButton {
     onSelect: (group: GroupTO | undefined) => void;
-    icon?: string;
+    label: string;
 }
 
 export const GroupDropDown: FunctionComponent<GroupDropDownProps> = (props) => {
@@ -31,14 +31,14 @@ export const GroupDropDown: FunctionComponent<GroupDropDownProps> = (props) => {
     );
 };
 
-export const GroupDropDownButton: FunctionComponent<GroupDropDownPropsButton> = (props) => {
-    const {onSelect, icon} = props;
+export const GroupLabelDropDown: FunctionComponent<GroupDropDownPropsButton> = (props) => {
+    const {onSelect, label} = props;
     const {groups, groupToOption, selectGroup} = useGroupDropDownViewModel();
 
     return (
         <DavitLabelDropDown
             dropdownItems={groups.map(groupToOption)}
-            label={icon}
+            label={label}
             onSelect={(group) => onSelect(selectGroup(Number(group.value), groups))}
         />
     );

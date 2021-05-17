@@ -11,9 +11,9 @@ interface RelationDropDownProps {
     placeholder?: string;
 }
 
-interface RelationDropDownPropsButton {
+interface RelationLabelDropDownProps {
     onSelect: (relation: DataRelationTO | undefined) => void;
-    icon?: string;
+    label: string;
 }
 
 export const RelationDropDown: FunctionComponent<RelationDropDownProps> = (props) => {
@@ -29,14 +29,14 @@ export const RelationDropDown: FunctionComponent<RelationDropDownProps> = (props
     );
 };
 
-export const RelationDropDownButton: FunctionComponent<RelationDropDownPropsButton> = (props) => {
-    const {onSelect, icon} = props;
+export const RelationLabelDropDown: FunctionComponent<RelationLabelDropDownProps> = (props) => {
+    const {onSelect, label} = props;
     const {relations, selectDataRelation, relationToOption} = useRelationDropDownViewModel();
 
     return (
         <DavitLabelDropDown
             dropdownItems={relations.map(relationToOption)}
-            label={icon}
+            label={label}
             onSelect={(relation) => onSelect(selectDataRelation(Number(relation.value), relations))}
         />
     );
