@@ -9,10 +9,10 @@ import {DavitBackButton} from "../../../../../../common/fragments/buttons/DavitB
 import {DavitAddButton} from "../../../../../../common/fragments/buttons/DavitAddButton";
 import {Form} from "../../../../../../common/fragments/forms/Form";
 import {FormLine} from "./fragments/FormLine";
-import { FormDivider } from './fragments/FormDivider';
-import { FormHeader } from '../../../../../../common/fragments/forms/FormHeader';
-import { FormBody } from '../../../../../../common/fragments/forms/FormBody';
-import { FormFooter } from '../../../../../../common/fragments/forms/FormFooter';
+import {FormDivider} from './fragments/FormDivider';
+import {FormHeader} from '../../../../../../common/fragments/forms/FormHeader';
+import {FormBody} from '../../../../../../common/fragments/forms/FormBody';
+import {FormFooter} from '../../../../../../common/fragments/forms/FormFooter';
 
 interface DataFormProps {
 }
@@ -39,13 +39,17 @@ export const DataForm: FunctionComponent<DataFormProps> = () => {
         const createInstanceRow = (instance: DataInstanceTO, index: number): JSX.Element => {
             return (<tr key={index}>
                     <td>
-                        <div style={{display: "flex", justifyContent: "space-between"}}>
+                        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
                             <DavitLabelTextfield
                                 onChangeCallback={(newName) => changeInstanceName(newName, index)}
                                 value={instance.name}
                                 onBlur={updateData}
                             />
-                            {index !== 0 && <DavitDeleteButton onClick={() => deleteInstance(index)} noConfirm/>}
+                            {index !== 0 &&
+                            <div>
+                                <DavitDeleteButton onClick={() => deleteInstance(index)} noConfirm/>
+                            </div>
+                            }
                         </div>
                     </td>
                 </tr>
@@ -64,33 +68,33 @@ export const DataForm: FunctionComponent<DataFormProps> = () => {
                 <FormBody>
 
 
-                <FormLine>
-                    <DavitLabelTextfield
-                        label='Name:'
-                        placeholder='Data Name'
-                        onChangeCallback={changeName}
-                        value={name}
-                        focus
-                        onBlur={updateData}
-                    />
-                </FormLine>
+                    <FormLine>
+                        <DavitLabelTextfield
+                            label='Name:'
+                            placeholder='Data Name'
+                            onChangeCallback={changeName}
+                            value={name}
+                            focus
+                            onBlur={updateData}
+                        />
+                    </FormLine>
 
 
-                <FormDivider/>
+                    <FormDivider/>
 
-                <FormLine>
-                    <table className={"border"} style={{width: "40em"}}>
-                        <thead>
-                        <tr>
-                            <td style={{textAlign: "center"}}>Instances</td>
-                            <td style={{textAlign: "end"}}><DavitAddButton onClick={createInstance}/></td>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {instances.map(createInstanceRow)}
-                        </tbody>
-                    </table>
-                </FormLine>
+                    <FormLine>
+                        <table className={"border"} style={{width: "40em"}}>
+                            <thead>
+                            <tr>
+                                <td style={{textAlign: "center"}}>Instances</td>
+                                <td style={{textAlign: "end"}}><DavitAddButton onClick={createInstance}/></td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {instances.map(createInstanceRow)}
+                            </tbody>
+                        </table>
+                    </FormLine>
 
                 </FormBody>
 

@@ -6,14 +6,14 @@ import {ConditionTO} from "../../../../dataAccess/access/to/ConditionTO";
 import {masterDataSelectors} from "../../../../slices/MasterDataSlice";
 import {DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
 
-interface ConditionDropDownButtonProps {
+interface ConditionLabelDropDownProps {
     onSelect: (conditionId: number | undefined) => void;
     conditions: ConditionTO[];
-    icon?: string;
+    label: string;
 }
 
-export const ConditionDropDownButton: FunctionComponent<ConditionDropDownButtonProps> = (props) => {
-    const {onSelect, icon, conditions} = props;
+export const ConditionLabelDropDown: FunctionComponent<ConditionLabelDropDownProps> = (props) => {
+    const {onSelect, label, conditions} = props;
 
     const actors: ActorCTO[] = useSelector(masterDataSelectors.selectActors);
     const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
@@ -45,7 +45,7 @@ export const ConditionDropDownButton: FunctionComponent<ConditionDropDownButtonP
                 return conditionToOption(condition);
             })}
             onSelect={(condition) => onSelect(Number(condition.value))}
-            label={icon}
+            label={label}
         />
     );
 };

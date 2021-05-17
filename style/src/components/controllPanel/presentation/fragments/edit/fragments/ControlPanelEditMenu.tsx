@@ -6,10 +6,10 @@ import {DataRelationTO} from '../../../../../../dataAccess/access/to/DataRelatio
 import {DataSetupTO} from '../../../../../../dataAccess/access/to/DataSetupTO';
 import {GroupTO} from '../../../../../../dataAccess/access/to/GroupTO';
 import {ActorDropDownLabel} from '../../../../../common/fragments/dropdowns/ActorDropDown';
-import {DataDropDownButton} from '../../../../../common/fragments/dropdowns/DataDropDown';
-import {DataSetupDropDownButton} from '../../../../../common/fragments/dropdowns/DataSetupDropDown';
-import {RelationDropDownButton} from '../../../../../common/fragments/dropdowns/RelationDropDown';
-import {SequenceDropDownButton} from '../../../../../common/fragments/dropdowns/SequenceDropDown';
+import {DataLabelDropDown} from '../../../../../common/fragments/dropdowns/DataDropDown';
+import {DataSetupLabelDropDown} from '../../../../../common/fragments/dropdowns/DataSetupDropDown';
+import {RelationLabelDropDown} from '../../../../../common/fragments/dropdowns/RelationDropDown';
+import {SequenceLabelDropDown} from '../../../../../common/fragments/dropdowns/SequenceDropDown';
 import {OptionField} from '../common/OptionField';
 import {AddOrEdit} from '../../../../../common/fragments/AddOrEdit';
 import {ChainDropDownButton} from '../../../../../common/fragments/dropdowns/ChainDropDown';
@@ -40,24 +40,24 @@ export const ControlPanelEditMenu: FunctionComponent<ControlPanelEditMenuProps> 
             </OptionField>
             <OptionField label='Data' divider={true}>
                 <AddOrEdit label={'Data'} addCallBack={() => editOrAddData()}
-                           dropDown={<DataDropDownButton onSelect={editOrAddData} icon='Data'/>}/>
+                           dropDown={<DataLabelDropDown onSelect={editOrAddData} label='Data'/>}/>
                 <AddOrEdit label={'Relation'} addCallBack={() => editOrAddRelation()}
-                           dropDown={<RelationDropDownButton onSelect={editOrAddRelation} icon='Relation'/>}/>
+                           dropDown={<RelationLabelDropDown onSelect={editOrAddRelation} label='Relation'/>}/>
             </OptionField>
             <OptionField label='Data - Setup' divider={true}>
                 <AddOrEdit label={'Data Setup'} addCallBack={() => editOrAddDataSetup()}
-                           dropDown={<DataSetupDropDownButton onSelect={editOrAddDataSetup} icon='Data-Setup'/>}/>
+                           dropDown={<DataSetupLabelDropDown onSelect={editOrAddDataSetup} label='Data-Setup'/>}/>
             </OptionField>
             <OptionField label='sequence' divider={true}>
                 <AddOrEdit label={'Sequence'} addCallBack={() => editOrAddSequence()}
-                           dropDown={<SequenceDropDownButton
+                           dropDown={<SequenceLabelDropDown
                                onSelect={(sequenceTO) => editOrAddSequence(sequenceTO?.id)}
-                               icon='Sequence'/>}
+                               label='Sequence'/>}
                 />
                 <AddOrEdit label={'Chain'} addCallBack={() => editOrAddChain()}
                            dropDown={<ChainDropDownButton
                                onSelect={(chain) => editOrAddChain(chain)}
-                               icon='Chain'/>}
+                               label='Chain'/>}
                 />
             </OptionField>
         </ControlPanel>

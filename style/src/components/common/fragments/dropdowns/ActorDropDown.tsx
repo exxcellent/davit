@@ -13,7 +13,7 @@ interface ActorDropDownProps {
 
 interface ActorDropDownLabelProps {
     onSelect: (actor: ActorCTO | undefined) => void;
-    label?: string;
+    label: string;
 }
 
 export const ActorDropDown: FunctionComponent<ActorDropDownProps> = (props) => {

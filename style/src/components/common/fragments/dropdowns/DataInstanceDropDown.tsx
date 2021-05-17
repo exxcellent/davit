@@ -9,10 +9,10 @@ interface DataInstanceDropDownProps {
     value?: number;
 }
 
-interface DataInstanceDropDownButtonProps {
+interface DataInstanceLabelDropDownProps {
     onSelect: (id: number | undefined) => void;
     instances: DataInstanceTO[];
-    icon?: string;
+    label: string;
 }
 
 /**
@@ -32,15 +32,15 @@ export const DataInstanceDropDown: FunctionComponent<DataInstanceDropDownProps> 
     );
 };
 
-export const DataInstanceDropDownButton: FunctionComponent<DataInstanceDropDownButtonProps> = (props) => {
-    const {onSelect, instances, icon} = props;
+export const DataInstanceLabelDropDown: FunctionComponent<DataInstanceLabelDropDownProps> = (props) => {
+    const {onSelect, instances, label} = props;
     const {dataInstacesToOption} = useDataInstanceDropDownViewModel();
 
     return (
         <DavitLabelDropDown
             dropdownItems={dataInstacesToOption(instances)}
             onSelect={(instance) => onSelect(Number(instance.value))}
-            label={icon}
+            label={label}
         />
     );
 };

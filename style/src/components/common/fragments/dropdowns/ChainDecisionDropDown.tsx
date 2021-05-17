@@ -5,10 +5,10 @@ import {masterDataSelectors} from "../../../../slices/MasterDataSlice";
 import {DavitUtil} from "../../../../utils/DavitUtil";
 import {DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
 
-interface ChainDecisionDropDownButtonProps {
+interface ChainDecisionDropDownLabelProps {
     onSelect: (link: ChainDecisionTO | undefined) => void;
     chainId: number;
-    icon?: string;
+    label: string;
     exclude?: number;
 }
 
@@ -20,14 +20,14 @@ interface ChainDecisionDropDownProps {
     exclude?: number;
 }
 
-export const ChainDecisionDropDownButton: FunctionComponent<ChainDecisionDropDownButtonProps> = (props) => {
-    const {onSelect, icon, chainId, exclude} = props;
+export const ChainDecisionDropDownButton: FunctionComponent<ChainDecisionDropDownLabelProps> = (props) => {
+    const {onSelect, label, chainId, exclude} = props;
     const {createDecisionOptions, selectChainDecision} = useChainDecisionDropDownViewModel(chainId, exclude);
 
     return (
         <DavitLabelDropDown
             dropdownItems={createDecisionOptions()}
-            label={icon}
+            label={label}
             onSelect={(item) => onSelect(selectChainDecision(Number(item.value)))}
         />
     );

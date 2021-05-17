@@ -6,9 +6,9 @@ import {sequenceModelSelectors} from "../../../../slices/SequenceModelSlice";
 import {DavitUtil} from "../../../../utils/DavitUtil";
 import {DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
 
-interface StepDropDownButtonProps {
+interface StepLabelDropDownProps {
     onSelect: (step: SequenceStepCTO | undefined) => void;
-    icon?: string;
+    label: string;
 }
 
 interface StepDropDownProps {
@@ -18,14 +18,14 @@ interface StepDropDownProps {
     exclude?: number;
 }
 
-export const StepDropDownButton: FunctionComponent<StepDropDownButtonProps> = (props) => {
-    const {onSelect, icon} = props;
+export const StepLabelDropDown: FunctionComponent<StepLabelDropDownProps> = (props) => {
+    const {onSelect, label} = props;
     const {sequence, stepOptions, selectSequenceStep} = useStepDropDownViewModel();
 
     return (
         <DavitLabelDropDown
             dropdownItems={stepOptions()}
-            label={icon}
+            label={label}
             onSelect={(step) => onSelect(selectSequenceStep(Number(step.value), sequence))}
         />
     );

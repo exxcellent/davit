@@ -1,24 +1,24 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { ChainDecisionTO } from '../../../../../../dataAccess/access/to/ChainDecisionTO';
-import { ChainlinkTO } from '../../../../../../dataAccess/access/to/ChainlinkTO';
-import { ChainTO } from '../../../../../../dataAccess/access/to/ChainTO';
-import { SequenceTO } from '../../../../../../dataAccess/access/to/SequenceTO';
-import { EditActions } from '../../../../../../slices/EditSlice';
-import { masterDataSelectors } from '../../../../../../slices/MasterDataSlice';
-import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
-import { EditChain } from '../../../../../../slices/thunks/ChainThunks';
-import { EditSequence } from '../../../../../../slices/thunks/SequenceThunks';
-import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { DavitBackButton } from '../../../../../common/fragments/buttons/DavitBackButton';
-import { DavitButton } from '../../../../../common/fragments/buttons/DavitButton';
-import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
-import { DavitLabelTextfield } from '../../../../../common/fragments/DavitLabelTextfield';
-import { ChainDecisionDropDownButton } from '../../../../../common/fragments/dropdowns/ChainDecisionDropDown';
-import { ChainLinkDropDownButton } from '../../../../../common/fragments/dropdowns/ChainLinkDropDown';
-import { OptionField } from '../common/OptionField';
-import { AddOrEdit } from '../../../../../common/fragments/AddOrEdit';
-import { ControlPanel } from '../common/ControlPanel';
+import React, {FunctionComponent, useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {ChainDecisionTO} from '../../../../../../dataAccess/access/to/ChainDecisionTO';
+import {ChainlinkTO} from '../../../../../../dataAccess/access/to/ChainlinkTO';
+import {ChainTO} from '../../../../../../dataAccess/access/to/ChainTO';
+import {SequenceTO} from '../../../../../../dataAccess/access/to/SequenceTO';
+import {EditActions} from '../../../../../../slices/EditSlice';
+import {masterDataSelectors} from '../../../../../../slices/MasterDataSlice';
+import {sequenceModelSelectors} from '../../../../../../slices/SequenceModelSlice';
+import {EditChain} from '../../../../../../slices/thunks/ChainThunks';
+import {EditSequence} from '../../../../../../slices/thunks/SequenceThunks';
+import {DavitUtil} from '../../../../../../utils/DavitUtil';
+import {DavitBackButton} from '../../../../../common/fragments/buttons/DavitBackButton';
+import {DavitButton} from '../../../../../common/fragments/buttons/DavitButton';
+import {DavitDeleteButton} from '../../../../../common/fragments/buttons/DavitDeleteButton';
+import {DavitLabelTextfield} from '../../../../../common/fragments/DavitLabelTextfield';
+import {ChainDecisionDropDownButton} from '../../../../../common/fragments/dropdowns/ChainDecisionDropDown';
+import {ChainLinkDropDownButton} from '../../../../../common/fragments/dropdowns/ChainLinkDropDown';
+import {OptionField} from '../common/OptionField';
+import {AddOrEdit} from '../../../../../common/fragments/AddOrEdit';
+import {ControlPanel} from '../common/ControlPanel';
 
 export interface ControlPanelEditChainProps {
 }
@@ -48,11 +48,13 @@ export const ControlPanelEditChain: FunctionComponent<ControlPanelEditChainProps
             </OptionField>
 
             <OptionField label='Create / Edit | Chain - Link' divider={true}>
-                <AddOrEdit addCallBack={editOrAddChainLink} label={'Link'} dropDown={<ChainLinkDropDownButton
-                    onSelect={(link) => editOrAddChainLink(link)}
-                    icon='wrench'
-                    chainId={id}
-                />} />
+                <AddOrEdit addCallBack={editOrAddChainLink}
+                           label={'Link'}
+                           dropDown={<ChainLinkDropDownButton
+                               onSelect={(link) => editOrAddChainLink(link)}
+                               label='wrench'
+                               chainId={id}
+                           />}/>
             </OptionField>
 
             <OptionField label='Create / Edit | Chain - Decision' divider={true}>
@@ -60,14 +62,14 @@ export const ControlPanelEditChain: FunctionComponent<ControlPanelEditChainProps
                            label={'Decision'}
                            dropDown={<ChainDecisionDropDownButton
                                onSelect={editOrAddChainDecision}
-                               icon='wrench'
-                               chainId={id} />} />
+                               label='wrench'
+                               chainId={id}/>}/>
             </OptionField>
 
             <OptionField label='Options' divider={true}>
-                <DavitButton onClick={createAnother} label='Create another' />
-                <DavitBackButton onClick={saveChain} />
-                <DavitDeleteButton onClick={deleteChain} />
+                <DavitButton onClick={createAnother} label='Create another'/>
+                <DavitBackButton onClick={saveChain}/>
+                <DavitDeleteButton onClick={deleteChain}/>
             </OptionField>
 
         </ControlPanel>
