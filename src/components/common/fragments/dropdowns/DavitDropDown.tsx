@@ -22,7 +22,7 @@ export interface DavitDropDownProps {
 export interface DavitLabelDropDownProps {
     onSelect: (dropdownItem: DavitDropDownItemProps) => void;
     dropdownItems: DavitDropDownItemProps[];
-    label?: string;
+    label: string;
     className?: string;
     classPrefix?: string;
 }

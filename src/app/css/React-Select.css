@@ -29,6 +29,8 @@
     background-color: var(--background-color);
     border: var(--color-secondary) solid var(--davit-border-size-medium);
     border-radius: var(--davit-border-radius);
+    position: fixed !important;
+    z-index: 99 !important;
 }
 
 .react-select__option.react-select__option--is-focused, .react-select__option:hover {
@@ -69,11 +71,6 @@
 
 .react-select-label__indicator {
     color: var(--text-color) !important;
-}
-
-.react-select-label__menu {
-    position: absolute;
-    z-index: 99;
 }
 
 .react-select-label__menu-list {

@@ -52,7 +52,7 @@ export const ControlPanelEditChain: FunctionComponent<ControlPanelEditChainProps
                            label={'Link'}
                            dropDown={<ChainLinkDropDownButton
                                onSelect={(link) => editOrAddChainLink(link)}
-                               icon='wrench'
+                               label='wrench'
                                chainId={id}
                            />}/>
             </OptionField>
@@ -62,7 +62,7 @@ export const ControlPanelEditChain: FunctionComponent<ControlPanelEditChainProps
                            label={'Decision'}
                            dropDown={<ChainDecisionDropDownButton
                                onSelect={editOrAddChainDecision}
-                               icon='wrench'
+                               label='wrench'
                                chainId={id}/>}/>
             </OptionField>
 

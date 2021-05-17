@@ -11,9 +11,9 @@ interface ChainDropDownProps {
     value?: number;
 }
 
-interface ChainDropDownPropsButton {
+interface ChainDropDownLabelProps {
     onSelect: (chain: ChainTO | undefined) => void;
-    icon?: string;
+    label: string;
 }
 
 export const ChainDropDown: FunctionComponent<ChainDropDownProps> = (props) => {
@@ -31,15 +31,15 @@ export const ChainDropDown: FunctionComponent<ChainDropDownProps> = (props) => {
     );
 };
 
-export const ChainDropDownButton: FunctionComponent<ChainDropDownPropsButton> = (props) => {
-    const {onSelect, icon} = props;
+export const ChainDropDownButton: FunctionComponent<ChainDropDownLabelProps> = (props) => {
+    const {onSelect, label} = props;
     const {selectChain, chainToOption, chains} = useChainDropDownViewModel();
 
     return (
         <DavitLabelDropDown
             dropdownItems={chains.map(chainToOption)}
             onSelect={(chain) => onSelect(selectChain(Number(chain.value)))}
-            label={icon}
+            label={label}
         />
     );
 };

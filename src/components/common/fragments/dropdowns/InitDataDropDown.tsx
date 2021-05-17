@@ -14,10 +14,10 @@ interface InitDataDropDownDownProps {
     value?: number;
 }
 
-interface InitDataDropDownPropsButton {
+interface InitDataLabelDropDownProps {
     initDatas: InitDataTO[];
     onSelect: (initData: InitDataTO | undefined) => void;
-    icon?: string;
+    label: string;
 }
 
 export const InitDataDropDown: FunctionComponent<InitDataDropDownDownProps> = (props) => {
@@ -35,14 +35,14 @@ export const InitDataDropDown: FunctionComponent<InitDataDropDownDownProps> = (p
     );
 };
 
-export const InitDataDropDownButton: FunctionComponent<InitDataDropDownPropsButton> = (props) => {
-    const {onSelect, icon, initDatas} = props;
+export const InitDataLabelDropDown: FunctionComponent<InitDataLabelDropDownProps> = (props) => {
+    const {onSelect, label, initDatas} = props;
     const {initDataToOption, selectInitData} = useDataSetupDropDownViewModel();
 
     return (
         <DavitLabelDropDown
             dropdownItems={initDatas.map(initDataToOption)}
-            label={icon}
+            label={label}
             onSelect={(initData) => onSelect(selectInitData(Number(initData.value), initDatas))}
         />
     );
