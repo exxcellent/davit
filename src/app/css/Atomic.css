@@ -13,6 +13,8 @@
     --davit-font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
     --davit-font-size: 16px;
 
+    --davit-hover-color: rgba(0, 0, 0, .5);
+
     --davit-button-tiny-height: 1rem;
     --davit-button-tiny-width: 1rem;
     --davit-button-tiny-margin-top-bottom: 0.1rem;
@@ -66,7 +68,7 @@ button {
 }
 
 button:hover {
-    background: rgba(0, 0, 0, .5);
+    background: var(--davit-hover-color);
     cursor: pointer;
 }
 

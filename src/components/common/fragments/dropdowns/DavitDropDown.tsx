@@ -15,12 +15,16 @@ export interface DavitDropDownProps {
     value?: string;
     placeholder?: string;
     clearable?: boolean;
+    className?: string;
+    classPrefix?: string;
 }
 
 export interface DavitLabelDropDownProps {
     onSelect: (dropdownItem: DavitDropDownItemProps) => void;
     dropdownItems: DavitDropDownItemProps[];
     label?: string;
+    className?: string;
+    classPrefix?: string;
 }
 
 interface ReactSelectOption {
@@ -29,13 +33,13 @@ interface ReactSelectOption {
 }
 
 export const DavitDropDown: FunctionComponent<DavitDropDownProps> = (props) => {
-    const {dropdownItems, onSelect, placeholder, value, clearable} = props;
+    const {dropdownItems, onSelect, placeholder, value, clearable, classPrefix, className} = props;
 
 
     return (
         <Select
-            classNamePrefix={"react-select"}
-            className={"react-select-container"}
+            classNamePrefix={classPrefix ? classPrefix : "react-select"}
+            className={className ? className : "react-select-container"}
             isClearable={clearable}
             placeholder={placeholder}
             value={getSelectedValue(value, dropdownItems)}
@@ -46,12 +50,12 @@ export const DavitDropDown: FunctionComponent<DavitDropDownProps> = (props) => {
 };
 
 export const DavitLabelDropDown: FunctionComponent<DavitLabelDropDownProps> = (props) => {
-        const {dropdownItems, onSelect, label} = props;
+        const {dropdownItems, onSelect, label, className, classPrefix} = props;
 
         return (
             <Select
-                classNamePrefix={"react-select"}
-                className={"react-select-container"}
+                classNamePrefix={classPrefix ? classPrefix : "react-select-label"}
+                className={className ? className : "react-select-label-container"}
                 value={{value: label, label: label}}
                 options={dropdownItems.sort((a, b) => a.text.toLowerCase().localeCompare(b.text.toLowerCase())).map(dropdownItemToOption)}
                 onChange={(value) => handleOnChange(value, onSelect)}
