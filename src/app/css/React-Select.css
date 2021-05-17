@@ -4,6 +4,7 @@
     border-radius: var(--davit-border-radius);
     background-color: transparent;
     color: var(--text-color);
+    max-width: fit-content !important;
 }
 
 .react-select__control {
@@ -31,6 +32,7 @@
     border-radius: var(--davit-border-radius);
     position: fixed !important;
     z-index: 99 !important;
+    max-width: fit-content;
 }
 
 .react-select__option.react-select__option--is-focused, .react-select__option:hover {
@@ -77,6 +79,9 @@
     background-color: var(--background-color);
     border: var(--color-secondary) solid var(--davit-border-size-medium);
     border-radius: var(--davit-border-radius);
+    position: fixed !important;
+    z-index: 99 !important;
+    max-width: fit-content;
 }
 
 .react-select-label__option.react-select-label__option--is-focused, .react-select-label__option:hover {
