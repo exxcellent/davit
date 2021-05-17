@@ -4,7 +4,6 @@
     border-radius: var(--davit-border-radius);
     background-color: transparent;
     color: var(--text-color);
-    max-width: fit-content !important;
 }
 
 .react-select__control {
