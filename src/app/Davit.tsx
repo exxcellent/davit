@@ -13,7 +13,7 @@ import "./css/Davit.css";
 
 // import {BrowserRouter, Route, Switch} from "react-router-dom";
 // electron needs HashRouter
-import { HashRouter as BrowserRouter, Switch, Route } from 'react-router-dom';
+import {HashRouter as BrowserRouter, Route, Switch} from 'react-router-dom';
 
 export const ModuleRoutes = {
     home: "/",
@@ -36,7 +36,7 @@ export function Davit() {
         <BrowserRouter>
             <Switch>
                 <Route exact path={ModuleRoutes.home}>
-                    <div className="carvGridContainer">
+                    <div className="davitGridContainer">
                         <ControlPanelController/>
                         <ActorModelController/>
                         <DataModelController/>

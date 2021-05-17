@@ -34,6 +34,7 @@
 .react-select__option.react-select__option--is-focused, .react-select__option:hover {
     color: var(--color-secondary);
     background-color: transparent;
+    cursor: pointer;
 }
 
 .react-select__option.react-select__option--is-selected {
@@ -61,7 +62,6 @@
 }
 
 .react-select-label__control:hover {
-    /*background-color: transparent !important;*/
     border: none !important;
     background-color: var(--davit-hover-color) !important;
     cursor: pointer;
@@ -85,6 +85,7 @@
 .react-select-label__option.react-select-label__option--is-focused, .react-select-label__option:hover {
     color: var(--color-secondary);
     background-color: transparent;
+    cursor: pointer;
 }
 
 .react-select-label__option.react-select-label__option--is-selected {
