@@ -14,7 +14,7 @@ import {sequenceModelSelectors} from '../../slices/SequenceModelSlice';
 import {DavitUtil} from '../../utils/DavitUtil';
 import {TabFragment} from '../tableModel/fragments/TabFragment';
 import {TabGroupFragment} from '../tableModel/fragments/TabGroupFragment';
-import {FlowChartlabel} from './FlowChartlabel';
+import {FlowChartlabel} from './fragments/FlowChartlabel';
 import {ViewPlaceholder} from '../common/fragments/ViewPlaceholder';
 import {CenteredFlex} from '../common/fragments/CenteredFlex';
 
