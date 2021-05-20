@@ -35,26 +35,28 @@ export const ControlPanelEditMenu: FunctionComponent<ControlPanelEditMenuProps> 
     return (
         <ControlPanel>
             <OptionField label='actor'>
-                <AddOrEdit label={'Actor'} addCallBack={() => editOrAddActor()}
-                           dropDown={<ActorDropDownLabel onSelect={editOrAddActor} label='Actor'/>}/>
+                <AddOrEdit
+                    addCallBack={() => editOrAddActor()}
+                    dropDown={<ActorDropDownLabel onSelect={editOrAddActor} label='Actor'/>}
+                />
             </OptionField>
             <OptionField label='Data' divider={true}>
-                <AddOrEdit label={'Data'} addCallBack={() => editOrAddData()}
+                <AddOrEdit addCallBack={() => editOrAddData()}
                            dropDown={<DataLabelDropDown onSelect={editOrAddData} label='Data'/>}/>
-                <AddOrEdit label={'Relation'} addCallBack={() => editOrAddRelation()}
+                <AddOrEdit addCallBack={() => editOrAddRelation()}
                            dropDown={<RelationLabelDropDown onSelect={editOrAddRelation} label='Relation'/>}/>
             </OptionField>
             <OptionField label='Data - Setup' divider={true}>
-                <AddOrEdit label={'Data Setup'} addCallBack={() => editOrAddDataSetup()}
+                <AddOrEdit addCallBack={() => editOrAddDataSetup()}
                            dropDown={<DataSetupLabelDropDown onSelect={editOrAddDataSetup} label='Data-Setup'/>}/>
             </OptionField>
             <OptionField label='sequence' divider={true}>
-                <AddOrEdit label={'Sequence'} addCallBack={() => editOrAddSequence()}
+                <AddOrEdit addCallBack={() => editOrAddSequence()}
                            dropDown={<SequenceLabelDropDown
                                onSelect={(sequenceTO) => editOrAddSequence(sequenceTO?.id)}
                                label='Sequence'/>}
                 />
-                <AddOrEdit label={'Chain'} addCallBack={() => editOrAddChain()}
+                <AddOrEdit addCallBack={() => editOrAddChain()}
                            dropDown={<ChainDropDownButton
                                onSelect={(chain) => editOrAddChain(chain)}
                                label='Chain'/>}

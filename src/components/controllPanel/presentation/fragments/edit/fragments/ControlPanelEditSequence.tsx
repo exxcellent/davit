@@ -51,11 +51,11 @@ export const ControlPanelEditSequence: FunctionComponent<ControlPanelEditSequenc
                 />
             </OptionField>
             <OptionField label='Create / Edit | Sequence - Step' divider={true}>
-                <AddOrEdit addCallBack={editOrAddSequenceStep} label={'Step'}
+                <AddOrEdit addCallBack={editOrAddSequenceStep}
                            dropDown={<StepLabelDropDown onSelect={editOrAddSequenceStep} label='Step'/>}/>
             </OptionField>
             <OptionField label='Create / Edit | Sequence - Decision' divider={true}>
-                <AddOrEdit addCallBack={editOrAddDecision} label={'Decision'}
+                <AddOrEdit addCallBack={editOrAddDecision}
                            dropDown={<DecisionLabelDropDown onSelect={editOrAddDecision} label='Decision'/>}/>
             </OptionField>
             <OptionField label={'options'} divider={true}>

@@ -3,7 +3,6 @@ import {DavitAddButton} from './buttons/DavitAddButton';
 
 interface AddOrEditProps {
     addCallBack: () => void;
-    label: string;
     dropDown: JSX.Element;
 }
 
