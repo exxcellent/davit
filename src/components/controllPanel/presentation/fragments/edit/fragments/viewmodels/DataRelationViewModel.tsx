@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {DataCTO} from '../../../../../../../dataAccess/access/cto/DataCTO';
 import {DataRelationTO, Direction, RelationType} from '../../../../../../../dataAccess/access/to/DataRelationTO';
@@ -13,7 +13,6 @@ export const useDataRelationViewModel = () => {
     const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
     const relationToEdit: DataRelationTO | null = useSelector(editSelectors.selectRelationToEdit);
     const dispatch = useDispatch();
-    const [key, setKey] = useState<number>(0);
 
     useEffect(() => {
         // check if component to edit is really set or go back to edit mode
@@ -75,7 +74,7 @@ export const useDataRelationViewModel = () => {
     };
 
     const createAnother = () => {
-        setKey(key + 1);
+        saveRelation();
         dispatch(EditActions.setMode.editRelation());
     };
 
@@ -128,7 +127,6 @@ export const useDataRelationViewModel = () => {
         directionOptions,
         typeOptions,
         validRelation,
-        key,
         createAnother,
         updateRelation,
         note: relationToEdit ? relationToEdit.note : '',
