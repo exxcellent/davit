@@ -1,34 +1,34 @@
-import React, { FunctionComponent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { ActorCTO } from '../../dataAccess/access/cto/ActorCTO';
-import { DataCTO } from '../../dataAccess/access/cto/DataCTO';
-import { DataSetupCTO } from '../../dataAccess/access/cto/DataSetupCTO';
-import { SequenceStepCTO } from '../../dataAccess/access/cto/SequenceStepCTO';
-import { ActionTO } from '../../dataAccess/access/to/ActionTO';
-import { ConditionTO } from '../../dataAccess/access/to/ConditionTO';
-import { DecisionTO } from '../../dataAccess/access/to/DecisionTO';
-import { InitDataTO } from '../../dataAccess/access/to/InitDataTO';
-import { ActionType } from '../../dataAccess/access/types/ActionType';
-import { editSelectors } from '../../slices/EditSlice';
-import { GlobalActions, globalSelectors } from '../../slices/GlobalSlice';
-import { MasterDataActions, masterDataSelectors } from '../../slices/MasterDataSlice';
-import { sequenceModelSelectors } from '../../slices/SequenceModelSlice';
-import { EditActor } from '../../slices/thunks/ActorThunks';
-import { DavitUtil } from '../../utils/DavitUtil';
-import { ActorData } from '../../viewDataTypes/ActorData';
-import { ActorDataState } from '../../viewDataTypes/ActorDataState';
-import { ViewFragmentProps } from '../../viewDataTypes/ViewFragment';
-import { Arrow, ArrowType, DavitPathHead, DavitPathProps, DavitPathTypes } from '../common/fragments/svg/DavitPath';
-import { DavitCard, DavitCardProps } from '../common/fragments/DavitCard';
-import { DnDBox, DnDBoxElement, DnDBoxType } from '../common/fragments/DnDBox';
-import { ViewPlaceholder } from '../common/fragments/ViewPlaceholder';
+import React, {FunctionComponent} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {ActorCTO} from '../../dataAccess/access/cto/ActorCTO';
+import {DataCTO} from '../../dataAccess/access/cto/DataCTO';
+import {DataSetupCTO} from '../../dataAccess/access/cto/DataSetupCTO';
+import {SequenceStepCTO} from '../../dataAccess/access/cto/SequenceStepCTO';
+import {ActionTO} from '../../dataAccess/access/to/ActionTO';
+import {ConditionTO} from '../../dataAccess/access/to/ConditionTO';
+import {DecisionTO} from '../../dataAccess/access/to/DecisionTO';
+import {InitDataTO} from '../../dataAccess/access/to/InitDataTO';
+import {ActionType} from '../../dataAccess/access/types/ActionType';
+import {editSelectors} from '../../slices/EditSlice';
+import {GlobalActions, globalSelectors} from '../../slices/GlobalSlice';
+import {MasterDataActions, masterDataSelectors} from '../../slices/MasterDataSlice';
+import {sequenceModelSelectors} from '../../slices/SequenceModelSlice';
+import {EditActor} from '../../slices/thunks/ActorThunks';
+import {DavitUtil} from '../../utils/DavitUtil';
+import {ActorData} from '../../viewDataTypes/ActorData';
+import {ActorDataState} from '../../viewDataTypes/ActorDataState';
+import {ViewFragmentProps} from '../../viewDataTypes/ViewFragment';
+import {Arrow, ArrowType, DavitPathHead, DavitPathProps, DavitPathTypes} from '../common/fragments/svg/DavitPath';
+import {DavitCard, DavitCardProps} from '../common/fragments/DavitCard';
+import {DnDBox, DnDBoxElement, DnDBoxType} from '../common/fragments/DnDBox';
+import {ViewPlaceholder} from '../common/fragments/ViewPlaceholder';
 
 interface ActorModelControllerProps {
     fullScreen?: boolean;
 }
 
 export const ActorModelController: FunctionComponent<ActorModelControllerProps> = (props) => {
-        const { fullScreen } = props;
+        const {fullScreen} = props;
 
         const {
             onPositionUpdate,
@@ -42,7 +42,8 @@ export const ActorModelController: FunctionComponent<ActorModelControllerProps> 
 
         return (
             <>
-                {toDnDElements.length === 0 && <ViewPlaceholder text={'Create a new actor'} className={DnDBoxType.actor.toString()} />}
+                {toDnDElements.length === 0 &&
+                <ViewPlaceholder text={'Create a new actor'} className={DnDBoxType.actor.toString()}/>}
                 {toDnDElements.length > 0 && <DnDBox
                     onPositionUpdate={onPositionUpdate}
                     toDnDElements={toDnDElements}
@@ -325,7 +326,7 @@ const useViewModel = () => {
                 id: actor.actor.id,
                 initName: actor.actor.name,
                 initWidth: 100,
-                initHeigth: 30,
+                initHeight: 30,
                 dataFragments: getActorDatas().filter(
                     (act) =>
                         act.parentId === actor.actor.id ||
