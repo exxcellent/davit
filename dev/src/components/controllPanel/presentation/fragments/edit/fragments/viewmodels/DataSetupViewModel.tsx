@@ -1,13 +1,13 @@
-import {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {ActorCTO} from '../../../../../../../dataAccess/access/cto/ActorCTO';
-import {DataSetupCTO} from '../../../../../../../dataAccess/access/cto/DataSetupCTO';
-import {InitDataTO} from '../../../../../../../dataAccess/access/to/InitDataTO';
-import {EditActions, editSelectors} from '../../../../../../../slices/EditSlice';
-import {EditDataSetup} from '../../../../../../../slices/thunks/DataSetupThunks';
-import {DavitUtil} from '../../../../../../../utils/DavitUtil';
-import {GlobalActions} from '../../../../../../../slices/GlobalSlice';
-import {EditInitData} from '../../../../../../../slices/thunks/InitDataThunks';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { ActorCTO } from '../../../../../../../dataAccess/access/cto/ActorCTO';
+import { DataSetupCTO } from '../../../../../../../dataAccess/access/cto/DataSetupCTO';
+import { InitDataTO } from '../../../../../../../dataAccess/access/to/InitDataTO';
+import { EditActions, editSelectors } from '../../../../../../../slices/EditSlice';
+import { EditDataSetup } from '../../../../../../../slices/thunks/DataSetupThunks';
+import { DavitUtil } from '../../../../../../../utils/DavitUtil';
+import { GlobalActions } from '../../../../../../../slices/GlobalSlice';
+import { EditInitData } from '../../../../../../../slices/thunks/InitDataThunks';
 
 export const useDataSetupViewModel = () => {
     const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.selectDataSetupToEdit);
@@ -50,7 +50,6 @@ export const useDataSetupViewModel = () => {
     };
 
     const createAnother = () => {
-        saveDataSetup();
         dispatch(EditActions.setMode.editDataSetup());
     };
 

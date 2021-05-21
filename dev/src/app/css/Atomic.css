@@ -1,36 +1,15 @@
 :root {
-    --davit-border-radius: 0.2rem;
-
-    --davit-border-size-small: 0.2rem;
-    --davit-border-size-medium: 0.15rem;
-    --davit-border-size-larg: 0.5rem;
-
+    --davit-border-radius: 5px;
+    --davit-border-size: 2px;
     --davit-padding-top-bottom: 0.7em;
     --davit-padding-right-left: 1.2em;
-
-    --davit-margin-top-bottom: 1rem;
-
+    --davit-margin-top-bottom: 1em;
     --davit-font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
     --davit-font-size: 16px;
-
-    --davit-hover-color: rgba(0, 0, 0, .5);
-
-    --davit-button-tiny-height: 1rem;
-    --davit-button-tiny-width: 1rem;
-    --davit-button-tiny-margin-top-bottom: 0.1rem;
-    --davit-button-tiny-margin-left-right: 0.3rem;
-
-    --davit-button-small-height: 1.8rem;
-    --davit-button-small-width: 2rem;
-    --davit-button-small-margin-top-bottom: 0.1rem;
-    --davit-button-small-margin-left-right: 0.3rem;
-
-    --davit-button-sidepanel-height: 3.5rem;
-    --davit-button-sidepanel-width: 100%;
 }
 
 .border {
-    border: var(--davit-border-size-medium) solid var(--color-secondary);
+    border: var(--davit-border-size) solid var(--carv2-color-secondary);
     border-radius: var(--davit-border-radius);
 }
 
@@ -49,37 +28,37 @@
 html {
     font-size: var(--davit-font-size);
     font-family: var(--davit-font-family);
-    color: var(--text-color);
+    color: var(--carv2-text-color);
 }
 
-label {
+label{
     font-family: sans-serif;
     font-size: 100%;
     line-height: 1.15;
 }
 
 button {
-    color: var(--text-color);
+    color: var(--carv2-text-color);
     border-radius: var(--davit-border-radius);
-    border: var(--davit-border-size-medium) solid var(--color-secondary);
+    border: var(--davit-border-size) solid var(--carv2-color-secondary);
     background-color: transparent;
     text-align: center;
     padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
 }
 
 button:hover {
-    background: var(--davit-hover-color);
+    background: rgba(0, 0, 0, .5);
     cursor: pointer;
 }
 
 input {
     padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
     border-radius: var(--davit-border-radius);
-    border-color: var(--color-secondary);
+    border-color: var(--carv2-color-secondary);
     background-color: transparent;
     border-style: solid;
-    border-width: var(--davit-border-size-medium);
-    color: var(--text-color);
+    border-width: var(--davit-border-size);
+    color: var(--carv2-text-color);
     font-family: var(--davit-font-family);
     font-size: var(--davit-font-size);
 }

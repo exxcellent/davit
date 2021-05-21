@@ -1,18 +1,19 @@
-import React, {FunctionComponent} from 'react';
-import {useSelector} from 'react-redux';
-import {editSelectors, Mode} from '../../../../../slices/EditSlice';
-import {ControlPanelEditChain} from './fragments/ControlPanelEditChain';
-import {ControlPanelEditMenu} from './fragments/ControlPanelEditMenu';
-import {ControlPanelEditSequence} from './fragments/ControlPanelEditSequence';
-import {EditActorModal} from './fragments/modals/EditActorModal';
-import {EditDataModal} from './fragments/modals/EditDataModal';
-import {EditDataRelationModal} from './fragments/modals/EditDataRelationModal';
-import {EditDataSetupModal} from './fragments/modals/EditDataSetupModal';
-import {EditActionModal} from './fragments/modals/EditActionModal';
-import {EditDecisionModal} from './fragments/modals/EditDecisionModal';
-import {EditStepModal} from './fragments/modals/EditStepModal';
-import {EditChainLinkModal} from './fragments/modals/EditChainLinkModal';
-import {EditChainDecisionModal} from './fragments/modals/EditChainDecisionModal';
+import React, { FunctionComponent } from 'react';
+import { useSelector } from 'react-redux';
+import { editSelectors, Mode } from '../../../../../slices/EditSlice';
+import { ControlPanelEditChain } from './fragments/ControlPanelEditChain';
+import { ControlPanelEditGroup } from './fragments/ControlPanelEditGroup';
+import { ControlPanelEditMenu } from './fragments/ControlPanelEditMenu';
+import { ControlPanelEditSequence } from './fragments/ControlPanelEditSequence';
+import { EditActorModal } from './fragments/modals/EditActorModal';
+import { EditDataModal } from './fragments/modals/EditDataModal';
+import { EditDataRelationModal } from './fragments/modals/EditDataRelationModal';
+import { EditDataSetupModal } from './fragments/modals/EditDataSetupModal';
+import { EditActionModal } from './fragments/modals/EditActionModal';
+import { EditDecisionModal } from './fragments/modals/EditDecisionModal';
+import { EditStepModal } from './fragments/modals/EditStepModal';
+import { EditChainLinkModal } from './fragments/modals/EditChainLinkModal';
+import { EditChainDecisionModal } from './fragments/modals/EditChainDecisionModal';
 
 export interface ControlPanelEditControllerProps {
 }
@@ -24,29 +25,31 @@ export const ControlPanelEditController: FunctionComponent<ControlPanelEditContr
     const getViewByMode = (currentMode: Mode) => {
         switch (currentMode) {
             case Mode.EDIT_ACTOR:
-                return <EditActorModal/>;
+                return <EditActorModal />;
+            case Mode.EDIT_GROUP:
+                return <ControlPanelEditGroup />;
             case Mode.EDIT_DATA:
-                return <EditDataModal/>;
+                return <EditDataModal />;
             case Mode.EDIT_RELATION:
-                return <EditDataRelationModal/>;
+                return <EditDataRelationModal />;
             case Mode.EDIT_SEQUENCE:
-                return <ControlPanelEditSequence/>;
+                return <ControlPanelEditSequence />;
             case Mode.EDIT_SEQUENCE_STEP:
-                return <EditStepModal/>;
+                return <EditStepModal />;
             case Mode.EDIT_SEQUENCE_DECISION:
-                return <EditDecisionModal/>;
+                return <EditDecisionModal />;
             case Mode.EDIT_SEQUENCE_STEP_ACTION:
-                return <EditActionModal/>;
+                return <EditActionModal />;
             case Mode.EDIT_DATASETUP:
-                return <EditDataSetupModal/>;
+                return <EditDataSetupModal />;
             case Mode.EDIT_CHAIN:
-                return <ControlPanelEditChain/>;
+                return <ControlPanelEditChain />;
             case Mode.EDIT_CHAIN_LINK:
-                return <EditChainLinkModal/>;
+                return <EditChainLinkModal />;
             case Mode.EDIT_CHAIN_DECISION:
-                return <EditChainDecisionModal/>;
+                return <EditChainDecisionModal />;
             default:
-                return <ControlPanelEditMenu/>;
+                return <ControlPanelEditMenu />;
         }
     };
 

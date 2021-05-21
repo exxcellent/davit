@@ -17,7 +17,7 @@ export interface DavitCardProps {
     id: number;
     initName: string;
     initWidth: number;
-    initHeigth: number;
+    initHeight: number;
     dataFragments: ViewFragmentProps[];
     instances?: DataInstanceTO[];
     zoomFactor: number;
@@ -26,7 +26,7 @@ export interface DavitCardProps {
 }
 
 export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
-    const {id, initName, initWidth, initHeigth, dataFragments, instances, zoomFactor, type} = props;
+    const {id, initName, initWidth, initHeight, dataFragments, instances, zoomFactor, type} = props;
 
     const {onClickEdit, onClickFilter, showMenu, setShowMenu, isActiveFilter} = useDavitCardViewModel(type, id);
 
@@ -37,7 +37,7 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
                 initName={instanceName}
                 dataFragments={actors}
                 initWidth={initWidth}
-                initHeigth={initHeigth}
+                initHeight={initHeight}
                 zoomFactor={zoomFactor}
                 key={id}
                 type="INSTANCE"
@@ -50,7 +50,7 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
             className={isActiveFilter ? "activeFilter card" : "card"}
             style={{
                 minWidth: initWidth * zoomFactor,
-                minHeight: initHeigth * zoomFactor,
+                minHeight: initHeight * zoomFactor,
                 fontSize: `${zoomFactor}em`,
             }}
             onClick={props.onClick ? () => props.onClick!(props.id) : undefined}
@@ -75,7 +75,7 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
                         </div>
                     )}
                 </div>
-                <DavitShowMoreButton className={"button-tiny"} onClick={() => {
+                <DavitShowMoreButton className={"Carv2CardMainButton"} onClick={() => {
                     setShowMenu(!showMenu);
                 }}/>
             </div>

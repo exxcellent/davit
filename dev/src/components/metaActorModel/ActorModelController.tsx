@@ -326,7 +326,7 @@ const useViewModel = () => {
                 id: actor.actor.id,
                 initName: actor.actor.name,
                 initWidth: 100,
-                initHeigth: 30,
+                initHeight: 30,
                 dataFragments: getActorDatas().filter(
                     (act) =>
                         act.parentId === actor.actor.id ||
@@ -363,7 +363,7 @@ const useViewModel = () => {
                     targetHeight: arrowToDraw.targetGeometricalData.geometricalData.height,
                     targetWidth: arrowToDraw.targetGeometricalData.geometricalData.width,
                     stroked: arrowToDraw.type === ArrowType.TRIGGER,
-                    lineColor: arrowToDraw.type === ArrowType.SEND ? 'var(--color-exxcellent-blue)' : 'black',
+                    lineColor: arrowToDraw.type === ArrowType.SEND ? 'var(--carv2-color-exxcellent-blue)' : 'black',
                 });
             });
             return arrowProps;

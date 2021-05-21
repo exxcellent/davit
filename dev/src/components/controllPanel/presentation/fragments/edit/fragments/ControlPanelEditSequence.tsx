@@ -1,24 +1,24 @@
-import React, {FunctionComponent, useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {SequenceCTO} from '../../../../../../dataAccess/access/cto/SequenceCTO';
-import {SequenceStepCTO} from '../../../../../../dataAccess/access/cto/SequenceStepCTO';
-import {DecisionTO} from '../../../../../../dataAccess/access/to/DecisionTO';
-import {SequenceTO} from '../../../../../../dataAccess/access/to/SequenceTO';
-import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
-import {sequenceModelSelectors} from '../../../../../../slices/SequenceModelSlice';
-import {EditSequence} from '../../../../../../slices/thunks/SequenceThunks';
-import {DavitUtil} from '../../../../../../utils/DavitUtil';
-import {DavitBackButton} from '../../../../../common/fragments/buttons/DavitBackButton';
-import {DavitButton} from '../../../../../common/fragments/buttons/DavitButton';
-import {DavitDeleteButton} from '../../../../../common/fragments/buttons/DavitDeleteButton';
-import {DavitLabelTextfield} from '../../../../../common/fragments/DavitLabelTextfield';
-import {DecisionLabelDropDown} from '../../../../../common/fragments/dropdowns/DecisionDropDown';
-import {StepLabelDropDown} from '../../../../../common/fragments/dropdowns/StepDropDown';
-import {OptionField} from '../common/OptionField';
-import {DavitCommentButton} from '../../../../../common/fragments/buttons/DavitCommentButton';
-import {AddOrEdit} from '../../../../../common/fragments/AddOrEdit';
-import {GlobalActions} from '../../../../../../slices/GlobalSlice';
-import {ControlPanel} from '../common/ControlPanel';
+import React, { FunctionComponent, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { SequenceCTO } from '../../../../../../dataAccess/access/cto/SequenceCTO';
+import { SequenceStepCTO } from '../../../../../../dataAccess/access/cto/SequenceStepCTO';
+import { DecisionTO } from '../../../../../../dataAccess/access/to/DecisionTO';
+import { SequenceTO } from '../../../../../../dataAccess/access/to/SequenceTO';
+import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
+import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
+import { EditSequence } from '../../../../../../slices/thunks/SequenceThunks';
+import { DavitUtil } from '../../../../../../utils/DavitUtil';
+import { DavitBackButton } from '../../../../../common/fragments/buttons/DavitBackButton';
+import { DavitButton } from '../../../../../common/fragments/buttons/DavitButton';
+import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
+import { DavitLabelTextfield } from '../../../../../common/fragments/DavitLabelTextfield';
+import { DecisionDropDownButton } from '../../../../../common/fragments/dropdowns/DecisionDropDown';
+import { StepDropDownButton } from '../../../../../common/fragments/dropdowns/StepDropDown';
+import { OptionField } from '../common/OptionField';
+import { DavitCommentButton } from '../../../../../common/fragments/buttons/DavitCommentButton';
+import { AddOrEdit } from '../../../../../common/fragments/AddOrEdit';
+import { GlobalActions } from '../../../../../../slices/GlobalSlice';
+import { ControlPanel } from '../common/ControlPanel';
 
 export interface ControlPanelEditSequenceProps {
 }
@@ -51,18 +51,18 @@ export const ControlPanelEditSequence: FunctionComponent<ControlPanelEditSequenc
                 />
             </OptionField>
             <OptionField label='Create / Edit | Sequence - Step' divider={true}>
-                <AddOrEdit addCallBack={editOrAddSequenceStep}
-                           dropDown={<StepLabelDropDown onSelect={editOrAddSequenceStep} label='Step'/>}/>
+                <AddOrEdit addCallBack={editOrAddSequenceStep} label={'Step'}
+                           dropDown={<StepDropDownButton onSelect={editOrAddSequenceStep} icon='wrench' />} />
             </OptionField>
             <OptionField label='Create / Edit | Sequence - Decision' divider={true}>
-                <AddOrEdit addCallBack={editOrAddDecision}
-                           dropDown={<DecisionLabelDropDown onSelect={editOrAddDecision} label='Decision'/>}/>
+                <AddOrEdit addCallBack={editOrAddDecision} label={'Decision'}
+                           dropDown={<DecisionDropDownButton onSelect={editOrAddDecision} icon='wrench' />} />
             </OptionField>
             <OptionField label={'options'} divider={true}>
-                <DavitButton onClick={createAnother} label='Create another'/>
-                <DavitBackButton onClick={saveSequence}/>
-                <DavitCommentButton onSaveCallback={saveNote} comment={note}/>
-                <DavitDeleteButton onClick={deleteSequence}/>
+                <DavitButton onClick={createAnother} label='Create another' />
+                <DavitBackButton onClick={saveSequence} />
+                <DavitCommentButton onSaveCallback={saveNote} comment={note} />
+                <DavitDeleteButton onClick={deleteSequence} />
             </OptionField>
         </ControlPanel>
     )
