@@ -1,39 +1,40 @@
-import React, {FunctionComponent} from "react";
-import {useSelector} from "react-redux";
-import {SequenceCTO} from "../../../../dataAccess/access/cto/SequenceCTO";
-import {DecisionTO} from "../../../../dataAccess/access/to/DecisionTO";
-import {sequenceModelSelectors} from "../../../../slices/SequenceModelSlice";
-import {DavitUtil} from "../../../../utils/DavitUtil";
-import {DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { DropdownProps } from "semantic-ui-react";
+import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
+import { DecisionTO } from "../../../../dataAccess/access/to/DecisionTO";
+import { sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
+import { DavitUtil } from "../../../../utils/DavitUtil";
+import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
 
-interface DecisionLabelDropDownProps {
+interface DecisionDropDownButtonProps extends DropdownProps {
     onSelect: (decision: DecisionTO | undefined) => void;
-    label: string;
+    icon?: string;
 }
 
-interface DecisionDropDownProps {
+interface DecisionDropDownProps extends DropdownProps {
     onSelect: (decision: DecisionTO | undefined) => void;
     placeholder?: string;
     value?: number;
     exclude?: number;
 }
 
-export const DecisionLabelDropDown: FunctionComponent<DecisionLabelDropDownProps> = (props) => {
-    const {onSelect, label} = props;
-    const {sequenceToEdit, decisionOptions, selectDecision} = useDecisionDropDownViewModel();
+export const DecisionDropDownButton: FunctionComponent<DecisionDropDownButtonProps> = (props) => {
+    const { onSelect, icon } = props;
+    const { sequenceToEdit, decisionOptions, selectDecision } = useDecisionDropDownViewModel();
 
     return (
-        <DavitLabelDropDown
+        <DavitIconDropDown
             dropdownItems={decisionOptions()}
             onSelect={(decision) => onSelect(selectDecision(Number(decision.value), sequenceToEdit))}
-            label={label}
+            icon={icon}
         />
     );
 };
 
 export const DecisionDropDown: FunctionComponent<DecisionDropDownProps> = (props) => {
-    const {onSelect, placeholder, value, exclude} = props;
-    const {sequenceToEdit, decisionOptions, selectDecision} = useDecisionDropDownViewModel(exclude);
+    const { onSelect, placeholder, value, exclude } = props;
+    const { sequenceToEdit, decisionOptions, selectDecision } = useDecisionDropDownViewModel(exclude);
 
     return (
         <DavitDropDown
@@ -74,5 +75,5 @@ const useDecisionDropDownViewModel = (exclude?: number) => {
         return undefined;
     };
 
-    return {sequenceToEdit, decisionOptions, selectDecision};
+    return { sequenceToEdit, decisionOptions, selectDecision };
 };

@@ -1,5 +1,4 @@
 import React, {FunctionComponent} from "react";
-import "./Form.css";
 
 export interface FormProps {
 }

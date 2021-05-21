@@ -1,24 +1,25 @@
-import React, {FunctionComponent} from "react";
-import {useSelector} from "react-redux";
-import {ActorCTO} from "../../../../dataAccess/access/cto/ActorCTO";
-import {masterDataSelectors} from "../../../../slices/MasterDataSlice";
-import {DavitUtil} from "../../../../utils/DavitUtil";
-import {DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { DropdownProps } from "semantic-ui-react";
+import { ActorCTO } from "../../../../dataAccess/access/cto/ActorCTO";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import { DavitUtil } from "../../../../utils/DavitUtil";
+import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
 
-interface ActorDropDownProps {
+interface ActorDropDownProps extends DropdownProps {
     onSelect: (actor: ActorCTO | undefined) => void;
     placeholder?: string;
     value?: number;
 }
 
-interface ActorDropDownLabelProps {
+interface ActorDropDownButtonProps extends DropdownProps {
     onSelect: (actor: ActorCTO | undefined) => void;
-    label: string;
+    icon?: string;
 }
 
 export const ActorDropDown: FunctionComponent<ActorDropDownProps> = (props) => {
-    const {onSelect, placeholder, value} = props;
-    const {actors, actorToOption, selectActor} = useActorDropDownViewModel();
+    const { onSelect, placeholder, value } = props;
+    const { actors, actorToOption, selectActor } = useActorDropDownViewModel();
 
     return (
         <DavitDropDown
@@ -30,15 +31,15 @@ export const ActorDropDown: FunctionComponent<ActorDropDownProps> = (props) => {
     );
 };
 
-export const ActorDropDownLabel: FunctionComponent<ActorDropDownLabelProps> = (props) => {
-    const {onSelect, label} = props;
-    const {actorToOption, actors, selectActor} = useActorDropDownViewModel();
+export const ActorDropDownButton: FunctionComponent<ActorDropDownButtonProps> = (props) => {
+    const { onSelect, icon } = props;
+    const { actorToOption, actors, selectActor } = useActorDropDownViewModel();
 
     return (
-        <DavitLabelDropDown
+        <DavitIconDropDown
             dropdownItems={actors.map((actor) => actorToOption(actor))}
             onSelect={(item) => onSelect(selectActor(Number(item.value), actors))}
-            label={label}
+            icon={icon}
         />
     );
 };
@@ -61,5 +62,5 @@ const useActorDropDownViewModel = () => {
         return undefined;
     };
 
-    return {actors, actorToOption, selectActor};
+    return { actors, actorToOption, selectActor };
 };

@@ -1,19 +1,20 @@
-import React, {FunctionComponent} from "react";
-import {useSelector} from "react-redux";
-import {ActorCTO} from "../../../../dataAccess/access/cto/ActorCTO";
-import {DataCTO} from "../../../../dataAccess/access/cto/DataCTO";
-import {ConditionTO} from "../../../../dataAccess/access/to/ConditionTO";
-import {masterDataSelectors} from "../../../../slices/MasterDataSlice";
-import {DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { DropdownProps } from "semantic-ui-react";
+import { ActorCTO } from "../../../../dataAccess/access/cto/ActorCTO";
+import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
+import { ConditionTO } from "../../../../dataAccess/access/to/ConditionTO";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import { DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
 
-interface ConditionLabelDropDownProps {
+interface ConditionDropDownButtonProps extends DropdownProps {
     onSelect: (conditionId: number | undefined) => void;
     conditions: ConditionTO[];
-    label: string;
+    icon?: string;
 }
 
-export const ConditionLabelDropDown: FunctionComponent<ConditionLabelDropDownProps> = (props) => {
-    const {onSelect, label, conditions} = props;
+export const ConditionDropDownButton: FunctionComponent<ConditionDropDownButtonProps> = (props) => {
+    const { onSelect, icon, conditions } = props;
 
     const actors: ActorCTO[] = useSelector(masterDataSelectors.selectActors);
     const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
@@ -40,12 +41,12 @@ export const ConditionLabelDropDown: FunctionComponent<ConditionLabelDropDownPro
     };
 
     return (
-        <DavitLabelDropDown
-            dropdownItems={conditions.map((condition) => {
+        <DavitIconDropDown
+            dropdownItems={conditions.map((condition, index) => {
                 return conditionToOption(condition);
             })}
             onSelect={(condition) => onSelect(Number(condition.value))}
-            label={label}
+            icon={icon}
         />
     );
 };

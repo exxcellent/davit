@@ -1,15 +1,16 @@
-import React, {FunctionComponent} from "react";
-import {ActionType} from "../../../../dataAccess/access/types/ActionType";
-import {DavitDropDown, DavitDropDownItemProps} from "./DavitDropDown";
+import React, { FunctionComponent } from "react";
+import { DropdownProps } from "semantic-ui-react";
+import { ActionType } from "../../../../dataAccess/access/types/ActionType";
+import { DavitDropDown, DavitDropDownItemProps } from "./DavitDropDown";
 
-interface ActionTypeDropDownnProps {
+interface ActionTypeDropDownnProps extends DropdownProps {
     onSelect: (actionType: ActionType | undefined) => void;
     placeholder?: string;
     value?: ActionType;
 }
 
 export const ActionTypeDropDown: FunctionComponent<ActionTypeDropDownnProps> = (props) => {
-    const {onSelect, placeholder, value} = props;
+    const { onSelect, placeholder, value } = props;
     const actions: ActionType[] = Object.values(ActionType);
 
     const getActionTypeLabel = (type: ActionType): string => {

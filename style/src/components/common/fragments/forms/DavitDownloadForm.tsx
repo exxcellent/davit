@@ -3,8 +3,6 @@ import {useDispatch} from "react-redux";
 import {GlobalActions} from "../../../../slices/GlobalSlice";
 import {DavitLabelTextfield} from "../DavitLabelTextfield";
 import {useEnterHook, useEscHook} from "../../../../utils/WindowUtil";
-import {FormHeader} from "./FormHeader";
-import {FormFooter} from "./FormFooter";
 
 interface DavitDownloadFormProps {
     onCloseCallback: () => void;
@@ -27,18 +25,20 @@ export const DavitDownloadForm: FunctionComponent<DavitDownloadFormProps> = (pro
 
     return (
         <div className="downloadForm">
-            <FormHeader>
-                <DavitLabelTextfield
-                    label="File name:"
-                    placeholder="project name..."
-                    onChangeCallback={(name: string) => setProjectName(name)}
-                    value={projectName}
-                />
-            </FormHeader>
-            <FormFooter>
+            <DavitLabelTextfield
+                label="File name:"
+                placeholder="project name..."
+                onChangeCallback={(name: string) => setProjectName(name)}
+                value={projectName}
+            />
+            <div style={{
+                display: "flex",
+                justifyContent: "space-around",
+                paddingTop: "var(--davit-padding-top-bottom)"
+            }}>
                 <button onClick={() => onCloseCallback()}>cancel</button>
                 <button onClick={() => onSubmit()}>download</button>
-            </FormFooter>
+            </div>
         </div>
     );
 };

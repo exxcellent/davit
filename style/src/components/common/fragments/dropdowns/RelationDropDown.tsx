@@ -1,24 +1,25 @@
-import React, {FunctionComponent} from "react";
-import {useSelector} from "react-redux";
-import {DataCTO} from "../../../../dataAccess/access/cto/DataCTO";
-import {DataRelationTO} from "../../../../dataAccess/access/to/DataRelationTO";
-import {masterDataSelectors} from "../../../../slices/MasterDataSlice";
-import {DavitUtil} from "../../../../utils/DavitUtil";
-import {DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { DropdownProps } from "semantic-ui-react";
+import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
+import { DataRelationTO } from "../../../../dataAccess/access/to/DataRelationTO";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import { DavitUtil } from "../../../../utils/DavitUtil";
+import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
 
-interface RelationDropDownProps {
+interface RelationDropDownProps extends DropdownProps {
     onSelect: (relation: DataRelationTO | undefined) => void;
     placeholder?: string;
 }
 
-interface RelationLabelDropDownProps {
+interface RelationDropDownPropsButton extends DropdownProps {
     onSelect: (relation: DataRelationTO | undefined) => void;
-    label: string;
+    icon?: string;
 }
 
 export const RelationDropDown: FunctionComponent<RelationDropDownProps> = (props) => {
-    const {onSelect, placeholder} = props;
-    const {relations, selectDataRelation, relationToOption} = useRelationDropDownViewModel();
+    const { onSelect, placeholder } = props;
+    const { relations, selectDataRelation, relationToOption } = useRelationDropDownViewModel();
 
     return (
         <DavitDropDown
@@ -29,14 +30,14 @@ export const RelationDropDown: FunctionComponent<RelationDropDownProps> = (props
     );
 };
 
-export const RelationLabelDropDown: FunctionComponent<RelationLabelDropDownProps> = (props) => {
-    const {onSelect, label} = props;
-    const {relations, selectDataRelation, relationToOption} = useRelationDropDownViewModel();
+export const RelationDropDownButton: FunctionComponent<RelationDropDownPropsButton> = (props) => {
+    const { onSelect, icon } = props;
+    const { relations, selectDataRelation, relationToOption } = useRelationDropDownViewModel();
 
     return (
-        <DavitLabelDropDown
+        <DavitIconDropDown
             dropdownItems={relations.map(relationToOption)}
-            label={label}
+            icon={icon}
             onSelect={(relation) => onSelect(selectDataRelation(Number(relation.value), relations))}
         />
     );
@@ -66,5 +67,5 @@ const useRelationDropDownViewModel = () => {
         };
     };
 
-    return {relations, selectDataRelation, relationToOption};
+    return { relations, selectDataRelation, relationToOption };
 };

@@ -1,18 +1,19 @@
-import React, {FunctionComponent} from "react";
-import {useSelector} from "react-redux";
-import {ChainlinkTO} from "../../../../dataAccess/access/to/ChainlinkTO";
-import {masterDataSelectors} from "../../../../slices/MasterDataSlice";
-import {DavitUtil} from "../../../../utils/DavitUtil";
-import {DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { DropdownProps } from "semantic-ui-react";
+import { ChainlinkTO } from "../../../../dataAccess/access/to/ChainlinkTO";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import { DavitUtil } from "../../../../utils/DavitUtil";
+import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
 
-interface ChainLinkDropDownLabelProps {
+interface ChainLinkDropDownButtonProps extends DropdownProps {
     onSelect: (link: ChainlinkTO | undefined) => void;
     chainId: number;
-    label: string;
+    icon?: string;
     exclude?: number;
 }
 
-interface ChainLinkDropDownProps {
+interface ChainLinkDropDownProps extends DropdownProps {
     onSelect: (link: ChainlinkTO | undefined) => void;
     chainId: number;
     placeholder?: string;
@@ -21,8 +22,8 @@ interface ChainLinkDropDownProps {
 }
 
 export const ChainLinkDropDown: FunctionComponent<ChainLinkDropDownProps> = (props) => {
-    const {onSelect, placeholder, value, chainId, exclude} = props;
-    const {linkOptions, selectChainLink} = useChainStepDropDownViewModel(chainId, exclude);
+    const { onSelect, placeholder, value, chainId, exclude } = props;
+    const { linkOptions, selectChainLink } = useChainStepDropDownViewModel(chainId, exclude);
 
     const validatedValue = (): string | undefined => {
         return value ? (value === -1 ? undefined : value.toString()) : undefined;
@@ -38,15 +39,15 @@ export const ChainLinkDropDown: FunctionComponent<ChainLinkDropDownProps> = (pro
     );
 };
 
-export const ChainLinkDropDownButton: FunctionComponent<ChainLinkDropDownLabelProps> = (props) => {
-    const {onSelect, label, chainId, exclude} = props;
-    const {selectChainLink, linkOptions} = useChainStepDropDownViewModel(chainId, exclude);
+export const ChainLinkDropDownButton: FunctionComponent<ChainLinkDropDownButtonProps> = (props) => {
+    const { onSelect, icon, chainId, exclude } = props;
+    const { selectChainLink, linkOptions } = useChainStepDropDownViewModel(chainId, exclude);
 
     return (
-        <DavitLabelDropDown
+        <DavitIconDropDown
             dropdownItems={linkOptions()}
             onSelect={(link) => onSelect(selectChainLink(Number(link.value)))}
-            label={label}
+            icon={icon}
         />
     );
 };
@@ -81,5 +82,5 @@ const useChainStepDropDownViewModel = (chainId: number, exclude?: number) => {
         return undefined;
     };
 
-    return {linkOptions, selectChainLink};
+    return { linkOptions, selectChainLink };
 };

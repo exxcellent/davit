@@ -1,24 +1,25 @@
-import React, {FunctionComponent} from "react";
-import {useSelector} from "react-redux";
-import {DataCTO} from "../../../../dataAccess/access/cto/DataCTO";
-import {masterDataSelectors} from "../../../../slices/MasterDataSlice";
-import {DavitUtil} from "../../../../utils/DavitUtil";
-import {DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { DropdownProps } from "semantic-ui-react";
+import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import { DavitUtil } from "../../../../utils/DavitUtil";
+import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
 
-interface DataDropDownProps {
+interface DataDropDownProps extends DropdownProps {
     onSelect: (data: DataCTO | undefined) => void;
     placeholder?: string;
     value?: number;
 }
 
-interface DataDropDownLabelProps {
+interface DataDropDownButtonProps extends DropdownProps {
     onSelect: (data: DataCTO | undefined) => void;
-    label: string;
+    icon?: string;
 }
 
 export const DataDropDown: FunctionComponent<DataDropDownProps> = (props) => {
-    const {onSelect, placeholder, value} = props;
-    const {datas, selectData, dataToOption} = useDataDropDownViewModel();
+    const { onSelect, placeholder, value } = props;
+    const { datas, selectData, dataToOption } = useDataDropDownViewModel();
 
     return (
         <DavitDropDown
@@ -30,15 +31,15 @@ export const DataDropDown: FunctionComponent<DataDropDownProps> = (props) => {
     );
 };
 
-export const DataLabelDropDown: FunctionComponent<DataDropDownLabelProps> = (props) => {
-    const {onSelect, label} = props;
-    const {datas, selectData, dataToOption} = useDataDropDownViewModel();
+export const DataDropDownButton: FunctionComponent<DataDropDownButtonProps> = (props) => {
+    const { onSelect, icon } = props;
+    const { datas, selectData, dataToOption } = useDataDropDownViewModel();
 
     return (
-        <DavitLabelDropDown
+        <DavitIconDropDown
             dropdownItems={datas.map(dataToOption)}
             onSelect={(data) => onSelect(selectData(Number(data.value), datas))}
-            label={label}
+            icon={icon}
         />
     );
 };
@@ -61,5 +62,5 @@ const useDataDropDownViewModel = () => {
         };
     };
 
-    return {datas, selectData, dataToOption};
+    return { datas, selectData, dataToOption };
 };

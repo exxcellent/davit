@@ -1,18 +1,19 @@
-import {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {DataCTO} from '../../../../../../../dataAccess/access/cto/DataCTO';
-import {DataRelationTO, Direction, RelationType} from '../../../../../../../dataAccess/access/to/DataRelationTO';
-import {EditActions, editSelectors} from '../../../../../../../slices/EditSlice';
-import {masterDataSelectors} from '../../../../../../../slices/MasterDataSlice';
-import {EditRelation} from '../../../../../../../slices/thunks/RelationThunks';
-import {DavitUtil} from '../../../../../../../utils/DavitUtil';
-import {GlobalActions} from '../../../../../../../slices/GlobalSlice';
-import {DavitDropDownItemProps} from "../../../../../../common/fragments/dropdowns/DavitDropDown";
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { DropdownItemProps } from 'semantic-ui-react';
+import { DataCTO } from '../../../../../../../dataAccess/access/cto/DataCTO';
+import { DataRelationTO, Direction, RelationType } from '../../../../../../../dataAccess/access/to/DataRelationTO';
+import { EditActions, editSelectors } from '../../../../../../../slices/EditSlice';
+import { masterDataSelectors } from '../../../../../../../slices/MasterDataSlice';
+import { EditRelation } from '../../../../../../../slices/thunks/RelationThunks';
+import { DavitUtil } from '../../../../../../../utils/DavitUtil';
+import { GlobalActions } from '../../../../../../../slices/GlobalSlice';
 
 export const useDataRelationViewModel = () => {
     const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
     const relationToEdit: DataRelationTO | null = useSelector(editSelectors.selectRelationToEdit);
     const dispatch = useDispatch();
+    const [key, setKey] = useState<number>(0);
 
     useEffect(() => {
         // check if component to edit is really set or go back to edit mode
@@ -22,11 +23,11 @@ export const useDataRelationViewModel = () => {
         }
     }, [relationToEdit, dispatch]);
 
-    const dataToOption = (data: DataCTO): DavitDropDownItemProps => {
+    const dataToOption = (data: DataCTO): DropdownItemProps => {
         return {
             key: data.data.id,
             text: data.data.name,
-            value: data.data.id.toString(),
+            value: data.data.id,
         };
     };
 
@@ -74,20 +75,20 @@ export const useDataRelationViewModel = () => {
     };
 
     const createAnother = () => {
-        saveRelation();
+        setKey(key + 1);
         dispatch(EditActions.setMode.editRelation());
     };
 
-    const directionOptions = Object.entries(Direction).map(([key, value], index) => ({
-        key: index,
+    const directionOptions = Object.entries(Direction).map(([key, value]) => ({
+        key: key,
         text: key,
-        value: value.toString(),
+        value: value,
     }));
 
-    const typeOptions = Object.entries(RelationType).map(([key, value], index) => ({
-        key: index,
+    const typeOptions = Object.entries(RelationType).map(([key, value]) => ({
+        key: key,
         text: key,
-        value: value.toString(),
+        value: value,
     }));
 
     const validRelation = (): boolean => {
@@ -110,8 +111,8 @@ export const useDataRelationViewModel = () => {
         label: 'EDIT * RELATION',
         label1: relationToEdit?.label1,
         label2: relationToEdit?.label2,
-        data1: relationToEdit?.data1Fk === -1 ? undefined : relationToEdit?.data1Fk.toString(),
-        data2: relationToEdit?.data2Fk === -1 ? undefined : relationToEdit?.data2Fk.toString(),
+        data1: relationToEdit?.data1Fk === -1 ? undefined : relationToEdit?.data1Fk,
+        data2: relationToEdit?.data2Fk === -1 ? undefined : relationToEdit?.data2Fk,
         direction1: relationToEdit?.direction1,
         direction2: relationToEdit?.direction2,
         type1: relationToEdit?.type1,
@@ -127,6 +128,7 @@ export const useDataRelationViewModel = () => {
         directionOptions,
         typeOptions,
         validRelation,
+        key,
         createAnother,
         updateRelation,
         note: relationToEdit ? relationToEdit.note : '',
