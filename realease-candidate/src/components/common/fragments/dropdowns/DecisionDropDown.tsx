@@ -1,33 +1,32 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
-import { DropdownProps } from "semantic-ui-react";
 import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
 import { DecisionTO } from "../../../../dataAccess/access/to/DecisionTO";
 import { sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
 import { DavitUtil } from "../../../../utils/DavitUtil";
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
+import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "./DavitDropDown";
 
-interface DecisionDropDownButtonProps extends DropdownProps {
+interface DecisionLabelDropDownProps {
     onSelect: (decision: DecisionTO | undefined) => void;
-    icon?: string;
+    label: string;
 }
 
-interface DecisionDropDownProps extends DropdownProps {
+interface DecisionDropDownProps {
     onSelect: (decision: DecisionTO | undefined) => void;
     placeholder?: string;
     value?: number;
     exclude?: number;
 }
 
-export const DecisionDropDownButton: FunctionComponent<DecisionDropDownButtonProps> = (props) => {
-    const {onSelect, icon} = props;
+export const DecisionLabelDropDown: FunctionComponent<DecisionLabelDropDownProps> = (props) => {
+    const {onSelect, label} = props;
     const {sequenceToEdit, decisionOptions, selectDecision} = useDecisionDropDownViewModel();
 
     return (
-        <DavitIconDropDown
+        <DavitLabelDropDown
             dropdownItems={decisionOptions()}
             onSelect={(decision) => onSelect(selectDecision(Number(decision.value), sequenceToEdit))}
-            icon={icon}
+            label={label}
         />
     );
 };

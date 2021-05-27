@@ -1,20 +1,19 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
-import { DropdownProps } from "semantic-ui-react";
 import { DataSetupTO } from "../../../../dataAccess/access/to/DataSetupTO";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 import { DavitUtil } from "../../../../utils/DavitUtil";
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
+import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "./DavitDropDown";
 
-interface DataSetupDropDownProps extends DropdownProps {
+interface DataSetupDropDownProps {
     onSelect: (dataSetup: DataSetupTO | undefined) => void;
     placeholder?: string;
     value?: number;
 }
 
-interface DataSetupDropDownPropsButton extends DropdownProps {
+interface DataSetupLabelDropDownProps {
     onSelect: (dataSetup: DataSetupTO | undefined) => void;
-    icon?: string;
+    label: string;
 }
 
 export const DataSetupDropDown: FunctionComponent<DataSetupDropDownProps> = (props) => {
@@ -32,14 +31,14 @@ export const DataSetupDropDown: FunctionComponent<DataSetupDropDownProps> = (pro
     );
 };
 
-export const DataSetupDropDownButton: FunctionComponent<DataSetupDropDownPropsButton> = (props) => {
-    const {onSelect, icon} = props;
+export const DataSetupLabelDropDown: FunctionComponent<DataSetupLabelDropDownProps> = (props) => {
+    const {onSelect, label} = props;
     const {dataSetups, selectDataSetup, dataSetupToOption} = useDataSetupDropDownViewModel();
 
     return (
-        <DavitIconDropDown
+        <DavitLabelDropDown
             dropdownItems={dataSetups.map(dataSetupToOption)}
-            icon={icon}
+            label={label}
             onSelect={(setup) => onSelect(selectDataSetup(Number(setup.value), dataSetups))}
         />
     );

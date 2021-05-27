@@ -10,7 +10,7 @@ export const DavitMenuLabel: FunctionComponent<DavitMenuLabelProps> = (props) =>
 
     return (
         <OptionField>
-            <label className="carv2label davitMenuLabel">{text}</label>
+            <label className="davitMenuLabel">{text}</label>
         </OptionField>
     );
 };

@@ -2,7 +2,6 @@ import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { editSelectors, Mode } from "../../../../../slices/EditSlice";
 import { ControlPanelEditChain } from "./fragments/ControlPanelEditChain";
-import { ControlPanelEditGroup } from "./fragments/ControlPanelEditGroup";
 import { ControlPanelEditMenu } from "./fragments/ControlPanelEditMenu";
 import { ControlPanelEditSequence } from "./fragments/ControlPanelEditSequence";
 import { EditActionModal } from "./fragments/modals/EditActionModal";
@@ -26,8 +25,6 @@ export const ControlPanelEditController: FunctionComponent<ControlPanelEditContr
         switch (currentMode) {
             case Mode.EDIT_ACTOR:
                 return <EditActorModal />;
-            case Mode.EDIT_GROUP:
-                return <ControlPanelEditGroup />;
             case Mode.EDIT_DATA:
                 return <EditDataModal />;
             case Mode.EDIT_RELATION:

@@ -6,7 +6,7 @@
 }
 
 .carvPath.SEND {
-    stroke: var(--carv2-color-exxcellent-blue);
+    stroke: var(--color-exxcellent-blue);
 }
 
 .carvPath.TRIGGER {
@@ -24,10 +24,10 @@
 }
 
 .davitArrowText {
-    fill: var(--carv2-text-color);
+    fill: var(--text-color);
 }
 
 .davitArrowTextBG {
-    stroke: var(--carv2-background-color-header);
+    stroke: var(--background-color-header);
     stroke-width: 0.3em;
 }

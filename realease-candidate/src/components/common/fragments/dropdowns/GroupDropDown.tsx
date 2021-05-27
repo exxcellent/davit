@@ -1,20 +1,19 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
-import { DropdownProps } from "semantic-ui-react";
 import { GroupTO } from "../../../../dataAccess/access/to/GroupTO";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 import { DavitUtil } from "../../../../utils/DavitUtil";
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
+import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "./DavitDropDown";
 
-interface GroupDropDownProps extends DropdownProps {
+interface GroupDropDownProps {
     onSelect: (group: GroupTO | undefined) => void;
     placeholder?: string;
     value?: number;
 }
 
-interface GroupDropDownPropsButton extends DropdownProps {
+interface GroupDropDownPropsButton {
     onSelect: (group: GroupTO | undefined) => void;
-    icon?: string;
+    label: string;
 }
 
 export const GroupDropDown: FunctionComponent<GroupDropDownProps> = (props) => {
@@ -32,14 +31,14 @@ export const GroupDropDown: FunctionComponent<GroupDropDownProps> = (props) => {
     );
 };
 
-export const GroupDropDownButton: FunctionComponent<GroupDropDownPropsButton> = (props) => {
-    const {onSelect, icon} = props;
+export const GroupLabelDropDown: FunctionComponent<GroupDropDownPropsButton> = (props) => {
+    const {onSelect, label} = props;
     const {groups, groupToOption, selectGroup} = useGroupDropDownViewModel();
 
     return (
-        <DavitIconDropDown
+        <DavitLabelDropDown
             dropdownItems={groups.map(groupToOption)}
-            icon={icon}
+            label={label}
             onSelect={(group) => onSelect(selectGroup(Number(group.value), groups))}
         />
     );

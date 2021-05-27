@@ -74,7 +74,7 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
                         strokeColor:
                             calcSteps.find((step) => step === node.parentId) && calcSteps.find((step) => step === node.id)
                                 ? lineColor()
-                                : "var(--carv2-background-color-header)",
+                                : "var(--background-color-header)",
                         strokeWidth:
                             calcSteps.find((step) => step === node.parentId) && calcSteps.find((step) => step === node.id)
                                 ? 5
@@ -126,7 +126,7 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
                             calcLinkIds?.find((link) => link === node.parentId) &&
                             calcLinkIds.find((link) => link === node.id)
                                 ? chainLineColor()
-                                : "var(--carv2-background-color-header)",
+                                : "var(--background-color-header)",
                         strokeWidth:
                             calcLinkIds?.find((link) => link === node.parentId) &&
                             calcLinkIds.find((link) => link === node.id)
@@ -203,7 +203,7 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
                     <div style={{display: "flex", position: "absolute", zIndex: 1, width: "47vw"}}>
                         {chain && (
                             <TabGroupFragment label="Mode"
-                                              style={{backgroundColor: "var(--carv2-background-color-header)"}}
+                                              style={{backgroundColor: "var(--background-color-header)"}}
                             >
                                 <TabFragment label="Chain"
                                              isActive={showChain}
@@ -486,11 +486,11 @@ const useFlowChartViewModel = () => {
             if (terminalStep) {
                 switch (terminalStep.type) {
                     case GoToTypes.ERROR:
-                        return "var(--carv2-data-delete-color)";
+                        return "var(--data-delete-color)";
                     case GoToTypes.FIN:
-                        return "var(--carv2-data-add-color)";
+                        return "var(--data-add-color)";
                     case GoToTypes.IDLE:
-                        return "var(--carv2-color-exxcellent-blue)";
+                        return "var(--color-exxcellent-blue)";
                 }
             } else {
                 return "#FF00FF";
@@ -501,9 +501,9 @@ const useFlowChartViewModel = () => {
             if (calcChain) {
                 switch (calcChain.terminal.type) {
                     case GoToTypesChain.ERROR:
-                        return "var(--carv2-data-delete-color)";
+                        return "var(--data-delete-color)";
                     case GoToTypesChain.FIN:
-                        return "var(--carv2-data-add-color)";
+                        return "var(--data-add-color)";
                 }
             } else {
                 return "#FF00FF";

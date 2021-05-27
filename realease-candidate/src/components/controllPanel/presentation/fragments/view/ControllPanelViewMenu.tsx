@@ -14,11 +14,11 @@ import { SequenceDropDown } from "../../../../common/fragments/dropdowns/Sequenc
 import { OptionField } from "../edit/common/OptionField";
 import { ViewNavigator } from "./fragments/ViewNavigator";
 
-export interface ControlPanelViewOptionsProps {
+export interface ControlPanelViewMenuProps {
     hidden: boolean;
 }
 
-export const ControlPanelViewOptions: FunctionComponent<ControlPanelViewOptionsProps> = () => {
+export const ControlPanelViewMenu: FunctionComponent<ControlPanelViewMenuProps> = () => {
 
     const {
         stepIndex,
@@ -29,7 +29,7 @@ export const ControlPanelViewOptions: FunctionComponent<ControlPanelViewOptionsP
         currentSequence,
         currentChain,
         selectChain,
-    } = useControllPanelSequenceOptionsViewModel();
+    } = useControlPanelViewMenuViewModel();
 
     const {stepBack, stepNext, linkBack, linkNext} = useStepAndLinkNavigation();
 
@@ -42,20 +42,18 @@ export const ControlPanelViewOptions: FunctionComponent<ControlPanelViewOptionsP
     return (
         <div className={"headerGrid"}>
 
-            <OptionField>
-                <OptionField label="Data - Setup">
-                    <DataSetupDropDown
-                        onSelect={selectDataSetup}
-                        placeholder="Select Data Setup ..."
-                        value={currentDataSetup}
-                    />
-                </OptionField>
+            <OptionField label="Data - Setup">
+                <DataSetupDropDown
+                    onSelect={selectDataSetup}
+                    placeholder="Select Data Setup ..."
+                    value={currentDataSetup}
+                />
+            </OptionField>
 
-                <OptionField label="SEQUENCE">
-                    <SequenceDropDown onSelect={selectSequence}
-                                      value={currentSequence}
-                    />
-                </OptionField>
+            <OptionField label="SEQUENCE">
+                <SequenceDropDown onSelect={selectSequence}
+                                  value={currentSequence}
+                />
             </OptionField>
 
             <OptionField label="CHAIN"
@@ -81,7 +79,7 @@ export const ControlPanelViewOptions: FunctionComponent<ControlPanelViewOptionsP
     );
 };
 
-const useControllPanelSequenceOptionsViewModel = () => {
+const useControlPanelViewMenuViewModel = () => {
     const sequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const stepIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentStepIndex);
     const selectedDataSetup: DataSetupCTO | null = useSelector(sequenceModelSelectors.selectDataSetup);
