@@ -1,20 +1,20 @@
-import React, {FunctionComponent, useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {DataCTO} from "../../../../../../dataAccess/access/cto/DataCTO";
-import {DataInstanceTO} from "../../../../../../dataAccess/access/to/DataInstanceTO";
-import {DataSetupTO} from "../../../../../../dataAccess/access/to/DataSetupTO";
-import {InitDataTO} from "../../../../../../dataAccess/access/to/InitDataTO";
-import {EditActions, editSelectors} from "../../../../../../slices/EditSlice";
-import {masterDataSelectors} from "../../../../../../slices/MasterDataSlice";
-import {EditInitData} from "../../../../../../slices/thunks/InitDataThunks";
-import {DavitUtil} from "../../../../../../utils/DavitUtil";
-import {DavitBackButton} from "../../../../../common/fragments/buttons/DavitBackButton";
-import {DavitButton} from "../../../../../common/fragments/buttons/DavitButton";
-import {DavitDeleteButton} from "../../../../../common/fragments/buttons/DavitDeleteButton";
-import {ActorDropDown} from "../../../../../common/fragments/dropdowns/ActorDropDown";
-import {DataAndInstanceId, InstanceDropDown} from "../../../../../common/fragments/dropdowns/InstanceDropDown";
-import {OptionField} from "../common/OptionField";
-import {GlobalActions} from "../../../../../../slices/GlobalSlice";
+import React, { FunctionComponent, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
+import { DataInstanceTO } from "../../../../../../dataAccess/access/to/DataInstanceTO";
+import { DataSetupTO } from "../../../../../../dataAccess/access/to/DataSetupTO";
+import { InitDataTO } from "../../../../../../dataAccess/access/to/InitDataTO";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
+import { GlobalActions } from "../../../../../../slices/GlobalSlice";
+import { masterDataSelectors } from "../../../../../../slices/MasterDataSlice";
+import { EditInitData } from "../../../../../../slices/thunks/InitDataThunks";
+import { DavitUtil } from "../../../../../../utils/DavitUtil";
+import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
+import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { ActorDropDown } from "../../../../../common/fragments/dropdowns/ActorDropDown";
+import { DataAndInstanceId, InstanceDropDown } from "../../../../../common/fragments/dropdowns/InstanceDropDown";
+import { OptionField } from "../common/OptionField";
 
 export interface ControlPanelEditInitDataProps {
     hidden: boolean;
@@ -40,15 +40,25 @@ export const ControlPanelEditInitData: FunctionComponent<ControlPanelEditInitDat
                     value={actorFk}
                 />
             </OptionField>
-            <OptionField label="Select Data which will be added" divider={true}>
-                <InstanceDropDown onSelect={setInstance} value={data}/>
+            <OptionField label="Select Data which will be added"
+                         divider={true}
+            >
+                <InstanceDropDown onSelect={setInstance}
+                                  value={data}
+                />
             </OptionField>
-            <OptionField label="Navigation" divider={true}>
-                <DavitButton onClick={createAnother} label="Create another"/>
-                <DavitBackButton onClick={saveInitData}/>
+            <OptionField label="Navigation"
+                         divider={true}
+            >
+                <DavitButton onClick={createAnother}
+                             label="Create another"
+                />
+                <DavitBackButton onClick={saveInitData} />
             </OptionField>
-            <OptionField label={"Options"} divider={true}>
-                <DavitDeleteButton onClick={deleteInitData}/>
+            <OptionField label={"Options"}
+                         divider={true}
+            >
+                <DavitDeleteButton onClick={deleteInitData} />
             </OptionField>
         </div>
     );

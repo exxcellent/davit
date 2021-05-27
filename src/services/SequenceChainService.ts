@@ -26,7 +26,7 @@ export interface CalcChain {
 
 export const SequenceChainService = {
     calculateChain: (sequenceChain: ChainCTO | null): CalcChain => {
-        const calcSequenceChain: CalcChain = { calcLinks: [], linkIds: [], terminal: { type: GoToTypesChain.ERROR } };
+        const calcSequenceChain: CalcChain = {calcLinks: [], linkIds: [], terminal: {type: GoToTypesChain.ERROR}};
         let loopStartingStep: number = -1;
         let actorDatas: ActorData[] = [];
 
@@ -94,7 +94,7 @@ export const SequenceChainService = {
                 }
             }
         }
-        return { ...calcSequenceChain, loopStartingIndex: isLooping(loopStartingStep) ? loopStartingStep : undefined };
+        return {...calcSequenceChain, loopStartingIndex: isLooping(loopStartingStep) ? loopStartingStep : undefined};
     },
 };
 
@@ -131,16 +131,16 @@ export const getRoot = (chain: ChainCTO | null): ChainlinkCTO | null => {
 };
 
 const getNext = (goTo: GoToChain, chain: ChainCTO): ChainlinkCTO | ChainDecisionTO | TerminalChain => {
-    let nextStepOrDecisionOrTerminal: ChainlinkCTO | ChainDecisionTO | TerminalChain = { type: GoToTypesChain.ERROR };
+    let nextStepOrDecisionOrTerminal: ChainlinkCTO | ChainDecisionTO | TerminalChain = {type: GoToTypesChain.ERROR};
     switch (goTo.type) {
         case GoToTypesChain.LINK:
-            nextStepOrDecisionOrTerminal = getLinkFromChain(goTo.id, chain) || { type: GoToTypesChain.ERROR };
+            nextStepOrDecisionOrTerminal = getLinkFromChain(goTo.id, chain) || {type: GoToTypesChain.ERROR};
             break;
         case GoToTypesChain.DEC:
-            nextStepOrDecisionOrTerminal = getDecisionFromChain(goTo.id, chain) || { type: GoToTypesChain.ERROR };
+            nextStepOrDecisionOrTerminal = getDecisionFromChain(goTo.id, chain) || {type: GoToTypesChain.ERROR};
             break;
         case GoToTypesChain.FIN:
-            nextStepOrDecisionOrTerminal = { type: GoToTypesChain.FIN };
+            nextStepOrDecisionOrTerminal = {type: GoToTypesChain.FIN};
     }
     return nextStepOrDecisionOrTerminal;
 };

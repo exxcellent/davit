@@ -33,7 +33,8 @@
     padding: var(--padding-vertical) var(--padding-horizontal);
 }
 
-.bar.medium {}
+.bar.medium {
+}
 
 .bar.small {
     --padding-vertical: .125rem; /* 16px * 0.125 = 2px */

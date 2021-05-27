@@ -36,7 +36,7 @@ export const DecisionRepository = {
                 id: DataAccessUtil.determineNewId(this.findAll()),
             };
         } else {
-            decisionTO = { ...copyDecisionToSave };
+            decisionTO = {...copyDecisionToSave};
         }
         dataStore.getDataStore().decisions.set(decisionTO.id, decisionTO);
         return decisionTO;

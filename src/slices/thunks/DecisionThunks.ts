@@ -1,15 +1,15 @@
-import {AppThunk} from '../../app/store';
-import {SequenceCTO} from '../../dataAccess/access/cto/SequenceCTO';
-import {SequenceStepCTO} from '../../dataAccess/access/cto/SequenceStepCTO';
-import {DecisionTO} from '../../dataAccess/access/to/DecisionTO';
-import {GoToTypes} from '../../dataAccess/access/types/GoToType';
-import {DataAccess} from '../../dataAccess/DataAccess';
-import {DataAccessResponse} from '../../dataAccess/DataAccessResponse';
-import {DavitUtil} from '../../utils/DavitUtil';
-import {editActions, Mode} from '../EditSlice';
-import {MasterDataActions} from '../MasterDataSlice';
-import {EditStep} from './StepThunks';
-import {GlobalActions} from "../GlobalSlice";
+import { AppThunk } from "../../app/store";
+import { SequenceCTO } from "../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
+import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
+import { GoToTypes } from "../../dataAccess/access/types/GoToType";
+import { DataAccess } from "../../dataAccess/DataAccess";
+import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
+import { DavitUtil } from "../../utils/DavitUtil";
+import { editActions, Mode } from "../EditSlice";
+import { GlobalActions } from "../GlobalSlice";
+import { MasterDataActions } from "../MasterDataSlice";
+import { EditStep } from "./StepThunks";
 
 const createDecisionThunk = (decision: DecisionTO, from?: SequenceStepCTO | DecisionTO, ifGoTo?: Boolean): AppThunk => (
     dispatch,

@@ -1,19 +1,20 @@
-import React, { FunctionComponent } from 'react';
-import { DnDBox, DnDBoxType } from '../DnDBox';
-import { PositionTO } from '../../../../dataAccess/access/to/PositionTO';
-import { DavitModal } from './DavitModal';
+import React, { FunctionComponent } from "react";
+import { PositionTO } from "../../../../dataAccess/access/to/PositionTO";
+import { DnDBox, DnDBoxType } from "../DnDBox";
+import { DavitModal } from "./DavitModal";
 
 interface DavitDraggableModalProps {
     form: JSX.Element
 }
 
 export const DavitDraggableModal: FunctionComponent<DavitDraggableModalProps> = (props) => {
-    const { form } = props;
+    const {form} = props;
 
     return (
         <DavitModal>
             <DnDBox
-                onPositionUpdate={() => {}}
+                onPositionUpdate={() => {
+                }}
                 toDnDElements={[
                     {
                         element: form,
@@ -23,8 +24,10 @@ export const DavitDraggableModal: FunctionComponent<DavitDraggableModalProps> = 
                     },
                 ]}
                 svgElements={[]}
-                zoomIn={() => {}}
-                zoomOut={() => {}}
+                zoomIn={() => {
+                }}
+                zoomOut={() => {
+                }}
                 type={DnDBoxType.fullscreen}
             />
         </DavitModal>

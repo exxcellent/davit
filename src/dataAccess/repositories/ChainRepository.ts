@@ -21,7 +21,7 @@ export const ChainRepository = {
                 id: DataAccessUtil.determineNewId(this.findAll()),
             };
         } else {
-            chainTO = { ...chain };
+            chainTO = {...chain};
         }
         dataStore.getDataStore().chains.set(chainTO.id!, chainTO);
         return chainTO;

@@ -1,27 +1,27 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { ChainDecisionTO } from '../../../../../../../dataAccess/access/to/ChainDecisionTO';
-import { ChainlinkTO } from '../../../../../../../dataAccess/access/to/ChainlinkTO';
-import { ChainTO } from '../../../../../../../dataAccess/access/to/ChainTO';
-import { DataSetupTO } from '../../../../../../../dataAccess/access/to/DataSetupTO';
-import { SequenceTO } from '../../../../../../../dataAccess/access/to/SequenceTO';
-import { GoToChain, GoToTypesChain } from '../../../../../../../dataAccess/access/types/GoToTypeChain';
-import { EditActions, editSelectors } from '../../../../../../../slices/EditSlice';
-import { sequenceModelSelectors } from '../../../../../../../slices/SequenceModelSlice';
-import { EditChainLink } from '../../../../../../../slices/thunks/ChainLinkThunks';
-import { EditChain } from '../../../../../../../slices/thunks/ChainThunks';
-import { DavitUtil } from '../../../../../../../utils/DavitUtil';
-import { GlobalActions } from '../../../../../../../slices/GlobalSlice';
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { ChainDecisionTO } from "../../../../../../../dataAccess/access/to/ChainDecisionTO";
+import { ChainlinkTO } from "../../../../../../../dataAccess/access/to/ChainlinkTO";
+import { ChainTO } from "../../../../../../../dataAccess/access/to/ChainTO";
+import { DataSetupTO } from "../../../../../../../dataAccess/access/to/DataSetupTO";
+import { SequenceTO } from "../../../../../../../dataAccess/access/to/SequenceTO";
+import { GoToChain, GoToTypesChain } from "../../../../../../../dataAccess/access/types/GoToTypeChain";
+import { EditActions, editSelectors } from "../../../../../../../slices/EditSlice";
+import { GlobalActions } from "../../../../../../../slices/GlobalSlice";
+import { sequenceModelSelectors } from "../../../../../../../slices/SequenceModelSlice";
+import { EditChainLink } from "../../../../../../../slices/thunks/ChainLinkThunks";
+import { EditChain } from "../../../../../../../slices/thunks/ChainThunks";
+import { DavitUtil } from "../../../../../../../utils/DavitUtil";
 
 export const useChainLinkViewModel = () => {
     const chainLinkToEdit: ChainlinkTO | null = useSelector(editSelectors.selectChainLinkToEdit);
     const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
     const dispatch = useDispatch();
-    const [currentGoTo, setCurrentGoTo] = useState<GoToChain>({ type: GoToTypesChain.LINK, id: -1 });
+    const [currentGoTo, setCurrentGoTo] = useState<GoToChain>({type: GoToTypesChain.LINK, id: -1});
 
     useEffect(() => {
         if (DavitUtil.isNullOrUndefined(chainLinkToEdit)) {
-            dispatch(GlobalActions.handleError('Tried to go to edit sequence step without sequenceStepToEdit specified'));
+            dispatch(GlobalActions.handleError("Tried to go to edit sequence step without sequenceStepToEdit specified"));
             dispatch(EditActions.setMode.edit());
         }
         if (chainLinkToEdit) {
@@ -40,12 +40,12 @@ export const useChainLinkViewModel = () => {
 
     const saveChainLink = (newMode?: string) => {
         if (!DavitUtil.isNullOrUndefined(chainLinkToEdit) && !DavitUtil.isNullOrUndefined(selectedChain)) {
-            if (chainLinkToEdit!.name !== '') {
+            if (chainLinkToEdit!.name !== "") {
                 dispatch(EditChainLink.save(chainLinkToEdit!));
             } else {
                 dispatch(EditChainLink.delete(chainLinkToEdit!));
             }
-            if (newMode && newMode === 'EDIT') {
+            if (newMode && newMode === "EDIT") {
                 dispatch(EditActions.setMode.edit());
             } else {
                 dispatch(EditActions.setMode.editChain(selectedChain!));
@@ -71,7 +71,7 @@ export const useChainLinkViewModel = () => {
 
     const handleType = (newGoToType?: string) => {
         if (newGoToType !== undefined) {
-            const gType = { type: (GoToTypesChain as any)[newGoToType] };
+            const gType = {type: (GoToTypesChain as any)[newGoToType]};
             setCurrentGoTo(gType);
             switch (newGoToType) {
                 case GoToTypesChain.ERROR:
@@ -86,14 +86,14 @@ export const useChainLinkViewModel = () => {
 
     const setNextLink = (link?: ChainlinkTO) => {
         if (link) {
-            const newGoTo: GoToChain = { type: GoToTypesChain.LINK, id: link.id };
+            const newGoTo: GoToChain = {type: GoToTypesChain.LINK, id: link.id};
             saveGoToType(newGoTo);
         }
     };
 
     const setNextDecision = (decision?: ChainDecisionTO) => {
         if (decision) {
-            const newGoTo: GoToChain = { type: GoToTypesChain.DEC, id: decision.id };
+            const newGoTo: GoToChain = {type: GoToTypesChain.DEC, id: decision.id};
             saveGoToType(newGoTo);
         }
     };
@@ -150,8 +150,8 @@ export const useChainLinkViewModel = () => {
     };
 
     return {
-        label: 'EDIT * ' + (selectedChain?.name || '') + ' * ' + (chainLinkToEdit?.name || ''),
-        name: chainLinkToEdit ? chainLinkToEdit.name : '',
+        label: "EDIT * " + (selectedChain?.name || "") + " * " + (chainLinkToEdit?.name || ""),
+        name: chainLinkToEdit ? chainLinkToEdit.name : "",
         changeName,
         saveChainLink,
         deleteChainLink,

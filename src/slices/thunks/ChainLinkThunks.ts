@@ -1,13 +1,13 @@
-import {AppThunk} from "../../app/store";
-import {ChainDecisionTO} from "../../dataAccess/access/to/ChainDecisionTO";
-import {ChainlinkTO} from "../../dataAccess/access/to/ChainlinkTO";
-import {GoToTypesChain} from "../../dataAccess/access/types/GoToTypeChain";
-import {DataAccess} from "../../dataAccess/DataAccess";
-import {DataAccessResponse} from "../../dataAccess/DataAccessResponse";
-import {editActions, Mode} from "../EditSlice";
-import {MasterDataActions} from "../MasterDataSlice";
-import {EditChainDecision} from "./ChainDecisionThunks";
-import {GlobalActions} from "../GlobalSlice";
+import { AppThunk } from "../../app/store";
+import { ChainDecisionTO } from "../../dataAccess/access/to/ChainDecisionTO";
+import { ChainlinkTO } from "../../dataAccess/access/to/ChainlinkTO";
+import { GoToTypesChain } from "../../dataAccess/access/types/GoToTypeChain";
+import { DataAccess } from "../../dataAccess/DataAccess";
+import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
+import { editActions, Mode } from "../EditSlice";
+import { GlobalActions } from "../GlobalSlice";
+import { MasterDataActions } from "../MasterDataSlice";
+import { EditChainDecision } from "./ChainDecisionThunks";
 
 const createChainLinkThunk = (link: ChainlinkTO, from?: ChainlinkTO | ChainDecisionTO, ifGoTO?: boolean): AppThunk => (
     dispatch,

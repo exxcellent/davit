@@ -7,5 +7,6 @@ export class ChainlinkCTO {
         public chainLink: ChainlinkTO = new ChainlinkTO(),
         public sequence: SequenceCTO = new SequenceCTO(),
         public dataSetup: DataSetupCTO = new DataSetupCTO(),
-    ) {}
+    ) {
+    }
 }
