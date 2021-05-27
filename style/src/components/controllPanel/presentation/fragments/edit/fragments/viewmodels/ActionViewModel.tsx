@@ -8,7 +8,7 @@ import { ActionTO } from "../../../../../../../dataAccess/access/to/ActionTO";
 import { ActionType } from "../../../../../../../dataAccess/access/types/ActionType";
 import { EditActions, editSelectors } from "../../../../../../../slices/EditSlice";
 import { GlobalActions } from "../../../../../../../slices/GlobalSlice";
-import { MasterDataActions } from "../../../../../../../slices/MasterDataSlice";
+import { MasterDataActions, masterDataSelectors } from "../../../../../../../slices/MasterDataSlice";
 import { sequenceModelSelectors } from "../../../../../../../slices/SequenceModelSlice";
 import { EditAction } from "../../../../../../../slices/thunks/ActionThunks";
 import { DavitUtil } from "../../../../../../../utils/DavitUtil";
@@ -17,6 +17,8 @@ import { DataAndInstanceId } from "../../../../../../common/fragments/dropdowns/
 
 export const useActionViewModel = () => {
     const actionToEdit: ActionTO | null = useSelector(editSelectors.selectActionToEdit);
+    const actors: ActorCTO[] = useSelector(masterDataSelectors.selectActors);
+    const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const dispatch = useDispatch();
 
@@ -145,6 +147,51 @@ export const useActionViewModel = () => {
         }
     };
 
+    const getActorName = (actorId: number, actors: ActorCTO[]): string => {
+        return actors.find((actor) => actor.actor.id === actorId)?.actor.name || "";
+    };
+
+    const getDataName = (dataId: number, datas: DataCTO[]): string => {
+        const data: DataCTO | undefined = datas.find((data) => data.data.id === dataId);
+        return data ? data?.data.name : "data is null";
+    };
+
+    const getActionTypeLabel = (type: ActionType): string => {
+        let label: string = "";
+        switch (type) {
+            case ActionType.ADD:
+                label = "Add or Update";
+                break;
+            case ActionType.DELETE:
+                label = "Delete";
+                break;
+            case ActionType.SEND:
+                label = "Send";
+                break;
+            case ActionType.SEND_AND_DELETE:
+                label = "Send and delete";
+                break;
+            case ActionType.TRIGGER:
+                label = "Trigger";
+                break;
+        }
+        return label;
+    };
+
+    const getOptionText = (action: ActionTO): string => {
+        let text: string;
+        if (action.actionType !== ActionType.TRIGGER) {
+            text = `${getActorName(action.receivingActorFk, actors)} - ${getActionTypeLabel(
+                action.actionType,
+            )} - ${getDataName(action.dataFk, datas)}`;
+        } else {
+            text = `${getActorName(action.sendingActorFk, actors)} - ${getActionTypeLabel(
+                action.actionType,
+            )} - ${getActorName(action.receivingActorFk, actors)}`;
+        }
+        return text;
+    };
+
     return {
         label: "EDIT * SEQUENCE * STEP * ACTION",
         action: actionToEdit,
@@ -167,5 +214,6 @@ export const useActionViewModel = () => {
         }),
         setTriggerLabel,
         triggerLabel: actionToEdit?.actionType === ActionType.TRIGGER ? actionToEdit.triggerText : "",
+        getOptionText
     };
 };

@@ -38,7 +38,7 @@ export function Davit() {
                 <Route exact
                        path={ModuleRoutes.home}
                 >
-                    <div className="carvGridContainer">
+                    <div className="davitGridContainer">
                         <ControlPanelController />
                         <ActorModelController />
                         <DataModelController />

@@ -12,7 +12,6 @@ import { DavitEditButton } from "../../../../../../common/fragments/buttons/Davi
 import { DavitRootButton } from "../../../../../../common/fragments/buttons/DavitRootButton";
 import { DavitShowMoreButton } from "../../../../../../common/fragments/buttons/DavitShowMoreButton";
 import { DavitLabelTextfield } from "../../../../../../common/fragments/DavitLabelTextfield";
-import { useActionDropDownViewModel } from "../../../../../../common/fragments/dropdowns/ActionButtonDropDown";
 import { DecisionDropDown } from "../../../../../../common/fragments/dropdowns/DecisionDropDown";
 import { GoToOptionDropDown } from "../../../../../../common/fragments/dropdowns/GoToOptionDropDown";
 import { StepDropDown } from "../../../../../../common/fragments/dropdowns/StepDropDown";
@@ -53,9 +52,7 @@ export const StepForm: FunctionComponent<StepFormProps> = () => {
         switchIndexesAndSave,
     } = useStepViewModel();
 
-    const {deleteAction} = useActionViewModel();
-
-    const {getOptionText} = useActionDropDownViewModel();
+    const {deleteAction, getOptionText} = useActionViewModel();
 
     const labelSelectDecision: string = "Select next decision";
     const labelCreateDecision: string = "Create next decision";
