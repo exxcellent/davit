@@ -79,7 +79,7 @@ const useViewModel = () => {
         const editStepArrows: Arrow[] = useSelector(editSelectors.selectEditStepArrows);
         // ----- VIEW -----
         const arrows: Arrow[] = useSelector(sequenceModelSelectors.selectCurrentArrows);
-        const currentActorDatas: ActorData[] = useSelector(sequenceModelSelectors.selectActorData);
+        const currentActorDatas: ActorData[] = useSelector(sequenceModelSelectors.selectStepActorData);
         const errors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
         const dataSetup: DataSetupCTO | null = useSelector(sequenceModelSelectors.selectDataSetup);
 
@@ -328,7 +328,7 @@ const useViewModel = () => {
                 id: actor.actor.id,
                 initName: actor.actor.name,
                 initWidth: 100,
-                initHeigth: 30,
+                initHeight: 30,
                 dataFragments: getActorDatas().filter(
                     (act) =>
                         act.parentId === actor.actor.id ||
