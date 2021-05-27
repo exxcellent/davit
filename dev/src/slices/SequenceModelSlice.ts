@@ -401,7 +401,7 @@ export const sequenceModelSelectors = {
             return null;
         }
     },
-    selectActorData: (state: RootState): ActorData[] => {
+    selectStepActorData: (state: RootState): ActorData[] => {
         const filteredSteps = getFilteredSteps(state);
         return filteredSteps[state.sequenceModel.currentStepIndex]?.actorDatas || [];
     },
