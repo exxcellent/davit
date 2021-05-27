@@ -22,7 +22,7 @@ export interface DavitIconDropDownProps extends DropdownItemProps {
 }
 
 export const DavitDropDown: FunctionComponent<DavitDropDownProps> = (props) => {
-    const { dropdownItems, onSelect, placeholder, value, clearable, others } = props;
+    const {dropdownItems, onSelect, placeholder, value, clearable, others} = props;
 
     return (
         <Dropdown
@@ -42,7 +42,7 @@ export const DavitDropDown: FunctionComponent<DavitDropDownProps> = (props) => {
 };
 
 export const DavitIconDropDown: FunctionComponent<DavitIconDropDownProps> = (props) => {
-    const { dropdownItems, onSelect, icon } = props;
+    const {dropdownItems, onSelect, icon} = props;
 
     return (
         <Dropdown

@@ -3,9 +3,11 @@
 .padding-small, .padding-s {
     padding: var(--spacing-small);
 }
+
 .padding-medium, .padding-m {
     padding: var(--spacing-medium);
 }
+
 .padding-large, .padding-l {
     padding: var(--spacing-large);
 }
@@ -14,10 +16,12 @@
     padding-top: var(--spacing-small);
     padding-bottom: var(--spacing-small);
 }
+
 .padding-vertical-medium, .padding-vertical-m {
     padding-top: var(--spacing-medium);
     padding-bottom: var(--spacing-medium);
 }
+
 .padding-vertical-large, .padding-vertical-l {
     padding-top: var(--spacing-large);
     padding-bottom: var(--spacing-large);
@@ -27,10 +31,12 @@
     padding-left: var(--spacing-small);
     padding-right: var(--spacing-small);
 }
+
 .padding-horizontal-medium, .padding-horizontal-m {
     padding-left: var(--spacing-medium);
     padding-right: var(--spacing-medium);
 }
+
 .padding-horizontal-large, .padding-horizontal-l {
     padding-left: var(--spacing-large);
     padding-right: var(--spacing-large);
@@ -39,9 +45,11 @@
 .padding-top-small, .padding-top-s {
     padding-top: var(--spacing-small);
 }
+
 .padding-top-medium, .padding-top-m {
     padding-top: var(--spacing-medium);
 }
+
 .padding-top-large, .padding-top-l {
     padding-top: var(--spacing-large);
 }
@@ -49,9 +57,11 @@
 .padding-right-small, .padding--rights {
     padding-right: var(--spacing-small);
 }
+
 .padding-right-medium, .padding-right-m {
     padding-right: var(--spacing-medium);
 }
+
 .padding-right-large, .padding-right-l {
     padding-right: var(--spacing-large);
 }
@@ -59,9 +69,11 @@
 .padding-bottom-small, .padding-bottom-s {
     padding-bottom: var(--spacing-small);
 }
+
 .padding-bottom-medium, .padding-bottom-m {
     padding-bottom: var(--spacing-medium);
 }
+
 .padding-bottom-large, .padding-bottom-l {
     padding-bottom: var(--spacing-large);
 }
@@ -69,9 +81,11 @@
 .padding-left-small, .padding-left-s {
     padding-left: var(--spacing-small);
 }
+
 .padding-left-medium, .padding-left-m {
     padding-left: var(--spacing-medium);
 }
+
 .padding-left-large, .padding-left-l {
     padding-left: var(--spacing-large);
 }
@@ -81,9 +95,11 @@
 .margin-small, .margin-s {
     margin: var(--spacing-small);
 }
+
 .margin-medium, .margin-m {
     margin: var(--spacing-medium);
 }
+
 .margin-large, .margin-l {
     margin: var(--spacing-large);
 }
@@ -92,10 +108,12 @@
     margin-top: var(--spacing-small);
     margin-bottom: var(--spacing-small);
 }
+
 .margin-vertical-medium, .margin-vertical-m {
     margin-top: var(--spacing-medium);
     margin-bottom: var(--spacing-medium);
 }
+
 .margin-vertical-large, .margin-vertical-l {
     margin-top: var(--spacing-large);
     margin-bottom: var(--spacing-large);
@@ -105,10 +123,12 @@
     margin-left: var(--spacing-small);
     margin-right: var(--spacing-small);
 }
+
 .margin-horizontal-medium, .margin-horizontal-m {
     margin-left: var(--spacing-medium);
     margin-right: var(--spacing-medium);
 }
+
 .margin-horizontal-large, .margin-horizontal-l {
     margin-left: var(--spacing-large);
     margin-right: var(--spacing-large);
@@ -117,9 +137,11 @@
 .margin-top-small, .margin-top-s {
     margin-top: var(--spacing-small);
 }
+
 .margin-top-medium, .margin-top-m {
     margin-top: var(--spacing-medium);
 }
+
 .margin-top-large, .margin-top-l {
     margin-top: var(--spacing-large);
 }
@@ -127,9 +149,11 @@
 .margin-right-small, .margin--rights {
     margin-right: var(--spacing-small);
 }
+
 .margin-right-medium, .margin-right-m {
     margin-right: var(--spacing-medium);
 }
+
 .margin-right-large, .margin-right-l {
     margin-right: var(--spacing-large);
 }
@@ -137,9 +161,11 @@
 .margin-bottom-small, .margin-bottom-s {
     margin-bottom: var(--spacing-small);
 }
+
 .margin-bottom-medium, .margin-bottom-m {
     margin-bottom: var(--spacing-medium);
 }
+
 .margin-bottom-large, .margin-bottom-l {
     margin-bottom: var(--spacing-large);
 }
@@ -147,25 +173,28 @@
 .margin-left-small, .margin-left-s {
     margin-left: var(--spacing-small);
 }
+
 .margin-left-medium, .margin-left-m {
     margin-left: var(--spacing-medium);
 }
+
 .margin-left-large, .margin-left-l {
     margin-left: var(--spacing-large);
 }
-
 
 /* flex box */
 .flex {
     display: -webkit-flex;
     display: flex;
 }
+
 .flex-column {
     display: -webkit-flex;
     display: flex;
     -webkit-flex-direction: column;
             flex-direction: column;
 }
+
 .flex-row {
     display: -webkit-flex;
     display: flex;
@@ -179,12 +208,14 @@
     -webkit-align-items: flex-start;
             align-items: flex-start;
 }
+
 .flex-center {
     -webkit-justify-content: center;
             justify-content: center;
     -webkit-align-items: center;
             align-items: center;
 }
+
 .flex-end {
     -webkit-justify-content: flex-end;
             justify-content: flex-end;
@@ -201,67 +232,74 @@
     -webkit-flex-grow: 1;
             flex-grow: 1;
 }
+
 .flex-shrink {
     -webkit-flex-shrink: 1;
             flex-shrink: 1;
 }
 
-
 @font-face {
     font-family: 'DIN OT';
     font-style: normal;
     font-weight: 900;
-    src: url(../../static/media/DINOT-Bold.d41d8cd9.ttf)  format('truetype');
+    src: url(../../static/media/DINOT-Bold.d41d8cd9.ttf) format('truetype');
 }
+
 @font-face {
     font-family: 'DIN OT';
     font-style: normal;
     font-weight: 800;
-    src: url(../../static/media/DINOT-Bold.d41d8cd9.ttf)  format('truetype');
+    src: url(../../static/media/DINOT-Bold.d41d8cd9.ttf) format('truetype');
 }
+
 @font-face {
     font-family: 'DIN OT';
     font-style: normal;
     font-weight: 700;
-    src: url(../../static/media/DINOT-Bold.d41d8cd9.ttf)  format('truetype');
+    src: url(../../static/media/DINOT-Bold.d41d8cd9.ttf) format('truetype');
 }
+
 @font-face {
     font-family: 'DIN OT';
     font-style: normal;
     font-weight: 600;
-    src: url(../../static/media/DINOT-Medium.d41d8cd9.ttf)  format('truetype');
+    src: url(../../static/media/DINOT-Medium.d41d8cd9.ttf) format('truetype');
 }
+
 @font-face {
     font-family: 'DIN OT';
     font-style: normal;
     font-weight: 500;
-    src: url(../../static/media/DINOT-Medium.d41d8cd9.ttf)  format('truetype');
+    src: url(../../static/media/DINOT-Medium.d41d8cd9.ttf) format('truetype');
 }
+
 @font-face {
     font-family: 'DIN OT';
     font-style: normal;
     font-weight: 400;
-    src: url(../../static/media/DINOT-Medium.d41d8cd9.ttf)  format('truetype');
+    src: url(../../static/media/DINOT-Medium.d41d8cd9.ttf) format('truetype');
 }
+
 @font-face {
     font-family: 'DIN OT';
     font-style: normal;
     font-weight: 300;
-    src: url(../../static/media/DINOT-Medium.d41d8cd9.ttf)  format('truetype');
+    src: url(../../static/media/DINOT-Medium.d41d8cd9.ttf) format('truetype');
 }
+
 @font-face {
     font-family: 'DIN OT';
     font-style: normal;
     font-weight: 200;
-    src: url(../../static/media/DINOT-Light.d41d8cd9.ttf)  format('truetype');
+    src: url(../../static/media/DINOT-Light.d41d8cd9.ttf) format('truetype');
 }
+
 @font-face {
     font-family: 'DIN OT';
     font-style: normal;
     font-weight: 100;
-    src: url(../../static/media/DINOT-Light.d41d8cd9.ttf)  format('truetype');
+    src: url(../../static/media/DINOT-Light.d41d8cd9.ttf) format('truetype');
 }
-
 
 :root {
     --color-dark-blue: #0D456B;
@@ -335,29 +373,36 @@ time, mark, audio, video {
 
     vertical-align: baseline;
 }
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
     display: block;
 }
+
 body {
     line-height: 1;
 }
+
 ol, ul {
     list-style: none;
 }
+
 blockquote, q {
     quotes: none;
 }
+
 blockquote:before, blockquote:after,
 q:before, q:after {
     content: '';
     content: none;
 }
+
 table {
     border-collapse: collapse;
     border-spacing: 0;
 }
+
 .bar {
     display: -webkit-flex;
     display: flex;
@@ -397,7 +442,8 @@ table {
     padding: var(--padding-vertical) var(--padding-horizontal);
 }
 
-.bar.medium {}
+.bar.medium {
+}
 
 .bar.small {
     --padding-vertical: .125rem; /* 16px * 0.125 = 2px */
@@ -454,11 +500,12 @@ table {
 
 .card {
     border: 1px solid var(--color-grey--lighter);
-    box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0,0,0,.12);
+    box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, .12);
 }
 
 .card.outlined {
     box-shadow: none;
 }
 
-/*# sourceMappingURL=main.9d0d3d1d.chunk.css.map*/
+
+/*# sourceMappingURL=main.bc3d328d.chunk.css.map*/

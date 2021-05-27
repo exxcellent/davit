@@ -22,8 +22,8 @@ interface ChainLinkDropDownProps extends DropdownProps {
 }
 
 export const ChainLinkDropDown: FunctionComponent<ChainLinkDropDownProps> = (props) => {
-    const { onSelect, placeholder, value, chainId, exclude } = props;
-    const { linkOptions, selectChainLink } = useChainStepDropDownViewModel(chainId, exclude);
+    const {onSelect, placeholder, value, chainId, exclude} = props;
+    const {linkOptions, selectChainLink} = useChainStepDropDownViewModel(chainId, exclude);
 
     const validatedValue = (): string | undefined => {
         return value ? (value === -1 ? undefined : value.toString()) : undefined;
@@ -40,8 +40,8 @@ export const ChainLinkDropDown: FunctionComponent<ChainLinkDropDownProps> = (pro
 };
 
 export const ChainLinkDropDownButton: FunctionComponent<ChainLinkDropDownButtonProps> = (props) => {
-    const { onSelect, icon, chainId, exclude } = props;
-    const { selectChainLink, linkOptions } = useChainStepDropDownViewModel(chainId, exclude);
+    const {onSelect, icon, chainId, exclude} = props;
+    const {selectChainLink, linkOptions} = useChainStepDropDownViewModel(chainId, exclude);
 
     return (
         <DavitIconDropDown
@@ -82,5 +82,5 @@ const useChainStepDropDownViewModel = (chainId: number, exclude?: number) => {
         return undefined;
     };
 
-    return { linkOptions, selectChainLink };
+    return {linkOptions, selectChainLink};
 };

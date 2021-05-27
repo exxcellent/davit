@@ -6,7 +6,7 @@ export interface DavitMenuLabelProps {
 }
 
 export const DavitMenuLabel: FunctionComponent<DavitMenuLabelProps> = (props) => {
-    const { text } = props;
+    const {text} = props;
 
     return (
         <OptionField>

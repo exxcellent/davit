@@ -18,8 +18,8 @@ interface ChainDropDownPropsButton extends DropdownProps {
 }
 
 export const ChainDropDown: FunctionComponent<ChainDropDownProps> = (props) => {
-    const { onSelect, placeholder, value } = props;
-    const { chainToOption, chains, selectChain } = useChainDropDownViewModel();
+    const {onSelect, placeholder, value} = props;
+    const {chainToOption, chains, selectChain} = useChainDropDownViewModel();
 
     return (
         <DavitDropDown
@@ -33,8 +33,8 @@ export const ChainDropDown: FunctionComponent<ChainDropDownProps> = (props) => {
 };
 
 export const ChainDropDownButton: FunctionComponent<ChainDropDownPropsButton> = (props) => {
-    const { onSelect, icon } = props;
-    const { selectChain, chainToOption, chains } = useChainDropDownViewModel();
+    const {onSelect, icon} = props;
+    const {selectChain, chainToOption, chains} = useChainDropDownViewModel();
 
     return (
         <DavitIconDropDown
@@ -63,5 +63,5 @@ const useChainDropDownViewModel = () => {
         };
     };
 
-    return { chainToOption, selectChain, chains };
+    return {chainToOption, selectChain, chains};
 };

@@ -33,9 +33,9 @@ export const DataAccess = {
         };
         try {
             dataStore.storeFileData(fileData);
-            return { ...response, code: 200 };
+            return {...response, code: 200};
         } catch (error) {
-            return { ...response, message: error.message };
+            return {...response, message: error.message};
         }
     },
 
@@ -47,9 +47,9 @@ export const DataAccess = {
         };
         try {
             dataStore.createNewProject();
-            return { ...response, code: 200 };
+            return {...response, code: 200};
         } catch (error) {
-            return { ...response, message: error.message };
+            return {...response, message: error.message};
         }
     },
 
@@ -62,9 +62,9 @@ export const DataAccess = {
         makeTransactional(() => TechnicalDataAccessService.saveProjectName(projectName));
         try {
             dataStore.downloadData(projectName);
-            return { ...response, code: 200 };
+            return {...response, code: 200};
         } catch (error) {
-            return { ...response, message: error.message };
+            return {...response, message: error.message};
         }
     },
 

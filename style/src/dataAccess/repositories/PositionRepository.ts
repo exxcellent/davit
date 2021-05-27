@@ -29,7 +29,7 @@ export const PositionRepository = {
                 id: DataAccessUtil.determineNewId(this.findAll()),
             };
         } else {
-            positionTO = { ...position };
+            positionTO = {...position};
         }
         dataStore.getDataStore().positions.set(positionTO.id!, positionTO);
         return positionTO;

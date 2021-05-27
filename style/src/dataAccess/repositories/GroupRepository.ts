@@ -32,7 +32,7 @@ export const GroupRepository = {
             };
             console.info("set new actor id: " + groupTO.id);
         } else {
-            groupTO = { ...group };
+            groupTO = {...group};
         }
         dataStore.getDataStore().groups.set(groupTO.id!, groupTO);
         return groupTO;

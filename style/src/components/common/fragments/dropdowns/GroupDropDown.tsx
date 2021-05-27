@@ -18,8 +18,8 @@ interface GroupDropDownPropsButton extends DropdownProps {
 }
 
 export const GroupDropDown: FunctionComponent<GroupDropDownProps> = (props) => {
-    const { onSelect, placeholder, value } = props;
-    const { groups, groupToOption, selectGroup } = useGroupDropDownViewModel();
+    const {onSelect, placeholder, value} = props;
+    const {groups, groupToOption, selectGroup} = useGroupDropDownViewModel();
 
     return (
         <DavitDropDown
@@ -33,8 +33,8 @@ export const GroupDropDown: FunctionComponent<GroupDropDownProps> = (props) => {
 };
 
 export const GroupDropDownButton: FunctionComponent<GroupDropDownPropsButton> = (props) => {
-    const { onSelect, icon } = props;
-    const { groups, groupToOption, selectGroup } = useGroupDropDownViewModel();
+    const {onSelect, icon} = props;
+    const {groups, groupToOption, selectGroup} = useGroupDropDownViewModel();
 
     return (
         <DavitIconDropDown
@@ -63,5 +63,5 @@ const useGroupDropDownViewModel = () => {
         return undefined;
     };
 
-    return { groups, groupToOption, selectGroup };
+    return {groups, groupToOption, selectGroup};
 };

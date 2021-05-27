@@ -36,7 +36,7 @@ export const ChainLinkRepository = {
                 id: DataAccessUtil.determineNewId(this.findAll()),
             };
         } else {
-            chainlinkTO = { ...chainLink };
+            chainlinkTO = {...chainLink};
         }
         dataStore.getDataStore().chainlinks.set(chainlinkTO.id!, chainlinkTO);
         return chainlinkTO;

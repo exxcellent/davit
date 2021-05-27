@@ -11,8 +11,8 @@ interface MultiselectDataDropDownProps extends DropdownProps {
 }
 
 export const MultiselectDataDropDown: FunctionComponent<MultiselectDataDropDownProps> = (props) => {
-    const { onSelect, selected, placeholder } = props;
-    const { datas, dataToOption } = useMultiSelectDataDropDownViewModel();
+    const {onSelect, selected, placeholder} = props;
+    const {datas, dataToOption} = useMultiSelectDataDropDownViewModel();
 
     return (
         <Dropdown
@@ -28,7 +28,7 @@ export const MultiselectDataDropDown: FunctionComponent<MultiselectDataDropDownP
             }}
             value={selected}
             scrolling
-            disabled={datas.length > 0 ? false : true}
+            disabled={datas.length <= 0}
         />
     );
 };
@@ -57,5 +57,5 @@ const useMultiSelectDataDropDownViewModel = () => {
         }
     };
 
-    return { datas, dataToOption };
+    return {datas, dataToOption};
 };

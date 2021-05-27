@@ -52,7 +52,7 @@ export enum ActiveTab {
 }
 
 export const TableModelController: FunctionComponent<TableModelControllerProps> = (props) => {
-    const { fullScreen } = props;
+    const {fullScreen} = props;
     const {
         showChainModelTab,
         showSequenceModelTabs,
@@ -67,7 +67,9 @@ export const TableModelController: FunctionComponent<TableModelControllerProps> 
     } = useSequenceTableViewModel();
 
     return (
-        <div className={fullScreen ? "" : "sequenceTable"} ref={parentRef}>
+        <div className={fullScreen ? "" : "sequenceTable"}
+             ref={parentRef}
+        >
             <div className="tableBorder">
                 <TabPanel
                     showChainModelTab={showChainModelTab}
@@ -209,7 +211,7 @@ const useSequenceTableViewModel = () => {
             case ActiveTab.errorAction:
                 return calcErrorAction;
             default:
-                return { header: [], bodyData: [] };
+                return {header: [], bodyData: []};
         }
     };
 

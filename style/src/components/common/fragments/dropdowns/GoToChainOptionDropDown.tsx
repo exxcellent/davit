@@ -10,7 +10,7 @@ interface GoToChainOptionDropDownProps extends DropdownProps {
 }
 
 export const GoToChainOptionDropDown: FunctionComponent<GoToChainOptionDropDownProps> = (props) => {
-    const { onSelect, value } = props;
+    const {onSelect, value} = props;
 
     const getOptions = (): DavitDropDownItemProps[] => {
         return Object.values(GoToTypesChain).map((goto, index) => goToToOption(goto, index));

@@ -22,8 +22,8 @@ interface ChainDecisionDropDownProps extends DropdownProps {
 }
 
 export const ChainDecisionDropDownButton: FunctionComponent<ChainDecisionDropDownButtonProps> = (props) => {
-    const { onSelect, icon, chainId, exclude } = props;
-    const { createDecisionOptions, selectChainDecision } = useChainDecisionDropDownViewModel(chainId, exclude);
+    const {onSelect, icon, chainId, exclude} = props;
+    const {createDecisionOptions, selectChainDecision} = useChainDecisionDropDownViewModel(chainId, exclude);
 
     return (
         <DavitIconDropDown
@@ -35,8 +35,8 @@ export const ChainDecisionDropDownButton: FunctionComponent<ChainDecisionDropDow
 };
 
 export const ChainDecisionDropDown: FunctionComponent<ChainDecisionDropDownProps> = (props) => {
-    const { onSelect, placeholder, value, chainId, exclude } = props;
-    const { createDecisionOptions, selectChainDecision } = useChainDecisionDropDownViewModel(chainId, exclude);
+    const {onSelect, placeholder, value, chainId, exclude} = props;
+    const {createDecisionOptions, selectChainDecision} = useChainDecisionDropDownViewModel(chainId, exclude);
 
     return (
         <DavitDropDown
@@ -78,5 +78,5 @@ const useChainDecisionDropDownViewModel = (chainId: number, exclude?: number) =>
         return undefined;
     };
 
-    return { createDecisionOptions, selectChainDecision };
+    return {createDecisionOptions, selectChainDecision};
 };

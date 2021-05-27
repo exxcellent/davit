@@ -20,8 +20,8 @@ interface DataInstanceDropDownButtonProps extends DropdownProps {
  * List's all instances of a data object.
  */
 export const DataInstanceDropDown: FunctionComponent<DataInstanceDropDownProps> = (props) => {
-    const { onSelect, placeholder, value, instances } = props;
-    const { dataInstacesToOption } = useDataInstanceDropDownViewModel();
+    const {onSelect, placeholder, value, instances} = props;
+    const {dataInstacesToOption} = useDataInstanceDropDownViewModel();
 
     return (
         <DavitDropDown
@@ -34,8 +34,8 @@ export const DataInstanceDropDown: FunctionComponent<DataInstanceDropDownProps> 
 };
 
 export const DataInstanceDropDownButton: FunctionComponent<DataInstanceDropDownButtonProps> = (props) => {
-    const { onSelect, instances, icon } = props;
-    const { dataInstacesToOption } = useDataInstanceDropDownViewModel();
+    const {onSelect, instances, icon} = props;
+    const {dataInstacesToOption} = useDataInstanceDropDownViewModel();
 
     return (
         <DavitIconDropDown
@@ -59,5 +59,5 @@ const useDataInstanceDropDownViewModel = () => {
         return dropdownItemProps;
     };
 
-    return { dataInstacesToOption };
+    return {dataInstacesToOption};
 };

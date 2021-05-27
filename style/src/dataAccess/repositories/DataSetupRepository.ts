@@ -20,7 +20,7 @@ export const DataSetupRepository = {
                 id: DataAccessUtil.determineNewId(this.findAll()),
             };
         } else {
-            dataSetupTO = { ...dataSetup };
+            dataSetupTO = {...dataSetup};
         }
         dataStore.getDataStore().dataSetups.set(dataSetupTO.id!, dataSetupTO);
         return dataSetupTO;

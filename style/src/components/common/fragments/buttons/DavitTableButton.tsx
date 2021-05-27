@@ -1,6 +1,6 @@
-import React, { FunctionComponent } from 'react';
-import { DavitButton } from './DavitButton';
-import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { IconDefinition } from "@fortawesome/fontawesome-common-types";
+import React, { FunctionComponent } from "react";
+import { DavitButton } from "./DavitButton";
 
 interface DavitTableButtonProps {
     onClick: () => void;
@@ -9,9 +9,12 @@ interface DavitTableButtonProps {
 }
 
 export const DavitTableButton: FunctionComponent<DavitTableButtonProps> = (props) => {
-    const { onClick, icon, disable } = props;
+    const {onClick, icon, disable} = props;
 
     return (
-        <DavitButton iconName={icon} onClick={onClick} disable={disable} />
+        <DavitButton iconName={icon}
+                     onClick={onClick}
+                     disable={disable}
+        />
     );
 };
