@@ -46,7 +46,9 @@ export const DataModelController: FunctionComponent<DataModelControllerProps> = 
             return (
                 <>
                     {toDnDElements.length === 0 &&
-                    <ViewPlaceholder text={'Create a new data object'} className={DnDBoxType.data.toString()}/>}
+                    <ViewPlaceholder text={'Create a new data object'}
+                                     className={DnDBoxType.data.toString()}
+                    />}
                     {toDnDElements.length > 0 && <DnDBox
                         onPositionUpdate={onPositionUpdate}
                         toDnDElements={toDnDElements}
@@ -82,7 +84,7 @@ const useMetaDataModelViewModel = () => {
         const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.selectDataSetupToEdit);
         const initDataToEdit: InitDataTO | null = useSelector(editSelectors.selectInitDataToEdit);
         // ----- VIEW -----
-        const currentActorDatas: ActorData[] = useSelector(sequenceModelSelectors.selectActorData);
+        const stepActorDatas: ActorData[] = useSelector(sequenceModelSelectors.selectStepActorData);
         const errors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
         const actions: ActionTO[] = useSelector(sequenceModelSelectors.selectActions);
         const dataSetup: DataSetupCTO | null = useSelector(sequenceModelSelectors.selectDataSetup);
@@ -105,34 +107,42 @@ const useMetaDataModelViewModel = () => {
             return actorDatas;
         };
 
+
         const getActorDatasFromView = (): ViewFragmentProps[] => {
             const actorDatas: ViewFragmentProps[] = [];
-            const actorDatasFromErros: ViewFragmentProps[] = errors.map(mapActionToActorDatas);
-            const actorDatasFromActions: ViewFragmentProps[] = actions.map(mapActionToActorDatas);
 
-            const actorDatasFromCompDatas: ViewFragmentProps[] = currentActorDatas
-                .filter((actDat) => actDat.state !== ActorDataState.UPDATED_FROM)
-                .map(mapActorDataToActorData);
+            if (stepActorDatas.length > 0) {
 
-            const actorDatasFromDataSetupView: ViewFragmentProps[] = dataSetup
-                ? dataSetup.initDatas.map(mapInitDataToActorData)
-                : [];
+                const actorDatasFromErros: ViewFragmentProps[] = errors.map(mapActionToActorDatas);
+                const actorDatasFromActions: ViewFragmentProps[] = actions.map(mapActionToActorDatas);
 
-            actorDatas.push(...actorDatasFromErros);
-            actorDatas.push(
-                ...actorDatasFromActions.filter(
-                    (actorDataFromAction) => !actorDatas.some((cp) => actorDataExists(cp, actorDataFromAction)),
-                ),
-            );
-            actorDatas.push(
-                ...actorDatasFromCompDatas.filter(
-                    (actorDataFromCompData) => !actorDatas.some((cp) => actorDataExists(cp, actorDataFromCompData)),
-                ),
-            );
+                const actorDatasFromCompDatas: ViewFragmentProps[] = stepActorDatas
+                    .filter((actDat) => actDat.state !== ActorDataState.UPDATED_FROM)
+                    .map(mapActorDataToActorData);
 
-            if (currentActorDatas.length <= 0) {
+                actorDatas.push(...actorDatasFromErros);
+
+                actorDatas.push(
+                    ...actorDatasFromActions.filter(
+                        (actorDataFromAction) => !actorDatas.some((cp) => actorDataExists(cp, actorDataFromAction)),
+                    ),
+                );
+
+                actorDatas.push(
+                    ...actorDatasFromCompDatas.filter(
+                        (actorDataFromCompData) => !actorDatas.some((cp) => actorDataExists(cp, actorDataFromCompData)),
+                    ),
+                );
+
+            } else {
+                // Do not show data-setup actor-data's if step actor-data's are available.
+                const actorDatasFromDataSetupView: ViewFragmentProps[] = dataSetup
+                    ? dataSetup.initDatas.map(mapInitDataToActorData)
+                    : [];
+
                 actorDatas.push(...actorDatasFromDataSetupView);
             }
+
             return actorDatas;
         };
 
