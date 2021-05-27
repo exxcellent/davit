@@ -5,7 +5,7 @@ interface CenteredFlexProps {
 }
 
 export const CenteredFlex: FunctionComponent<CenteredFlexProps> = (props) => {
-    const { children, className } = props;
+    const {children, className} = props;
 
     return (
         <div className={className ? `centeredFlex ${className}` : "centeredFlex"}>{children}</div>

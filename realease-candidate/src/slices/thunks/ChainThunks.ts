@@ -1,15 +1,15 @@
 // ----------------------------------------------- CHAIN -----------------------------------------------
 
-import {AppThunk} from "../../app/store";
-import {ChainCTO} from "../../dataAccess/access/cto/ChainCTO";
-import {ChainDecisionTO} from "../../dataAccess/access/to/ChainDecisionTO";
-import {ChainlinkTO} from "../../dataAccess/access/to/ChainlinkTO";
-import {ChainTO} from "../../dataAccess/access/to/ChainTO";
-import {DataAccess} from "../../dataAccess/DataAccess";
-import {DataAccessResponse} from "../../dataAccess/DataAccessResponse";
-import {MasterDataActions} from "../MasterDataSlice";
-import {SequenceModelActions} from "../SequenceModelSlice";
-import {GlobalActions} from "../GlobalSlice";
+import { AppThunk } from "../../app/store";
+import { ChainCTO } from "../../dataAccess/access/cto/ChainCTO";
+import { ChainDecisionTO } from "../../dataAccess/access/to/ChainDecisionTO";
+import { ChainlinkTO } from "../../dataAccess/access/to/ChainlinkTO";
+import { ChainTO } from "../../dataAccess/access/to/ChainTO";
+import { DataAccess } from "../../dataAccess/DataAccess";
+import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
+import { GlobalActions } from "../GlobalSlice";
+import { MasterDataActions } from "../MasterDataSlice";
+import { SequenceModelActions } from "../SequenceModelSlice";
 
 const createChainThunk = (): AppThunk => (dispatch) => {
     const chain: ChainTO = new ChainTO();

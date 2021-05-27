@@ -1,7 +1,7 @@
-import React, { FunctionComponent } from 'react';
-import { ControlPanelFileOptions } from './fragments/ControlPanelFileOptions';
-import { ControlPanel } from '../edit/common/ControlPanel';
-import { OptionField } from '../edit/common/OptionField';
+import React, { FunctionComponent } from "react";
+import { ControlPanel } from "../edit/common/ControlPanel";
+import { OptionField } from "../edit/common/OptionField";
+import { ControlPanelFileOptions } from "./fragments/ControlPanelFileOptions";
 
 export interface ControlPanelFileControllerProps {
 }
@@ -11,7 +11,7 @@ export const ControlPanelFileController: FunctionComponent<ControlPanelFileContr
     return (
         <ControlPanel>
             <OptionField>
-                <ControlPanelFileOptions/>
+                <ControlPanelFileOptions />
             </OptionField>
         </ControlPanel>
     );

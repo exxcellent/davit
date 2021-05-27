@@ -10,7 +10,7 @@ interface ActionTypeDropDownnProps extends DropdownProps {
 }
 
 export const ActionTypeDropDown: FunctionComponent<ActionTypeDropDownnProps> = (props) => {
-    const { onSelect, placeholder, value } = props;
+    const {onSelect, placeholder, value} = props;
     const actions: ActionType[] = Object.values(ActionType);
 
     const getActionTypeLabel = (type: ActionType): string => {

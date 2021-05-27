@@ -25,7 +25,7 @@ export const SequenceActionReducer = {
         const newActorDatas: ActorData[] = actorDatas
             .filter((actorData) => !isTransiantState(actorData.state))
             .map((actorData) => {
-                return { ...actorData, state: ActorDataState.PERSISTENT };
+                return {...actorData, state: ActorDataState.PERSISTENT};
             });
         const errors: ActionTO[] = [];
 
@@ -87,7 +87,7 @@ export const SequenceActionReducer = {
                                 instanceFk: newActorDatas[indexActorDataReceiving].instanceFk,
                                 state: ActorDataState.UPDATED_FROM,
                             });
-                            newActorDatas[indexActorDataReceiving] = { ...actorData, state: ActorDataState.UPDATED_TO };
+                            newActorDatas[indexActorDataReceiving] = {...actorData, state: ActorDataState.UPDATED_TO};
                         } else {
                             newActorDatas.push(actorData);
                         }
@@ -105,7 +105,7 @@ export const SequenceActionReducer = {
                         };
                         newActorDatas[indexActorDataSending].state = ActorDataState.DELETED;
                         if (actorDataIsPresent(indexActorDataReceiving)) {
-                            newActorDatas[indexActorDataReceiving] = { ...actorData, state: ActorDataState.UPDATED_TO };
+                            newActorDatas[indexActorDataReceiving] = {...actorData, state: ActorDataState.UPDATED_TO};
                         } else {
                             newActorDatas.push(actorData);
                         }
@@ -115,7 +115,7 @@ export const SequenceActionReducer = {
                     break;
             }
         });
-        return { actorDatas: newActorDatas, errors };
+        return {actorDatas: newActorDatas, errors};
     },
 
     executeDecisionCheck(decision: DecisionTO, actorDatas: ActorData[]): SequenceDecisionResult {
@@ -126,7 +126,7 @@ export const SequenceActionReducer = {
         let updatedActorDatas: ActorData[] = actorDatas
             .filter((actorData) => !isTransiantState(actorData.state))
             .map((actorData) => {
-                return { ...actorData, state: ActorDataState.PERSISTENT };
+                return {...actorData, state: ActorDataState.PERSISTENT};
             });
 
         let goTo = decision.ifGoTo;
@@ -149,7 +149,7 @@ export const SequenceActionReducer = {
             }
         });
 
-        return { actorDatas: updatedActorDatas, goto: goTo };
+        return {actorDatas: updatedActorDatas, goto: goTo};
     },
 };
 

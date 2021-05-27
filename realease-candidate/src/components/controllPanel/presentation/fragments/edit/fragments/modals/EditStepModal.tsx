@@ -1,6 +1,6 @@
-import React, { FunctionComponent } from 'react';
-import { StepForm } from '../forms/StepForm';
-import { DavitDraggableModal } from '../../../../../../common/fragments/modals/DavitDraggableModal';
+import React, { FunctionComponent } from "react";
+import { DavitDraggableModal } from "../../../../../../common/fragments/modals/DavitDraggableModal";
+import { StepForm } from "../forms/StepForm";
 
 interface EditStepModalProps {
 
@@ -9,6 +9,6 @@ interface EditStepModalProps {
 export const EditStepModal: FunctionComponent<EditStepModalProps> = () => {
 
     return (
-        <DavitDraggableModal form={<StepForm />}/>
+        <DavitDraggableModal form={<StepForm />} />
     );
 };

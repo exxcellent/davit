@@ -53,11 +53,11 @@ export const TabPanel: FunctionComponent<TabPanelProps> = (props) => {
         ];
 
         if (mode === Mode.EDIT_SEQUENCE_STEP || mode === Mode.EDIT_SEQUENCE_STEP_ACTION) {
-            tabs.push({ label: "Actions", identifier: ActiveTab.action });
+            tabs.push({label: "Actions", identifier: ActiveTab.action});
         }
 
         if (mode === Mode.EDIT_SEQUENCE_DECISION || mode === Mode.EDIT_SEQUENCE_DECISION_CONDITION) {
-            tabs.push({ label: "Condition", identifier: ActiveTab.condition });
+            tabs.push({label: "Condition", identifier: ActiveTab.condition});
         }
 
         return {
@@ -126,7 +126,9 @@ export const TabPanel: FunctionComponent<TabPanelProps> = (props) => {
     const mapTabGroups = (tabGroup: TabGroupDefinition, index: number) => {
         return (
             (tabGroup.condition === undefined || tabGroup.condition) && (
-                <TabGroupFragment label={tabGroup.label} key={index}>
+                <TabGroupFragment label={tabGroup.label}
+                                  key={index}
+                >
                     {tabGroup.tabs.map(
                         (tab: any, index) =>
                             (tab.condition === undefined || tab.condition) && (
@@ -152,7 +154,9 @@ export const TabPanel: FunctionComponent<TabPanelProps> = (props) => {
     };
 
     return (
-        <div className="tabs" key={getTabsKey()}>
+        <div className="tabs"
+             key={getTabsKey()}
+        >
             {tabDefinitions.map(mapTabGroups)}
         </div>
     );

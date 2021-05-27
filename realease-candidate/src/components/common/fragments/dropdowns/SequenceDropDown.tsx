@@ -18,8 +18,8 @@ interface SequenceDropDownPropsButton extends DropdownProps {
 }
 
 export const SequenceDropDown: FunctionComponent<SequenceDropDownProps> = (props) => {
-    const { onSelect, placeholder, value } = props;
-    const { sequences, selectSequence, sequenceToOption } = useSequenceDropDownViewModel();
+    const {onSelect, placeholder, value} = props;
+    const {sequences, selectSequence, sequenceToOption} = useSequenceDropDownViewModel();
 
     return (
         <DavitDropDown
@@ -33,8 +33,8 @@ export const SequenceDropDown: FunctionComponent<SequenceDropDownProps> = (props
 };
 
 export const SequenceDropDownButton: FunctionComponent<SequenceDropDownPropsButton> = (props) => {
-    const { onSelect, icon } = props;
-    const { sequences, selectSequence, sequenceToOption } = useSequenceDropDownViewModel();
+    const {onSelect, icon} = props;
+    const {sequences, selectSequence, sequenceToOption} = useSequenceDropDownViewModel();
 
     return (
         <DavitIconDropDown
@@ -63,5 +63,5 @@ const useSequenceDropDownViewModel = () => {
         };
     };
 
-    return { sequences, selectSequence, sequenceToOption };
+    return {sequences, selectSequence, sequenceToOption};
 };

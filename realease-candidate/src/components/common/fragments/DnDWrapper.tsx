@@ -15,11 +15,11 @@ export interface DnDWrapperProps {
 }
 
 export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
-    const { dragConstraintsRef, initX, initY, onPositionUpdate, positionId, shadow, onGeoUpdate, geoId } = props;
+    const {dragConstraintsRef, initX, initY, onPositionUpdate, positionId, shadow, onGeoUpdate, geoId} = props;
 
     const x = useMotionValue(initX);
     const y = useMotionValue(initY);
-    const { scaleX, scaleY } = useInvertedScale();
+    const {scaleX, scaleY} = useInvertedScale();
 
     useEffect(() => {
         x.set(initX * (dragConstraintsRef.current.offsetWidth / 100));
@@ -60,7 +60,8 @@ export const DnDWrapper: FunctionComponent<DnDWrapperProps> = (props) => {
                 scaleX,
                 scaleY,
             }}
-            ref={ref}>
+            ref={ref}
+        >
             {props.children}
         </motion.div>
     );
@@ -85,7 +86,8 @@ export const createDnDItem = (
             dragConstraintsRef={dragConstraintsRef}
             shadow={shadow}
             onGeoUpdate={updateGeo}
-            geoId={geoId}>
+            geoId={geoId}
+        >
             {children}
         </DnDWrapper>
     );

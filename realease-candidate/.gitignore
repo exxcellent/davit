@@ -23,7 +23,6 @@ yarn-debug.log*
 yarn-error.log*
 .vscode/launch.json
 dist
-/.idea/
 /yarn.lock
 
 storybook-static

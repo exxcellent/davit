@@ -31,7 +31,7 @@ export const ActorRepository = {
                 id: DataAccessUtil.determineNewId(this.findAll()),
             };
         } else {
-            actorTO = { ...actor };
+            actorTO = {...actor};
         }
         dataStore.getDataStore().actors.set(actorTO.id!, actorTO);
         return actorTO;

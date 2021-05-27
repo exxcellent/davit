@@ -10,7 +10,7 @@ interface ColorDropDownProps extends DropdownProps {
 }
 
 export const ColorDropDown: FunctionComponent<ColorDropDownProps> = (props) => {
-    const { onSelect, placeholder, colors, value } = props;
+    const {onSelect, placeholder, colors, value} = props;
 
     const colorToOption = (color: string, key: number): DavitDropDownItemProps => {
         return {

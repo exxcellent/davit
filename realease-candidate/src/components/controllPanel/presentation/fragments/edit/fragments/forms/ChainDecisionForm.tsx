@@ -1,24 +1,24 @@
-import React, { FunctionComponent } from 'react';
-import { Form } from '../../../../../../common/fragments/forms/Form';
-import { FormHeader } from '../../../../../../common/fragments/forms/FormHeader';
-import { FormDivider } from './fragments/FormDivider';
-import { FormBody } from '../../../../../../common/fragments/forms/FormBody';
-import { FormFooter } from '../../../../../../common/fragments/forms/FormFooter';
-import { FormLine } from './fragments/FormLine';
-import { DavitBackButton } from '../../../../../../common/fragments/buttons/DavitBackButton';
-import { DavitDeleteButton } from '../../../../../../common/fragments/buttons/DavitDeleteButton';
-import { useChainDecisionViewModel } from '../viewmodels/ChainDecisionViewModel';
-import { FormLabel } from './fragments/FormLabel';
-import { DavitLabelTextfield } from '../../../../../../common/fragments/DavitLabelTextfield';
-import { DavitAddButton } from '../../../../../../common/fragments/buttons/DavitAddButton';
-import { GoToTypesChain } from '../../../../../../../dataAccess/access/types/GoToTypeChain';
-import { GoToChainOptionDropDown } from '../../../../../../common/fragments/dropdowns/GoToChainOptionDropDown';
-import { ChainLinkDropDown } from '../../../../../../common/fragments/dropdowns/ChainLinkDropDown';
-import { ChainDecisionDropDown } from '../../../../../../common/fragments/dropdowns/ChainDecisionDropDown';
-import { ConditionTO } from '../../../../../../../dataAccess/access/to/ConditionTO';
-import { DavitUtil } from '../../../../../../../utils/DavitUtil';
-import { ActorDropDown } from '../../../../../../common/fragments/dropdowns/ActorDropDown';
-import { InstanceDropDown } from '../../../../../../common/fragments/dropdowns/InstanceDropDown';
+import React, { FunctionComponent } from "react";
+import { ConditionTO } from "../../../../../../../dataAccess/access/to/ConditionTO";
+import { GoToTypesChain } from "../../../../../../../dataAccess/access/types/GoToTypeChain";
+import { DavitUtil } from "../../../../../../../utils/DavitUtil";
+import { DavitAddButton } from "../../../../../../common/fragments/buttons/DavitAddButton";
+import { DavitBackButton } from "../../../../../../common/fragments/buttons/DavitBackButton";
+import { DavitDeleteButton } from "../../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitLabelTextfield } from "../../../../../../common/fragments/DavitLabelTextfield";
+import { ActorDropDown } from "../../../../../../common/fragments/dropdowns/ActorDropDown";
+import { ChainDecisionDropDown } from "../../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
+import { ChainLinkDropDown } from "../../../../../../common/fragments/dropdowns/ChainLinkDropDown";
+import { GoToChainOptionDropDown } from "../../../../../../common/fragments/dropdowns/GoToChainOptionDropDown";
+import { InstanceDropDown } from "../../../../../../common/fragments/dropdowns/InstanceDropDown";
+import { Form } from "../../../../../../common/fragments/forms/Form";
+import { FormBody } from "../../../../../../common/fragments/forms/FormBody";
+import { FormFooter } from "../../../../../../common/fragments/forms/FormFooter";
+import { FormHeader } from "../../../../../../common/fragments/forms/FormHeader";
+import { useChainDecisionViewModel } from "../viewmodels/ChainDecisionViewModel";
+import { FormDivider } from "./fragments/FormDivider";
+import { FormLabel } from "./fragments/FormLabel";
+import { FormLine } from "./fragments/FormLine";
 
 interface ChainDecisionFormProps {
 
@@ -47,14 +47,14 @@ export const ChainDecisionForm: FunctionComponent<ChainDecisionFormProps> = () =
         goBack,
     } = useChainDecisionViewModel();
 
-    const labelName: string = 'Chain decision - name';
-    const labelConditions: string = 'Conditions';
-    const labelIfGotoType: string = 'Type condition true';
-    const labelElseGotoType: string = 'Type condition false';
-    const labelCreateLink: string = 'Create next link';
-    const labelSelectLink: string = 'Select next link';
-    const labelCreateDecision: string = 'Create next decision';
-    const labelSelectDecision: string = 'Select next decision';
+    const labelName: string = "Chain decision - name";
+    const labelConditions: string = "Conditions";
+    const labelIfGotoType: string = "Type condition true";
+    const labelElseGotoType: string = "Type condition false";
+    const labelCreateLink: string = "Create next link";
+    const labelSelectLink: string = "Select next link";
+    const labelCreateDecision: string = "Create next decision";
+    const labelSelectDecision: string = "Select next decision";
 
     const buildChainConditionTableRow = (condition: ConditionTO): JSX.Element => {
         let copyCondition: ConditionTO = DavitUtil.deepCopy(condition);
@@ -62,13 +62,13 @@ export const ChainDecisionForm: FunctionComponent<ChainDecisionFormProps> = () =
         return (
             <tr key={copyCondition.id}>
                 <td>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <div style={{display: "flex", justifyContent: "space-between"}}>
                         <ActorDropDown
                             onSelect={(actor) => {
                                 copyCondition.actorFk = actor ? actor.actor.id : -1;
                                 saveCondition(copyCondition);
                             }}
-                            placeholder={'Select actor...'}
+                            placeholder={"Select actor..."}
                             value={copyCondition.actorFk}
                         />
                         <InstanceDropDown
@@ -79,15 +79,18 @@ export const ChainDecisionForm: FunctionComponent<ChainDecisionFormProps> = () =
                                     saveCondition(copyCondition);
                                 }
                             }}
-                            placeholder={'Select data instance ...'}
+                            placeholder={"Select data instance ..."}
                             value={JSON.stringify({
                                 dataFk: copyCondition!.dataFk,
                                 instanceId: copyCondition!.instanceFk,
                             })
-                            } />
+                            }
+                        />
                         {copyCondition.id !== -1 && <DavitDeleteButton onClick={() => {
                             deleteCondition(copyCondition.id);
-                        }} noConfirm />}
+                        }}
+                                                                       noConfirm
+                        />}
                     </div>
                 </td>
             </tr>
@@ -107,8 +110,8 @@ export const ChainDecisionForm: FunctionComponent<ChainDecisionFormProps> = () =
                 <FormLine>
                     <FormLabel>{labelName}</FormLabel>
                     <DavitLabelTextfield
-                        label='Name:'
-                        placeholder='Chain decision name ...'
+                        label="Name:"
+                        placeholder="Chain decision name ..."
                         onChangeCallback={(name: string) => changeName(name)}
                         value={name}
                         focus={true}
@@ -123,15 +126,17 @@ export const ChainDecisionForm: FunctionComponent<ChainDecisionFormProps> = () =
 
                 {/*// TODO: Condition list*/}
                 <FormLine>
-                    <table className={'border'} style={{ width: '40em', minHeight: '30vh' }}>
+                    <table className={"border"}
+                           style={{width: "40em", minHeight: "30vh"}}
+                    >
                         <thead>
                         <tr>
-                            <td style={{ textAlign: 'center' }}>Actor</td>
-                            <td style={{ textAlign: 'center' }}>Data Instance</td>
-                            <td style={{ textAlign: 'end' }}><DavitAddButton onClick={createCondition} /></td>
+                            <td style={{textAlign: "center"}}>Actor</td>
+                            <td style={{textAlign: "center"}}>Data Instance</td>
+                            <td style={{textAlign: "end"}}><DavitAddButton onClick={createCondition} /></td>
                         </tr>
                         </thead>
-                        <tbody style={{ maxHeight: '40vh' }}>
+                        <tbody style={{maxHeight: "40vh"}}>
                         {chainConditions.map(buildChainConditionTableRow)}
                         </tbody>
                     </table>

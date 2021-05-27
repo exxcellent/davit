@@ -14,7 +14,7 @@ interface ConditionDropDownButtonProps extends DropdownProps {
 }
 
 export const ConditionDropDownButton: FunctionComponent<ConditionDropDownButtonProps> = (props) => {
-    const { onSelect, icon, conditions } = props;
+    const {onSelect, icon, conditions} = props;
 
     const actors: ActorCTO[] = useSelector(masterDataSelectors.selectActors);
     const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
@@ -42,7 +42,7 @@ export const ConditionDropDownButton: FunctionComponent<ConditionDropDownButtonP
 
     return (
         <DavitIconDropDown
-            dropdownItems={conditions.map((condition, index) => {
+            dropdownItems={conditions.map((condition) => {
                 return conditionToOption(condition);
             })}
             onSelect={(condition) => onSelect(Number(condition.value))}

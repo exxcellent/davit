@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { SequenceCTO } from '../../../../../../../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../../../../../../../dataAccess/access/cto/SequenceStepCTO';
-import { ConditionTO } from '../../../../../../../dataAccess/access/to/ConditionTO';
-import { DecisionTO } from '../../../../../../../dataAccess/access/to/DecisionTO';
-import { GoTo, GoToTypes } from '../../../../../../../dataAccess/access/types/GoToType';
-import { EditActions, editSelectors } from '../../../../../../../slices/EditSlice';
-import { SequenceModelActions, sequenceModelSelectors } from '../../../../../../../slices/SequenceModelSlice';
-import { EditDecision } from '../../../../../../../slices/thunks/DecisionThunks';
-import { EditSequence } from '../../../../../../../slices/thunks/SequenceThunks';
-import { DavitUtil } from '../../../../../../../utils/DavitUtil';
-import { GlobalActions } from '../../../../../../../slices/GlobalSlice';
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { SequenceCTO } from "../../../../../../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../../../../../../dataAccess/access/cto/SequenceStepCTO";
+import { ConditionTO } from "../../../../../../../dataAccess/access/to/ConditionTO";
+import { DecisionTO } from "../../../../../../../dataAccess/access/to/DecisionTO";
+import { GoTo, GoToTypes } from "../../../../../../../dataAccess/access/types/GoToType";
+import { EditActions, editSelectors } from "../../../../../../../slices/EditSlice";
+import { GlobalActions } from "../../../../../../../slices/GlobalSlice";
+import { SequenceModelActions, sequenceModelSelectors } from "../../../../../../../slices/SequenceModelSlice";
+import { EditDecision } from "../../../../../../../slices/thunks/DecisionThunks";
+import { EditSequence } from "../../../../../../../slices/thunks/SequenceThunks";
+import { DavitUtil } from "../../../../../../../utils/DavitUtil";
 
 export const useDecisionViewModel = () => {
     const decisionToEdit: DecisionTO | null = useSelector(editSelectors.selectDecisionToEdit);
@@ -20,7 +20,7 @@ export const useDecisionViewModel = () => {
 
     useEffect(() => {
         if (DavitUtil.isNullOrUndefined(decisionToEdit)) {
-            dispatch(GlobalActions.handleError('Tried to go to edit condition step without conditionToEdit specified'));
+            dispatch(GlobalActions.handleError("Tried to go to edit condition step without conditionToEdit specified"));
             dispatch(EditActions.setMode.edit());
         }
     }, [dispatch, decisionToEdit]);
@@ -46,7 +46,7 @@ export const useDecisionViewModel = () => {
 
     const saveDecision = (decision: DecisionTO) => {
         if (!DavitUtil.isNullOrUndefined(decision)) {
-            if (decisionToEdit!.name !== '') {
+            if (decisionToEdit!.name !== "") {
                 dispatch(EditDecision.save(decision!));
             }
         }
@@ -72,7 +72,7 @@ export const useDecisionViewModel = () => {
     const validStep = (): boolean => {
         let valid: boolean = false;
         if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
-            if (decisionToEdit!.name !== '') {
+            if (decisionToEdit!.name !== "") {
                 valid = true;
             }
         }
@@ -90,7 +90,7 @@ export const useDecisionViewModel = () => {
 
     const handleType = (ifGoTo: boolean, newGoToType?: string) => {
         if (newGoToType !== undefined) {
-            const gType = { type: (GoToTypes as any)[newGoToType] };
+            const gType = {type: (GoToTypes as any)[newGoToType]};
             switch (newGoToType) {
                 case GoToTypes.ERROR:
                     saveGoToType(ifGoTo, gType);
@@ -113,14 +113,14 @@ export const useDecisionViewModel = () => {
 
     const setGoToTypeStep = (ifGoTo: boolean, step?: SequenceStepCTO) => {
         if (step) {
-            const newGoTo: GoTo = { type: GoToTypes.STEP, id: step.squenceStepTO.id };
+            const newGoTo: GoTo = {type: GoToTypes.STEP, id: step.squenceStepTO.id};
             saveGoToType(ifGoTo, newGoTo);
         }
     };
 
     const setGoToTypeDecision = (ifGoTo: boolean, decision?: DecisionTO) => {
         if (decision) {
-            const newGoTo: GoTo = { type: GoToTypes.DEC, id: decision.id };
+            const newGoTo: GoTo = {type: GoToTypes.DEC, id: decision.id};
             saveGoToType(ifGoTo, newGoTo);
         }
     };
@@ -203,7 +203,7 @@ export const useDecisionViewModel = () => {
     const saveAndGoBack = () => {
         if (!DavitUtil.isNullOrUndefined(decisionToEdit) && !DavitUtil.isNullOrUndefined(selectedSequence)) {
             const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
-            if (copyDecision!.name !== '') {
+            if (copyDecision!.name !== "") {
                 copyDecision.ifGoTo = checkGoTos(copyDecision.ifGoTo);
                 copyDecision.elseGoTo = checkGoTos(copyDecision.elseGoTo);
 
@@ -216,7 +216,7 @@ export const useDecisionViewModel = () => {
     };
 
     return {
-        label: 'EDIT * ' + (selectedSequence?.sequenceTO.name || '') + ' * ' + (decisionToEdit?.name || ''),
+        label: "EDIT * " + (selectedSequence?.sequenceTO.name || "") + " * " + (decisionToEdit?.name || ""),
         name: decisionToEdit?.name,
         changeName,
         saveDecision,
@@ -236,7 +236,7 @@ export const useDecisionViewModel = () => {
         createCondition,
         decId: decisionToEdit?.id,
         conditions: decisionToEdit?.conditions || [],
-        note: decisionToEdit ? decisionToEdit.note : '',
+        note: decisionToEdit ? decisionToEdit.note : "",
         saveNote,
         deleteCondition,
         saveCondition,

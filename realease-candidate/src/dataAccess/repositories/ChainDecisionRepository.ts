@@ -1,7 +1,7 @@
-import { ChainDecisionTO } from '../access/to/ChainDecisionTO';
-import dataStore from '../DataStore';
-import { CheckHelper } from '../util/CheckHelper';
-import { DataAccessUtil } from '../util/DataAccessUtil';
+import { ChainDecisionTO } from "../access/to/ChainDecisionTO";
+import dataStore from "../DataStore";
+import { CheckHelper } from "../util/CheckHelper";
+import { DataAccessUtil } from "../util/DataAccessUtil";
 
 export const ChainDecisionRepository = {
     find(id: number): ChainDecisionTO | undefined {
@@ -34,7 +34,7 @@ export const ChainDecisionRepository = {
                 id: DataAccessUtil.determineNewId(this.findAll()),
             };
         } else {
-            chainDecisionTO = { ...decision };
+            chainDecisionTO = {...decision};
         }
         dataStore.getDataStore().chaindecisions.set(chainDecisionTO.id!, chainDecisionTO);
         return chainDecisionTO;

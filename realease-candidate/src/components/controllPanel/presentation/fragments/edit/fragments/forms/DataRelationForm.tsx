@@ -1,18 +1,18 @@
-import React, { FunctionComponent, useState } from 'react';
-import { Form } from '../../../../../../common/fragments/forms/Form';
-import { FormLine } from './fragments/FormLine';
-import { Dropdown } from 'semantic-ui-react';
-import { Direction } from '../../../../../../../dataAccess/access/to/DataRelationTO';
-import { DavitCommentButton } from '../../../../../../common/fragments/buttons/DavitCommentButton';
-import { DavitButton } from '../../../../../../common/fragments/buttons/DavitButton';
-import { DavitBackButton } from '../../../../../../common/fragments/buttons/DavitBackButton';
-import { DavitDeleteButton } from '../../../../../../common/fragments/buttons/DavitDeleteButton';
-import { useDataRelationViewModel } from '../viewmodels/DataRelationViewModel';
-import { FormLabel, FormlabelAlign } from './fragments/FormLabel';
-import { FormDivider } from './fragments/FormDivider';
-import { FormHeader } from '../../../../../../common/fragments/forms/FormHeader';
-import { FormBody } from '../../../../../../common/fragments/forms/FormBody';
-import { FormFooter } from '../../../../../../common/fragments/forms/FormFooter';
+import React, { FunctionComponent, useState } from "react";
+import { Dropdown } from "semantic-ui-react";
+import { Direction } from "../../../../../../../dataAccess/access/to/DataRelationTO";
+import { DavitBackButton } from "../../../../../../common/fragments/buttons/DavitBackButton";
+import { DavitButton } from "../../../../../../common/fragments/buttons/DavitButton";
+import { DavitCommentButton } from "../../../../../../common/fragments/buttons/DavitCommentButton";
+import { DavitDeleteButton } from "../../../../../../common/fragments/buttons/DavitDeleteButton";
+import { Form } from "../../../../../../common/fragments/forms/Form";
+import { FormBody } from "../../../../../../common/fragments/forms/FormBody";
+import { FormFooter } from "../../../../../../common/fragments/forms/FormFooter";
+import { FormHeader } from "../../../../../../common/fragments/forms/FormHeader";
+import { useDataRelationViewModel } from "../viewmodels/DataRelationViewModel";
+import { FormDivider } from "./fragments/FormDivider";
+import { FormLabel, FormlabelAlign } from "./fragments/FormLabel";
+import { FormLine } from "./fragments/FormLine";
 
 interface DataRelationFormProps {
 
@@ -56,7 +56,7 @@ export const DataRelationForm: FunctionComponent<DataRelationFormProps> = () => 
 
                 <FormLine>
                     <Dropdown
-                        placeholder='Select Data...'
+                        placeholder="Select Data..."
                         selection
                         selectOnBlur={false}
                         options={dataOptions}
@@ -67,7 +67,7 @@ export const DataRelationForm: FunctionComponent<DataRelationFormProps> = () => 
                         onBlur={() => updateRelation()}
                     />
                     <Dropdown
-                        placeholder='Select Direction1'
+                        placeholder="Select Direction1"
                         selection
                         options={directionOptions}
                         onChange={(event, data) => setDirection(Direction[data.value as Direction])}
@@ -83,7 +83,7 @@ export const DataRelationForm: FunctionComponent<DataRelationFormProps> = () => 
                 </FormLine>
                 <FormLine>
                     <Dropdown
-                        placeholder='Select Data...'
+                        placeholder="Select Data..."
                         selection
                         selectOnBlur={false}
                         options={dataOptions}
@@ -94,7 +94,7 @@ export const DataRelationForm: FunctionComponent<DataRelationFormProps> = () => 
                         onBlur={() => updateRelation()}
                     />
                     <Dropdown
-                        placeholder='Select Direction2'
+                        placeholder="Select Direction2"
                         selection
                         options={directionOptions}
                         onChange={(event, data) => setDirection(Direction[data.value as Direction], true)}
@@ -109,11 +109,15 @@ export const DataRelationForm: FunctionComponent<DataRelationFormProps> = () => 
 
             <FormFooter>
                 <DavitDeleteButton onClick={deleteRelation} />
-                <DavitCommentButton onSaveCallback={saveNote} comment={note} />
+                <DavitCommentButton onSaveCallback={saveNote}
+                                    comment={note}
+                />
                 <DavitButton onClick={() => {
                     createAnother();
                     setKey(key + 1);
-                }} label='Create another' />
+                }}
+                             label="Create another"
+                />
                 <DavitBackButton onClick={saveRelation} />
             </FormFooter>
 

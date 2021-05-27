@@ -20,8 +20,8 @@ interface StepDropDownProps extends DropdownProps {
 }
 
 export const StepDropDownButton: FunctionComponent<StepDropDownButtonProps> = (props) => {
-    const { onSelect, icon } = props;
-    const { sequence, stepOptions, selectSequenceStep } = useStepDropDownViewModel();
+    const {onSelect, icon} = props;
+    const {sequence, stepOptions, selectSequenceStep} = useStepDropDownViewModel();
 
     return (
         <DavitIconDropDown
@@ -33,8 +33,8 @@ export const StepDropDownButton: FunctionComponent<StepDropDownButtonProps> = (p
 };
 
 export const StepDropDown: FunctionComponent<StepDropDownProps> = (props) => {
-    const { onSelect, placeholder, value, exclude } = props;
-    const { sequence, stepOptions, selectSequenceStep } = useStepDropDownViewModel(exclude);
+    const {onSelect, placeholder, value, exclude} = props;
+    const {sequence, stepOptions, selectSequenceStep} = useStepDropDownViewModel(exclude);
 
     return (
         <DavitDropDown
@@ -75,5 +75,5 @@ const useStepDropDownViewModel = (exclude?: number) => {
         return undefined;
     };
 
-    return { sequence: sequenceToEdit, stepOptions, selectSequenceStep };
+    return {sequence: sequenceToEdit, stepOptions, selectSequenceStep};
 };
