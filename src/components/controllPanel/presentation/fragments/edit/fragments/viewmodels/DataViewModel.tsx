@@ -56,6 +56,7 @@ export const useDataViewModel = () => {
     };
 
     const createAnother = () => {
+        saveData();
         dispatch(EditActions.setMode.editData());
     };
 
