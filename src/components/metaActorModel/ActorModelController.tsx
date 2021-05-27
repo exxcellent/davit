@@ -77,7 +77,7 @@ const useViewModel = () => {
         const editStepArrows: Arrow[] = useSelector(editSelectors.selectEditStepArrows);
         // ----- VIEW -----
         const arrows: Arrow[] = useSelector(sequenceModelSelectors.selectCurrentArrows);
-        const currentActorDatas: ActorData[] = useSelector(sequenceModelSelectors.selectActorData);
+        const stepActorDatas: ActorData[] = useSelector(sequenceModelSelectors.selectStepActorData);
         const errors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
         const dataSetup: DataSetupCTO | null = useSelector(sequenceModelSelectors.selectDataSetup);
 
@@ -99,7 +99,7 @@ const useViewModel = () => {
             const actorDatas: ViewFragmentProps[] = [];
             const actorDatasFromErros: ViewFragmentProps[] = errors.map(mapErrorToActorDatas);
 
-            const actorDatasFromCurrentActorDatas: ViewFragmentProps[] = currentActorDatas
+            const actorDatasFromCurrentActorDatas: ViewFragmentProps[] = stepActorDatas
                 .map(mapActorDataToViewFragment)
                 .sort((a, b) => a.name.localeCompare(b.name));
             actorDatas.push(...actorDatasFromErros);
@@ -132,7 +132,7 @@ const useViewModel = () => {
             });
             actorDatas.push(...actorDataFromDecisionToEdit);
             actorDatas.push(...actorDatasFromDataSetupEdit);
-            if (currentActorDatas.length <= 0) {
+            if (stepActorDatas.length <= 0) {
                 actorDatas.push(...actorDatasFromDataSetupView);
             }
             actorDatas.push(...actorDataFromActionToEdit);
