@@ -27,7 +27,7 @@ export const InitDataRepository = {
                 id: DataAccessUtil.determineNewId(this.findAll()),
             };
         } else {
-            initDataTO = { ...initData };
+            initDataTO = {...initData};
         }
         dataStore.getDataStore().initDatas.set(initDataTO.id!, initDataTO);
         return initDataTO;

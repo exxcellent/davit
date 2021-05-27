@@ -1,15 +1,15 @@
-import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
-import { faHandPointer } from '@fortawesome/free-solid-svg-icons/faHandPointer';
-import { faPencilAlt, faPlus, faReply } from '@fortawesome/free-solid-svg-icons';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons/faTrashAlt';
-import { faAngleDown } from '@fortawesome/free-solid-svg-icons/faAngleDown';
-import { faAngleUp } from '@fortawesome/free-solid-svg-icons/faAngleUp';
-import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter';
-import { faFile } from '@fortawesome/free-solid-svg-icons/faFile';
-import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
-import { faMinusCircle } from '@fortawesome/free-solid-svg-icons/faMinusCircle';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons/faInfoCircle';
+import { faPencilAlt, faPlus, faReply } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons/faAngleDown";
+import { faAngleUp } from "@fortawesome/free-solid-svg-icons/faAngleUp";
+import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons/faExclamationTriangle";
+import { faEye } from "@fortawesome/free-solid-svg-icons/faEye";
+import { faFile } from "@fortawesome/free-solid-svg-icons/faFile";
+import { faFilter } from "@fortawesome/free-solid-svg-icons/faFilter";
+import { faHandPointer } from "@fortawesome/free-solid-svg-icons/faHandPointer";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons/faInfoCircle";
+import { faMinusCircle } from "@fortawesome/free-solid-svg-icons/faMinusCircle";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
+import { faWrench } from "@fortawesome/free-solid-svg-icons/faWrench";
 
 export const DavitIcons = {
     wrench: faWrench,

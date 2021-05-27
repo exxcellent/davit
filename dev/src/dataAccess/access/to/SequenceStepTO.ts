@@ -6,7 +6,7 @@ export class SequenceStepTO extends AbstractTO {
         public name = "",
         public index = -1,
         public sequenceFk = -1,
-        public goto: GoTo = { type: GoToTypes.ERROR },
+        public goto: GoTo = {type: GoToTypes.ERROR},
         public root: boolean = false,
         public note: string = "",
     ) {

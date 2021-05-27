@@ -1,15 +1,15 @@
-import React, { FunctionComponent, useState } from 'react';
-import { DavitLabelTextfield } from '../../../../../../common/fragments/DavitLabelTextfield';
-import { DavitCommentButton } from '../../../../../../common/fragments/buttons/DavitCommentButton';
-import { DavitButton } from '../../../../../../common/fragments/buttons/DavitButton';
-import { DavitBackButton } from '../../../../../../common/fragments/buttons/DavitBackButton';
-import { DavitDeleteButton } from '../../../../../../common/fragments/buttons/DavitDeleteButton';
-import { useActorViewModel } from '../viewmodels/ActorViewModel';
-import { FormLine } from './fragments/FormLine';
-import { Form } from '../../../../../../common/fragments/forms/Form';
-import { FormDivider } from './fragments/FormDivider';
-import { FormHeader } from '../../../../../../common/fragments/forms/FormHeader';
-import { FormBody } from '../../../../../../common/fragments/forms/FormBody';
+import React, { FunctionComponent, useState } from "react";
+import { DavitBackButton } from "../../../../../../common/fragments/buttons/DavitBackButton";
+import { DavitButton } from "../../../../../../common/fragments/buttons/DavitButton";
+import { DavitCommentButton } from "../../../../../../common/fragments/buttons/DavitCommentButton";
+import { DavitDeleteButton } from "../../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitLabelTextfield } from "../../../../../../common/fragments/DavitLabelTextfield";
+import { Form } from "../../../../../../common/fragments/forms/Form";
+import { FormBody } from "../../../../../../common/fragments/forms/FormBody";
+import { FormHeader } from "../../../../../../common/fragments/forms/FormHeader";
+import { useActorViewModel } from "../viewmodels/ActorViewModel";
+import { FormDivider } from "./fragments/FormDivider";
+import { FormLine } from "./fragments/FormLine";
 
 interface ActorFormProps {
 }
@@ -41,8 +41,8 @@ export const ActorForm: FunctionComponent<ActorFormProps> = () => {
 
                 <FormLine>
                     <DavitLabelTextfield
-                        label='Name:'
-                        placeholder='Actor Name'
+                        label="Name:"
+                        placeholder="Actor Name"
                         onChangeCallback={(name: string) => changeName(name)}
                         onBlur={updateActor}
                         value={name}
@@ -56,11 +56,15 @@ export const ActorForm: FunctionComponent<ActorFormProps> = () => {
 
             <FormLine>
                 <DavitDeleteButton onClick={deleteActor} />
-                <DavitCommentButton onSaveCallback={saveNote} comment={note} />
+                <DavitCommentButton onSaveCallback={saveNote}
+                                    comment={note}
+                />
                 <DavitButton onClick={() => {
                     createAnother();
                     setKey(key + 1);
-                }} label='Create another' />
+                }}
+                             label="Create another"
+                />
                 <DavitBackButton onClick={saveActor} />
             </FormLine>
 

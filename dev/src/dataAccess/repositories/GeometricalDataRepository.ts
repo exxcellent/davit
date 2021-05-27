@@ -29,7 +29,7 @@ export const GeometricalDataRepository = {
                 id: DataAccessUtil.determineNewId(this.findAll()),
             };
         } else {
-            geometricalDataTO = { ...geometricalData };
+            geometricalDataTO = {...geometricalData};
         }
         dataStore.getDataStore().geometricalDatas.set(geometricalDataTO.id!, geometricalDataTO);
         return geometricalDataTO;

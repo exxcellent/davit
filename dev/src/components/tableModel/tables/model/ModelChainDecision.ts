@@ -1,11 +1,11 @@
-import { useDispatch } from 'react-redux';
-import { ChainlinkCTO } from '../../../../dataAccess/access/cto/ChainlinkCTO';
-import { ChainDecisionTO } from '../../../../dataAccess/access/to/ChainDecisionTO';
-import { CalcChain } from '../../../../services/SequenceChainService';
-import { EditActions } from '../../../../slices/EditSlice';
-import { DavitTableRowData } from '../../../common/fragments/DavitTable';
-import { getChainGotoName } from '../../util/TableUtil';
-import { DavitIcons } from '../../../common/IconSet';
+import { useDispatch } from "react-redux";
+import { ChainlinkCTO } from "../../../../dataAccess/access/cto/ChainlinkCTO";
+import { ChainDecisionTO } from "../../../../dataAccess/access/to/ChainDecisionTO";
+import { CalcChain } from "../../../../services/SequenceChainService";
+import { EditActions } from "../../../../slices/EditSlice";
+import { DavitTableRowData } from "../../../common/fragments/DavitTable";
+import { DavitIcons } from "../../../common/IconSet";
+import { getChainGotoName } from "../../util/TableUtil";
 
 export const useGetModelChainDecisionTableData = (
     calcChain: CalcChain | null,
@@ -40,7 +40,7 @@ const createChainDecisionColumn = (
     const elsegoto: string = getChainGotoName(decision.elseGoTo, selectedChainlinks, selectedChainDecisions);
     const trClass = "carv2Tr";
 
-    const editAction = { icon: DavitIcons.wrench, callback: editCallback };
+    const editAction = {icon: DavitIcons.wrench, callback: editCallback};
 
     return {
         trClass,

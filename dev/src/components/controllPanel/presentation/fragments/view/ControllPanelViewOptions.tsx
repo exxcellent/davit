@@ -1,18 +1,18 @@
-import React, { FunctionComponent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { DataSetupCTO } from '../../../../../dataAccess/access/cto/DataSetupCTO';
-import { SequenceCTO } from '../../../../../dataAccess/access/cto/SequenceCTO';
-import { ChainTO } from '../../../../../dataAccess/access/to/ChainTO';
-import { DataSetupTO } from '../../../../../dataAccess/access/to/DataSetupTO';
-import { SequenceTO } from '../../../../../dataAccess/access/to/SequenceTO';
-import { SequenceModelActions, sequenceModelSelectors } from '../../../../../slices/SequenceModelSlice';
-import { DavitUtil } from '../../../../../utils/DavitUtil';
-import { useStepAndLinkNavigation } from '../../../../../utils/WindowUtil';
-import { ChainDropDown } from '../../../../common/fragments/dropdowns/ChainDropDown';
-import { DataSetupDropDown } from '../../../../common/fragments/dropdowns/DataSetupDropDown';
-import { SequenceDropDown } from '../../../../common/fragments/dropdowns/SequenceDropDown';
-import { OptionField } from '../edit/common/OptionField';
-import { ViewNavigator } from './fragments/ViewNavigator';
+import React, { FunctionComponent } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { DataSetupCTO } from "../../../../../dataAccess/access/cto/DataSetupCTO";
+import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
+import { ChainTO } from "../../../../../dataAccess/access/to/ChainTO";
+import { DataSetupTO } from "../../../../../dataAccess/access/to/DataSetupTO";
+import { SequenceTO } from "../../../../../dataAccess/access/to/SequenceTO";
+import { SequenceModelActions, sequenceModelSelectors } from "../../../../../slices/SequenceModelSlice";
+import { DavitUtil } from "../../../../../utils/DavitUtil";
+import { useStepAndLinkNavigation } from "../../../../../utils/WindowUtil";
+import { ChainDropDown } from "../../../../common/fragments/dropdowns/ChainDropDown";
+import { DataSetupDropDown } from "../../../../common/fragments/dropdowns/DataSetupDropDown";
+import { SequenceDropDown } from "../../../../common/fragments/dropdowns/SequenceDropDown";
+import { OptionField } from "../edit/common/OptionField";
+import { ViewNavigator } from "./fragments/ViewNavigator";
 
 export interface ControlPanelViewOptionsProps {
     hidden: boolean;
@@ -31,37 +31,50 @@ export const ControlPanelViewOptions: FunctionComponent<ControlPanelViewOptionsP
         selectChain,
     } = useControllPanelSequenceOptionsViewModel();
 
-    const { stepBack, stepNext, linkBack, linkNext } = useStepAndLinkNavigation();
+    const {stepBack, stepNext, linkBack, linkNext} = useStepAndLinkNavigation();
 
     const getIndex = (): string => {
-        const link: string = (linkIndex + 1).toString() || '0';
-        const step: string = stepIndex.toString() || '0';
-        return link + ' / ' + step;
+        const link: string = (linkIndex + 1).toString() || "0";
+        const step: string = stepIndex.toString() || "0";
+        return link + " / " + step;
     };
 
     return (
-        <div className={'headerGrid'}>
+        <div className={"headerGrid"}>
 
             <OptionField>
-                <OptionField label='Data - Setup'>
+                <OptionField label="Data - Setup">
                     <DataSetupDropDown
                         onSelect={selectDataSetup}
-                        placeholder='Select Data Setup ...'
+                        placeholder="Select Data Setup ..."
                         value={currentDataSetup}
                     />
                 </OptionField>
 
-                <OptionField label='SEQUENCE'>
-                    <SequenceDropDown onSelect={selectSequence} value={currentSequence} />
+                <OptionField label="SEQUENCE">
+                    <SequenceDropDown onSelect={selectSequence}
+                                      value={currentSequence}
+                    />
                 </OptionField>
             </OptionField>
 
-            <OptionField label='CHAIN' divider={true}>
-                <ChainDropDown onSelect={selectChain} value={currentChain} />
+            <OptionField label="CHAIN"
+                         divider={true}
+            >
+                <ChainDropDown onSelect={selectChain}
+                               value={currentChain}
+                />
             </OptionField>
 
-            <OptionField label='STEP' divider={true}>
-                <ViewNavigator fastBackward={linkBack} fastForward={linkNext} backward={stepBack} forward={stepNext} index={getIndex()} />
+            <OptionField label="STEP"
+                         divider={true}
+            >
+                <ViewNavigator fastBackward={linkBack}
+                               fastForward={linkNext}
+                               backward={stepBack}
+                               forward={stepNext}
+                               index={getIndex()}
+                />
             </OptionField>
 
         </div>
@@ -106,33 +119,33 @@ const useControllPanelSequenceOptionsViewModel = () => {
 
     const getDataSetupName = (): string => {
         if (selectedDataSetup) {
-            return ' * ' + selectDataSetup.name;
+            return " * " + selectDataSetup.name;
         } else {
-            return '';
+            return "";
         }
     };
 
     const getSequenceName = (): string => {
         if (sequence) {
-            return ' * ' + sequence.sequenceTO.name;
+            return " * " + sequence.sequenceTO.name;
         } else {
-            return '';
+            return "";
         }
     };
 
     const getStepName = (): string => {
         if (stepIndex && sequence) {
             return (
-                ' * ' +
+                " * " +
                 sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.id === stepIndex)?.squenceStepTO.name
             );
         } else {
-            return '';
+            return "";
         }
     };
 
     return {
-        label: 'VIEW' + getDataSetupName() + getSequenceName() + getStepName(),
+        label: "VIEW" + getDataSetupName() + getSequenceName() + getStepName(),
         sequence,
         stepIndex,
         linkIndex,

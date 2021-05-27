@@ -1,10 +1,10 @@
-import {AppThunk} from "../../app/store";
-import {ActorCTO} from "../../dataAccess/access/cto/ActorCTO";
-import {DataAccess} from "../../dataAccess/DataAccess";
-import {DataAccessResponse} from "../../dataAccess/DataAccessResponse";
-import {editActions, Mode} from "../EditSlice";
-import {MasterDataActions} from "../MasterDataSlice";
-import {GlobalActions} from "../GlobalSlice";
+import { AppThunk } from "../../app/store";
+import { ActorCTO } from "../../dataAccess/access/cto/ActorCTO";
+import { DataAccess } from "../../dataAccess/DataAccess";
+import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
+import { editActions, Mode } from "../EditSlice";
+import { GlobalActions } from "../GlobalSlice";
+import { MasterDataActions } from "../MasterDataSlice";
 
 const createActorThunk = (): AppThunk => (dispatch) => {
     const actor: ActorCTO = new ActorCTO();

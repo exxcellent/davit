@@ -5,5 +5,6 @@ export class DataCTO {
     constructor(
         public data: DataTO = new DataTO(),
         public geometricalData: GeometricalDataCTO = new GeometricalDataCTO(),
-    ) {}
+    ) {
+    }
 }

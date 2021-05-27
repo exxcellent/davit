@@ -18,8 +18,8 @@ interface DataSetupDropDownPropsButton extends DropdownProps {
 }
 
 export const DataSetupDropDown: FunctionComponent<DataSetupDropDownProps> = (props) => {
-    const { onSelect, placeholder, value } = props;
-    const { dataSetups, selectDataSetup, dataSetupToOption } = useDataSetupDropDownViewModel();
+    const {onSelect, placeholder, value} = props;
+    const {dataSetups, selectDataSetup, dataSetupToOption} = useDataSetupDropDownViewModel();
 
     return (
         <DavitDropDown
@@ -33,8 +33,8 @@ export const DataSetupDropDown: FunctionComponent<DataSetupDropDownProps> = (pro
 };
 
 export const DataSetupDropDownButton: FunctionComponent<DataSetupDropDownPropsButton> = (props) => {
-    const { onSelect, icon } = props;
-    const { dataSetups, selectDataSetup, dataSetupToOption } = useDataSetupDropDownViewModel();
+    const {onSelect, icon} = props;
+    const {dataSetups, selectDataSetup, dataSetupToOption} = useDataSetupDropDownViewModel();
 
     return (
         <DavitIconDropDown
@@ -63,5 +63,5 @@ const useDataSetupDropDownViewModel = () => {
         return undefined;
     };
 
-    return { dataSetups, dataSetupToOption, selectDataSetup };
+    return {dataSetups, dataSetupToOption, selectDataSetup};
 };

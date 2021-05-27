@@ -17,7 +17,7 @@ export const createViewFragment = (actorDataFragmentProps: ViewFragmentProps, ke
             return (
                 <div
                     className={"gg-check-o"}
-                    style={{ color: "green", backgroundColor: "var(--carv2-data-persistent-color)" }}
+                    style={{color: "green", backgroundColor: "var(--carv2-data-persistent-color)"}}
                 />
             );
         }
@@ -26,7 +26,7 @@ export const createViewFragment = (actorDataFragmentProps: ViewFragmentProps, ke
             return (
                 <div
                     className={"gg-close-o"}
-                    style={{ color: "red", backgroundColor: "var(--carv2-data-persistent-color)" }}
+                    style={{color: "red", backgroundColor: "var(--carv2-data-persistent-color)"}}
                 />
             );
         }
@@ -35,8 +35,12 @@ export const createViewFragment = (actorDataFragmentProps: ViewFragmentProps, ke
     };
 
     return (
-        <div className="viewFragment" key={key}>
-            <div className={getClassnameForViewFragmentState(actorDataFragmentProps.state)} key={key}>
+        <div className="viewFragment"
+             key={key}
+        >
+            <div className={getClassnameForViewFragmentState(actorDataFragmentProps.state)}
+                 key={key}
+            >
                 {actorDataFragmentProps.name}
             </div>
             {getCheckFeeld(actorDataFragmentProps.state) && getCheckFeeld(actorDataFragmentProps.state)}

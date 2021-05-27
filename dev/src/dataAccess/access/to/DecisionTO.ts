@@ -7,8 +7,8 @@ export class DecisionTO extends AbstractTO {
         public name: string = "",
         public sequenceFk: number = -1,
         public conditions: ConditionTO[] = [],
-        public ifGoTo: GoTo = { type: GoToTypes.FIN },
-        public elseGoTo: GoTo = { type: GoToTypes.ERROR },
+        public ifGoTo: GoTo = {type: GoToTypes.FIN},
+        public elseGoTo: GoTo = {type: GoToTypes.ERROR},
         public root: boolean = false,
         public note: string = "",
     ) {

@@ -1,10 +1,10 @@
-import {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {DataCTO} from '../../../../../../../dataAccess/access/cto/DataCTO';
-import {EditActions, editSelectors} from '../../../../../../../slices/EditSlice';
-import {EditData} from '../../../../../../../slices/thunks/DataThunks';
-import {DavitUtil} from '../../../../../../../utils/DavitUtil';
-import {GlobalActions} from '../../../../../../../slices/GlobalSlice';
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { DataCTO } from "../../../../../../../dataAccess/access/cto/DataCTO";
+import { EditActions, editSelectors } from "../../../../../../../slices/EditSlice";
+import { GlobalActions } from "../../../../../../../slices/GlobalSlice";
+import { EditData } from "../../../../../../../slices/thunks/DataThunks";
+import { DavitUtil } from "../../../../../../../utils/DavitUtil";
 
 export const useDataViewModel = () => {
     const dataToEdit: DataCTO | null = useSelector(editSelectors.selectDataToEdit);
@@ -13,7 +13,7 @@ export const useDataViewModel = () => {
     useEffect(() => {
         // check if component to edit is really set or gso back to edit mode
         if (dataToEdit === null || dataToEdit === undefined) {
-            dispatch(GlobalActions.handleError('Tried to go to edit data without dataToedit specified'));
+            dispatch(GlobalActions.handleError("Tried to go to edit data without dataToedit specified"));
             dispatch(EditActions.setMode.edit());
         }
     });
@@ -38,7 +38,7 @@ export const useDataViewModel = () => {
     };
 
     const saveData = () => {
-        if (dataToEdit?.data.name !== '') {
+        if (dataToEdit?.data.name !== "") {
             const copyData: DataCTO = DavitUtil.deepCopy(dataToEdit);
             copyData.data.instances = copyData.data.instances.filter(instance => instance.name !== "");
             dispatch(EditData.save(copyData!));
@@ -61,7 +61,7 @@ export const useDataViewModel = () => {
 
 
     const saveNote = (text: string) => {
-        if (!DavitUtil.isNullOrUndefined(dataToEdit) && text !== '') {
+        if (!DavitUtil.isNullOrUndefined(dataToEdit) && text !== "") {
             const copyDataToEdit: DataCTO = DavitUtil.deepCopy(dataToEdit);
             copyDataToEdit.data.note = text;
             dispatch(EditActions.setMode.editData(copyDataToEdit));
@@ -85,7 +85,7 @@ export const useDataViewModel = () => {
     };
 
     return {
-        label: 'EDIT * ' + (dataToEdit?.data.name || ''),
+        label: "EDIT * " + (dataToEdit?.data.name || ""),
         name: dataToEdit?.data.name,
         changeName: changeDataName,
         saveData,
@@ -94,7 +94,7 @@ export const useDataViewModel = () => {
         createAnother,
         instances: dataToEdit?.data.instances ? dataToEdit.data.instances : [],
         id: dataToEdit?.data.id || -1,
-        note: dataToEdit ? dataToEdit.data.note : '',
+        note: dataToEdit ? dataToEdit.data.note : "",
         saveNote,
         changeInstanceName,
         createInstance,

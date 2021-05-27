@@ -18,8 +18,8 @@ interface ActorDropDownButtonProps extends DropdownProps {
 }
 
 export const ActorDropDown: FunctionComponent<ActorDropDownProps> = (props) => {
-    const { onSelect, placeholder, value } = props;
-    const { actors, actorToOption, selectActor } = useActorDropDownViewModel();
+    const {onSelect, placeholder, value} = props;
+    const {actors, actorToOption, selectActor} = useActorDropDownViewModel();
 
     return (
         <DavitDropDown
@@ -32,8 +32,8 @@ export const ActorDropDown: FunctionComponent<ActorDropDownProps> = (props) => {
 };
 
 export const ActorDropDownButton: FunctionComponent<ActorDropDownButtonProps> = (props) => {
-    const { onSelect, icon } = props;
-    const { actorToOption, actors, selectActor } = useActorDropDownViewModel();
+    const {onSelect, icon} = props;
+    const {actorToOption, actors, selectActor} = useActorDropDownViewModel();
 
     return (
         <DavitIconDropDown
@@ -62,5 +62,5 @@ const useActorDropDownViewModel = () => {
         return undefined;
     };
 
-    return { actors, actorToOption, selectActor };
+    return {actors, actorToOption, selectActor};
 };

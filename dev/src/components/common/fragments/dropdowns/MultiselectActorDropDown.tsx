@@ -11,8 +11,8 @@ interface MultiselectActorDropDownProps extends DropdownProps {
 }
 
 export const MultiselectActorDropDown: FunctionComponent<MultiselectActorDropDownProps> = (props) => {
-    const { onSelect, selected, placeholder } = props;
-    const { actors, actorToOption } = useMultiselectActorDropDownViewModel();
+    const {onSelect, selected, placeholder} = props;
+    const {actors, actorToOption} = useMultiselectActorDropDownViewModel();
 
     return (
         <Dropdown
@@ -28,8 +28,8 @@ export const MultiselectActorDropDown: FunctionComponent<MultiselectActorDropDow
             }}
             value={selected}
             scrolling
-            disabled={actors.length > 0 ? false : true}
-            style={{ overflow: "auto" }}
+            disabled={actors.length <= 0}
+            style={{overflow: "auto"}}
         />
     );
 };
@@ -47,5 +47,5 @@ const useMultiselectActorDropDownViewModel = () => {
         ];
     };
 
-    return { actors, actorToOption };
+    return {actors, actorToOption};
 };

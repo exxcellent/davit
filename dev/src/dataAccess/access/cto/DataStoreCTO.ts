@@ -44,5 +44,6 @@ export class DataStoreCTO {
         public chains = new Map<number, ChainTO>(),
         public chainlinks = new Map<number, ChainlinkTO>(),
         public chaindecisions = new Map<number, ChainDecisionTO>(),
-    ) {}
+    ) {
+    }
 }

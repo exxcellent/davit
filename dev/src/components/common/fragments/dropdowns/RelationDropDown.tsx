@@ -18,8 +18,8 @@ interface RelationDropDownPropsButton extends DropdownProps {
 }
 
 export const RelationDropDown: FunctionComponent<RelationDropDownProps> = (props) => {
-    const { onSelect, placeholder } = props;
-    const { relations, selectDataRelation, relationToOption } = useRelationDropDownViewModel();
+    const {onSelect, placeholder} = props;
+    const {relations, selectDataRelation, relationToOption} = useRelationDropDownViewModel();
 
     return (
         <DavitDropDown
@@ -31,8 +31,8 @@ export const RelationDropDown: FunctionComponent<RelationDropDownProps> = (props
 };
 
 export const RelationDropDownButton: FunctionComponent<RelationDropDownPropsButton> = (props) => {
-    const { onSelect, icon } = props;
-    const { relations, selectDataRelation, relationToOption } = useRelationDropDownViewModel();
+    const {onSelect, icon} = props;
+    const {relations, selectDataRelation, relationToOption} = useRelationDropDownViewModel();
 
     return (
         <DavitIconDropDown
@@ -67,5 +67,5 @@ const useRelationDropDownViewModel = () => {
         };
     };
 
-    return { relations, selectDataRelation, relationToOption };
+    return {relations, selectDataRelation, relationToOption};
 };
