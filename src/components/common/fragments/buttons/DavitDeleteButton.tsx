@@ -1,6 +1,6 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
-import { DavitButton } from './DavitButton';
-import { DavitIcons } from '../../IconSet';
+import React, { FunctionComponent, useEffect, useState } from "react";
+import { DavitIcons } from "../../IconSet";
+import { DavitButton } from "./DavitButton";
 
 interface DavitDeleteButtonProps {
     onClick: () => void;

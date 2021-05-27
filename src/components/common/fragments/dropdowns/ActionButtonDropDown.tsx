@@ -1,14 +1,14 @@
-import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
-import { DropdownProps } from 'semantic-ui-react';
-import { ActorCTO } from '../../../../dataAccess/access/cto/ActorCTO';
-import { DataCTO } from '../../../../dataAccess/access/cto/DataCTO';
-import { ActionTO } from '../../../../dataAccess/access/to/ActionTO';
-import { ActionType } from '../../../../dataAccess/access/types/ActionType';
-import { editSelectors } from '../../../../slices/EditSlice';
-import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
-import { DavitUtil } from '../../../../utils/DavitUtil';
-import { DavitDropDownItemProps, DavitIconDropDown } from './DavitDropDown';
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { DropdownProps } from "semantic-ui-react";
+import { ActorCTO } from "../../../../dataAccess/access/cto/ActorCTO";
+import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
+import { ActionTO } from "../../../../dataAccess/access/to/ActionTO";
+import { ActionType } from "../../../../dataAccess/access/types/ActionType";
+import { editSelectors } from "../../../../slices/EditSlice";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import { DavitUtil } from "../../../../utils/DavitUtil";
+import { DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
 
 interface ActionDropDownProps extends DropdownProps {
     onSelect: (action: ActionTO | undefined) => void;
@@ -16,8 +16,8 @@ interface ActionDropDownProps extends DropdownProps {
 }
 
 export const ActionButtonDropDown: FunctionComponent<ActionDropDownProps> = (props) => {
-    const { onSelect, icon } = props;
-    const { actions, actionToOption, selectAction } = useActionDropDownViewModel();
+    const {onSelect, icon} = props;
+    const {actions, actionToOption, selectAction} = useActionDropDownViewModel();
 
     return (
         <DavitIconDropDown
@@ -94,5 +94,5 @@ export const useActionDropDownViewModel = () => {
         return undefined;
     };
 
-    return { actions, actionToOption, selectAction, getOptionText };
+    return {actions, actionToOption, selectAction, getOptionText};
 };

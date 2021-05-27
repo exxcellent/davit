@@ -7,5 +7,6 @@ export class ActorCTO {
         public actor: ActorTO = new ActorTO(),
         public geometricalData: GeometricalDataCTO = new GeometricalDataCTO(),
         public design: DesignTO = new DesignTO(),
-    ) {}
+    ) {
+    }
 }

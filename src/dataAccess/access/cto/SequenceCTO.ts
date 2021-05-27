@@ -7,5 +7,6 @@ export class SequenceCTO {
         public sequenceTO: SequenceTO = new SequenceTO(),
         public sequenceStepCTOs: SequenceStepCTO[] = [],
         public decisions: DecisionTO[] = [],
-    ) {}
+    ) {
+    }
 }

@@ -20,8 +20,8 @@ interface DecisionDropDownProps extends DropdownProps {
 }
 
 export const DecisionDropDownButton: FunctionComponent<DecisionDropDownButtonProps> = (props) => {
-    const { onSelect, icon } = props;
-    const { sequenceToEdit, decisionOptions, selectDecision } = useDecisionDropDownViewModel();
+    const {onSelect, icon} = props;
+    const {sequenceToEdit, decisionOptions, selectDecision} = useDecisionDropDownViewModel();
 
     return (
         <DavitIconDropDown
@@ -33,8 +33,8 @@ export const DecisionDropDownButton: FunctionComponent<DecisionDropDownButtonPro
 };
 
 export const DecisionDropDown: FunctionComponent<DecisionDropDownProps> = (props) => {
-    const { onSelect, placeholder, value, exclude } = props;
-    const { sequenceToEdit, decisionOptions, selectDecision } = useDecisionDropDownViewModel(exclude);
+    const {onSelect, placeholder, value, exclude} = props;
+    const {sequenceToEdit, decisionOptions, selectDecision} = useDecisionDropDownViewModel(exclude);
 
     return (
         <DavitDropDown
@@ -75,5 +75,5 @@ const useDecisionDropDownViewModel = (exclude?: number) => {
         return undefined;
     };
 
-    return { sequenceToEdit, decisionOptions, selectDecision };
+    return {sequenceToEdit, decisionOptions, selectDecision};
 };

@@ -1,24 +1,24 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { SequenceCTO } from '../../../../../../dataAccess/access/cto/SequenceCTO';
-import { SequenceStepCTO } from '../../../../../../dataAccess/access/cto/SequenceStepCTO';
-import { DecisionTO } from '../../../../../../dataAccess/access/to/DecisionTO';
-import { SequenceTO } from '../../../../../../dataAccess/access/to/SequenceTO';
-import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
-import { sequenceModelSelectors } from '../../../../../../slices/SequenceModelSlice';
-import { EditSequence } from '../../../../../../slices/thunks/SequenceThunks';
-import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { DavitBackButton } from '../../../../../common/fragments/buttons/DavitBackButton';
-import { DavitButton } from '../../../../../common/fragments/buttons/DavitButton';
-import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
-import { DavitLabelTextfield } from '../../../../../common/fragments/DavitLabelTextfield';
-import { DecisionDropDownButton } from '../../../../../common/fragments/dropdowns/DecisionDropDown';
-import { StepDropDownButton } from '../../../../../common/fragments/dropdowns/StepDropDown';
-import { OptionField } from '../common/OptionField';
-import { DavitCommentButton } from '../../../../../common/fragments/buttons/DavitCommentButton';
-import { AddOrEdit } from '../../../../../common/fragments/AddOrEdit';
-import { GlobalActions } from '../../../../../../slices/GlobalSlice';
-import { ControlPanel } from '../common/ControlPanel';
+import React, { FunctionComponent, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../../../../../dataAccess/access/cto/SequenceStepCTO";
+import { DecisionTO } from "../../../../../../dataAccess/access/to/DecisionTO";
+import { SequenceTO } from "../../../../../../dataAccess/access/to/SequenceTO";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
+import { GlobalActions } from "../../../../../../slices/GlobalSlice";
+import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
+import { EditSequence } from "../../../../../../slices/thunks/SequenceThunks";
+import { DavitUtil } from "../../../../../../utils/DavitUtil";
+import { AddOrEdit } from "../../../../../common/fragments/AddOrEdit";
+import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
+import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitCommentButton } from "../../../../../common/fragments/buttons/DavitCommentButton";
+import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
+import { DecisionDropDownButton } from "../../../../../common/fragments/dropdowns/DecisionDropDown";
+import { StepDropDownButton } from "../../../../../common/fragments/dropdowns/StepDropDown";
+import { ControlPanel } from "../common/ControlPanel";
+import { OptionField } from "../common/OptionField";
 
 export interface ControlPanelEditSequenceProps {
 }
@@ -40,28 +40,46 @@ export const ControlPanelEditSequence: FunctionComponent<ControlPanelEditSequenc
 
     return (
         <ControlPanel>
-            <OptionField label='Sequence - name'>
+            <OptionField label="Sequence - name">
                 <DavitLabelTextfield
-                    label='Name:'
-                    placeholder='Sequence Name...'
+                    label="Name:"
+                    placeholder="Sequence Name..."
                     onChangeCallback={(name: string) => changeName(name)}
                     value={name}
                     focus={true}
                     onBlur={updateSequence}
                 />
             </OptionField>
-            <OptionField label='Create / Edit | Sequence - Step' divider={true}>
-                <AddOrEdit addCallBack={editOrAddSequenceStep} label={'Step'}
-                           dropDown={<StepDropDownButton onSelect={editOrAddSequenceStep} icon='wrench' />} />
+            <OptionField label="Create / Edit | Sequence - Step"
+                         divider={true}
+            >
+                <AddOrEdit addCallBack={editOrAddSequenceStep}
+                           label={"Step"}
+                           dropDown={<StepDropDownButton onSelect={editOrAddSequenceStep}
+                                                         icon="wrench"
+                           />}
+                />
             </OptionField>
-            <OptionField label='Create / Edit | Sequence - Decision' divider={true}>
-                <AddOrEdit addCallBack={editOrAddDecision} label={'Decision'}
-                           dropDown={<DecisionDropDownButton onSelect={editOrAddDecision} icon='wrench' />} />
+            <OptionField label="Create / Edit | Sequence - Decision"
+                         divider={true}
+            >
+                <AddOrEdit addCallBack={editOrAddDecision}
+                           label={"Decision"}
+                           dropDown={<DecisionDropDownButton onSelect={editOrAddDecision}
+                                                             icon="wrench"
+                           />}
+                />
             </OptionField>
-            <OptionField label={'options'} divider={true}>
-                <DavitButton onClick={createAnother} label='Create another' />
+            <OptionField label={"options"}
+                         divider={true}
+            >
+                <DavitButton onClick={createAnother}
+                             label="Create another"
+                />
                 <DavitBackButton onClick={saveSequence} />
-                <DavitCommentButton onSaveCallback={saveNote} comment={note} />
+                <DavitCommentButton onSaveCallback={saveNote}
+                                    comment={note}
+                />
                 <DavitDeleteButton onClick={deleteSequence} />
             </OptionField>
         </ControlPanel>
@@ -78,7 +96,7 @@ const useControlPanelEditSequenceViewModel = () => {
     useEffect(() => {
         // check if sequence to edit is really set or gos back to edit mode
         if (DavitUtil.isNullOrUndefined(sequenceToEdit)) {
-            dispatch(GlobalActions.handleError('Tried to go to edit sequence without sequenceToedit specified'));
+            dispatch(GlobalActions.handleError("Tried to go to edit sequence without sequenceToedit specified"));
             dispatch(EditActions.setMode.edit());
         }
         if (sequenceToEdit?.id !== -1) {
@@ -95,7 +113,7 @@ const useControlPanelEditSequenceViewModel = () => {
     };
 
     const saveSequence = () => {
-        if (sequenceToEdit!.name !== '') {
+        if (sequenceToEdit!.name !== "") {
             dispatch(EditSequence.save(sequenceToEdit!));
         } else {
             dispatch(EditSequence.delete(sequenceToEdit!));
@@ -146,7 +164,7 @@ const useControlPanelEditSequenceViewModel = () => {
 
     const copySequence = () => {
         const copySequence: SequenceTO = DavitUtil.deepCopy(sequenceToEdit);
-        copySequence.name = sequenceToEdit?.name + '-copy';
+        copySequence.name = sequenceToEdit?.name + "-copy";
         copySequence.id = -1;
         dispatch(EditSequence.update(copySequence));
     };
@@ -161,7 +179,7 @@ const useControlPanelEditSequenceViewModel = () => {
     };
 
     const saveNote = (text: string) => {
-        if (!DavitUtil.isNullOrUndefined(sequenceToEdit) && text !== '') {
+        if (!DavitUtil.isNullOrUndefined(sequenceToEdit) && text !== "") {
             const copySequenceToEdit: SequenceTO = DavitUtil.deepCopy(sequenceToEdit);
             copySequenceToEdit.note = text;
             dispatch(EditSequence.save(copySequenceToEdit));
@@ -169,7 +187,7 @@ const useControlPanelEditSequenceViewModel = () => {
     };
 
     return {
-        label: 'EDIT * ' + (sequenceToEdit?.name || ''),
+        label: "EDIT * " + (sequenceToEdit?.name || ""),
         name: sequenceToEdit?.name,
         changeName,
         saveSequence,
@@ -181,7 +199,7 @@ const useControlPanelEditSequenceViewModel = () => {
         updateSequence,
         editOrAddDecision,
         id: sequenceToEdit?.id || -1,
-        note: sequenceToEdit ? sequenceToEdit.note : '',
+        note: sequenceToEdit ? sequenceToEdit.note : "",
         saveNote,
     };
 };

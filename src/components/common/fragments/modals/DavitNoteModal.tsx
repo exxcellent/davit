@@ -1,6 +1,6 @@
-import React, { FunctionComponent } from 'react';
-import { DavitNoteForm } from '../forms/DavitNoteForm';
-import { DavitModal } from './DavitModal';
+import React, { FunctionComponent } from "react";
+import { DavitNoteForm } from "../forms/DavitNoteForm";
+import { DavitModal } from "./DavitModal";
 
 interface DavitNoteModalProps {
     text: string;
@@ -9,7 +9,7 @@ interface DavitNoteModalProps {
 }
 
 export const DavitNoteModal: FunctionComponent<DavitNoteModalProps> = (props) => {
-    const { text, closeCallback, saveTextCallback } = props;
+    const {text, closeCallback, saveTextCallback} = props;
 
     return (
         <DavitModal>

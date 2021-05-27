@@ -8,8 +8,8 @@ export class ChainDecisionTO01 extends AbstractTO {
         public chainFk: number = -1,
         public actorFk: number = -1,
         public dataAndInstaceIds: DataAndInstanceId[] = [],
-        public ifGoTo: GoToChain = { type: GoToTypesChain.FIN },
-        public elseGoTo: GoToChain = { type: GoToTypesChain.ERROR },
+        public ifGoTo: GoToChain = {type: GoToTypesChain.FIN},
+        public elseGoTo: GoToChain = {type: GoToTypesChain.ERROR},
     ) {
         super();
     }

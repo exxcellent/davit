@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent } from "react";
 
 interface ViewPlaceholderProps {
     text: string
@@ -6,11 +6,11 @@ interface ViewPlaceholderProps {
 }
 
 export const ViewPlaceholder: FunctionComponent<ViewPlaceholderProps> = (props) => {
-    const { text, className } = props;
+    const {text, className} = props;
 
     return (
         <div className={className}>
-            <div className={'viewPlaceholder'}>
+            <div className={"viewPlaceholder"}>
                 <h2>{text}</h2>
             </div>
         </div>

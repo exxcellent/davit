@@ -1,10 +1,10 @@
-import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
-import { Dropdown, DropdownProps } from 'semantic-ui-react';
-import { DataCTO } from '../../../../dataAccess/access/cto/DataCTO';
-import { DataInstanceTO } from '../../../../dataAccess/access/to/DataInstanceTO';
-import { masterDataSelectors } from '../../../../slices/MasterDataSlice';
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from './DavitDropDown';
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { Dropdown, DropdownProps } from "semantic-ui-react";
+import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
+import { DataInstanceTO } from "../../../../dataAccess/access/to/DataInstanceTO";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
 
 export interface DataAndInstanceId {
     dataFk: number;
@@ -29,8 +29,8 @@ interface InstanceDropDownMultiselectProps extends DropdownProps {
 }
 
 export const InstanceDropDown: FunctionComponent<InstanceDropDownProps> = (props) => {
-    const { onSelect, placeholder, value } = props;
-    const { selectInstance, createOptions } = useInstanceDropDownViewModel();
+    const {onSelect, placeholder, value} = props;
+    const {selectInstance, createOptions} = useInstanceDropDownViewModel();
 
     return (
         <DavitDropDown
@@ -43,8 +43,8 @@ export const InstanceDropDown: FunctionComponent<InstanceDropDownProps> = (props
 };
 
 export const InstanceDropDownButton: FunctionComponent<InstanceDropDownButtonProps> = (props) => {
-    const { onSelect, icon } = props;
-    const { selectInstance, createOptions } = useInstanceDropDownViewModel();
+    const {onSelect, icon} = props;
+    const {selectInstance, createOptions} = useInstanceDropDownViewModel();
 
     return (
         <DavitIconDropDown
@@ -56,8 +56,8 @@ export const InstanceDropDownButton: FunctionComponent<InstanceDropDownButtonPro
 };
 
 export const InstanceDropDownMultiselect: FunctionComponent<InstanceDropDownMultiselectProps> = (props) => {
-    const { onSelect, selected, placeholder } = props;
-    const { selectInstances, createOptions } = useInstanceDropDownViewModel();
+    const {onSelect, selected, placeholder} = props;
+    const {selectInstances, createOptions} = useInstanceDropDownViewModel();
 
     return (
         <Dropdown
@@ -112,7 +112,7 @@ const useInstanceDropDownViewModel = () => {
     };
 
     const instanceToOption = (instance: DataInstanceTO, data: DataCTO, key: number): DavitDropDownItemProps => {
-        const optionItem: DataAndInstanceId = { dataFk: data.data.id, instanceId: instance.id };
+        const optionItem: DataAndInstanceId = {dataFk: data.data.id, instanceId: instance.id};
         const optionItemString: string = JSON.stringify(optionItem);
         let optionLabel: string = data.data.name;
         if (instance.id !== -1) {
@@ -125,5 +125,5 @@ const useInstanceDropDownViewModel = () => {
         };
     };
 
-    return { selectInstance, selectInstances, createOptions };
+    return {selectInstance, selectInstances, createOptions};
 };

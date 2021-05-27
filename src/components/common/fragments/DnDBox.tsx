@@ -1,11 +1,11 @@
-import {motion} from "framer-motion";
-import React, {FunctionComponent, useEffect, useRef, useState} from "react";
-import {ASPECT_RATIO, WINDOW_FACTOR} from "../../../app/DavitConstants";
-import {GeometricalDataTO} from "../../../dataAccess/access/to/GeometricalDataTO";
-import {PositionTO} from "../../../dataAccess/access/to/PositionTO";
-import {useCurrentHeight, useCurrentWitdh, useCustomZoomEvent} from "../../../utils/WindowUtil";
-import {createDnDItem} from "./DnDWrapper";
-import {DavitPath, DavitPathProps} from "./svg/DavitPath";
+import { motion } from "framer-motion";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import { ASPECT_RATIO, WINDOW_FACTOR } from "../../../app/DavitConstants";
+import { GeometricalDataTO } from "../../../dataAccess/access/to/GeometricalDataTO";
+import { PositionTO } from "../../../dataAccess/access/to/PositionTO";
+import { useCurrentHeight, useCurrentWitdh, useCustomZoomEvent } from "../../../utils/WindowUtil";
+import { createDnDItem } from "./DnDWrapper";
+import { DavitPath, DavitPathProps } from "./svg/DavitPath";
 
 export interface DnDBoxElement {
     element: JSX.Element;
@@ -52,7 +52,7 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
 
     const createDavitPath = (paths: DavitPathProps[]): JSX.Element[] => {
         return paths.map((svg, index) => {
-            return <DavitPath {...svg} key={index}/>;
+            return <DavitPath {...svg} key={index} />;
         });
     };
 
@@ -75,9 +75,12 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
             ref={constraintsRef}
             style={fullScreen ? {height: height, maxWidth: width} : {}}
             className={fullScreen ? type.toString() + "Fullscreen" : type.toString()}
-            key={key}>
+            key={key}
+        >
             {toDnDElements.map(wrapItem)}
-            <motion.label className="zoomLabel" key={zoom ? zoom : ""}>
+            <motion.label className="zoomLabel"
+                          key={zoom ? zoom : ""}
+            >
                 {zoom ? Math.round(zoom * 100) + "%" : ""}
             </motion.label>
             <motion.svg className="sVGArea">{createDavitPath(paths)}</motion.svg>
