@@ -84,7 +84,7 @@ const useMetaDataModelViewModel = () => {
         const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.selectDataSetupToEdit);
         const initDataToEdit: InitDataTO | null = useSelector(editSelectors.selectInitDataToEdit);
         // ----- VIEW -----
-        const currentActorDatas: ActorData[] = useSelector(sequenceModelSelectors.selectActorData);
+        const currentActorDatas: ActorData[] = useSelector(sequenceModelSelectors.selectStepActorData);
         const errors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
         const actions: ActionTO[] = useSelector(sequenceModelSelectors.selectActions);
 
@@ -158,7 +158,6 @@ const useMetaDataModelViewModel = () => {
 
         function mapActionToActorDatas(actionItem: ActionTO): ViewFragmentProps {
             const state: ActorDataState = mapActionTypeToViewFragmentState(actionItem.actionType);
-            // const parentId = getDataAndInstanceIds(actionItem.dataFk);
             return {
                 name: getActorNameById(actionItem.receivingActorFk),
                 state: state,
@@ -197,7 +196,7 @@ const useMetaDataModelViewModel = () => {
         const mapInitDataToActorData = (initData: InitDataTO): ViewFragmentProps => {
             return {
                 parentId:
-                    initData.instanceFk > 1
+                    initData.instanceFk > -1
                         ? {dataId: initData.dataFk, instanceId: initData.instanceFk}
                         : initData.dataFk,
                 name: getActorNameById(initData.actorFk),
@@ -283,7 +282,7 @@ const useMetaDataModelViewModel = () => {
                 id: data.data.id,
                 initName: data.data.name,
                 initWidth: 100,
-                initHeigth: 30,
+                initHeight: 30,
                 dataFragments: getActorDatas().filter(
                     (act) =>
                         act.parentId === data.data.id ||
