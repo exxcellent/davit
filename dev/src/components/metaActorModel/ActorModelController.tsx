@@ -42,8 +42,9 @@ export const ActorModelController: FunctionComponent<ActorModelControllerProps> 
 
         return (
             <>
-                {toDnDElements.length === 0 && <ViewPlaceholder text={"Create a new actor"}
-                                                                className={DnDBoxType.actor.toString()}
+                {toDnDElements.length === 0 &&
+                <ViewPlaceholder text={"Create a new actor"}
+                                 className={DnDBoxType.actor.toString()}
                 />}
                 {toDnDElements.length > 0 && <DnDBox
                     onPositionUpdate={onPositionUpdate}
@@ -364,7 +365,7 @@ const useViewModel = () => {
                     targetHeight: arrowToDraw.targetGeometricalData.geometricalData.height,
                     targetWidth: arrowToDraw.targetGeometricalData.geometricalData.width,
                     stroked: arrowToDraw.type === ArrowType.TRIGGER,
-                    lineColor: arrowToDraw.type === ArrowType.SEND ? "var(--carv2-color-exxcellent-blue)" : "black",
+                    lineColor: arrowToDraw.type === ArrowType.SEND ? "var(--color-exxcellent-blue)" : "black",
                 });
             });
             return arrowProps;

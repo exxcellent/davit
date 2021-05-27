@@ -1,31 +1,19 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
-import { Dropdown, DropdownProps } from "semantic-ui-react";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { DataInstanceTO } from "../../../../dataAccess/access/to/DataInstanceTO";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
+import { DavitDropDown, DavitDropDownItemProps } from "./DavitDropDown";
 
 export interface DataAndInstanceId {
     dataFk: number;
     instanceId: number;
 }
 
-interface InstanceDropDownProps extends DropdownProps {
+interface InstanceDropDownProps {
     onSelect: (dataAndInstance: DataAndInstanceId | undefined) => void;
     placeholder?: string;
     value?: string;
-}
-
-interface InstanceDropDownButtonProps extends DropdownProps {
-    onSelect: (dataAndInstance: DataAndInstanceId | undefined) => void;
-    icon?: string;
-}
-
-interface InstanceDropDownMultiselectProps extends DropdownProps {
-    onSelect: (dataAndInstaces: DataAndInstanceId[] | undefined) => void;
-    selected: DataAndInstanceId[];
-    placeholder?: string;
 }
 
 export const InstanceDropDown: FunctionComponent<InstanceDropDownProps> = (props) => {
@@ -42,39 +30,6 @@ export const InstanceDropDown: FunctionComponent<InstanceDropDownProps> = (props
     );
 };
 
-export const InstanceDropDownButton: FunctionComponent<InstanceDropDownButtonProps> = (props) => {
-    const {onSelect, icon} = props;
-    const {selectInstance, createOptions} = useInstanceDropDownViewModel();
-
-    return (
-        <DavitIconDropDown
-            dropdownItems={createOptions()}
-            icon={icon}
-            onSelect={(instance) => onSelect(selectInstance(instance.value))}
-        />
-    );
-};
-
-export const InstanceDropDownMultiselect: FunctionComponent<InstanceDropDownMultiselectProps> = (props) => {
-    const {onSelect, selected, placeholder} = props;
-    const {selectInstances, createOptions} = useInstanceDropDownViewModel();
-
-    return (
-        <Dropdown
-            placeholder={placeholder || "Select Datas ..."}
-            fluid
-            multiple
-            selection
-            options={createOptions()}
-            onChange={(event, instances) => {
-                onSelect(selectInstances((instances.value as string[]) || undefined));
-            }}
-            value={selected.map((select) => JSON.stringify(select))}
-            scrolling
-            disabled={createOptions().length <= 0}
-        />
-    );
-};
 
 const useInstanceDropDownViewModel = () => {
     const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);

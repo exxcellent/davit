@@ -1,24 +1,23 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
-import { DropdownProps } from "semantic-ui-react";
 import { ActorCTO } from "../../../../dataAccess/access/cto/ActorCTO";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { InitDataTO } from "../../../../dataAccess/access/to/InitDataTO";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 import { DavitUtil } from "../../../../utils/DavitUtil";
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
+import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "./DavitDropDown";
 
-interface InitDataDropDownDownProps extends DropdownProps {
+interface InitDataDropDownDownProps {
     initDatas: InitDataTO[];
     onSelect: (initData: InitDataTO | undefined) => void;
     placeholder?: string;
     value?: number;
 }
 
-interface InitDataDropDownPropsButton extends DropdownProps {
+interface InitDataLabelDropDownProps {
     initDatas: InitDataTO[];
     onSelect: (initData: InitDataTO | undefined) => void;
-    icon?: string;
+    label: string;
 }
 
 export const InitDataDropDown: FunctionComponent<InitDataDropDownDownProps> = (props) => {
@@ -36,14 +35,14 @@ export const InitDataDropDown: FunctionComponent<InitDataDropDownDownProps> = (p
     );
 };
 
-export const InitDataDropDownButton: FunctionComponent<InitDataDropDownPropsButton> = (props) => {
-    const {onSelect, icon, initDatas} = props;
+export const InitDataLabelDropDown: FunctionComponent<InitDataLabelDropDownProps> = (props) => {
+    const {onSelect, label, initDatas} = props;
     const {initDataToOption, selectInitData} = useDataSetupDropDownViewModel();
 
     return (
-        <DavitIconDropDown
+        <DavitLabelDropDown
             dropdownItems={initDatas.map(initDataToOption)}
-            icon={icon}
+            label={label}
             onSelect={(initData) => onSelect(selectInitData(Number(initData.value), initDatas))}
         />
     );
@@ -58,7 +57,7 @@ const useDataSetupDropDownViewModel = () => {
     };
 
     const getDataName = (dataId: number, instanceId?: number): string => {
-        let dataName: string = "";
+        let dataName: string;
         let instanceName: string = "";
         const data: DataCTO | undefined = datas.find((data) => data.data.id === dataId);
         dataName = data?.data.name || "";

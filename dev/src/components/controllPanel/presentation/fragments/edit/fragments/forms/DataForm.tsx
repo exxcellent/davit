@@ -39,15 +39,19 @@ export const DataForm: FunctionComponent<DataFormProps> = () => {
         const createInstanceRow = (instance: DataInstanceTO, index: number): JSX.Element => {
             return (<tr key={index}>
                     <td>
-                        <div style={{display: "flex", justifyContent: "space-between"}}>
+                        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
                             <DavitLabelTextfield
                                 onChangeCallback={(newName) => changeInstanceName(newName, index)}
                                 value={instance.name}
                                 onBlur={updateData}
                             />
-                            {index !== 0 && <DavitDeleteButton onClick={() => deleteInstance(index)}
-                                                               noConfirm
-                            />}
+                            {index !== 0 &&
+                            <div>
+                                <DavitDeleteButton onClick={() => deleteInstance(index)}
+                                                   noConfirm
+                                />
+                            </div>
+                            }
                         </div>
                     </td>
                 </tr>

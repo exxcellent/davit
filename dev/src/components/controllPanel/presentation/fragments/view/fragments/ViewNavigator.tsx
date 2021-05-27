@@ -23,7 +23,6 @@ export const ViewNavigator: FunctionComponent<ViewNavigatorProps> = (props) => {
                 iconName={faFastBackward}
                 onClick={fastBackward}
                 style={{borderTopRightRadius: 0, borderBottomRightRadius: 0}}
-                className={"padding"}
             />
             <DavitButton
                 iconName={faArrowLeft}
@@ -33,7 +32,7 @@ export const ViewNavigator: FunctionComponent<ViewNavigatorProps> = (props) => {
                 style={{borderRadius: 0}}
             />
             <div className={"border"}
-                 style={{textAlign: "center", padding: "0.55em", borderRadius: 0}}
+                 style={{textAlign: "center", padding: "0.43rem", borderRadius: 0}}
             >
                 <label>{index}</label>
             </div>

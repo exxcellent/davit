@@ -51,10 +51,9 @@ export const ControlPanelEditChain: FunctionComponent<ControlPanelEditChainProps
                          divider={true}
             >
                 <AddOrEdit addCallBack={editOrAddChainLink}
-                           label={"Link"}
                            dropDown={<ChainLinkDropDownButton
                                onSelect={(link) => editOrAddChainLink(link)}
-                               icon="wrench"
+                               label="Link"
                                chainId={id}
                            />}
                 />
@@ -64,10 +63,9 @@ export const ControlPanelEditChain: FunctionComponent<ControlPanelEditChainProps
                          divider={true}
             >
                 <AddOrEdit addCallBack={editOrAddChainDecision}
-                           label={"Decision"}
                            dropDown={<ChainDecisionDropDownButton
                                onSelect={editOrAddChainDecision}
-                               icon="wrench"
+                               label="Decision"
                                chainId={id}
                            />}
                 />

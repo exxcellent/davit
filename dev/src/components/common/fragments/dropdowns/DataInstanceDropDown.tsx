@@ -1,19 +1,18 @@
 import React, { FunctionComponent } from "react";
-import { DropdownProps } from "semantic-ui-react";
 import { DataInstanceTO } from "../../../../dataAccess/access/to/DataInstanceTO";
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
+import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "./DavitDropDown";
 
-interface DataInstanceDropDownProps extends DropdownProps {
+interface DataInstanceDropDownProps {
     onSelect: (id: number | undefined) => void;
     instances: DataInstanceTO[];
     placeholder?: string;
     value?: number;
 }
 
-interface DataInstanceDropDownButtonProps extends DropdownProps {
+interface DataInstanceLabelDropDownProps {
     onSelect: (id: number | undefined) => void;
     instances: DataInstanceTO[];
-    icon?: string;
+    label: string;
 }
 
 /**
@@ -33,15 +32,15 @@ export const DataInstanceDropDown: FunctionComponent<DataInstanceDropDownProps> 
     );
 };
 
-export const DataInstanceDropDownButton: FunctionComponent<DataInstanceDropDownButtonProps> = (props) => {
-    const {onSelect, instances, icon} = props;
+export const DataInstanceLabelDropDown: FunctionComponent<DataInstanceLabelDropDownProps> = (props) => {
+    const {onSelect, instances, label} = props;
     const {dataInstacesToOption} = useDataInstanceDropDownViewModel();
 
     return (
-        <DavitIconDropDown
+        <DavitLabelDropDown
             dropdownItems={dataInstacesToOption(instances)}
             onSelect={(instance) => onSelect(Number(instance.value))}
-            icon={icon}
+            label={label}
         />
     );
 };

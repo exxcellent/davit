@@ -15,8 +15,8 @@ import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton
 import { DavitCommentButton } from "../../../../../common/fragments/buttons/DavitCommentButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
-import { DecisionDropDownButton } from "../../../../../common/fragments/dropdowns/DecisionDropDown";
-import { StepDropDownButton } from "../../../../../common/fragments/dropdowns/StepDropDown";
+import { DecisionLabelDropDown } from "../../../../../common/fragments/dropdowns/DecisionDropDown";
+import { StepLabelDropDown } from "../../../../../common/fragments/dropdowns/StepDropDown";
 import { ControlPanel } from "../common/ControlPanel";
 import { OptionField } from "../common/OptionField";
 
@@ -54,9 +54,8 @@ export const ControlPanelEditSequence: FunctionComponent<ControlPanelEditSequenc
                          divider={true}
             >
                 <AddOrEdit addCallBack={editOrAddSequenceStep}
-                           label={"Step"}
-                           dropDown={<StepDropDownButton onSelect={editOrAddSequenceStep}
-                                                         icon="wrench"
+                           dropDown={<StepLabelDropDown onSelect={editOrAddSequenceStep}
+                                                        label="Step"
                            />}
                 />
             </OptionField>
@@ -64,9 +63,8 @@ export const ControlPanelEditSequence: FunctionComponent<ControlPanelEditSequenc
                          divider={true}
             >
                 <AddOrEdit addCallBack={editOrAddDecision}
-                           label={"Decision"}
-                           dropDown={<DecisionDropDownButton onSelect={editOrAddDecision}
-                                                             icon="wrench"
+                           dropDown={<DecisionLabelDropDown onSelect={editOrAddDecision}
+                                                            label="Decision"
                            />}
                 />
             </OptionField>
