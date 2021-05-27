@@ -1,21 +1,21 @@
-import React, {FunctionComponent} from 'react';
-import {ActorCTO} from '../../../../../../dataAccess/access/cto/ActorCTO';
-import {DataCTO} from '../../../../../../dataAccess/access/cto/DataCTO';
-import {ChainTO} from '../../../../../../dataAccess/access/to/ChainTO';
-import {DataRelationTO} from '../../../../../../dataAccess/access/to/DataRelationTO';
-import {DataSetupTO} from '../../../../../../dataAccess/access/to/DataSetupTO';
-import {GroupTO} from '../../../../../../dataAccess/access/to/GroupTO';
-import {ActorDropDownLabel} from '../../../../../common/fragments/dropdowns/ActorDropDown';
-import {DataLabelDropDown} from '../../../../../common/fragments/dropdowns/DataDropDown';
-import {DataSetupLabelDropDown} from '../../../../../common/fragments/dropdowns/DataSetupDropDown';
-import {RelationLabelDropDown} from '../../../../../common/fragments/dropdowns/RelationDropDown';
-import {SequenceLabelDropDown} from '../../../../../common/fragments/dropdowns/SequenceDropDown';
-import {OptionField} from '../common/OptionField';
-import {AddOrEdit} from '../../../../../common/fragments/AddOrEdit';
-import {ChainDropDownButton} from '../../../../../common/fragments/dropdowns/ChainDropDown';
-import {useDispatch, useSelector} from "react-redux";
-import {EditActions, editSelectors, Mode} from "../../../../../../slices/EditSlice";
-import {ControlPanel} from '../common/ControlPanel';
+import React, { FunctionComponent } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { ActorCTO } from "../../../../../../dataAccess/access/cto/ActorCTO";
+import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
+import { ChainTO } from "../../../../../../dataAccess/access/to/ChainTO";
+import { DataRelationTO } from "../../../../../../dataAccess/access/to/DataRelationTO";
+import { DataSetupTO } from "../../../../../../dataAccess/access/to/DataSetupTO";
+import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
+import { EditActions, editSelectors, Mode } from "../../../../../../slices/EditSlice";
+import { AddOrEdit } from "../../../../../common/fragments/AddOrEdit";
+import { ActorDropDownLabel } from "../../../../../common/fragments/dropdowns/ActorDropDown";
+import { ChainDropDownButton } from "../../../../../common/fragments/dropdowns/ChainDropDown";
+import { DataLabelDropDown } from "../../../../../common/fragments/dropdowns/DataDropDown";
+import { DataSetupLabelDropDown } from "../../../../../common/fragments/dropdowns/DataSetupDropDown";
+import { RelationLabelDropDown } from "../../../../../common/fragments/dropdowns/RelationDropDown";
+import { SequenceLabelDropDown } from "../../../../../common/fragments/dropdowns/SequenceDropDown";
+import { ControlPanel } from "../common/ControlPanel";
+import { OptionField } from "../common/OptionField";
 
 
 export interface ControlPanelEditMenuProps {
@@ -34,32 +34,51 @@ export const ControlPanelEditMenu: FunctionComponent<ControlPanelEditMenuProps> 
 
     return (
         <ControlPanel>
-            <OptionField label='actor'>
+            <OptionField label="actor">
                 <AddOrEdit
                     addCallBack={() => editOrAddActor()}
-                    dropDown={<ActorDropDownLabel onSelect={editOrAddActor} label='Actor'/>}
+                    dropDown={<ActorDropDownLabel onSelect={editOrAddActor}
+                                                  label="Actor"
+                    />}
                 />
             </OptionField>
-            <OptionField label='Data' divider={true}>
+            <OptionField label="Data"
+                         divider={true}
+            >
                 <AddOrEdit addCallBack={() => editOrAddData()}
-                           dropDown={<DataLabelDropDown onSelect={editOrAddData} label='Data'/>}/>
+                           dropDown={<DataLabelDropDown onSelect={editOrAddData}
+                                                        label="Data"
+                           />}
+                />
                 <AddOrEdit addCallBack={() => editOrAddRelation()}
-                           dropDown={<RelationLabelDropDown onSelect={editOrAddRelation} label='Relation'/>}/>
+                           dropDown={<RelationLabelDropDown onSelect={editOrAddRelation}
+                                                            label="Relation"
+                           />}
+                />
             </OptionField>
-            <OptionField label='Data - Setup' divider={true}>
+            <OptionField label="Data - Setup"
+                         divider={true}
+            >
                 <AddOrEdit addCallBack={() => editOrAddDataSetup()}
-                           dropDown={<DataSetupLabelDropDown onSelect={editOrAddDataSetup} label='Data-Setup'/>}/>
+                           dropDown={<DataSetupLabelDropDown onSelect={editOrAddDataSetup}
+                                                             label="Data-Setup"
+                           />}
+                />
             </OptionField>
-            <OptionField label='sequence' divider={true}>
+            <OptionField label="sequence"
+                         divider={true}
+            >
                 <AddOrEdit addCallBack={() => editOrAddSequence()}
                            dropDown={<SequenceLabelDropDown
                                onSelect={(sequenceTO) => editOrAddSequence(sequenceTO?.id)}
-                               label='Sequence'/>}
+                               label="Sequence"
+                           />}
                 />
                 <AddOrEdit addCallBack={() => editOrAddChain()}
                            dropDown={<ChainDropDownButton
                                onSelect={(chain) => editOrAddChain(chain)}
-                               label='Chain'/>}
+                               label="Chain"
+                           />}
                 />
             </OptionField>
         </ControlPanel>

@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, {FunctionComponent, Ref, useEffect, useRef, useState} from "react";
+import React, { FunctionComponent, Ref, useEffect, useRef, useState } from "react";
 
 export interface DavitLabelTextfieldProps {
     onChangeCallback: (value: string) => void;

@@ -1,6 +1,6 @@
-import React, {FunctionComponent} from "react";
-import {DataInstanceTO} from "../../../../dataAccess/access/to/DataInstanceTO";
-import {DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
+import React, { FunctionComponent } from "react";
+import { DataInstanceTO } from "../../../../dataAccess/access/to/DataInstanceTO";
+import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "./DavitDropDown";
 
 interface DataInstanceDropDownProps {
     onSelect: (id: number | undefined) => void;

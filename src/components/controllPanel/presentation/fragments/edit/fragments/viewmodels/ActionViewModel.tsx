@@ -1,18 +1,18 @@
-import {useDispatch, useSelector} from 'react-redux';
-import {ActorCTO} from '../../../../../../../dataAccess/access/cto/ActorCTO';
-import {DataCTO} from '../../../../../../../dataAccess/access/cto/DataCTO';
-import {SequenceCTO} from '../../../../../../../dataAccess/access/cto/SequenceCTO';
-import {SequenceStepCTO} from '../../../../../../../dataAccess/access/cto/SequenceStepCTO';
-import {ActionTO} from '../../../../../../../dataAccess/access/to/ActionTO';
-import {ActionType} from '../../../../../../../dataAccess/access/types/ActionType';
-import {EditActions, editSelectors} from '../../../../../../../slices/EditSlice';
-import {MasterDataActions, masterDataSelectors} from '../../../../../../../slices/MasterDataSlice';
-import {sequenceModelSelectors} from '../../../../../../../slices/SequenceModelSlice';
-import {EditAction} from '../../../../../../../slices/thunks/ActionThunks';
-import {DavitUtil} from '../../../../../../../utils/DavitUtil';
-import {DataAndInstanceId} from '../../../../../../common/fragments/dropdowns/InstanceDropDown';
-import {GlobalActions} from '../../../../../../../slices/GlobalSlice';
-import {useState} from 'react';
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { ActorCTO } from "../../../../../../../dataAccess/access/cto/ActorCTO";
+import { DataCTO } from "../../../../../../../dataAccess/access/cto/DataCTO";
+import { SequenceCTO } from "../../../../../../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../../../../../../dataAccess/access/cto/SequenceStepCTO";
+import { ActionTO } from "../../../../../../../dataAccess/access/to/ActionTO";
+import { ActionType } from "../../../../../../../dataAccess/access/types/ActionType";
+import { EditActions, editSelectors } from "../../../../../../../slices/EditSlice";
+import { GlobalActions } from "../../../../../../../slices/GlobalSlice";
+import { MasterDataActions, masterDataSelectors } from "../../../../../../../slices/MasterDataSlice";
+import { sequenceModelSelectors } from "../../../../../../../slices/SequenceModelSlice";
+import { EditAction } from "../../../../../../../slices/thunks/ActionThunks";
+import { DavitUtil } from "../../../../../../../utils/DavitUtil";
+import { DataAndInstanceId } from "../../../../../../common/fragments/dropdowns/InstanceDropDown";
 
 
 export const useActionViewModel = () => {
@@ -36,7 +36,7 @@ export const useActionViewModel = () => {
                 dispatch(EditActions.setMode.editStep(step));
             } else {
                 // should never happend but as fallback savty.
-                dispatch(GlobalActions.handleError('Step not found!'));
+                dispatch(GlobalActions.handleError("Step not found!"));
                 dispatch(EditActions.setMode.edit());
             }
         }
@@ -63,8 +63,8 @@ export const useActionViewModel = () => {
         if (newActionType !== undefined && selectedSequence !== null && actionToEdit !== null) {
             const copyActionToEdit: ActionTO = DavitUtil.deepCopy(actionToEdit);
             copyActionToEdit.actionType = newActionType;
-            copyActionToEdit.sendingActorFk = newActionType.includes('SEND') ? actionToEdit.sendingActorFk : -1;
-            copyActionToEdit.receivingActorFk = newActionType.includes('SEND') ? actionToEdit.receivingActorFk : -1;
+            copyActionToEdit.sendingActorFk = newActionType.includes("SEND") ? actionToEdit.sendingActorFk : -1;
+            copyActionToEdit.receivingActorFk = newActionType.includes("SEND") ? actionToEdit.receivingActorFk : -1;
             dispatch(EditAction.update(copyActionToEdit));
             dispatch(EditAction.save(copyActionToEdit));
         }
@@ -122,9 +122,9 @@ export const useActionViewModel = () => {
             if (!validAction(actionToEdit!)) {
                 deleteAction(actionToEdit!);
             }
-            if (newMode && newMode === 'EDIT') {
+            if (newMode && newMode === "EDIT") {
                 dispatch(EditActions.setMode.edit());
-            } else if (newMode && newMode === 'SEQUENCE') {
+            } else if (newMode && newMode === "SEQUENCE") {
                 dispatch(EditActions.setMode.editSequence(selectedSequence?.sequenceTO.id));
             } else {
                 const step: SequenceStepCTO | undefined = MasterDataActions.find.findSequenceStepCTO(
@@ -193,7 +193,7 @@ export const useActionViewModel = () => {
     };
 
     return {
-        label: 'EDIT * SEQUENCE * STEP * ACTION',
+        label: "EDIT * SEQUENCE * STEP * ACTION",
         action: actionToEdit,
         setActor,
         setAction,
@@ -213,7 +213,7 @@ export const useActionViewModel = () => {
             instanceId: actionToEdit?.instanceFk,
         }),
         setTriggerLabel,
-        triggerLabel: actionToEdit?.actionType === ActionType.TRIGGER ? actionToEdit.triggerText : '',
+        triggerLabel: actionToEdit?.actionType === ActionType.TRIGGER ? actionToEdit.triggerText : "",
         getOptionText
     };
 };

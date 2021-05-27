@@ -1,4 +1,4 @@
-import React, {FunctionComponent} from 'react';
+import React, { FunctionComponent } from "react";
 import "./Modal.css";
 
 interface DavitModalProps {
@@ -7,5 +7,5 @@ interface DavitModalProps {
 export const DavitModal: FunctionComponent<DavitModalProps> = (props) => {
     const {children} = props;
 
-    return <div className='davitModal'>{children}</div>;
+    return <div className="davitModal">{children}</div>;
 };

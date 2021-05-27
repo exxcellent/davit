@@ -1,8 +1,8 @@
-import { DataStoreCTO } from './access/cto/DataStoreCTO';
-import { ActionTO } from './access/to/ActionTO';
-import { DecisionTO } from './access/to/DecisionTO';
-import { SequenceStepTO } from './access/to/SequenceStepTO';
-import { GoToTypes } from './access/types/GoToType';
+import { DataStoreCTO } from "./access/cto/DataStoreCTO";
+import { ActionTO } from "./access/to/ActionTO";
+import { DecisionTO } from "./access/to/DecisionTO";
+import { SequenceStepTO } from "./access/to/SequenceStepTO";
+import { GoToTypes } from "./access/types/GoToType";
 
 export const ConstraintsHelper = {
     deleteDataConstraintCheck(dataId: number, dataStore: DataStoreCTO) {
@@ -79,14 +79,14 @@ export const ConstraintsHelper = {
 
     deleteStepConstraintCheck(stepToDelete: SequenceStepTO, dataStore: DataStoreCTO) {
         let errorMessagePrefix: string = `delete.error! step: ${stepToDelete.name} with id: ${stepToDelete.id} is still connected to: \n`;
-        let errorMessageSuffix: string = '';
+        let errorMessageSuffix: string = "";
 
         const constraintStep: SequenceStepTO | undefined = Array.from(dataStore.steps.values()).find(
             (step) => step.goto.type === GoToTypes.STEP && step.goto.id === stepToDelete.id,
         );
 
         errorMessageSuffix =
-            errorMessageSuffix + (constraintStep ? `step: ${constraintStep.name} with id: ${constraintStep.id}!` : '');
+            errorMessageSuffix + (constraintStep ? `step: ${constraintStep.name} with id: ${constraintStep.id}!` : "");
 
         const constraintAction: ActionTO | undefined = Array.from(dataStore.actions.values()).find(
             (action) => action.sequenceStepFk === stepToDelete.id,
@@ -94,7 +94,7 @@ export const ConstraintsHelper = {
 
         errorMessageSuffix =
             errorMessageSuffix +
-            (constraintAction ? `\n action: ${constraintAction.actionType} with id: ${constraintAction.id}!` : '');
+            (constraintAction ? `\n action: ${constraintAction.actionType} with id: ${constraintAction.id}!` : "");
 
         const constraintDecision: DecisionTO | undefined = Array.from(dataStore.decisions.values()).find(
             (decision) =>
@@ -104,7 +104,7 @@ export const ConstraintsHelper = {
 
         errorMessageSuffix =
             errorMessageSuffix +
-            (constraintDecision ? `\n decision: ${constraintDecision.name} with id: ${constraintDecision.id}!` : '');
+            (constraintDecision ? `\n decision: ${constraintDecision.name} with id: ${constraintDecision.id}!` : "");
 
         if (errorMessageSuffix.length > 0) {
             throw new Error(errorMessagePrefix + errorMessageSuffix);

@@ -25,7 +25,7 @@ export const ActionRepository = {
                 id: DataAccessUtil.determineNewId(this.findAll()),
             };
         } else {
-            actionTO = { ...action };
+            actionTO = {...action};
         }
         dataStore.getDataStore().actions.set(actionTO.id, actionTO);
         return actionTO;

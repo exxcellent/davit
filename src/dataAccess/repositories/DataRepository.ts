@@ -25,7 +25,7 @@ export const DataRepository = {
 
         checkDeleteInstancesConstraint(data, this.findAll(), dataStore.getDataStore());
 
-        let dataTO: DataTO = { ...data };
+        let dataTO: DataTO = {...data};
 
         dataTO = checkOrsetNewDataId(this.findAll(), dataTO);
         dataTO.instances = data.instances.map((instance) => checkOrSetNewInstanceId(data.instances, instance));

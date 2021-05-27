@@ -1,24 +1,25 @@
-import {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {DataCTO} from '../../../../../../../dataAccess/access/cto/DataCTO';
-import {DataRelationTO, Direction, RelationType} from '../../../../../../../dataAccess/access/to/DataRelationTO';
-import {EditActions, editSelectors} from '../../../../../../../slices/EditSlice';
-import {masterDataSelectors} from '../../../../../../../slices/MasterDataSlice';
-import {EditRelation} from '../../../../../../../slices/thunks/RelationThunks';
-import {DavitUtil} from '../../../../../../../utils/DavitUtil';
-import {GlobalActions} from '../../../../../../../slices/GlobalSlice';
-import {DavitDropDownItemProps} from "../../../../../../common/fragments/dropdowns/DavitDropDown";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { DataCTO } from "../../../../../../../dataAccess/access/cto/DataCTO";
+import { DataRelationTO, Direction, RelationType } from "../../../../../../../dataAccess/access/to/DataRelationTO";
+import { EditActions, editSelectors } from "../../../../../../../slices/EditSlice";
+import { GlobalActions } from "../../../../../../../slices/GlobalSlice";
+import { masterDataSelectors } from "../../../../../../../slices/MasterDataSlice";
+import { EditRelation } from "../../../../../../../slices/thunks/RelationThunks";
+import { DavitUtil } from "../../../../../../../utils/DavitUtil";
+import { DavitDropDownItemProps } from "../../../../../../common/fragments/dropdowns/DavitDropDown";
 
 export const useDataRelationViewModel = () => {
     const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
     const relationToEdit: DataRelationTO | null = useSelector(editSelectors.selectRelationToEdit);
     const dispatch = useDispatch();
+    const [key, setKey] = useState<number>(0);
 
     useEffect(() => {
         // check if component to edit is really set or go back to edit mode
         if (DavitUtil.isNullOrUndefined(relationToEdit)) {
             dispatch(EditActions.setMode.edit());
-            dispatch(GlobalActions.handleError('Tried to go to edit relation without relationToedit specified'));
+            dispatch(GlobalActions.handleError("Tried to go to edit relation without relationToedit specified"));
         }
     }, [relationToEdit, dispatch]);
 
@@ -74,7 +75,7 @@ export const useDataRelationViewModel = () => {
     };
 
     const createAnother = () => {
-        saveRelation();
+        setKey(key + 1);
         dispatch(EditActions.setMode.editRelation());
     };
 
@@ -99,7 +100,7 @@ export const useDataRelationViewModel = () => {
     };
 
     const saveNote = (text: string) => {
-        if (!DavitUtil.isNullOrUndefined(relationToEdit) && text !== '') {
+        if (!DavitUtil.isNullOrUndefined(relationToEdit) && text !== "") {
             const relationCopy: DataRelationTO = DavitUtil.deepCopy(relationToEdit);
             relationCopy.note = text;
             dispatch(EditActions.setMode.editRelation(relationCopy));
@@ -107,7 +108,7 @@ export const useDataRelationViewModel = () => {
     };
 
     return {
-        label: 'EDIT * RELATION',
+        label: "EDIT * RELATION",
         label1: relationToEdit?.label1,
         label2: relationToEdit?.label2,
         data1: relationToEdit?.data1Fk === -1 ? undefined : relationToEdit?.data1Fk.toString(),
@@ -127,9 +128,10 @@ export const useDataRelationViewModel = () => {
         directionOptions,
         typeOptions,
         validRelation,
+        key,
         createAnother,
         updateRelation,
-        note: relationToEdit ? relationToEdit.note : '',
+        note: relationToEdit ? relationToEdit.note : "",
         saveNote,
     };
 };

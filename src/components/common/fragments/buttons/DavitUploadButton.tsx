@@ -4,7 +4,8 @@ import { useDispatch } from "react-redux";
 import { GlobalActions } from "../../../../slices/GlobalSlice";
 import { DavitButton } from "./DavitButton";
 
-export interface DavitFileInputProps {}
+export interface DavitFileInputProps {
+}
 
 export const DavitUploadButton: FunctionComponent<DavitFileInputProps> = () => {
     const dispatch = useDispatch();
@@ -28,7 +29,9 @@ export const DavitUploadButton: FunctionComponent<DavitFileInputProps> = () => {
 
     return (
         <div>
-            <DavitButton iconName={faCloudUploadAlt} onClick={openFileBrowser} />
+            <DavitButton iconName={faCloudUploadAlt}
+                         onClick={openFileBrowser}
+            />
             <input
                 hidden={true}
                 ref={inputFileRef}

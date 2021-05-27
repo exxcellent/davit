@@ -1,6 +1,6 @@
-import React, {FunctionComponent} from "react";
-import {ActionType} from "../../../../dataAccess/access/types/ActionType";
-import {DavitDropDown, DavitDropDownItemProps} from "./DavitDropDown";
+import React, { FunctionComponent } from "react";
+import { ActionType } from "../../../../dataAccess/access/types/ActionType";
+import { DavitDropDown, DavitDropDownItemProps } from "./DavitDropDown";
 
 interface ActionTypeDropDownnProps {
     onSelect: (actionType: ActionType | undefined) => void;

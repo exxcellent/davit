@@ -1,3 +1,4 @@
 export class AbstractTO {
-    constructor(public id: number = -1) {}
+    constructor(public id: number = -1) {
+    }
 }

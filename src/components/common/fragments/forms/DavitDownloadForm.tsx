@@ -1,10 +1,10 @@
-import React, {FunctionComponent, useState} from "react";
-import {useDispatch} from "react-redux";
-import {GlobalActions} from "../../../../slices/GlobalSlice";
-import {DavitLabelTextfield} from "../DavitLabelTextfield";
-import {useEnterHook, useEscHook} from "../../../../utils/WindowUtil";
-import {FormHeader} from "./FormHeader";
-import {FormFooter} from "./FormFooter";
+import React, { FunctionComponent, useState } from "react";
+import { useDispatch } from "react-redux";
+import { GlobalActions } from "../../../../slices/GlobalSlice";
+import { useEnterHook, useEscHook } from "../../../../utils/WindowUtil";
+import { DavitLabelTextfield } from "../DavitLabelTextfield";
+import { FormFooter } from "./FormFooter";
+import { FormHeader } from "./FormHeader";
 
 interface DavitDownloadFormProps {
     onCloseCallback: () => void;

@@ -1,9 +1,9 @@
-import React, { FunctionComponent } from 'react';
-import { ControlPanel } from '../edit/common/ControlPanel';
-import { OptionField } from '../edit/common/OptionField';
-import { DavitButton } from '../../../../common/fragments/buttons/DavitButton';
-import { faShare } from '@fortawesome/free-solid-svg-icons';
-import { ModuleRoutes } from '../../../../../app/Davit';
+import { faShare } from "@fortawesome/free-solid-svg-icons";
+import React, { FunctionComponent } from "react";
+import { ModuleRoutes } from "../../../../../app/Davit";
+import { DavitButton } from "../../../../common/fragments/buttons/DavitButton";
+import { ControlPanel } from "../edit/common/ControlPanel";
+import { OptionField } from "../edit/common/OptionField";
 
 export interface ControlPanelTabControllerProps {
     hidden: boolean;
@@ -16,10 +16,18 @@ export const ControlPanelTabController: FunctionComponent<ControlPanelTabControl
     return (
         <ControlPanel>
             <OptionField>
-                <DavitButton iconName={faShare} onClick={showActorPage} />
-                <DavitButton iconName={faShare} onClick={showDataPage} />
-                <DavitButton iconName={faShare} onClick={showTablePage} />
-                <DavitButton iconName={faShare} onClick={showFlowChartPage} />
+                <DavitButton iconName={faShare}
+                             onClick={showActorPage}
+                />
+                <DavitButton iconName={faShare}
+                             onClick={showDataPage}
+                />
+                <DavitButton iconName={faShare}
+                             onClick={showTablePage}
+                />
+                <DavitButton iconName={faShare}
+                             onClick={showFlowChartPage}
+                />
             </OptionField>
         </ControlPanel>
     );
@@ -39,5 +47,5 @@ const useFileOptionModelView = () => {
         window.open(ModuleRoutes.flowChart, "_blank", "toolbar=no,top=0,left=0");
     };
 
-    return { showActorPage, showDataPage, showTablePage, showFlowChartPage };
+    return {showActorPage, showDataPage, showTablePage, showFlowChartPage};
 };

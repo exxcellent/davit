@@ -6,7 +6,7 @@ interface FlowChartlabelProps {
 }
 
 export const FlowChartlabel: FunctionComponent<FlowChartlabelProps> = (props) => {
-    const { text, label } = props;
+    const {text, label} = props;
 
     return (
         <div className="flowChartLabel">

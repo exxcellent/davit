@@ -22,7 +22,7 @@ export const SequenceRepository = {
                 id: DataAccessUtil.determineNewId(this.findAll()),
             };
         } else {
-            sequenceTO = { ...sequence };
+            sequenceTO = {...sequence};
         }
         dataStore.getDataStore().sequences.set(sequenceTO.id!, sequenceTO);
         return sequenceTO;
