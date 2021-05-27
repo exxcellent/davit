@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/davit/dev/static/css/main.d67ab438.chunk.css",
-    "main.js": "/davit/dev/static/js/main.a465db01.chunk.js",
-    "main.js.map": "/davit/dev/static/js/main.a465db01.chunk.js.map",
+    "main.js": "/davit/dev/static/js/main.6f8fc308.chunk.js",
+    "main.js.map": "/davit/dev/static/js/main.6f8fc308.chunk.js.map",
     "runtime-main.js": "/davit/dev/static/js/runtime-main.8e25331c.js",
     "runtime-main.js.map": "/davit/dev/static/js/runtime-main.8e25331c.js.map",
     "static/js/2.bf6f282e.chunk.js": "/davit/dev/static/js/2.bf6f282e.chunk.js",
     "static/js/2.bf6f282e.chunk.js.map": "/davit/dev/static/js/2.bf6f282e.chunk.js.map",
     "index.html": "/davit/dev/index.html",
-    "precache-manifest.63d4b5988e4939b845175b129d4c6e4e.js": "/davit/dev/precache-manifest.63d4b5988e4939b845175b129d4c6e4e.js",
+    "precache-manifest.1c2fda00dde4207f50860c4e4b0b9491.js": "/davit/dev/precache-manifest.1c2fda00dde4207f50860c4e4b0b9491.js",
     "service-worker.js": "/davit/dev/service-worker.js",
     "static/css/main.d67ab438.chunk.css.map": "/davit/dev/static/css/main.d67ab438.chunk.css.map",
     "static/js/2.bf6f282e.chunk.js.LICENSE.txt": "/davit/dev/static/js/2.bf6f282e.chunk.js.LICENSE.txt",
@@ -19,6 +19,6 @@
     "static/js/runtime-main.8e25331c.js",
     "static/js/2.bf6f282e.chunk.js",
     "static/css/main.d67ab438.chunk.css",
-    "static/js/main.a465db01.chunk.js"
+    "static/js/main.6f8fc308.chunk.js"
   ]
 }
