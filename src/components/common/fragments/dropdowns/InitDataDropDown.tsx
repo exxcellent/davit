@@ -1,11 +1,11 @@
-import React, {FunctionComponent} from "react";
-import {useSelector} from "react-redux";
-import {ActorCTO} from "../../../../dataAccess/access/cto/ActorCTO";
-import {DataCTO} from "../../../../dataAccess/access/cto/DataCTO";
-import {InitDataTO} from "../../../../dataAccess/access/to/InitDataTO";
-import {masterDataSelectors} from "../../../../slices/MasterDataSlice";
-import {DavitUtil} from "../../../../utils/DavitUtil";
-import {DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { ActorCTO } from "../../../../dataAccess/access/cto/ActorCTO";
+import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
+import { InitDataTO } from "../../../../dataAccess/access/to/InitDataTO";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import { DavitUtil } from "../../../../utils/DavitUtil";
+import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "./DavitDropDown";
 
 interface InitDataDropDownDownProps {
     initDatas: InitDataTO[];

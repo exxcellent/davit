@@ -1,9 +1,9 @@
-import React, {FunctionComponent} from 'react';
-import {useSelector} from 'react-redux';
-import {DataCTO} from '../../../../dataAccess/access/cto/DataCTO';
-import {DataInstanceTO} from '../../../../dataAccess/access/to/DataInstanceTO';
-import {masterDataSelectors} from '../../../../slices/MasterDataSlice';
-import {DavitDropDown, DavitDropDownItemProps} from './DavitDropDown';
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
+import { DataInstanceTO } from "../../../../dataAccess/access/to/DataInstanceTO";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import { DavitDropDown, DavitDropDownItemProps } from "./DavitDropDown";
 
 export interface DataAndInstanceId {
     dataFk: number;

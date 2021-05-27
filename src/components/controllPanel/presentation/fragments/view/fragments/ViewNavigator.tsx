@@ -1,10 +1,10 @@
-import React, {FunctionComponent} from 'react';
-import {DavitButton} from '../../../../../common/fragments/buttons/DavitButton';
-import {faFastBackward} from '@fortawesome/free-solid-svg-icons/faFastBackward';
-import {faArrowLeft} from '@fortawesome/free-solid-svg-icons/faArrowLeft';
-import {faArrowRight} from '@fortawesome/free-solid-svg-icons/faArrowRight';
-import {faFastForward} from '@fortawesome/free-solid-svg-icons/faFastForward';
-import {CenteredFlex} from '../../../../../common/fragments/CenteredFlex';
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons/faArrowLeft";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons/faArrowRight";
+import { faFastBackward } from "@fortawesome/free-solid-svg-icons/faFastBackward";
+import { faFastForward } from "@fortawesome/free-solid-svg-icons/faFastForward";
+import React, { FunctionComponent } from "react";
+import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
+import { CenteredFlex } from "../../../../../common/fragments/CenteredFlex";
 
 interface ViewNavigatorProps {
     fastBackward: () => void,
@@ -26,17 +26,19 @@ export const ViewNavigator: FunctionComponent<ViewNavigatorProps> = (props) => {
             />
             <DavitButton
                 iconName={faArrowLeft}
-                label='BACK'
+                label="BACK"
                 onClick={backward}
                 iconLeft={true}
                 style={{borderRadius: 0}}
             />
-            <div className={'border'} style={{textAlign: "center", padding: "0.43rem", borderRadius: 0}}>
+            <div className={"border"}
+                 style={{textAlign: "center", padding: "0.43rem", borderRadius: 0}}
+            >
                 <label>{index}</label>
             </div>
             <DavitButton
                 iconName={faArrowRight}
-                label='NEXT'
+                label="NEXT"
                 onClick={forward}
                 style={{borderRadius: 0}}
             />

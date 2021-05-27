@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {GroupTO} from '../../../../../../../dataAccess/access/to/GroupTO';
-import {EditActions, editSelectors} from '../../../../../../../slices/EditSlice';
-import {EditGroup} from '../../../../../../../slices/thunks/GroupThunks';
-import {DavitUtil} from '../../../../../../../utils/DavitUtil';
-import {GlobalActions} from '../../../../../../../slices/GlobalSlice';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { GroupTO } from "../../../../../../../dataAccess/access/to/GroupTO";
+import { EditActions, editSelectors } from "../../../../../../../slices/EditSlice";
+import { GlobalActions } from "../../../../../../../slices/GlobalSlice";
+import { EditGroup } from "../../../../../../../slices/thunks/GroupThunks";
+import { DavitUtil } from "../../../../../../../utils/DavitUtil";
 
 const useGroupViewModel = () => {
     const groupToEdit: GroupTO | null = useSelector(editSelectors.selectGroupToEdit);
@@ -13,7 +13,7 @@ const useGroupViewModel = () => {
     useEffect(() => {
         // check if sequence to edit is really set or gos back to edit mode
         if (DavitUtil.isNullOrUndefined(groupToEdit)) {
-            dispatch(GlobalActions.handleError('Tried to go to edit group without groupToEdit specified'));
+            dispatch(GlobalActions.handleError("Tried to go to edit group without groupToEdit specified"));
             dispatch(EditActions.setMode.edit());
         }
 
@@ -50,7 +50,7 @@ const useGroupViewModel = () => {
         if (!DavitUtil.isNullOrUndefined(groupToEdit)) {
             return groupToEdit!.color;
         } else {
-            return '';
+            return "";
         }
     };
 
@@ -65,7 +65,7 @@ const useGroupViewModel = () => {
     };
 
     return {
-        label: 'EDIT GROUP',
+        label: "EDIT GROUP",
         name: groupToEdit?.name,
         changeName,
         saveGroup,

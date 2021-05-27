@@ -1,29 +1,29 @@
-import React, {FunctionComponent, useState} from 'react';
-import {DavitLabelTextfield} from '../../../../../../common/fragments/DavitLabelTextfield';
-import {DavitCommentButton} from '../../../../../../common/fragments/buttons/DavitCommentButton';
-import {DavitBackButton} from '../../../../../../common/fragments/buttons/DavitBackButton';
-import {DavitDeleteButton} from '../../../../../../common/fragments/buttons/DavitDeleteButton';
-import {FormLine} from './fragments/FormLine';
-import {Form} from '../../../../../../common/fragments/forms/Form';
-import {FormDivider} from './fragments/FormDivider';
-import {GoToOptionDropDown} from '../../../../../../common/fragments/dropdowns/GoToOptionDropDown';
-import {GoToTypes} from '../../../../../../../dataAccess/access/types/GoToType';
-import {DavitAddButton} from '../../../../../../common/fragments/buttons/DavitAddButton';
-import {StepDropDown} from '../../../../../../common/fragments/dropdowns/StepDropDown';
-import {DecisionDropDown} from '../../../../../../common/fragments/dropdowns/DecisionDropDown';
-import {DavitRootButton} from '../../../../../../common/fragments/buttons/DavitRootButton';
-import {useStepViewModel} from '../viewmodels/StepViewModel';
-import {FormLabel} from './fragments/FormLabel';
-import {DavitShowMoreButton} from '../../../../../../common/fragments/buttons/DavitShowMoreButton';
-import {ActionTO} from '../../../../../../../dataAccess/access/to/ActionTO';
-import {DavitButton} from '../../../../../../common/fragments/buttons/DavitButton';
-import {faAngleDown} from '@fortawesome/free-solid-svg-icons/faAngleDown';
-import {faAngleUp} from '@fortawesome/free-solid-svg-icons/faAngleUp';
-import {DavitEditButton} from '../../../../../../common/fragments/buttons/DavitEditButton';
-import {useActionViewModel} from '../viewmodels/ActionViewModel';
-import {FormHeader} from '../../../../../../common/fragments/forms/FormHeader';
-import {FormBody} from '../../../../../../common/fragments/forms/FormBody';
-import {FormFooter} from '../../../../../../common/fragments/forms/FormFooter';
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons/faAngleDown";
+import { faAngleUp } from "@fortawesome/free-solid-svg-icons/faAngleUp";
+import React, { FunctionComponent, useState } from "react";
+import { ActionTO } from "../../../../../../../dataAccess/access/to/ActionTO";
+import { GoToTypes } from "../../../../../../../dataAccess/access/types/GoToType";
+import { DavitAddButton } from "../../../../../../common/fragments/buttons/DavitAddButton";
+import { DavitBackButton } from "../../../../../../common/fragments/buttons/DavitBackButton";
+import { DavitButton } from "../../../../../../common/fragments/buttons/DavitButton";
+import { DavitCommentButton } from "../../../../../../common/fragments/buttons/DavitCommentButton";
+import { DavitDeleteButton } from "../../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitEditButton } from "../../../../../../common/fragments/buttons/DavitEditButton";
+import { DavitRootButton } from "../../../../../../common/fragments/buttons/DavitRootButton";
+import { DavitShowMoreButton } from "../../../../../../common/fragments/buttons/DavitShowMoreButton";
+import { DavitLabelTextfield } from "../../../../../../common/fragments/DavitLabelTextfield";
+import { DecisionDropDown } from "../../../../../../common/fragments/dropdowns/DecisionDropDown";
+import { GoToOptionDropDown } from "../../../../../../common/fragments/dropdowns/GoToOptionDropDown";
+import { StepDropDown } from "../../../../../../common/fragments/dropdowns/StepDropDown";
+import { Form } from "../../../../../../common/fragments/forms/Form";
+import { FormBody } from "../../../../../../common/fragments/forms/FormBody";
+import { FormFooter } from "../../../../../../common/fragments/forms/FormFooter";
+import { FormHeader } from "../../../../../../common/fragments/forms/FormHeader";
+import { useActionViewModel } from "../viewmodels/ActionViewModel";
+import { useStepViewModel } from "../viewmodels/StepViewModel";
+import { FormDivider } from "./fragments/FormDivider";
+import { FormLabel } from "./fragments/FormLabel";
+import { FormLine } from "./fragments/FormLine";
 
 interface StepFormProps {
 }
@@ -54,10 +54,10 @@ export const StepForm: FunctionComponent<StepFormProps> = () => {
 
     const {deleteAction, getOptionText} = useActionViewModel();
 
-    const labelSelectDecision: string = 'Select next decision';
-    const labelCreateDecision: string = 'Create next decision';
-    const labelSelectStep: string = 'Select next step';
-    const labelCreateStep: string = 'Create next step';
+    const labelSelectDecision: string = "Select next decision";
+    const labelCreateDecision: string = "Create next decision";
+    const labelSelectStep: string = "Select next step";
+    const labelCreateStep: string = "Create next step";
 
     const [showActions, setShowActions] = useState(true);
 
@@ -66,14 +66,19 @@ export const StepForm: FunctionComponent<StepFormProps> = () => {
                 <td>
                     <label>{getOptionText(action)}</label>
                 </td>
-                <td style={{textAlign: 'end'}}>
+                <td style={{textAlign: "end"}}>
                     <DavitDeleteButton onClick={() => {
                         deleteAction(action);
                         updateStep();
-                    }}/>
-                    <DavitEditButton onClick={() => editOrAddAction(action)}/>
-                    <DavitButton iconName={faAngleDown} onClick={() => switchIndexesAndSave(index, true)}/>
-                    <DavitButton iconName={faAngleUp} onClick={() => switchIndexesAndSave(index, false)}/>
+                    }}
+                    />
+                    <DavitEditButton onClick={() => editOrAddAction(action)} />
+                    <DavitButton iconName={faAngleDown}
+                                 onClick={() => switchIndexesAndSave(index, true)}
+                    />
+                    <DavitButton iconName={faAngleUp}
+                                 onClick={() => switchIndexesAndSave(index, false)}
+                    />
                 </td>
             </tr>
         );
@@ -81,19 +86,22 @@ export const StepForm: FunctionComponent<StepFormProps> = () => {
 
     const buildActionTable = (actions: ActionTO[]): JSX.Element => {
         return (
-            <table className={'border'} style={{width: '40em', overflow: 'hidden'}}>
+            <table className={"border"}
+                   style={{width: "40em", overflow: "hidden"}}
+            >
                 <thead>
                 <tr>
-                    <td style={{textAlign: 'center'}}>Action</td>
-                    <td style={{textAlign: 'end'}}>
+                    <td style={{textAlign: "center"}}>Action</td>
+                    <td style={{textAlign: "end"}}>
                         <DavitAddButton onClick={() => {
                             editOrAddAction();
                             updateStep();
-                        }}/>
+                        }}
+                        />
                     </td>
                 </tr>
                 </thead>
-                <tbody style={{maxHeight: '30vh'}}>
+                <tbody style={{maxHeight: "30vh"}}>
                 {actions.map((action, index) => createActionRow(action, index))}
                 </tbody>
             </table>
@@ -106,14 +114,14 @@ export const StepForm: FunctionComponent<StepFormProps> = () => {
                 <h2>Step</h2>
             </FormHeader>
 
-            <FormDivider/>
+            <FormDivider />
 
             <FormBody>
 
                 <FormLine>
                     <DavitLabelTextfield
-                        label='Name:'
-                        placeholder='Step Name ...'
+                        label="Name:"
+                        placeholder="Step Name ..."
                         onChangeCallback={(name: string) => changeName(name)}
                         value={name}
                         focus={true}
@@ -121,28 +129,32 @@ export const StepForm: FunctionComponent<StepFormProps> = () => {
                     />
                 </FormLine>
 
-                <FormDivider/>
+                <FormDivider />
 
                 <FormLine>
                     <FormLabel><h3>Actions</h3></FormLabel>
-                    <DavitShowMoreButton show={showActions} onClick={() => setShowActions(!showActions)}/>
+                    <DavitShowMoreButton show={showActions}
+                                         onClick={() => setShowActions(!showActions)}
+                    />
                 </FormLine>
 
-                {showActions && <FormDivider/> && <FormLine>{buildActionTable(actions)}</FormLine>}
+                {showActions && <FormDivider /> && <FormLine>{buildActionTable(actions)}</FormLine>}
 
-                <FormDivider/>
+                <FormDivider />
 
                 <FormLine>
                     <FormLabel>Select type of the next element</FormLabel>
                 </FormLine>
 
                 <FormLine>
-                    <GoToOptionDropDown onSelect={handleType} value={goTo ? goTo.type : GoToTypes.ERROR}/>
+                    <GoToOptionDropDown onSelect={handleType}
+                                        value={goTo ? goTo.type : GoToTypes.ERROR}
+                    />
                 </FormLine>
 
                 {goTo!.type === GoToTypes.STEP && (
                     <>
-                        <FormDivider/>
+                        <FormDivider />
 
                         <FormLine>
                             <FormLabel>{labelSelectStep}</FormLabel>
@@ -154,14 +166,14 @@ export const StepForm: FunctionComponent<StepFormProps> = () => {
                         </FormLine>
                         <FormLine>
                             <FormLabel>{labelCreateStep}</FormLabel>
-                            <DavitAddButton onClick={createGoToStep}/>
+                            <DavitAddButton onClick={createGoToStep} />
                         </FormLine>
                     </>
                 )}
 
                 {goTo!.type === GoToTypes.DEC && (
                     <>
-                        <FormDivider/>
+                        <FormDivider />
 
                         <FormLine>
                             <FormLabel>{labelSelectDecision}</FormLabel>
@@ -172,19 +184,23 @@ export const StepForm: FunctionComponent<StepFormProps> = () => {
                         </FormLine>
                         <FormLine>
                             <FormLabel>{labelCreateDecision}</FormLabel>
-                            <DavitAddButton onClick={createGoToDecision}/>
+                            <DavitAddButton onClick={createGoToDecision} />
                         </FormLine>
                     </>
                 )}
             </FormBody>
 
-            <FormDivider/>
+            <FormDivider />
 
             <FormFooter>
-                <DavitDeleteButton onClick={deleteSequenceStep}/>
-                <DavitCommentButton onSaveCallback={saveNote} comment={note}/>
-                <DavitRootButton onClick={setRoot} isRoot={isRoot}/>
-                <DavitBackButton onClick={saveSequenceStep}/>
+                <DavitDeleteButton onClick={deleteSequenceStep} />
+                <DavitCommentButton onSaveCallback={saveNote}
+                                    comment={note}
+                />
+                <DavitRootButton onClick={setRoot}
+                                 isRoot={isRoot}
+                />
+                <DavitBackButton onClick={saveSequenceStep} />
             </FormFooter>
         </Form>
     );

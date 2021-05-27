@@ -1,5 +1,5 @@
-import React, {FunctionComponent} from "react";
-import {DavitAddButton} from './buttons/DavitAddButton';
+import React, { FunctionComponent } from "react";
+import { DavitAddButton } from "./buttons/DavitAddButton";
 
 interface AddOrEditProps {
     addCallBack: () => void;
@@ -11,7 +11,7 @@ export const AddOrEdit: FunctionComponent<AddOrEditProps> = (props) => {
 
     return (
         <div style={{display: "flex"}}>
-            <DavitAddButton onClick={() => addCallBack()}/>
+            <DavitAddButton onClick={() => addCallBack()} />
             {dropDown}
         </div>
     );

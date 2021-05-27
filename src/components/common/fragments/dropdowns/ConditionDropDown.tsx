@@ -1,10 +1,10 @@
-import React, {FunctionComponent} from "react";
-import {useSelector} from "react-redux";
-import {ActorCTO} from "../../../../dataAccess/access/cto/ActorCTO";
-import {DataCTO} from "../../../../dataAccess/access/cto/DataCTO";
-import {ConditionTO} from "../../../../dataAccess/access/to/ConditionTO";
-import {masterDataSelectors} from "../../../../slices/MasterDataSlice";
-import {DavitDropDownItemProps, DavitLabelDropDown} from "./DavitDropDown";
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { ActorCTO } from "../../../../dataAccess/access/cto/ActorCTO";
+import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
+import { ConditionTO } from "../../../../dataAccess/access/to/ConditionTO";
+import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
+import { DavitDropDownItemProps, DavitLabelDropDown } from "./DavitDropDown";
 
 interface ConditionLabelDropDownProps {
     onSelect: (conditionId: number | undefined) => void;

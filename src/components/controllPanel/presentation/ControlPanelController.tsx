@@ -1,11 +1,11 @@
-import React, {FunctionComponent} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {EditActions, editSelectors, Mode} from "../../../slices/EditSlice";
-import {DavitUtil} from "../../../utils/DavitUtil";
-import {ControlPanelEditController} from "./fragments/edit/ControlPanelEditController";
-import {ControlPanelFileController} from "./fragments/file/ControlPanelFileController";
-import {ControlPanelTabController} from "./fragments/tabs/ControlPanelTabController";
-import {ControlPanelViewMenu} from "./fragments/view/ControllPanelViewMenu";
+import React, { FunctionComponent } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { EditActions, editSelectors, Mode } from "../../../slices/EditSlice";
+import { DavitUtil } from "../../../utils/DavitUtil";
+import { ControlPanelEditController } from "./fragments/edit/ControlPanelEditController";
+import { ControlPanelFileController } from "./fragments/file/ControlPanelFileController";
+import { ControlPanelTabController } from "./fragments/tabs/ControlPanelTabController";
+import { ControlPanelViewMenu } from "./fragments/view/ControllPanelViewMenu";
 
 export interface ControlPanelProps {
 }
@@ -16,16 +16,16 @@ export const ControlPanelController: FunctionComponent<ControlPanelProps> = () =
     const useGetViewByMode = (mode: Mode) => {
         if (!DavitUtil.isNullOrUndefined(mode)) {
             if (mode.includes("EDIT")) {
-                return <ControlPanelEditController/>;
+                return <ControlPanelEditController />;
             }
             if (mode.includes("VIEW")) {
-                return <ControlPanelViewMenu hidden={!mode.includes("VIEW")}/>;
+                return <ControlPanelViewMenu hidden={!mode.includes("VIEW")} />;
             }
             if (mode.includes("FILE")) {
-                return <ControlPanelFileController/>;
+                return <ControlPanelFileController />;
             }
             if (mode.includes("TAB")) {
-                return <ControlPanelTabController hidden={!mode.includes("TAB")}/>;
+                return <ControlPanelTabController hidden={!mode.includes("TAB")} />;
             }
         }
     };
