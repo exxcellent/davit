@@ -15,7 +15,7 @@ export const DavitCardButton: FunctionComponent<DavitCardButtonProps> = (props) 
     return (
         <button
             onClick={onClick}
-            className={"Carv2CardButton" + (isActive ? " activeButton" : "") + (disable ? " disabled" : "")}
+            className={"button-small" + (isActive ? " activeButton" : "") + (disable ? " disabled" : "")}
             disabled={disable}
         >
             <FontAwesomeIcon icon={icon} />

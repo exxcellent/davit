@@ -68,7 +68,6 @@ time, mark, audio, video {
 
     font-family: var(--text-font-family);
     font-size: var(--text-size);
-
     vertical-align: baseline;
 }
 

@@ -1,9 +1,8 @@
 import React, { FunctionComponent } from "react";
-import { DropdownProps } from "semantic-ui-react";
 import { GoToTypes } from "../../../../dataAccess/access/types/GoToType";
 import { DavitDropDown, DavitDropDownItemProps } from "./DavitDropDown";
 
-interface GoToOptionDropDownProps extends DropdownProps {
+interface GoToOptionDropDownProps {
     onSelect: (gotoType: GoToTypes | undefined) => void;
     value?: GoToTypes;
 }

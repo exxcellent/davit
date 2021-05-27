@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from "react";
+import "./Modal.css";
 
 interface DavitModalProps {
 }

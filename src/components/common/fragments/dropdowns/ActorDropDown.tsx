@@ -1,20 +1,19 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
-import { DropdownProps } from "semantic-ui-react";
 import { ActorCTO } from "../../../../dataAccess/access/cto/ActorCTO";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 import { DavitUtil } from "../../../../utils/DavitUtil";
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
+import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "./DavitDropDown";
 
-interface ActorDropDownProps extends DropdownProps {
+interface ActorDropDownProps {
     onSelect: (actor: ActorCTO | undefined) => void;
     placeholder?: string;
     value?: number;
 }
 
-interface ActorDropDownButtonProps extends DropdownProps {
+interface ActorDropDownLabelProps {
     onSelect: (actor: ActorCTO | undefined) => void;
-    icon?: string;
+    label: string;
 }
 
 export const ActorDropDown: FunctionComponent<ActorDropDownProps> = (props) => {
@@ -31,15 +30,15 @@ export const ActorDropDown: FunctionComponent<ActorDropDownProps> = (props) => {
     );
 };
 
-export const ActorDropDownButton: FunctionComponent<ActorDropDownButtonProps> = (props) => {
-    const {onSelect, icon} = props;
+export const ActorDropDownLabel: FunctionComponent<ActorDropDownLabelProps> = (props) => {
+    const {onSelect, label} = props;
     const {actorToOption, actors, selectActor} = useActorDropDownViewModel();
 
     return (
-        <DavitIconDropDown
+        <DavitLabelDropDown
             dropdownItems={actors.map((actor) => actorToOption(actor))}
             onSelect={(item) => onSelect(selectActor(Number(item.value), actors))}
-            icon={icon}
+            label={label}
         />
     );
 };

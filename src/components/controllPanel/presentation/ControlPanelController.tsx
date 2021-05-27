@@ -5,7 +5,7 @@ import { DavitUtil } from "../../../utils/DavitUtil";
 import { ControlPanelEditController } from "./fragments/edit/ControlPanelEditController";
 import { ControlPanelFileController } from "./fragments/file/ControlPanelFileController";
 import { ControlPanelTabController } from "./fragments/tabs/ControlPanelTabController";
-import { ControlPanelViewOptions } from "./fragments/view/ControllPanelViewOptions";
+import { ControlPanelViewMenu } from "./fragments/view/ControllPanelViewMenu";
 
 export interface ControlPanelProps {
 }
@@ -19,7 +19,7 @@ export const ControlPanelController: FunctionComponent<ControlPanelProps> = () =
                 return <ControlPanelEditController />;
             }
             if (mode.includes("VIEW")) {
-                return <ControlPanelViewOptions hidden={!mode.includes("VIEW")} />;
+                return <ControlPanelViewMenu hidden={!mode.includes("VIEW")} />;
             }
             if (mode.includes("FILE")) {
                 return <ControlPanelFileController />;
