@@ -6,11 +6,11 @@ export interface DavitMenuLabelProps {
 }
 
 export const DavitMenuLabel: FunctionComponent<DavitMenuLabelProps> = (props) => {
-    const { text } = props;
+    const {text} = props;
 
     return (
         <OptionField>
-            <label className="carv2label davitMenuLabel">{text}</label>
+            <label className="davitMenuLabel">{text}</label>
         </OptionField>
     );
 };

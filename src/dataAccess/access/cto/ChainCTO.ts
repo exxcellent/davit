@@ -7,5 +7,6 @@ export class ChainCTO {
         public chain: ChainTO = new ChainTO(),
         public links: ChainlinkCTO[] = [],
         public decisions: ChainDecisionTO[] = [],
-    ) {}
+    ) {
+    }
 }

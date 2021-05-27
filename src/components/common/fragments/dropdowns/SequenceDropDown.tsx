@@ -1,25 +1,24 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
-import { DropdownProps } from "semantic-ui-react";
 import { SequenceTO } from "../../../../dataAccess/access/to/SequenceTO";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 import { DavitUtil } from "../../../../utils/DavitUtil";
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
+import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "./DavitDropDown";
 
-interface SequenceDropDownProps extends DropdownProps {
+interface SequenceDropDownProps {
     onSelect: (sequence: SequenceTO | undefined) => void;
     placeholder?: string;
     value?: number;
 }
 
-interface SequenceDropDownPropsButton extends DropdownProps {
+interface SequenceLabelDropDownProps {
     onSelect: (sequence: SequenceTO | undefined) => void;
-    icon?: string;
+    label: string;
 }
 
 export const SequenceDropDown: FunctionComponent<SequenceDropDownProps> = (props) => {
-    const { onSelect, placeholder, value } = props;
-    const { sequences, selectSequence, sequenceToOption } = useSequenceDropDownViewModel();
+    const {onSelect, placeholder, value} = props;
+    const {sequences, selectSequence, sequenceToOption} = useSequenceDropDownViewModel();
 
     return (
         <DavitDropDown
@@ -32,14 +31,14 @@ export const SequenceDropDown: FunctionComponent<SequenceDropDownProps> = (props
     );
 };
 
-export const SequenceDropDownButton: FunctionComponent<SequenceDropDownPropsButton> = (props) => {
-    const { onSelect, icon } = props;
-    const { sequences, selectSequence, sequenceToOption } = useSequenceDropDownViewModel();
+export const SequenceLabelDropDown: FunctionComponent<SequenceLabelDropDownProps> = (props) => {
+    const {onSelect, label} = props;
+    const {sequences, selectSequence, sequenceToOption} = useSequenceDropDownViewModel();
 
     return (
-        <DavitIconDropDown
+        <DavitLabelDropDown
             dropdownItems={sequences.map(sequenceToOption)}
-            icon={icon}
+            label={label}
             onSelect={(sequence) => onSelect(selectSequence(Number(sequence.value), sequences))}
         />
     );
@@ -63,5 +62,5 @@ const useSequenceDropDownViewModel = () => {
         };
     };
 
-    return { sequences, selectSequence, sequenceToOption };
+    return {sequences, selectSequence, sequenceToOption};
 };

@@ -1,14 +1,14 @@
-import {AppThunk} from "../../app/store";
-import {SequenceCTO} from "../../dataAccess/access/cto/SequenceCTO";
-import {DecisionTO} from "../../dataAccess/access/to/DecisionTO";
-import {SequenceStepTO} from "../../dataAccess/access/to/SequenceStepTO";
-import {SequenceTO} from "../../dataAccess/access/to/SequenceTO";
-import {DataAccess} from "../../dataAccess/DataAccess";
-import {DataAccessResponse} from "../../dataAccess/DataAccessResponse";
-import {editActions, Mode} from "../EditSlice";
-import {MasterDataActions} from "../MasterDataSlice";
-import {SequenceModelActions} from "../SequenceModelSlice";
-import {GlobalActions} from "../GlobalSlice";
+import { AppThunk } from "../../app/store";
+import { SequenceCTO } from "../../dataAccess/access/cto/SequenceCTO";
+import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
+import { SequenceStepTO } from "../../dataAccess/access/to/SequenceStepTO";
+import { SequenceTO } from "../../dataAccess/access/to/SequenceTO";
+import { DataAccess } from "../../dataAccess/DataAccess";
+import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
+import { editActions, Mode } from "../EditSlice";
+import { GlobalActions } from "../GlobalSlice";
+import { MasterDataActions } from "../MasterDataSlice";
+import { SequenceModelActions } from "../SequenceModelSlice";
 
 const createSequenceThunk = (): AppThunk => (dispatch) => {
     const sequence: SequenceTO = new SequenceTO();

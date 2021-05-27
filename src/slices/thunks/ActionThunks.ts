@@ -1,12 +1,12 @@
-import {AppThunk} from "../../app/store";
-import {SequenceStepCTO} from "../../dataAccess/access/cto/SequenceStepCTO";
-import {ActionTO} from "../../dataAccess/access/to/ActionTO";
-import {DataAccess} from "../../dataAccess/DataAccess";
-import {DataAccessResponse} from "../../dataAccess/DataAccessResponse";
-import {editActions, EditActions, Mode} from "../EditSlice";
-import {MasterDataActions} from "../MasterDataSlice";
-import {EditStep} from "./StepThunks";
-import {GlobalActions} from "../GlobalSlice";
+import { AppThunk } from "../../app/store";
+import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
+import { ActionTO } from "../../dataAccess/access/to/ActionTO";
+import { DataAccess } from "../../dataAccess/DataAccess";
+import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
+import { editActions, EditActions, Mode } from "../EditSlice";
+import { GlobalActions } from "../GlobalSlice";
+import { MasterDataActions } from "../MasterDataSlice";
+import { EditStep } from "./StepThunks";
 
 const createActionThunk = (action: ActionTO): AppThunk => (dispatch) => {
     const response: DataAccessResponse<ActionTO> = DataAccess.saveActionTO(action);

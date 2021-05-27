@@ -1,15 +1,15 @@
-import React, {FunctionComponent, useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {DataCTO} from '../../../../../../dataAccess/access/cto/DataCTO';
-import {DataInstanceTO} from '../../../../../../dataAccess/access/to/DataInstanceTO';
-import {EditActions, editSelectors} from '../../../../../../slices/EditSlice';
-import {EditData} from '../../../../../../slices/thunks/DataThunks';
-import {DavitUtil} from '../../../../../../utils/DavitUtil';
-import {DavitBackButton} from '../../../../../common/fragments/buttons/DavitBackButton';
-import {DavitDeleteButton} from '../../../../../common/fragments/buttons/DavitDeleteButton';
-import {DavitLabelTextfield} from '../../../../../common/fragments/DavitLabelTextfield';
-import {OptionField} from '../common/OptionField';
-import {GlobalActions} from '../../../../../../slices/GlobalSlice';
+import React, { FunctionComponent, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { DataCTO } from "../../../../../../dataAccess/access/cto/DataCTO";
+import { DataInstanceTO } from "../../../../../../dataAccess/access/to/DataInstanceTO";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
+import { GlobalActions } from "../../../../../../slices/GlobalSlice";
+import { EditData } from "../../../../../../slices/thunks/DataThunks";
+import { DavitUtil } from "../../../../../../utils/DavitUtil";
+import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
+import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
+import { OptionField } from "../common/OptionField";
 
 export interface ControlPanelEditDataInstanceProps {
     hidden: boolean;
@@ -26,23 +26,29 @@ export const ControlPanelEditDataInstance: FunctionComponent<ControlPanelEditDat
     } = useControlPanelEditDataInstanceViewModel();
 
     return (
-        <div className='headerGrid'>
-            <OptionField label='Instance - Name'>
+        <div className="headerGrid">
+            <OptionField label="Instance - Name">
                 <DavitLabelTextfield
-                    label='Name:'
-                    placeholder='Data Instance Name'
+                    label="Name:"
+                    placeholder="Data Instance Name"
                     onChangeCallback={(name: string) => changeName(name)}
                     value={getName()}
                     onBlur={saveOnBlur}
                     focus
                 />
             </OptionField>
-            <OptionField divider={true}/>
-            <OptionField label='Navigation' divider={true}>
-                <DavitBackButton onClick={goBack}/>
+            <OptionField divider={true} />
+            <OptionField label="Navigation"
+                         divider={true}
+            >
+                <DavitBackButton onClick={goBack} />
             </OptionField>
-            <OptionField label='Data - Options' divider={true}>
-                <DavitDeleteButton onClick={deleteDataInstance} disable={isDeleteButtonDisable()}/>
+            <OptionField label="Data - Options"
+                         divider={true}
+            >
+                <DavitDeleteButton onClick={deleteDataInstance}
+                                   disable={isDeleteButtonDisable()}
+                />
             </OptionField>
         </div>
     );
@@ -56,7 +62,7 @@ const useControlPanelEditDataInstanceViewModel = () => {
     useEffect(() => {
         // check if component to edit is really set or go back to edit mode
         if (dataToEdit === null && instanceId === -1) {
-            dispatch(GlobalActions.handleError('Tried to go to edit data without data to edit specified'));
+            dispatch(GlobalActions.handleError("Tried to go to edit data without data to edit specified"));
             dispatch(EditActions.setMode.edit());
         }
     });
@@ -73,7 +79,7 @@ const useControlPanelEditDataInstanceViewModel = () => {
         if (dataToEdit !== null && instanceId !== null) {
             const copyData: DataCTO = DavitUtil.deepCopy(dataToEdit);
             const instance: DataInstanceTO | undefined = copyData.data.instances.find((inst) => inst.id === instanceId);
-            if (instance && instance.name === '') {
+            if (instance && instance.name === "") {
                 if (instance.id === -1) {
                     deleteDataInstance();
                 } else {
@@ -88,7 +94,7 @@ const useControlPanelEditDataInstanceViewModel = () => {
     const saveOnBlur = () => {
         if (dataToEdit !== null && instanceId !== null) {
             const copyData: DataCTO = DavitUtil.deepCopy(dataToEdit);
-            if (copyData.data.instances.find((inst) => inst.id === instanceId)!.name !== '') {
+            if (copyData.data.instances.find((inst) => inst.id === instanceId)!.name !== "") {
                 dispatch(EditData.save(copyData));
             }
         }
@@ -109,7 +115,7 @@ const useControlPanelEditDataInstanceViewModel = () => {
         if (instance) {
             name = instance.name;
         } else {
-            name = 'could not find instance!';
+            name = "could not find instance!";
         }
         return name;
     };
@@ -123,7 +129,7 @@ const useControlPanelEditDataInstanceViewModel = () => {
     };
 
     return {
-        label: 'EDIT * DATA * INSTANCE',
+        label: "EDIT * DATA * INSTANCE",
         getName,
         changeName,
         goBack,

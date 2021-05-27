@@ -1,26 +1,26 @@
-import React, { FunctionComponent } from 'react';
-import { useDecisionViewModel } from '../viewmodels/DecisionViewModel';
-import { Form } from '../../../../../../common/fragments/forms/Form';
-import { DavitLabelTextfield } from '../../../../../../common/fragments/DavitLabelTextfield';
-import { GoToOptionDropDown } from '../../../../../../common/fragments/dropdowns/GoToOptionDropDown';
-import { GoToTypes } from '../../../../../../../dataAccess/access/types/GoToType';
-import { DavitAddButton } from '../../../../../../common/fragments/buttons/DavitAddButton';
-import { StepDropDown } from '../../../../../../common/fragments/dropdowns/StepDropDown';
-import { DecisionDropDown } from '../../../../../../common/fragments/dropdowns/DecisionDropDown';
-import { DavitCommentButton } from '../../../../../../common/fragments/buttons/DavitCommentButton';
-import { DavitBackButton } from '../../../../../../common/fragments/buttons/DavitBackButton';
-import { DavitRootButton } from '../../../../../../common/fragments/buttons/DavitRootButton';
-import { DavitDeleteButton } from '../../../../../../common/fragments/buttons/DavitDeleteButton';
-import { FormLine } from './fragments/FormLine';
-import { FormLabel, FormlabelAlign } from './fragments/FormLabel';
-import { FormDivider } from './fragments/FormDivider';
-import { FormHeader } from '../../../../../../common/fragments/forms/FormHeader';
-import { FormBody } from '../../../../../../common/fragments/forms/FormBody';
-import { FormFooter } from '../../../../../../common/fragments/forms/FormFooter';
-import { DavitUtil } from '../../../../../../../utils/DavitUtil';
-import { ActorDropDown } from '../../../../../../common/fragments/dropdowns/ActorDropDown';
-import { InstanceDropDown } from '../../../../../../common/fragments/dropdowns/InstanceDropDown';
-import { ConditionTO } from '../../../../../../../dataAccess/access/to/ConditionTO';
+import React, { FunctionComponent } from "react";
+import { ConditionTO } from "../../../../../../../dataAccess/access/to/ConditionTO";
+import { GoToTypes } from "../../../../../../../dataAccess/access/types/GoToType";
+import { DavitUtil } from "../../../../../../../utils/DavitUtil";
+import { DavitAddButton } from "../../../../../../common/fragments/buttons/DavitAddButton";
+import { DavitBackButton } from "../../../../../../common/fragments/buttons/DavitBackButton";
+import { DavitCommentButton } from "../../../../../../common/fragments/buttons/DavitCommentButton";
+import { DavitDeleteButton } from "../../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitRootButton } from "../../../../../../common/fragments/buttons/DavitRootButton";
+import { DavitLabelTextfield } from "../../../../../../common/fragments/DavitLabelTextfield";
+import { ActorDropDown } from "../../../../../../common/fragments/dropdowns/ActorDropDown";
+import { DecisionDropDown } from "../../../../../../common/fragments/dropdowns/DecisionDropDown";
+import { GoToOptionDropDown } from "../../../../../../common/fragments/dropdowns/GoToOptionDropDown";
+import { InstanceDropDown } from "../../../../../../common/fragments/dropdowns/InstanceDropDown";
+import { StepDropDown } from "../../../../../../common/fragments/dropdowns/StepDropDown";
+import { Form } from "../../../../../../common/fragments/forms/Form";
+import { FormBody } from "../../../../../../common/fragments/forms/FormBody";
+import { FormFooter } from "../../../../../../common/fragments/forms/FormFooter";
+import { FormHeader } from "../../../../../../common/fragments/forms/FormHeader";
+import { useDecisionViewModel } from "../viewmodels/DecisionViewModel";
+import { FormDivider } from "./fragments/FormDivider";
+import { FormLabel, FormlabelAlign } from "./fragments/FormLabel";
+import { FormLine } from "./fragments/FormLine";
 
 interface DecisionFormProps {
 
@@ -52,12 +52,12 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
     } = useDecisionViewModel();
 
 
-    const labelDecision: string = 'Select next decision';
-    const labelCreateDecision: string = 'Create new / next decision';
-    const labelStep: string = 'Select next step';
-    const labelCreateStep: string = 'Create new /next step';
-    const labelTypeIf: string = 'Type condition true';
-    const labelTypeElse: string = 'Type condition false';
+    const labelDecision: string = "Select next decision";
+    const labelCreateDecision: string = "Create new / next decision";
+    const labelStep: string = "Select next step";
+    const labelCreateStep: string = "Create new /next step";
+    const labelTypeIf: string = "Type condition true";
+    const labelTypeElse: string = "Type condition false";
     const labelIfLabel: string = "If condition's are true";
     const labelElseLabel: string = "If condition's are false";
 
@@ -68,13 +68,13 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
         return (
             <tr key={copyCondition.id}>
                 <td>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <div style={{display: "flex", justifyContent: "space-between"}}>
                         <ActorDropDown
                             onSelect={(actor) => {
                                 copyCondition.actorFk = actor ? actor.actor.id : -1;
                                 saveCondition(copyCondition);
                             }}
-                            placeholder={'Select actor...'}
+                            placeholder={"Select actor..."}
                             value={copyCondition.actorFk}
                         />
                         <InstanceDropDown
@@ -85,15 +85,18 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
                                     saveCondition(copyCondition);
                                 }
                             }}
-                            placeholder={'Select data instance ...'}
+                            placeholder={"Select data instance ..."}
                             value={JSON.stringify({
                                 dataFk: copyCondition!.dataFk,
                                 instanceId: copyCondition!.instanceFk,
                             })
-                            } />
+                            }
+                        />
                         {copyCondition.id !== -1 && <DavitDeleteButton onClick={() => {
                             deleteCondition(copyCondition.id);
-                        }} noConfirm />}
+                        }}
+                                                                       noConfirm
+                        />}
                     </div>
                 </td>
             </tr>
@@ -110,8 +113,8 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
 
                 <FormLine>
                     <DavitLabelTextfield
-                        label='Name:'
-                        placeholder='Decision name ...'
+                        label="Name:"
+                        placeholder="Decision name ..."
                         onChangeCallback={(name: string) => changeName(name)}
                         value={name}
                         focus={true}
@@ -121,15 +124,17 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
                 {/*------------------------- Condition -------------------------*/}
 
                 <FormLine>
-                    <table className={'border'} style={{ width: '40em', minHeight: '30vh' }}>
+                    <table className={"border"}
+                           style={{width: "40em", minHeight: "30vh"}}
+                    >
                         <thead>
                         <tr>
-                            <td style={{ textAlign: 'center' }}>Actor</td>
-                            <td style={{ textAlign: 'center' }}>Data Instance</td>
-                            <td style={{ textAlign: 'end' }}><DavitAddButton onClick={createCondition} /></td>
+                            <td style={{textAlign: "center"}}>Actor</td>
+                            <td style={{textAlign: "center"}}>Data Instance</td>
+                            <td style={{textAlign: "end"}}><DavitAddButton onClick={createCondition} /></td>
                         </tr>
                         </thead>
-                        <tbody style={{ maxHeight: '40vh' }}>
+                        <tbody style={{maxHeight: "40vh"}}>
                         {conditions.map(buildConditionTableRow)}
                         </tbody>
                     </table>
@@ -239,8 +244,12 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
             <FormDivider />
             <FormFooter>
                 <DavitDeleteButton onClick={deleteDecision} />
-                <DavitCommentButton onSaveCallback={saveNote} comment={note} />
-                <DavitRootButton onClick={setRoot} isRoot={isRoot} />
+                <DavitCommentButton onSaveCallback={saveNote}
+                                    comment={note}
+                />
+                <DavitRootButton onClick={setRoot}
+                                 isRoot={isRoot}
+                />
                 <DavitBackButton onClick={saveAndGoBack} />
             </FormFooter>
 

@@ -7,9 +7,11 @@ interface TabFragmentProps {
 }
 
 export const TabFragment: FunctionComponent<TabFragmentProps> = (props) => {
-    const { label, isActive, onClick } = props;
+    const {label, isActive, onClick} = props;
     return (
-        <div className={isActive ? "tab active" : "tab"} onClick={onClick}>
+        <div className={isActive ? "tab active" : "tab"}
+             onClick={onClick}
+        >
             {label}
         </div>
     );

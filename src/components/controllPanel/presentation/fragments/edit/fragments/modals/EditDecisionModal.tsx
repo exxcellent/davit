@@ -1,6 +1,6 @@
-import React, { FunctionComponent } from 'react';
-import { DecisionForm } from '../forms/DecisionForm';
-import { DavitDraggableModal } from '../../../../../../common/fragments/modals/DavitDraggableModal';
+import React, { FunctionComponent } from "react";
+import { DavitDraggableModal } from "../../../../../../common/fragments/modals/DavitDraggableModal";
+import { DecisionForm } from "../forms/DecisionForm";
 
 interface EditDecicionModalProps {
 

@@ -1,18 +1,18 @@
-import React, { FunctionComponent, useState } from 'react';
-import { Form } from '../../../../../../common/fragments/forms/Form';
-import { FormLine } from './fragments/FormLine';
-import { Dropdown } from 'semantic-ui-react';
-import { Direction } from '../../../../../../../dataAccess/access/to/DataRelationTO';
-import { DavitCommentButton } from '../../../../../../common/fragments/buttons/DavitCommentButton';
-import { DavitButton } from '../../../../../../common/fragments/buttons/DavitButton';
-import { DavitBackButton } from '../../../../../../common/fragments/buttons/DavitBackButton';
-import { DavitDeleteButton } from '../../../../../../common/fragments/buttons/DavitDeleteButton';
-import { useDataRelationViewModel } from '../viewmodels/DataRelationViewModel';
-import { FormLabel, FormlabelAlign } from './fragments/FormLabel';
-import { FormDivider } from './fragments/FormDivider';
-import { FormHeader } from '../../../../../../common/fragments/forms/FormHeader';
-import { FormBody } from '../../../../../../common/fragments/forms/FormBody';
-import { FormFooter } from '../../../../../../common/fragments/forms/FormFooter';
+import React, { FunctionComponent, useState } from "react";
+import { Direction } from "../../../../../../../dataAccess/access/to/DataRelationTO";
+import { DavitBackButton } from "../../../../../../common/fragments/buttons/DavitBackButton";
+import { DavitButton } from "../../../../../../common/fragments/buttons/DavitButton";
+import { DavitCommentButton } from "../../../../../../common/fragments/buttons/DavitCommentButton";
+import { DavitDeleteButton } from "../../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitDropDown } from "../../../../../../common/fragments/dropdowns/DavitDropDown";
+import { Form } from "../../../../../../common/fragments/forms/Form";
+import { FormBody } from "../../../../../../common/fragments/forms/FormBody";
+import { FormFooter } from "../../../../../../common/fragments/forms/FormFooter";
+import { FormHeader } from "../../../../../../common/fragments/forms/FormHeader";
+import { useDataRelationViewModel } from "../viewmodels/DataRelationViewModel";
+import { FormDivider } from "./fragments/FormDivider";
+import { FormLabel, FormlabelAlign } from "./fragments/FormLabel";
+import { FormLine } from "./fragments/FormLine";
 
 interface DataRelationFormProps {
 
@@ -49,30 +49,28 @@ export const DataRelationForm: FunctionComponent<DataRelationFormProps> = () => 
 
             <FormBody>
 
-
                 <FormLine>
                     <FormLabel align={FormlabelAlign.center}>FROM</FormLabel>
                 </FormLine>
 
                 <FormLine>
-                    <Dropdown
-                        placeholder='Select Data...'
-                        selection
-                        selectOnBlur={false}
-                        options={dataOptions}
-                        onChange={(event, data) => {
+                    <DavitDropDown
+                        placeholder="Select Data..."
+                        dropdownItems={dataOptions}
+                        onSelect={(data) => {
                             setData(Number(data.value));
+                            updateRelation();
                         }}
                         value={data1}
-                        onBlur={() => updateRelation()}
                     />
-                    <Dropdown
-                        placeholder='Select Direction1'
-                        selection
-                        options={directionOptions}
-                        onChange={(event, data) => setDirection(Direction[data.value as Direction])}
+                    <DavitDropDown
+                        placeholder="Select Direction1"
+                        dropdownItems={directionOptions}
+                        onSelect={(data) => {
+                            setDirection(Direction[data.value as Direction]);
+                            updateRelation();
+                        }}
                         value={direction1}
-                        onBlur={() => updateRelation()}
                     />
                 </FormLine>
 
@@ -82,24 +80,23 @@ export const DataRelationForm: FunctionComponent<DataRelationFormProps> = () => 
                     <FormLabel align={FormlabelAlign.center}>TO</FormLabel>
                 </FormLine>
                 <FormLine>
-                    <Dropdown
-                        placeholder='Select Data...'
-                        selection
-                        selectOnBlur={false}
-                        options={dataOptions}
-                        onChange={(event, data) => {
+                    <DavitDropDown
+                        placeholder="Select Data..."
+                        dropdownItems={dataOptions}
+                        onSelect={(data) => {
                             setData(Number(data.value), true);
+                            updateRelation();
                         }}
                         value={data2}
-                        onBlur={() => updateRelation()}
                     />
-                    <Dropdown
-                        placeholder='Select Direction2'
-                        selection
-                        options={directionOptions}
-                        onChange={(event, data) => setDirection(Direction[data.value as Direction], true)}
+                    <DavitDropDown
+                        placeholder="Select Direction2"
+                        dropdownItems={directionOptions}
+                        onSelect={(data) => {
+                            setDirection(Direction[data.value as Direction], true);
+                            updateRelation();
+                        }}
                         value={direction2}
-                        onBlur={() => updateRelation()}
                     />
                 </FormLine>
 
@@ -109,11 +106,15 @@ export const DataRelationForm: FunctionComponent<DataRelationFormProps> = () => 
 
             <FormFooter>
                 <DavitDeleteButton onClick={deleteRelation} />
-                <DavitCommentButton onSaveCallback={saveNote} comment={note} />
+                <DavitCommentButton onSaveCallback={saveNote}
+                                    comment={note}
+                />
                 <DavitButton onClick={() => {
                     createAnother();
                     setKey(key + 1);
-                }} label='Create another' />
+                }}
+                             label="Create another"
+                />
                 <DavitBackButton onClick={saveRelation} />
             </FormFooter>
 

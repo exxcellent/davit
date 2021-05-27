@@ -19,7 +19,7 @@ export const TechnicalDataAccessService = {
         CheckHelper.nullCheck(geometricalData, "geometricalData");
         const position = PositionRepository.find(geometricalData!.positionFk!);
         CheckHelper.nullCheck(position, "position");
-        return { geometricalData: geometricalData!, position: position! };
+        return {geometricalData: geometricalData!, position: position!};
     },
 
     findGeometricalData(id: number): GeometricalDataTO | undefined {

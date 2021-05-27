@@ -35,7 +35,7 @@ export const SequenceStepRepository = {
                 id: DataAccessUtil.determineNewId(this.findAll()),
             };
         } else {
-            sequenceStepTO = { ...sequenceStep };
+            sequenceStepTO = {...sequenceStep};
         }
         dataStore.getDataStore().steps.set(sequenceStepTO.id!, sequenceStepTO);
         return sequenceStepTO;

@@ -268,7 +268,7 @@ export const SequenceDataAccessService = {
             InitDataRepository.save(initData);
         });
         const savedInitDatas: InitDataTO[] = InitDataRepository.findAllForSetup(savedDataSetupTO.id);
-        return { dataSetup: savedDataSetupTO, initDatas: savedInitDatas };
+        return {dataSetup: savedDataSetupTO, initDatas: savedInitDatas};
     },
 
     deleteDataSetup(dataSetup: DataSetupCTO): DataSetupCTO {
@@ -374,7 +374,7 @@ const createSequenceCTO = (sequence: SequenceTO | undefined): SequenceCTO => {
     );
     sequenceStepCTOs.sort((step1, step2) => step1.squenceStepTO.index - step2.squenceStepTO.index);
     const decisions: DecisionTO[] = DecisionRepository.findAllForSequence(sequence!.id);
-    return { sequenceTO: sequence!, sequenceStepCTOs: sequenceStepCTOs, decisions: decisions };
+    return {sequenceTO: sequence!, sequenceStepCTOs: sequenceStepCTOs, decisions: decisions};
 };
 
 const createSequenceStepCTO = (sequenceStepTO: SequenceStepTO | undefined): SequenceStepCTO => {

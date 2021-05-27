@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from "react";
-import { Dropdown, DropdownItemProps } from "semantic-ui-react";
+import Select from "react-select";
 import "../../../../app/css/Davit.css";
+import "../../../../app/css/React-Select.css";
 
 export interface DavitDropDownItemProps {
     key: number;
@@ -8,63 +9,95 @@ export interface DavitDropDownItemProps {
     text: string;
 }
 
-export interface DavitDropDownProps extends DropdownItemProps {
+export interface DavitDropDownProps {
     onSelect: (dropdownItem: DavitDropDownItemProps) => void;
     dropdownItems: DavitDropDownItemProps[];
     value?: string;
     placeholder?: string;
+    clearable?: boolean;
+    className?: string;
+    classPrefix?: string;
 }
 
-export interface DavitIconDropDownProps extends DropdownItemProps {
+export interface DavitLabelDropDownProps {
     onSelect: (dropdownItem: DavitDropDownItemProps) => void;
     dropdownItems: DavitDropDownItemProps[];
-    icon?: string;
+    label: string;
+    className?: string;
+    classPrefix?: string;
+}
+
+interface ReactSelectOption {
+    value: string;
+    label: string;
 }
 
 export const DavitDropDown: FunctionComponent<DavitDropDownProps> = (props) => {
-    const { dropdownItems, onSelect, placeholder, value, clearable, others } = props;
+    const {dropdownItems, onSelect, placeholder, value, clearable, classPrefix, className} = props;
+
 
     return (
-        <Dropdown
-            selection
-            selectOnBlur={false}
-            placeholder={placeholder || ""}
-            scrolling
-            value={value}
-            disabled={dropdownItems.length < 1}
-            search
-            clearable={clearable ? clearable : false}
-            options={dropdownItems.sort((a, b) => a.text.toLowerCase().localeCompare(b.text.toLowerCase()))}
-            onChange={(event, data) => onSelect(parsDataToDavitDropDownItemProps(data))}
-            {...others}
+        <Select
+            classNamePrefix={classPrefix ? classPrefix : "react-select"}
+            className={className ? className : "react-select-container"}
+            isClearable={clearable}
+            placeholder={placeholder}
+            value={getSelectedValue(value, dropdownItems)}
+            options={dropdownItems.sort((a, b) => a.text.toLowerCase().localeCompare(b.text.toLowerCase())).map(dropdownItemToOption)}
+            onChange={(value) => handleOnChange(value, onSelect)}
         />
     );
 };
 
-export const DavitIconDropDown: FunctionComponent<DavitIconDropDownProps> = (props) => {
-    const { dropdownItems, onSelect, icon } = props;
+export const DavitLabelDropDown: FunctionComponent<DavitLabelDropDownProps> = (props) => {
+        const {dropdownItems, onSelect, label, className, classPrefix} = props;
 
-    return (
-        <Dropdown
-            // icon={dropdownItems.length > 0 ? icon : ""}
-            icon={icon}
-            selectOnBlur={false}
-            className="button icon"
-            trigger={<React.Fragment />}
-            scrolling
-            // disabled={dropdownItems.length < 1}
-            options={dropdownItems.sort((a, b) => {
-                return a.text! < b.text! ? -1 : a.text! > b.text! ? 1 : 0;
-            })}
-            onChange={(event, data) => onSelect(parsDataToDavitDropDownItemProps(data))}
-        />
-    );
-};
+        return (
+            <Select
+                classNamePrefix={classPrefix ? classPrefix : "react-select-label"}
+                className={className ? className : "react-select-label-container"}
+                value={{value: label, label: label}}
+                options={dropdownItems.sort((a, b) => a.text.toLowerCase().localeCompare(b.text.toLowerCase())).map(dropdownItemToOption)}
+                onChange={(value) => handleOnChange(value, onSelect)}
+                isSearchable={false}
+            />
+        );
+    }
+;
 
-const parsDataToDavitDropDownItemProps = (data: any): DavitDropDownItemProps => {
+const parsDataToDavitDropDownItemProps = (data: ReactSelectOption): DavitDropDownItemProps => {
+    console.info("parsing data: ", data);
     return {
-        key: data.key ? data.key : -1,
-        text: data.text ? data.text : "",
-        value: data.value ? data.value.toString() : "",
+        key: -1,
+        text: data.label ? data.label : "",
+        value: data.value ? data.value : "",
     };
+};
+
+const dropdownItemToOption = (dropdownItem: DavitDropDownItemProps): ReactSelectOption => {
+    return {value: dropdownItem.value, label: dropdownItem.text};
+};
+
+const handleOnChange = (value: any, onSelect: (dropdownItem: DavitDropDownItemProps) => void) => {
+    if (value !== null) {
+        const option: DavitDropDownItemProps = parsDataToDavitDropDownItemProps(value);
+        onSelect(option);
+    } else {
+        onSelect({key: -1, value: "", text: ""});
+    }
+};
+
+const getSelectedValue = (value: string | undefined, dropdownItems: DavitDropDownItemProps[]): ReactSelectOption => {
+    let selectedValue: ReactSelectOption = {value: "", label: ""};
+
+    if (value) {
+
+        const option: DavitDropDownItemProps | undefined = dropdownItems.find(option => option.value === value);
+
+        if (option) {
+            selectedValue.value = option.value;
+            selectedValue.label = option.text;
+        }
+    }
+    return selectedValue;
 };

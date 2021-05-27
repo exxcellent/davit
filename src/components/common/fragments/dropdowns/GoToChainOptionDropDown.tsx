@@ -1,16 +1,15 @@
 import React, { FunctionComponent } from "react";
-import { DropdownProps } from "semantic-ui-react";
 import { GoToTypes } from "../../../../dataAccess/access/types/GoToType";
 import { GoToTypesChain } from "../../../../dataAccess/access/types/GoToTypeChain";
 import { DavitDropDown, DavitDropDownItemProps } from "./DavitDropDown";
 
-interface GoToChainOptionDropDownProps extends DropdownProps {
+interface GoToChainOptionDropDownProps {
     onSelect: (gotoType: GoToTypesChain | undefined) => void;
     value?: GoToTypesChain;
 }
 
 export const GoToChainOptionDropDown: FunctionComponent<GoToChainOptionDropDownProps> = (props) => {
-    const { onSelect, value } = props;
+    const {onSelect, value} = props;
 
     const getOptions = (): DavitDropDownItemProps[] => {
         return Object.values(GoToTypesChain).map((goto, index) => goToToOption(goto, index));
@@ -33,7 +32,6 @@ export const GoToChainOptionDropDown: FunctionComponent<GoToChainOptionDropDownP
             dropdownItems={getOptions()}
             onSelect={(goto) => onSelect(selectGotoType(goto.value))}
             value={value ? value : GoToTypes.ERROR}
-            compact
         />
     );
 };

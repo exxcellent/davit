@@ -1,19 +1,18 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
-import { DropdownProps } from "semantic-ui-react";
 import { ChainDecisionTO } from "../../../../dataAccess/access/to/ChainDecisionTO";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 import { DavitUtil } from "../../../../utils/DavitUtil";
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
+import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "./DavitDropDown";
 
-interface ChainDecisionDropDownButtonProps extends DropdownProps {
+interface ChainDecisionDropDownLabelProps {
     onSelect: (link: ChainDecisionTO | undefined) => void;
     chainId: number;
-    icon?: string;
+    label: string;
     exclude?: number;
 }
 
-interface ChainDecisionDropDownProps extends DropdownProps {
+interface ChainDecisionDropDownProps {
     onSelect: (link: ChainDecisionTO | undefined) => void;
     chainId: number;
     placeholder?: string;
@@ -21,22 +20,22 @@ interface ChainDecisionDropDownProps extends DropdownProps {
     exclude?: number;
 }
 
-export const ChainDecisionDropDownButton: FunctionComponent<ChainDecisionDropDownButtonProps> = (props) => {
-    const { onSelect, icon, chainId, exclude } = props;
-    const { createDecisionOptions, selectChainDecision } = useChainDecisionDropDownViewModel(chainId, exclude);
+export const ChainDecisionDropDownButton: FunctionComponent<ChainDecisionDropDownLabelProps> = (props) => {
+    const {onSelect, label, chainId, exclude} = props;
+    const {createDecisionOptions, selectChainDecision} = useChainDecisionDropDownViewModel(chainId, exclude);
 
     return (
-        <DavitIconDropDown
+        <DavitLabelDropDown
             dropdownItems={createDecisionOptions()}
-            icon={icon}
+            label={label}
             onSelect={(item) => onSelect(selectChainDecision(Number(item.value)))}
         />
     );
 };
 
 export const ChainDecisionDropDown: FunctionComponent<ChainDecisionDropDownProps> = (props) => {
-    const { onSelect, placeholder, value, chainId, exclude } = props;
-    const { createDecisionOptions, selectChainDecision } = useChainDecisionDropDownViewModel(chainId, exclude);
+    const {onSelect, placeholder, value, chainId, exclude} = props;
+    const {createDecisionOptions, selectChainDecision} = useChainDecisionDropDownViewModel(chainId, exclude);
 
     return (
         <DavitDropDown
@@ -78,5 +77,5 @@ const useChainDecisionDropDownViewModel = (chainId: number, exclude?: number) =>
         return undefined;
     };
 
-    return { createDecisionOptions, selectChainDecision };
+    return {createDecisionOptions, selectChainDecision};
 };

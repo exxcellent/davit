@@ -1,40 +1,39 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
-import { DropdownProps } from "semantic-ui-react";
 import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
 import { sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
 import { DavitUtil } from "../../../../utils/DavitUtil";
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
+import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "./DavitDropDown";
 
-interface StepDropDownButtonProps extends DropdownProps {
+interface StepLabelDropDownProps {
     onSelect: (step: SequenceStepCTO | undefined) => void;
-    icon?: string;
+    label: string;
 }
 
-interface StepDropDownProps extends DropdownProps {
+interface StepDropDownProps {
     onSelect: (step: SequenceStepCTO | undefined) => void;
     placeholder?: string;
     value?: number;
     exclude?: number;
 }
 
-export const StepDropDownButton: FunctionComponent<StepDropDownButtonProps> = (props) => {
-    const { onSelect, icon } = props;
-    const { sequence, stepOptions, selectSequenceStep } = useStepDropDownViewModel();
+export const StepLabelDropDown: FunctionComponent<StepLabelDropDownProps> = (props) => {
+    const {onSelect, label} = props;
+    const {sequence, stepOptions, selectSequenceStep} = useStepDropDownViewModel();
 
     return (
-        <DavitIconDropDown
+        <DavitLabelDropDown
             dropdownItems={stepOptions()}
-            icon={icon}
+            label={label}
             onSelect={(step) => onSelect(selectSequenceStep(Number(step.value), sequence))}
         />
     );
 };
 
 export const StepDropDown: FunctionComponent<StepDropDownProps> = (props) => {
-    const { onSelect, placeholder, value, exclude } = props;
-    const { sequence, stepOptions, selectSequenceStep } = useStepDropDownViewModel(exclude);
+    const {onSelect, placeholder, value, exclude} = props;
+    const {sequence, stepOptions, selectSequenceStep} = useStepDropDownViewModel(exclude);
 
     return (
         <DavitDropDown
@@ -75,5 +74,5 @@ const useStepDropDownViewModel = (exclude?: number) => {
         return undefined;
     };
 
-    return { sequence: sequenceToEdit, stepOptions, selectSequenceStep };
+    return {sequence: sequenceToEdit, stepOptions, selectSequenceStep};
 };

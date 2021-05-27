@@ -1,19 +1,18 @@
-import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
-import { editSelectors, Mode } from '../../../../../slices/EditSlice';
-import { ControlPanelEditChain } from './fragments/ControlPanelEditChain';
-import { ControlPanelEditGroup } from './fragments/ControlPanelEditGroup';
-import { ControlPanelEditMenu } from './fragments/ControlPanelEditMenu';
-import { ControlPanelEditSequence } from './fragments/ControlPanelEditSequence';
-import { EditActorModal } from './fragments/modals/EditActorModal';
-import { EditDataModal } from './fragments/modals/EditDataModal';
-import { EditDataRelationModal } from './fragments/modals/EditDataRelationModal';
-import { EditDataSetupModal } from './fragments/modals/EditDataSetupModal';
-import { EditActionModal } from './fragments/modals/EditActionModal';
-import { EditDecisionModal } from './fragments/modals/EditDecisionModal';
-import { EditStepModal } from './fragments/modals/EditStepModal';
-import { EditChainLinkModal } from './fragments/modals/EditChainLinkModal';
-import { EditChainDecisionModal } from './fragments/modals/EditChainDecisionModal';
+import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { editSelectors, Mode } from "../../../../../slices/EditSlice";
+import { ControlPanelEditChain } from "./fragments/ControlPanelEditChain";
+import { ControlPanelEditMenu } from "./fragments/ControlPanelEditMenu";
+import { ControlPanelEditSequence } from "./fragments/ControlPanelEditSequence";
+import { EditActionModal } from "./fragments/modals/EditActionModal";
+import { EditActorModal } from "./fragments/modals/EditActorModal";
+import { EditChainDecisionModal } from "./fragments/modals/EditChainDecisionModal";
+import { EditChainLinkModal } from "./fragments/modals/EditChainLinkModal";
+import { EditDataModal } from "./fragments/modals/EditDataModal";
+import { EditDataRelationModal } from "./fragments/modals/EditDataRelationModal";
+import { EditDataSetupModal } from "./fragments/modals/EditDataSetupModal";
+import { EditDecisionModal } from "./fragments/modals/EditDecisionModal";
+import { EditStepModal } from "./fragments/modals/EditStepModal";
 
 export interface ControlPanelEditControllerProps {
 }
@@ -26,8 +25,6 @@ export const ControlPanelEditController: FunctionComponent<ControlPanelEditContr
         switch (currentMode) {
             case Mode.EDIT_ACTOR:
                 return <EditActorModal />;
-            case Mode.EDIT_GROUP:
-                return <ControlPanelEditGroup />;
             case Mode.EDIT_DATA:
                 return <EditDataModal />;
             case Mode.EDIT_RELATION:

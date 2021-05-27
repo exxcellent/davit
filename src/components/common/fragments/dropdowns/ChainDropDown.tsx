@@ -1,25 +1,24 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
-import { DropdownProps } from "semantic-ui-react";
 import { ChainTO } from "../../../../dataAccess/access/to/ChainTO";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 import { DavitUtil } from "../../../../utils/DavitUtil";
-import { DavitDropDown, DavitDropDownItemProps, DavitIconDropDown } from "./DavitDropDown";
+import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "./DavitDropDown";
 
-interface ChainDropDownProps extends DropdownProps {
+interface ChainDropDownProps {
     onSelect: (chain: ChainTO | undefined) => void;
     placeholder?: string;
     value?: number;
 }
 
-interface ChainDropDownPropsButton extends DropdownProps {
+interface ChainDropDownLabelProps {
     onSelect: (chain: ChainTO | undefined) => void;
-    icon?: string;
+    label: string;
 }
 
 export const ChainDropDown: FunctionComponent<ChainDropDownProps> = (props) => {
-    const { onSelect, placeholder, value } = props;
-    const { chainToOption, chains, selectChain } = useChainDropDownViewModel();
+    const {onSelect, placeholder, value} = props;
+    const {chainToOption, chains, selectChain} = useChainDropDownViewModel();
 
     return (
         <DavitDropDown
@@ -32,15 +31,15 @@ export const ChainDropDown: FunctionComponent<ChainDropDownProps> = (props) => {
     );
 };
 
-export const ChainDropDownButton: FunctionComponent<ChainDropDownPropsButton> = (props) => {
-    const { onSelect, icon } = props;
-    const { selectChain, chainToOption, chains } = useChainDropDownViewModel();
+export const ChainDropDownButton: FunctionComponent<ChainDropDownLabelProps> = (props) => {
+    const {onSelect, label} = props;
+    const {selectChain, chainToOption, chains} = useChainDropDownViewModel();
 
     return (
-        <DavitIconDropDown
+        <DavitLabelDropDown
             dropdownItems={chains.map(chainToOption)}
             onSelect={(chain) => onSelect(selectChain(Number(chain.value)))}
-            icon={icon}
+            label={label}
         />
     );
 };
@@ -63,5 +62,5 @@ const useChainDropDownViewModel = () => {
         };
     };
 
-    return { chainToOption, selectChain, chains };
+    return {chainToOption, selectChain, chains};
 };

@@ -1,12 +1,12 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { SequenceCTO } from '../../../../dataAccess/access/cto/SequenceCTO';
-import { Terminal } from '../../../../dataAccess/access/types/GoToType';
-import { CalculatedStep } from '../../../../services/SequenceService';
-import { SequenceModelActions, sequenceModelSelectors } from '../../../../slices/SequenceModelSlice';
-import { DavitTableRowData } from '../../../common/fragments/DavitTable';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { DavitIcons } from '../../../common/IconSet';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
+import { Terminal } from "../../../../dataAccess/access/types/GoToType";
+import { CalculatedStep } from "../../../../services/SequenceService";
+import { SequenceModelActions, sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
+import { DavitTableRowData } from "../../../common/fragments/DavitTable";
+import { DavitIcons } from "../../../common/IconSet";
 
 export const useGetCalcSequenceTableData = (calcSteps: CalculatedStep[], selectedSequence: SequenceCTO | null) => {
     const dispatch = useDispatch();

@@ -38,7 +38,7 @@ export const SequenceService = {
             sequenceModel: sequence,
             stepIds: [],
             calculatedSteps: [],
-            terminal: { type: GoToTypes.ERROR },
+            terminal: {type: GoToTypes.ERROR},
         };
         const stepIds: string[] = [];
         let loopStartingStep: number = -1;
@@ -159,7 +159,7 @@ export const SequenceService = {
 // ------------------------------------------ PRIVATE FUNCTIONS --------------------------------------
 
 const getInitStep = (result: SequenceActionResult): CalculatedStep => {
-    return { stepId: "root", actorDatas: result.actorDatas, type: "INIT", errors: result.errors };
+    return {stepId: "root", actorDatas: result.actorDatas, type: "INIT", errors: result.errors};
 };
 
 const getStepFromSequence = (stepId: number, sequence: SequenceCTO): SequenceStepCTO | undefined => {
@@ -180,19 +180,19 @@ const getNext = (goTo: GoTo, sequence: SequenceCTO): SequenceStepCTO | DecisionT
     let nextStepOrDecisionOrTerminal: SequenceStepCTO | DecisionTO | Terminal;
     switch (goTo.type) {
         case GoToTypes.STEP:
-            nextStepOrDecisionOrTerminal = getStepFromSequence(goTo.id, sequence) || { type: GoToTypes.ERROR };
+            nextStepOrDecisionOrTerminal = getStepFromSequence(goTo.id, sequence) || {type: GoToTypes.ERROR};
             break;
         case GoToTypes.DEC:
-            nextStepOrDecisionOrTerminal = getDecisionFromSequence(goTo.id, sequence) || { type: GoToTypes.ERROR };
+            nextStepOrDecisionOrTerminal = getDecisionFromSequence(goTo.id, sequence) || {type: GoToTypes.ERROR};
             break;
         case GoToTypes.FIN:
-            nextStepOrDecisionOrTerminal = { type: GoToTypes.FIN };
+            nextStepOrDecisionOrTerminal = {type: GoToTypes.FIN};
             break;
         case GoToTypes.IDLE:
-            nextStepOrDecisionOrTerminal = { type: GoToTypes.IDLE };
+            nextStepOrDecisionOrTerminal = {type: GoToTypes.IDLE};
             break;
         default:
-            nextStepOrDecisionOrTerminal = { type: GoToTypes.ERROR };
+            nextStepOrDecisionOrTerminal = {type: GoToTypes.ERROR};
     }
     return nextStepOrDecisionOrTerminal;
 };

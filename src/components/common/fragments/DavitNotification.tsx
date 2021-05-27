@@ -1,8 +1,8 @@
-import React, { FunctionComponent } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import { IconDefinition } from '@fortawesome/fontawesome-common-types';
-import { DavitIcons } from '../IconSet';
+import { IconDefinition } from "@fortawesome/fontawesome-common-types";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { FunctionComponent } from "react";
+import { DavitIcons } from "../IconSet";
 
 export enum NotificationLevel {
     info = "info",
@@ -47,10 +47,16 @@ export const DavitNotification: FunctionComponent<DavitNotificationProps> = (pro
     };
 
     return (
-        <div className={"notificationCard"} style={{borderColor: getIconColor()}}>
+        <div className={"notificationCard"}
+             style={{borderColor: getIconColor()}}
+        >
             <button style={{borderColor: getIconColor(), paddingLeft: "0.5em", paddingRight: "0.5em", margin: "1em"}}
-                    onClick={() => onCloseCallback()}>
-                <FontAwesomeIcon icon={getNotificationIcon()} size={"2x"} style={{color: getIconColor()}}/>
+                    onClick={() => onCloseCallback()}
+            >
+                <FontAwesomeIcon icon={getNotificationIcon()}
+                                 size={"2x"}
+                                 style={{color: getIconColor()}}
+                />
             </button>
             <div>
                 <h3 style={{color: getIconColor()}}>{header}</h3>

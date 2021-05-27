@@ -5,7 +5,7 @@ interface FormFooterProps {
 }
 
 export const FormFooter: FunctionComponent<FormFooterProps> = (props) => {
-    const { children } = props;
+    const {children} = props;
 
     return (
         <div className={"formFooter"}>
