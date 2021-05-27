@@ -18,8 +18,8 @@ interface DataDropDownButtonProps extends DropdownProps {
 }
 
 export const DataDropDown: FunctionComponent<DataDropDownProps> = (props) => {
-    const { onSelect, placeholder, value } = props;
-    const { datas, selectData, dataToOption } = useDataDropDownViewModel();
+    const {onSelect, placeholder, value} = props;
+    const {datas, selectData, dataToOption} = useDataDropDownViewModel();
 
     return (
         <DavitDropDown
@@ -32,8 +32,8 @@ export const DataDropDown: FunctionComponent<DataDropDownProps> = (props) => {
 };
 
 export const DataDropDownButton: FunctionComponent<DataDropDownButtonProps> = (props) => {
-    const { onSelect, icon } = props;
-    const { datas, selectData, dataToOption } = useDataDropDownViewModel();
+    const {onSelect, icon} = props;
+    const {datas, selectData, dataToOption} = useDataDropDownViewModel();
 
     return (
         <DavitIconDropDown
@@ -62,5 +62,5 @@ const useDataDropDownViewModel = () => {
         };
     };
 
-    return { datas, selectData, dataToOption };
+    return {datas, selectData, dataToOption};
 };

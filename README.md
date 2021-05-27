@@ -4,14 +4,14 @@
 
 > Dataflow Analysis and Visualization Tool (DAVIT)
 
-
 ## Style Guide
 
 [DAVIT Style Guide](https://exxcellent.github.io/davit/style/)
 
 ## Releases:
+
 - PROD
-  - [PROD V1 Website](https://exxcellent.github.io/davit/v1/)
+    - [PROD V1 Website](https://exxcellent.github.io/davit/v1/)
 
 - DEV
-  - [DEV Website](https://exxcellent.github.io/davit/dev/)
+    - [DEV Website](https://exxcellent.github.io/davit/dev/)

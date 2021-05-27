@@ -7,7 +7,10 @@ interface DavitRootButtonProps {
 }
 
 export const DavitRootButton: FunctionComponent<DavitRootButtonProps> = (props) => {
-    const { onClick, isRoot } = props;
+    const {onClick, isRoot} = props;
 
-    return <DavitButton onClick={onClick} label={isRoot ? "Start" : "Set as Start"} disable={isRoot} />;
+    return <DavitButton onClick={onClick}
+                        label={isRoot ? "Start" : "Set as Start"}
+                        disable={isRoot}
+    />;
 };

@@ -1,36 +1,36 @@
-import React, { FunctionComponent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { ActorCTO } from '../../dataAccess/access/cto/ActorCTO';
-import { DataCTO } from '../../dataAccess/access/cto/DataCTO';
-import { DataSetupCTO } from '../../dataAccess/access/cto/DataSetupCTO';
-import { GeometricalDataCTO } from '../../dataAccess/access/cto/GeometraicalDataCTO';
-import { SequenceStepCTO } from '../../dataAccess/access/cto/SequenceStepCTO';
-import { ActionTO } from '../../dataAccess/access/to/ActionTO';
-import { ConditionTO } from '../../dataAccess/access/to/ConditionTO';
-import { DataRelationTO } from '../../dataAccess/access/to/DataRelationTO';
-import { DecisionTO } from '../../dataAccess/access/to/DecisionTO';
-import { InitDataTO } from '../../dataAccess/access/to/InitDataTO';
-import { ActionType } from '../../dataAccess/access/types/ActionType';
-import { editSelectors } from '../../slices/EditSlice';
-import { GlobalActions, globalSelectors } from '../../slices/GlobalSlice';
-import { MasterDataActions, masterDataSelectors } from '../../slices/MasterDataSlice';
-import { sequenceModelSelectors } from '../../slices/SequenceModelSlice';
-import { EditData } from '../../slices/thunks/DataThunks';
-import { DavitUtil } from '../../utils/DavitUtil';
-import { ActorData } from '../../viewDataTypes/ActorData';
-import { ActorDataState } from '../../viewDataTypes/ActorDataState';
-import { ViewFragmentProps } from '../../viewDataTypes/ViewFragment';
-import { DavitPathProps, DavitPathTypes } from '../common/fragments/svg/DavitPath';
-import { DavitCard, DavitCardProps } from '../common/fragments/DavitCard';
-import { DnDBox, DnDBoxElement, DnDBoxType } from '../common/fragments/DnDBox';
-import { ViewPlaceholder } from '../common/fragments/ViewPlaceholder';
+import React, { FunctionComponent } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { ActorCTO } from "../../dataAccess/access/cto/ActorCTO";
+import { DataCTO } from "../../dataAccess/access/cto/DataCTO";
+import { DataSetupCTO } from "../../dataAccess/access/cto/DataSetupCTO";
+import { GeometricalDataCTO } from "../../dataAccess/access/cto/GeometraicalDataCTO";
+import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
+import { ActionTO } from "../../dataAccess/access/to/ActionTO";
+import { ConditionTO } from "../../dataAccess/access/to/ConditionTO";
+import { DataRelationTO } from "../../dataAccess/access/to/DataRelationTO";
+import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
+import { InitDataTO } from "../../dataAccess/access/to/InitDataTO";
+import { ActionType } from "../../dataAccess/access/types/ActionType";
+import { editSelectors } from "../../slices/EditSlice";
+import { GlobalActions, globalSelectors } from "../../slices/GlobalSlice";
+import { MasterDataActions, masterDataSelectors } from "../../slices/MasterDataSlice";
+import { sequenceModelSelectors } from "../../slices/SequenceModelSlice";
+import { EditData } from "../../slices/thunks/DataThunks";
+import { DavitUtil } from "../../utils/DavitUtil";
+import { ActorData } from "../../viewDataTypes/ActorData";
+import { ActorDataState } from "../../viewDataTypes/ActorDataState";
+import { ViewFragmentProps } from "../../viewDataTypes/ViewFragment";
+import { DavitCard, DavitCardProps } from "../common/fragments/DavitCard";
+import { DnDBox, DnDBoxElement, DnDBoxType } from "../common/fragments/DnDBox";
+import { DavitPathProps, DavitPathTypes } from "../common/fragments/svg/DavitPath";
+import { ViewPlaceholder } from "../common/fragments/ViewPlaceholder";
 
 interface DataModelControllerProps {
     fullScreen?: boolean;
 }
 
 export const DataModelController: FunctionComponent<DataModelControllerProps> = (props) => {
-    const { fullScreen } = props;
+    const {fullScreen} = props;
 
     const {
         onPositionUpdate,
@@ -43,31 +43,32 @@ export const DataModelController: FunctionComponent<DataModelControllerProps> = 
     } = useMetaDataModelViewModel();
 
     const createMetaDataDnDBox = () => {
-        return (
-            <>
-                {toDnDElements.length === 0 &&
-                <ViewPlaceholder text={'Create a new data object'} className={DnDBoxType.data.toString()} />}
-                {toDnDElements.length > 0 && <DnDBox
-                    onPositionUpdate={onPositionUpdate}
-                    toDnDElements={toDnDElements}
-                    svgElements={getRelations()}
-                    fullScreen={fullScreen}
-                    zoomIn={zoomIn}
-                    zoomOut={zoomOut}
-                    zoom={dataZoomFactor}
-                    type={DnDBoxType.data}
-                    onGeoUpdate={onGeometricalDataUpdate}
-                />}
-            </>
-        );
-    }
-;
+            return (
+                <>
+                    {toDnDElements.length === 0 &&
+                    <ViewPlaceholder text={"Create a new data object"}
+                                     className={DnDBoxType.data.toString()}
+                    />}
+                    {toDnDElements.length > 0 && <DnDBox
+                        onPositionUpdate={onPositionUpdate}
+                        toDnDElements={toDnDElements}
+                        svgElements={getRelations()}
+                        fullScreen={fullScreen}
+                        zoomIn={zoomIn}
+                        zoomOut={zoomOut}
+                        zoom={dataZoomFactor}
+                        type={DnDBoxType.data}
+                        onGeoUpdate={onGeometricalDataUpdate}
+                    />}
+                </>
+            );
+        }
+    ;
 
-return createMetaDataDnDBox();
+    return createMetaDataDnDBox();
 };
 
-const useMetaDataModelViewModel = () =>
-    {
+const useMetaDataModelViewModel = () => {
         const dispatch = useDispatch();
         // ====== SELECTORS =====
         const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);
@@ -95,7 +96,7 @@ const useMetaDataModelViewModel = () =>
         }, [dispatch]);
 
         const getActorNameById = (actorId: number): string => {
-            return actors.find((actor) => actor.actor.id === actorId)?.actor.name || 'Could not find Actor';
+            return actors.find((actor) => actor.actor.id === actorId)?.actor.name || "Could not find Actor";
         };
 
         const getActorDatas = () => {
@@ -168,7 +169,7 @@ const useMetaDataModelViewModel = () =>
         const mapActorDataToActorData = (actorData: ActorData): ViewFragmentProps => {
             return {
                 name: getActorNameById(actorData.actorFk),
-                parentId: { dataId: actorData.dataFk, instanceId: actorData.instanceFk },
+                parentId: {dataId: actorData.dataFk, instanceId: actorData.instanceFk},
                 state: ActorDataState.PERSISTENT,
             };
         };
@@ -187,7 +188,7 @@ const useMetaDataModelViewModel = () =>
 
         const mapConditionToActorData = (condition: ConditionTO): ViewFragmentProps => {
             return {
-                parentId: { dataId: condition.dataFk, instanceId: condition.instanceFk },
+                parentId: {dataId: condition.dataFk, instanceId: condition.instanceFk},
                 name: getActorNameById(condition.actorFk),
                 state: ActorDataState.CHECKED,
             };
@@ -197,7 +198,7 @@ const useMetaDataModelViewModel = () =>
             return {
                 parentId:
                     initData.instanceFk > 1
-                        ? { dataId: initData.dataFk, instanceId: initData.instanceFk }
+                        ? {dataId: initData.dataFk, instanceId: initData.instanceFk}
                         : initData.dataFk,
                 name: getActorNameById(initData.actorFk),
                 state: ActorDataState.NEW,
@@ -290,7 +291,7 @@ const useMetaDataModelViewModel = () =>
                 ),
                 instances: data.data.instances,
                 zoomFactor: dataZoomFactor,
-                type: 'DATA',
+                type: "DATA",
             };
         };
 

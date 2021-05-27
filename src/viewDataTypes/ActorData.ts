@@ -6,5 +6,6 @@ export class ActorData {
         public dataFk = -1,
         public instanceFk = -1,
         public state = ActorDataState.PERSISTENT,
-    ) {}
+    ) {
+    }
 }

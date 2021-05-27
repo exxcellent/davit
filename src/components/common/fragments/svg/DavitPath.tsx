@@ -64,8 +64,8 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
         lineColor,
     } = props;
 
-    const INTERFACE_INPUT: Point = { x: 0, y: targetHeight / 2 };
-    const INTERFACE_OUTPUT: Point = { x: 0, y: sourceHeight / 2 };
+    const INTERFACE_INPUT: Point = {x: 0, y: targetHeight / 2};
+    const INTERFACE_OUTPUT: Point = {x: 0, y: sourceHeight / 2};
     const OFFSET: number = 10;
     const MARKER_WIDTH: number = 20;
     const TEXT_OFFSET: number = 25;
@@ -75,8 +75,8 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
         const endDir: "LEFT" | " RIGHT" = x1 < x2 + sourceWidth / 2 ? "LEFT" : " RIGHT";
         const xStart = startDir === "LEFT" ? x1 : x1 + sourceWidth;
         const xEnd = endDir === "LEFT" ? x2 : x2 + targetWidth + OFFSET + MARKER_WIDTH;
-        let startPoint: Point = { x: xStart, y: y1 };
-        let endPoint: Point = { x: xEnd, y: y2 };
+        let startPoint: Point = {x: xStart, y: y1};
+        let endPoint: Point = {x: xEnd, y: y2};
         // set interfaces
         startPoint = plusPoint(startPoint, INTERFACE_OUTPUT);
         endPoint = plusPoint(endPoint, INTERFACE_INPUT);
@@ -103,7 +103,7 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
         `}
                     className={"carvPath "}
                     markerEnd="url(#arrow)"
-                    style={{ stroke: lineColor ? lineColor : "black", strokeDasharray: stroked ? 5.5 : "" }}
+                    style={{stroke: lineColor ? lineColor : "black", strokeDasharray: stroked ? 5.5 : ""}}
                 />
                 {labels.map((label, index) => {
                     return (
@@ -111,13 +111,15 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
                             <text
                                 x={middlePoint.x - TEXT_OFFSET}
                                 y={middlePoint.y + index * 20}
-                                className="davitArrowTextBG">
+                                className="davitArrowTextBG"
+                            >
                                 {label}
                             </text>
                             <text
                                 x={middlePoint.x - TEXT_OFFSET}
                                 y={middlePoint.y + index * 20}
-                                className="davitArrowText">
+                                className="davitArrowText"
+                            >
                                 {label}
                             </text>
                         </>
@@ -129,13 +131,13 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
 
     const createGridLine = () => {
         const startPoint: Point = getDirectionPoint(
-            { x: xSource, y: ySource },
+            {x: xSource, y: ySource},
             sourceWidth,
             sourceHeight,
             sourceDirection,
         );
         const endPoint: Point = getDirectionPoint(
-            { x: xTarget, y: yTarget },
+            {x: xTarget, y: yTarget},
             targetWidth,
             targetHeight,
             targetDirection,
@@ -170,15 +172,15 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
         const offset = 25;
         switch (direction) {
             case Direction.TOP:
-                return { x: 0, y: -offset };
+                return {x: 0, y: -offset};
             case Direction.LEFT:
-                return { x: -offset, y: 0 };
+                return {x: -offset, y: 0};
             case Direction.RIGHT:
-                return { x: offset, y: 0 };
+                return {x: offset, y: 0};
             case Direction.BOTTOM:
-                return { x: 0, y: offset };
+                return {x: 0, y: offset};
             case undefined:
-                return { x: 0, y: 0 };
+                return {x: 0, y: 0};
         }
     };
 
@@ -208,15 +210,15 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
     };
 
     const setOutPutOffset = (point: Point, offset: number, startDir: "LEFT" | " RIGHT"): Point => {
-        return startDir === "LEFT" ? { x: point.x - offset, y: point.y } : { x: point.x + offset, y: point.y };
+        return startDir === "LEFT" ? {x: point.x - offset, y: point.y} : {x: point.x + offset, y: point.y};
     };
 
     const setInputPutOffset = (point: Point, offset: number): Point => {
-        return { x: point.x - offset, y: point.y };
+        return {x: point.x - offset, y: point.y};
     };
 
     const plusPoint = (point1: Point, point2: Point): Point => {
-        return { x: point1.x + point2.x, y: point1.y + point2.y };
+        return {x: point1.x + point2.x, y: point1.y + point2.y};
     };
 
     const getMiddlePoint = (startPoint: Point, endPoint: Point): Point => {
@@ -253,8 +255,11 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
                         refX="8"
                         refY="3"
                         orient="auto"
-                        strokeWidth="0">
-                        <path d="M0,0 L0,6 L9,3 z" className="carvArrowMarker" />
+                        strokeWidth="0"
+                    >
+                        <path d="M0,0 L0,6 L9,3 z"
+                              className="carvArrowMarker"
+                        />
                     </marker>
                 </defs>
             )}

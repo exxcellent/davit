@@ -1,7 +1,7 @@
-import React, {FunctionComponent, useState} from "react";
-import {DavitButton} from "./DavitButton";
-import {faComment, faCommentDots} from "@fortawesome/free-solid-svg-icons";
-import {DavitNoteModal} from "../modals/DavitNoteModal";
+import { faComment, faCommentDots } from "@fortawesome/free-solid-svg-icons";
+import React, { FunctionComponent, useState } from "react";
+import { DavitNoteModal } from "../modals/DavitNoteModal";
+import { DavitButton } from "./DavitButton";
 
 export interface DavitCommentButtonProps {
     onSaveCallback: (comment: string) => void;
@@ -15,9 +15,14 @@ export const DavitCommentButton: FunctionComponent<DavitCommentButtonProps> = (p
 
     return (
         <>
-            <DavitButton onClick={() => setShowForm(true)} iconName={comment === "" ? faComment : faCommentDots}/>
+            <DavitButton onClick={() => setShowForm(true)}
+                         iconName={comment === "" ? faComment : faCommentDots}
+            />
             {showForm &&
-            <DavitNoteModal text={comment} closeCallback={() => setShowForm(false)} saveTextCallback={onSaveCallback}/>
+            <DavitNoteModal text={comment}
+                            closeCallback={() => setShowForm(false)}
+                            saveTextCallback={onSaveCallback}
+            />
             }
         </>
     );

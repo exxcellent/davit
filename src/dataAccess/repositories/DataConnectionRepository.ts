@@ -20,7 +20,7 @@ export const DataConnectionRepository = {
             };
             console.info("set new actor id: " + dataRelationTO.id);
         } else {
-            dataRelationTO = { ...dataRelation };
+            dataRelationTO = {...dataRelation};
         }
         dataStore.getDataStore().dataConnections.set(dataRelationTO.id!, dataRelationTO);
         return dataRelationTO;

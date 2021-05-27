@@ -29,7 +29,7 @@ export const DesignRepository = {
                 id: DataAccessUtil.determineNewId(this.findAll()),
             };
         } else {
-            designTO = { ...design };
+            designTO = {...design};
         }
         dataStore.getDataStore().designs.set(designTO.id!, designTO);
         return designTO;

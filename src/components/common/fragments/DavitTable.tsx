@@ -1,7 +1,7 @@
-import React, { FunctionComponent } from 'react';
-import { DavitTableButton } from './buttons/DavitTableButton';
-import { IconDefinition } from '@fortawesome/fontawesome-common-types';
-import { DavitIcons } from '../IconSet';
+import { IconDefinition } from "@fortawesome/fontawesome-common-types";
+import React, { FunctionComponent } from "react";
+import { DavitIcons } from "../IconSet";
+import { DavitTableButton } from "./buttons/DavitTableButton";
 
 export interface DavitTableProps {
     header: string[];
@@ -24,23 +24,32 @@ export interface DavitTableRowData {
 }
 
 export const DavitTable: FunctionComponent<DavitTableProps> = (props) => {
-    const { header, bodyData, addFunction, tableHeight } = props;
+    const {header, bodyData, addFunction, tableHeight} = props;
 
     const mapValue = (value: string | JSX.Element, index: number) => {
         return (
-            <td id={index.toString()} key={index}>
+            <td id={index.toString()}
+                key={index}
+            >
                 {value}
             </td>
         );
     };
 
     const createButton = (action: DavitTableAction, key: number) => {
-        return <DavitTableButton icon={action.icon} onClick={action.callback} key={key} disable={action.disable} />;
+        return <DavitTableButton icon={action.icon}
+                                 onClick={action.callback}
+                                 key={key}
+                                 disable={action.disable}
+        />;
     };
 
     const createRow = (data: DavitTableRowData, index: number) => {
         return (
-            <tr key={index} className={data.trClass} onClick={data.onClick}>
+            <tr key={index}
+                className={data.trClass}
+                onClick={data.onClick}
+            >
                 {data.data.map(mapValue)}
                 {data.actions.length > 0 && <td>{data.actions.map((action, index) => createButton(action, index))}</td>}
             </tr>
@@ -60,7 +69,9 @@ export const DavitTable: FunctionComponent<DavitTableProps> = (props) => {
 
     const createEmptyRow = (key: string, numberOfElements: number, className?: string): JSX.Element => {
         return (
-            <tr key={key} className={className}>
+            <tr key={key}
+                className={className}
+            >
                 {new Array(numberOfElements).map((_, index) => {
                     return <td key={index} />;
                 })}
@@ -71,16 +82,16 @@ export const DavitTable: FunctionComponent<DavitTableProps> = (props) => {
     return (
         <table>
             <thead>
-                <tr>{header.map(mapValue)}</tr>
+            <tr>{header.map(mapValue)}</tr>
             </thead>
-            <tbody style={{ height: tableHeight }}>
-                {bodyData.map(createRow)}
-                {addFunction && (
-                    <tr>
-                        <td>{createButton({ icon: DavitIcons.plus, callback: addFunction }, 0)}</td>
-                    </tr>
-                )}
-                {fillWithEmptyRows()}
+            <tbody style={{height: tableHeight}}>
+            {bodyData.map(createRow)}
+            {addFunction && (
+                <tr>
+                    <td>{createButton({icon: DavitIcons.plus, callback: addFunction}, 0)}</td>
+                </tr>
+            )}
+            {fillWithEmptyRows()}
             </tbody>
         </table>
     );

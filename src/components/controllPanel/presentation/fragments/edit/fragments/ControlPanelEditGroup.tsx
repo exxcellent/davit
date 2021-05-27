@@ -1,16 +1,16 @@
-import React, { FunctionComponent, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { GroupTO } from '../../../../../../dataAccess/access/to/GroupTO';
-import { EditActions, editSelectors } from '../../../../../../slices/EditSlice';
-import { EditGroup } from '../../../../../../slices/thunks/GroupThunks';
-import { DavitUtil } from '../../../../../../utils/DavitUtil';
-import { DavitButton } from '../../../../../common/fragments/buttons/DavitButton';
-import { DavitDeleteButton } from '../../../../../common/fragments/buttons/DavitDeleteButton';
-import { DavitLabelTextfield } from '../../../../../common/fragments/DavitLabelTextfield';
-import { ColorDropDown } from '../../../../../common/fragments/dropdowns/ColorDropDown';
-import { GlobalActions } from '../../../../../../slices/GlobalSlice';
-import { ControlPanel } from '../common/ControlPanel';
-import { OptionField } from '../common/OptionField';
+import React, { FunctionComponent, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
+import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
+import { GlobalActions } from "../../../../../../slices/GlobalSlice";
+import { EditGroup } from "../../../../../../slices/thunks/GroupThunks";
+import { DavitUtil } from "../../../../../../utils/DavitUtil";
+import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
+import { ColorDropDown } from "../../../../../common/fragments/dropdowns/ColorDropDown";
+import { ControlPanel } from "../common/ControlPanel";
+import { OptionField } from "../common/OptionField";
 
 export interface ControlPanelEditGroupProps {
 }
@@ -35,14 +35,14 @@ export const ControlPanelEditGroup: FunctionComponent<ControlPanelEditGroupProps
                 <ColorDropDown
                     onSelect={setGroupColor}
                     placeholder={getGroupColor()}
-                    colors={['red', 'blue', 'green']}
+                    colors={["red", "blue", "green"]}
                 />
             </OptionField>
 
             <OptionField divider={true}>
                 <DavitLabelTextfield
-                    label='Name:'
-                    placeholder='Group Name ...'
+                    label="Name:"
+                    placeholder="Group Name ..."
                     onChangeCallback={(name: string) => changeName(name)}
                     value={name}
                     focus={true}
@@ -51,8 +51,12 @@ export const ControlPanelEditGroup: FunctionComponent<ControlPanelEditGroupProps
             </OptionField>
 
             <OptionField divider={true}>
-                <DavitButton onClick={createAnother} label='Create another' />
-                <DavitButton onClick={saveGroup} label='OK' />
+                <DavitButton onClick={createAnother}
+                             label="Create another"
+                />
+                <DavitButton onClick={saveGroup}
+                             label="OK"
+                />
             </OptionField>
 
             <OptionField divider={true}>
@@ -70,7 +74,7 @@ const useControlPanelEditGroupViewModel = () => {
     useEffect(() => {
         // check if sequence to edit is really set or gos back to edit mode
         if (DavitUtil.isNullOrUndefined(groupToEdit)) {
-            dispatch(GlobalActions.handleError('Tried to go to edit group without groupToEdit specified'));
+            dispatch(GlobalActions.handleError("Tried to go to edit group without groupToEdit specified"));
             dispatch(EditActions.setMode.edit());
         }
 
@@ -107,7 +111,7 @@ const useControlPanelEditGroupViewModel = () => {
         if (!DavitUtil.isNullOrUndefined(groupToEdit)) {
             return groupToEdit!.color;
         } else {
-            return '';
+            return "";
         }
     };
 
@@ -122,7 +126,7 @@ const useControlPanelEditGroupViewModel = () => {
     };
 
     return {
-        label: 'EDIT GROUP',
+        label: "EDIT GROUP",
         name: groupToEdit?.name,
         changeName,
         saveGroup,

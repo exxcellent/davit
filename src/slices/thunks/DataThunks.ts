@@ -1,10 +1,10 @@
-import {AppThunk} from "../../app/store";
-import {DataCTO} from "../../dataAccess/access/cto/DataCTO";
-import {DataAccess} from "../../dataAccess/DataAccess";
-import {DataAccessResponse} from "../../dataAccess/DataAccessResponse";
-import {editActions, Mode} from "../EditSlice";
-import {MasterDataActions} from "../MasterDataSlice";
-import {GlobalActions} from "../GlobalSlice";
+import { AppThunk } from "../../app/store";
+import { DataCTO } from "../../dataAccess/access/cto/DataCTO";
+import { DataAccess } from "../../dataAccess/DataAccess";
+import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
+import { editActions, Mode } from "../EditSlice";
+import { GlobalActions } from "../GlobalSlice";
+import { MasterDataActions } from "../MasterDataSlice";
 
 const createDataThunk = (): AppThunk => (dispatch) => {
     const data: DataCTO = new DataCTO();

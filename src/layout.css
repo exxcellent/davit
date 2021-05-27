@@ -2,10 +2,12 @@
 .flex {
     display: flex;
 }
+
 .flex-column {
     display: flex;
     flex-direction: column;
 }
+
 .flex-row {
     display: flex;
     flex-direction: row;
@@ -15,10 +17,12 @@
     justify-content: flex-start;
     align-items: flex-start;
 }
+
 .flex-center {
     justify-content: center;
     align-items: center;
 }
+
 .flex-end {
     justify-content: flex-end;
     align-items: flex-end;
@@ -31,7 +35,7 @@
 .flex-grow {
     flex-grow: 1;
 }
+
 .flex-shrink {
     flex-shrink: 1;
 }
-

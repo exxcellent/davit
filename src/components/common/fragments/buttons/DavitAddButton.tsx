@@ -1,6 +1,6 @@
-import React, { CSSProperties, FunctionComponent } from 'react';
-import { DavitButton } from './DavitButton';
-import { DavitIcons } from '../../IconSet';
+import React, { CSSProperties, FunctionComponent } from "react";
+import { DavitIcons } from "../../IconSet";
+import { DavitButton } from "./DavitButton";
 
 interface DavitAddButtonProps {
     onClick: () => void;
@@ -8,7 +8,10 @@ interface DavitAddButtonProps {
 }
 
 export const DavitAddButton: FunctionComponent<DavitAddButtonProps> = (props) => {
-    const { onClick, style } = props;
+    const {onClick, style} = props;
 
-    return <DavitButton onClick={onClick} iconName={DavitIcons.plus} style={style}/>;
+    return <DavitButton onClick={onClick}
+                        iconName={DavitIcons.plus}
+                        style={style}
+    />;
 };

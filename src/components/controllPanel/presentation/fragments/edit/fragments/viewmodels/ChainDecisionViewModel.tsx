@@ -1,27 +1,27 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { ChainDecisionTO } from '../../../../../../../dataAccess/access/to/ChainDecisionTO';
-import { ChainlinkTO } from '../../../../../../../dataAccess/access/to/ChainlinkTO';
-import { ChainTO } from '../../../../../../../dataAccess/access/to/ChainTO';
-import { GoToChain, GoToTypesChain } from '../../../../../../../dataAccess/access/types/GoToTypeChain';
-import { EditActions, editSelectors } from '../../../../../../../slices/EditSlice';
-import { sequenceModelSelectors } from '../../../../../../../slices/SequenceModelSlice';
-import { EditChainDecision } from '../../../../../../../slices/thunks/ChainDecisionThunks';
-import { DavitUtil } from '../../../../../../../utils/DavitUtil';
-import { GlobalActions } from '../../../../../../../slices/GlobalSlice';
-import { ConditionTO } from '../../../../../../../dataAccess/access/to/ConditionTO';
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { ChainDecisionTO } from "../../../../../../../dataAccess/access/to/ChainDecisionTO";
+import { ChainlinkTO } from "../../../../../../../dataAccess/access/to/ChainlinkTO";
+import { ChainTO } from "../../../../../../../dataAccess/access/to/ChainTO";
+import { ConditionTO } from "../../../../../../../dataAccess/access/to/ConditionTO";
+import { GoToChain, GoToTypesChain } from "../../../../../../../dataAccess/access/types/GoToTypeChain";
+import { EditActions, editSelectors } from "../../../../../../../slices/EditSlice";
+import { GlobalActions } from "../../../../../../../slices/GlobalSlice";
+import { sequenceModelSelectors } from "../../../../../../../slices/SequenceModelSlice";
+import { EditChainDecision } from "../../../../../../../slices/thunks/ChainDecisionThunks";
+import { DavitUtil } from "../../../../../../../utils/DavitUtil";
 
 export const useChainDecisionViewModel = () => {
     const decisionToEdit: ChainDecisionTO | null = useSelector(editSelectors.selectChainDecisionToEdit);
     const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
     const dispatch = useDispatch();
-    const [currentIfGoTo, setCurrentIfGoTo] = useState<GoToChain>({ type: GoToTypesChain.FIN });
-    const [currentElseGoTo, setCurrentElseGoTo] = useState<GoToChain>({ type: GoToTypesChain.ERROR });
+    const [currentIfGoTo, setCurrentIfGoTo] = useState<GoToChain>({type: GoToTypesChain.FIN});
+    const [currentElseGoTo, setCurrentElseGoTo] = useState<GoToChain>({type: GoToTypesChain.ERROR});
     const [key, setKey] = useState<number>(0);
 
     useEffect(() => {
         if (DavitUtil.isNullOrUndefined(decisionToEdit)) {
-            dispatch(GlobalActions.handleError('Tried to go to edit condition step without conditionToEdit specified'));
+            dispatch(GlobalActions.handleError("Tried to go to edit condition step without conditionToEdit specified"));
             dispatch(EditActions.setMode.edit());
         }
         if (decisionToEdit) {
@@ -81,7 +81,7 @@ export const useChainDecisionViewModel = () => {
 
     const handleType = (ifGoTo: boolean, newGoToType?: string) => {
         if (newGoToType !== undefined) {
-            const gType = { type: (GoToTypesChain as any)[newGoToType] };
+            const gType = {type: (GoToTypesChain as any)[newGoToType]};
             ifGoTo ? setCurrentIfGoTo(gType) : setCurrentElseGoTo(gType);
             switch (newGoToType) {
                 case GoToTypesChain.ERROR:
@@ -96,14 +96,14 @@ export const useChainDecisionViewModel = () => {
 
     const setGoToTypeStep = (ifGoTo: boolean, link?: ChainlinkTO) => {
         if (link) {
-            const newGoTo: GoToChain = { type: GoToTypesChain.LINK, id: link.id };
+            const newGoTo: GoToChain = {type: GoToTypesChain.LINK, id: link.id};
             saveGoToType(ifGoTo, newGoTo);
         }
     };
 
     const setGoToTypeDecision = (ifGoTo: boolean, decision?: ChainDecisionTO) => {
         if (decision) {
-            const newGoTo: GoToChain = { type: GoToTypesChain.DEC, id: decision.id };
+            const newGoTo: GoToChain = {type: GoToTypesChain.DEC, id: decision.id};
             saveGoToType(ifGoTo, newGoTo);
         }
     };

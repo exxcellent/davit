@@ -11,10 +11,10 @@ name: Deploy to PROD
 
 on:
   release:
-    types: 
+    types:
       - created
 
-jobs:   
+jobs:
   info:
     name: Check version
     runs-on: ubuntu-latest
@@ -27,20 +27,20 @@ jobs:
         run: |
           export IS_PRE_RELEASE=$(cat $GITHUB_EVENT_PATH | jq '.release.prerelease' | sed -e 's/^"//' -e 's/"$//')
           echo "Set IS_PRE_RELEASE=$IS_PRE_RELEASE"
-          
+
           if [ "$IS_PRE_RELEASE" == "false" ]; then exit 0; else exit 1; fi
-          
+
   build:
     name: Build and Deploy
-    needs: [info]
+    needs: [ info ]
     if: needs.info.outputs.validRelease == 'success'
     runs-on: ubuntu-latest
-    steps:     
+    steps:
       - name: Checkout
         uses: actions/checkout@v2.3.1
         with:
           persist-credentials: false
-        
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -57,7 +57,7 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-            
+
       - name: Yarn Install
         uses: CultureHQ/actions-yarn@v1.0.1
         with:
@@ -80,15 +80,15 @@ jobs:
           file: package.json
           field: homepage
           value: https://exxcellent.github.io/davit/${{ env.major_version }}
-      
+
       - name: Yarn Build
         uses: CultureHQ/actions-yarn@v1.0.1
         with:
           args: build
- 
+
       - name: Show files
         run: ls -la
-    
+
       - name: Deploy on PROD
         uses: JamesIves/github-pages-deploy-action@3.7.1
         if: success() # && ( github.ref == 'refs/heads/prod' )

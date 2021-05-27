@@ -1,6 +1,6 @@
-import React, { FunctionComponent } from 'react';
-import { ActorForm } from '../forms/ActorForm';
-import { DavitDraggableModal } from '../../../../../../common/fragments/modals/DavitDraggableModal';
+import React, { FunctionComponent } from "react";
+import { DavitDraggableModal } from "../../../../../../common/fragments/modals/DavitDraggableModal";
+import { ActorForm } from "../forms/ActorForm";
 
 interface EditActorModalProps {
 
