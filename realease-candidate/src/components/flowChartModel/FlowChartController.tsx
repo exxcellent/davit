@@ -16,7 +16,7 @@ import { CenteredFlex } from "../common/fragments/CenteredFlex";
 import { ViewPlaceholder } from "../common/fragments/ViewPlaceholder";
 import { TabFragment } from "../tableModel/fragments/TabFragment";
 import { TabGroupFragment } from "../tableModel/fragments/TabGroupFragment";
-import { FlowChartlabel } from "./FlowChartlabel";
+import { FlowChartlabel } from "./fragments/FlowChartlabel";
 
 interface FlowChartControllerProps {
     fullScreen?: boolean;
