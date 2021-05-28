@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk, RootState } from "../app/store";
 import { Arrow, ArrowType } from "../components/common/fragments/svg/DavitPath";
 import { ChainCTO } from "../dataAccess/access/cto/ChainCTO";
 import { ChainlinkCTO } from "../dataAccess/access/cto/ChainlinkCTO";
@@ -16,6 +15,7 @@ import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
 import { CalcChain, getRoot, SequenceChainService } from "../services/SequenceChainService";
 import { CalcSequence, CalculatedStep, SequenceService } from "../services/SequenceService";
+import { AppThunk, RootState } from "../store";
 import { ActorData } from "../viewDataTypes/ActorData";
 import { Mode } from "./EditSlice";
 import { GlobalActions } from "./GlobalSlice";

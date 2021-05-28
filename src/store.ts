@@ -1,10 +1,10 @@
 import { configureStore, getDefaultMiddleware, ThunkAction } from "@reduxjs/toolkit";
-import { EditReducer } from "../slices/EditSlice";
-import { globalReducer } from "../slices/GlobalSlice";
-import { MasterDataReducer } from "../slices/MasterDataSlice";
-import { SequenceModelReducer } from "../slices/SequenceModelSlice";
-import { createStorageListener } from "../utils/StorageListener";
-import { storageMiddleware } from "./middlewares/StateSync";
+import { storageMiddleware } from "./app/middlewares/StateSync";
+import { EditReducer } from "./slices/EditSlice";
+import { globalReducer } from "./slices/GlobalSlice";
+import { MasterDataReducer } from "./slices/MasterDataSlice";
+import { SequenceModelReducer } from "./slices/SequenceModelSlice";
+import { createStorageListener } from "./utils/StorageListener";
 
 const middleware = getDefaultMiddleware().concat(storageMiddleware);
 
