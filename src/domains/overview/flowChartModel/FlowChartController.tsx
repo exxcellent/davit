@@ -1,21 +1,21 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { ArcherContainer, ArcherElement, Relation } from "react-archer";
 import { useSelector } from "react-redux";
-import { ChainCTO } from "../../dataAccess/access/cto/ChainCTO";
-import { ChainlinkCTO } from "../../dataAccess/access/cto/ChainlinkCTO";
-import { SequenceCTO } from "../../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
-import { ChainDecisionTO } from "../../dataAccess/access/to/ChainDecisionTO";
-import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
-import { GoTo, GoToTypes, Terminal } from "../../dataAccess/access/types/GoToType";
-import { GoToChain, GoToTypesChain, TerminalChain } from "../../dataAccess/access/types/GoToTypeChain";
-import { CalcChain } from "../../services/SequenceChainService";
-import { sequenceModelSelectors } from "../../slices/SequenceModelSlice";
-import { DavitUtil } from "../../utils/DavitUtil";
-import { CenteredFlex } from "../common/fragments/CenteredFlex";
-import { ViewPlaceholder } from "../common/fragments/ViewPlaceholder";
-import { TabFragment } from "../tableModel/fragments/TabFragment";
-import { TabGroupFragment } from "../tableModel/fragments/TabGroupFragment";
+import { CenteredFlex } from "../../../components/common/fragments/CenteredFlex";
+import { ViewPlaceholder } from "../../../components/common/fragments/ViewPlaceholder";
+import { TabFragment } from "../../../components/tableModel/fragments/TabFragment";
+import { TabGroupFragment } from "../../../components/tableModel/fragments/TabGroupFragment";
+import { ChainCTO } from "../../../dataAccess/access/cto/ChainCTO";
+import { ChainlinkCTO } from "../../../dataAccess/access/cto/ChainlinkCTO";
+import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
+import { ChainDecisionTO } from "../../../dataAccess/access/to/ChainDecisionTO";
+import { DecisionTO } from "../../../dataAccess/access/to/DecisionTO";
+import { GoTo, GoToTypes, Terminal } from "../../../dataAccess/access/types/GoToType";
+import { GoToChain, GoToTypesChain, TerminalChain } from "../../../dataAccess/access/types/GoToTypeChain";
+import { CalcChain } from "../../../services/SequenceChainService";
+import { sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
+import { DavitUtil } from "../../../utils/DavitUtil";
 import { FlowChartlabel } from "./fragments/FlowChartlabel";
 
 interface FlowChartControllerProps {

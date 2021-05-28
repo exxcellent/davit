@@ -7,11 +7,11 @@ import { HashRouter as BrowserRouter, Route, Switch } from "react-router-dom";
 import "../app/css/Davit.css";
 import { ErrorNotification } from "../components/common/fragments/ErrorNotification";
 import { ControlPanelController } from "../components/controllPanel/presentation/ControlPanelController";
-import { FlowChartController } from "../components/flowChartModel/FlowChartController";
 import { SidePanelController } from "../components/sidePanel/SidePanelController";
 import { TableModelController } from "../components/tableModel/presentation/TableModelController";
 import { ActorModelController } from "../domains/actor/ActorModelController";
 import { DataModelController } from "../domains/datamodel/DataModelController";
+import { FlowChartController } from "../domains/overview/flowChartModel/FlowChartController";
 import { GlobalActions } from "../slices/GlobalSlice";
 import { MasterDataActions } from "../slices/MasterDataSlice";
 
