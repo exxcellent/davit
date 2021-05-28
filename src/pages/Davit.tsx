@@ -4,10 +4,10 @@ import { useDispatch } from "react-redux";
 // import {BrowserRouter, Route, Switch} from "react-router-dom";
 // electron needs HashRouter
 import { HashRouter as BrowserRouter, Route, Switch } from "react-router-dom";
-import "../app/css/Davit.css";
 import { ErrorNotification } from "../components/common/fragments/ErrorNotification";
 import { ControlPanelController } from "../components/controllPanel/presentation/ControlPanelController";
 import { SidePanelController } from "../components/sidePanel/SidePanelController";
+import "../css/Davit.css";
 import { ActorModelController } from "../domains/actor/ActorModelController";
 import { DataModelController } from "../domains/datamodel/DataModelController";
 import { FlowChartController } from "../domains/overview/flowChartModel/FlowChartController";
