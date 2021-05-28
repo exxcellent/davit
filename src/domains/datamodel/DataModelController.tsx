@@ -1,5 +1,9 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { DavitCard, DavitCardProps } from "../../components/common/fragments/DavitCard";
+import { DnDBox, DnDBoxElement, DnDBoxType } from "../../components/common/fragments/DnDBox";
+import { DavitPathProps, DavitPathTypes } from "../../components/common/fragments/svg/DavitPath";
+import { ViewPlaceholder } from "../../components/common/fragments/ViewPlaceholder";
 import { ActorCTO } from "../../dataAccess/access/cto/ActorCTO";
 import { DataCTO } from "../../dataAccess/access/cto/DataCTO";
 import { DataSetupCTO } from "../../dataAccess/access/cto/DataSetupCTO";
@@ -20,10 +24,6 @@ import { DavitUtil } from "../../utils/DavitUtil";
 import { ActorData } from "../../viewDataTypes/ActorData";
 import { ActorDataState } from "../../viewDataTypes/ActorDataState";
 import { ViewFragmentProps } from "../../viewDataTypes/ViewFragment";
-import { DavitCard, DavitCardProps } from "../common/fragments/DavitCard";
-import { DnDBox, DnDBoxElement, DnDBoxType } from "../common/fragments/DnDBox";
-import { DavitPathProps, DavitPathTypes } from "../common/fragments/svg/DavitPath";
-import { ViewPlaceholder } from "../common/fragments/ViewPlaceholder";
 
 interface DataModelControllerProps {
     fullScreen?: boolean;
