@@ -3,8 +3,8 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { Davit } from "./app/Davit";
 import { store } from "./app/store";
-import "./index.css";
 import * as serviceWorker from "./serviceWorker";
+import "./style/index.css";
 
 ReactDOM.render(
     <Provider store={store}>
