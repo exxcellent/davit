@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk, RootState } from "../app/store";
 import { Arrow, ArrowType } from "../components/common/fragments/svg/DavitPath";
 import { ChainCTO } from "../dataAccess/access/cto/ChainCTO";
 import { ChainlinkCTO } from "../dataAccess/access/cto/ChainlinkCTO";
@@ -10,15 +9,14 @@ import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
 import { ChainDecisionTO } from "../dataAccess/access/to/ChainDecisionTO";
 import { ChainTO } from "../dataAccess/access/to/ChainTO";
-import { InitDataTO } from "../dataAccess/access/to/InitDataTO";
 import { ActionType } from "../dataAccess/access/types/ActionType";
 import { Terminal } from "../dataAccess/access/types/GoToType";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
 import { CalcChain, getRoot, SequenceChainService } from "../services/SequenceChainService";
 import { CalcSequence, CalculatedStep, SequenceService } from "../services/SequenceService";
+import { AppThunk, RootState } from "../store";
 import { ActorData } from "../viewDataTypes/ActorData";
-import { ActorDataState } from "../viewDataTypes/ActorDataState";
 import { Mode } from "./EditSlice";
 import { GlobalActions } from "./GlobalSlice";
 
@@ -404,19 +402,8 @@ export const sequenceModelSelectors = {
         }
     },
     selectActorData: (state: RootState): ActorData[] => {
-        let actorDatas: ActorData[] = [];
-        // Get step actor-data's if calculation is present
-        if (state.sequenceModel.calcSequence || state.sequenceModel.calcChain) {
-            const filteredSteps = getFilteredSteps(state);
-            actorDatas.push(...filteredSteps[state.sequenceModel.currentStepIndex]?.actorDatas || []);
-        }
-        // Get date-setup init data's if NO calculation is present
-        if (state.sequenceModel.selectedDataSetup && !state.sequenceModel.calcSequence && !state.sequenceModel.calcChain) {
-            const initDatasFormDataSetup = state.sequenceModel.selectedDataSetup?.initDatas || [];
-            actorDatas.push(...initDatasFormDataSetup.map(mapInitDataToActorData));
-        }
-
-        return actorDatas;
+        const filteredSteps = getFilteredSteps(state);
+        return filteredSteps[state.sequenceModel.currentStepIndex]?.actorDatas || [];
     },
     selectErrors: (state: RootState): ActionTO[] => {
         const filteredSteps = getFilteredSteps(state);
@@ -496,7 +483,7 @@ export const SequenceModelActions = {
     calcChain: calcModelsThunk,
 };
 
-function getFilteredSteps(state: RootState): CalculatedStep[] {
+function getFilteredSteps(state: RootState) {
     return state.edit.mode === Mode.VIEW
         ? filterSteps(
             getCurrentCalcSequence(state.sequenceModel)?.calculatedSteps || [],
@@ -523,12 +510,3 @@ function getCurrentDataSetup(state: SequenceModelState): DataSetupCTO | null {
         ? state.calcChain?.calcLinks[state.currentLinkIndex].dataSetup || null
         : state.selectedDataSetup;
 }
-
-const mapInitDataToActorData = (initData: InitDataTO): ActorData => {
-    return {
-        state: ActorDataState.PERSISTENT,
-        actorFk: initData.actorFk,
-        dataFk: initData.dataFk,
-        instanceFk: initData.instanceFk,
-    };
-};

@@ -1,12 +1,12 @@
 // ----------------------------------------------- CHAIN -----------------------------------------------
 
-import { AppThunk } from "../../app/store";
 import { ChainCTO } from "../../dataAccess/access/cto/ChainCTO";
 import { ChainDecisionTO } from "../../dataAccess/access/to/ChainDecisionTO";
 import { ChainlinkTO } from "../../dataAccess/access/to/ChainlinkTO";
 import { ChainTO } from "../../dataAccess/access/to/ChainTO";
 import { DataAccess } from "../../dataAccess/DataAccess";
 import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
+import { AppThunk } from "../../store";
 import { GlobalActions } from "../GlobalSlice";
 import { MasterDataActions } from "../MasterDataSlice";
 import { SequenceModelActions } from "../SequenceModelSlice";
