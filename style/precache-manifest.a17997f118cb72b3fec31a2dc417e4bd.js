@@ -28,7 +28,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "7.d713bb79.iframe.bundle.js"
   },
   {
-    "revision": "9628b601a3d14e73f1d07a8e1a020d0c",
+    "revision": "3ca2b4aef7886a05b956f8ade8ad5e32",
     "url": "iframe.html"
   },
   {
@@ -56,11 +56,11 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "static/media/DINOT-Medium.d41d8cd9.ttf"
   },
   {
-    "revision": "e6dfc5fe835e0a9f9cb4",
-    "url": "vendors~main.1c805bd9.iframe.bundle.js"
+    "revision": "4788f3bf2958837c7118",
+    "url": "vendors~main.604baebe.iframe.bundle.js"
   },
   {
     "revision": "25659aa5b361e026cba8b02c899cd6f0",
-    "url": "vendors~main.1c805bd9.iframe.bundle.js.LICENSE.txt"
+    "url": "vendors~main.604baebe.iframe.bundle.js.LICENSE.txt"
   }
 ]);
