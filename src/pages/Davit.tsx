@@ -4,16 +4,16 @@ import { useDispatch } from "react-redux";
 // import {BrowserRouter, Route, Switch} from "react-router-dom";
 // electron needs HashRouter
 import { HashRouter as BrowserRouter, Route, Switch } from "react-router-dom";
+import "../app/css/Davit.css";
 import { ErrorNotification } from "../components/common/fragments/ErrorNotification";
 import { ControlPanelController } from "../components/controllPanel/presentation/ControlPanelController";
 import { FlowChartController } from "../components/flowChartModel/FlowChartController";
-import { ActorModelController } from "../components/metaActorModel/ActorModelController";
 import { DataModelController } from "../components/metaDataModel/DataModelController";
 import { SidePanelController } from "../components/sidePanel/SidePanelController";
 import { TableModelController } from "../components/tableModel/presentation/TableModelController";
+import { ActorModelController } from "../domains/actor/ActorModelController";
 import { GlobalActions } from "../slices/GlobalSlice";
 import { MasterDataActions } from "../slices/MasterDataSlice";
-import "../app/css/Davit.css";
 
 export const ModuleRoutes = {
     home: "/",
