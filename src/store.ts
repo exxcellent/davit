@@ -1,5 +1,5 @@
 import { configureStore, getDefaultMiddleware, ThunkAction } from "@reduxjs/toolkit";
-import { storageMiddleware } from "./app/middlewares/StateSync";
+import { storageMiddleware } from "./middlewares/StateSync";
 import { EditReducer } from "./slices/EditSlice";
 import { globalReducer } from "./slices/GlobalSlice";
 import { MasterDataReducer } from "./slices/MasterDataSlice";
