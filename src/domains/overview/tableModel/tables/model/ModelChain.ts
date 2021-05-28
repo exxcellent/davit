@@ -1,9 +1,9 @@
 import { useDispatch } from "react-redux";
-import { ChainTO } from "../../../../dataAccess/access/to/ChainTO";
-import { EditActions } from "../../../../slices/EditSlice";
-import { SequenceModelActions } from "../../../../slices/SequenceModelSlice";
-import { DavitTableRowData } from "../../../common/fragments/DavitTable";
-import { DavitIcons } from "../../../common/IconSet";
+import { DavitTableRowData } from "../../../../../components/common/fragments/DavitTable";
+import { DavitIcons } from "../../../../../components/common/IconSet";
+import { ChainTO } from "../../../../../dataAccess/access/to/ChainTO";
+import { EditActions } from "../../../../../slices/EditSlice";
+import { SequenceModelActions } from "../../../../../slices/SequenceModelSlice";
 
 export const useGetChainModelsTableData = (chainModels: ChainTO[]) => {
     const dispatch = useDispatch();

@@ -1,11 +1,11 @@
 import { useDispatch } from "react-redux";
-import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
-import { DecisionTO } from "../../../../dataAccess/access/to/DecisionTO";
-import { GoTo, GoToTypes, Intermediate } from "../../../../dataAccess/access/types/GoToType";
-import { EditActions } from "../../../../slices/EditSlice";
-import { DavitTableRowData } from "../../../common/fragments/DavitTable";
-import { DavitIcons } from "../../../common/IconSet";
+import { DavitTableRowData } from "../../../../../components/common/fragments/DavitTable";
+import { DavitIcons } from "../../../../../components/common/IconSet";
+import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../../../../dataAccess/access/cto/SequenceStepCTO";
+import { DecisionTO } from "../../../../../dataAccess/access/to/DecisionTO";
+import { GoTo, GoToTypes, Intermediate } from "../../../../../dataAccess/access/types/GoToType";
+import { EditActions } from "../../../../../slices/EditSlice";
 
 export const useGetStepTableData = (
     selectedSequence: SequenceCTO | null,

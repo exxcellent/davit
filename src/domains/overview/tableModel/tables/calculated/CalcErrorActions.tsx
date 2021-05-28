@@ -1,10 +1,10 @@
 import { useSelector } from "react-redux";
-import { ActorCTO } from "../../../../dataAccess/access/cto/ActorCTO";
-import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
-import { ActionTO } from "../../../../dataAccess/access/to/ActionTO";
-import { ActionType } from "../../../../dataAccess/access/types/ActionType";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
-import { DavitTableRowData } from "../../../common/fragments/DavitTable";
+import { DavitTableRowData } from "../../../../../components/common/fragments/DavitTable";
+import { ActorCTO } from "../../../../../dataAccess/access/cto/ActorCTO";
+import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
+import { ActionTO } from "../../../../../dataAccess/access/to/ActionTO";
+import { ActionType } from "../../../../../dataAccess/access/types/ActionType";
+import { masterDataSelectors } from "../../../../../slices/MasterDataSlice";
 
 export const useGetCalcErrorActionsTableData = (errorActions: ActionTO[]) => {
     const datas: DataCTO[] = useSelector(masterDataSelectors.selectDatas);

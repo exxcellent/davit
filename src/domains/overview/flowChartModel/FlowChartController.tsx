@@ -3,8 +3,6 @@ import { ArcherContainer, ArcherElement, Relation } from "react-archer";
 import { useSelector } from "react-redux";
 import { CenteredFlex } from "../../../components/common/fragments/CenteredFlex";
 import { ViewPlaceholder } from "../../../components/common/fragments/ViewPlaceholder";
-import { TabFragment } from "../../../components/tableModel/fragments/TabFragment";
-import { TabGroupFragment } from "../../../components/tableModel/fragments/TabGroupFragment";
 import { ChainCTO } from "../../../dataAccess/access/cto/ChainCTO";
 import { ChainlinkCTO } from "../../../dataAccess/access/cto/ChainlinkCTO";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
@@ -16,6 +14,8 @@ import { GoToChain, GoToTypesChain, TerminalChain } from "../../../dataAccess/ac
 import { CalcChain } from "../../../services/SequenceChainService";
 import { sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
 import { DavitUtil } from "../../../utils/DavitUtil";
+import { TabFragment } from "../tableModel/fragments/TabFragment";
+import { TabGroupFragment } from "../tableModel/fragments/TabGroupFragment";
 import { FlowChartlabel } from "./fragments/FlowChartlabel";
 
 interface FlowChartControllerProps {

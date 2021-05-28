@@ -1,10 +1,10 @@
 import { useDispatch } from "react-redux";
-import { ChainlinkCTO } from "../../../../dataAccess/access/cto/ChainlinkCTO";
-import { ChainDecisionTO } from "../../../../dataAccess/access/to/ChainDecisionTO";
-import { CalcChain } from "../../../../services/SequenceChainService";
-import { EditActions } from "../../../../slices/EditSlice";
-import { DavitTableRowData } from "../../../common/fragments/DavitTable";
-import { DavitIcons } from "../../../common/IconSet";
+import { DavitTableRowData } from "../../../../../components/common/fragments/DavitTable";
+import { DavitIcons } from "../../../../../components/common/IconSet";
+import { ChainlinkCTO } from "../../../../../dataAccess/access/cto/ChainlinkCTO";
+import { ChainDecisionTO } from "../../../../../dataAccess/access/to/ChainDecisionTO";
+import { CalcChain } from "../../../../../services/SequenceChainService";
+import { EditActions } from "../../../../../slices/EditSlice";
 import { getChainGotoName } from "../../util/TableUtil";
 
 export const useGetModelChainDecisionTableData = (

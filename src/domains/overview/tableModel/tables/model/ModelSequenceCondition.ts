@@ -1,13 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
-import { ActorCTO } from "../../../../dataAccess/access/cto/ActorCTO";
-import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
-import { ConditionTO } from "../../../../dataAccess/access/to/ConditionTO";
-import { DecisionTO } from "../../../../dataAccess/access/to/DecisionTO";
-import { EditActions, editSelectors } from "../../../../slices/EditSlice";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
-import { EditDecision } from "../../../../slices/thunks/DecisionThunks";
-import { DavitTableRowData } from "../../../common/fragments/DavitTable";
-import { DavitIcons } from "../../../common/IconSet";
+import { DavitTableRowData } from "../../../../../components/common/fragments/DavitTable";
+import { DavitIcons } from "../../../../../components/common/IconSet";
+import { ActorCTO } from "../../../../../dataAccess/access/cto/ActorCTO";
+import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
+import { ConditionTO } from "../../../../../dataAccess/access/to/ConditionTO";
+import { DecisionTO } from "../../../../../dataAccess/access/to/DecisionTO";
+import { EditActions, editSelectors } from "../../../../../slices/EditSlice";
+import { masterDataSelectors } from "../../../../../slices/MasterDataSlice";
+import { EditDecision } from "../../../../../slices/thunks/DecisionThunks";
 
 export const useGetModelSequenceConditionTableData = (
     decision: DecisionTO | null,

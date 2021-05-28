@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
-import { editSelectors, Mode } from "../../../slices/EditSlice";
+import { editSelectors, Mode } from "../../../../slices/EditSlice";
 import { ActiveTab } from "../presentation/TableModelController";
 import { TabFragment } from "./TabFragment";
 import { TabGroupFragment } from "./TabGroupFragment";
