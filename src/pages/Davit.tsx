@@ -13,7 +13,7 @@ import { SidePanelController } from "../components/sidePanel/SidePanelController
 import { TableModelController } from "../components/tableModel/presentation/TableModelController";
 import { GlobalActions } from "../slices/GlobalSlice";
 import { MasterDataActions } from "../slices/MasterDataSlice";
-import "./css/Davit.css";
+import "../app/css/Davit.css";
 
 export const ModuleRoutes = {
     home: "/",
