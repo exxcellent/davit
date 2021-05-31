@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 // electron needs HashRouter
 import { HashRouter as BrowserRouter, Route, Switch } from "react-router-dom";
 import { ErrorNotification } from "../components/common/fragments/ErrorNotification";
-import { ControlPanelController } from "../components/controllPanel/presentation/ControlPanelController";
+import { ControlPanelController } from "../components/organisms/controllPanel/presentation/ControlPanelController";
 import { SidePanelController } from "../components/sidePanel/SidePanelController";
 import "../css/Davit.css";
 import { ActorModelController } from "../domains/actor/ActorModelController";

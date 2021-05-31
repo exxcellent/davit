@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { OptionField } from "../../controllPanel/presentation/fragments/edit/common/OptionField";
+import { OptionField } from "../../organisms/controllPanel/presentation/fragments/edit/common/OptionField";
 
 export interface DavitMenuLabelProps {
     text: string;
