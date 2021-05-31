@@ -1,4 +1,4 @@
-import { DAVIT_VERISON } from "../../app/DavitConstants";
+import { DAVIT_VERISON } from "../../DavitConstants";
 import { StoreTO } from "../access/to/StoreTO";
 import { DavitVersionMigrator01 } from "./davitVersio01/DavitVersionMigrator01";
 import { DavitVersionMigrator02 } from "./davitVersion02/DavitVersionMigrator02";
