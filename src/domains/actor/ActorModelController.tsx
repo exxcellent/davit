@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DnDBox, DnDBoxElement, DnDBoxType } from "../../components/common/fragments/DnDBox";
 import {
     Arrow,
     ArrowType,
@@ -10,6 +9,7 @@ import {
 } from "../../components/common/fragments/svg/DavitPath";
 import { ViewPlaceholder } from "../../components/layout/ViewPlaceholder";
 import { DavitCard, DavitCardProps } from "../../components/molecules/card/DavitCard";
+import { DnDBox, DnDBoxElement, DnDBoxType } from "../../components/organisms/dndBox/DnDBox";
 import { ActorCTO } from "../../dataAccess/access/cto/ActorCTO";
 import { DataCTO } from "../../dataAccess/access/cto/DataCTO";
 import { DataSetupCTO } from "../../dataAccess/access/cto/DataSetupCTO";

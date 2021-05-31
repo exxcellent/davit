@@ -4,8 +4,8 @@ import { GeometricalDataTO } from "../../../dataAccess/access/to/GeometricalData
 import { PositionTO } from "../../../dataAccess/access/to/PositionTO";
 import { ASPECT_RATIO, WINDOW_FACTOR } from "../../../DavitConstants";
 import { useCurrentHeight, useCurrentWitdh, useCustomZoomEvent } from "../../../utils/WindowUtil";
-import { createDnDItem } from "./DnDWrapper";
-import { DavitPath, DavitPathProps } from "./svg/DavitPath";
+import { DavitPath, DavitPathProps } from "../../common/fragments/svg/DavitPath";
+import { createDnDItem } from "./fragments/DnDWrapper";
 
 export interface DnDBoxElement {
     element: JSX.Element;

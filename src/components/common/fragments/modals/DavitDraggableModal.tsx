@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { PositionTO } from "../../../../dataAccess/access/to/PositionTO";
-import { DnDBox, DnDBoxType } from "../DnDBox";
+import { DnDBox, DnDBoxType } from "../../../organisms/dndBox/DnDBox";
 import { DavitModal } from "./DavitModal";
 
 interface DavitDraggableModalProps {

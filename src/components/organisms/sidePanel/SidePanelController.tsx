@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import logo from "../../../assets/exxcellent_logo_200.png";
 import { DAVIT_VERISON } from "../../../DavitConstants";
-import logo from "../../../icons/logo200.png";
 import { EditActions, editSelectors, Mode } from "../../../slices/EditSlice";
 import { DavitSidePanelButton } from "../../atomic/buttons/DavitSidePanelButton";
-import { DavitIcons } from "../../common/IconSet";
+import { DavitIcons } from "../../atomic/IconSet";
 
 export interface SidePanelProps {
 }
