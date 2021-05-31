@@ -1,10 +1,10 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { useEnterHook, useEscHook } from "../../../../utils/WindowUtil";
-import { FormDivider } from "../../../organisms/controllPanel/presentation/fragments/edit/fragments/forms/fragments/FormDivider";
-import { FormLine } from "../../../organisms/controllPanel/presentation/fragments/edit/fragments/forms/fragments/FormLine";
-import { FormBody } from "./FormBody";
-import { FormFooter } from "./FormFooter";
-import { FormHeader } from "./FormHeader";
+import { useEnterHook, useEscHook } from "../../../utils/WindowUtil";
+import { FormDivider } from "../../organisms/controllPanel/presentation/fragments/edit/fragments/forms/fragments/FormDivider";
+import { FormLine } from "../../organisms/controllPanel/presentation/fragments/edit/fragments/forms/fragments/FormLine";
+import { FormBody } from "./fragments/FormBody";
+import { FormFooter } from "./fragments/FormFooter";
+import { FormHeader } from "./fragments/FormHeader";
 
 interface DavitNoteFormProps {
     subHeader?: string;

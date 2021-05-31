@@ -8,11 +8,11 @@ import { DavitCommentButton } from "../../../../../../../atomic/buttons/DavitCom
 import { DavitDeleteButton } from "../../../../../../../atomic/buttons/DavitDeleteButton";
 import { ActorDropDown } from "../../../../../../../atomic/dropdowns/ActorDropDown";
 import { InstanceDropDown } from "../../../../../../../atomic/dropdowns/InstanceDropDown";
+import { Form } from "../../../../../../../atomic/forms/Form";
+import { FormBody } from "../../../../../../../atomic/forms/fragments/FormBody";
+import { FormFooter } from "../../../../../../../atomic/forms/fragments/FormFooter";
+import { FormHeader } from "../../../../../../../atomic/forms/fragments/FormHeader";
 import { DavitTextInput } from "../../../../../../../atomic/textinput/DavitTextInput";
-import { Form } from "../../../../../../../common/fragments/forms/Form";
-import { FormBody } from "../../../../../../../common/fragments/forms/FormBody";
-import { FormFooter } from "../../../../../../../common/fragments/forms/FormFooter";
-import { FormHeader } from "../../../../../../../common/fragments/forms/FormHeader";
 import { useDataSetupViewModel } from "../viewmodels/DataSetupViewModel";
 import { FormDivider } from "./fragments/FormDivider";
 import { FormLine } from "./fragments/FormLine";

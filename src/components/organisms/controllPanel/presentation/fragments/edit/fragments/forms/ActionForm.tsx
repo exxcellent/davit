@@ -7,8 +7,8 @@ import { ActionTypeDropDown } from "../../../../../../../atomic/dropdowns/Action
 import { ActorDropDown } from "../../../../../../../atomic/dropdowns/ActorDropDown";
 import { DataDropDown } from "../../../../../../../atomic/dropdowns/DataDropDown";
 import { InstanceDropDown } from "../../../../../../../atomic/dropdowns/InstanceDropDown";
+import { Form } from "../../../../../../../atomic/forms/Form";
 import { DavitTextInput } from "../../../../../../../atomic/textinput/DavitTextInput";
-import { Form } from "../../../../../../../common/fragments/forms/Form";
 import { useActionViewModel } from "../viewmodels/ActionViewModel";
 import { FormDivider } from "./fragments/FormDivider";
 import { FormLabel, FormlabelAlign } from "./fragments/FormLabel";

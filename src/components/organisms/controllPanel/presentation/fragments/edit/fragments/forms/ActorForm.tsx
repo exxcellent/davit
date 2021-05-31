@@ -3,10 +3,10 @@ import { DavitBackButton } from "../../../../../../../atomic/buttons/DavitBackBu
 import { DavitButton } from "../../../../../../../atomic/buttons/DavitButton";
 import { DavitCommentButton } from "../../../../../../../atomic/buttons/DavitCommentButton";
 import { DavitDeleteButton } from "../../../../../../../atomic/buttons/DavitDeleteButton";
+import { Form } from "../../../../../../../atomic/forms/Form";
+import { FormBody } from "../../../../../../../atomic/forms/fragments/FormBody";
+import { FormHeader } from "../../../../../../../atomic/forms/fragments/FormHeader";
 import { DavitTextInput } from "../../../../../../../atomic/textinput/DavitTextInput";
-import { Form } from "../../../../../../../common/fragments/forms/Form";
-import { FormBody } from "../../../../../../../common/fragments/forms/FormBody";
-import { FormHeader } from "../../../../../../../common/fragments/forms/FormHeader";
 import { useActorViewModel } from "../viewmodels/ActorViewModel";
 import { FormDivider } from "./fragments/FormDivider";
 import { FormLine } from "./fragments/FormLine";

@@ -10,11 +10,11 @@ import { ChainDecisionDropDown } from "../../../../../../../atomic/dropdowns/Cha
 import { ChainLinkDropDown } from "../../../../../../../atomic/dropdowns/ChainLinkDropDown";
 import { GoToChainOptionDropDown } from "../../../../../../../atomic/dropdowns/GoToChainOptionDropDown";
 import { InstanceDropDown } from "../../../../../../../atomic/dropdowns/InstanceDropDown";
+import { Form } from "../../../../../../../atomic/forms/Form";
+import { FormBody } from "../../../../../../../atomic/forms/fragments/FormBody";
+import { FormFooter } from "../../../../../../../atomic/forms/fragments/FormFooter";
+import { FormHeader } from "../../../../../../../atomic/forms/fragments/FormHeader";
 import { DavitTextInput } from "../../../../../../../atomic/textinput/DavitTextInput";
-import { Form } from "../../../../../../../common/fragments/forms/Form";
-import { FormBody } from "../../../../../../../common/fragments/forms/FormBody";
-import { FormFooter } from "../../../../../../../common/fragments/forms/FormFooter";
-import { FormHeader } from "../../../../../../../common/fragments/forms/FormHeader";
 import { useChainDecisionViewModel } from "../viewmodels/ChainDecisionViewModel";
 import { FormDivider } from "./fragments/FormDivider";
 import { FormLabel } from "./fragments/FormLabel";

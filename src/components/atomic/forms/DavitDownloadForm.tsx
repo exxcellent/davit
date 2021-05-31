@@ -1,10 +1,10 @@
 import React, { FunctionComponent, useState } from "react";
 import { useDispatch } from "react-redux";
-import { GlobalActions } from "../../../../slices/GlobalSlice";
-import { useEnterHook, useEscHook } from "../../../../utils/WindowUtil";
-import { DavitTextInput } from "../../../atomic/textinput/DavitTextInput";
-import { FormFooter } from "./FormFooter";
-import { FormHeader } from "./FormHeader";
+import { GlobalActions } from "../../../slices/GlobalSlice";
+import { useEnterHook, useEscHook } from "../../../utils/WindowUtil";
+import { DavitTextInput } from "../textinput/DavitTextInput";
+import { FormFooter } from "./fragments/FormFooter";
+import { FormHeader } from "./fragments/FormHeader";
 
 interface DavitDownloadFormProps {
     onCloseCallback: () => void;

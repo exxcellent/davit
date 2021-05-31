@@ -14,11 +14,11 @@ import { DavitShowMoreButton } from "../../../../../../../atomic/buttons/DavitSh
 import { DecisionDropDown } from "../../../../../../../atomic/dropdowns/DecisionDropDown";
 import { GoToOptionDropDown } from "../../../../../../../atomic/dropdowns/GoToOptionDropDown";
 import { StepDropDown } from "../../../../../../../atomic/dropdowns/StepDropDown";
+import { Form } from "../../../../../../../atomic/forms/Form";
+import { FormBody } from "../../../../../../../atomic/forms/fragments/FormBody";
+import { FormFooter } from "../../../../../../../atomic/forms/fragments/FormFooter";
+import { FormHeader } from "../../../../../../../atomic/forms/fragments/FormHeader";
 import { DavitTextInput } from "../../../../../../../atomic/textinput/DavitTextInput";
-import { Form } from "../../../../../../../common/fragments/forms/Form";
-import { FormBody } from "../../../../../../../common/fragments/forms/FormBody";
-import { FormFooter } from "../../../../../../../common/fragments/forms/FormFooter";
-import { FormHeader } from "../../../../../../../common/fragments/forms/FormHeader";
 import { useActionViewModel } from "../viewmodels/ActionViewModel";
 import { useStepViewModel } from "../viewmodels/StepViewModel";
 import { FormDivider } from "./fragments/FormDivider";
