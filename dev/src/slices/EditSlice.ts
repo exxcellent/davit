@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AppThunk, RootState } from "../app/store";
 import { Arrow, ArrowType } from "../components/common/fragments/svg/DavitPath";
 import { ActorCTO } from "../dataAccess/access/cto/ActorCTO";
 import { DataCTO } from "../dataAccess/access/cto/DataCTO";
@@ -20,7 +21,6 @@ import { SequenceTO } from "../dataAccess/access/to/SequenceTO";
 import { ActionType } from "../dataAccess/access/types/ActionType";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
-import { AppThunk, RootState } from "../store";
 import { DavitUtil } from "../utils/DavitUtil";
 import { GlobalActions } from "./GlobalSlice";
 import { masterDataSelectors } from "./MasterDataSlice";

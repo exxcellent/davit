@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DAVIT_VERISON } from "../../DavitConstants";
+import { DAVIT_VERISON } from "../../app/DavitConstants";
 import logo from "../../icons/logo200.png";
 import { EditActions, editSelectors, Mode } from "../../slices/EditSlice";
 import { DavitSidePanelButton } from "../common/fragments/buttons/DavitSidePanelButton";

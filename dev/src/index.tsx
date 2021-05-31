@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { Davit } from "./pages/Davit";
+import { Davit } from "./app/Davit";
+import { store } from "./app/store";
+import "./index.css";
 import * as serviceWorker from "./serviceWorker";
-import { store } from "./store";
-import "./style/index.css";
 
 ReactDOM.render(
     <Provider store={store}>

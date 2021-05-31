@@ -1,4 +1,4 @@
-import { DAVIT_VERISON, DEFAULT_PROJECT_NAME, DEFAULT_ZOOM, STORE_ID } from "../DavitConstants";
+import { DAVIT_VERISON, DEFAULT_PROJECT_NAME, DEFAULT_ZOOM, STORE_ID } from "../app/DavitConstants";
 import { DataStoreCTO } from "./access/cto/DataStoreCTO";
 import { StoreTO } from "./access/to/StoreTO";
 import { DavitVersionManager } from "./migration/DavitVersionManager";
