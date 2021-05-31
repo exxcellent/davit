@@ -1,6 +1,5 @@
 @import "Colors.css";
 @import "Atomic.css";
-@import "Keyframes.css";
 @import "Icons.css";
 @import "Flowchart.css";
 @import "Path.css";
@@ -578,21 +577,6 @@
 .deleteButton.fluid {
     width: 8em;
     animation: growDeleteButton var(--animation-time) ease-in-out 0s;
-}
-
-.notificationCard {
-    width: 30em;
-    min-height: 6em;
-    background-color: var(--background-color);
-    border-radius: var(--davit-border-radius);
-    border: var(--davit-border-size-medium) solid var(--color-border);
-    display: flex;
-    align-items: center;
-    z-index: 99;
-    position: absolute;
-    right: 0;
-    top: 0;
-    animation: notificationSlideIn var(--animation-time) ease-in-out 0s;
 }
 
 .headerGrid {

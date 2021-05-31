@@ -1,6 +1,7 @@
 @import "./spacing.css";
 @import "./layout.css";
 @import "./fonts.css";
+@import "./animations.css";
 
 :root {
     --color-dark-blue: #0D456B;

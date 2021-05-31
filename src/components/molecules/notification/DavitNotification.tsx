@@ -2,7 +2,8 @@ import { IconDefinition } from "@fortawesome/fontawesome-common-types";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { FunctionComponent } from "react";
-import { DavitIcons } from "../IconSet";
+import { DavitIcons } from "../../common/IconSet";
+import "./DavitNotification.css";
 
 export enum NotificationLevel {
     info = "info",
@@ -33,34 +34,20 @@ export const DavitNotification: FunctionComponent<DavitNotificationProps> = (pro
         }
     };
 
-    const getIconColor = (): string => {
-        switch (level) {
-            case "info":
-                return "white";
-            case "warning":
-                return "orange";
-            case "error":
-                return "var(--carv2-data-delete-color)";
-            default:
-                return "white";
-        }
-    };
-
     return (
-        <div className={"notificationCard"}
-             style={{borderColor: getIconColor()}}
+        <div className={"notificationCard " + level}
         >
-            <button style={{borderColor: getIconColor(), paddingLeft: "0.5em", paddingRight: "0.5em", margin: "1em"}}
+            <button className={level + " margin-medium"}
                     onClick={() => onCloseCallback()}
             >
                 <FontAwesomeIcon icon={getNotificationIcon()}
                                  size={"2x"}
-                                 style={{color: getIconColor()}}
+                                 className={level}
                 />
             </button>
             <div>
-                <h3 style={{color: getIconColor()}}>{header}</h3>
-                <label style={{color: "var(--carv2-text-color)"}}>{text}</label>
+                <h3 className={level}>{header}</h3>
+                <label>{text}</label>
             </div>
         </div>
     );
