@@ -15,8 +15,8 @@ import { DavitCommentButton } from "../../../../../atomic/buttons/DavitCommentBu
 import { DavitDeleteButton } from "../../../../../atomic/buttons/DavitDeleteButton";
 import { DecisionLabelDropDown } from "../../../../../atomic/dropdowns/DecisionDropDown";
 import { StepLabelDropDown } from "../../../../../atomic/dropdowns/StepDropDown";
-import { AddOrEdit } from "../../../../../common/fragments/AddOrEdit";
 import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
+import { AddOrEdit } from "../../../../../molecules/AddOrEdit";
 import { ControlPanel } from "../common/ControlPanel";
 import { OptionField } from "../common/OptionField";
 

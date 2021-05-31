@@ -13,7 +13,7 @@ import { DataLabelDropDown } from "../../../../../atomic/dropdowns/DataDropDown"
 import { DataSetupLabelDropDown } from "../../../../../atomic/dropdowns/DataSetupDropDown";
 import { RelationLabelDropDown } from "../../../../../atomic/dropdowns/RelationDropDown";
 import { SequenceLabelDropDown } from "../../../../../atomic/dropdowns/SequenceDropDown";
-import { AddOrEdit } from "../../../../../common/fragments/AddOrEdit";
+import { AddOrEdit } from "../../../../../molecules/AddOrEdit";
 import { ControlPanel } from "../common/ControlPanel";
 import { OptionField } from "../common/OptionField";
 
