@@ -79,9 +79,9 @@ const useViewModel = () => {
         const editStepArrows: Arrow[] = useSelector(editSelectors.selectEditStepArrows);
         // ----- VIEW -----
         const arrows: Arrow[] = useSelector(sequenceModelSelectors.selectCurrentArrows);
+
         const currentActorDatas: ActorData[] = useSelector(sequenceModelSelectors.selectActorData);
         const errors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
-        const dataSetup: DataSetupCTO | null = useSelector(sequenceModelSelectors.selectDataSetup);
 
         const actorZoom: number = useSelector(globalSelectors.selectActorZoomFactor);
 
@@ -99,18 +99,19 @@ const useViewModel = () => {
 
         const getActorDatasFromView = (): ViewFragmentProps[] => {
             const actorDatas: ViewFragmentProps[] = [];
+            //Map and add errors to actor data's
             const actorDatasFromErros: ViewFragmentProps[] = errors.map(mapErrorToActorDatas);
-
+            actorDatas.push(...actorDatasFromErros);
+            //Map and add current Actor-Data's to actor data's if there not already exist in actorDatas
             const actorDatasFromCurrentActorDatas: ViewFragmentProps[] = currentActorDatas
                 .map(mapActorDataToViewFragment)
                 .sort((a, b) => a.name.localeCompare(b.name));
-            actorDatas.push(...actorDatasFromErros);
-
             actorDatas.push(
                 ...actorDatasFromCurrentActorDatas.filter(
                     (actorDataFromActorData) => !actorDatas.some((cp) => actorDataExists(cp, actorDataFromActorData)),
                 ),
             );
+
             return actorDatas;
         };
 
@@ -123,9 +124,6 @@ const useViewModel = () => {
             const actorDatasFromDataSetupEdit: ViewFragmentProps[] = dataSetupToEdit
                 ? dataSetupToEdit.initDatas.map(mapInitDataToActorData)
                 : [];
-            const actorDatasFromDataSetupView: ViewFragmentProps[] = dataSetup
-                ? dataSetup.initDatas.map(mapInitDataToActorData)
-                : [];
             const actorDatasFromInitData: ViewFragmentProps | undefined = initDataToEdit
                 ? mapInitDataToActorData(initDataToEdit)
                 : undefined;
@@ -134,9 +132,6 @@ const useViewModel = () => {
             });
             actorDatas.push(...actorDataFromDecisionToEdit);
             actorDatas.push(...actorDatasFromDataSetupEdit);
-            if (currentActorDatas.length <= 0) {
-                actorDatas.push(...actorDatasFromDataSetupView);
-            }
             actorDatas.push(...actorDataFromActionToEdit);
             if (actorDatasFromInitData) {
                 actorDatas.push(actorDatasFromInitData);
@@ -328,7 +323,7 @@ const useViewModel = () => {
                 id: actor.actor.id,
                 initName: actor.actor.name,
                 initWidth: 100,
-                initHeigth: 30,
+                initHeight: 30,
                 dataFragments: getActorDatas().filter(
                     (act) =>
                         act.parentId === actor.actor.id ||
