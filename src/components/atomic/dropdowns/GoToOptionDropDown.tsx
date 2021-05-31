@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
-import { GoToTypes } from "../../../../dataAccess/access/types/GoToType";
-import { DavitDropDown, DavitDropDownItemProps } from "../../../atomic/dropdown/DavitDropDown";
+import { GoToTypes } from "../../../dataAccess/access/types/GoToType";
+import { DavitDropDown, DavitDropDownItemProps } from "./DavitDropDown";
 
 interface GoToOptionDropDownProps {
     onSelect: (gotoType: GoToTypes | undefined) => void;

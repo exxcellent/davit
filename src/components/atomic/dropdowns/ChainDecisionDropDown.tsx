@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
-import { ChainDecisionTO } from "../../../../dataAccess/access/to/ChainDecisionTO";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
-import { DavitUtil } from "../../../../utils/DavitUtil";
-import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "../../../atomic/dropdown/DavitDropDown";
+import { ChainDecisionTO } from "../../../dataAccess/access/to/ChainDecisionTO";
+import { masterDataSelectors } from "../../../slices/MasterDataSlice";
+import { DavitUtil } from "../../../utils/DavitUtil";
+import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "./DavitDropDown";
 
 interface ChainDecisionDropDownLabelProps {
     onSelect: (link: ChainDecisionTO | undefined) => void;

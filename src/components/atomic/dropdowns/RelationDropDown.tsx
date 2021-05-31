@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
-import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
-import { DataRelationTO } from "../../../../dataAccess/access/to/DataRelationTO";
-import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
-import { DavitUtil } from "../../../../utils/DavitUtil";
-import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "../../../atomic/dropdown/DavitDropDown";
+import { DataCTO } from "../../../dataAccess/access/cto/DataCTO";
+import { DataRelationTO } from "../../../dataAccess/access/to/DataRelationTO";
+import { masterDataSelectors } from "../../../slices/MasterDataSlice";
+import { DavitUtil } from "../../../utils/DavitUtil";
+import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "./DavitDropDown";
 
 interface RelationDropDownProps {
     onSelect: (relation: DataRelationTO | undefined) => void;

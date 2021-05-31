@@ -7,13 +7,13 @@ import { DataRelationTO } from "../../../../../../dataAccess/access/to/DataRelat
 import { DataSetupTO } from "../../../../../../dataAccess/access/to/DataSetupTO";
 import { GroupTO } from "../../../../../../dataAccess/access/to/GroupTO";
 import { EditActions, editSelectors, Mode } from "../../../../../../slices/EditSlice";
+import { ActorDropDownLabel } from "../../../../../atomic/dropdowns/ActorDropDown";
+import { ChainDropDownButton } from "../../../../../atomic/dropdowns/ChainDropDown";
+import { DataLabelDropDown } from "../../../../../atomic/dropdowns/DataDropDown";
+import { DataSetupLabelDropDown } from "../../../../../atomic/dropdowns/DataSetupDropDown";
+import { RelationLabelDropDown } from "../../../../../atomic/dropdowns/RelationDropDown";
+import { SequenceLabelDropDown } from "../../../../../atomic/dropdowns/SequenceDropDown";
 import { AddOrEdit } from "../../../../../common/fragments/AddOrEdit";
-import { ActorDropDownLabel } from "../../../../../common/fragments/dropdowns/ActorDropDown";
-import { ChainDropDownButton } from "../../../../../common/fragments/dropdowns/ChainDropDown";
-import { DataLabelDropDown } from "../../../../../common/fragments/dropdowns/DataDropDown";
-import { DataSetupLabelDropDown } from "../../../../../common/fragments/dropdowns/DataSetupDropDown";
-import { RelationLabelDropDown } from "../../../../../common/fragments/dropdowns/RelationDropDown";
-import { SequenceLabelDropDown } from "../../../../../common/fragments/dropdowns/SequenceDropDown";
 import { ControlPanel } from "../common/ControlPanel";
 import { OptionField } from "../common/OptionField";
 

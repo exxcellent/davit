@@ -9,14 +9,14 @@ import { GlobalActions } from "../../../../../../slices/GlobalSlice";
 import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
 import { EditSequence } from "../../../../../../slices/thunks/SequenceThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
+import { DecisionLabelDropDown } from "../../../../../atomic/dropdowns/DecisionDropDown";
+import { StepLabelDropDown } from "../../../../../atomic/dropdowns/StepDropDown";
 import { AddOrEdit } from "../../../../../common/fragments/AddOrEdit";
 import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
 import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
 import { DavitCommentButton } from "../../../../../common/fragments/buttons/DavitCommentButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
-import { DecisionLabelDropDown } from "../../../../../common/fragments/dropdowns/DecisionDropDown";
-import { StepLabelDropDown } from "../../../../../common/fragments/dropdowns/StepDropDown";
 import { ControlPanel } from "../common/ControlPanel";
 import { OptionField } from "../common/OptionField";
 

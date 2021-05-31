@@ -12,7 +12,7 @@ import { MasterDataActions, masterDataSelectors } from "../../../../../../../sli
 import { sequenceModelSelectors } from "../../../../../../../slices/SequenceModelSlice";
 import { EditAction } from "../../../../../../../slices/thunks/ActionThunks";
 import { DavitUtil } from "../../../../../../../utils/DavitUtil";
-import { DataAndInstanceId } from "../../../../../../common/fragments/dropdowns/InstanceDropDown";
+import { DataAndInstanceId } from "../../../../../../atomic/dropdowns/InstanceDropDown";
 
 
 export const useActionViewModel = () => {

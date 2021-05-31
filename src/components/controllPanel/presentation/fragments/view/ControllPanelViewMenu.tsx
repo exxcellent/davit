@@ -8,9 +8,9 @@ import { SequenceTO } from "../../../../../dataAccess/access/to/SequenceTO";
 import { SequenceModelActions, sequenceModelSelectors } from "../../../../../slices/SequenceModelSlice";
 import { DavitUtil } from "../../../../../utils/DavitUtil";
 import { useStepAndLinkNavigation } from "../../../../../utils/WindowUtil";
-import { ChainDropDown } from "../../../../common/fragments/dropdowns/ChainDropDown";
-import { DataSetupDropDown } from "../../../../common/fragments/dropdowns/DataSetupDropDown";
-import { SequenceDropDown } from "../../../../common/fragments/dropdowns/SequenceDropDown";
+import { ChainDropDown } from "../../../../atomic/dropdowns/ChainDropDown";
+import { DataSetupDropDown } from "../../../../atomic/dropdowns/DataSetupDropDown";
+import { SequenceDropDown } from "../../../../atomic/dropdowns/SequenceDropDown";
 import { OptionField } from "../edit/common/OptionField";
 import { ViewNavigator } from "./fragments/ViewNavigator";
 

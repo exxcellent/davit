@@ -10,13 +10,13 @@ import { sequenceModelSelectors } from "../../../../../../slices/SequenceModelSl
 import { EditChain } from "../../../../../../slices/thunks/ChainThunks";
 import { EditSequence } from "../../../../../../slices/thunks/SequenceThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
+import { ChainDecisionDropDownButton } from "../../../../../atomic/dropdowns/ChainDecisionDropDown";
+import { ChainLinkDropDownButton } from "../../../../../atomic/dropdowns/ChainLinkDropDown";
 import { AddOrEdit } from "../../../../../common/fragments/AddOrEdit";
 import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
 import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
 import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
-import { ChainDecisionDropDownButton } from "../../../../../common/fragments/dropdowns/ChainDecisionDropDown";
-import { ChainLinkDropDownButton } from "../../../../../common/fragments/dropdowns/ChainLinkDropDown";
 import { ControlPanel } from "../common/ControlPanel";
 import { OptionField } from "../common/OptionField";
 

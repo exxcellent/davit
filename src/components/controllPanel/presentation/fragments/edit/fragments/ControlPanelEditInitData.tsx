@@ -9,11 +9,11 @@ import { GlobalActions } from "../../../../../../slices/GlobalSlice";
 import { masterDataSelectors } from "../../../../../../slices/MasterDataSlice";
 import { EditInitData } from "../../../../../../slices/thunks/InitDataThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
+import { ActorDropDown } from "../../../../../atomic/dropdowns/ActorDropDown";
+import { DataAndInstanceId, InstanceDropDown } from "../../../../../atomic/dropdowns/InstanceDropDown";
 import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
 import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
-import { ActorDropDown } from "../../../../../common/fragments/dropdowns/ActorDropDown";
-import { DataAndInstanceId, InstanceDropDown } from "../../../../../common/fragments/dropdowns/InstanceDropDown";
 import { OptionField } from "../common/OptionField";
 
 export interface ControlPanelEditInitDataProps {

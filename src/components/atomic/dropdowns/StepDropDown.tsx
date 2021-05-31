@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
-import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
-import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";
-import { sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
-import { DavitUtil } from "../../../../utils/DavitUtil";
-import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "../../../atomic/dropdown/DavitDropDown";
+import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
+import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
+import { sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
+import { DavitUtil } from "../../../utils/DavitUtil";
+import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "./DavitDropDown";
 
 interface StepLabelDropDownProps {
     onSelect: (step: SequenceStepCTO | undefined) => void;

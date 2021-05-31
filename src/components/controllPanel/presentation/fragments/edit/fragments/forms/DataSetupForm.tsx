@@ -1,14 +1,14 @@
 import React, { FunctionComponent } from "react";
 import { InitDataTO } from "../../../../../../../dataAccess/access/to/InitDataTO";
 import { DavitUtil } from "../../../../../../../utils/DavitUtil";
+import { ActorDropDown } from "../../../../../../atomic/dropdowns/ActorDropDown";
+import { InstanceDropDown } from "../../../../../../atomic/dropdowns/InstanceDropDown";
 import { DavitAddButton } from "../../../../../../common/fragments/buttons/DavitAddButton";
 import { DavitBackButton } from "../../../../../../common/fragments/buttons/DavitBackButton";
 import { DavitButton } from "../../../../../../common/fragments/buttons/DavitButton";
 import { DavitCommentButton } from "../../../../../../common/fragments/buttons/DavitCommentButton";
 import { DavitDeleteButton } from "../../../../../../common/fragments/buttons/DavitDeleteButton";
 import { DavitLabelTextfield } from "../../../../../../common/fragments/DavitLabelTextfield";
-import { ActorDropDown } from "../../../../../../common/fragments/dropdowns/ActorDropDown";
-import { InstanceDropDown } from "../../../../../../common/fragments/dropdowns/InstanceDropDown";
 import { Form } from "../../../../../../common/fragments/forms/Form";
 import { FormBody } from "../../../../../../common/fragments/forms/FormBody";
 import { FormFooter } from "../../../../../../common/fragments/forms/FormFooter";

@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import { Direction } from "../../../../../../../dataAccess/access/to/DataRelationTO";
-import { DavitDropDown } from "../../../../../../atomic/dropdown/DavitDropDown";
+import { DavitDropDown } from "../../../../../../atomic/dropdowns/DavitDropDown";
 import { DavitBackButton } from "../../../../../../common/fragments/buttons/DavitBackButton";
 import { DavitButton } from "../../../../../../common/fragments/buttons/DavitButton";
 import { DavitCommentButton } from "../../../../../../common/fragments/buttons/DavitCommentButton";
