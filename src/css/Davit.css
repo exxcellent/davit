@@ -3,7 +3,6 @@
 @import "Icons.css";
 @import "Flowchart.css";
 @import "Path.css";
-@import "Table.css";
 
 .davitGridContainer {
     display: grid;

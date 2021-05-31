@@ -2,6 +2,7 @@ import { IconDefinition } from "@fortawesome/fontawesome-common-types";
 import React, { FunctionComponent } from "react";
 import { DavitTableButton } from "../../atomic/buttons/DavitTableButton";
 import { DavitIcons } from "../../atomic/IconSet";
+import "./DavitTable.css";
 
 export interface DavitTableProps {
     header: string[];

@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { DavitIcons } from "../../../../../components/atomic/IconSet";
-import { DavitTableAction, DavitTableRowData } from "../../../../../components/common/fragments/DavitTable";
+import { DavitTableAction, DavitTableRowData } from "../../../../../components/organisms/table/DavitTable";
 import { SequenceTO } from "../../../../../dataAccess/access/to/SequenceTO";
 import { EditActions } from "../../../../../slices/EditSlice";
 import { SequenceModelActions } from "../../../../../slices/SequenceModelSlice";
