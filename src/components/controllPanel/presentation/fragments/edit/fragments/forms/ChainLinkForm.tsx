@@ -1,14 +1,14 @@
 import React, { FunctionComponent } from "react";
 import { GoToTypesChain } from "../../../../../../../dataAccess/access/types/GoToTypeChain";
+import { DavitAddButton } from "../../../../../../atomic/buttons/DavitAddButton";
+import { DavitBackButton } from "../../../../../../atomic/buttons/DavitBackButton";
+import { DavitDeleteButton } from "../../../../../../atomic/buttons/DavitDeleteButton";
+import { DavitRootButton } from "../../../../../../atomic/buttons/DavitRootButton";
 import { ChainDecisionDropDown } from "../../../../../../atomic/dropdowns/ChainDecisionDropDown";
 import { ChainLinkDropDown } from "../../../../../../atomic/dropdowns/ChainLinkDropDown";
 import { DataSetupDropDown } from "../../../../../../atomic/dropdowns/DataSetupDropDown";
 import { GoToChainOptionDropDown } from "../../../../../../atomic/dropdowns/GoToChainOptionDropDown";
 import { SequenceDropDown } from "../../../../../../atomic/dropdowns/SequenceDropDown";
-import { DavitAddButton } from "../../../../../../common/fragments/buttons/DavitAddButton";
-import { DavitBackButton } from "../../../../../../common/fragments/buttons/DavitBackButton";
-import { DavitDeleteButton } from "../../../../../../common/fragments/buttons/DavitDeleteButton";
-import { DavitRootButton } from "../../../../../../common/fragments/buttons/DavitRootButton";
 import { DavitLabelTextfield } from "../../../../../../common/fragments/DavitLabelTextfield";
 import { Form } from "../../../../../../common/fragments/forms/Form";
 import { FormBody } from "../../../../../../common/fragments/forms/FormBody";

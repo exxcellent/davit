@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { DavitIcons } from "../../IconSet";
+import { DavitIcons } from "../../common/IconSet";
 import { DavitButton } from "./DavitButton";
 
 interface DavitBackButtonProps {

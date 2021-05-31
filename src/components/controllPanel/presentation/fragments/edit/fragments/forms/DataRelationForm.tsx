@@ -1,10 +1,10 @@
 import React, { FunctionComponent, useState } from "react";
 import { Direction } from "../../../../../../../dataAccess/access/to/DataRelationTO";
+import { DavitBackButton } from "../../../../../../atomic/buttons/DavitBackButton";
+import { DavitButton } from "../../../../../../atomic/buttons/DavitButton";
+import { DavitCommentButton } from "../../../../../../atomic/buttons/DavitCommentButton";
+import { DavitDeleteButton } from "../../../../../../atomic/buttons/DavitDeleteButton";
 import { DavitDropDown } from "../../../../../../atomic/dropdowns/DavitDropDown";
-import { DavitBackButton } from "../../../../../../common/fragments/buttons/DavitBackButton";
-import { DavitButton } from "../../../../../../common/fragments/buttons/DavitButton";
-import { DavitCommentButton } from "../../../../../../common/fragments/buttons/DavitCommentButton";
-import { DavitDeleteButton } from "../../../../../../common/fragments/buttons/DavitDeleteButton";
 import { Form } from "../../../../../../common/fragments/forms/Form";
 import { FormBody } from "../../../../../../common/fragments/forms/FormBody";
 import { FormFooter } from "../../../../../../common/fragments/forms/FormFooter";

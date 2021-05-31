@@ -3,7 +3,7 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons/faArrowRight";
 import { faFastBackward } from "@fortawesome/free-solid-svg-icons/faFastBackward";
 import { faFastForward } from "@fortawesome/free-solid-svg-icons/faFastForward";
 import React, { FunctionComponent } from "react";
-import { DavitButton } from "../../../../../common/fragments/buttons/DavitButton";
+import { DavitButton } from "../../../../../atomic/buttons/DavitButton";
 import { CenteredFlex } from "../../../../../common/fragments/CenteredFlex";
 
 interface ViewNavigatorProps {

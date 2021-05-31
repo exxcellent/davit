@@ -1,8 +1,8 @@
 import React, { FunctionComponent, useState } from "react";
-import { DavitBackButton } from "../../../../../../common/fragments/buttons/DavitBackButton";
-import { DavitButton } from "../../../../../../common/fragments/buttons/DavitButton";
-import { DavitCommentButton } from "../../../../../../common/fragments/buttons/DavitCommentButton";
-import { DavitDeleteButton } from "../../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitBackButton } from "../../../../../../atomic/buttons/DavitBackButton";
+import { DavitButton } from "../../../../../../atomic/buttons/DavitButton";
+import { DavitCommentButton } from "../../../../../../atomic/buttons/DavitCommentButton";
+import { DavitDeleteButton } from "../../../../../../atomic/buttons/DavitDeleteButton";
 import { DavitLabelTextfield } from "../../../../../../common/fragments/DavitLabelTextfield";
 import { Form } from "../../../../../../common/fragments/forms/Form";
 import { FormBody } from "../../../../../../common/fragments/forms/FormBody";

@@ -6,8 +6,8 @@ import { EditActions, editSelectors } from "../../../../../../slices/EditSlice";
 import { GlobalActions } from "../../../../../../slices/GlobalSlice";
 import { EditData } from "../../../../../../slices/thunks/DataThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
-import { DavitBackButton } from "../../../../../common/fragments/buttons/DavitBackButton";
-import { DavitDeleteButton } from "../../../../../common/fragments/buttons/DavitDeleteButton";
+import { DavitBackButton } from "../../../../../atomic/buttons/DavitBackButton";
+import { DavitDeleteButton } from "../../../../../atomic/buttons/DavitDeleteButton";
 import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
 import { OptionField } from "../common/OptionField";
 

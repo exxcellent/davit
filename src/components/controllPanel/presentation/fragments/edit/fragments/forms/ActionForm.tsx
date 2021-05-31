@@ -1,12 +1,12 @@
 import { faReply } from "@fortawesome/free-solid-svg-icons";
 import React, { FunctionComponent } from "react";
 import { ActionType } from "../../../../../../../dataAccess/access/types/ActionType";
+import { DavitButton } from "../../../../../../atomic/buttons/DavitButton";
+import { DavitDeleteButton } from "../../../../../../atomic/buttons/DavitDeleteButton";
 import { ActionTypeDropDown } from "../../../../../../atomic/dropdowns/ActionTypeDropDown";
 import { ActorDropDown } from "../../../../../../atomic/dropdowns/ActorDropDown";
 import { DataDropDown } from "../../../../../../atomic/dropdowns/DataDropDown";
 import { InstanceDropDown } from "../../../../../../atomic/dropdowns/InstanceDropDown";
-import { DavitButton } from "../../../../../../common/fragments/buttons/DavitButton";
-import { DavitDeleteButton } from "../../../../../../common/fragments/buttons/DavitDeleteButton";
 import { DavitLabelTextfield } from "../../../../../../common/fragments/DavitLabelTextfield";
 import { Form } from "../../../../../../common/fragments/forms/Form";
 import { useActionViewModel } from "../viewmodels/ActionViewModel";

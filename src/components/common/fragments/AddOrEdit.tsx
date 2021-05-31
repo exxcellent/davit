@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { DavitAddButton } from "./buttons/DavitAddButton";
+import { DavitAddButton } from "../../atomic/buttons/DavitAddButton";
 
 interface AddOrEditProps {
     addCallBack: () => void;

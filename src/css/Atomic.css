@@ -58,20 +58,6 @@ label {
     line-height: 1.15;
 }
 
-button {
-    color: var(--text-color);
-    border-radius: var(--davit-border-radius);
-    border: var(--davit-border-size-medium) solid var(--color-secondary);
-    background-color: transparent;
-    text-align: center;
-    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
-}
-
-button:hover {
-    background: var(--davit-hover-color);
-    cursor: pointer;
-}
-
 input {
     padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
     border-radius: var(--davit-border-radius);

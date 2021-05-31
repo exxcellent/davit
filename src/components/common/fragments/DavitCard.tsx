@@ -4,9 +4,9 @@ import { DataInstanceTO } from "../../../dataAccess/access/to/DataInstanceTO";
 import { EditActions } from "../../../slices/EditSlice";
 import { Filter, SequenceModelActions, sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
 import { createViewFragment, ViewFragmentProps } from "../../../viewDataTypes/ViewFragment";
+import { DavitCardButton } from "../../atomic/buttons/DavitCardButton";
+import { DavitShowMoreButton } from "../../atomic/buttons/DavitShowMoreButton";
 import { DavitIcons } from "../IconSet";
-import { DavitCardButton } from "./buttons/DavitCardButton";
-import { DavitShowMoreButton } from "./buttons/DavitShowMoreButton";
 
 /**
  *  Prop: initWidth / initHeight

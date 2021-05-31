@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { DAVIT_VERISON } from "../../DavitConstants";
 import logo from "../../icons/logo200.png";
 import { EditActions, editSelectors, Mode } from "../../slices/EditSlice";
-import { DavitSidePanelButton } from "../common/fragments/buttons/DavitSidePanelButton";
+import { DavitSidePanelButton } from "../atomic/buttons/DavitSidePanelButton";
 import { DavitIcons } from "../common/IconSet";
 
 export interface SidePanelProps {
