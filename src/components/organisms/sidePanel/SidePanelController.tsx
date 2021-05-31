@@ -4,7 +4,7 @@ import logo from "../../../assets/exxcellent_logo_200.png";
 import { DAVIT_VERISON } from "../../../DavitConstants";
 import { EditActions, editSelectors, Mode } from "../../../slices/EditSlice";
 import { DavitSidePanelButton } from "../../atomic/buttons/DavitSidePanelButton";
-import { DavitIcons } from "../../atomic/IconSet";
+import { DavitIcons } from "../../atomic/icons/IconSet";
 
 export interface SidePanelProps {
 }

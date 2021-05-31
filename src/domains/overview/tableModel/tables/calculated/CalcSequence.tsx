@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DavitIcons } from "../../../../../components/atomic/IconSet";
+import { DavitIcons } from "../../../../../components/atomic/icons/IconSet";
 import { DavitTableRowData } from "../../../../../components/organisms/table/DavitTable";
 import { SequenceCTO } from "../../../../../dataAccess/access/cto/SequenceCTO";
 import { Terminal } from "../../../../../dataAccess/access/types/GoToType";

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { DavitIcons } from "../../../../../components/atomic/IconSet";
+import { DavitIcons } from "../../../../../components/atomic/icons/IconSet";
 import { DavitTableRowData } from "../../../../../components/organisms/table/DavitTable";
 import { ActorCTO } from "../../../../../dataAccess/access/cto/ActorCTO";
 import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
