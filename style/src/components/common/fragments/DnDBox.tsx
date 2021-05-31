@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { ASPECT_RATIO, WINDOW_FACTOR } from "../../../app/DavitConstants";
 import { GeometricalDataTO } from "../../../dataAccess/access/to/GeometricalDataTO";
 import { PositionTO } from "../../../dataAccess/access/to/PositionTO";
+import { ASPECT_RATIO, WINDOW_FACTOR } from "../../../DavitConstants";
 import { useCurrentHeight, useCurrentWitdh, useCustomZoomEvent } from "../../../utils/WindowUtil";
 import { createDnDItem } from "./DnDWrapper";
 import { DavitPath, DavitPathProps } from "./svg/DavitPath";

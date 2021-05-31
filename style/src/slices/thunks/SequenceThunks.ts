@@ -1,10 +1,10 @@
-import { AppThunk } from "../../app/store";
 import { SequenceCTO } from "../../dataAccess/access/cto/SequenceCTO";
 import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
 import { SequenceStepTO } from "../../dataAccess/access/to/SequenceStepTO";
 import { SequenceTO } from "../../dataAccess/access/to/SequenceTO";
 import { DataAccess } from "../../dataAccess/DataAccess";
 import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
+import { AppThunk } from "../../store";
 import { editActions, Mode } from "../EditSlice";
 import { GlobalActions } from "../GlobalSlice";
 import { MasterDataActions } from "../MasterDataSlice";
