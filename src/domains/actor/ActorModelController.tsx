@@ -49,7 +49,9 @@ export const ActorModelController: FunctionComponent<ActorModelControllerProps> 
         return (
             <>
                 {toDnDElements.length === 0 &&
-                <ViewPlaceholder text={"Create a new actor"} />}
+                <div className="actorModel">
+                    <ViewPlaceholder text={"Create a new actor"} />
+                </div>}
                 {toDnDElements.length > 0 && <DnDBox
                     onPositionUpdate={onPositionUpdate}
                     toDnDElements={toDnDElements}

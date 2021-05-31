@@ -46,7 +46,9 @@ export const DataModelController: FunctionComponent<DataModelControllerProps> = 
             return (
                 <>
                     {toDnDElements.length === 0 &&
-                    <ViewPlaceholder text={"Create a new data object"} />}
+                    <div className="dataModel">
+                        <ViewPlaceholder text={"Create a new data object"} />
+                    </div>}
                     {toDnDElements.length > 0 && <DnDBox
                         onPositionUpdate={onPositionUpdate}
                         toDnDElements={toDnDElements}
