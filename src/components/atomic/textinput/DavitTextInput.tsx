@@ -1,7 +1,7 @@
-/* eslint-disable react/display-name */
 import React, { FunctionComponent, Ref, useEffect, useRef, useState } from "react";
+import "./DavitTextInput.css";
 
-export interface DavitLabelTextfieldProps {
+export interface DavitTextInputProps {
     onChangeCallback: (value: string) => void;
     focus?: boolean;
     onBlur?: () => void;
@@ -10,7 +10,7 @@ export interface DavitLabelTextfieldProps {
     label?: string;
 }
 
-export const DavitLabelTextfield: FunctionComponent<DavitLabelTextfieldProps> = (props) => {
+export const DavitTextInput: FunctionComponent<DavitTextInputProps> = (props) => {
     const {label, placeholder, value, onChangeCallback, onBlur, focus} = props;
 
     const [stateValue, setStateValue] = useState<string>("");
@@ -29,7 +29,7 @@ export const DavitLabelTextfield: FunctionComponent<DavitLabelTextfieldProps> = 
     }, [focus, inputRef]);
 
     return (
-        <div style={{display: "flex"}}>
+        <div className="flex">
             {label && <label className={"inputLabel"}>{label}</label>}
             <input
                 className={label ? "input label" : undefined}

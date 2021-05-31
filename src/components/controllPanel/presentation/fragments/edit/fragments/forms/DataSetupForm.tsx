@@ -8,7 +8,7 @@ import { DavitCommentButton } from "../../../../../../atomic/buttons/DavitCommen
 import { DavitDeleteButton } from "../../../../../../atomic/buttons/DavitDeleteButton";
 import { ActorDropDown } from "../../../../../../atomic/dropdowns/ActorDropDown";
 import { InstanceDropDown } from "../../../../../../atomic/dropdowns/InstanceDropDown";
-import { DavitLabelTextfield } from "../../../../../../common/fragments/DavitLabelTextfield";
+import { DavitTextInput } from "../../../../../../atomic/textinput/DavitTextInput";
 import { Form } from "../../../../../../common/fragments/forms/Form";
 import { FormBody } from "../../../../../../common/fragments/forms/FormBody";
 import { FormFooter } from "../../../../../../common/fragments/forms/FormFooter";
@@ -90,7 +90,7 @@ export const DataSetupForm: FunctionComponent<DataSetupFormProps> = () => {
             <FormBody>
 
                 <FormLine>
-                    <DavitLabelTextfield
+                    <DavitTextInput
                         label="Name:"
                         placeholder="Data Setup Name ..."
                         onChangeCallback={(name: string) => changeName(name)}

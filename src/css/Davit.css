@@ -608,21 +608,6 @@
     transition: background-color var(--animation-time);
 }
 
-.inputLabel {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-right: var(--davit-padding-right-left);
-    padding-left: var(--davit-padding-right-left);
-    border-bottom-left-radius: var(--davit-border-radius);
-    border-top-left-radius: var(--davit-border-radius);
-    border: var(--davit-border-size-medium) solid var(--color-secondary);
-    border-bottom: var(--davit-border-size-medium) solid var(--color-secondary);
-    background-color: var(--color-secondary);
-    color: var(--text-color);
-    font-family: var(--davit-font-family);
-    font-size: var(--davit-font-size);
-}
 
 .labelField {
     color: var(--text-color);

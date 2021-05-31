@@ -14,7 +14,7 @@ import { DavitShowMoreButton } from "../../../../../../atomic/buttons/DavitShowM
 import { DecisionDropDown } from "../../../../../../atomic/dropdowns/DecisionDropDown";
 import { GoToOptionDropDown } from "../../../../../../atomic/dropdowns/GoToOptionDropDown";
 import { StepDropDown } from "../../../../../../atomic/dropdowns/StepDropDown";
-import { DavitLabelTextfield } from "../../../../../../common/fragments/DavitLabelTextfield";
+import { DavitTextInput } from "../../../../../../atomic/textinput/DavitTextInput";
 import { Form } from "../../../../../../common/fragments/forms/Form";
 import { FormBody } from "../../../../../../common/fragments/forms/FormBody";
 import { FormFooter } from "../../../../../../common/fragments/forms/FormFooter";
@@ -119,7 +119,7 @@ export const StepForm: FunctionComponent<StepFormProps> = () => {
             <FormBody>
 
                 <FormLine>
-                    <DavitLabelTextfield
+                    <DavitTextInput
                         label="Name:"
                         placeholder="Step Name ..."
                         onChangeCallback={(name: string) => changeName(name)}

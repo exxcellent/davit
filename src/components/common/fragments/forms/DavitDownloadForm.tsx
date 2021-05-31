@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { GlobalActions } from "../../../../slices/GlobalSlice";
 import { useEnterHook, useEscHook } from "../../../../utils/WindowUtil";
-import { DavitLabelTextfield } from "../DavitLabelTextfield";
+import { DavitTextInput } from "../../../atomic/textinput/DavitTextInput";
 import { FormFooter } from "./FormFooter";
 import { FormHeader } from "./FormHeader";
 
@@ -28,7 +28,7 @@ export const DavitDownloadForm: FunctionComponent<DavitDownloadFormProps> = (pro
     return (
         <div className="downloadForm">
             <FormHeader>
-                <DavitLabelTextfield
+                <DavitTextInput
                     label="File name:"
                     placeholder="project name..."
                     onChangeCallback={(name: string) => setProjectName(name)}

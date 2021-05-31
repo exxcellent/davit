@@ -10,7 +10,7 @@ import { ChainDecisionDropDown } from "../../../../../../atomic/dropdowns/ChainD
 import { ChainLinkDropDown } from "../../../../../../atomic/dropdowns/ChainLinkDropDown";
 import { GoToChainOptionDropDown } from "../../../../../../atomic/dropdowns/GoToChainOptionDropDown";
 import { InstanceDropDown } from "../../../../../../atomic/dropdowns/InstanceDropDown";
-import { DavitLabelTextfield } from "../../../../../../common/fragments/DavitLabelTextfield";
+import { DavitTextInput } from "../../../../../../atomic/textinput/DavitTextInput";
 import { Form } from "../../../../../../common/fragments/forms/Form";
 import { FormBody } from "../../../../../../common/fragments/forms/FormBody";
 import { FormFooter } from "../../../../../../common/fragments/forms/FormFooter";
@@ -109,7 +109,7 @@ export const ChainDecisionForm: FunctionComponent<ChainDecisionFormProps> = () =
 
                 <FormLine>
                     <FormLabel>{labelName}</FormLabel>
-                    <DavitLabelTextfield
+                    <DavitTextInput
                         label="Name:"
                         placeholder="Chain decision name ..."
                         onChangeCallback={(name: string) => changeName(name)}

@@ -5,7 +5,7 @@ import { DavitBackButton } from "../../../../../../atomic/buttons/DavitBackButto
 import { DavitButton } from "../../../../../../atomic/buttons/DavitButton";
 import { DavitCommentButton } from "../../../../../../atomic/buttons/DavitCommentButton";
 import { DavitDeleteButton } from "../../../../../../atomic/buttons/DavitDeleteButton";
-import { DavitLabelTextfield } from "../../../../../../common/fragments/DavitLabelTextfield";
+import { DavitTextInput } from "../../../../../../atomic/textinput/DavitTextInput";
 import { Form } from "../../../../../../common/fragments/forms/Form";
 import { FormBody } from "../../../../../../common/fragments/forms/FormBody";
 import { FormFooter } from "../../../../../../common/fragments/forms/FormFooter";
@@ -40,7 +40,7 @@ export const DataForm: FunctionComponent<DataFormProps> = () => {
             return (<tr key={index}>
                     <td>
                         <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-                            <DavitLabelTextfield
+                            <DavitTextInput
                                 onChangeCallback={(newName) => changeInstanceName(newName, index)}
                                 value={instance.name}
                                 onBlur={updateData}
@@ -71,7 +71,7 @@ export const DataForm: FunctionComponent<DataFormProps> = () => {
 
 
                     <FormLine>
-                        <DavitLabelTextfield
+                        <DavitTextInput
                             label="Name:"
                             placeholder="Data Name"
                             onChangeCallback={changeName}

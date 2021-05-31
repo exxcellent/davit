@@ -9,7 +9,7 @@ import { ChainLinkDropDown } from "../../../../../../atomic/dropdowns/ChainLinkD
 import { DataSetupDropDown } from "../../../../../../atomic/dropdowns/DataSetupDropDown";
 import { GoToChainOptionDropDown } from "../../../../../../atomic/dropdowns/GoToChainOptionDropDown";
 import { SequenceDropDown } from "../../../../../../atomic/dropdowns/SequenceDropDown";
-import { DavitLabelTextfield } from "../../../../../../common/fragments/DavitLabelTextfield";
+import { DavitTextInput } from "../../../../../../atomic/textinput/DavitTextInput";
 import { Form } from "../../../../../../common/fragments/forms/Form";
 import { FormBody } from "../../../../../../common/fragments/forms/FormBody";
 import { FormFooter } from "../../../../../../common/fragments/forms/FormFooter";
@@ -64,7 +64,7 @@ export const ChainLinkForm: FunctionComponent<ChainLinkFormProps> = () => {
             <FormBody>
 
                 <FormLine>
-                    <DavitLabelTextfield
+                    <DavitTextInput
                         label="Name:"
                         placeholder="Chainlink Name ..."
                         onChangeCallback={(name: string) => changeName(name)}

@@ -39,8 +39,3 @@
 .flex-shrink {
     flex-shrink: 1;
 }
-
-.flex-center {
-    justify-content: center;
-    align-items: center;
-}

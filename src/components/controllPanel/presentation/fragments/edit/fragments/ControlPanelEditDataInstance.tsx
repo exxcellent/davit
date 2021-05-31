@@ -8,7 +8,7 @@ import { EditData } from "../../../../../../slices/thunks/DataThunks";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
 import { DavitBackButton } from "../../../../../atomic/buttons/DavitBackButton";
 import { DavitDeleteButton } from "../../../../../atomic/buttons/DavitDeleteButton";
-import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
+import { DavitTextInput } from "../../../../../atomic/textinput/DavitTextInput";
 import { OptionField } from "../common/OptionField";
 
 export interface ControlPanelEditDataInstanceProps {
@@ -28,7 +28,7 @@ export const ControlPanelEditDataInstance: FunctionComponent<ControlPanelEditDat
     return (
         <div className="headerGrid">
             <OptionField label="Instance - Name">
-                <DavitLabelTextfield
+                <DavitTextInput
                     label="Name:"
                     placeholder="Data Instance Name"
                     onChangeCallback={(name: string) => changeName(name)}

@@ -12,7 +12,7 @@ import { DecisionDropDown } from "../../../../../../atomic/dropdowns/DecisionDro
 import { GoToOptionDropDown } from "../../../../../../atomic/dropdowns/GoToOptionDropDown";
 import { InstanceDropDown } from "../../../../../../atomic/dropdowns/InstanceDropDown";
 import { StepDropDown } from "../../../../../../atomic/dropdowns/StepDropDown";
-import { DavitLabelTextfield } from "../../../../../../common/fragments/DavitLabelTextfield";
+import { DavitTextInput } from "../../../../../../atomic/textinput/DavitTextInput";
 import { Form } from "../../../../../../common/fragments/forms/Form";
 import { FormBody } from "../../../../../../common/fragments/forms/FormBody";
 import { FormFooter } from "../../../../../../common/fragments/forms/FormFooter";
@@ -112,7 +112,7 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
             <FormBody>
 
                 <FormLine>
-                    <DavitLabelTextfield
+                    <DavitTextInput
                         label="Name:"
                         placeholder="Decision name ..."
                         onChangeCallback={(name: string) => changeName(name)}

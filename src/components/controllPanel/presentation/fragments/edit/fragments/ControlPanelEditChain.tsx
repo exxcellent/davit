@@ -15,7 +15,7 @@ import { DavitButton } from "../../../../../atomic/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../atomic/buttons/DavitDeleteButton";
 import { ChainDecisionDropDownButton } from "../../../../../atomic/dropdowns/ChainDecisionDropDown";
 import { ChainLinkDropDownButton } from "../../../../../atomic/dropdowns/ChainLinkDropDown";
-import { DavitLabelTextfield } from "../../../../../common/fragments/DavitLabelTextfield";
+import { DavitTextInput } from "../../../../../atomic/textinput/DavitTextInput";
 import { AddOrEdit } from "../../../../../molecules/AddOrEdit";
 import { ControlPanel } from "../common/ControlPanel";
 import { OptionField } from "../common/OptionField";
@@ -38,7 +38,7 @@ export const ControlPanelEditChain: FunctionComponent<ControlPanelEditChainProps
     return (
         <ControlPanel>
             <OptionField label="Chain - name">
-                <DavitLabelTextfield
+                <DavitTextInput
                     label="Name:"
                     placeholder="Chain Name..."
                     onChangeCallback={(name: string) => changeName(name)}

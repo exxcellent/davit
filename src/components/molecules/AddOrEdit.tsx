@@ -1,5 +1,4 @@
 import React, { FunctionComponent } from "react";
-import "../../style/layout.css";
 import { DavitAddButton } from "../atomic/buttons/DavitAddButton";
 
 interface AddOrEditProps {

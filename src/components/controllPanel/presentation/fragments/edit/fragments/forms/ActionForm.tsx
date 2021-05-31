@@ -7,7 +7,7 @@ import { ActionTypeDropDown } from "../../../../../../atomic/dropdowns/ActionTyp
 import { ActorDropDown } from "../../../../../../atomic/dropdowns/ActorDropDown";
 import { DataDropDown } from "../../../../../../atomic/dropdowns/DataDropDown";
 import { InstanceDropDown } from "../../../../../../atomic/dropdowns/InstanceDropDown";
-import { DavitLabelTextfield } from "../../../../../../common/fragments/DavitLabelTextfield";
+import { DavitTextInput } from "../../../../../../atomic/textinput/DavitTextInput";
 import { Form } from "../../../../../../common/fragments/forms/Form";
 import { useActionViewModel } from "../viewmodels/ActionViewModel";
 import { FormDivider } from "./fragments/FormDivider";
@@ -74,7 +74,7 @@ export const ActionForm: FunctionComponent<ActionFormProps> = () => {
         {actionType === ActionType.TRIGGER &&
         <FormLine>
             <FormLabel>Enter Trigger text</FormLabel>
-            <DavitLabelTextfield
+            <DavitTextInput
                 placeholder="Trigger text ..."
                 onChangeCallback={(name: string) => setTriggerLabel(name)}
                 value={triggerLabel}

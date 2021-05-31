@@ -3,7 +3,7 @@ import { DavitBackButton } from "../../../../../../atomic/buttons/DavitBackButto
 import { DavitButton } from "../../../../../../atomic/buttons/DavitButton";
 import { DavitCommentButton } from "../../../../../../atomic/buttons/DavitCommentButton";
 import { DavitDeleteButton } from "../../../../../../atomic/buttons/DavitDeleteButton";
-import { DavitLabelTextfield } from "../../../../../../common/fragments/DavitLabelTextfield";
+import { DavitTextInput } from "../../../../../../atomic/textinput/DavitTextInput";
 import { Form } from "../../../../../../common/fragments/forms/Form";
 import { FormBody } from "../../../../../../common/fragments/forms/FormBody";
 import { FormHeader } from "../../../../../../common/fragments/forms/FormHeader";
@@ -40,7 +40,7 @@ export const ActorForm: FunctionComponent<ActorFormProps> = () => {
             <FormBody>
 
                 <FormLine>
-                    <DavitLabelTextfield
+                    <DavitTextInput
                         label="Name:"
                         placeholder="Actor Name"
                         onChangeCallback={(name: string) => changeName(name)}
