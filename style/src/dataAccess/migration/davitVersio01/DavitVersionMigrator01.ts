@@ -1,5 +1,5 @@
+import { DEFAULT_PROJECT_NAME } from "../../../app/DavitConstants";
 import { DataAndInstanceId } from "../../../components/common/fragments/dropdowns/InstanceDropDown";
-import { DEFAULT_PROJECT_NAME } from "../../../DavitConstants";
 import { ActionTO } from "../../access/to/ActionTO";
 import { ActorTO } from "../../access/to/ActorTO";
 import { ChainDecisionTO } from "../../access/to/ChainDecisionTO";

@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AppThunk, RootState } from "../app/store";
 import { ActorCTO } from "../dataAccess/access/cto/ActorCTO";
 import { DataCTO } from "../dataAccess/access/cto/DataCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
@@ -11,7 +12,6 @@ import { GroupTO } from "../dataAccess/access/to/GroupTO";
 import { SequenceTO } from "../dataAccess/access/to/SequenceTO";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
-import { AppThunk, RootState } from "../store";
 import { DavitUtil } from "../utils/DavitUtil";
 import { GlobalActions } from "./GlobalSlice";
 

@@ -1,5 +1,5 @@
 import React from "react";
-import "../src/style/index.css";
+import "../src/index.css";
 
 const customViewports = {
     appleIphone12: {

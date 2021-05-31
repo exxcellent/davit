@@ -1,4 +1,4 @@
-import { splitSymbol, storageKey } from "../middlewares/StateSync";
+import { splitSymbol, storageKey } from "../app/middlewares/StateSync";
 
 export function createStorageListener(store: any) {
     return () => {

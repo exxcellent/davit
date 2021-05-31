@@ -1,4 +1,4 @@
-import { DAVIT_VERISON, DEFAULT_PROJECT_NAME, DEFAULT_ZOOM } from "../../../DavitConstants";
+import { DAVIT_VERISON, DEFAULT_PROJECT_NAME, DEFAULT_ZOOM } from "../../../app/DavitConstants";
 import { ActionTO } from "../to/ActionTO";
 import { ActorTO } from "../to/ActorTO";
 import { ChainDecisionTO } from "../to/ChainDecisionTO";

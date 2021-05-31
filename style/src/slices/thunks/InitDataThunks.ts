@@ -1,7 +1,7 @@
+import { AppThunk } from "../../app/store";
 import { InitDataTO } from "../../dataAccess/access/to/InitDataTO";
 import { DataAccess } from "../../dataAccess/DataAccess";
 import { DataAccessResponse } from "../../dataAccess/DataAccessResponse";
-import { AppThunk } from "../../store";
 import { editActions, EditActions, Mode } from "../EditSlice";
 import { GlobalActions } from "../GlobalSlice";
 import { MasterDataActions } from "../MasterDataSlice";

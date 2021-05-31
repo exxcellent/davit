@@ -1,6 +1,6 @@
 import { faShare } from "@fortawesome/free-solid-svg-icons";
 import React, { FunctionComponent } from "react";
-import { ModuleRoutes } from "../../../../../pages/Davit";
+import { ModuleRoutes } from "../../../../../app/Davit";
 import { DavitButton } from "../../../../common/fragments/buttons/DavitButton";
 import { ControlPanel } from "../edit/common/ControlPanel";
 import { OptionField } from "../edit/common/OptionField";
