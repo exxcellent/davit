@@ -84,9 +84,10 @@ const useMetaDataModelViewModel = () => {
         const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.selectDataSetupToEdit);
         const initDataToEdit: InitDataTO | null = useSelector(editSelectors.selectInitDataToEdit);
         // ----- VIEW -----
+        const actions: ActionTO[] = useSelector(sequenceModelSelectors.selectActions);
+
         const currentActorDatas: ActorData[] = useSelector(sequenceModelSelectors.selectActorData);
         const errors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
-        const actions: ActionTO[] = useSelector(sequenceModelSelectors.selectActions);
 
         const dataZoomFactor: number = useSelector(globalSelectors.selectDataZoomFactor);
 
@@ -108,23 +109,28 @@ const useMetaDataModelViewModel = () => {
 
         const getActorDatasFromView = (): ViewFragmentProps[] => {
             const actorDatas: ViewFragmentProps[] = [];
-            const actorDatasFromErros: ViewFragmentProps[] = errors.map(mapActionToActorDatas);
-            const actorDatasFromActions: ViewFragmentProps[] = actions.map(mapActionToActorDatas);
-
-            const actorDatasFromCompDatas: ViewFragmentProps[] = currentActorDatas
-                .filter((actDat) => actDat.state !== ActorDataState.UPDATED_FROM)
-                .map(mapActorDataToActorData);
+            //Map and add errors to actor data's
+            const actorDatasFromErros: ViewFragmentProps[] = errors.map(mapErrorToActorDatas);
             actorDatas.push(...actorDatasFromErros);
+            //Map and add actions to actor data's if there not already exist in actorDatas
+            const actorDatasFromActions: ViewFragmentProps[] = actions.map(mapActionToActorDatas);
             actorDatas.push(
                 ...actorDatasFromActions.filter(
                     (actorDataFromAction) => !actorDatas.some((cp) => actorDataExists(cp, actorDataFromAction)),
                 ),
             );
+            //Map and add current Actor-Data's to actor data's if there not already exist in actorDatas
+            const actorDatasFromCurrentActorDatas: ViewFragmentProps[] = currentActorDatas
+                // We don't want to display "old" state of data.
+                .filter((actDat) => actDat.state !== ActorDataState.UPDATED_FROM)
+                .map(mapActorDataToViewFragment)
+                .sort((a, b) => a.name.localeCompare(b.name));
             actorDatas.push(
-                ...actorDatasFromCompDatas.filter(
-                    (actorDataFromCompData) => !actorDatas.some((cp) => actorDataExists(cp, actorDataFromCompData)),
+                ...actorDatasFromCurrentActorDatas.filter(
+                    (actorDataFromCurrentActorDatas) => !actorDatas.some((cp) => actorDataExists(cp, actorDataFromCurrentActorDatas)),
                 ),
             );
+
             return actorDatas;
         };
 
@@ -156,9 +162,20 @@ const useMetaDataModelViewModel = () => {
             return actorDatas;
         };
 
+        const mapErrorToActorDatas = (errorItem: ActionTO): ViewFragmentProps => {
+            const state: ActorDataState = mapErrorTypeToViewFragmentState(errorItem.actionType);
+
+            const parentId = state === ActorDataState.ERROR_SEND ? errorItem.sendingActorFk : errorItem.receivingActorFk;
+
+            return {
+                name: getDataNameById(errorItem.dataFk, errorItem.instanceFk),
+                state: state,
+                parentId: parentId,
+            };
+        };
+
         function mapActionToActorDatas(actionItem: ActionTO): ViewFragmentProps {
             const state: ActorDataState = mapActionTypeToViewFragmentState(actionItem.actionType);
-            // const parentId = getDataAndInstanceIds(actionItem.dataFk);
             return {
                 name: getActorNameById(actionItem.receivingActorFk),
                 state: state,
@@ -166,7 +183,7 @@ const useMetaDataModelViewModel = () => {
             };
         }
 
-        const mapActorDataToActorData = (actorData: ActorData): ViewFragmentProps => {
+        const mapActorDataToViewFragment = (actorData: ActorData): ViewFragmentProps => {
             return {
                 name: getActorNameById(actorData.actorFk),
                 parentId: {dataId: actorData.dataFk, instanceId: actorData.instanceFk},
@@ -197,7 +214,7 @@ const useMetaDataModelViewModel = () => {
         const mapInitDataToActorData = (initData: InitDataTO): ViewFragmentProps => {
             return {
                 parentId:
-                    initData.instanceFk > 1
+                    initData.instanceFk > -1
                         ? {dataId: initData.dataFk, instanceId: initData.instanceFk}
                         : initData.dataFk,
                 name: getActorNameById(initData.actorFk),
@@ -245,6 +262,42 @@ const useMetaDataModelViewModel = () => {
             return cdState;
         };
 
+        const mapErrorTypeToViewFragmentState = (actionType: ActionType): ActorDataState => {
+            let cdState: ActorDataState;
+            switch (actionType) {
+                case ActionType.ADD:
+                    cdState = ActorDataState.ERROR_ADD;
+                    break;
+                case ActionType.DELETE:
+                    cdState = ActorDataState.ERROR_DELETE;
+                    break;
+                case ActionType.SEND:
+                case ActionType.SEND_AND_DELETE:
+                    cdState = ActorDataState.ERROR_SEND;
+                    break;
+                case ActionType.TRIGGER:
+                    cdState = ActorDataState.PERSISTENT;
+                    break;
+            }
+            return cdState;
+        };
+
+        const getDataNameById = (dataId: number, instanceId?: number): string => {
+            let dataName: string = "Could not find Data";
+            const data: DataCTO | undefined = datas.find((data) => data.data.id === dataId);
+            if (data) {
+                dataName = data.data.name;
+                if (instanceId !== undefined && instanceId !== -1) {
+                    dataName =
+                        dataName +
+                        " - " +
+                        (data.data.instances.find((inst) => inst.id === instanceId)?.name ||
+                            "Could not find instance Name");
+                }
+            }
+            return dataName;
+        };
+
         const onPositionUpdate = (x: number, y: number, positionId: number) => {
             const dataCTO = datas.find((data) => data.geometricalData.position.id === positionId);
             if (dataCTO) {
@@ -283,7 +336,7 @@ const useMetaDataModelViewModel = () => {
                 id: data.data.id,
                 initName: data.data.name,
                 initWidth: 100,
-                initHeigth: 30,
+                initHeight: 30,
                 dataFragments: getActorDatas().filter(
                     (act) =>
                         act.parentId === data.data.id ||
