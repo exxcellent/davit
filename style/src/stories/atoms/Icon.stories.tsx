@@ -2,7 +2,7 @@ import { Meta, Story } from "@storybook/react";
 import React from "react";
 import { withDesign } from "storybook-addon-designs";
 
-import { availableIcons, Icon, IconActorEdit, IconProps } from "../../components/exxcellent-components/atoms";
+import { availableIcons, Icon, IconActorEdit, IconProps } from "../../components/atomic/icons";
 import { backgrounds } from "../shared/styles";
 
 const iconList = Array.from(Object.keys(availableIcons)).sort();
