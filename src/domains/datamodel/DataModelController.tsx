@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { DavitCard, DavitCardProps } from "../../components/common/fragments/DavitCard";
 import { DnDBox, DnDBoxElement, DnDBoxType } from "../../components/common/fragments/DnDBox";
 import { DavitPathProps, DavitPathTypes } from "../../components/common/fragments/svg/DavitPath";
-import { ViewPlaceholder } from "../../components/common/fragments/ViewPlaceholder";
+import { ViewPlaceholder } from "../../components/layout/ViewPlaceholder";
 import { ActorCTO } from "../../dataAccess/access/cto/ActorCTO";
 import { DataCTO } from "../../dataAccess/access/cto/DataCTO";
 import { DataSetupCTO } from "../../dataAccess/access/cto/DataSetupCTO";
@@ -46,9 +46,7 @@ export const DataModelController: FunctionComponent<DataModelControllerProps> = 
             return (
                 <>
                     {toDnDElements.length === 0 &&
-                    <ViewPlaceholder text={"Create a new data object"}
-                                     className={DnDBoxType.data.toString()}
-                    />}
+                    <ViewPlaceholder text={"Create a new data object"} />}
                     {toDnDElements.length > 0 && <DnDBox
                         onPositionUpdate={onPositionUpdate}
                         toDnDElements={toDnDElements}

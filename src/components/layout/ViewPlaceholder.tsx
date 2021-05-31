@@ -1,18 +1,16 @@
 import React, { FunctionComponent } from "react";
+import "./ViewPlaceholder.css";
 
 interface ViewPlaceholderProps {
     text: string
-    className?: string
 }
 
 export const ViewPlaceholder: FunctionComponent<ViewPlaceholderProps> = (props) => {
-    const {text, className} = props;
+    const {text} = props;
 
     return (
-        <div className={className}>
-            <div className={"viewPlaceholder"}>
-                <h2>{text}</h2>
-            </div>
+        <div className="viewPlaceholder">
+            <h2>{text}</h2>
         </div>
     );
 };

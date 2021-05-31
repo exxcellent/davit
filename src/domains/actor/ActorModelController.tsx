@@ -9,7 +9,7 @@ import {
     DavitPathProps,
     DavitPathTypes
 } from "../../components/common/fragments/svg/DavitPath";
-import { ViewPlaceholder } from "../../components/common/fragments/ViewPlaceholder";
+import { ViewPlaceholder } from "../../components/layout/ViewPlaceholder";
 import { ActorCTO } from "../../dataAccess/access/cto/ActorCTO";
 import { DataCTO } from "../../dataAccess/access/cto/DataCTO";
 import { DataSetupCTO } from "../../dataAccess/access/cto/DataSetupCTO";
@@ -49,9 +49,7 @@ export const ActorModelController: FunctionComponent<ActorModelControllerProps> 
         return (
             <>
                 {toDnDElements.length === 0 &&
-                <ViewPlaceholder text={"Create a new actor"}
-                                 className={DnDBoxType.actor.toString()}
-                />}
+                <ViewPlaceholder text={"Create a new actor"} />}
                 {toDnDElements.length > 0 && <DnDBox
                     onPositionUpdate={onPositionUpdate}
                     toDnDElements={toDnDElements}

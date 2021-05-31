@@ -1,8 +1,7 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { ArcherContainer, ArcherElement, Relation } from "react-archer";
 import { useSelector } from "react-redux";
-import { CenteredFlex } from "../../../components/common/fragments/CenteredFlex";
-import { ViewPlaceholder } from "../../../components/common/fragments/ViewPlaceholder";
+import { ViewPlaceholder } from "../../../components/layout/ViewPlaceholder";
 import { ChainCTO } from "../../../dataAccess/access/cto/ChainCTO";
 import { ChainlinkCTO } from "../../../dataAccess/access/cto/ChainlinkCTO";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
@@ -194,11 +193,9 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
                  ref={parentRef}
             >
                 {!renderFlowChart() &&
-                <CenteredFlex>
-                    <ViewPlaceholder
-                        text={"Select a sequence or chain to see the flow chart"}
-                    />
-                </CenteredFlex>}
+                <ViewPlaceholder
+                    text={"Select a sequence or chain to see the flow chart"}
+                />}
                 {renderFlowChart() && <>
                     <div style={{display: "flex", position: "absolute", zIndex: 1, width: "47vw"}}>
                         {chain && (

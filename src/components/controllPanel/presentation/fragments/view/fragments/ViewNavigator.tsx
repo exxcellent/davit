@@ -4,7 +4,6 @@ import { faFastBackward } from "@fortawesome/free-solid-svg-icons/faFastBackward
 import { faFastForward } from "@fortawesome/free-solid-svg-icons/faFastForward";
 import React, { FunctionComponent } from "react";
 import { DavitButton } from "../../../../../atomic/buttons/DavitButton";
-import { CenteredFlex } from "../../../../../common/fragments/CenteredFlex";
 
 interface ViewNavigatorProps {
     fastBackward: () => void,
@@ -18,7 +17,7 @@ export const ViewNavigator: FunctionComponent<ViewNavigatorProps> = (props) => {
     const {fastBackward, fastForward, backward, forward, index} = props;
 
     return (
-        <CenteredFlex>
+        <div className="flex">
             <DavitButton
                 iconName={faFastBackward}
                 onClick={fastBackward}
@@ -47,6 +46,6 @@ export const ViewNavigator: FunctionComponent<ViewNavigatorProps> = (props) => {
                 onClick={fastForward}
                 style={{borderTopLeftRadius: 0, borderBottomLeftRadius: 0}}
             />
-        </CenteredFlex>
+        </div>
     );
 };
