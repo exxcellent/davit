@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { DataSetupTO } from "../../../../dataAccess/access/to/DataSetupTO";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 import { DavitUtil } from "../../../../utils/DavitUtil";
-import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "./DavitDropDown";
+import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "../../../atomic/dropdown/DavitDropDown";
 
 interface DataSetupDropDownProps {
     onSelect: (dataSetup: DataSetupTO | undefined) => void;

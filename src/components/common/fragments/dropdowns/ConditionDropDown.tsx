@@ -4,7 +4,7 @@ import { ActorCTO } from "../../../../dataAccess/access/cto/ActorCTO";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { ConditionTO } from "../../../../dataAccess/access/to/ConditionTO";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
-import { DavitDropDownItemProps, DavitLabelDropDown } from "./DavitDropDown";
+import { DavitDropDownItemProps, DavitLabelDropDown } from "../../../atomic/dropdown/DavitDropDown";
 
 interface ConditionLabelDropDownProps {
     onSelect: (conditionId: number | undefined) => void;

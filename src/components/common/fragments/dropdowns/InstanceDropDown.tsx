@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { DataCTO } from "../../../../dataAccess/access/cto/DataCTO";
 import { DataInstanceTO } from "../../../../dataAccess/access/to/DataInstanceTO";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
-import { DavitDropDown, DavitDropDownItemProps } from "./DavitDropDown";
+import { DavitDropDown, DavitDropDownItemProps } from "../../../atomic/dropdown/DavitDropDown";
 
 export interface DataAndInstanceId {
     dataFk: number;

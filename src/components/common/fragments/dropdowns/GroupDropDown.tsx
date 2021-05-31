@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { GroupTO } from "../../../../dataAccess/access/to/GroupTO";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 import { DavitUtil } from "../../../../utils/DavitUtil";
-import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "./DavitDropDown";
+import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "../../../atomic/dropdown/DavitDropDown";
 
 interface GroupDropDownProps {
     onSelect: (group: GroupTO | undefined) => void;

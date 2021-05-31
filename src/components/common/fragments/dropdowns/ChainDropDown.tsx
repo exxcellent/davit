@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { ChainTO } from "../../../../dataAccess/access/to/ChainTO";
 import { masterDataSelectors } from "../../../../slices/MasterDataSlice";
 import { DavitUtil } from "../../../../utils/DavitUtil";
-import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "./DavitDropDown";
+import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "../../../atomic/dropdown/DavitDropDown";
 
 interface ChainDropDownProps {
     onSelect: (chain: ChainTO | undefined) => void;

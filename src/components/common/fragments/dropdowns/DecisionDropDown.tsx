@@ -4,7 +4,7 @@ import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
 import { DecisionTO } from "../../../../dataAccess/access/to/DecisionTO";
 import { sequenceModelSelectors } from "../../../../slices/SequenceModelSlice";
 import { DavitUtil } from "../../../../utils/DavitUtil";
-import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "./DavitDropDown";
+import { DavitDropDown, DavitDropDownItemProps, DavitLabelDropDown } from "../../../atomic/dropdown/DavitDropDown";
 
 interface DecisionLabelDropDownProps {
     onSelect: (decision: DecisionTO | undefined) => void;
