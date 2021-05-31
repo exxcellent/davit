@@ -6,7 +6,8 @@ import { Filter, SequenceModelActions, sequenceModelSelectors } from "../../../s
 import { createViewFragment, ViewFragmentProps } from "../../../viewDataTypes/ViewFragment";
 import { DavitCardButton } from "../../atomic/buttons/DavitCardButton";
 import { DavitShowMoreButton } from "../../atomic/buttons/DavitShowMoreButton";
-import { DavitIcons } from "../IconSet";
+import { DavitIcons } from "../../common/IconSet";
+import "./DavitCard.css";
 
 /**
  *  Prop: initWidth / initHeight
