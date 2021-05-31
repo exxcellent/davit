@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import Select from "react-select";
-import "../../../../app/css/Davit.css";
-import "../../../../app/css/React-Select.css";
+import "../../../../css/Davit.css";
+import "../../../../css/React-Select.css";
 
 export interface DavitDropDownItemProps {
     key: number;
