@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { globalSelectors, globalSlice } from "../../../slices/GlobalSlice";
-import { DavitNotification, NotificationLevel } from "../../molecules/notification/DavitNotification";
+import { DavitNotification, NotificationLevel } from "./DavitNotification";
 
 export interface ErrorNotificationProps {
 }
