@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "298b5cc2324f8ffd34c7c6f970659fcc",
+    "revision": "4559ca41eb6ed38e99640fc22db65849",
     "url": "/davit/realease-candidate/index.html"
   },
   {
-    "revision": "b426732e0215dc715b55",
+    "revision": "c3732d2ada91c7765a85",
     "url": "/davit/realease-candidate/static/css/main.92781620.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/davit/realease-candidate/static/js/2.bf6f282e.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "b426732e0215dc715b55",
-    "url": "/davit/realease-candidate/static/js/main.0161b905.chunk.js"
+    "revision": "c3732d2ada91c7765a85",
+    "url": "/davit/realease-candidate/static/js/main.0fb4edbf.chunk.js"
   },
   {
     "revision": "9722403e07a27c5c3461",
