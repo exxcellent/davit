@@ -1,4 +1,4 @@
-import { DataAndInstanceId } from "../../../../components/common/fragments/dropdowns/InstanceDropDown";
+import { DataAndInstanceId } from "../../../../components/atomic/dropdowns/InstanceDropDown";
 import { AbstractTO } from "../../../access/to/AbstractTO";
 import { GoTo, GoToTypes } from "../../../access/types/GoToType";
 

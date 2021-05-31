@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { DavitTableRowData } from "../../../../../components/common/fragments/DavitTable";
+import { DavitTableRowData } from "../../../../../components/organisms/table/DavitTable";
 import { ActorCTO } from "../../../../../dataAccess/access/cto/ActorCTO";
 import { DataCTO } from "../../../../../dataAccess/access/cto/DataCTO";
 import { ActionTO } from "../../../../../dataAccess/access/to/ActionTO";

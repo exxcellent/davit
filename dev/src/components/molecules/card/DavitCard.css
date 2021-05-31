@@ -1,0 +1,53 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color);
+    border-radius: var(--davit-border-radius);
+    box-shadow: 0 0 0 1px var(--color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
+    background-color: var(--background-color-header);
+    animation-duration: var(--animation-time);
+    animation-name: grow;
+    animation-timing-function: ease-in-out;
+    transition: width var(--animation-time), box-shadow var(--animation-time);
+    cursor: grab;
+}
+
+.card:active {
+    cursor: grabbing;
+}
+
+.activeFilter {
+    box-shadow: 0 0 0 3px var(--color-secondary);
+    transition: box-shadow var(--animation-time);
+}
+
+.cardHeader {
+    font-size: 0.8em;
+    font-family: Lato, Helvetica Neue, Arial, Helvetica, sans-serif;
+    text-align: center;
+    padding: 0.5em;
+    display: flex;
+    transition: color var(--animation-time), height var(--animation-time) width var(--animation-time);
+    color: white;
+}
+
+.carhHeaderText {
+    color: var(--text-color);
+    height: 2.5em;
+    transition: color var(--animation-time), height var(--animation-time);
+}
+
+.carhHeaderTextInvisible {
+    color: transparent;
+    height: 0.1px;
+}
+
+.cardHeaderButtons {
+    color: transparent;
+    transition: color var(--animation-time), height var(--animation-time);
+    padding: 0.2em;
+    width: 100%;
+    justify-content: end;
+}
