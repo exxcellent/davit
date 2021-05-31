@@ -2,7 +2,6 @@
 @import "Atomic.css";
 @import "Icons.css";
 @import "Flowchart.css";
-@import "Path.css";
 
 .davitGridContainer {
     display: grid;

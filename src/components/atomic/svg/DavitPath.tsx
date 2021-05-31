@@ -1,7 +1,8 @@
 import { motion, Point } from "framer-motion";
 import React, { FunctionComponent } from "react";
-import { GeometricalDataCTO } from "../../../../dataAccess/access/cto/GeometraicalDataCTO";
-import { Direction } from "../../../../dataAccess/access/to/DataRelationTO";
+import { GeometricalDataCTO } from "../../../dataAccess/access/cto/GeometraicalDataCTO";
+import { Direction } from "../../../dataAccess/access/to/DataRelationTO";
+import "./DavitPath.css";
 
 export interface Arrow {
     sourceGeometricalData: GeometricalDataCTO;
@@ -205,8 +206,7 @@ export const DavitPath: FunctionComponent<DavitPathProps> = (props) => {
     };
 
     const getMiddleValue = (val1: number, val2: number): number => {
-        const middleValue = (val2 - val1) / 2 + val1;
-        return middleValue;
+        return (val2 - val1) / 2 + val1;
     };
 
     const setOutPutOffset = (point: Point, offset: number, startDir: "LEFT" | " RIGHT"): Point => {

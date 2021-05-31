@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Arrow, ArrowType } from "../components/common/fragments/svg/DavitPath";
+import { Arrow, ArrowType } from "../components/atomic/svg/DavitPath";
 import { ChainCTO } from "../dataAccess/access/cto/ChainCTO";
 import { ChainlinkCTO } from "../dataAccess/access/cto/ChainlinkCTO";
 import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
