@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { DavitNoteForm } from "../forms/DavitNoteForm";
+import { DavitNoteForm } from "../../common/fragments/forms/DavitNoteForm";
 import { DavitModal } from "./DavitModal";
 
 interface DavitNoteModalProps {
