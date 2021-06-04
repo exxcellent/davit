@@ -27,3 +27,12 @@
     color: var(--color-error);
     border-color: var(--color-error);
 }
+
+@keyframes notificationSlideIn {
+    0% {
+        right: -30em;
+    }
+    100% {
+        right: 0;
+    }
+}
