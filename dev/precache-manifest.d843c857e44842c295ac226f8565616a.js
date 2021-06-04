@@ -1,11 +1,11 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "5726d5b8a422a6ee8082b7fa3bf8bebe",
+    "revision": "0c503c6f3f0c7286be85041190592b5d",
     "url": "/davit/dev/index.html"
   },
   {
-    "revision": "cfb624ca03d25dd3f806",
-    "url": "/davit/dev/static/css/main.63764819.chunk.css"
+    "revision": "448ed302120add40a7b7",
+    "url": "/davit/dev/static/css/main.46dbaa26.chunk.css"
   },
   {
     "revision": "c3fc125f071807cc37de",
@@ -16,7 +16,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/davit/dev/static/js/2.54feafee.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "cfb624ca03d25dd3f806",
+    "revision": "448ed302120add40a7b7",
     "url": "/davit/dev/static/js/main.ff7f6ee8.chunk.js"
   },
   {
