@@ -1,0 +1,20 @@
+.noteForm {
+    width: 30%;
+    background: var(--background-color);
+    border-radius: var(--border-radius);
+    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
+}
+
+.noteTextarea {
+    border-radius: var(--border-radius);
+    resize: none;
+    width: 100%;
+    font-size: var(--davit-font-size);
+    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.noteTextarea:focus {
+    outline: none;
+}

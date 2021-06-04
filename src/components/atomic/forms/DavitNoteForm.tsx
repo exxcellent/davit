@@ -2,6 +2,7 @@ import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useEnterHook, useEscHook } from "../../../utils/WindowUtil";
 import { FormDivider } from "../../organisms/controllPanel/presentation/fragments/edit/fragments/forms/fragments/FormDivider";
 import { FormLine } from "../../organisms/controllPanel/presentation/fragments/edit/fragments/forms/fragments/FormLine";
+import "./DavitNoteForm.css";
 import { FormBody } from "./fragments/FormBody";
 import { FormFooter } from "./fragments/FormFooter";
 import { FormHeader } from "./fragments/FormHeader";

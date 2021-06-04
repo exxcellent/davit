@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { GlobalActions } from "../../../slices/GlobalSlice";
 import { useEnterHook, useEscHook } from "../../../utils/WindowUtil";
 import { DavitTextInput } from "../textinput/DavitTextInput";
+import "./DavitDownloadForm.css";
 import { FormFooter } from "./fragments/FormFooter";
 import { FormHeader } from "./fragments/FormHeader";
 

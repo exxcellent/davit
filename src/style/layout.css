@@ -15,7 +15,7 @@
 
 .flex-start {
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: center;
 }
 
 .flex-center {
@@ -40,11 +40,28 @@
     flex-shrink: 1;
 }
 
+.content-space-around {
+    justify-content: space-around;
+}
+
+/*Size*/
+
+.width-fluid {
+    width: 100%;
+}
+
 /* border */
 .border {
     border-width: var(--border-size-medium);
     border-style: solid;
     border-color: var(--border-color);
+    border-radius: var(--border-radius);
+}
+
+.border-top {
+    border-top-width: var(--border-size-medium);
+    border-top-style: solid;
+    border-top-color: var(--border-color);
     border-radius: var(--border-radius);
 }
 
