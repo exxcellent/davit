@@ -46,6 +46,26 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
         );
     };
 
+    const getCardHeaderContent = (showOptions: boolean): JSX.Element => {
+        if (showOptions) {
+            return (<div className="cardButtonGroup">
+                {type !== "INSTANCE" &&
+                <DavitCardButton icon={DavitIcons.wrench}
+                                 onClick={() => onClickEdit(id, type)}
+                />}
+                <DavitCardButton
+                    icon={DavitIcons.filter}
+                    onClick={() => onClickFilter(id, type)}
+                    isActive={isActiveFilter}
+                />
+            </div>);
+        } else {
+            return (<div className="cardLabelWrapper">
+                <label>{initName}</label>
+            </div>);
+        }
+    };
+
     return (
         <div
             className={isActiveFilter ? "activeFilter card" : "card"}
@@ -57,37 +77,19 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
             onClick={props.onClick ? () => props.onClick!(props.id) : undefined}
             key={id}
         >
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    width: "100%",
-                }}
-            >
-                <div className={showMenu ? "cardHeaderButtons" : "cardHeader"}>
-                    <div className={showMenu ? "carhHeaderTextInvisible" : "cardHeaderText"}>{initName}</div>
-                    {showMenu && (
-                        <div style={{display: "flex", justifyContent: "flex-end"}}>
-                            {type !== "INSTANCE" &&
-                            <DavitCardButton icon={DavitIcons.wrench}
-                                             onClick={() => onClickEdit(id, type)}
-                            />}
-                            <DavitCardButton
-                                icon={DavitIcons.filter}
-                                onClick={() => onClickFilter(id, type)}
-                                isActive={isActiveFilter}
-                            />
-                        </div>
-                    )}
-                </div>
+            <div className="cardHeader">
+
+                {getCardHeaderContent(showMenu)}
+
                 <DavitShowMoreButton className={"button-tiny"}
                                      onClick={() => {
                                          setShowMenu(!showMenu);
                                      }}
                 />
             </div>
+
             {instances && (
-                <div style={{display: "flex", alignItems: "start"}}>
+                <div className="cardInstanceWrapper">
                     {instances.map((instance, index) =>
                         createInstances(
                             index,
@@ -103,7 +105,9 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
                     )}
                 </div>
             )}
+
             {(instances === undefined || instances?.length === 0) && dataFragments.map(createViewFragment)}
+
         </div>
     );
 };

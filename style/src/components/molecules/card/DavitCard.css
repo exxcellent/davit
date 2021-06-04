@@ -12,6 +12,13 @@
     animation-timing-function: ease-in-out;
     transition: width var(--animation-time), box-shadow var(--animation-time);
     cursor: grab;
+    width: 100%;
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .card:active {
@@ -23,31 +30,24 @@
     transition: box-shadow var(--animation-time);
 }
 
-.cardHeader {
+.cardLabelWrapper {
     font-size: 0.8em;
-    font-family: Lato, Helvetica Neue, Arial, Helvetica, sans-serif;
     text-align: center;
-    padding: 0.5em;
+    padding: var(--spacing-small);
     display: flex;
     transition: color var(--animation-time), height var(--animation-time) width var(--animation-time);
-    color: white;
-}
-
-.carhHeaderText {
-    color: var(--text-color);
-    height: 2.5em;
-    transition: color var(--animation-time), height var(--animation-time);
-}
-
-.carhHeaderTextInvisible {
-    color: transparent;
-    height: 0.1px;
-}
-
-.cardHeaderButtons {
-    color: transparent;
-    transition: color var(--animation-time), height var(--animation-time);
-    padding: 0.2em;
     width: 100%;
+    justify-content: start;
+}
+
+.cardButtonGroup {
+    width: 100%;
+    display: flex;
     justify-content: end;
+}
+
+.cardInstanceWrapper {
+    display: flex;
+    align-items: start;
+    width: 100%;
 }

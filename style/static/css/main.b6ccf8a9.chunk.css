@@ -301,24 +301,6 @@
     src: url(../../static/media/DINOT-Light.d41d8cd9.ttf) format('truetype');
 }
 
-@-webkit-keyframes notificationSlideIn {
-    0% {
-        right: -30em;
-    }
-    100% {
-        right: 0;
-    }
-}
-
-@keyframes notificationSlideIn {
-    0% {
-        right: -30em;
-    }
-    100% {
-        right: 0;
-    }
-}
-
 @-webkit-keyframes appearTabGroup {
     0% {
         color: transparent;
@@ -730,4 +712,4 @@ table {
 }
 
 
-/*# sourceMappingURL=main.8b84dcb8.chunk.css.map*/
+/*# sourceMappingURL=main.b6ccf8a9.chunk.css.map*/
