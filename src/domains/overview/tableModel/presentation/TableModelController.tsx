@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { DavitTable } from "../../../../components/common/fragments/DavitTable";
+import { DavitTable } from "../../../../components/organisms/table/DavitTable";
 import { ChainlinkCTO } from "../../../../dataAccess/access/cto/ChainlinkCTO";
 import { SequenceCTO } from "../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../dataAccess/access/cto/SequenceStepCTO";

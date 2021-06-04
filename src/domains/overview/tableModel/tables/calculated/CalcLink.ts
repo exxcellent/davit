@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { DavitTableRowData } from "../../../../../components/common/fragments/DavitTable";
+import { DavitTableRowData } from "../../../../../components/organisms/table/DavitTable";
 import { CalcChain, CalcChainLink } from "../../../../../services/SequenceChainService";
 import { SequenceModelActions, sequenceModelSelectors } from "../../../../../slices/SequenceModelSlice";
 
