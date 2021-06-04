@@ -14,7 +14,7 @@
     min-height: var(--flowchart-element-min-height);
     min-width: var(--flowchart-element-min-width);
     max-width: var(--flowchart-element-max-width);
-    border-radius: var(--davit-border-radius);
+    border-radius: var(--border-radius);
     padding: var(--flowchart-padding);
     text-align: center;
     box-shadow: 0 0 0 1px var(--color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);

@@ -42,6 +42,20 @@
 
 /* border */
 .border {
-    border: var(--davit-border-size-medium) solid var(--color-secondary);
-    border-radius: var(--davit-border-radius);
+    border-width: var(--border-size-medium);
+    border-style: solid;
+    border-color: var(--border-color);
+    border-radius: var(--border-radius);
+}
+
+.border .medium {
+    border-width: var(--border-size-medium);
+}
+
+.border .small {
+    border-width: var(--border-size-small);
+}
+
+.border .big {
+    border-width: var(--border-size-big);
 }

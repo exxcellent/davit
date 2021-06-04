@@ -1,7 +1,7 @@
 .react-select-container {
     min-width: 15rem;
-    border: var(--davit-border-size-medium) solid var(--color-secondary);
-    border-radius: var(--davit-border-radius);
+    border: var(--border-size-medium) solid var(--color-secondary);
+    border-radius: var(--border-radius);
     background-color: transparent;
     color: var(--text-color);
 }
@@ -12,7 +12,7 @@
 }
 
 .react-select__control:hover {
-    background-color: var(--davit-hover-color) !important;
+    background-color: var(--hover-color) !important;
     cursor: pointer;
 }
 
@@ -27,8 +27,8 @@
 
 .react-select__menu-list {
     background-color: var(--background-color);
-    border: var(--color-secondary) solid var(--davit-border-size-medium);
-    border-radius: var(--davit-border-radius);
+    border: var(--color-secondary) solid var(--border-size-medium);
+    border-radius: var(--border-radius);
     position: fixed !important;
     z-index: 99 !important;
     max-width: fit-content;
@@ -53,8 +53,8 @@
 
 .react-select-label-container {
     min-width: 9rem;
-    border: var(--davit-border-size-medium) solid var(--color-secondary);
-    border-radius: var(--davit-border-radius);
+    border: var(--border-size-medium) solid var(--color-secondary);
+    border-radius: var(--border-radius);
     background-color: transparent;
     color: var(--text-color);
 }
@@ -66,7 +66,7 @@
 
 .react-select-label__control:hover {
     border: none !important;
-    background-color: var(--davit-hover-color) !important;
+    background-color: var(--hover-color) !important;
     cursor: pointer;
 }
 
@@ -76,8 +76,8 @@
 
 .react-select-label__menu-list {
     background-color: var(--background-color);
-    border: var(--color-secondary) solid var(--davit-border-size-medium);
-    border-radius: var(--davit-border-radius);
+    border: var(--color-secondary) solid var(--border-size-medium);
+    border-radius: var(--border-radius);
     position: fixed !important;
     z-index: 99 !important;
     max-width: fit-content;

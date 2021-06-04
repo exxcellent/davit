@@ -32,7 +32,7 @@
     --text-font-family: "DIN OT", Helvetica, Arial, sans-serif;
 
     --spacing-small: 10px;
-    --spacing-medium: 10px;
+    --spacing-medium: 15px;
     --spacing-large: 22px;
 
     /* primary */
@@ -47,12 +47,15 @@
     --tertiary-color: var(--color-grey);
     --tertiary-text-color: var(--color-dark);
 
+    /*TODO: clean up*/
     /*    from Atomic.css*/
-    --davit-border-radius: 0.2rem;
 
-    --davit-border-size-small: 0.2rem;
-    --davit-border-size-medium: 0.15rem;
-    --davit-border-size-larg: 0.5rem;
+    /* border */
+    --border-radius: 0.2rem;
+    --border-color: var(--color-secondary);
+    --border-size-small: 0.2rem;
+    --border-size-medium: 0.15rem;
+    --border-size-big: 0.5rem;
 
     --davit-padding-top-bottom: 0.7em;
     --davit-padding-right-left: 1.2em;
@@ -62,7 +65,7 @@
     --davit-font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
     --davit-font-size: 16px;
 
-    --davit-hover-color: rgba(0, 0, 0, .5);
+    --hover-color: rgba(0, 0, 0, .5);
 
     --davit-button-tiny-height: 1rem;
     --davit-button-tiny-width: 1rem;

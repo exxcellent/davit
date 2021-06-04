@@ -1,0 +1,10 @@
+.deleteButton {
+    background-color: transparent;
+    color: var(--davit-color-warning);
+    border-color: var(--davit-color-warning) !important;
+}
+
+.deleteButton.fluid {
+    width: 8em;
+    animation: growDeleteButton var(--animation-time) ease-in-out 0s;
+}
