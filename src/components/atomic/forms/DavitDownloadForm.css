@@ -2,5 +2,4 @@
     width: 30%;
     background: var(--background-color);
     border-radius: var(--border-radius);
-    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
 }
