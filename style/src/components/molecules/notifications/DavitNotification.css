@@ -13,17 +13,17 @@
     animation: notificationSlideIn var(--animation-time) ease-in-out 0s;
 }
 
-.info {
+.notificationCard .info {
     color: var(--color-white);
     border-color: var(--color-white);
 }
 
-.warning {
+.notificationCard .warning {
     color: var(--color-warning);
     border-color: var(--color-warning);
 }
 
-.error {
+.notificationCard .error {
     color: var(--color-error);
     border-color: var(--color-error);
 }
