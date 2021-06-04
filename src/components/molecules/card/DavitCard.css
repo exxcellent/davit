@@ -37,17 +37,17 @@
     display: flex;
     transition: color var(--animation-time), height var(--animation-time) width var(--animation-time);
     width: 100%;
-    justify-content: start;
+    justify-content: flex-start;
 }
 
 .cardButtonGroup {
     width: 100%;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 .cardInstanceWrapper {
     display: flex;
-    align-items: start;
+    align-items: flex-start;
     width: 100%;
 }
