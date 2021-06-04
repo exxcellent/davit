@@ -1,15 +1,9 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DavitCard, DavitCardProps } from "../../components/common/fragments/DavitCard";
-import { DnDBox, DnDBoxElement, DnDBoxType } from "../../components/common/fragments/DnDBox";
-import {
-    Arrow,
-    ArrowType,
-    DavitPathHead,
-    DavitPathProps,
-    DavitPathTypes
-} from "../../components/common/fragments/svg/DavitPath";
-import { ViewPlaceholder } from "../../components/common/fragments/ViewPlaceholder";
+import { Arrow, ArrowType, DavitPathHead, DavitPathProps, DavitPathTypes } from "../../components/atomic/svg/DavitPath";
+import { ViewPlaceholder } from "../../components/layout/ViewPlaceholder";
+import { DavitCard, DavitCardProps } from "../../components/molecules/card/DavitCard";
+import { DnDBox, DnDBoxElement, DnDBoxType } from "../../components/organisms/dndBox/DnDBox";
 import { ActorCTO } from "../../dataAccess/access/cto/ActorCTO";
 import { DataCTO } from "../../dataAccess/access/cto/DataCTO";
 import { DataSetupCTO } from "../../dataAccess/access/cto/DataSetupCTO";
@@ -49,9 +43,9 @@ export const ActorModelController: FunctionComponent<ActorModelControllerProps> 
         return (
             <>
                 {toDnDElements.length === 0 &&
-                <ViewPlaceholder text={"Create a new actor"}
-                                 className={DnDBoxType.actor.toString()}
-                />}
+                <div className="actorModel">
+                    <ViewPlaceholder text={"Create a new actor"} />
+                </div>}
                 {toDnDElements.length > 0 && <DnDBox
                     onPositionUpdate={onPositionUpdate}
                     toDnDElements={toDnDElements}

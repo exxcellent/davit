@@ -1,4 +1,4 @@
-import { DataAndInstanceId } from "../../../components/common/fragments/dropdowns/InstanceDropDown";
+import { DataAndInstanceId } from "../../../components/atomic/dropdowns/InstanceDropDown";
 import { DEFAULT_PROJECT_NAME } from "../../../DavitConstants";
 import { ActionTO } from "../../access/to/ActionTO";
 import { ActorTO } from "../../access/to/ActorTO";
