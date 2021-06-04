@@ -23,7 +23,7 @@ export const DavitButton: FunctionComponent<DavitButtonProps> = (props) => {
                 style={style}
         >
             {iconName && iconLeft && <FontAwesomeIcon icon={iconName} />}
-            {label && <label className={"padding"}>{label}</label>}
+            {label && <label>{label}</label>}
             {iconName && !iconLeft && <FontAwesomeIcon icon={iconName} />}
         </button>
     );

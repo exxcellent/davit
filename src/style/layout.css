@@ -39,3 +39,9 @@
 .flex-shrink {
     flex-shrink: 1;
 }
+
+/* border */
+.border {
+    border: var(--davit-border-size-medium) solid var(--color-secondary);
+    border-radius: var(--davit-border-radius);
+}
