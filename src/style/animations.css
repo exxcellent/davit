@@ -1,12 +1,3 @@
-@keyframes notificationSlideIn {
-    0% {
-        right: -30em;
-    }
-    100% {
-        right: 0;
-    }
-}
-
 @keyframes appearTabGroup {
     0% {
         color: transparent;
