@@ -360,7 +360,8 @@ const useViewModel = () => {
                     targetHeight: arrowToDraw.targetGeometricalData.geometricalData.height,
                     targetWidth: arrowToDraw.targetGeometricalData.geometricalData.width,
                     stroked: arrowToDraw.type === ArrowType.TRIGGER,
-                    lineColor: arrowToDraw.type === ArrowType.SEND ? "var(--color-exxcellent-blue)" : "black",
+                    // TODO: this is a bad place to set css color variable!
+                    lineColor: arrowToDraw.type === ArrowType.SEND ? "var(--color-blue)" : "var(--color-black)",
                 });
             });
             return arrowProps;

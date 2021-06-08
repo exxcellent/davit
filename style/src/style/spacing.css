@@ -92,6 +92,10 @@
 
 /* margin */
 
+.margin-tiny, .margin-t {
+    margin: var(--spacing-tiny);
+}
+
 .margin-small, .margin-s {
     margin: var(--spacing-small);
 }
