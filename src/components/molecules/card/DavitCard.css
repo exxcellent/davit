@@ -33,13 +33,13 @@
 .cardLabelWrapper {
     font-size: 0.8em;
     text-align: center;
-    padding: var(--spacing-small);
     display: flex;
     transition: color var(--animation-time), height var(--animation-time) width var(--animation-time);
     width: 100%;
     justify-content: flex-start;
 }
 
+/*TODO: use instead spacing variables*/
 .cardButtonGroup {
     width: 100%;
     display: flex;

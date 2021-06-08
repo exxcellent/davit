@@ -48,19 +48,24 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
 
     const getCardHeaderContent = (showOptions: boolean): JSX.Element => {
         if (showOptions) {
-            return (<div className="cardButtonGroup">
-                {type !== "INSTANCE" &&
-                <DavitCardButton icon={DavitIcons.wrench}
-                                 onClick={() => onClickEdit(id, type)}
-                />}
-                <DavitCardButton
-                    icon={DavitIcons.filter}
-                    onClick={() => onClickFilter(id, type)}
-                    isActive={isActiveFilter}
-                />
-            </div>);
+            return (
+                <div className="cardButtonGroup padding-tiny">
+                    {type !== "INSTANCE" &&
+                    <div className="margin-tiny">
+                        <DavitCardButton icon={DavitIcons.wrench}
+                                         onClick={() => onClickEdit(id, type)}
+                        />
+                    </div>}
+                    <div className="margin-tiny">
+                        <DavitCardButton
+                            icon={DavitIcons.filter}
+                            onClick={() => onClickFilter(id, type)}
+                            isActive={isActiveFilter}
+                        />
+                    </div>
+                </div>);
         } else {
-            return (<div className="cardLabelWrapper">
+            return (<div className="cardLabelWrapper padding-small">
                 <label>{initName}</label>
             </div>);
         }

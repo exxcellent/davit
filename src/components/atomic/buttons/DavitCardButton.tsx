@@ -1,6 +1,6 @@
 import { IconDefinition } from "@fortawesome/fontawesome-common-types";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { FunctionComponent } from "react";
+import { DavitButton } from "./DavitButton";
 
 interface DavitCardButtonProps {
     onClick: () => void;
@@ -13,12 +13,12 @@ export const DavitCardButton: FunctionComponent<DavitCardButtonProps> = (props) 
     const {onClick, disable, icon, isActive} = props;
 
     return (
-        <button
+        <DavitButton
             onClick={onClick}
-            className={"button-small" + (isActive ? " activeButton" : "") + (disable ? " disabled" : "")}
-            disabled={disable}
+            className={`padding-tiny border ${isActive ? "activeButton" : ""}`}
+            disable={disable}
+            iconName={icon}
         >
-            <FontAwesomeIcon icon={icon} />
-        </button>
+        </DavitButton>
     );
 };
