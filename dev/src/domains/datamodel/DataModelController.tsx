@@ -26,11 +26,9 @@ import { ActorDataState } from "../../viewDataTypes/ActorDataState";
 import { ViewFragmentProps } from "../../viewDataTypes/ViewFragment";
 
 interface DataModelControllerProps {
-    fullScreen?: boolean;
 }
 
-export const DataModelController: FunctionComponent<DataModelControllerProps> = (props) => {
-    const {fullScreen} = props;
+export const DataModelController: FunctionComponent<DataModelControllerProps> = () => {
 
     const {
         onPositionUpdate,
@@ -53,7 +51,6 @@ export const DataModelController: FunctionComponent<DataModelControllerProps> = 
                         onPositionUpdate={onPositionUpdate}
                         toDnDElements={toDnDElements}
                         svgElements={getRelations()}
-                        fullScreen={fullScreen}
                         zoomIn={zoomIn}
                         zoomOut={zoomOut}
                         zoom={dataZoomFactor}

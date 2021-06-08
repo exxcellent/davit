@@ -1,5 +1,9 @@
 /* padding */
 
+.padding-tiny, .padding-t {
+    padding: var(--spacing-tiny);
+}
+
 .padding-small, .padding-s {
     padding: var(--spacing-small);
 }
