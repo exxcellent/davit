@@ -9,7 +9,7 @@
     grid-template-areas:
     "leftBar header header"
     "leftBar actorArea seqModel"
-    "leftBar dataModel seqTabel";
+    "leftBar dataArea seqTabel";
     height: 100vh;
     max-height: 100vh;
     overflow: hidden;
@@ -43,15 +43,6 @@
     border-image: linear-gradient(to bottom, var(--background-color-shadow), var(--background-color)) 1 1 100%;
 }
 
-.actorModelFullscreen {
-    border: 1px solid black;
-    background-color: var(--background-color);
-}
-
-.dataModelFullscreen {
-    border: 1px solid black;
-    background-color: var(--background-color);
-}
 
 .actorModel {
     grid-area: actorArea;
@@ -67,7 +58,7 @@
 }
 
 .dataModel {
-    grid-area: dataModel;
+    grid-area: dataArea;
     border-style: solid;
     border-width: 2px 0 0 0;
     border-image: linear-gradient(to right,
@@ -172,6 +163,16 @@
     margin: 10px;
 }
 
+/* Full screen */
+.actorModelFullscreen {
+    border: 1px solid black;
+    background-color: var(--background-color);
+}
+
+.dataModelFullscreen {
+    border: 1px solid black;
+    background-color: var(--background-color);
+}
 
 /* -------------------------------------------- Optionfield -------------------------------------------- */
 
@@ -225,24 +226,6 @@
 
 .pLeft1 {
     padding-left: 0.5em;
-}
-
-/* -------------------------------------------- Sidepanel -------------------------------------------- */
-
-.verticalLabel {
-    writing-mode: tb-rl;
-    -webkit-transform: rotate(180deg);
-    -moz-transform: rotate(180deg);
-    -o-transform: rotate(180deg);
-    -ms-transform: rotate(180deg);
-    transform: rotate(180deg);
-    text-align: center;
-    font-size: 3em;
-    font-family: ArialRoundedMTBold, "Arial Rounded MT Bold", serif;
-    margin-left: 13px;
-    margin-top: 0.5em;
-    margin-bottom: 1em;
-    color: #0060a9;
 }
 
 /* -------------------------------------------- Control panel -------------------------------------------- */

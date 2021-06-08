@@ -5,6 +5,7 @@ import { DAVIT_VERISON } from "../../../DavitConstants";
 import { EditActions, editSelectors, Mode } from "../../../slices/EditSlice";
 import { DavitSidePanelButton } from "../../atomic/buttons/DavitSidePanelButton";
 import { DavitIcons } from "../../atomic/icons/IconSet";
+import "./SidePanel.css";
 
 export interface SidePanelProps {
 }
