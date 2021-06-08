@@ -1,5 +1,9 @@
 /* padding */
 
+.padding-tiny, .padding-t {
+    padding: var(--spacing-tiny);
+}
+
 .padding-small, .padding-s {
     padding: var(--spacing-small);
 }
@@ -783,4 +787,4 @@ table {
 }
 
 
-/*# sourceMappingURL=main.0cdb8f2f.chunk.css.map*/
+/*# sourceMappingURL=main.a5bc1e89.chunk.css.map*/

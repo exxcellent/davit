@@ -29,3 +29,8 @@ button.button-tiny {
     justify-content: center;
     align-items: center;
 }
+
+button.activeButton {
+    background-color: var(--border-color);
+    border-color: var(--primary-text-color);
+}
