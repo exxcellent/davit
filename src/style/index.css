@@ -28,9 +28,12 @@
     --color-light--lighter: #F7F7F7;
     --color-white: #FFFFFF;
 
+    --color-hover: rgba(0, 0, 0, .5);
+
     --text-size: 100%;
     --text-font-family: "DIN OT", Helvetica, Arial, sans-serif;
 
+    --spacing-tiny: 5px;
     --spacing-small: 10px;
     --spacing-medium: 15px;
     --spacing-large: 22px;
@@ -47,36 +50,17 @@
     --tertiary-color: var(--color-grey);
     --tertiary-text-color: var(--color-dark);
 
-    /*TODO: clean up*/
-    /*    from Atomic.css*/
 
     /* border */
     --border-radius: 0.2rem;
     --border-color: var(--color-secondary);
-    --border-size-small: 0.2rem;
-    --border-size-medium: 0.15rem;
+    --border-size-small: 1px;
+    --border-size-medium: 2px;
     --border-size-big: 0.5rem;
 
 
     /*TODO: hier gehts weiiiiiiter!*/
-    --davit-padding-right-left: 1.2em;
 
-    --davit-margin-top-bottom: 1rem;
-
-    --davit-font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    --davit-font-size: 16px;
-
-    --hover-color: rgba(0, 0, 0, .5);
-
-    --davit-button-tiny-height: 1rem;
-    --davit-button-tiny-width: 1rem;
-    --davit-button-tiny-margin-top-bottom: 0.1rem;
-    --davit-button-tiny-margin-left-right: 0.3rem;
-
-    --davit-button-small-height: 1.8rem;
-    --davit-button-small-width: 2rem;
-    --davit-button-small-margin-top-bottom: 0.1rem;
-    --davit-button-small-margin-left-right: 0.3rem;
 
     --davit-button-sidepanel-height: 3.5rem;
     --davit-button-sidepanel-width: 100%;

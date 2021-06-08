@@ -8,7 +8,6 @@
     border-radius: var(--border-radius);
     resize: none;
     width: 80%;
-    font-size: var(--davit-font-size);
     background-color: var(--background-color);
     color: var(--text-color);
 }

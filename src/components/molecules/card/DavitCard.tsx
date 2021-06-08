@@ -81,11 +81,13 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
 
                 {getCardHeaderContent(showMenu)}
 
-                <DavitShowMoreButton className={"button-tiny"}
-                                     onClick={() => {
-                                         setShowMenu(!showMenu);
-                                     }}
-                />
+                <div className="margin-tiny">
+                    <DavitShowMoreButton className={"button-tiny"}
+                                         onClick={() => {
+                                             setShowMenu(!showMenu);
+                                         }}
+                    />
+                </div>
             </div>
 
             {instances && (

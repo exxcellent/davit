@@ -221,47 +221,12 @@
     align-items: center;
 }
 
-.button-tiny {
-    width: var(--davit-button-tiny-width);
-    height: var(--davit-button-tiny-height);
-    padding: 0;
-    margin: var(--davit-button-tiny-margin-top-bottom) var(--davit-button-tiny-margin-left-right);
-    box-shadow: 0 0 0 1px var(--color-border);
-    border: var(--border-size-small) solid transparent;
-    color: var(--color-border);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent;
-}
 
 .disabled:hover {
     background-color: transparent;
     transition: background-color 0.4s;
     color: black;
     cursor: default;
-}
-
-.button-small {
-    animation-name: growWidth;
-    animation-duration: var(--animation-time);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: var(--davit-button-small-width);
-    height: var(--davit-button-small-height);
-    margin: var(--davit-button-tiny-margin-top-bottom) var(--davit-button-tiny-margin-left-right);
-    background-color: transparent;
-}
-
-.activeButton {
-    background-color: var(--color-secondary);
-}
-
-.button-small:hover {
-    background-color: var(--color-secondary);
-    transition: background-color 0.4s;
-    color: black;
 }
 
 .pLeft1 {
