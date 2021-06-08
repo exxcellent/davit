@@ -365,7 +365,6 @@
     width: 100%;
 }
 
-
 #innerCard {
     width: 100px;
     height: 30px;
@@ -377,10 +376,7 @@
     overflow: hidden;
 }
 
-
 /* -------------------------------------------- Actor -------------------------------------------- */
-
-
 .viewFragment {
     display: flex;
     justify-content: center;
@@ -553,16 +549,6 @@
 .sidePanelButton.active {
     background-color: var(--color-secondary);
     transition: background-color var(--animation-time);
-}
-
-
-.labelField {
-    color: var(--text-color);
-    background-color: transparent;
-    text-align: center;
-    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
-    min-width: 8em;
-    border-radius: 0;
 }
 
 .headerGrid {

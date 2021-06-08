@@ -1,9 +1,4 @@
 .inputLabel {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-right: var(--davit-padding-right-left);
-    padding-left: var(--davit-padding-right-left);
     border-bottom-left-radius: var(--border-radius);
     border-top-left-radius: var(--border-radius);
     border: var(--border-size-medium) solid var(--color-secondary);
@@ -15,7 +10,6 @@
 }
 
 input {
-    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
     border-radius: var(--border-radius);
     border-color: var(--color-secondary);
     background-color: transparent;
