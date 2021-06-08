@@ -15,6 +15,7 @@ import { sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
 import { DavitUtil } from "../../../utils/DavitUtil";
 import { TabFragment } from "../tableModel/fragments/TabFragment";
 import { TabGroupFragment } from "../tableModel/fragments/TabGroupFragment";
+import "./FlowChart.css";
 import { FlowChartlabel } from "./fragments/FlowChartlabel";
 
 interface FlowChartControllerProps {
