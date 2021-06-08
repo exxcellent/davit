@@ -9,7 +9,7 @@
     resize: none;
     width: 80%;
     background-color: var(--background-color);
-    color: var(--text-color);
+    color: var(--primary-text-color);
 }
 
 .noteTextarea:focus {

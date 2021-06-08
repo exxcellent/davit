@@ -1,7 +1,7 @@
 .deleteButton {
     background-color: transparent;
-    color: var(--davit-color-warning);
-    border-color: var(--davit-color-warning) !important;
+    color: var(--color-error);
+    border-color: var(--color-error) !important;
 }
 
 .deleteButton.fluid {

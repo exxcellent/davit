@@ -3,9 +3,9 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: var(--text-color);
+    color: var(--primary-text-color);
     border-radius: var(--border-radius);
-    box-shadow: 0 0 0 1px var(--color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
+    box-shadow: 0 0 0 1px var(--border-color), 0 0 5px 5px rgba(0, 0, 0, 0.199);
     background-color: var(--background-color-header);
     animation-duration: var(--animation-time);
     animation-name: grow;

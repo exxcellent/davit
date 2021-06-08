@@ -11,7 +11,7 @@
 }
 
 button {
-    color: var(--text-color);
+    color: var(--primary-text-color);
     background-color: transparent;
     text-align: center;
 }
@@ -25,7 +25,6 @@ button:hover {
 button.button-tiny {
     width: var(--davit-button-tiny-width);
     height: var(--davit-button-tiny-height);
-    border: var(--border-size-small) solid var(--color-border);
     display: flex;
     justify-content: center;
     align-items: center;

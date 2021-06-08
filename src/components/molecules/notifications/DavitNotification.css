@@ -3,7 +3,7 @@
     min-height: 6em;
     background-color: var(--background-color);
     border-radius: var(--border-radius);
-    border: var(--border-size-medium) solid var(--color-border);
+    border: var(--border-size-medium) solid var(--border-color);
     display: flex;
     align-items: center;
     z-index: 99;

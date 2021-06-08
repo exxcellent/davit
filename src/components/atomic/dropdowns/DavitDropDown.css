@@ -1,9 +1,9 @@
 .react-select-container {
     min-width: 15rem;
-    border: var(--border-size-medium) solid var(--color-secondary);
+    border: var(--border-size-medium) solid var(--border-color);
     border-radius: var(--border-radius);
     background-color: transparent;
-    color: var(--text-color);
+    color: var(--primary-text-color);
 }
 
 .react-select__control {
@@ -17,7 +17,7 @@
 }
 
 .react-select__indicator {
-    color: var(--text-color) !important;
+    color: var(--primary-text-color) !important;
 }
 
 .react-select__menu {
@@ -27,7 +27,7 @@
 
 .react-select__menu-list {
     background-color: var(--background-color);
-    border: var(--color-secondary) solid var(--border-size-medium);
+    border: var(--border-color) solid var(--border-size-medium);
     border-radius: var(--border-radius);
     position: fixed !important;
     z-index: 99 !important;
@@ -42,21 +42,21 @@
 
 .react-select__option.react-select__option--is-selected {
     background-color: var(--color-secondary);
-    color: var(--text-color);
+    color: var(--primary-text-color);
 }
 
 .react-select-container .react-select__single-value, .react-select__input {
-    color: var(--text-color);
+    color: var(--primary-text-color);
 }
 
 /*======================================== label dropdown ========================================*/
 
 .react-select-label-container {
     min-width: 9rem;
-    border: var(--border-size-medium) solid var(--color-secondary);
+    border: var(--border-size-medium) solid var(--border-color);
     border-radius: var(--border-radius);
     background-color: transparent;
-    color: var(--text-color);
+    color: var(--primary-text-color);
 }
 
 .react-select-label__control {
@@ -71,12 +71,12 @@
 }
 
 .react-select-label__indicator {
-    color: var(--text-color) !important;
+    color: var(--primary-text-color) !important;
 }
 
 .react-select-label__menu-list {
     background-color: var(--background-color);
-    border: var(--color-secondary) solid var(--border-size-medium);
+    border: var(--border-color) solid var(--border-size-medium);
     border-radius: var(--border-radius);
     position: fixed !important;
     z-index: 99 !important;
@@ -91,11 +91,11 @@
 
 .react-select-label__option.react-select-label__option--is-selected {
     background-color: var(--color-secondary);
-    color: var(--text-color);
+    color: var(--primary-text-color);
 }
 
 .react-select-label-container .react-select-label__single-value, .react-select-label__input {
-    color: var(--text-color);
+    color: var(--primary-text-color);
 }
 
 .react-select-label__value-container.react-select-label__value-container--has-value {

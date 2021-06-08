@@ -52,7 +52,6 @@
 
 /* border */
 .border {
-    border-width: var(--border-size-medium);
     border-style: solid;
     border-color: var(--border-color);
     border-radius: var(--border-radius);
@@ -65,14 +64,14 @@
     border-radius: var(--border-radius);
 }
 
-.border .medium {
-    border-width: var(--border-size-medium);
-}
-
-.border .small {
+.border-small {
     border-width: var(--border-size-small);
 }
 
-.border .big {
+.border-medium {
+    border-width: var(--border-size-medium);
+}
+
+.border-big {
     border-width: var(--border-size-big);
 }
