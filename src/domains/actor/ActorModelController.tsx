@@ -24,11 +24,9 @@ import { ActorDataState } from "../../viewDataTypes/ActorDataState";
 import { ViewFragmentProps } from "../../viewDataTypes/ViewFragment";
 
 interface ActorModelControllerProps {
-    fullScreen?: boolean;
 }
 
-export const ActorModelController: FunctionComponent<ActorModelControllerProps> = (props) => {
-        const {fullScreen} = props;
+export const ActorModelController: FunctionComponent<ActorModelControllerProps> = () => {
 
         const {
             onPositionUpdate,
@@ -50,7 +48,6 @@ export const ActorModelController: FunctionComponent<ActorModelControllerProps> 
                     onPositionUpdate={onPositionUpdate}
                     toDnDElements={toDnDElements}
                     svgElements={getArrows()}
-                    fullScreen={fullScreen}
                     zoomIn={zoomIn}
                     zoomOut={zoomOut}
                     zoom={actorZoom}

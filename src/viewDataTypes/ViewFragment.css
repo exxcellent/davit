@@ -1,5 +1,6 @@
 .viewFragment {
     max-width: 15em;
+    border-top: 1px solid var(--primary-text-color);
 }
 
 .actorData {
@@ -7,7 +8,7 @@
     height: 100%;
 }
 
-.actorData .NEW {
+.actorData.NEW {
     background-color: var(--data-add-color);
     color: var(--data-text-color);
 }

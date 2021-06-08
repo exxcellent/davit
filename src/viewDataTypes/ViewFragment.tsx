@@ -9,7 +9,7 @@ export interface ViewFragmentProps {
 }
 
 const getClassnameForViewFragmentState = (state: ActorDataState) => {
-    return "actorData flex flex-center" + state;
+    return `actorData ${state} flex flex-center`;
 };
 
 export const createViewFragment = (actorDataFragmentProps: ViewFragmentProps, key: number) => {
