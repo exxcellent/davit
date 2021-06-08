@@ -253,8 +253,17 @@
 
 /*Size*/
 
-.flex .width-fluid {
+.width-fluid {
     width: 100%;
+}
+
+.height-fluid {
+    height: 100%;
+}
+
+.fluid {
+    width: 100%;
+    height: 100%;
 }
 
 /* border */
@@ -787,4 +796,4 @@ table {
 }
 
 
-/*# sourceMappingURL=main.a5bc1e89.chunk.css.map*/
+/*# sourceMappingURL=main.47dea634.chunk.css.map*/

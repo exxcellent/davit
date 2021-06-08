@@ -1,0 +1,7 @@
+.zoomLabel {
+    color: var(--primary-text-color);
+    font-size: 0.7em;
+    animation-name: disapear;
+    animation-duration: 3s;
+    opacity: 0;
+}
