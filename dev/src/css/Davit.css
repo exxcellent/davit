@@ -1,7 +1,4 @@
-@import "Colors.css";
-@import "Atomic.css";
 @import "Icons.css";
-@import "Flowchart.css";
 
 .davitGridContainer {
     display: grid;
@@ -31,14 +28,14 @@
 .leftPanel {
     grid-area: leftBar;
     justify-self: center;
-    background-color: var(--background-color-slidebar);
+    background-color: var(--color-black);
     width: 100%;
 }
 
 .controllerHeader {
     grid-area: header;
     background-color: var(--background-color-header);
-    color: var(--text-color);
+    color: var(--primary-text-color);
     border-style: solid;
     border-width: 0 0 5px 0;
     border-image: linear-gradient(to bottom, var(--background-color-shadow), var(--background-color)) 1 1 100%;
@@ -60,10 +57,10 @@
     border-width: 0 2px 2px 0;
     border-image: linear-gradient(to bottom,
     transparent,
-    var(--color-primary),
-    var(--color-primary),
-    var(--color-primary),
-    var(--color-primary),
+    var(--2x2-border-color),
+    var(--2x2-border-color),
+    var(--2x2-border-color),
+    var(--2x2-border-color),
     transparent) 0 100%;
 }
 
@@ -79,10 +76,10 @@
     border-width: 2px 0 0 0;
     border-image: linear-gradient(to right,
     transparent,
-    var(--color-primary),
-    var(--color-primary),
-    var(--color-primary),
-    var(--color-primary),
+    var(--2x2-border-color),
+    var(--2x2-border-color),
+    var(--2x2-border-color),
+    var(--2x2-border-color),
     transparent) 1 1 100%;
 }
 
@@ -92,10 +89,10 @@
     overflow: hidden;
     border-image: linear-gradient(to right,
     transparent,
-    var(--color-primary),
-    var(--color-primary),
-    var(--color-primary),
-    var(--color-primary),
+    var(--2x2-border-color),
+    var(--2x2-border-color),
+    var(--2x2-border-color),
+    var(--2x2-border-color),
     transparent) 1 1 100%;
     border-style: solid;
     border-width: 0 0 2px 0;
@@ -118,28 +115,28 @@
 .flowChartLabelLeft {
     display: flex;
     align-self: center;
-    border-left: 2px solid var(--color-secondary);
-    border-top: 2px solid var(--color-secondary);
-    border-bottom: 2px solid var(--color-secondary);
+    border-left: 2px solid var(--border-color);
+    border-top: 2px solid var(--border-color);
+    border-bottom: 2px solid var(--border-color);
     padding: 8px;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
     width: 20%;
     background-color: var(--color-secondary);
     font-weight: bold;
-    color: var(--background-color-slidebar);
+    color: var(--color-black);
 }
 
 .flowChartLabelRight {
     width: 80%;
-    border-right: 2px solid var(--color-secondary);
-    border-top: 2px solid var(--color-secondary);
-    border-bottom: 2px solid var(--color-secondary);
+    border-right: 2px solid var(--border-color);
+    border-top: 2px solid var(--border-color);
+    border-bottom: 2px solid var(--border-color);
     padding: 5px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     font-weight: bold;
-    color: var(--text-color);
+    color: var(--primary-text-color);
     background-color: var(--background-color-header);
 }
 
@@ -150,10 +147,10 @@
     border-width: 0 0 0 2px;
     border-image: linear-gradient(to bottom,
     transparent,
-    var(--color-primary),
-    var(--color-primary),
-    var(--color-primary),
-    var(--color-primary),
+    var(--2x2-border-color),
+    var(--2x2-border-color),
+    var(--2x2-border-color),
+    var(--2x2-border-color),
     transparent) 0 100%;
     padding: 2px;
     overflow: hidden;
@@ -205,7 +202,7 @@
 
 #buttonGroupLabel {
     opacity: 1 !important;
-    color: var(--text-color);
+    color: var(--primary-text-color);
 }
 
 /*================================================================================================================*/
@@ -222,47 +219,12 @@
     align-items: center;
 }
 
-.button-tiny {
-    width: var(--davit-button-tiny-width);
-    height: var(--davit-button-tiny-height);
-    padding: 0;
-    margin: var(--davit-button-tiny-margin-top-bottom) var(--davit-button-tiny-margin-left-right);
-    box-shadow: 0 0 0 1px var(--color-border);
-    border: var(--davit-border-size-small) solid transparent;
-    color: var(--color-border);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent;
-}
 
 .disabled:hover {
     background-color: transparent;
     transition: background-color 0.4s;
     color: black;
     cursor: default;
-}
-
-.button-small {
-    animation-name: growWidth;
-    animation-duration: var(--animation-time);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: var(--davit-button-small-width);
-    height: var(--davit-button-small-height);
-    margin: var(--davit-button-tiny-margin-top-bottom) var(--davit-button-tiny-margin-left-right);
-    background-color: transparent;
-}
-
-.activeButton {
-    background-color: var(--color-secondary);
-}
-
-.button-small:hover {
-    background-color: var(--color-secondary);
-    transition: background-color 0.4s;
-    color: black;
 }
 
 .pLeft1 {
@@ -301,7 +263,7 @@
     bottom: 0;
     width: 2em;
     height: 7.8em;
-    background-color: var(--background-color-slidebar);
+    background-color: var(--color-black);
     color: white;
     margin: 0;
     text-align: center;
@@ -309,10 +271,10 @@
     border-width: 0 0 0 2px;
     border-image: linear-gradient(to bottom,
     transparent,
-    var(--color-primary),
-    var(--color-primary),
-    var(--color-primary),
-    var(--color-primary),
+    var(--2x2-border-color),
+    var(--2x2-border-color),
+    var(--2x2-border-color),
+    var(--2x2-border-color),
     transparent) 0 100%;
     animation-duration: var(--animation-time);
 }
@@ -327,10 +289,10 @@
     animation-duration: var(--animation-time);
     border-image: linear-gradient(to bottom,
     transparent,
-    var(--color-primary),
-    var(--color-primary),
-    var(--color-primary),
-    var(--color-primary),
+    var(--2x2-border-color),
+    var(--2x2-border-color),
+    var(--2x2-border-color),
+    var(--2x2-border-color),
     transparent);
     height: 7.8em;
 }
@@ -366,7 +328,6 @@
     width: 100%;
 }
 
-
 #innerCard {
     width: 100px;
     height: 30px;
@@ -378,17 +339,14 @@
     overflow: hidden;
 }
 
-
 /* -------------------------------------------- Actor -------------------------------------------- */
-
-
 .viewFragment {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     text-align: center;
-    border-top: 0.5px solid var(--text-color);
+    border-top: 0.5px solid var(--primary-text-color);
     max-width: 15em;
 }
 
@@ -424,8 +382,8 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: var(--color-exxcellent-blue) !important;
-    color: var(--text-color) !important;
+    background-color: var(--color-blue) !important;
+    color: var(--primary-text-color) !important;
 }
 
 .carv2ActorDataUPDATED_TO {
@@ -434,8 +392,8 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: var(--color-pink) !important;
-    color: var(--text-color) !important;
+    background-color: var(--color-purple) !important;
+    color: var(--primary-text-color) !important;
 }
 
 .carv2ActorDataUPDATED_FROM {
@@ -444,7 +402,7 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: var(--color-dark-purple) !important;
+    background-color: var(--color-purple-dark) !important;
     color: var(--data-persistent-color) !important;
 }
 
@@ -455,7 +413,7 @@
     width: 100%;
     height: 100%;
     background-color: var(--data-delete-color) !important;
-    color: var(--text-color) !important;
+    color: var(--primary-text-color) !important;
 }
 
 .carv2ActorDataADD {
@@ -465,7 +423,7 @@
     width: 100%;
     height: 100%;
     background-color: var(--background-color-header) !important;
-    color: var(--text-color) !important;
+    color: var(--primary-text-color) !important;
     box-shadow: 6px 6px 10px var(--data-add-color) inset !important;
 }
 
@@ -486,7 +444,7 @@
     width: 100%;
     height: 100%;
     background-color: var(--data-persistent-color) !important;
-    color: var(--text-color) !important;
+    color: var(--primary-text-color) !important;
 }
 
 .carv2ActorDataDELETE {
@@ -496,7 +454,7 @@
     width: 100%;
     height: 100%;
     background-color: var(--background-color-header) !important;
-    color: var(--text-color) !important;
+    color: var(--primary-text-color) !important;
     box-shadow: 6px 6px 10px var(--data-delete-color) inset !important;
 }
 
@@ -507,7 +465,7 @@
     width: 100%;
     height: 100%;
     background-color: var(--data-add-color) !important;
-    color: var(--text-color) !important;
+    color: var(--primary-text-color) !important;
     box-shadow: 0 0 20px rgb(255, 0, 0);
 }
 
@@ -518,7 +476,7 @@
     width: 100%;
     height: 100%;
     background-color: var(--data-delete-color) !important;
-    color: var(--text-color) !important;
+    color: var(--primary-text-color) !important;
     box-shadow: 0 0 20px rgb(255, 0, 0);
 }
 
@@ -528,53 +486,38 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: var(--color-exxcellent-blue) !important;
-    color: var(--text-color) !important;
+    background-color: var(--color-blue) !important;
+    color: var(--primary-text-color) !important;
     box-shadow: 0 0 20px rgb(255, 0, 0);
 }
 
 /*========================================== NEW DAVIT CSS ==========================================================*/
 
 .zoomLabel {
-    color: var(--text-color);
+    color: var(--primary-text-color);
     font-size: 0.7em;
     animation-name: disapear;
     animation-duration: 3s;
     opacity: 0;
 }
 
+:root {
+    --davit-button-sidepanel-height: 3.5rem;
+    --davit-button-sidepanel-width: 100%;
+    --button-sidepanel-border-color: var(--color-white);
+}
+
 .sidePanelButton {
     border: none;
     width: var(--davit-button-sidepanel-width);
     height: var(--davit-button-sidepanel-height);
-    border-bottom: var(--davit-border-size-medium) solid var(--color-primary);
+    border-bottom: var(--border-size-medium) solid var(--button-sidepanel-border-color);
     border-radius: 0;
 }
 
 .sidePanelButton.active {
     background-color: var(--color-secondary);
     transition: background-color var(--animation-time);
-}
-
-
-.labelField {
-    color: var(--text-color);
-    background-color: transparent;
-    text-align: center;
-    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
-    min-width: 8em;
-    border-radius: 0;
-}
-
-.deleteButton {
-    background-color: transparent;
-    color: var(--davit-color-warning);
-    border-color: var(--davit-color-warning);
-}
-
-.deleteButton.fluid {
-    width: 8em;
-    animation: growDeleteButton var(--animation-time) ease-in-out 0s;
 }
 
 .headerGrid {

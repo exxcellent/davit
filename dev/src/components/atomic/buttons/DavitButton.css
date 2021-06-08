@@ -1,13 +1,31 @@
+:root {
+    --davit-button-tiny-height: 1rem;
+    --davit-button-tiny-width: 1rem;
+    --davit-button-tiny-margin-top-bottom: 0.1rem;
+    --davit-button-tiny-margin-left-right: 0.3rem;
+
+    --davit-button-small-height: 1.8rem;
+    --davit-button-small-width: 2rem;
+    --davit-button-small-margin-top-bottom: 0.1rem;
+    --davit-button-small-margin-left-right: 0.3rem;
+}
+
 button {
-    color: var(--text-color);
-    border-radius: var(--davit-border-radius);
-    border: var(--davit-border-size-medium) solid var(--color-secondary);
+    color: var(--primary-text-color);
     background-color: transparent;
     text-align: center;
-    padding: var(--davit-padding-top-bottom) var(--davit-padding-right-left);
 }
 
 button:hover {
-    background: var(--davit-hover-color);
+    background: var(--color-hover);
     cursor: pointer;
+}
+
+
+button.button-tiny {
+    width: var(--davit-button-tiny-width);
+    height: var(--davit-button-tiny-height);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

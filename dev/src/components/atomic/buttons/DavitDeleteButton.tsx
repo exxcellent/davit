@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { DavitIcons } from "../icons/IconSet";
 import { DavitButton } from "./DavitButton";
+import "./DavitDeleteButton.css";
 
 interface DavitDeleteButtonProps {
     onClick: () => void;
@@ -32,7 +33,7 @@ export const DavitDeleteButton: FunctionComponent<DavitDeleteButtonProps> = (pro
         <DavitButton
             iconName={fluid ? undefined : DavitIcons.trash}
             onClick={clickEventHandler}
-            className={fluid ? "deleteButton fluid" : "deleteButton"}
+            className={fluid ? "deleteButton fluid padding-vertical-small padding-horizontal-medium border" : "deleteButton padding-vertical-small padding-horizontal-medium border"}
             disable={disable}
             label={fluid ? "SURE" : undefined}
         />

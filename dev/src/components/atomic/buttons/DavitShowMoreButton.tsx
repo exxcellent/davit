@@ -21,10 +21,12 @@ export const DavitShowMoreButton: FunctionComponent<DavitMoreButtonProps> = (pro
         }
     }, [show]);
 
-    return <DavitButton onClick={() => {
-        onClick();
+    const onToggle = () => {
         setShowMore(!showMore);
-    }}
+        onClick();
+    };
+
+    return <DavitButton onClick={onToggle}
                         className={className ? className : undefined}
                         iconName={showMore ? faAngleDown : faAngleRight}
                         style={style}

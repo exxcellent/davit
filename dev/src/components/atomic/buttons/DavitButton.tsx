@@ -17,13 +17,13 @@ export const DavitButton: FunctionComponent<DavitButtonProps> = (props) => {
     const {onClick, label, disable, iconName, iconLeft, className, style} = props;
 
     return (
-        <button className={className}
+        <button className={className ? className : `padding-vertical-small padding-horizontal-medium border`}
                 onClick={onClick}
                 disabled={disable}
                 style={style}
         >
             {iconName && iconLeft && <FontAwesomeIcon icon={iconName} />}
-            {label && <label className={"padding"}>{label}</label>}
+            {label && <label>{label}</label>}
             {iconName && !iconLeft && <FontAwesomeIcon icon={iconName} />}
         </button>
     );
