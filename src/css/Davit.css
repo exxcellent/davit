@@ -319,156 +319,12 @@
 }
 
 /* -------------------------------------------- Actor -------------------------------------------- */
-.viewFragment {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    text-align: center;
-    border-top: 0.5px solid var(--primary-text-color);
-    max-width: 15em;
-}
-
 .appearAnimation {
     animation-duration: var(--animation-time);
     animation-name: grow;
     animation-timing-function: ease-in-out;
 }
 
-.carv2ActorDataNEW {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: var(--data-add-color) !important;
-    color: var(--data-text-color) !important;
-}
-
-.carv2ActorDataPERSISTENT {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: var(--data-persistent-color) !important;
-    color: var(--data-text-color) !important;
-}
-
-.carv2ActorDataSENT {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: var(--color-blue) !important;
-    color: var(--primary-text-color) !important;
-}
-
-.carv2ActorDataUPDATED_TO {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: var(--color-purple) !important;
-    color: var(--primary-text-color) !important;
-}
-
-.carv2ActorDataUPDATED_FROM {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: var(--color-purple-dark) !important;
-    color: var(--data-persistent-color) !important;
-}
-
-.carv2ActorDataDELETED {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: var(--data-delete-color) !important;
-    color: var(--primary-text-color) !important;
-}
-
-.carv2ActorDataADD {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: var(--background-color-header) !important;
-    color: var(--primary-text-color) !important;
-    box-shadow: 6px 6px 10px var(--data-add-color) inset !important;
-}
-
-.carv2ActorDataCHECKED {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: var(--data-persistent-color) !important;
-    color: var(--data-text-color) !important;
-}
-
-.carv2ActorDataCHECK_FAILED {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: var(--data-persistent-color) !important;
-    color: var(--primary-text-color) !important;
-}
-
-.carv2ActorDataDELETE {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: var(--background-color-header) !important;
-    color: var(--primary-text-color) !important;
-    box-shadow: 6px 6px 10px var(--data-delete-color) inset !important;
-}
-
-.carv2ActorDataERROR_ADD {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: var(--data-add-color) !important;
-    color: var(--primary-text-color) !important;
-    box-shadow: 0 0 20px rgb(255, 0, 0);
-}
-
-.carv2ActorDataERROR_DELETE {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: var(--data-delete-color) !important;
-    color: var(--primary-text-color) !important;
-    box-shadow: 0 0 20px rgb(255, 0, 0);
-}
-
-.carv2ActorDataERROR_SEND {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: var(--color-blue) !important;
-    color: var(--primary-text-color) !important;
-    box-shadow: 0 0 20px rgb(255, 0, 0);
-}
 
 /*========================================== NEW DAVIT CSS ==========================================================*/
 
@@ -478,25 +334,6 @@
     animation-name: disapear;
     animation-duration: 3s;
     opacity: 0;
-}
-
-:root {
-    --davit-button-sidepanel-height: 3.5rem;
-    --davit-button-sidepanel-width: 100%;
-    --button-sidepanel-border-color: var(--color-white);
-}
-
-.sidePanelButton {
-    border: none;
-    width: var(--davit-button-sidepanel-width);
-    height: var(--davit-button-sidepanel-height);
-    border-bottom: var(--border-size-medium) solid var(--button-sidepanel-border-color);
-    border-radius: 0;
-}
-
-.sidePanelButton.active {
-    background-color: var(--color-secondary);
-    transition: background-color var(--animation-time);
 }
 
 .headerGrid {
