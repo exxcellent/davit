@@ -12,8 +12,10 @@
     --color-cyan--lighter: #72C4EB;
     --color-lila: #9D599F;
     --color-lila--lighter: #BA8BBC;
-    --color-green: #C8D400;
-    --color-green--lighter: #D9E14D;
+    --color-purple: #93019b;
+    --color-purple-dark: #540058;
+    --color-green: #0FBD58;
+    --color-green--lighter: #00e760;
     --color-error: #C81919;
     --color-error--lighter: #D95E5E;
     --color-warning: #F0BB29;
@@ -50,6 +52,8 @@
     --tertiary-color: var(--color-grey);
     --tertiary-text-color: var(--color-dark);
 
+    --background-color: var(--color-dark--lighter);
+    --background-color-shadow: var(--color-black);
 
     /* border */
     --border-radius: 0.2rem;
@@ -57,13 +61,18 @@
     --border-size-small: 1px;
     --border-size-medium: 2px;
     --border-size-big: 0.5rem;
+    /* 2x2 border */
+    --2x2-border-color: var(--color-white);
 
+    /* data */
+    --data-add-color: var(--color-green);
+    --data-delete-color: var(--color-error);
+    --data-text-color: var(--color-black);
+    --data-persistent-color: var(--color-dark--lighter);
 
-    /*TODO: hier gehts weiiiiiiter!*/
-
-
-    --davit-button-sidepanel-height: 3.5rem;
-    --davit-button-sidepanel-width: 100%;
+    /*--background-color-header: rgba(0, 0, 0, 0.5);*/
+    --background-color-header: var(--color-dark);
+    --color-secondary: #00cdf1;
 }
 
 html, body, div, span, applet, object, iframe,
