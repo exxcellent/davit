@@ -17,7 +17,7 @@
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
     width: 20%;
-    background-color: var(--color-secondary);
+    background-color: var(--secondary-color);
     font-weight: bold;
     color: var(--color-black);
 }
