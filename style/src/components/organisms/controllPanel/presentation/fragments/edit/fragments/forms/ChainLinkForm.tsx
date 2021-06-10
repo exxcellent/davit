@@ -1,19 +1,21 @@
 import React, { FunctionComponent } from "react";
 import { GoToTypesChain } from "../../../../../../../../dataAccess/access/types/GoToTypeChain";
-import { DavitAddButton } from "../../../../../../../atomic/buttons/DavitAddButton";
-import { DavitBackButton } from "../../../../../../../atomic/buttons/DavitBackButton";
-import { DavitDeleteButton } from "../../../../../../../atomic/buttons/DavitDeleteButton";
-import { DavitRootButton } from "../../../../../../../atomic/buttons/DavitRootButton";
-import { ChainDecisionDropDown } from "../../../../../../../atomic/dropdowns/ChainDecisionDropDown";
-import { ChainLinkDropDown } from "../../../../../../../atomic/dropdowns/ChainLinkDropDown";
-import { DataSetupDropDown } from "../../../../../../../atomic/dropdowns/DataSetupDropDown";
-import { GoToChainOptionDropDown } from "../../../../../../../atomic/dropdowns/GoToChainOptionDropDown";
-import { SequenceDropDown } from "../../../../../../../atomic/dropdowns/SequenceDropDown";
-import { Form } from "../../../../../../../atomic/forms/Form";
+import {
+    ChainDecisionDropDown,
+    ChainLinkDropDown,
+    DataSetupDropDown,
+    DavitAddButton,
+    DavitBackButton,
+    DavitButton,
+    DavitDeleteButton,
+    DavitTextInput,
+    Form,
+    GoToChainOptionDropDown,
+    SequenceDropDown
+} from "../../../../../../../atomic";
 import { FormBody } from "../../../../../../../atomic/forms/fragments/FormBody";
 import { FormFooter } from "../../../../../../../atomic/forms/fragments/FormFooter";
 import { FormHeader } from "../../../../../../../atomic/forms/fragments/FormHeader";
-import { DavitTextInput } from "../../../../../../../atomic/textinput/DavitTextInput";
 import { useChainLinkViewModel } from "../viewmodels/ChainLinkViewModel";
 import { FormDivider } from "./fragments/FormDivider";
 import { FormLabel } from "./fragments/FormLabel";
@@ -148,11 +150,13 @@ export const ChainLinkForm: FunctionComponent<ChainLinkFormProps> = () => {
 
             <FormFooter>
                 <DavitDeleteButton onClick={deleteChainLink}
-                                   disable={isRoot}
+                                   disabled={isRoot}
                 />
-                <DavitRootButton onClick={setRoot}
-                                 isRoot={isRoot}
-                />
+                <DavitButton onClick={setRoot}
+                             disabled={isRoot}
+                >
+                    {isRoot ? "Start" : "Set as Start"}
+                </DavitButton>
                 <DavitBackButton onClick={saveChainLink} />
             </FormFooter>
 

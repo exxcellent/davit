@@ -58,29 +58,3 @@
     width: 100%;
     height: 100%;
 }
-
-/* border */
-.border {
-    border-style: solid;
-    border-color: var(--border-color);
-    border-radius: var(--border-radius);
-}
-
-.border-top {
-    border-top-width: var(--border-size-medium);
-    border-top-style: solid;
-    border-top-color: var(--border-color);
-    border-radius: var(--border-radius);
-}
-
-.border-small {
-    border-width: var(--border-size-small);
-}
-
-.border-medium {
-    border-width: var(--border-size-medium);
-}
-
-.border-big {
-    border-width: var(--border-size-big);
-}

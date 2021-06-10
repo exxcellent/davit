@@ -2,13 +2,13 @@ import React, { FunctionComponent, useState } from "react";
 import { Direction } from "../../../../../../../../dataAccess/access/to/DataRelationTO";
 import { DavitBackButton } from "../../../../../../../atomic/buttons/DavitBackButton";
 import { DavitButton } from "../../../../../../../atomic/buttons/DavitButton";
-import { DavitCommentButton } from "../../../../../../../atomic/buttons/DavitCommentButton";
 import { DavitDeleteButton } from "../../../../../../../atomic/buttons/DavitDeleteButton";
 import { DavitDropDown } from "../../../../../../../atomic/dropdowns/DavitDropDown";
 import { Form } from "../../../../../../../atomic/forms/Form";
 import { FormBody } from "../../../../../../../atomic/forms/fragments/FormBody";
 import { FormFooter } from "../../../../../../../atomic/forms/fragments/FormFooter";
 import { FormHeader } from "../../../../../../../atomic/forms/fragments/FormHeader";
+import { DavitCommentButton } from "../../../../../../../molecules";
 import { useDataRelationViewModel } from "../viewmodels/DataRelationViewModel";
 import { FormDivider } from "./fragments/FormDivider";
 import { FormLabel, FormlabelAlign } from "./fragments/FormLabel";
@@ -113,8 +113,9 @@ export const DataRelationForm: FunctionComponent<DataRelationFormProps> = () => 
                     createAnother();
                     setKey(key + 1);
                 }}
-                             label="Create another"
-                />
+                >
+                    {"Create another"}
+                </DavitButton>
                 <DavitBackButton onClick={saveRelation} />
             </FormFooter>
 

@@ -58,10 +58,14 @@ table {
 .carv2Tr {
     background-color: var(--data-table-row-color);
     color: black;
-    height: 2.5em;
     text-align: start;
     animation-name: appearText;
     animation-duration: 0.2s;
+}
+
+.carv2Tr td {
+    height: 100%;
+    padding: var(--spacing-tiny);
 }
 
 .carv2Tr:nth-child(odd) {
