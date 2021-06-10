@@ -220,7 +220,8 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
                             />
                         </div>
                     </div>
-                    <div className="flowChart"
+
+                    <div className="flowChart padding-small"
                          style={{height: tableHeight}}
                     >
                         {!showChain && sequence && buildFlowChart()}
