@@ -4,7 +4,6 @@ import { DavitUtil } from "../../../../../../../../utils/DavitUtil";
 import { DavitAddButton } from "../../../../../../../atomic/buttons/DavitAddButton";
 import { DavitBackButton } from "../../../../../../../atomic/buttons/DavitBackButton";
 import { DavitButton } from "../../../../../../../atomic/buttons/DavitButton";
-import { DavitCommentButton } from "../../../../../../../atomic/buttons/DavitCommentButton";
 import { DavitDeleteButton } from "../../../../../../../atomic/buttons/DavitDeleteButton";
 import { ActorDropDown } from "../../../../../../../atomic/dropdowns/ActorDropDown";
 import { InstanceDropDown } from "../../../../../../../atomic/dropdowns/InstanceDropDown";
@@ -13,6 +12,7 @@ import { FormBody } from "../../../../../../../atomic/forms/fragments/FormBody";
 import { FormFooter } from "../../../../../../../atomic/forms/fragments/FormFooter";
 import { FormHeader } from "../../../../../../../atomic/forms/fragments/FormHeader";
 import { DavitTextInput } from "../../../../../../../atomic/textinput/DavitTextInput";
+import { DavitCommentButton } from "../../../../../../../molecules";
 import { useDataSetupViewModel } from "../viewmodels/DataSetupViewModel";
 import { FormDivider } from "./fragments/FormDivider";
 import { FormLine } from "./fragments/FormLine";
@@ -110,7 +110,7 @@ export const DataSetupForm: FunctionComponent<DataSetupFormProps> = () => {
                         <tr>
                             <td style={{textAlign: "center"}}>Actor</td>
                             <td style={{textAlign: "center"}}>Data Instance</td>
-                            <td style={{textAlign: "end"}}><DavitAddButton onClick={createInitData} /></td>
+                            <td className={"flex flex-end"}><DavitAddButton onClick={createInitData} /></td>
                         </tr>
                         </thead>
                         <tbody style={{maxHeight: "40vh"}}>
@@ -127,9 +127,9 @@ export const DataSetupForm: FunctionComponent<DataSetupFormProps> = () => {
                 <DavitCommentButton onSaveCallback={saveNote}
                                     comment={note}
                 />
-                <DavitButton onClick={createAnother}
-                             label="Create another"
-                />
+                <DavitButton onClick={createAnother}>
+                    {"Create another"}
+                </DavitButton>
                 <DavitBackButton onClick={saveDataSetup} />
             </FormFooter>
 

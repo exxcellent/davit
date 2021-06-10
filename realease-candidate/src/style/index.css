@@ -2,6 +2,7 @@
 @import "./layout.css";
 @import "./fonts.css";
 @import "./animations.css";
+@import "./border.css";
 
 :root {
     --color-dark-blue: #0D456B;
@@ -9,11 +10,13 @@
     --color-blue: #0060A9;
     --color-blue--lighter: #4D90C3;
     --color-cyan: #35ABE2;
-    --color-cyan--lighter: #72C4EB;
+    --color-cyan--lighter: #00cdf1; /* original theme color: #72C4EB; */
     --color-lila: #9D599F;
     --color-lila--lighter: #BA8BBC;
-    --color-green: #C8D400;
-    --color-green--lighter: #D9E14D;
+    --color-purple: #93019b;
+    --color-purple-dark: #540058;
+    --color-green: #0FBD58;
+    --color-green--lighter: #00e760;
     --color-error: #C81919;
     --color-error--lighter: #D95E5E;
     --color-warning: #F0BB29;
@@ -28,24 +31,92 @@
     --color-light--lighter: #F7F7F7;
     --color-white: #FFFFFF;
 
+
     --text-size: 100%;
     --text-font-family: "DIN OT", Helvetica, Arial, sans-serif;
 
+    /* spacing */
+    --spacing-tiny: 5px;
     --spacing-small: 10px;
-    --spacing-medium: 10px;
+    --spacing-medium: 15px;
     --spacing-large: 22px;
 
+    /* border */
+    --border-radius: 0.2rem;
+    --border-size-small: 1px;
+    --border-size-medium: 2px;
+    --border-size-large: 0.5rem;
+}
+
+.light {
     /* primary */
     --primary-color: var(--color-dark-blue);
     --primary-text-color: var(--color-light);
 
     /* secondary */
-    --secondary-color: var(--color-blue);
+    --secondary-color: var(--color-cyan--lighter);
+    /*--secondary-color: var(--color-blue);*/
     --secondary-text-color: var(--color-light);
 
     /* tertiary */
     --tertiary-color: var(--color-grey);
     --tertiary-text-color: var(--color-dark);
+
+
+    --border-color: var(--secondary-color);
+    /* 2x2 border */
+    --2x2-border-color: var(--color-white);
+
+    /* data */
+    --data-add-color: var(--color-green);
+    --data-delete-color: var(--color-error);
+    --data-text-color: var(--color-black);
+    --data-persistent-color: var(--color-dark--lighter);
+
+    --color-hover: rgba(0, 0, 0, .5);
+
+
+    /*--background-color-header: rgba(0, 0, 0, 0.5);*/
+    --background-color-header: var(--color-dark);
+
+    --background-color: var(--color-dark--lighter);
+    --background-color-shadow: var(--color-black);
+
+}
+
+.dark {
+    /* primary */
+    --primary-color: var(--color-dark-blue);
+    --primary-text-color: var(--color-light);
+
+    /* secondary */
+    --secondary-color: var(--color-cyan--lighter);
+    /*--secondary-color: var(--color-blue);*/
+    --secondary-text-color: var(--color-light);
+
+    /* tertiary */
+    --tertiary-color: var(--color-grey);
+    --tertiary-text-color: var(--color-dark);
+
+
+    --border-color: var(--secondary-color);
+    /* 2x2 border */
+    --2x2-border-color: var(--color-white);
+
+    /* data */
+    --data-add-color: var(--color-green);
+    --data-delete-color: var(--color-error);
+    --data-text-color: var(--color-black);
+    --data-persistent-color: var(--color-dark--lighter);
+
+    --color-hover: rgba(0, 0, 0, .5);
+
+
+    /*--background-color-header: rgba(0, 0, 0, 0.5);*/
+    --background-color-header: var(--color-dark);
+
+    --background-color: var(--color-dark--lighter);
+    --background-color-shadow: var(--color-black);
 }
 
 html, body, div, span, applet, object, iframe,
@@ -64,11 +135,10 @@ time, mark, audio, video {
     margin: 0;
     padding: 0;
     border: 0;
-    font-size: 100%;
-    font: inherit;
 
     font-family: var(--text-font-family);
     font-size: var(--text-size);
+    color: var(--primary-text-color);
     vertical-align: baseline;
 }
 
@@ -99,4 +169,9 @@ q:before, q:after {
 table {
     border-collapse: collapse;
     border-spacing: 0;
+}
+
+/* misc utils */
+.no-user-select {
+    user-select: none;
 }

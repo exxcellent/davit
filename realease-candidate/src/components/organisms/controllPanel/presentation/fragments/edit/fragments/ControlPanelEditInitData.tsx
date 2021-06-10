@@ -50,9 +50,9 @@ export const ControlPanelEditInitData: FunctionComponent<ControlPanelEditInitDat
             <OptionField label="Navigation"
                          divider={true}
             >
-                <DavitButton onClick={createAnother}
-                             label="Create another"
-                />
+                <DavitButton onClick={createAnother}>
+                    {"Create another"}
+                </DavitButton>
                 <DavitBackButton onClick={saveInitData} />
             </OptionField>
             <OptionField label={"Options"}

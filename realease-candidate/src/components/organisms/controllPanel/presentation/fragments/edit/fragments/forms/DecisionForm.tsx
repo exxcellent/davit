@@ -2,11 +2,10 @@ import React, { FunctionComponent } from "react";
 import { ConditionTO } from "../../../../../../../../dataAccess/access/to/ConditionTO";
 import { GoToTypes } from "../../../../../../../../dataAccess/access/types/GoToType";
 import { DavitUtil } from "../../../../../../../../utils/DavitUtil";
+import { DavitButton } from "../../../../../../../atomic";
 import { DavitAddButton } from "../../../../../../../atomic/buttons/DavitAddButton";
 import { DavitBackButton } from "../../../../../../../atomic/buttons/DavitBackButton";
-import { DavitCommentButton } from "../../../../../../../atomic/buttons/DavitCommentButton";
 import { DavitDeleteButton } from "../../../../../../../atomic/buttons/DavitDeleteButton";
-import { DavitRootButton } from "../../../../../../../atomic/buttons/DavitRootButton";
 import { ActorDropDown } from "../../../../../../../atomic/dropdowns/ActorDropDown";
 import { DecisionDropDown } from "../../../../../../../atomic/dropdowns/DecisionDropDown";
 import { GoToOptionDropDown } from "../../../../../../../atomic/dropdowns/GoToOptionDropDown";
@@ -17,6 +16,7 @@ import { FormBody } from "../../../../../../../atomic/forms/fragments/FormBody";
 import { FormFooter } from "../../../../../../../atomic/forms/fragments/FormFooter";
 import { FormHeader } from "../../../../../../../atomic/forms/fragments/FormHeader";
 import { DavitTextInput } from "../../../../../../../atomic/textinput/DavitTextInput";
+import { DavitCommentButton } from "../../../../../../../molecules";
 import { useDecisionViewModel } from "../viewmodels/DecisionViewModel";
 import { FormDivider } from "./fragments/FormDivider";
 import { FormLabel, FormlabelAlign } from "./fragments/FormLabel";
@@ -131,7 +131,7 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
                         <tr>
                             <td style={{textAlign: "center"}}>Actor</td>
                             <td style={{textAlign: "center"}}>Data Instance</td>
-                            <td style={{textAlign: "end"}}><DavitAddButton onClick={createCondition} /></td>
+                            <td className={"flex flex-end"}><DavitAddButton onClick={createCondition} /></td>
                         </tr>
                         </thead>
                         <tbody style={{maxHeight: "40vh"}}>
@@ -247,9 +247,11 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
                 <DavitCommentButton onSaveCallback={saveNote}
                                     comment={note}
                 />
-                <DavitRootButton onClick={setRoot}
-                                 isRoot={isRoot}
-                />
+                <DavitButton onClick={setRoot}
+                             disabled={isRoot}
+                >
+                    {isRoot ? "Start" : "Set as Start"}
+                </DavitButton>
                 <DavitBackButton onClick={saveAndGoBack} />
             </FormFooter>
 

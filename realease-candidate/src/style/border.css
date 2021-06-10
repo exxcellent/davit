@@ -1,0 +1,33 @@
+/* border */
+.border {
+    border-style: solid;
+    border-color: var(--border-color);
+    border-radius: var(--border-radius);
+}
+
+.border-top {
+    border-top-width: var(--border-size-medium);
+    border-top-style: solid;
+    border-top-color: var(--border-color);
+    border-radius: var(--border-radius);
+}
+
+.border-small {
+    border-width: var(--border-size-small);
+}
+
+.border-medium {
+    border-width: var(--border-size-medium);
+}
+
+.border-large {
+    border-width: var(--border-size-large);
+}
+
+.border-radius {
+    border-radius: var(--border-radius);
+}
+
+.remove-border-radius {
+    border-radius: unset;
+}

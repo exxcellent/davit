@@ -11,11 +11,11 @@ import { EditSequence } from "../../../../../../../slices/thunks/SequenceThunks"
 import { DavitUtil } from "../../../../../../../utils/DavitUtil";
 import { DavitBackButton } from "../../../../../../atomic/buttons/DavitBackButton";
 import { DavitButton } from "../../../../../../atomic/buttons/DavitButton";
-import { DavitCommentButton } from "../../../../../../atomic/buttons/DavitCommentButton";
 import { DavitDeleteButton } from "../../../../../../atomic/buttons/DavitDeleteButton";
 import { DecisionLabelDropDown } from "../../../../../../atomic/dropdowns/DecisionDropDown";
 import { StepLabelDropDown } from "../../../../../../atomic/dropdowns/StepDropDown";
 import { DavitTextInput } from "../../../../../../atomic/textinput/DavitTextInput";
+import { DavitCommentButton } from "../../../../../../molecules";
 import { AddOrEdit } from "../../../../../../molecules/AddOrEdit";
 import { ControlPanel } from "../common/ControlPanel";
 import { OptionField } from "../common/OptionField";
@@ -72,8 +72,9 @@ export const ControlPanelEditSequence: FunctionComponent<ControlPanelEditSequenc
                          divider={true}
             >
                 <DavitButton onClick={createAnother}
-                             label="Create another"
-                />
+                >
+                    {"Create another"}
+                </DavitButton>
                 <DavitBackButton onClick={saveSequence} />
                 <DavitCommentButton onSaveCallback={saveNote}
                                     comment={note}

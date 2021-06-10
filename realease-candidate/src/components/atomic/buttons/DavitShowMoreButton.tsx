@@ -1,17 +1,16 @@
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons/faAngleDown";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons/faAngleRight";
-import React, { CSSProperties, FunctionComponent, useEffect, useState } from "react";
-import { DavitButton } from "./DavitButton";
+import React, { FunctionComponent, useEffect, useState } from "react";
+import { ElementSize } from "../../../style/Theme";
+import { DavitButtonProps } from "./DavitButton";
+import { DavitIconButton } from "./DavitIconButton";
 
-interface DavitMoreButtonProps {
-    onClick: () => void;
-    style?: CSSProperties;
+interface DavitMoreButtonProps extends DavitButtonProps {
     show?: boolean
-    className?: string
 }
 
 export const DavitShowMoreButton: FunctionComponent<DavitMoreButtonProps> = (props) => {
-    const {onClick, style, show, className} = props;
+    const {onClick, show} = props;
 
     const [showMore, setShowMore] = useState(false);
 
@@ -21,12 +20,13 @@ export const DavitShowMoreButton: FunctionComponent<DavitMoreButtonProps> = (pro
         }
     }, [show]);
 
-    return <DavitButton onClick={() => {
-        onClick();
+    const onToggle = () => {
         setShowMore(!showMore);
-    }}
-                        className={className ? className : undefined}
-                        iconName={showMore ? faAngleDown : faAngleRight}
-                        style={style}
+        onClick();
+    };
+
+    return <DavitIconButton onClick={onToggle}
+                            size={ElementSize.tiny}
+                            iconName={showMore ? faAngleDown : faAngleRight}
     />;
 };
