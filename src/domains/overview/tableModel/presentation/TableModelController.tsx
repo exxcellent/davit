@@ -65,7 +65,7 @@ export const TableModelController: FunctionComponent<TableModelControllerProps> 
     } = useSequenceTableViewModel();
 
     return (
-        <div className={"sequenceTable"}
+        <div className={"sequenceTable padding-tiny"}
              ref={parentRef}
         >
             <div className="tableBorder">

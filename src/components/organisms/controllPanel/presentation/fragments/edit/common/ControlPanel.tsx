@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from "react";
+import "./ControlPanel.css";
 
 interface ControlPanelProps {
 }
