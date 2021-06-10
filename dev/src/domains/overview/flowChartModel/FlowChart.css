@@ -5,6 +5,12 @@
     --flowchart-padding: 6px;
 }
 
+.flowChart {
+    overflow: auto;
+    display: block;
+    width: 100%;
+}
+
 .STEP, .LINK {
     display: flex;
     justify-content: center;

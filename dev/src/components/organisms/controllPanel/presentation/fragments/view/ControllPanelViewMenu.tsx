@@ -11,6 +11,7 @@ import { useStepAndLinkNavigation } from "../../../../../../utils/WindowUtil";
 import { ChainDropDown } from "../../../../../atomic/dropdowns/ChainDropDown";
 import { DataSetupDropDown } from "../../../../../atomic/dropdowns/DataSetupDropDown";
 import { SequenceDropDown } from "../../../../../atomic/dropdowns/SequenceDropDown";
+import { ControlPanel } from "../edit/common/ControlPanel";
 import { OptionField } from "../edit/common/OptionField";
 import { ViewNavigator } from "./fragments/ViewNavigator";
 
@@ -40,7 +41,7 @@ export const ControlPanelViewMenu: FunctionComponent<ControlPanelViewMenuProps> 
     };
 
     return (
-        <div className={"headerGrid"}>
+        <ControlPanel>
 
             <OptionField label="Data - Setup">
                 <DataSetupDropDown
@@ -75,7 +76,7 @@ export const ControlPanelViewMenu: FunctionComponent<ControlPanelViewMenuProps> 
                 />
             </OptionField>
 
-        </div>
+        </ControlPanel>
     );
 };
 
