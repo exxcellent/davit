@@ -4,6 +4,7 @@ import { faFastBackward } from "@fortawesome/free-solid-svg-icons/faFastBackward
 import { faFastForward } from "@fortawesome/free-solid-svg-icons/faFastForward";
 import React, { FunctionComponent } from "react";
 import { DavitButton } from "../../../../../../atomic/buttons/DavitButton";
+import "./ViewNavigator.css";
 
 interface ViewNavigatorProps {
     fastBackward: () => void,
@@ -30,9 +31,7 @@ export const ViewNavigator: FunctionComponent<ViewNavigatorProps> = (props) => {
                 iconLeft={true}
                 style={{borderRadius: 0}}
             />
-            <div className={"border"}
-                 style={{textAlign: "center", padding: "0.43rem", borderRadius: 0}}
-            >
+            <div className={"index border border-medium flex flex-center padding-small"}>
                 <label>{index}</label>
             </div>
             <DavitButton
