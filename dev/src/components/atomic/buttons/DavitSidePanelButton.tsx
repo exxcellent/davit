@@ -1,7 +1,6 @@
 import { IconDefinition } from "@fortawesome/fontawesome-common-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { FunctionComponent } from "react";
-import "./DavitSidePanelButton.css";
 
 interface DavitButtonIconProps {
     onClick: () => void;

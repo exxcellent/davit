@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
+// import {BrowserRouter, Route, Switch} from "react-router-dom";
+// electron needs HashRouter
 import { HashRouter as BrowserRouter, Route, Switch } from "react-router-dom";
 import { ErrorNotification } from "../components/molecules/notifications/ErrorNotification";
 import { ControlPanelController } from "../components/organisms/controllPanel/presentation/ControlPanelController";
@@ -49,29 +51,37 @@ export function Davit() {
                 <Route exact
                        path={ModuleRoutes.actor}
                 >
-                    <div className="componentPage">
-                        <ActorModelController />
+                    <div className="Carv2">
+                        <div className="componentPage">
+                            <ActorModelController fullScreen />
+                        </div>
                     </div>
                 </Route>
                 <Route exact
                        path={ModuleRoutes.data}
                 >
-                    <div className="componentPage">
-                        <DataModelController />
+                    <div className="Carv2">
+                        <div className="componentPage">
+                            <DataModelController fullScreen />
+                        </div>
                     </div>
                 </Route>
                 <Route exact
                        path={ModuleRoutes.table}
                 >
-                    <div className="componentPage">
-                        <TableModelController />
+                    <div className="Carv2">
+                        <div className="componentPage">
+                            <TableModelController fullScreen />
+                        </div>
                     </div>
                 </Route>
                 <Route exact
                        path={ModuleRoutes.flowChart}
                 >
-                    <div className="componentPage">
-                        <FlowChartController />
+                    <div className="Carv2">
+                        <div className="componentPage">
+                            <FlowChartController fullScreen />
+                        </div>
                     </div>
                 </Route>
             </Switch>

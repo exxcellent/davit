@@ -33,6 +33,7 @@ import { useGetStepTableData } from "../tables/model/ModelSequenceStep";
 import { useGetStepActionTableData } from "../tables/model/ModelSequenceStepAction";
 
 interface TableModelControllerProps {
+    fullScreen?: boolean;
 }
 
 export enum ActiveTab {
@@ -50,7 +51,8 @@ export enum ActiveTab {
     dataSetup = "dataSetup",
 }
 
-export const TableModelController: FunctionComponent<TableModelControllerProps> = () => {
+export const TableModelController: FunctionComponent<TableModelControllerProps> = (props) => {
+    const {fullScreen} = props;
     const {
         showChainModelTab,
         showSequenceModelTabs,
@@ -65,7 +67,7 @@ export const TableModelController: FunctionComponent<TableModelControllerProps> 
     } = useSequenceTableViewModel();
 
     return (
-        <div className={"sequenceTable"}
+        <div className={fullScreen ? "" : "sequenceTable"}
              ref={parentRef}
         >
             <div className="tableBorder">

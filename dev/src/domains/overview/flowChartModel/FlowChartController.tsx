@@ -19,9 +19,11 @@ import "./FlowChart.css";
 import { FlowChartlabel } from "./fragments/FlowChartlabel";
 
 interface FlowChartControllerProps {
+    fullScreen?: boolean;
 }
 
-export const FlowChartController: FunctionComponent<FlowChartControllerProps> = () => {
+export const FlowChartController: FunctionComponent<FlowChartControllerProps> = (props) => {
+        const {fullScreen} = props;
         const {
             nodeModelTree,
             calcSteps,
@@ -188,7 +190,7 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
         };
 
         return (
-            <div className="flowChartModel"
+            <div className={fullScreen ? "fullscreen" : "flowChartModel"}
                  ref={parentRef}
             >
                 {!renderFlowChart() &&

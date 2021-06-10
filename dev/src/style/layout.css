@@ -46,17 +46,8 @@
 
 /*Size*/
 
-.width-fluid {
+.flex .width-fluid {
     width: 100%;
-}
-
-.height-fluid {
-    height: 100%;
-}
-
-.fluid {
-    width: 100%;
-    height: 100%;
 }
 
 /* border */
