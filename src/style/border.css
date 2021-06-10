@@ -23,3 +23,11 @@
 .border-large {
     border-width: var(--border-size-large);
 }
+
+.border-radius {
+    border-radius: var(--border-radius);
+}
+
+.remove-border-radius {
+    border-radius: unset;
+}

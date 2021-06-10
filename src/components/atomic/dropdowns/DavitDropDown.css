@@ -62,6 +62,7 @@
 .react-select-label__control {
     background-color: transparent !important;
     border: none !important;
+    box-shadow: none !important;
 }
 
 .react-select-label__control:hover {

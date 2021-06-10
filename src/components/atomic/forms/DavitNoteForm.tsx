@@ -53,12 +53,12 @@ export const DavitNoteForm: FunctionComponent<DavitNoteFormProps> = (props) => {
             <FormDivider />
 
             <FormFooter>
-                <DavitButton onClick={() => onCancel()}
-                             label="cancel"
-                />
-                <DavitButton onClick={() => onSubmit(noteText)}
-                             label="save"
-                />
+                <DavitButton onClick={() => onCancel()}>
+                    {"cancel"}
+                </DavitButton>
+                <DavitButton onClick={() => onSubmit(noteText)}>
+                    {"save"}
+                </DavitButton>
             </FormFooter>
         </div>
     );

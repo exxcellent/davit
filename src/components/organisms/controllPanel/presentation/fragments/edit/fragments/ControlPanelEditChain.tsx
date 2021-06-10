@@ -74,9 +74,9 @@ export const ControlPanelEditChain: FunctionComponent<ControlPanelEditChainProps
             <OptionField label="Options"
                          divider={true}
             >
-                <DavitButton onClick={createAnother}
-                             label="Create another"
-                />
+                <DavitButton onClick={createAnother}>
+                    {"Create another"}
+                </DavitButton>
                 <DavitBackButton onClick={saveChain} />
                 <DavitDeleteButton onClick={deleteChain} />
             </OptionField>

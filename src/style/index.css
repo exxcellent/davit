@@ -138,6 +138,7 @@ time, mark, audio, video {
 
     font-family: var(--text-font-family);
     font-size: var(--text-size);
+    color: var(--primary-text-color);
     vertical-align: baseline;
 }
 
@@ -168,4 +169,9 @@ q:before, q:after {
 table {
     border-collapse: collapse;
     border-spacing: 0;
+}
+
+/* misc utils */
+.no-user-select {
+    user-select: none;
 }
