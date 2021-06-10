@@ -9,7 +9,7 @@
     --color-blue: #0060A9;
     --color-blue--lighter: #4D90C3;
     --color-cyan: #35ABE2;
-    --color-cyan--lighter: #72C4EB;
+    --color-cyan--lighter: #00cdf1; /* original theme color: #72C4EB; */
     --color-lila: #9D599F;
     --color-lila--lighter: #BA8BBC;
     --color-purple: #93019b;
@@ -53,7 +53,7 @@
     --primary-text-color: var(--color-light);
 
     /* secondary */
-    --secondary-color: #00cdf1;
+    --secondary-color: var(--color-cyan--lighter);
     /*--secondary-color: var(--color-blue);*/
     --secondary-text-color: var(--color-light);
 
@@ -89,7 +89,7 @@
     --primary-text-color: var(--color-light);
 
     /* secondary */
-    --secondary-color: #00cdf1;
+    --secondary-color: var(--color-cyan--lighter);
     /*--secondary-color: var(--color-blue);*/
     --secondary-text-color: var(--color-light);
 
