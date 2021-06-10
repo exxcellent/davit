@@ -15,7 +15,7 @@
 
 .flex-start {
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: center;
 }
 
 .flex-center {
@@ -38,4 +38,23 @@
 
 .flex-shrink {
     flex-shrink: 1;
+}
+
+.content-space-around {
+    justify-content: space-around;
+}
+
+/*Size*/
+
+.width-fluid {
+    width: 100%;
+}
+
+.height-fluid {
+    height: 100%;
+}
+
+.fluid {
+    width: 100%;
+    height: 100%;
 }

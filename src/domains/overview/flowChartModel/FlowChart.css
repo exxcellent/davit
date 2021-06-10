@@ -5,28 +5,34 @@
     --flowchart-padding: 6px;
 }
 
+.flowChart {
+    overflow: auto;
+    display: block;
+    width: 100%;
+}
+
 .STEP, .LINK {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: var(--text-color);
+    color: var(--primary-text-color);
     background-color: var(--background-color-header);
     min-height: var(--flowchart-element-min-height);
     min-width: var(--flowchart-element-min-width);
     max-width: var(--flowchart-element-max-width);
-    border-radius: var(--davit-border-radius);
+    border-radius: var(--border-radius);
     padding: var(--flowchart-padding);
     text-align: center;
-    box-shadow: 0 0 0 1px var(--color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
+    box-shadow: 0 0 0 1px var(--border-color), 0 0 5px 5px rgba(0, 0, 0, 0.199);
 }
 
 .COND, .DEC {
     z-index: 2;
     width: 2em;
     height: 2em;
-    background-color: var(--background-color-shadow);
+    background-color: var(--color-black);
     transform: translateY(0.8em) rotate(45deg);
-    box-shadow: 0 0 0 1px var(--color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
+    box-shadow: 0 0 0 1px var(--border-color), 0 0 5px 5px rgba(0, 0, 0, 0.199);
 }
 
 .condLabel {
@@ -37,7 +43,7 @@
     padding-left: 3px;
     padding-right: 3px;
     border-radius: 3px;
-    box-shadow: 0 0 0 1px var(--color-border), 0 0 5px 5px rgba(0, 0, 0, 0.199);
+    box-shadow: 0 0 0 1px var(--border-color), 0 0 5px 5px rgba(0, 0, 0, 0.199);
 }
 
 .FIN {
@@ -54,9 +60,9 @@
     border-radius: 50%;
     width: 2em;
     height: 2em;
-    background-color: var(--color-exxcellent-blue);
+    background-color: var(--color-blue);
     border: 0.2em solid var(--background-color);
-    box-shadow: 0 0 0 0.2em var(--color-exxcellent-blue), 0 0 6px 6px rgba(0, 0, 0, 0.199);
+    box-shadow: 0 0 0 0.2em var(--color-blue), 0 0 6px 6px rgba(0, 0, 0, 0.199);
     transform: translateY(0.2em);
 }
 
@@ -89,7 +95,7 @@
 }
 
 #flowChartCurrentStep {
-    box-shadow: 0 0 6px 2px var(--color-secondary), 0 0 5px 5px rgba(0, 0, 0, 0.199);
+    box-shadow: 0 0 6px 2px var(--secondary-color), 0 0 5px 5px rgba(0, 0, 0, 0.199);
     animation-duration: 0.5s;
     animation-name: glow;
 }

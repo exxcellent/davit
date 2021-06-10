@@ -3,8 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import logo from "../../../assets/exxcellent_logo_200.png";
 import { DAVIT_VERISON } from "../../../DavitConstants";
 import { EditActions, editSelectors, Mode } from "../../../slices/EditSlice";
-import { DavitSidePanelButton } from "../../atomic/buttons/DavitSidePanelButton";
+import { ElementSize } from "../../../style/Theme";
+import { DavitIconButton } from "../../atomic";
 import { DavitIcons } from "../../atomic/icons/IconSet";
+import "./SidePanel.css";
 
 export interface SidePanelProps {
 }
@@ -14,17 +16,18 @@ export const SidePanelController: FunctionComponent<SidePanelProps> = () => {
 
     return (
         <div className="leftPanel">
-            <DavitSidePanelButton icon={DavitIcons.pencil}
-                                  onClick={setModeToEdit}
-                                  active={mode.includes(Mode.EDIT.toString())}
+            <DavitIconButton iconName={DavitIcons.pencil}
+                             size={ElementSize.large}
+                             className={"sidePanelButton" + (mode.includes(Mode.EDIT.toString()) ? " active" : "")}
+                             onClick={setModeToEdit}
             />
-            <DavitSidePanelButton icon={DavitIcons.eye}
-                                  onClick={setModeToView}
-                                  active={mode === Mode.VIEW}
+            <DavitIconButton iconName={DavitIcons.eye}
+                             className={"sidePanelButton" + (mode === Mode.VIEW ? " active" : "")}
+                             onClick={setModeToView}
             />
-            <DavitSidePanelButton icon={DavitIcons.file}
-                                  onClick={setModeToFile}
-                                  active={mode === Mode.FILE}
+            <DavitIconButton iconName={DavitIcons.file}
+                             className={"sidePanelButton" + (mode === Mode.FILE ? " active" : "")}
+                             onClick={setModeToFile}
             />
             {/*TODO: enable wenn tabs are fixed!*/}
             {/*<DavitSidePanelButton icon="external alternate" onClick={setModeToTab} active={mode === Mode.TAB} />*/}

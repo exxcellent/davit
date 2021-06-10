@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Arrow, ArrowType, DavitPathHead, DavitPathProps, DavitPathTypes } from "../../components/atomic/svg/DavitPath";
-import { ViewPlaceholder } from "../../components/layout/ViewPlaceholder";
 import { DavitCard, DavitCardProps } from "../../components/molecules/card/DavitCard";
 import { DnDBox, DnDBoxElement, DnDBoxType } from "../../components/organisms/dndBox/DnDBox";
 import { ActorCTO } from "../../dataAccess/access/cto/ActorCTO";
@@ -24,11 +23,9 @@ import { ActorDataState } from "../../viewDataTypes/ActorDataState";
 import { ViewFragmentProps } from "../../viewDataTypes/ViewFragment";
 
 interface ActorModelControllerProps {
-    fullScreen?: boolean;
 }
 
-export const ActorModelController: FunctionComponent<ActorModelControllerProps> = (props) => {
-        const {fullScreen} = props;
+export const ActorModelController: FunctionComponent<ActorModelControllerProps> = () => {
 
         const {
             onPositionUpdate,
@@ -44,13 +41,12 @@ export const ActorModelController: FunctionComponent<ActorModelControllerProps> 
             <>
                 {toDnDElements.length === 0 &&
                 <div className="actorModel">
-                    <ViewPlaceholder text={"Create a new actor"} />
+                    <h2 className={"fluid flex flex-center"}>{"Create a new actor"}</h2>
                 </div>}
                 {toDnDElements.length > 0 && <DnDBox
                     onPositionUpdate={onPositionUpdate}
                     toDnDElements={toDnDElements}
                     svgElements={getArrows()}
-                    fullScreen={fullScreen}
                     zoomIn={zoomIn}
                     zoomOut={zoomOut}
                     zoom={actorZoom}
@@ -360,7 +356,8 @@ const useViewModel = () => {
                     targetHeight: arrowToDraw.targetGeometricalData.geometricalData.height,
                     targetWidth: arrowToDraw.targetGeometricalData.geometricalData.width,
                     stroked: arrowToDraw.type === ArrowType.TRIGGER,
-                    lineColor: arrowToDraw.type === ArrowType.SEND ? "var(--color-exxcellent-blue)" : "black",
+                    // TODO: this is a bad place to set css color variable!
+                    lineColor: arrowToDraw.type === ArrowType.SEND ? "var(--color-blue)" : "var(--color-black)",
                 });
             });
             return arrowProps;

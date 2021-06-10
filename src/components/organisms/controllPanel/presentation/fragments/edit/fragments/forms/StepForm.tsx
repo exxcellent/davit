@@ -3,13 +3,12 @@ import { faAngleUp } from "@fortawesome/free-solid-svg-icons/faAngleUp";
 import React, { FunctionComponent, useState } from "react";
 import { ActionTO } from "../../../../../../../../dataAccess/access/to/ActionTO";
 import { GoToTypes } from "../../../../../../../../dataAccess/access/types/GoToType";
+import { DavitIconButton } from "../../../../../../../atomic";
 import { DavitAddButton } from "../../../../../../../atomic/buttons/DavitAddButton";
 import { DavitBackButton } from "../../../../../../../atomic/buttons/DavitBackButton";
 import { DavitButton } from "../../../../../../../atomic/buttons/DavitButton";
-import { DavitCommentButton } from "../../../../../../../atomic/buttons/DavitCommentButton";
 import { DavitDeleteButton } from "../../../../../../../atomic/buttons/DavitDeleteButton";
 import { DavitEditButton } from "../../../../../../../atomic/buttons/DavitEditButton";
-import { DavitRootButton } from "../../../../../../../atomic/buttons/DavitRootButton";
 import { DavitShowMoreButton } from "../../../../../../../atomic/buttons/DavitShowMoreButton";
 import { DecisionDropDown } from "../../../../../../../atomic/dropdowns/DecisionDropDown";
 import { GoToOptionDropDown } from "../../../../../../../atomic/dropdowns/GoToOptionDropDown";
@@ -19,6 +18,7 @@ import { FormBody } from "../../../../../../../atomic/forms/fragments/FormBody";
 import { FormFooter } from "../../../../../../../atomic/forms/fragments/FormFooter";
 import { FormHeader } from "../../../../../../../atomic/forms/fragments/FormHeader";
 import { DavitTextInput } from "../../../../../../../atomic/textinput/DavitTextInput";
+import { DavitCommentButton } from "../../../../../../../molecules";
 import { useActionViewModel } from "../viewmodels/ActionViewModel";
 import { useStepViewModel } from "../viewmodels/StepViewModel";
 import { FormDivider } from "./fragments/FormDivider";
@@ -73,11 +73,11 @@ export const StepForm: FunctionComponent<StepFormProps> = () => {
                     }}
                     />
                     <DavitEditButton onClick={() => editOrAddAction(action)} />
-                    <DavitButton iconName={faAngleDown}
-                                 onClick={() => switchIndexesAndSave(index, true)}
+                    <DavitIconButton iconName={faAngleDown}
+                                     onClick={() => switchIndexesAndSave(index, true)}
                     />
-                    <DavitButton iconName={faAngleUp}
-                                 onClick={() => switchIndexesAndSave(index, false)}
+                    <DavitIconButton iconName={faAngleUp}
+                                     onClick={() => switchIndexesAndSave(index, false)}
                     />
                 </td>
             </tr>
@@ -197,9 +197,11 @@ export const StepForm: FunctionComponent<StepFormProps> = () => {
                 <DavitCommentButton onSaveCallback={saveNote}
                                     comment={note}
                 />
-                <DavitRootButton onClick={setRoot}
-                                 isRoot={isRoot}
-                />
+                <DavitButton onClick={setRoot}
+                             disabled={isRoot}
+                >
+                    {isRoot ? "Start" : "Set as Start"}
+                </DavitButton>
                 <DavitBackButton onClick={saveSequenceStep} />
             </FormFooter>
         </Form>
