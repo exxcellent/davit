@@ -35,13 +35,13 @@
 }
 
 .react-select__option.react-select__option--is-focused, .react-select__option:hover {
-    color: var(--color-secondary);
+    color: var(--secondary-color);
     background-color: transparent;
     cursor: pointer;
 }
 
 .react-select__option.react-select__option--is-selected {
-    background-color: var(--color-secondary);
+    background-color: var(--secondary-color);
     color: var(--primary-text-color);
 }
 
@@ -84,13 +84,13 @@
 }
 
 .react-select-label__option.react-select-label__option--is-focused, .react-select-label__option:hover {
-    color: var(--color-secondary);
+    color: var(--secondary-color);
     background-color: transparent;
     cursor: pointer;
 }
 
 .react-select-label__option.react-select-label__option--is-selected {
-    background-color: var(--color-secondary);
+    background-color: var(--secondary-color);
     color: var(--primary-text-color);
 }
 
