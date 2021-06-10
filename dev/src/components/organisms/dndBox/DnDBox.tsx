@@ -75,7 +75,7 @@ export const DnDBox: FunctionComponent<DnDBox> = (props) => {
             onMouseLeave={() => setMouseOver(false)}
             ref={constraintsRef}
             style={fullScreen ? {height: height, maxWidth: width} : {}}
-            className={fullScreen ? type.toString() + "Fullscreen" : type.toString()}
+            className={type.toString()}
             key={key}
         >
             {toDnDElements.map(wrapItem)}
