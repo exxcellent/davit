@@ -38,12 +38,12 @@ export const DavitDownloadForm: FunctionComponent<DavitDownloadFormProps> = (pro
                 />
             </FormHeader>
             <FormFooter>
-                <DavitButton onClick={() => onCloseCallback()}
-                             label="cancel"
-                />
-                <DavitButton onClick={() => onSubmit()}
-                             label="download"
-                />
+                <DavitButton onClick={() => onCloseCallback()}>
+                    {"cancel"}
+                </DavitButton>
+                <DavitButton onClick={() => onSubmit()}>
+                    {"download"}
+                </DavitButton>
             </FormFooter>
         </div>
     );

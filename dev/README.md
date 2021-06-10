@@ -15,3 +15,18 @@
 
 - DEV
     - [DEV Website](https://exxcellent.github.io/davit/dev/)
+
+## Project structure
+
+```
+src/
+ components/    <-- reusable components
+  atomic/
+  molecules/
+  organisms/
+  layout/
+ domains/       <-- business components        
+ style/         <-- global style definition
+ 
+ stories/
+```

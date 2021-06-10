@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { DataInstanceTO } from "../../../dataAccess/access/to/DataInstanceTO";
 import { EditActions } from "../../../slices/EditSlice";
 import { Filter, SequenceModelActions, sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
+import { ElementSize } from "../../../style/Theme";
 import { createViewFragment, ViewFragmentProps } from "../../../viewDataTypes/ViewFragment";
-import { DavitCardButton } from "../../atomic/buttons/DavitCardButton";
-import { DavitShowMoreButton } from "../../atomic/buttons/DavitShowMoreButton";
+import { DavitIconButton, DavitShowMoreButton } from "../../atomic";
 import { DavitIcons } from "../../atomic/icons/IconSet";
 import "./DavitCard.css";
 
@@ -52,15 +52,19 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
                 <div className="cardButtonGroup padding-tiny">
                     {type !== "INSTANCE" &&
                     <div className="margin-tiny">
-                        <DavitCardButton icon={DavitIcons.wrench}
-                                         onClick={() => onClickEdit(id, type)}
+                        <DavitIconButton
+                            size={ElementSize.small}
+                            onClick={() => onClickEdit(id, type)}
+                            className={`padding-tiny border`}
+                            iconName={DavitIcons.wrench}
                         />
                     </div>}
                     <div className="margin-tiny">
-                        <DavitCardButton
-                            icon={DavitIcons.filter}
+                        <DavitIconButton
+                            size={ElementSize.small}
                             onClick={() => onClickFilter(id, type)}
-                            isActive={isActiveFilter}
+                            className={`padding-tiny border ${isActiveFilter ? "activeButton" : ""}`}
+                            iconName={DavitIcons.filter}
                         />
                     </div>
                 </div>);

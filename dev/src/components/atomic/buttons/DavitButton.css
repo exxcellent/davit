@@ -1,19 +1,21 @@
-:root {
-    --davit-button-tiny-height: 1rem;
-    --davit-button-tiny-width: 1rem;
-    --davit-button-tiny-margin-top-bottom: 0.1rem;
-    --davit-button-tiny-margin-left-right: 0.3rem;
-
-    --davit-button-small-height: 1.8rem;
-    --davit-button-small-width: 2rem;
-    --davit-button-small-margin-top-bottom: 0.1rem;
-    --davit-button-small-margin-left-right: 0.3rem;
-}
-
 button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     color: var(--primary-text-color);
     background-color: transparent;
-    text-align: center;
+
+    border-style: solid;
+    border-color: var(--border-color);
+    border-radius: var(--border-radius);
+
+    --size: 42px;
+    height: var(--size); /* TODO do not use pixel perfect definitions */
+    min-height: var(--size);
+    min-width: var(--size);
+
+    padding: var(--spacing-small);
 }
 
 button:hover {
@@ -22,12 +24,34 @@ button:hover {
 }
 
 
-button.button-tiny {
-    width: var(--davit-button-tiny-width);
-    height: var(--davit-button-tiny-height);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+button.tiny {
+    --size: 1rem;
+    height: var(--size);
+    min-height: var(--size);
+    min-width: var(--size);
+
+    padding: 0;
+}
+
+button.small {
+    --size: 1.8rem;
+    height: var(--size);
+    min-height: var(--size);
+    min-width: var(--size);
+
+    padding: 0 var(--spacing-tiny) 0 var(--spacing-tiny);
+}
+
+button.medium {
+}
+
+button.large {
+    --size: 3.5rem;
+    height: var(--size);
+    min-height: var(--size);
+    min-width: var(--size);
+
+    padding: 0.5rem var(--spacing-medium) 0.5rem var(--spacing-medium);
 }
 
 button.activeButton {

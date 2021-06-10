@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DavitPathProps, DavitPathTypes } from "../../components/atomic/svg/DavitPath";
-import { ViewPlaceholder } from "../../components/layout/ViewPlaceholder";
 import { DavitCard, DavitCardProps } from "../../components/molecules/card/DavitCard";
 import { DnDBox, DnDBoxElement, DnDBoxType } from "../../components/organisms/dndBox/DnDBox";
 import { ActorCTO } from "../../dataAccess/access/cto/ActorCTO";
@@ -45,7 +44,7 @@ export const DataModelController: FunctionComponent<DataModelControllerProps> = 
                 <>
                     {toDnDElements.length === 0 &&
                     <div className="dataModel">
-                        <ViewPlaceholder text={"Create a new data object"} />
+                        <h2 className={"fluid flex flex-center"}>{"Create a new data object"}</h2>
                     </div>}
                     {toDnDElements.length > 0 && <DnDBox
                         onPositionUpdate={onPositionUpdate}
