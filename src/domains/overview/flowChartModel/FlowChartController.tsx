@@ -479,28 +479,30 @@ const useFlowChartViewModel = () => {
             return DavitUtil.deepCopy(stepIds);
         };
 
+        //TODO: do not use css variables here
         const getLineColor = (): string => {
             if (terminalStep) {
                 switch (terminalStep.type) {
                     case GoToTypes.ERROR:
-                        return "var(--data-delete-color)";
+                        return "var(--color-error)";
                     case GoToTypes.FIN:
-                        return "var(--data-add-color)";
+                        return "var(--color-green)";
                     case GoToTypes.IDLE:
-                        return "var(--color-exxcellent-blue)";
+                        return "var(--color-blue)";
                 }
             } else {
                 return "#FF00FF";
             }
         };
 
+        //TODO: do not use css variables here
         const getChainLineColor = (): string => {
             if (calcChain) {
                 switch (calcChain.terminal.type) {
                     case GoToTypesChain.ERROR:
-                        return "var(--data-delete-color)";
+                        return "var(--color-error)";
                     case GoToTypesChain.FIN:
-                        return "var(--data-add-color)";
+                        return "var(--color-green)";
                 }
             } else {
                 return "#FF00FF";
