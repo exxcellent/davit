@@ -95,7 +95,7 @@
 }
 
 #flowChartCurrentStep {
-    box-shadow: 0 0 6px 2px var(--color-secondary), 0 0 5px 5px rgba(0, 0, 0, 0.199);
+    box-shadow: 0 0 6px 2px var(--secondary-color), 0 0 5px 5px rgba(0, 0, 0, 0.199);
     animation-duration: 0.5s;
     animation-name: glow;
 }

@@ -13,6 +13,6 @@
 }
 
 .sidePanelButton.active {
-    background-color: var(--color-secondary);
+    background-color: var(--secondary-color);
     transition: background-color var(--animation-time);
 }

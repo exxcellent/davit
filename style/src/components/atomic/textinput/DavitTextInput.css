@@ -3,7 +3,7 @@
     border-top-left-radius: var(--border-radius);
     border: var(--border-size-medium) solid var(--border-color);
     border-bottom: var(--border-size-medium) solid var(--border-color);
-    background-color: var(--color-secondary);
+    background-color: var(--secondary-color);
     color: var(--primary-text-color);
 }
 
