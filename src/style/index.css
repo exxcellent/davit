@@ -2,6 +2,7 @@
 @import "./layout.css";
 @import "./fonts.css";
 @import "./animations.css";
+@import "./border.css";
 
 :root {
     --color-dark-blue: #0D456B;
@@ -44,7 +45,7 @@
     --border-radius: 0.2rem;
     --border-size-small: 1px;
     --border-size-medium: 2px;
-    --border-size-big: 0.5rem;
+    --border-size-large: 0.5rem;
 }
 
 .light {
