@@ -9,6 +9,10 @@ export const SequenceStateRepository = {
         return Array.from(dataStore.getDataStore().sequenceStates.values());
     },
 
+    findAllForSequence(sequenceId: number): SequenceStateTO[] {
+        return this.findAll().filter(state => state.sequenceFk !== sequenceId);
+    },
+
     find(id: number): SequenceStateTO | undefined {
         return dataStore.getDataStore().sequenceStates.get(id);
     },

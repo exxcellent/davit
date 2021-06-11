@@ -417,12 +417,21 @@ export const SequenceDataAccessService = {
 
 const createSequenceCTO = (sequence: SequenceTO | undefined): SequenceCTO => {
     CheckHelper.nullCheck(sequence, "sequence");
-    const sequenceStepCTOs: SequenceStepCTO[] = SequenceStepRepository.findAllForSequence(sequence!.id).map(
-        createSequenceStepCTO,
-    );
+
+    const sequenceStepCTOs: SequenceStepCTO[] = SequenceStepRepository.findAllForSequence(sequence!.id).map(createSequenceStepCTO);
+
     sequenceStepCTOs.sort((step1, step2) => step1.sequenceStepTO.index - step2.sequenceStepTO.index);
+
     const decisions: DecisionTO[] = DecisionRepository.findAllForSequence(sequence!.id);
-    return {sequenceTO: sequence!, sequenceStepCTOs: sequenceStepCTOs, decisions: decisions};
+
+    const sequenceStates: SequenceStateTO[] = SequenceStateRepository.findAllForSequence(sequence!.id);
+
+    return {
+        sequenceTO: sequence!,
+        sequenceStepCTOs: sequenceStepCTOs,
+        decisions: decisions,
+        sequenceStates: sequenceStates
+    };
 };
 
 const createSequenceStepCTO = (sequenceStepTO: SequenceStepTO | undefined): SequenceStepCTO => {
@@ -463,16 +472,20 @@ const createChainLinkCTO = (link: ChainlinkTO | undefined): ChainlinkCTO => {
 
 const crateChainCTO = (chain: ChainTO): ChainCTO => {
     CheckHelper.nullCheck(chain, "chainTO");
+
     const copyChain: ChainTO = DavitUtil.deepCopy(chain);
-    const chainCTO: ChainCTO = new ChainCTO();
+
     const chainLinkTOs: ChainlinkTO[] | undefined = ChainLinkRepository.findAllForChain(copyChain.id);
+
     let chainLinkCTOs: ChainlinkCTO[] = [];
+
     if (chainLinkTOs) {
         chainLinkCTOs = chainLinkTOs.map((link) => createChainLinkCTO(link));
     }
+
     const chainDecisions: ChainDecisionTO[] = ChainDecisionRepository.findAllForChain(copyChain.id);
-    chainCTO.chain = copyChain;
-    chainCTO.links = chainLinkCTOs;
-    chainCTO.decisions = chainDecisions;
-    return chainCTO;
+
+    const chainStates: ChainStateTO[] = ChainStateRepository.findAllByChainId(chain!.id);
+
+    return {chain: copyChain, links: chainLinkCTOs, decisions: chainDecisions, chainStates: chainStates};
 };

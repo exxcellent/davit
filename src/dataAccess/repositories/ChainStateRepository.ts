@@ -9,6 +9,10 @@ export const ChainStateRepository = {
         return Array.from(dataStore.getDataStore().chainStates.values());
     },
 
+    findAllByChainId(chainId: number): ChainStateTO[] {
+        return this.findAll().filter(state => state.chainFk !== chainId);
+    },
+
     find(id: number): ChainStateTO | undefined {
         return dataStore.getDataStore().chainStates.get(id);
     },
