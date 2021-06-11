@@ -18,7 +18,7 @@ export const ChainMockRepository = {
         let ChainMockTO: ChainMockTO;
         let chainMockId: number = chainMock.id;
 
-        chainMockId = DataAccessUtil.checkId(chainMockId, this.findAll());
+        chainMockId = DataAccessUtil.getOrCreateId(chainMockId, this.findAll());
 
         ChainMockTO = {
             ...chainMock,
