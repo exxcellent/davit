@@ -7,20 +7,24 @@ import { SequenceStepCTO } from "../access/cto/SequenceStepCTO";
 import { ActionTO } from "../access/to/ActionTO";
 import { ChainDecisionTO } from "../access/to/ChainDecisionTO";
 import { ChainlinkTO } from "../access/to/ChainlinkTO";
+import { ChainMockTO } from "../access/to/ChainMockTO";
 import { ChainTO } from "../access/to/ChainTO";
 import { DataSetupTO } from "../access/to/DataSetupTO";
 import { DecisionTO } from "../access/to/DecisionTO";
 import { InitDataTO } from "../access/to/InitDataTO";
+import { SequenceMockTO } from "../access/to/SequenceMockTO";
 import { SequenceStepTO } from "../access/to/SequenceStepTO";
 import { SequenceTO } from "../access/to/SequenceTO";
 import { GoToTypes } from "../access/types/GoToType";
 import { ActionRepository } from "../repositories/ActionRepository";
 import { ChainDecisionRepository } from "../repositories/ChainDecisionRepository";
 import { ChainLinkRepository } from "../repositories/ChainLinkRepository";
+import { ChainMockRepository } from "../repositories/ChainMockRepository";
 import { ChainRepository } from "../repositories/ChainRepository";
 import { DataSetupRepository } from "../repositories/DataSetupRepository";
 import { DecisionRepository } from "../repositories/DecisionRepository";
 import { InitDataRepository } from "../repositories/InitDataRepository";
+import { SequenceMockRepository } from "../repositories/SequenceMockRepository";
 import { SequenceRepository } from "../repositories/SequenceRepository";
 import { SequenceStepRepository } from "../repositories/SequenceStepRepository";
 import { CheckHelper } from "../util/CheckHelper";
@@ -292,6 +296,58 @@ export const SequenceDataAccessService = {
 
     deleteInitData(id: number): InitDataTO {
         return InitDataRepository.delete(id);
+    },
+
+    // --------------------------------------------------- Sequence Mock ------------------------------------------------
+
+    findAllSequenceMocks(): SequenceMockTO[] {
+        return SequenceMockRepository.findAll();
+    },
+
+    saveSequenceMock(sequenceMock: SequenceMockTO): SequenceMockTO {
+        CheckHelper.nullCheck(sequenceMock, "SequenceMock");
+        return SequenceMockRepository.save(sequenceMock);
+    },
+
+    deleteSequenceMock(sequenceMock: SequenceMockTO): SequenceMockTO {
+        CheckHelper.nullCheck(sequenceMock, "SequenceMock");
+        return SequenceMockRepository.delete(sequenceMock);
+    },
+
+    findSequenceMock(id: number): SequenceMockTO {
+        const sequenceMock: SequenceMockTO | undefined = SequenceMockRepository.find(id);
+
+        if (!sequenceMock) {
+            throw new Error("Could not find Sequence Mock with ID: " + id);
+        } else {
+            return sequenceMock;
+        }
+    },
+
+    // --------------------------------------------------- Chain Mock ------------------------------------------------
+
+    findAllChainMocks(): ChainMockTO[] {
+        return ChainMockRepository.findAll();
+    },
+
+    saveChainMock(chainMock: ChainMockTO): ChainMockTO {
+        CheckHelper.nullCheck(chainMock, "chainMock");
+        return ChainMockRepository.save(chainMock);
+    },
+
+    deleteChainMock(chainMock: ChainMockTO): ChainMockTO {
+        CheckHelper.nullCheck(chainMock, "chainMock");
+        return ChainMockRepository.delete(chainMock);
+    },
+
+    findChainMock(id: number): ChainMockTO {
+        const chainMock: ChainMockTO | undefined = ChainMockRepository.find(id);
+
+        if (!chainMock) {
+            throw new Error("Could not find Chain Mock with ID: " + id);
+        } else {
+            return chainMock;
+        }
     },
 
     // --------------------------------------------------- Chain ------------------------------------------------
