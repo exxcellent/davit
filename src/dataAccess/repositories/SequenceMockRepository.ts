@@ -18,7 +18,7 @@ export const SequenceMockRepository = {
         let sequenceMockTOtoSave: SequenceMockTO;
         let sequenceMockId: number = sequenceMock.id;
 
-        sequenceMockId = DataAccessUtil.checkId(sequenceMockId, this.findAll());
+        sequenceMockId = DataAccessUtil.getOrCreateId(sequenceMockId, this.findAll());
 
         sequenceMockTOtoSave = {
             ...sequenceMock,
