@@ -26,14 +26,10 @@ import { SequenceStepRepository } from "../repositories/SequenceStepRepository";
 import { CheckHelper } from "../util/CheckHelper";
 
 export const SequenceDataAccessService = {
-    // ---------------------------------------------------------- Sequence ----------------------------------------------------------
+    // ---------------------------------------------- Sequence ---------------------------------------------
 
     findSequenceCTO(sequenceId: number): SequenceCTO {
         return createSequenceCTO(SequenceRepository.find(sequenceId));
-    },
-
-    findSequenceTO(sequenceId: number): SequenceTO | undefined {
-        return SequenceRepository.find(sequenceId);
     },
 
     findAll(): SequenceTO[] {
@@ -44,8 +40,8 @@ export const SequenceDataAccessService = {
         CheckHelper.nullCheck(sequence, "sequenceCTO");
         const sequenceTO: SequenceTO = SequenceRepository.save(sequence.sequenceTO);
         sequence.sequenceStepCTOs.forEach((step) => {
-            if (step.squenceStepTO.sequenceFk === -1) {
-                step.squenceStepTO.sequenceFk = sequenceTO.id;
+            if (step.sequenceStepTO.sequenceFk === -1) {
+                step.sequenceStepTO.sequenceFk = sequenceTO.id;
             }
             this.saveSequenceStep(step);
         });
@@ -54,14 +50,13 @@ export const SequenceDataAccessService = {
 
     saveSequenceTO(sequenceTO: SequenceTO): SequenceTO {
         CheckHelper.nullCheck(sequenceTO, "sequenceTO");
-        const savedSequenceTO: SequenceTO = SequenceRepository.save(sequenceTO);
-        return savedSequenceTO;
+        return SequenceRepository.save(sequenceTO);
     },
 
     deleteSequenceTO(sequenceTO: SequenceTO): SequenceTO {
         CheckHelper.nullCheck(sequenceTO, "sequenceTO");
         const tempCTO: SequenceCTO = createSequenceCTO(sequenceTO);
-        tempCTO.sequenceStepCTOs.forEach((step) => SequenceStepRepository.delete(step.squenceStepTO));
+        tempCTO.sequenceStepCTOs.forEach((step) => SequenceStepRepository.delete(step.sequenceStepTO));
         tempCTO.decisions.forEach((cond) => DecisionRepository.delete(cond));
         return SequenceRepository.delete(sequenceTO);
     },
@@ -82,8 +77,8 @@ export const SequenceDataAccessService = {
         });
 
         sequence.sequenceStepCTOs.forEach((step) => {
-            if (step.squenceStepTO.goto.type === GoToTypes.STEP || step.squenceStepTO.goto.type === GoToTypes.DEC) {
-                step.squenceStepTO.goto.id = -1;
+            if (step.sequenceStepTO.goto.type === GoToTypes.STEP || step.sequenceStepTO.goto.type === GoToTypes.DEC) {
+                step.sequenceStepTO.goto.id = -1;
                 this.saveSequenceStep(step);
             }
         });
@@ -96,7 +91,7 @@ export const SequenceDataAccessService = {
         return sequence;
     },
 
-    // ---------------------------------------------------------- ROOT ----------------------------------------------------------
+    // ----------------------------------------------- ROOT -------------------------------------------------
 
     setRoot(sequenceId: number, id: number, isDecision: boolean): SequenceStepTO | DecisionTO {
         let root: SequenceStepTO | DecisionTO | null = null;
@@ -164,21 +159,21 @@ export const SequenceDataAccessService = {
         }
     },
 
-    // ---------------------------------------------------------- Sequence step ----------------------------------------------------------
+    // ------------------------------------------ Sequence step ----------------------------------------
 
     saveSequenceStep(sequenceStep: SequenceStepCTO): SequenceStepCTO {
         CheckHelper.nullCheck(sequenceStep, "sequenceStep");
         // TODO: move this in a CheckSaveDecision class.
-        if (sequenceStep.squenceStepTO.sequenceFk === -1) {
+        if (sequenceStep.sequenceStepTO.sequenceFk === -1) {
             throw new Error("Sequence step sequenceFk is '-1'!");
         }
-        const persistedActions: ActionTO[] = ActionRepository.findAllForStep(sequenceStep.squenceStepTO.id);
+        const persistedActions: ActionTO[] = ActionRepository.findAllForStep(sequenceStep.sequenceStepTO.id);
         const actionsToDelete: ActionTO[] = persistedActions.filter(
             (action) => !sequenceStep.actions.some((cDCTO) => cDCTO.id === action.id),
         );
         actionsToDelete.map((cptd) => cptd.id).forEach(ActionRepository.delete);
 
-        const savedStep: SequenceStepTO = SequenceStepRepository.save(sequenceStep.squenceStepTO);
+        const savedStep: SequenceStepTO = SequenceStepRepository.save(sequenceStep.sequenceStepTO);
 
         sequenceStep.actions.forEach((action) => {
             // action.sequenceStepFk = savedStep.id;
@@ -190,9 +185,9 @@ export const SequenceDataAccessService = {
     deleteSequenceStep(sequenceStep: SequenceStepCTO): SequenceStepCTO {
         CheckHelper.nullCheck(sequenceStep, "step");
         sequenceStep.actions.map((action) => ActionRepository.delete(action.id));
-        SequenceStepRepository.delete(sequenceStep.squenceStepTO);
+        SequenceStepRepository.delete(sequenceStep.sequenceStepTO);
         const seqSteps: SequenceStepTO[] = DavitUtil.deepCopy(
-            SequenceStepRepository.findAllForSequence(sequenceStep.squenceStepTO.sequenceFk),
+            SequenceStepRepository.findAllForSequence(sequenceStep.sequenceStepTO.sequenceFk),
         );
         seqSteps.sort((a, b) => a.index - b.index);
         seqSteps.forEach((step, index) => (step.index = index + 1));
@@ -205,7 +200,7 @@ export const SequenceDataAccessService = {
         return createSequenceStepCTO(step);
     },
 
-    // ---------------------------------------------------------- Decision ----------------------------------------------------------
+    // ------------------------------------------- Decision ---------------------------------------------
 
     saveDecision(decision: DecisionTO): DecisionTO {
         return DecisionRepository.save(decision);
@@ -223,13 +218,12 @@ export const SequenceDataAccessService = {
         return decision;
     },
 
-    // ---------------------------------------------------------- Action ----------------------------------------------------------
+    // ----------------------------------------------- Action -----------------------------------------------
 
     saveActionTO(action: ActionTO): ActionTO {
         CheckHelper.nullCheck(action, "actionTO");
         const copyAction: ActionTO = DavitUtil.deepCopy(action);
-        const savedActionTO: ActionTO = ActionRepository.save(copyAction);
-        return savedActionTO;
+        return ActionRepository.save(copyAction);
     },
 
     deleteAction(action: ActionTO): ActionTO {
@@ -238,7 +232,7 @@ export const SequenceDataAccessService = {
         return action;
     },
 
-    // ---------------------------------------------------------- Data Setup ----------------------------------------------------------
+    // --------------------------------------------- Data Setup -------------------------------------------
 
     findAllDataSetup(): DataSetupTO[] {
         return DataSetupRepository.findAll();
@@ -250,8 +244,7 @@ export const SequenceDataAccessService = {
 
     saveDataSetup(dataSetup: DataSetupTO): DataSetupTO {
         CheckHelper.nullCheck(dataSetup, "dataSetup");
-        const dataSetupTO: DataSetupTO = DataSetupRepository.save(dataSetup);
-        return dataSetupTO;
+        return DataSetupRepository.save(dataSetup);
     },
 
     saveDataSetupCTO(dataSetupCTO: DataSetupCTO): DataSetupCTO {
@@ -278,7 +271,7 @@ export const SequenceDataAccessService = {
         return dataSetup;
     },
 
-    // ---------------------------------------------------------- Init Data ----------------------------------------------------------
+    // ----------------------------------------------- Init Data --------------------------------------------
     findAllInitDatas(): InitDataTO[] {
         return InitDataRepository.findAll();
     },
@@ -294,15 +287,14 @@ export const SequenceDataAccessService = {
 
     saveInitData(initData: InitDataTO): InitDataTO {
         CheckHelper.nullCheck(initData, "initData");
-        const savedInitData: InitDataTO = InitDataRepository.save(initData);
-        return savedInitData;
+        return InitDataRepository.save(initData);
     },
 
     deleteInitData(id: number): InitDataTO {
         return InitDataRepository.delete(id);
     },
 
-    // ---------------------------------------------------------- Chain ----------------------------------------------------------
+    // --------------------------------------------------- Chain ------------------------------------------------
     findAllChains(): ChainTO[] {
         return ChainRepository.findAll();
     },
@@ -323,7 +315,7 @@ export const SequenceDataAccessService = {
         return ChainRepository.delete(chain);
     },
 
-    saveChainlink(link: ChainlinkTO): ChainlinkTO {
+    saveChainLink(link: ChainlinkTO): ChainlinkTO {
         return ChainLinkRepository.save(link);
     },
 
@@ -331,8 +323,8 @@ export const SequenceDataAccessService = {
         return ChainLinkRepository.findAll();
     },
 
-    deleteChainTO(chainlink: ChainlinkTO): ChainlinkTO {
-        return ChainLinkRepository.delete(chainlink);
+    deleteChainTO(chainLink: ChainlinkTO): ChainlinkTO {
+        return ChainLinkRepository.delete(chainLink);
     },
 
     saveChainDecision(decision: ChainDecisionTO): ChainDecisionTO {
@@ -352,7 +344,7 @@ export const SequenceDataAccessService = {
         if (link) {
             return link;
         } else {
-            throw Error("could not find chain link with id: " + id);
+            throw Error("Try to find chain link: Could not find chain link with ID: " + id);
         }
     },
 
@@ -361,18 +353,18 @@ export const SequenceDataAccessService = {
         if (decision) {
             return decision;
         } else {
-            throw Error("could not find chain decision with id: " + id);
+            throw Error("Try to find chain decision: Could not find chain decision with ID: " + id);
         }
     },
 };
-// ======================================================== PRIVATE ========================================================
+// ================================================== PRIVATE ====================================================
 
 const createSequenceCTO = (sequence: SequenceTO | undefined): SequenceCTO => {
     CheckHelper.nullCheck(sequence, "sequence");
     const sequenceStepCTOs: SequenceStepCTO[] = SequenceStepRepository.findAllForSequence(sequence!.id).map(
         createSequenceStepCTO,
     );
-    sequenceStepCTOs.sort((step1, step2) => step1.squenceStepTO.index - step2.squenceStepTO.index);
+    sequenceStepCTOs.sort((step1, step2) => step1.sequenceStepTO.index - step2.sequenceStepTO.index);
     const decisions: DecisionTO[] = DecisionRepository.findAllForSequence(sequence!.id);
     return {sequenceTO: sequence!, sequenceStepCTOs: sequenceStepCTOs, decisions: decisions};
 };
@@ -384,7 +376,7 @@ const createSequenceStepCTO = (sequenceStepTO: SequenceStepTO | undefined): Sequ
         return a.index - b.index;
     });
     return {
-        squenceStepTO: sequenceStepTO!,
+        sequenceStepTO: sequenceStepTO!,
         actions: sortByIndexActions,
     };
 };
