@@ -10,6 +10,10 @@ export const ConstraintsHelper = {
         // TODO: check if mock is part of an decision.
     },
 
+    deleteChainMockConstraintCheck(sequenceMockId: number, dataStore: DataStoreCTO) {
+        // TODO: check if mock is part of an decision.
+    },
+
     deleteDataConstraintCheck(dataId: number, dataStore: DataStoreCTO) {
         const dataRelationExists: boolean = Array.from(dataStore.dataConnections.values()).some(
             (relation) => relation.data1Fk === dataId || relation.data2Fk === dataId,
