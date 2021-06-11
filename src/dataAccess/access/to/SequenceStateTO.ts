@@ -1,10 +1,10 @@
 import { AbstractTO } from "./AbstractTO";
 
-export class SequenceMockTO extends AbstractTO {
+export class SequenceStateTO extends AbstractTO {
     constructor(
         public sequenceFk: number = -1,
         public label: string = "",
-        public isMockCondition: boolean = true,
+        public isState: boolean = true,
     ) {
         super();
     }

@@ -7,25 +7,25 @@ import { SequenceStepCTO } from "../access/cto/SequenceStepCTO";
 import { ActionTO } from "../access/to/ActionTO";
 import { ChainDecisionTO } from "../access/to/ChainDecisionTO";
 import { ChainlinkTO } from "../access/to/ChainlinkTO";
-import { ChainMockTO } from "../access/to/ChainMockTO";
+import { ChainStateTO } from "../access/to/ChainStateTO";
 import { ChainTO } from "../access/to/ChainTO";
 import { DataSetupTO } from "../access/to/DataSetupTO";
 import { DecisionTO } from "../access/to/DecisionTO";
 import { InitDataTO } from "../access/to/InitDataTO";
-import { SequenceMockTO } from "../access/to/SequenceMockTO";
+import { SequenceStateTO } from "../access/to/SequenceStateTO";
 import { SequenceStepTO } from "../access/to/SequenceStepTO";
 import { SequenceTO } from "../access/to/SequenceTO";
 import { GoToTypes } from "../access/types/GoToType";
 import { ActionRepository } from "../repositories/ActionRepository";
 import { ChainDecisionRepository } from "../repositories/ChainDecisionRepository";
 import { ChainLinkRepository } from "../repositories/ChainLinkRepository";
-import { ChainMockRepository } from "../repositories/ChainMockRepository";
 import { ChainRepository } from "../repositories/ChainRepository";
+import { ChainStateRepository } from "../repositories/ChainStateRepository";
 import { DataSetupRepository } from "../repositories/DataSetupRepository";
 import { DecisionRepository } from "../repositories/DecisionRepository";
 import { InitDataRepository } from "../repositories/InitDataRepository";
-import { SequenceMockRepository } from "../repositories/SequenceMockRepository";
 import { SequenceRepository } from "../repositories/SequenceRepository";
+import { SequenceStateRepository } from "../repositories/SequenceStateRepository";
 import { SequenceStepRepository } from "../repositories/SequenceStepRepository";
 import { CheckHelper } from "../util/CheckHelper";
 
@@ -298,55 +298,55 @@ export const SequenceDataAccessService = {
         return InitDataRepository.delete(id);
     },
 
-    // --------------------------------------------------- Sequence Mock ------------------------------------------------
+    // --------------------------------------------------- Sequence State ------------------------------------------------
 
-    findAllSequenceMocks(): SequenceMockTO[] {
-        return SequenceMockRepository.findAll();
+    findAllSequenceStates(): SequenceStateTO[] {
+        return SequenceStateRepository.findAll();
     },
 
-    saveSequenceMock(sequenceMock: SequenceMockTO): SequenceMockTO {
-        CheckHelper.nullCheck(sequenceMock, "SequenceMock");
-        return SequenceMockRepository.save(sequenceMock);
+    saveSequenceState(sequenceState: SequenceStateTO): SequenceStateTO {
+        CheckHelper.nullCheck(sequenceState, "sequenceState");
+        return SequenceStateRepository.save(sequenceState);
     },
 
-    deleteSequenceMock(sequenceMock: SequenceMockTO): SequenceMockTO {
-        CheckHelper.nullCheck(sequenceMock, "SequenceMock");
-        return SequenceMockRepository.delete(sequenceMock);
+    deleteSequenceState(sequenceState: SequenceStateTO): SequenceStateTO {
+        CheckHelper.nullCheck(sequenceState, "SequenceState");
+        return SequenceStateRepository.delete(sequenceState);
     },
 
-    findSequenceMock(id: number): SequenceMockTO {
-        const sequenceMock: SequenceMockTO | undefined = SequenceMockRepository.find(id);
+    findSequenceState(id: number): SequenceStateTO {
+        const sequenceState: SequenceStateTO | undefined = SequenceStateRepository.find(id);
 
-        if (!sequenceMock) {
-            throw new Error("Could not find Sequence Mock with ID: " + id);
+        if (!sequenceState) {
+            throw new Error("Could not find Sequence State with ID: " + id);
         } else {
-            return sequenceMock;
+            return sequenceState;
         }
     },
 
-    // --------------------------------------------------- Chain Mock ------------------------------------------------
+    // --------------------------------------------------- Chain state ------------------------------------------------
 
-    findAllChainMocks(): ChainMockTO[] {
-        return ChainMockRepository.findAll();
+    findAllChainStates(): ChainStateTO[] {
+        return ChainStateRepository.findAll();
     },
 
-    saveChainMock(chainMock: ChainMockTO): ChainMockTO {
-        CheckHelper.nullCheck(chainMock, "chainMock");
-        return ChainMockRepository.save(chainMock);
+    saveChainState(chainState: ChainStateTO): ChainStateTO {
+        CheckHelper.nullCheck(chainState, "chainState");
+        return ChainStateRepository.save(chainState);
     },
 
-    deleteChainMock(chainMock: ChainMockTO): ChainMockTO {
-        CheckHelper.nullCheck(chainMock, "chainMock");
-        return ChainMockRepository.delete(chainMock);
+    deleteChainState(chainState: ChainStateTO): ChainStateTO {
+        CheckHelper.nullCheck(chainState, "chainState");
+        return ChainStateRepository.delete(chainState);
     },
 
-    findChainMock(id: number): ChainMockTO {
-        const chainMock: ChainMockTO | undefined = ChainMockRepository.find(id);
+    findChainState(id: number): ChainStateTO {
+        const chainState: ChainStateTO | undefined = ChainStateRepository.find(id);
 
-        if (!chainMock) {
-            throw new Error("Could not find Chain Mock with ID: " + id);
+        if (!chainState) {
+            throw new Error("Could not find Chain State with ID: " + id);
         } else {
-            return chainMock;
+            return chainState;
         }
     },
 

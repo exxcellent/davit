@@ -7,14 +7,14 @@ import { SequenceStepCTO } from "./access/cto/SequenceStepCTO";
 import { ActionTO } from "./access/to/ActionTO";
 import { ChainDecisionTO } from "./access/to/ChainDecisionTO";
 import { ChainlinkTO } from "./access/to/ChainlinkTO";
-import { ChainMockTO } from "./access/to/ChainMockTO";
+import { ChainStateTO } from "./access/to/ChainStateTO";
 import { ChainTO } from "./access/to/ChainTO";
 import { DataRelationTO } from "./access/to/DataRelationTO";
 import { DataSetupTO } from "./access/to/DataSetupTO";
 import { DecisionTO } from "./access/to/DecisionTO";
 import { GroupTO } from "./access/to/GroupTO";
 import { InitDataTO } from "./access/to/InitDataTO";
-import { SequenceMockTO } from "./access/to/SequenceMockTO";
+import { SequenceStateTO } from "./access/to/SequenceStateTO";
 import { SequenceStepTO } from "./access/to/SequenceStepTO";
 import { SequenceTO } from "./access/to/SequenceTO";
 import { DataAccessResponse } from "./DataAccessResponse";
@@ -305,42 +305,42 @@ export const DataAccess = {
         return makeTransactional(() => SequenceDataAccessService.findChainLink(id));
     },
 
-    // ========================================= Sequence Mock =========================================
+    // ========================================= Sequence State =========================================
 
-    findAllSequenceMocks(): DataAccessResponse<SequenceMockTO[]> {
-        return makeTransactional(SequenceDataAccessService.findAllSequenceMocks);
+    findAllSequenceStates(): DataAccessResponse<SequenceStateTO[]> {
+        return makeTransactional(SequenceDataAccessService.findAllSequenceStates);
     },
 
-    findSequenceMock(id: number): DataAccessResponse<SequenceMockTO> {
-        return makeTransactional(() => SequenceDataAccessService.findSequenceMock(id));
+    findSequenceState(id: number): DataAccessResponse<SequenceStateTO> {
+        return makeTransactional(() => SequenceDataAccessService.findSequenceState(id));
     },
 
-    saveSequenceMock(sequenceMock: SequenceMockTO): DataAccessResponse<SequenceMockTO> {
-        return makeTransactional(() => SequenceDataAccessService.saveSequenceMock(sequenceMock));
+    saveSequenceState(sequenceState: SequenceStateTO): DataAccessResponse<SequenceStateTO> {
+        return makeTransactional(() => SequenceDataAccessService.saveSequenceState(sequenceState));
     },
 
-    deleteSequenceMock(sequenceMock: SequenceMockTO): DataAccessResponse<SequenceMockTO> {
-        return makeTransactional(() => SequenceDataAccessService.deleteSequenceMock(sequenceMock));
+    deleteSequenceState(sequenceState: SequenceStateTO): DataAccessResponse<SequenceStateTO> {
+        return makeTransactional(() => SequenceDataAccessService.deleteSequenceState(sequenceState));
     },
 
-    // ========================================= Chain Mock =========================================
+    // ========================================= Chain State =========================================
 
-    findAllChainMocks(): DataAccessResponse<ChainMockTO[]> {
-        return makeTransactional(SequenceDataAccessService.findAllChainMocks);
+    findAllChainStates(): DataAccessResponse<ChainStateTO[]> {
+        return makeTransactional(SequenceDataAccessService.findAllChainStates);
     },
 
-    findChainMock(id: number): DataAccessResponse<ChainMockTO> {
-        return makeTransactional(() => SequenceDataAccessService.findChainMock(id));
+    findChainState(id: number): DataAccessResponse<ChainStateTO> {
+        return makeTransactional(() => SequenceDataAccessService.findChainState(id));
     },
 
-    saveChainMock(chainMock: ChainMockTO): DataAccessResponse<ChainMockTO> {
-        return makeTransactional(() => SequenceDataAccessService.saveChainMock(chainMock));
+    saveChainState(chainState: ChainStateTO): DataAccessResponse<ChainStateTO> {
+        return makeTransactional(() => SequenceDataAccessService.saveChainState(chainState));
     },
 
-    deleteChainMock(chainMock: ChainMockTO): DataAccessResponse<ChainMockTO> {
-        return makeTransactional(() => SequenceDataAccessService.deleteChainMock(chainMock));
+    deleteChainState(chainState: ChainStateTO): DataAccessResponse<ChainStateTO> {
+        return makeTransactional(() => SequenceDataAccessService.deleteChainState(chainState));
     },
-    
+
 };
 
 // ========================================= PRIVATE =========================================

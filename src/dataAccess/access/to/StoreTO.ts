@@ -26,6 +26,6 @@ export interface StoreTO {
     chainlinks: any[];
     chaindecisions: any[];
     // mock
-    sequenceMocks: any[];
-    chainMocks: any[];
+    sequenceStates: any[];
+    chainStates: any[];
 }

@@ -1,10 +1,10 @@
 import { AbstractTO } from "./AbstractTO";
 
-export class ChainMockTO extends AbstractTO {
+export class ChainStateTO extends AbstractTO {
     constructor(
         public chainFk: number = -1,
         public label: string = "",
-        public isMockCondition: boolean = true,
+        public isState: boolean = true,
     ) {
         super();
     }

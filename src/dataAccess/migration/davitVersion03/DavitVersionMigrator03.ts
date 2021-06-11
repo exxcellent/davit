@@ -45,8 +45,8 @@ export const DavitVersionMigrator03 = {
             chains: dataStoreObject.chains as ChainTO[],
             chainlinks: dataStoreObject.chainlinks as ChainlinkTO[],
             chaindecisions: dataStoreObject.chaindecisions as ChainDecisionTO[],
-            sequenceMocks: [],
-            chainMocks: [],
+            sequenceStates: [],
+            chainStates: [],
         };
     },
 };
