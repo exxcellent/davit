@@ -9,18 +9,11 @@ export const DataAccessUtil = {
         return id;
     },
 
-    /**
-     * Generates a new UUID if id is -1.
-     * @param id
-     * @param abstracktTOs
-     *
-     * @return UUID
-     */
-    checkId(id: number, abstracktTOs: AbstractTO[]): number {
+    getOrCreateId(id: number, abstractTOs: AbstractTO[]): number {
         let idToCheck: number = id;
 
         if (idToCheck === -1) {
-            idToCheck = this.determineNewId(abstracktTOs);
+            idToCheck = this.determineNewId(abstractTOs);
         }
 
         return idToCheck;

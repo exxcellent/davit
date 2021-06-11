@@ -268,7 +268,7 @@ export const DataAccess = {
     },
 
     saveChainlink(link: ChainlinkTO): DataAccessResponse<ChainlinkTO> {
-        return makeTransactional(() => SequenceDataAccessService.saveChainlink(link));
+        return makeTransactional(() => SequenceDataAccessService.saveChainLink(link));
     },
 
     findAllChainLinks(): DataAccessResponse<ChainlinkTO[]> {
