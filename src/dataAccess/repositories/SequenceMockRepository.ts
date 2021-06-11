@@ -1,4 +1,5 @@
 import { SequenceMockTO } from "../access/to/SequenceMockTO";
+import { ConstraintsHelper } from "../ConstraintsHelper";
 import dataStore from "../DataStore";
 import { CheckHelper } from "../util/CheckHelper";
 import { DataAccessUtil } from "../util/DataAccessUtil";
@@ -30,7 +31,7 @@ export const SequenceMockRepository = {
     },
 
     delete(sequenceMock: SequenceMockTO): SequenceMockTO {
-        // TODO: add constraint check!
+        ConstraintsHelper.deleteSequenceMockConstraintCheck(sequenceMock.id, dataStore.getDataStore());
 
         const success = dataStore.getDataStore().sequenceMocks.delete(sequenceMock.id);
 
