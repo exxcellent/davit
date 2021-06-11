@@ -193,9 +193,10 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
                 {!renderFlowChart() &&
                 <h2 className={"fluid flex flex-center"}>{"Select a sequence or chain to see the flow chart"}</h2>
                 }
-                
+
                 {renderFlowChart() && <>
-                    <div style={{display: "flex", position: "absolute", zIndex: 1, width: "47vw"}}>
+                    {/*TODO: try to move this in to a css class.*/}
+                    <div style={{display: "flex", position: "absolute", zIndex: 99, width: "47vw"}}>
                         {chain && (
                             <TabGroupFragment label="Mode"
                                               style={{backgroundColor: "var(--background-color-header)"}}
