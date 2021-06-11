@@ -1,10 +1,9 @@
-import { DAVIT_VERISON, DEFAULT_ZOOM } from "../../../DavitConstants";
+import { DAVIT_VERISON } from "../../../DavitConstants";
 import { ActionTO } from "../../access/to/ActionTO";
 import { ActorTO } from "../../access/to/ActorTO";
 import { ChainDecisionTO } from "../../access/to/ChainDecisionTO";
 import { ChainlinkTO } from "../../access/to/ChainlinkTO";
 import { ChainTO } from "../../access/to/ChainTO";
-import { ConditionTO } from "../../access/to/ConditionTO";
 import { DataRelationTO } from "../../access/to/DataRelationTO";
 import { DataSetupTO } from "../../access/to/DataSetupTO";
 import { DataTO } from "../../access/to/DataTO";
@@ -15,40 +14,14 @@ import { InitDataTO } from "../../access/to/InitDataTO";
 import { PositionTO } from "../../access/to/PositionTO";
 import { SequenceStepTO } from "../../access/to/SequenceStepTO";
 import { SequenceTO } from "../../access/to/SequenceTO";
-import { StoreTO01 } from "../davitVersio01/to/StoreTO01";
-import { DecisionTO02 } from "./to/DecisionTO02";
-import { StoreTO02 } from "./to/StoreTO02";
+import { StoreTO } from "../../access/to/StoreTO";
+import { StoreTO02 } from "../davitVersion02/to/StoreTO02";
 
-export const DavitVersionMigrator02 = {
-    migrate(dataStoreObject: StoreTO01): StoreTO02 {
-        console.info("start migration to version 0.2");
-        const actorZoom: number = DEFAULT_ZOOM;
-        const dataZoom: number = DEFAULT_ZOOM;
-
-        const decisions: DecisionTO[] = (dataStoreObject.decisions as DecisionTO02[]).map((decision) => {
-            const conditions: ConditionTO[] = [];
-            decision.dataAndInstaceIds.forEach((dataAndInsanceId) => {
-                conditions.push({
-                    decisionFk: decision.id,
-                    instanceFk: dataAndInsanceId.instanceId,
-                    dataFk: dataAndInsanceId.dataFk,
-                    actorFk: decision.actorFk,
-                    id: -1,
-                });
-            });
-
-            return {
-                actorFk: decision.actorFk,
-                conditions: conditions,
-                elseGoTo: decision.elseGoTo,
-                id: decision.id,
-                ifGoTo: decision.ifGoTo,
-                name: decision.name,
-                root: decision.root,
-                sequenceFk: decision.sequenceFk,
-                note: "",
-            };
-        });
+export const DavitVersionMigrator03 = {
+    migrate(dataStoreObject: StoreTO02): StoreTO {
+        console.info("start migration to version 0.3");
+        const actorZoom: number = dataStoreObject.actorZoom;
+        const dataZoom: number = dataStoreObject.dataZoom;
 
         return {
             version: DAVIT_VERISON,
@@ -64,7 +37,7 @@ export const DavitVersionMigrator02 = {
             sequences: dataStoreObject.sequences as SequenceTO[],
             steps: dataStoreObject.steps as SequenceStepTO[],
             actions: dataStoreObject.actions as ActionTO[],
-            decisions: decisions,
+            decisions: dataStoreObject.decisions as DecisionTO[],
             datas: dataStoreObject.datas as DataTO[],
             dataConnections: dataStoreObject.dataConnections as DataRelationTO[],
             initDatas: dataStoreObject.initDatas as InitDataTO[],
@@ -72,6 +45,8 @@ export const DavitVersionMigrator02 = {
             chains: dataStoreObject.chains as ChainTO[],
             chainlinks: dataStoreObject.chainlinks as ChainlinkTO[],
             chaindecisions: dataStoreObject.chaindecisions as ChainDecisionTO[],
+            sequenceMocks: [],
+            chainMocks: [],
         };
     },
 };

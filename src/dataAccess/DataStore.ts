@@ -40,6 +40,8 @@ class DataStore {
             chains: [],
             chainlinks: [],
             chaindecisions: [],
+            sequenceMocks: [],
+            chainMocks: [],
         } as StoreTO;
         if (!dataObjectString) {
             localStorage.setItem(STORE_ID, JSON.stringify(objectStore));
@@ -108,6 +110,8 @@ class DataStore {
             chains: Array.from(this.data!.chains.values()),
             chainlinks: Array.from(this.data!.chainlinks.values()),
             chaindecisions: Array.from(this.data!.chaindecisions.values()),
+            sequenceMocks: Array.from(this.data!.sequenceMocks.values()),
+            chainMocks: Array.from(this.data!.chainMocks.values()),
         };
     }
 

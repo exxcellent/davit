@@ -1,4 +1,4 @@
-export interface StoreTO {
+export interface StoreTO02 {
     version: number;
     projectName: string;
     actorZoom: number;
@@ -25,7 +25,4 @@ export interface StoreTO {
     chains: any[];
     chainlinks: any[];
     chaindecisions: any[];
-    // mock
-    sequenceMocks: any[];
-    chainMocks: any[];
 }

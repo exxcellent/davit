@@ -3,6 +3,7 @@ import { ActionTO } from "../to/ActionTO";
 import { ActorTO } from "../to/ActorTO";
 import { ChainDecisionTO } from "../to/ChainDecisionTO";
 import { ChainlinkTO } from "../to/ChainlinkTO";
+import { ChainMockTO } from "../to/ChainMockTO";
 import { ChainTO } from "../to/ChainTO";
 import { DataRelationTO } from "../to/DataRelationTO";
 import { DataSetupTO } from "../to/DataSetupTO";
@@ -13,6 +14,7 @@ import { GeometricalDataTO } from "../to/GeometricalDataTO";
 import { GroupTO } from "../to/GroupTO";
 import { InitDataTO } from "../to/InitDataTO";
 import { PositionTO } from "../to/PositionTO";
+import { SequenceMockTO } from "../to/SequenceMockTO";
 import { SequenceStepTO } from "../to/SequenceStepTO";
 import { SequenceTO } from "../to/SequenceTO";
 
@@ -44,6 +46,9 @@ export class DataStoreCTO {
         public chains = new Map<number, ChainTO>(),
         public chainlinks = new Map<number, ChainlinkTO>(),
         public chaindecisions = new Map<number, ChainDecisionTO>(),
+        // Mock
+        public sequenceMocks = new Map<number, SequenceMockTO>(),
+        public chainMocks = new Map<number, ChainMockTO>(),
     ) {
     }
 }
