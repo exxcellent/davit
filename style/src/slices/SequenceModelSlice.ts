@@ -294,7 +294,7 @@ const filterSteps = (steps: CalculatedStep[], filter: Filter[], modelSteps: Sequ
     return steps.filter((step) =>
         filter.some((currentFilter) => {
             const actions: ActionTO[] =
-                modelSteps.find((modelStep) => modelStep.squenceStepTO.id === step.modelElementFk)?.actions || [];
+                modelSteps.find((modelStep) => modelStep.sequenceStepTO.id === step.modelElementFk)?.actions || [];
             switch (currentFilter.type) {
                 case "ACTOR":
                     return actions.some((action) => action.receivingActorFk === currentFilter.id);
@@ -311,7 +311,7 @@ const getArrowsForStepFk = (stepFk: number, sequenceStepCTOs: SequenceStepCTO[],
     let arrows: Arrow[] = [];
     let step: SequenceStepCTO | undefined;
     if (stepFk && sequenceStepCTOs) {
-        step = sequenceStepCTOs.find((stp) => stp.squenceStepTO.id === stepFk);
+        step = sequenceStepCTOs.find((stp) => stp.sequenceStepTO.id === stepFk);
     }
     if (step) {
         arrows = mapActionsToArrows(step.actions, rootState);
@@ -427,7 +427,7 @@ export const sequenceModelSelectors = {
         const stepId: number | undefined = filteredSteps[state.sequenceModel.currentStepIndex]?.modelElementFk;
         return stepId
             ? getCurrentSequenceModel(state.sequenceModel)?.sequenceStepCTOs.find(
-            (step) => step.squenceStepTO.id === stepId,
+            (step) => step.sequenceStepTO.id === stepId,
         )?.actions || []
             : [];
     },

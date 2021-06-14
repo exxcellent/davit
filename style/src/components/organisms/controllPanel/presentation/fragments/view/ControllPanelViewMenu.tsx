@@ -134,7 +134,7 @@ const useControlPanelViewMenuViewModel = () => {
         if (stepIndex && sequence) {
             return (
                 " * " +
-                sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.id === stepIndex)?.squenceStepTO.name
+                sequence.sequenceStepCTOs.find((step) => step.sequenceStepTO.id === stepIndex)?.sequenceStepTO.name
             );
         } else {
             return "";
