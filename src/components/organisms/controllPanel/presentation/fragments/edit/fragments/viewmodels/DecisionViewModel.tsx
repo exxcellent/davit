@@ -113,7 +113,7 @@ export const useDecisionViewModel = () => {
 
     const setGoToTypeStep = (ifGoTo: boolean, step?: SequenceStepCTO) => {
         if (step) {
-            const newGoTo: GoTo = {type: GoToTypes.STEP, id: step.squenceStepTO.id};
+            const newGoTo: GoTo = {type: GoToTypes.STEP, id: step.sequenceStepTO.id};
             saveGoToType(ifGoTo, newGoTo);
         }
     };
@@ -128,7 +128,7 @@ export const useDecisionViewModel = () => {
     const createGoToStep = (ifGoTo: boolean) => {
         if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
             const goToStep: SequenceStepCTO = new SequenceStepCTO();
-            goToStep.squenceStepTO.sequenceFk = decisionToEdit!.sequenceFk;
+            goToStep.sequenceStepTO.sequenceFk = decisionToEdit!.sequenceFk;
             const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
             dispatch(EditActions.setMode.editStep(goToStep, copyDecision, ifGoTo));
         }

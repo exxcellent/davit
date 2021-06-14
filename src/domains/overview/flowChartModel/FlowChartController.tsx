@@ -193,9 +193,10 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
                 {!renderFlowChart() &&
                 <h2 className={"fluid flex flex-center"}>{"Select a sequence or chain to see the flow chart"}</h2>
                 }
-                
+
                 {renderFlowChart() && <>
-                    <div style={{display: "flex", position: "absolute", zIndex: 1, width: "47vw"}}>
+                    {/*TODO: try to move this in to a css class.*/}
+                    <div style={{display: "flex", position: "absolute", zIndex: 99, width: "47vw"}}>
                         {chain && (
                             <TabGroupFragment label="Mode"
                                               style={{backgroundColor: "var(--background-color-header)"}}
@@ -281,7 +282,7 @@ const useFlowChartViewModel = () => {
             };
             if (!DavitUtil.isNullOrUndefined(sequence)) {
                 const rootStep: SequenceStepCTO | undefined = sequence!.sequenceStepCTOs.find(
-                    (step) => step.squenceStepTO.root,
+                    (step) => step.sequenceStepTO.root,
                 );
                 const rootCond: DecisionTO | undefined = sequence!.decisions.find((cond) => cond.root);
 
@@ -326,14 +327,14 @@ const useFlowChartViewModel = () => {
                     case GoToTypes.STEP:
                         // eslint-disable-next-line no-case-declarations
                         const step: SequenceStepCTO | null =
-                            sequence!.sequenceStepCTOs.find((step) => step.squenceStepTO.id === goto.id) || null;
+                            sequence!.sequenceStepCTOs.find((step) => step.sequenceStepTO.id === goto.id) || null;
                         if (step) {
-                            const prefix: string = "_STEP_" + step.squenceStepTO.id;
+                            const prefix: string = "_STEP_" + step.sequenceStepTO.id;
                             nodeModel.id = parentId + prefix;
-                            nodeModel.label = step.squenceStepTO.name;
+                            nodeModel.label = step.sequenceStepTO.name;
                             if (!parentId.includes(prefix)) {
                                 parentIds.push(nodeModel.id);
-                                nodeModel.childs.push(setGoToAsNode(step.squenceStepTO.goto, nodeModel.id, parentIds));
+                                nodeModel.childs.push(setGoToAsNode(step.sequenceStepTO.goto, nodeModel.id, parentIds));
                             }
                         }
                         break;
@@ -423,13 +424,13 @@ const useFlowChartViewModel = () => {
             if (sequence) {
                 const root: Node = getRoot(sequence);
                 if ((root.value as SequenceStepCTO).actions) {
-                    (initData.value as SequenceStepCTO).squenceStepTO.goto = {
+                    (initData.value as SequenceStepCTO).sequenceStepTO.goto = {
                         type: GoToTypes.STEP,
-                        id: (root.value as SequenceStepCTO).squenceStepTO.id,
+                        id: (root.value as SequenceStepCTO).sequenceStepTO.id,
                     };
                 }
                 if ((root.value as DecisionTO).elseGoTo) {
-                    (initData.value as SequenceStepCTO).squenceStepTO.goto = {
+                    (initData.value as SequenceStepCTO).sequenceStepTO.goto = {
                         type: GoToTypes.DEC,
                         id: (root.value as DecisionTO).id,
                     };
@@ -445,9 +446,9 @@ const useFlowChartViewModel = () => {
             switch (node.type) {
                 case GoToTypes.STEP:
                     parentIds.push(nodeModel.id);
-                    nodeModel.label = (node.value as SequenceStepCTO).squenceStepTO.name;
+                    nodeModel.label = (node.value as SequenceStepCTO).sequenceStepTO.name;
                     nodeModel.childs.push(
-                        setGoToAsNode((node.value as SequenceStepCTO).squenceStepTO.goto, nodeModel.id, parentIds),
+                        setGoToAsNode((node.value as SequenceStepCTO).sequenceStepTO.goto, nodeModel.id, parentIds),
                     );
                     break;
                 case GoToTypes.DEC:

@@ -9,14 +9,15 @@ import { GlobalActions } from "../../../../../../../slices/GlobalSlice";
 import { sequenceModelSelectors } from "../../../../../../../slices/SequenceModelSlice";
 import { EditSequence } from "../../../../../../../slices/thunks/SequenceThunks";
 import { DavitUtil } from "../../../../../../../utils/DavitUtil";
-import { DavitBackButton } from "../../../../../../atomic/buttons/DavitBackButton";
-import { DavitButton } from "../../../../../../atomic/buttons/DavitButton";
-import { DavitDeleteButton } from "../../../../../../atomic/buttons/DavitDeleteButton";
-import { DecisionLabelDropDown } from "../../../../../../atomic/dropdowns/DecisionDropDown";
-import { StepLabelDropDown } from "../../../../../../atomic/dropdowns/StepDropDown";
-import { DavitTextInput } from "../../../../../../atomic/textinput/DavitTextInput";
-import { DavitCommentButton } from "../../../../../../molecules";
-import { AddOrEdit } from "../../../../../../molecules/AddOrEdit";
+import {
+    DavitBackButton,
+    DavitButton,
+    DavitDeleteButton,
+    DavitTextInput,
+    DecisionLabelDropDown,
+    StepLabelDropDown
+} from "../../../../../../atomic";
+import { AddOrEdit, DavitCommentButton } from "../../../../../../molecules";
 import { ControlPanel } from "../common/ControlPanel";
 import { OptionField } from "../common/OptionField";
 
@@ -141,8 +142,8 @@ const useControlPanelEditSequenceViewModel = () => {
         let stepToEdit: SequenceStepCTO | undefined = step;
         if (stepToEdit === undefined) {
             stepToEdit = new SequenceStepCTO();
-            stepToEdit.squenceStepTO.sequenceFk = sequenceToEdit?.id || -1;
-            stepToEdit.squenceStepTO.root = isFirst();
+            stepToEdit.sequenceStepTO.sequenceFk = sequenceToEdit?.id || -1;
+            stepToEdit.sequenceStepTO.root = isFirst();
         }
         dispatch(EditActions.setMode.editStep(stepToEdit));
     };

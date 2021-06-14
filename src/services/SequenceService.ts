@@ -86,7 +86,7 @@ export const SequenceService = {
 
                         loopStartingStep = checkForLoop(calcSequence, step, result);
 
-                        const newStepId = "_STEP_" + step.squenceStepTO.id;
+                        const newStepId = "_STEP_" + step.sequenceStepTO.id;
                         stepId = stepId + newStepId;
                         stepIds.push(stepId);
 
@@ -94,13 +94,13 @@ export const SequenceService = {
                             stepId: stepId,
                             actorDatas: actorDatas,
                             errors: result.errors,
-                            modelElementFk: step.squenceStepTO.id,
+                            modelElementFk: step.sequenceStepTO.id,
                             type: "STEP",
                         });
 
                         if (!isLooping(loopStartingStep)) {
                             // set next object.
-                            stepOrDecision = getNext((stepOrDecision as SequenceStepCTO).squenceStepTO.goto, sequence);
+                            stepOrDecision = getNext((stepOrDecision as SequenceStepCTO).sequenceStepTO.goto, sequence);
                             type = getType(stepOrDecision);
                         }
                     }
@@ -163,7 +163,7 @@ const getInitStep = (result: SequenceActionResult): CalculatedStep => {
 };
 
 const getStepFromSequence = (stepId: number, sequence: SequenceCTO): SequenceStepCTO | undefined => {
-    return sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.id === stepId);
+    return sequence.sequenceStepCTOs.find((step) => step.sequenceStepTO.id === stepId);
 };
 
 const getDecisionFromSequence = (id: number, sequence: SequenceCTO): DecisionTO | undefined => {
@@ -171,7 +171,7 @@ const getDecisionFromSequence = (id: number, sequence: SequenceCTO): DecisionTO 
 };
 
 const getRoot = (sequence: SequenceCTO): SequenceStepCTO | DecisionTO | undefined => {
-    const step: SequenceStepCTO | undefined = sequence.sequenceStepCTOs.find((step) => step.squenceStepTO.root);
+    const step: SequenceStepCTO | undefined = sequence.sequenceStepCTOs.find((step) => step.sequenceStepTO.root);
     const cond: DecisionTO | undefined = sequence.decisions.find((cond) => cond.root);
     return step ? step : cond ? cond : undefined;
 };
@@ -202,7 +202,7 @@ const calculateStep = (step: SequenceStepCTO, actorDatas: ActorData[]): Sequence
 };
 
 const getType = (stepOrDecisionOrTerminal: SequenceStepCTO | DecisionTO | Terminal): GoToTypes => {
-    if ((stepOrDecisionOrTerminal as SequenceStepCTO).squenceStepTO) {
+    if ((stepOrDecisionOrTerminal as SequenceStepCTO).sequenceStepTO) {
         return GoToTypes.STEP;
     } else if ((stepOrDecisionOrTerminal as DecisionTO).elseGoTo) {
         return GoToTypes.DEC;
@@ -216,7 +216,7 @@ const getType = (stepOrDecisionOrTerminal: SequenceStepCTO | DecisionTO | Termin
 const checkForLoop = (calcSequence: CalcSequence, step: SequenceStepCTO, result: SequenceActionResult): number => {
     return calcSequence.calculatedSteps.findIndex(
         (calcStep) =>
-            calcStep.modelElementFk === step.squenceStepTO.id &&
+            calcStep.modelElementFk === step.sequenceStepTO.id &&
             calcStep.actorDatas.length === result.actorDatas.length &&
             !calcStep.actorDatas.some(
                 (cp) => !result.actorDatas.some((rcp) => rcp.actorFk === cp.actorFk && rcp.dataFk === cp.dataFk),
