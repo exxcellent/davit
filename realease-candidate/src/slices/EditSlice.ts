@@ -250,7 +250,7 @@ const setModeToEditThunk = (): AppThunk => (dispatch, getState) => {
             const step:
                 | SequenceStepCTO
                 | undefined = getState().sequenceModel.selectedSequenceModel?.sequenceStepCTOs.find(
-                (step) => step.squenceStepTO.id === stepIndex,
+                (step) => step.sequenceStepTO.id === stepIndex,
             );
             if (step) {
                 dispatch(setModeToEditStepThunk(step));
@@ -611,7 +611,7 @@ export const editSelectors = {
     selectEditStepArrows: (state: RootState): Arrow[] => {
         let arrows: Arrow[] = [];
 
-        if (state.edit.mode === Mode.EDIT_SEQUENCE_STEP && (state.edit.objectToEdit as SequenceStepCTO).squenceStepTO) {
+        if (state.edit.mode === Mode.EDIT_SEQUENCE_STEP && (state.edit.objectToEdit as SequenceStepCTO).sequenceStepTO) {
             arrows = getArrowsForStepFk(state.edit.objectToEdit as SequenceStepCTO, state);
         }
         return arrows;
@@ -629,7 +629,7 @@ export const editSelectors = {
     selectStepToEdit: (state: RootState): SequenceStepCTO | null => {
         switch (state.edit.mode) {
             case Mode.EDIT_SEQUENCE_STEP:
-                return (state.edit.objectToEdit as SequenceStepCTO).squenceStepTO
+                return (state.edit.objectToEdit as SequenceStepCTO).sequenceStepTO
                     ? (state.edit.objectToEdit as SequenceStepCTO)
                     : null;
             case Mode.EDIT_SEQUENCE_STEP_ACTION:

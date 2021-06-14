@@ -7,12 +7,14 @@ import { SequenceStepCTO } from "./access/cto/SequenceStepCTO";
 import { ActionTO } from "./access/to/ActionTO";
 import { ChainDecisionTO } from "./access/to/ChainDecisionTO";
 import { ChainlinkTO } from "./access/to/ChainlinkTO";
+import { ChainStateTO } from "./access/to/ChainStateTO";
 import { ChainTO } from "./access/to/ChainTO";
 import { DataRelationTO } from "./access/to/DataRelationTO";
 import { DataSetupTO } from "./access/to/DataSetupTO";
 import { DecisionTO } from "./access/to/DecisionTO";
 import { GroupTO } from "./access/to/GroupTO";
 import { InitDataTO } from "./access/to/InitDataTO";
+import { SequenceStateTO } from "./access/to/SequenceStateTO";
 import { SequenceStepTO } from "./access/to/SequenceStepTO";
 import { SequenceTO } from "./access/to/SequenceTO";
 import { DataAccessResponse } from "./DataAccessResponse";
@@ -268,7 +270,7 @@ export const DataAccess = {
     },
 
     saveChainlink(link: ChainlinkTO): DataAccessResponse<ChainlinkTO> {
-        return makeTransactional(() => SequenceDataAccessService.saveChainlink(link));
+        return makeTransactional(() => SequenceDataAccessService.saveChainLink(link));
     },
 
     findAllChainLinks(): DataAccessResponse<ChainlinkTO[]> {
@@ -302,6 +304,43 @@ export const DataAccess = {
     findChainLink(id: number): DataAccessResponse<ChainlinkTO> {
         return makeTransactional(() => SequenceDataAccessService.findChainLink(id));
     },
+
+    // ========================================= Sequence State =========================================
+
+    findAllSequenceStates(): DataAccessResponse<SequenceStateTO[]> {
+        return makeTransactional(SequenceDataAccessService.findAllSequenceStates);
+    },
+
+    findSequenceState(id: number): DataAccessResponse<SequenceStateTO> {
+        return makeTransactional(() => SequenceDataAccessService.findSequenceState(id));
+    },
+
+    saveSequenceState(sequenceState: SequenceStateTO): DataAccessResponse<SequenceStateTO> {
+        return makeTransactional(() => SequenceDataAccessService.saveSequenceState(sequenceState));
+    },
+
+    deleteSequenceState(sequenceState: SequenceStateTO): DataAccessResponse<SequenceStateTO> {
+        return makeTransactional(() => SequenceDataAccessService.deleteSequenceState(sequenceState));
+    },
+
+    // ========================================= Chain State =========================================
+
+    findAllChainStates(): DataAccessResponse<ChainStateTO[]> {
+        return makeTransactional(SequenceDataAccessService.findAllChainStates);
+    },
+
+    findChainState(id: number): DataAccessResponse<ChainStateTO> {
+        return makeTransactional(() => SequenceDataAccessService.findChainState(id));
+    },
+
+    saveChainState(chainState: ChainStateTO): DataAccessResponse<ChainStateTO> {
+        return makeTransactional(() => SequenceDataAccessService.saveChainState(chainState));
+    },
+
+    deleteChainState(chainState: ChainStateTO): DataAccessResponse<ChainStateTO> {
+        return makeTransactional(() => SequenceDataAccessService.deleteChainState(chainState));
+    },
+
 };
 
 // ========================================= PRIVATE =========================================
