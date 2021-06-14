@@ -80,8 +80,8 @@ function getModelElementName(step: CalculatedStep, selectSequence: SequenceCTO |
     switch (step.type) {
         case "STEP":
             return (
-                selectSequence?.sequenceStepCTOs.find((item) => item.squenceStepTO.id === step.modelElementFk)
-                    ?.squenceStepTO.name || "Step not found!"
+                selectSequence?.sequenceStepCTOs.find((item) => item.sequenceStepTO.id === step.modelElementFk)
+                    ?.sequenceStepTO.name || "Step not found!"
             );
         case "DECISION":
             return (

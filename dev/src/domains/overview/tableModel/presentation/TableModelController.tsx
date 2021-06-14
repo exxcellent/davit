@@ -156,7 +156,7 @@ const useSequenceTableViewModel = () => {
         if (mode === Mode.EDIT_SEQUENCE_STEP_ACTION) {
             if (selectedActionToEdit) {
                 const step: SequenceStepCTO | undefined = selectedSequence?.sequenceStepCTOs.find(
-                    (step) => step.squenceStepTO.id === selectedActionToEdit?.sequenceStepFk,
+                    (step) => step.sequenceStepTO.id === selectedActionToEdit?.sequenceStepFk,
                 );
                 if (step) {
                     stepToShow = step;
