@@ -20,6 +20,7 @@ import {
 import { AddOrEdit, DavitCommentButton } from "../../../../../../molecules";
 import { ControlPanel } from "../common/ControlPanel";
 import { OptionField } from "../common/OptionField";
+import { EditStateModal } from "./modals/EditStateModal";
 
 export interface ControlPanelEditSequenceProps {
 }
@@ -41,6 +42,9 @@ export const ControlPanelEditSequence: FunctionComponent<ControlPanelEditSequenc
 
     return (
         <ControlPanel>
+
+            <EditStateModal />
+
             <OptionField label="Sequence - name">
                 <DavitTextInput
                     label="Name:"
@@ -59,7 +63,7 @@ export const ControlPanelEditSequence: FunctionComponent<ControlPanelEditSequenc
                                                         label="Step"
                            />}
                 />
-            </OptionField>
+            </OptionField>;
             <OptionField label="Create / Edit | Sequence - Decision"
                          divider={true}
             >
@@ -68,7 +72,7 @@ export const ControlPanelEditSequence: FunctionComponent<ControlPanelEditSequenc
                                                             label="Decision"
                            />}
                 />
-            </OptionField>
+            </OptionField>;
             <OptionField label={"options"}
                          divider={true}
             >
@@ -81,7 +85,7 @@ export const ControlPanelEditSequence: FunctionComponent<ControlPanelEditSequenc
                                     comment={note}
                 />
                 <DavitDeleteButton onClick={deleteSequence} />
-            </OptionField>
+            </OptionField>;
         </ControlPanel>
     )
         ;
