@@ -1,10 +1,8 @@
-import { AbstractTO } from "./AbstractTO";
+import { StateTO } from "./StateTO";
 
-export class ChainStateTO extends AbstractTO {
+export class ChainStateTO extends StateTO {
     constructor(
         public chainFk: number = -1,
-        public label: string = "",
-        public isState: boolean = true,
     ) {
         super();
     }

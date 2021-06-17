@@ -1,20 +1,22 @@
 import React, { FunctionComponent } from "react";
-import { ChainStateTO } from "../../../../../../../../dataAccess/access/to/ChainStateTO";
-import { SequenceStateTO } from "../../../../../../../../dataAccess/access/to/SequenceStateTO";
+import { DavitBackButton } from "../../../../../../../atomic";
 import { Form } from "../../../../../../../atomic/forms/Form";
 import { FormBody } from "../../../../../../../atomic/forms/fragments/FormBody";
 import { FormFooter } from "../../../../../../../atomic/forms/fragments/FormFooter";
 import { FormHeader } from "../../../../../../../atomic/forms/fragments/FormHeader";
+import { useSequenceViewModel } from "../viewmodels/SequenceViewModel";
 import { FormDivider } from "./fragments/FormDivider";
 import { StateTable } from "./fragments/StateTable";
 
 interface StateFormProps {
-    statesToEdit: SequenceStateTO[] | ChainStateTO[];
 }
 
-export const StateForm: FunctionComponent<StateFormProps> = (props) => {
+//TODO: rename in SequenceStateForm!
+//TODO: create ChainStateForm.
 
-    const {statesToEdit} = props;
+export const StateForm: FunctionComponent<StateFormProps> = () => {
+
+    const {states, saveStates} = useSequenceViewModel();
 
     return (
         <Form>
@@ -26,22 +28,19 @@ export const StateForm: FunctionComponent<StateFormProps> = (props) => {
 
             <FormBody>
 
-                <StateTable sequenceStates={statesToEdit}
-                            removeStateCallback={removeState}
-                            toggleActiveCallback={toggleState}
+                <StateTable statesToEdit={states}
+                    //TODO: implement method
+                            removeStateCallback={() => {
+                            }}
+                    //TODO: implement method
+                            toggleActiveCallback={() => {
+                            }}
                 />
 
             </FormBody>
 
             <FormFooter>
-                {/*<DavitDeleteButton onClick={deleteDataSetup} />*/}
-                {/*<DavitCommentButton onSaveCallback={saveNote}*/}
-                {/*                    comment={note}*/}
-                {/*/>*/}
-                {/*<DavitButton onClick={createAnother}>*/}
-                {/*    {"Create another"}*/}
-                {/*</DavitButton>*/}
-                {/*<DavitBackButton onClick={saveDataSetup} />*/}
+                <DavitBackButton onClick={saveStates} />
             </FormFooter>
 
         </Form>
