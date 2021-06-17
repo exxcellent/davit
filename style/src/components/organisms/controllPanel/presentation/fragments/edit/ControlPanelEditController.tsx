@@ -12,6 +12,7 @@ import { EditDataModal } from "./fragments/modals/EditDataModal";
 import { EditDataRelationModal } from "./fragments/modals/EditDataRelationModal";
 import { EditDataSetupModal } from "./fragments/modals/EditDataSetupModal";
 import { EditDecisionModal } from "./fragments/modals/EditDecisionModal";
+import { EditStateModal } from "./fragments/modals/EditStateModal";
 import { EditStepModal } from "./fragments/modals/EditStepModal";
 
 export interface ControlPanelEditControllerProps {
@@ -33,6 +34,8 @@ export const ControlPanelEditController: FunctionComponent<ControlPanelEditContr
                 return <ControlPanelEditSequence />;
             case Mode.EDIT_SEQUENCE_STEP:
                 return <EditStepModal />;
+            case Mode.EDIT_SEQUENCE_STATES:
+                return <EditStateModal />;
             case Mode.EDIT_SEQUENCE_DECISION:
                 return <EditDecisionModal />;
             case Mode.EDIT_SEQUENCE_STEP_ACTION:

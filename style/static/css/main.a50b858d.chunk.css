@@ -303,6 +303,11 @@
             justify-content: space-around;
 }
 
+.content-space-between {
+    -webkit-justify-content: space-between;
+            justify-content: space-between;
+}
+
 /*Size*/
 
 .width-fluid {
@@ -317,6 +322,7 @@
     width: 100%;
     height: 100%;
 }
+
 @font-face {
     font-family: 'DIN OT';
     font-style: normal;
@@ -907,4 +913,4 @@ table {
 }
 
 
-/*# sourceMappingURL=main.70f638f4.chunk.css.map*/
+/*# sourceMappingURL=main.a50b858d.chunk.css.map*/

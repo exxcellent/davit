@@ -55,6 +55,7 @@ export enum Mode {
     EDIT_CHAIN_DECISION_CONDITION = "EDIT_CHAIN_DECISION_CONDITION",
     EDIT_CHAIN_LINK = "EDIT_CHAIN_LINK",
     EDIT_SEQUENCE = "EDIT_SEQUENCE",
+    EDIT_SEQUENCE_STATES = "EDIT_SEQUENCE_STATES",
     EDIT_SEQUENCE_DECISION = "EDIT_SEQUENCE_DECISION",
     EDIT_SEQUENCE_DECISION_CONDITION = "EDIT_SEQUENCE_DECISION_CONDITION",
     EDIT_SEQUENCE_STEP = "EDIT_SEQUENCE_STEP",
@@ -217,8 +218,8 @@ export const editActions = EditSlice.actions;
 // =============================================== THUNKS ===============================================
 
 // ----------------------------------------------- SET MODE -----------------------------------------------
-const setModeWithStorageThunk = (mode: Mode): AppThunk => (dispatch, getstate) => {
-    if (mode !== getstate().edit.mode) {
+const setModeWithStorageThunk = (mode: Mode): AppThunk => (dispatch, getState) => {
+    if (mode !== getState().edit.mode) {
         localStorage.setItem(MODE_LOCAL_STORAGE, mode);
         dispatch(EditSlice.actions.setMode(mode));
     }
@@ -327,6 +328,14 @@ const setModeToEditRelationThunk = (relation?: DataRelationTO): AppThunk => (dis
     } else {
         dispatch(EditSlice.actions.setRelationToEdit(relation));
     }
+};
+
+const setModeToEditSequenceStatesThunk = (): AppThunk => (dispatch, getState) => {
+    // const objectToEditIsSequence: boolean = (getState().edit.objectToEdit as SequenceTO).name !== undefined;
+    // if (objectToEditIsSequence) {
+    console.info("set mode to edit states.");
+    dispatch(setModeWithStorageThunk(Mode.EDIT_SEQUENCE_STATES));
+    // }
 };
 
 const setModeToEditSequenceThunk = (sequenceId?: number): AppThunk => (dispatch) => {
@@ -567,7 +576,7 @@ export const editSelectors = {
             : null;
     },
     selectSequenceToEdit: (state: RootState): SequenceTO | null => {
-        return state.edit.mode === Mode.EDIT_SEQUENCE && (state.edit.objectToEdit as SequenceTO)
+        return (state.edit.mode === Mode.EDIT_SEQUENCE || state.edit.mode === Mode.EDIT_SEQUENCE_STATES) && (state.edit.objectToEdit as SequenceTO)
             ? (state.edit.objectToEdit as SequenceTO)
             : null;
     },
@@ -675,6 +684,7 @@ export const EditActions = {
         editGroup: setModeToEditGroupThunk,
         editRelation: setModeToEditRelationThunk,
         editSequence: setModeToEditSequenceThunk,
+        editSequenceStates: setModeToEditSequenceStatesThunk,
         editDataSetup: setModeToEditDataSetupThunk,
         editInitData: setModeToEditInitDataThunk,
         editStep: setModeToEditStepThunk,
