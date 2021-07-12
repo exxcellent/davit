@@ -335,14 +335,19 @@ export const SequenceDataAccessService = {
         return ChainStateRepository.findAll();
     },
 
+    findAllChainStatesByChainFk(chainFk: number): ChainStateTO[] {
+        return ChainStateRepository.findAllByChainId(chainFk);
+    },
+
     saveChainState(chainState: ChainStateTO): ChainStateTO {
         CheckHelper.nullCheck(chainState, "chainState");
         return ChainStateRepository.save(chainState);
     },
 
-    deleteChainState(chainState: ChainStateTO): ChainStateTO {
-        CheckHelper.nullCheck(chainState, "chainState");
-        return ChainStateRepository.delete(chainState);
+    deleteChainState(chainStateId: number): ChainStateTO {
+        CheckHelper.nullCheck(chainStateId, "chainStateId");
+        const chainStateToDelete: ChainStateTO = this.findChainState(chainStateId);
+        return ChainStateRepository.delete(chainStateToDelete);
     },
 
     findChainState(id: number): ChainStateTO {

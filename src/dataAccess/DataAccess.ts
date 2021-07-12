@@ -341,8 +341,12 @@ export const DataAccess = {
         return makeTransactional(() => SequenceDataAccessService.saveChainState(chainState));
     },
 
-    deleteChainState(chainState: ChainStateTO): DataAccessResponse<ChainStateTO> {
-        return makeTransactional(() => SequenceDataAccessService.deleteChainState(chainState));
+    deleteChainState(chainStateId: number): DataAccessResponse<ChainStateTO> {
+        return makeTransactional(() => SequenceDataAccessService.deleteChainState(chainStateId));
+    },
+
+    findAllChainStatesByChainFk(chainFk: number): DataAccessResponse<ChainStateTO[]> {
+        return makeTransactional(() => SequenceDataAccessService.findAllChainStatesByChainFk(chainFk));
     },
 
 };

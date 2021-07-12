@@ -3,7 +3,6 @@ import {
     DavitBackButton,
     DavitButton,
     DavitDeleteButton,
-    DavitEditButton,
     DavitTextInput,
     DecisionLabelDropDown,
     StepLabelDropDown
@@ -44,8 +43,6 @@ export const ControlPanelEditSequence: FunctionComponent<ControlPanelEditSequenc
                     focus={true}
                     onBlur={updateSequence}
                 />
-
-                <DavitEditButton onClick={editStates} />
             </OptionField>
             <OptionField label="Create / Edit | Sequence - Step"
                          divider={true}
@@ -68,6 +65,8 @@ export const ControlPanelEditSequence: FunctionComponent<ControlPanelEditSequenc
             <OptionField label={"options"}
                          divider={true}
             >
+                <DavitButton onClick={editStates}>State</DavitButton>
+
                 <DavitButton onClick={createAnother}
                 >
                     {"Create another"}

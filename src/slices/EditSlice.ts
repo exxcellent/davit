@@ -51,6 +51,7 @@ export enum Mode {
     EDIT_DATASETUP = "EDIT_DATASETUP",
     EDIT_DATASETUP_INITDATA = "EDIT_DATASETUP_INIT DATA",
     EDIT_CHAIN = "EDIT_CHAIN",
+    EDIT_CHAIN_STATES = "EDIT_CHAIN_STATES",
     EDIT_CHAIN_DECISION = "EDIT_CHAIN_DECISION",
     EDIT_CHAIN_DECISION_CONDITION = "EDIT_CHAIN_DECISION_CONDITION",
     EDIT_CHAIN_LINK = "EDIT_CHAIN_LINK",
@@ -385,6 +386,10 @@ const setModeToEditChainConditionThunk = (decision: ChainDecisionTO): AppThunk =
     }
 };
 
+const setModeToEditChainStatesThunk = (): AppThunk => (dispatch) => {
+    dispatch(setModeWithStorageThunk(Mode.EDIT_CHAIN_STATES));
+};
+
 const setModeToEditStepThunk = (
     stepCTO: SequenceStepCTO,
     from?: SequenceStepCTO | DecisionTO,
@@ -688,6 +693,7 @@ export const EditActions = {
         editCondition: setModeToEditConditionThunk,
         editAction: setModeToEditActionThunk,
         editChain: setModeToEditChainThunk,
+        editChainStates: setModeToEditChainStatesThunk,
         editChainLink: setModeToEditChainLinkThunk,
         editChainDecision: setModeEditChainDecisionThunk,
         editChainCondition: setModeToEditChainConditionThunk,

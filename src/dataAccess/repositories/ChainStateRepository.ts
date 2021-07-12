@@ -10,7 +10,7 @@ export const ChainStateRepository = {
     },
 
     findAllByChainId(chainId: number): ChainStateTO[] {
-        return this.findAll().filter(state => state.chainFk !== chainId);
+        return this.findAll().filter(state => state.chainFk === chainId);
     },
 
     find(id: number): ChainStateTO | undefined {

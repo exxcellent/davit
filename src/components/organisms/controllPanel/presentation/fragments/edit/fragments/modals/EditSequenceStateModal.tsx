@@ -5,7 +5,7 @@ import { SequenceStateForm } from "../forms/SequenceStateForm";
 interface EditStateModalProps {
 }
 
-export const EditStateModal: FunctionComponent<EditStateModalProps> = () => {
+export const EditSequenceStateModal: FunctionComponent<EditStateModalProps> = () => {
 
     return (
         <DavitModal>
