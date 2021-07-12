@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { DavitModal } from "../../../../../../../atomic";
-import { StateForm } from "../forms/StateForm";
+import { SequenceStateForm } from "../forms/SequenceStateForm";
 
 interface EditStateModalProps {
 }
@@ -9,7 +9,7 @@ export const EditStateModal: FunctionComponent<EditStateModalProps> = () => {
 
     return (
         <DavitModal>
-            <StateForm />
+            <SequenceStateForm />
         </DavitModal>
     );
 };

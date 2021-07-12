@@ -304,14 +304,19 @@ export const SequenceDataAccessService = {
         return SequenceStateRepository.findAll();
     },
 
+    findAllSequenceStatesBySequenceFk(sequenceFk: number): SequenceStateTO[] {
+        return SequenceStateRepository.findAllForSequence(sequenceFk);
+    },
+
     saveSequenceState(sequenceState: SequenceStateTO): SequenceStateTO {
         CheckHelper.nullCheck(sequenceState, "sequenceState");
         return SequenceStateRepository.save(sequenceState);
     },
 
-    deleteSequenceState(sequenceState: SequenceStateTO): SequenceStateTO {
-        CheckHelper.nullCheck(sequenceState, "SequenceState");
-        return SequenceStateRepository.delete(sequenceState);
+    deleteSequenceState(sequenceStateId: number): SequenceStateTO {
+        CheckHelper.nullCheck(sequenceStateId, "SequenceStateId");
+        const sequenceStateToDelete: SequenceStateTO = this.findSequenceState(sequenceStateId);
+        return SequenceStateRepository.delete(sequenceStateToDelete);
     },
 
     findSequenceState(id: number): SequenceStateTO {

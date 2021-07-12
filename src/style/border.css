@@ -1,15 +1,15 @@
 /* border */
 .border {
-    border-style: solid;
     border-color: var(--border-color);
     border-radius: var(--border-radius);
+    border-style: solid;
 }
 
 .border-top {
-    border-top-width: var(--border-size-medium);
-    border-top-style: solid;
-    border-top-color: var(--border-color);
     border-radius: var(--border-radius);
+    border-top-color: var(--border-color);
+    border-top-style: solid;
+    border-top-width: var(--border-size-medium);
 }
 
 .border-small {
@@ -30,4 +30,13 @@
 
 .remove-border-radius {
     border-radius: unset;
+}
+
+.border-warning {
+    border-color: var(--color-error--lighter);
+    border-width: var(--border-size-medium);
+}
+
+.border-animation {
+    animation: borderGrow 0.8s ease-in-out;
 }

@@ -1,12 +1,12 @@
 :root {
-    --table-width: 40em;
-    --table-min-width: 30vh;
     --table-max-height: 40vh;
+    --table-min-width: 30vh;
+    --table-width: 40em;
 }
 
 .table {
-    width: var(--table-width);
     min-height: var(--table-min-width);
+    width: var(--table-width);
 }
 
 .headerTd {

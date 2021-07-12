@@ -3,10 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { SequenceCTO } from "../../../../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { DecisionTO } from "../../../../../../../../dataAccess/access/to/DecisionTO";
+import { SequenceStateTO } from "../../../../../../../../dataAccess/access/to/SequenceStateTO";
 import { SequenceTO } from "../../../../../../../../dataAccess/access/to/SequenceTO";
 import { EditActions, editSelectors } from "../../../../../../../../slices/EditSlice";
 import { GlobalActions } from "../../../../../../../../slices/GlobalSlice";
 import { sequenceModelSelectors } from "../../../../../../../../slices/SequenceModelSlice";
+import { EditSequenceState } from "../../../../../../../../slices/thunks/SequenceStateThunk";
 import { EditSequence } from "../../../../../../../../slices/thunks/SequenceThunks";
 import { DavitUtil } from "../../../../../../../../utils/DavitUtil";
 
@@ -109,10 +111,35 @@ export const useSequenceViewModel = () => {
         }
     };
 
-    const saveStates = () => {
+    // ---------------------- STATE ----------------------
+
+    const saveState = (stateToSave: SequenceStateTO) => {
+        dispatch(EditSequenceState.save(stateToSave));
+    };
+
+    const createState = () => {
         if (!DavitUtil.isNullOrUndefined(sequenceToEdit)) {
-            const copySequenceToEdit: SequenceTO = DavitUtil.deepCopy(sequenceToEdit);
-            dispatch(EditActions.setMode.editSequence(copySequenceToEdit.id));
+            let newSequenceState: SequenceStateTO = new SequenceStateTO();
+            newSequenceState.sequenceFk = sequenceToEdit!.id;
+            saveState(newSequenceState);
+        }
+    };
+
+    const deleteState = (stateToDeleteId: number) => {
+        dispatch(EditSequenceState.delete(stateToDeleteId));
+    };
+
+    const getState = (): SequenceStateTO[] => {
+        if (!DavitUtil.isNullOrUndefined(sequenceToEdit)) {
+            return EditSequenceState.findBySequenceFk(sequenceToEdit!.id);
+        } else {
+            return [];
+        }
+    };
+
+    const editSequence = () => {
+        if (!DavitUtil.isNullOrUndefined(sequenceToEdit)) {
+            dispatch(EditActions.setMode.editSequence(sequenceToEdit!.id));
         }
     };
 
@@ -137,8 +164,11 @@ export const useSequenceViewModel = () => {
         id: sequenceToEdit?.id || -1,
         note: sequenceToEdit ? sequenceToEdit.note : "",
         saveNote,
-        states: selectedSequence?.sequenceStates || [],
-        saveStates,
+        saveState,
+        deleteState,
+        getState,
+        createState,
         editStates,
+        editSequence,
     };
 };
