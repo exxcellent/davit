@@ -330,12 +330,8 @@ const setModeToEditRelationThunk = (relation?: DataRelationTO): AppThunk => (dis
     }
 };
 
-const setModeToEditSequenceStatesThunk = (): AppThunk => (dispatch, getState) => {
-    // const objectToEditIsSequence: boolean = (getState().edit.objectToEdit as SequenceTO).name !== undefined;
-    // if (objectToEditIsSequence) {
-    console.info("set mode to edit states.");
+const setModeToEditSequenceStatesThunk = (): AppThunk => (dispatch) => {
     dispatch(setModeWithStorageThunk(Mode.EDIT_SEQUENCE_STATES));
-    // }
 };
 
 const setModeToEditSequenceThunk = (sequenceId?: number): AppThunk => (dispatch) => {
