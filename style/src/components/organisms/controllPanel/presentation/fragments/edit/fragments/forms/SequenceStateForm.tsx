@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { SequenceStateTO } from "../../../../../../../../dataAccess/access/to/SequenceStateTO";
 import { StateTO } from "../../../../../../../../dataAccess/access/to/StateTO";
@@ -21,32 +21,20 @@ export const SequenceStateForm: FunctionComponent<StateFormProps> = () => {
 
     const sequenceStates: SequenceStateTO[] = useSelector(masterDataSelectors.selectSequenceStateBySequenceId(id));
 
-    const [invalidIds, setInvalidIds] = useState<number[]>([]);
-
     const create = () => {
         createState();
     };
 
     const closeStateForm = () => {
-        checkForDirty();
         if (!sequenceStates.some(state => state.label === "")) {
             sequenceStates.forEach(saveState);
             editSequence();
         }
     };
 
-    const checkForDirty = () => {
-        const invalidIds: number[] = sequenceStates
-            .filter(state => state.label === "")
-            .map(state => {
-                return state.id;
-            });
-        setInvalidIds(invalidIds);
-    };
-
-    const toggle = (stateToToggle: StateTO) => {
+    const setIsState = (stateToToggle: StateTO, is: boolean) => {
         const copyStateToToggle: StateTO = DavitUtil.deepCopy(stateToToggle);
-        copyStateToToggle.isState = !stateToToggle.isState;
+        copyStateToToggle.isState = is;
         saveState(copyStateToToggle as SequenceStateTO);
     };
 
@@ -61,7 +49,6 @@ export const SequenceStateForm: FunctionComponent<StateFormProps> = () => {
             copyStatToChangeName.label = name;
             saveState(copyStatToChangeName);
         }
-        checkForDirty();
     };
 
     return (
@@ -77,9 +64,8 @@ export const SequenceStateForm: FunctionComponent<StateFormProps> = () => {
                 <StateTable statesToEdit={sequenceStates}
                             addStateCallback={create}
                             removeStateCallback={delState}
-                            toggleActiveCallback={toggle}
+                            setActiveCallback={setIsState}
                             changeName={changeName}
-                            dirty={invalidIds}
                 />
 
             </FormBody>

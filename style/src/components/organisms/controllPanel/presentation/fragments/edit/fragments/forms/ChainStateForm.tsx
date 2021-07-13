@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { ChainStateTO } from "../../../../../../../../dataAccess/access/to/ChainStateTO";
 import { StateTO } from "../../../../../../../../dataAccess/access/to/StateTO";
@@ -21,32 +21,20 @@ export const ChainStateForm: FunctionComponent<ChainStateFormProps> = () => {
 
     const chainStates: ChainStateTO[] = useSelector(masterDataSelectors.selectChainStateByChainId(id));
 
-    const [dirty, setDirty] = useState<number[]>([]);
-
     const create = () => {
         createState();
     };
 
     const closeStateForm = () => {
-        checkForDirty();
         if (!chainStates.some(state => state.label === "")) {
             chainStates.forEach(saveState);
             editChain();
         }
     };
 
-    const checkForDirty = () => {
-        const invalidIds: number[] = chainStates
-            .filter(state => state.label === "")
-            .map(state => {
-                return state.id;
-            });
-        setDirty(invalidIds);
-    };
-
-    const toggle = (stateToToggle: StateTO) => {
+    const setIsState = (stateToToggle: StateTO, is: boolean) => {
         const copyStateToToggle: StateTO = DavitUtil.deepCopy(stateToToggle);
-        copyStateToToggle.isState = !stateToToggle.isState;
+        copyStateToToggle.isState = is;
         saveState(copyStateToToggle as ChainStateTO);
     };
 
@@ -61,7 +49,6 @@ export const ChainStateForm: FunctionComponent<ChainStateFormProps> = () => {
             copyStateToChangeName.label = name;
             saveState(copyStateToChangeName);
         }
-        checkForDirty();
     };
 
     return (
@@ -77,9 +64,8 @@ export const ChainStateForm: FunctionComponent<ChainStateFormProps> = () => {
                 <StateTable statesToEdit={chainStates}
                             addStateCallback={create}
                             removeStateCallback={delState}
-                            toggleActiveCallback={toggle}
+                            setActiveCallback={setIsState}
                             changeName={changeName}
-                            dirty={dirty}
                 />
 
             </FormBody>
