@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "ea9e13026a76f1200969d2094c3e5317",
+    "revision": "81cfd1ffba6366e50e5d85e749d29254",
     "url": "/davit/realease-candidate/index.html"
   },
   {
-    "revision": "2f0b7b2d0b8e648839b8",
-    "url": "/davit/realease-candidate/static/css/main.de294933.chunk.css"
+    "revision": "1895d9a83b09f98d4524",
+    "url": "/davit/realease-candidate/static/css/main.c6827ac8.chunk.css"
   },
   {
-    "revision": "b7b200c1f55e3aa858bd",
-    "url": "/davit/realease-candidate/static/js/2.1fa05944.chunk.js"
+    "revision": "f93ba39f0902115a726e",
+    "url": "/davit/realease-candidate/static/js/2.3ef0d6da.chunk.js"
   },
   {
     "revision": "348445d555cff59152cae6089da90a23",
-    "url": "/davit/realease-candidate/static/js/2.1fa05944.chunk.js.LICENSE.txt"
+    "url": "/davit/realease-candidate/static/js/2.3ef0d6da.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "2f0b7b2d0b8e648839b8",
-    "url": "/davit/realease-candidate/static/js/main.bb672d84.chunk.js"
+    "revision": "1895d9a83b09f98d4524",
+    "url": "/davit/realease-candidate/static/js/main.2f520995.chunk.js"
   },
   {
     "revision": "9722403e07a27c5c3461",
