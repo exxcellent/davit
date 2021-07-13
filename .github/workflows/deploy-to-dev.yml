@@ -17,8 +17,9 @@ jobs:
           persist-credentials: false
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
+          #TODO: Take node version from package.json.
           node-version: '15.x'
 
       - name: Cache node modules
@@ -34,9 +35,8 @@ jobs:
             ${{ runner.os }}-
 
       - name: Yarn Install
-        uses: CultureHQ/actions-yarn@v1.0.1
-        with:
-          args: install
+        run: yarn install
+
 
       # If the App is not deploy in the Servers root directory React needs to know where it is located.
       #https://create-react-app.dev/docs/deployment/#building-for-relative-paths
@@ -48,22 +48,16 @@ jobs:
           value: https://exxcellent.github.io/davit/dev
 
       - name: Yarn Build
-        uses: CultureHQ/actions-yarn@v1.0.1
-        with:
-          args: build
+        run: yarn build
 
-      - name: Show files
+      - name: Show build files
         run: ls -la
 
       - name: Yarn Test
-        uses: CultureHQ/actions-yarn@v1.0.1
-        with:
-          args: test
+        run: yarn test
 
       - name: Lint
-        uses: CultureHQ/actions-yarn@master
-        with:
-          args: lint
+        run: yarn lint
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
@@ -81,7 +75,7 @@ jobs:
         with:
           name: build
 
-      - name: Show files
+      - name: Show build files
         run: ls -la
 
       - name: Deploy on DEV
