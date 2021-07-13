@@ -23,16 +23,16 @@ jobs:
           node-version: '15.x'
 
       - name: Cache node modules
-          uses: actions/cache@v2
-          env:
-            cache-name: cache-node-modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
           with:
-            path: node_modules
-            key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
-            restore-keys: |
-              ${{ runner.os }}-build-${{ env.cache-name }}-
-              ${{ runner.os }}-build-
-              ${{ runner.os }}-
+          path: node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
 
       - name: Yarn Install
         run: yarn install
