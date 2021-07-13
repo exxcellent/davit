@@ -311,6 +311,10 @@ export const DataAccess = {
         return makeTransactional(SequenceDataAccessService.findAllSequenceStates);
     },
 
+    findAllSequenceStatesBySequenceFk(sequenceFk: number): DataAccessResponse<SequenceStateTO[]> {
+        return makeTransactional(() => SequenceDataAccessService.findAllSequenceStatesBySequenceFk(sequenceFk));
+    },
+
     findSequenceState(id: number): DataAccessResponse<SequenceStateTO> {
         return makeTransactional(() => SequenceDataAccessService.findSequenceState(id));
     },
@@ -319,8 +323,8 @@ export const DataAccess = {
         return makeTransactional(() => SequenceDataAccessService.saveSequenceState(sequenceState));
     },
 
-    deleteSequenceState(sequenceState: SequenceStateTO): DataAccessResponse<SequenceStateTO> {
-        return makeTransactional(() => SequenceDataAccessService.deleteSequenceState(sequenceState));
+    deleteSequenceState(sequenceStateId: number): DataAccessResponse<SequenceStateTO> {
+        return makeTransactional(() => SequenceDataAccessService.deleteSequenceState(sequenceStateId));
     },
 
     // ========================================= Chain State =========================================
@@ -337,8 +341,12 @@ export const DataAccess = {
         return makeTransactional(() => SequenceDataAccessService.saveChainState(chainState));
     },
 
-    deleteChainState(chainState: ChainStateTO): DataAccessResponse<ChainStateTO> {
-        return makeTransactional(() => SequenceDataAccessService.deleteChainState(chainState));
+    deleteChainState(chainStateId: number): DataAccessResponse<ChainStateTO> {
+        return makeTransactional(() => SequenceDataAccessService.deleteChainState(chainStateId));
+    },
+
+    findAllChainStatesByChainFk(chainFk: number): DataAccessResponse<ChainStateTO[]> {
+        return makeTransactional(() => SequenceDataAccessService.findAllChainStatesByChainFk(chainFk));
     },
 
 };

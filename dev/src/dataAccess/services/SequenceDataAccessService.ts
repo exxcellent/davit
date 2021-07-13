@@ -304,14 +304,19 @@ export const SequenceDataAccessService = {
         return SequenceStateRepository.findAll();
     },
 
+    findAllSequenceStatesBySequenceFk(sequenceFk: number): SequenceStateTO[] {
+        return SequenceStateRepository.findAllForSequence(sequenceFk);
+    },
+
     saveSequenceState(sequenceState: SequenceStateTO): SequenceStateTO {
         CheckHelper.nullCheck(sequenceState, "sequenceState");
         return SequenceStateRepository.save(sequenceState);
     },
 
-    deleteSequenceState(sequenceState: SequenceStateTO): SequenceStateTO {
-        CheckHelper.nullCheck(sequenceState, "SequenceState");
-        return SequenceStateRepository.delete(sequenceState);
+    deleteSequenceState(sequenceStateId: number): SequenceStateTO {
+        CheckHelper.nullCheck(sequenceStateId, "SequenceStateId");
+        const sequenceStateToDelete: SequenceStateTO = this.findSequenceState(sequenceStateId);
+        return SequenceStateRepository.delete(sequenceStateToDelete);
     },
 
     findSequenceState(id: number): SequenceStateTO {
@@ -330,14 +335,19 @@ export const SequenceDataAccessService = {
         return ChainStateRepository.findAll();
     },
 
+    findAllChainStatesByChainFk(chainFk: number): ChainStateTO[] {
+        return ChainStateRepository.findAllByChainId(chainFk);
+    },
+
     saveChainState(chainState: ChainStateTO): ChainStateTO {
         CheckHelper.nullCheck(chainState, "chainState");
         return ChainStateRepository.save(chainState);
     },
 
-    deleteChainState(chainState: ChainStateTO): ChainStateTO {
-        CheckHelper.nullCheck(chainState, "chainState");
-        return ChainStateRepository.delete(chainState);
+    deleteChainState(chainStateId: number): ChainStateTO {
+        CheckHelper.nullCheck(chainStateId, "chainStateId");
+        const chainStateToDelete: ChainStateTO = this.findChainState(chainStateId);
+        return ChainStateRepository.delete(chainStateToDelete);
     },
 
     findChainState(id: number): ChainStateTO {

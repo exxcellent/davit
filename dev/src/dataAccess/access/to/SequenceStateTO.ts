@@ -1,10 +1,8 @@
-import { AbstractTO } from "./AbstractTO";
+import { StateTO } from "./StateTO";
 
-export class SequenceStateTO extends AbstractTO {
+export class SequenceStateTO extends StateTO {
     constructor(
         public sequenceFk: number = -1,
-        public label: string = "",
-        public isState: boolean = true,
     ) {
         super();
     }

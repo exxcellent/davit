@@ -10,7 +10,7 @@ export const SequenceStateRepository = {
     },
 
     findAllForSequence(sequenceId: number): SequenceStateTO[] {
-        return this.findAll().filter(state => state.sequenceFk !== sequenceId);
+        return this.findAll().filter(state => state.sequenceFk === sequenceId);
     },
 
     find(id: number): SequenceStateTO | undefined {
