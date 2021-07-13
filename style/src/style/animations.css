@@ -98,7 +98,7 @@
     }
 }
 
-@keyframes slidein {
+@keyframes slideIn {
     from {
         margin-bottom: 11em;
         /* height: 300%; */
@@ -155,11 +155,29 @@
     }
 }
 
-@keyframes disapear {
+@keyframes disappear {
     0% {
         opacity: 1;
     }
     100% {
         opacity: 0;
+    }
+}
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes borderGrow {
+    0% {
+        border-color: transparent;
+    }
+    100% {
+        border-color: var(--color-error--lighter);
     }
 }

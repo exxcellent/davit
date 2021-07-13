@@ -1,0 +1,18 @@
+:root {
+    --table-max-height: 40vh;
+    --table-min-width: 30vh;
+    --table-width: 40em;
+}
+
+.table {
+    min-height: var(--table-min-width);
+    width: var(--table-width);
+}
+
+.headerTd {
+    text-align: center;
+}
+
+.body {
+    max-height: var(--table-max-height);
+}

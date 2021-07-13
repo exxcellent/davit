@@ -288,6 +288,10 @@
     justify-content: space-around;
 }
 
+.content-space-between {
+    justify-content: space-between;
+}
+
 /*Size*/
 
 .width-fluid {
@@ -302,6 +306,7 @@
     width: 100%;
     height: 100%;
 }
+
 @font-face {
     font-family: 'DIN OT';
     font-style: normal;
@@ -561,7 +566,7 @@
     }
 }
 
-@-webkit-keyframes slidein {
+@-webkit-keyframes slideIn {
     from {
         margin-bottom: 11em;
         /* height: 300%; */
@@ -573,7 +578,7 @@
     }
 }
 
-@keyframes slidein {
+@keyframes slideIn {
     from {
         margin-bottom: 11em;
         /* height: 300%; */
@@ -660,7 +665,7 @@
     }
 }
 
-@-webkit-keyframes disapear {
+@-webkit-keyframes disappear {
     0% {
         opacity: 1;
     }
@@ -669,7 +674,7 @@
     }
 }
 
-@keyframes disapear {
+@keyframes disappear {
     0% {
         opacity: 1;
     }
@@ -678,18 +683,53 @@
     }
 }
 
+@-webkit-keyframes appear {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes borderGrow {
+    0% {
+        border-color: transparent;
+    }
+    100% {
+        border-color: var(--color-error--lighter);
+    }
+}
+
+@keyframes borderGrow {
+    0% {
+        border-color: transparent;
+    }
+    100% {
+        border-color: var(--color-error--lighter);
+    }
+}
 /* border */
 .border {
-    border-style: solid;
     border-color: var(--border-color);
     border-radius: var(--border-radius);
+    border-style: solid;
 }
 
 .border-top {
-    border-top-width: var(--border-size-medium);
-    border-top-style: solid;
-    border-top-color: var(--border-color);
     border-radius: var(--border-radius);
+    border-top-color: var(--border-color);
+    border-top-style: solid;
+    border-top-width: var(--border-size-medium);
 }
 
 .border-small {
@@ -710,6 +750,16 @@
 
 .remove-border-radius {
     border-radius: unset;
+}
+
+.border-warning {
+    border-color: var(--color-error--lighter);
+    border-width: var(--border-size-medium);
+}
+
+.border-animation {
+    -webkit-animation: borderGrow 0.8s ease-in-out;
+            animation: borderGrow 0.8s ease-in-out;
 }
 
 :root {
@@ -892,4 +942,4 @@ table {
 }
 
 
-/*# sourceMappingURL=main.a6995908.chunk.css.map*/
+/*# sourceMappingURL=main.d1403a6c.chunk.css.map*/

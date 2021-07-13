@@ -4,10 +4,12 @@ import { DataCTO } from "../dataAccess/access/cto/DataCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { ChainDecisionTO } from "../dataAccess/access/to/ChainDecisionTO";
 import { ChainlinkTO } from "../dataAccess/access/to/ChainlinkTO";
+import { ChainStateTO } from "../dataAccess/access/to/ChainStateTO";
 import { ChainTO } from "../dataAccess/access/to/ChainTO";
 import { DataRelationTO } from "../dataAccess/access/to/DataRelationTO";
 import { DataSetupTO } from "../dataAccess/access/to/DataSetupTO";
 import { GroupTO } from "../dataAccess/access/to/GroupTO";
+import { SequenceStateTO } from "../dataAccess/access/to/SequenceStateTO";
 import { SequenceTO } from "../dataAccess/access/to/SequenceTO";
 import { DataAccess } from "../dataAccess/DataAccess";
 import { DataAccessResponse } from "../dataAccess/DataAccessResponse";
@@ -25,6 +27,8 @@ interface MasterDataState {
     chains: ChainTO[];
     chainLinks: ChainlinkTO[];
     chainDecisions: ChainDecisionTO[];
+    sequenceState: SequenceStateTO[];
+    chainState: ChainStateTO[];
 }
 
 const getInitialState: MasterDataState = {
@@ -37,6 +41,8 @@ const getInitialState: MasterDataState = {
     chains: [],
     chainLinks: [],
     chainDecisions: [],
+    sequenceState: [],
+    chainState: [],
 };
 
 const MasterDataSlice = createSlice({
@@ -70,6 +76,12 @@ const MasterDataSlice = createSlice({
         setChainDecisions: (state, action: PayloadAction<ChainDecisionTO[]>) => {
             state.chainDecisions = action.payload;
         },
+        setSequenceStates: (state, action: PayloadAction<SequenceStateTO[]>) => {
+            state.sequenceState = action.payload;
+        },
+        setChainStates: (state, action: PayloadAction<ChainStateTO[]>) => {
+            state.chainState = action.payload;
+        }
     },
 });
 
@@ -156,6 +168,24 @@ const loadChainDecisionsFromBackend = (): AppThunk => (dispatch) => {
     }
 };
 
+const loadChainStatesFromBackend = (): AppThunk => (dispatch) => {
+    const response: DataAccessResponse<ChainStateTO[]> = DataAccess.findAllChainStates();
+    if (response.code === 200) {
+        dispatch(MasterDataSlice.actions.setChainStates(response.object));
+    } else {
+        dispatch(GlobalActions.handleError(response.message));
+    }
+};
+
+const loadSequenceStatesFromBackend = (): AppThunk => (dispatch) => {
+    const response: DataAccessResponse<SequenceStateTO[]> = DataAccess.findAllSequenceStates();
+    if (response.code === 200) {
+        dispatch(MasterDataSlice.actions.setSequenceStates(response.object));
+    } else {
+        dispatch(GlobalActions.handleError(response.message));
+    }
+};
+
 const findSequenceStepCTO = (id: number): SequenceStepCTO | undefined => {
     let step: SequenceStepCTO | undefined;
     const response: DataAccessResponse<SequenceStepCTO> = DataAccess.findSequenceStepCTO(id);
@@ -175,13 +205,14 @@ const loadAll = (): AppThunk => (dispatch) => {
     dispatch(loadChainsFromBackend());
     dispatch(loadChainLinksFromBackend());
     dispatch(loadChainDecisionsFromBackend());
+    dispatch(loadChainStatesFromBackend());
+    dispatch(loadSequenceStatesFromBackend());
 };
-
-// ----------------------------------------------- SEARCH --------------------------------------------------
 
 // =============================================== SELECTORS ===============================================
 
 export const MasterDataReducer = MasterDataSlice.reducer;
+
 export const masterDataSelectors = {
     selectActors: (state: RootState): ActorCTO[] => state.masterData.actors,
     selectGroups: (state: RootState): GroupTO[] => state.masterData.groups,
@@ -192,14 +223,29 @@ export const masterDataSelectors = {
     selectChainLinks: (state: RootState): ChainlinkTO[] => state.masterData.chainLinks,
     selectChainDecisions: (state: RootState): ChainDecisionTO[] => state.masterData.chainDecisions,
     selectDataSetups: (state: RootState): DataSetupTO[] => state.masterData.dataSetups,
+
     selectSequenceTOById: (id: number) => (state: RootState): SequenceTO | undefined => {
         return state.masterData.sequences.find((sequence) => sequence.id === id);
     },
+
     selectActorById: (id: number) => {
         return (state: RootState): ActorCTO | null => {
             return state.masterData.actors.find((actor) => actor.actor.id === id) || null;
         };
     },
+
+    selectSequenceStateBySequenceId: (sequenceId: number) => {
+        return (state: RootState): SequenceStateTO[] => {
+            return state.masterData.sequenceState.filter(state => state.sequenceFk === sequenceId);
+        };
+    },
+
+    selectChainStateByChainId: (chainId: number) => {
+        return (state: RootState): ChainStateTO[] => {
+            return state.masterData.chainState.filter(state => state.chainFk === chainId);
+        };
+    },
+
     selectDataCTOById: (id: number) => {
         return (state: RootState): DataCTO | null => {
             return state.masterData.datas.find((data) => data.data.id === id) || null;
@@ -231,11 +277,13 @@ export const MasterDataActions = {
     loadChainsFromBackend,
     loadChainLinksFromBackend,
     loadChainDecisionsFromBackend,
+    loadChainStatesFromBackend,
     loadGroupsFromBackend,
     loadActorsFromBackend,
     loadDataSetupsFromBackend,
     loadRelationsFromBackend,
     loadSequencesFromBackend,
+    loadSequenceStatesFromBackend,
     loadDatasFromBackend,
     loadAll,
     find: {
