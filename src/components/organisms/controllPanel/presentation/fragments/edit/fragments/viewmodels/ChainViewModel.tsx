@@ -114,14 +114,6 @@ export const useChainViewModel = () => {
         dispatch(EditChainState.delete(stateToDeleteId));
     };
 
-    const getState = (): ChainStateTO[] => {
-        if (!DavitUtil.isNullOrUndefined(selectedChain)) {
-            return EditChainState.findByChainId(selectedChain!.id);
-        } else {
-            return [];
-        }
-    };
-
     const editChain = () => {
         if (!DavitUtil.isNullOrUndefined(selectedChain)) {
             dispatch(EditActions.setMode.editChain(selectedChain!));
@@ -147,7 +139,6 @@ export const useChainViewModel = () => {
         editOrAddChainDecision,
         editOrAddChainLink,
         editStates,
-        getState,
         saveState,
         editChain,
         createState,

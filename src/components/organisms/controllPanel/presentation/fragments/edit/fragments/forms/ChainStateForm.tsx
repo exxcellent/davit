@@ -1,6 +1,8 @@
 import React, { FunctionComponent, useState } from "react";
+import { useSelector } from "react-redux";
 import { ChainStateTO } from "../../../../../../../../dataAccess/access/to/ChainStateTO";
 import { StateTO } from "../../../../../../../../dataAccess/access/to/StateTO";
+import { masterDataSelectors } from "../../../../../../../../slices/MasterDataSlice";
 import { DavitUtil } from "../../../../../../../../utils/DavitUtil";
 import { DavitBackButton, Form } from "../../../../../../../atomic";
 import { FormBody } from "../../../../../../../atomic/forms/fragments/FormBody";
@@ -15,51 +17,49 @@ interface ChainStateFormProps {
 
 export const ChainStateForm: FunctionComponent<ChainStateFormProps> = () => {
 
-    // const {getState, saveState, editSequence, createState, deleteState} = useSequenceViewModel();
-    const {getState, saveState, editChain, createState, deleteState} = useChainViewModel();
+    const {saveState, editChain, createState, deleteState, id} = useChainViewModel();
 
-    const [states, setState] = useState<ChainStateTO[]>(getState());
+    const chainStates: ChainStateTO[] = useSelector(masterDataSelectors.selectChainStateByChainId(id));
+
     const [dirty, setDirty] = useState<number[]>([]);
 
     const create = () => {
         createState();
-        setState(getState());
     };
 
     const closeStateForm = () => {
-        setState(getState());
         checkForDirty();
-        if (!states.some(state => state.label === "")) {
-            states.forEach(saveState);
+        if (!chainStates.some(state => state.label === "")) {
+            chainStates.forEach(saveState);
             editChain();
         }
     };
 
     const checkForDirty = () => {
-        const dirtyStates: number[] = states.filter(state => state.label === "").map(state => {
-            return state.id;
-        });
-        setDirty(dirtyStates);
+        const invalidIds: number[] = chainStates
+            .filter(state => state.label === "")
+            .map(state => {
+                return state.id;
+            });
+        setDirty(invalidIds);
     };
 
     const toggle = (stateToToggle: StateTO) => {
         const copyStateToToggle: StateTO = DavitUtil.deepCopy(stateToToggle);
         copyStateToToggle.isState = !stateToToggle.isState;
         saveState(copyStateToToggle as ChainStateTO);
-        setState(getState());
     };
 
     const delState = (stateId: number) => {
         deleteState(stateId);
-        setState(getState());
     };
 
     const changeName = (name: string, stateId: number) => {
-        const stateToChangeName: ChainStateTO | undefined = states.find(state => state.id === stateId);
+        const stateToChangeName: ChainStateTO | undefined = chainStates.find(state => state.id === stateId);
         if (stateToChangeName) {
-            stateToChangeName.label = name;
-            saveState(stateToChangeName);
-            setState(getState());
+            const copyStateToChangeName: ChainStateTO = DavitUtil.deepCopy(stateToChangeName);
+            copyStateToChangeName.label = name;
+            saveState(copyStateToChangeName);
         }
         checkForDirty();
     };
@@ -74,7 +74,7 @@ export const ChainStateForm: FunctionComponent<ChainStateFormProps> = () => {
 
             <FormBody>
 
-                <StateTable statesToEdit={states}
+                <StateTable statesToEdit={chainStates}
                             addStateCallback={create}
                             removeStateCallback={delState}
                             toggleActiveCallback={toggle}

@@ -1,6 +1,8 @@
 import React, { FunctionComponent, useState } from "react";
+import { useSelector } from "react-redux";
 import { SequenceStateTO } from "../../../../../../../../dataAccess/access/to/SequenceStateTO";
 import { StateTO } from "../../../../../../../../dataAccess/access/to/StateTO";
+import { masterDataSelectors } from "../../../../../../../../slices/MasterDataSlice";
 import { DavitUtil } from "../../../../../../../../utils/DavitUtil";
 import { DavitBackButton, Form } from "../../../../../../../atomic";
 import { FormBody } from "../../../../../../../atomic/forms/fragments/FormBody";
@@ -15,50 +17,49 @@ interface StateFormProps {
 
 export const SequenceStateForm: FunctionComponent<StateFormProps> = () => {
 
-    const {getState, saveState, editSequence, createState, deleteState} = useSequenceViewModel();
+    const {saveState, editSequence, createState, deleteState, id} = useSequenceViewModel();
 
-    const [states, setState] = useState<SequenceStateTO[]>(getState());
-    const [dirty, setDirty] = useState<number[]>([]);
+    const sequenceStates: SequenceStateTO[] = useSelector(masterDataSelectors.selectSequenceStateBySequenceId(id));
+
+    const [invalidIds, setInvalidIds] = useState<number[]>([]);
 
     const create = () => {
         createState();
-        setState(getState());
     };
 
     const closeStateForm = () => {
-        setState(getState());
         checkForDirty();
-        if (!states.some(state => state.label === "")) {
-            states.forEach(saveState);
+        if (!sequenceStates.some(state => state.label === "")) {
+            sequenceStates.forEach(saveState);
             editSequence();
         }
     };
 
     const checkForDirty = () => {
-        const dirtyStates: number[] = states.filter(state => state.label === "").map(state => {
-            return state.id;
-        });
-        setDirty(dirtyStates);
+        const invalidIds: number[] = sequenceStates
+            .filter(state => state.label === "")
+            .map(state => {
+                return state.id;
+            });
+        setInvalidIds(invalidIds);
     };
 
     const toggle = (stateToToggle: StateTO) => {
         const copyStateToToggle: StateTO = DavitUtil.deepCopy(stateToToggle);
         copyStateToToggle.isState = !stateToToggle.isState;
         saveState(copyStateToToggle as SequenceStateTO);
-        setState(getState());
     };
 
     const delState = (stateId: number) => {
         deleteState(stateId);
-        setState(getState());
     };
 
     const changeName = (name: string, stateId: number) => {
-        const stateToChangeName: SequenceStateTO | undefined = states.find(state => state.id === stateId);
+        const stateToChangeName: SequenceStateTO | undefined = sequenceStates.find(state => state.id === stateId);
         if (stateToChangeName) {
-            stateToChangeName.label = name;
-            saveState(stateToChangeName);
-            setState(getState());
+            const copyStatToChangeName: SequenceStateTO = DavitUtil.deepCopy(stateToChangeName);
+            copyStatToChangeName.label = name;
+            saveState(copyStatToChangeName);
         }
         checkForDirty();
     };
@@ -73,12 +74,12 @@ export const SequenceStateForm: FunctionComponent<StateFormProps> = () => {
 
             <FormBody>
 
-                <StateTable statesToEdit={states}
+                <StateTable statesToEdit={sequenceStates}
                             addStateCallback={create}
                             removeStateCallback={delState}
                             toggleActiveCallback={toggle}
                             changeName={changeName}
-                            dirty={dirty}
+                            dirty={invalidIds}
                 />
 
             </FormBody>
