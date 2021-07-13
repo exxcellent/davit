@@ -21,7 +21,18 @@ jobs:
         with:
           #TODO: Take node version from package.json.
           node-version: '15.x'
-          cache: 'yarn'
+
+      - name: Cache node modules
+          uses: actions/cache@v2
+          env:
+            cache-name: cache-node-modules
+          with:
+            path: node_modules
+            key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+            restore-keys: |
+              ${{ runner.os }}-build-${{ env.cache-name }}-
+              ${{ runner.os }}-build-
+              ${{ runner.os }}-
 
       - name: Yarn Install
         run: yarn install
