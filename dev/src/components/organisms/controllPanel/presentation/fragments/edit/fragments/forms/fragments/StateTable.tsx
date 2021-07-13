@@ -1,24 +1,22 @@
 import React, { FunctionComponent } from "react";
 import { StateTO } from "../../../../../../../../../dataAccess/access/to/StateTO";
-import { DavitAddButton, DavitDeleteButton, DavitTextInput } from "../../../../../../../../atomic";
-import { DavitToggleButton } from "../../../../../../../../atomic/buttons/DavitToggleButton";
+import { DavitAddButton, DavitButton, DavitDeleteButton, DavitTextInput } from "../../../../../../../../atomic";
 import "./StateTable.css";
 
 interface StateTableProps {
     statesToEdit: StateTO[];
-    dirty?: number[];
     addStateCallback: () => void;
     changeName: (name: string, stateId: number) => void;
     removeStateCallback: (stateId: number) => void;
-    toggleActiveCallback: (state: StateTO) => void;
+    setActiveCallback: (state: StateTO, active: boolean) => void;
 }
 
 export const StateTable: FunctionComponent<StateTableProps> = (props) => {
-    const {statesToEdit, addStateCallback, changeName, removeStateCallback, toggleActiveCallback, dirty} = props;
+    const {statesToEdit, addStateCallback, changeName, removeStateCallback, setActiveCallback} = props;
 
     const buildStateTableRow = (state: StateTO, index: number): JSX.Element => {
 
-        const inputClasses: string = dirty?.find(id => id === state.id) ? "border border-warning border-animation" : "";
+        const inputClasses: string = state.label === "" ? "border border-warning border-animation" : "";
 
         return (
             <tr className="flex content-space-between fluid"
@@ -33,9 +31,15 @@ export const StateTable: FunctionComponent<StateTableProps> = (props) => {
                     />
                 </td>
                 <td className="flex flex-center">
-                    <DavitToggleButton toggle={() => toggleActiveCallback(state)}
-                                       value={state.isState}
-                    />
+
+                    <DavitButton
+                        className={state.isState ? " active" : ""}
+                        onClick={() => setActiveCallback(state, true)}
+                    >TRUE</DavitButton>
+                    <DavitButton
+                        className={state.isState ? "" : " active"}
+                        onClick={() => setActiveCallback(state, false)}
+                    >FALSE</DavitButton>
                 </td>
                 <td className="flex flex-center">
                     <DavitDeleteButton onClick={() => removeStateCallback(state.id)}
@@ -53,7 +57,7 @@ export const StateTable: FunctionComponent<StateTableProps> = (props) => {
 
             <tr className="flex content-space-between fluid">
                 <td className="flex flex-center">Name</td>
-                <td className="flex flex-center">Active</td>
+                <td className="flex flex-center">Default</td>
                 <td className={"flex flex-center"}><DavitAddButton onClick={addStateCallback} /></td>
             </tr>
 
