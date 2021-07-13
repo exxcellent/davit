@@ -24,7 +24,7 @@ jobs:
           cache: 'yarn'
 
       - name: Yarn Install
-      - run: yarn install
+        run: yarn install
 
 
       # If the App is not deploy in the Servers root directory React needs to know where it is located.
@@ -37,16 +37,16 @@ jobs:
           value: https://exxcellent.github.io/davit/dev
 
       - name: Yarn Build
-      - run: yarn build
+        run: yarn build
 
       - name: Show build files
         run: ls -la
 
       - name: Yarn Test
-      - run: yarn test
+        run: yarn test
 
       - name: Lint
-      - run: yarn lint
+        run: yarn lint
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
