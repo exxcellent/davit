@@ -42,7 +42,7 @@ jobs:
           persist-credentials: false
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: '15.x'
 
@@ -59,9 +59,7 @@ jobs:
             ${{ runner.os }}-
 
       - name: Yarn Install
-        uses: CultureHQ/actions-yarn@v1.0.1
-        with:
-          args: install
+        run: yarn install
 
       - name: Get Major Version
         run: |
@@ -82,9 +80,7 @@ jobs:
           value: https://exxcellent.github.io/davit/${{ env.major_version }}
 
       - name: Yarn Build
-        uses: CultureHQ/actions-yarn@v1.0.1
-        with:
-          args: build
+        run: yarn build
 
       - name: Show files
         run: ls -la
