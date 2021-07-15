@@ -23,7 +23,7 @@ import { useActionViewModel } from "../viewmodels/ActionViewModel";
 import { useStepViewModel } from "../viewmodels/StepViewModel";
 import { FormDivider } from "./fragments/FormDivider";
 import { FormLabel } from "./fragments/FormLabel";
-import { FormLine } from "./fragments/FormLine";
+import { FormLine, FormLinePosition } from "./fragments/FormLine";
 
 interface StepFormProps {
 }
@@ -114,9 +114,9 @@ export const StepForm: FunctionComponent<StepFormProps> = () => {
                 <h2>Step</h2>
             </FormHeader>
 
-            <FormDivider />
-
             <FormBody>
+
+                <FormDivider />
 
                 <FormLine>
                     <DavitTextInput
@@ -132,10 +132,15 @@ export const StepForm: FunctionComponent<StepFormProps> = () => {
                 <FormDivider />
 
                 <FormLine>
-                    <FormLabel><h3>Actions</h3></FormLabel>
-                    <DavitShowMoreButton show={showActions}
-                                         onClick={() => setShowActions(!showActions)}
-                    />
+                    <FormLine position={FormLinePosition.center}>
+                        <FormLabel><h3>Actions</h3></FormLabel>
+                    </FormLine>
+                    <FormLine position={FormLinePosition.center}>
+
+                        <DavitShowMoreButton show={showActions}
+                                             onClick={() => setShowActions(!showActions)}
+                        />
+                    </FormLine>
                 </FormLine>
 
                 {showActions && <FormDivider /> && <FormLine>{buildActionTable(actions)}</FormLine>}
@@ -143,54 +148,73 @@ export const StepForm: FunctionComponent<StepFormProps> = () => {
                 <FormDivider />
 
                 <FormLine>
-                    <FormLabel>Select type of the next element</FormLabel>
-                </FormLine>
+                    <FormLine position={FormLinePosition.start}>
+                        <FormLabel>Select type of the next element</FormLabel>
+                    </FormLine>
 
-                <FormLine>
-                    <GoToOptionDropDown onSelect={handleType}
-                                        value={goTo ? goTo.type : GoToTypes.ERROR}
-                    />
+                    <FormLine position={FormLinePosition.start}>
+                        <GoToOptionDropDown onSelect={handleType}
+                                            value={goTo ? goTo.type : GoToTypes.ERROR}
+                        />
+                    </FormLine>
                 </FormLine>
 
                 {goTo!.type === GoToTypes.STEP && (
                     <>
-                        <FormDivider />
 
                         <FormLine>
-                            <FormLabel>{labelSelectStep}</FormLabel>
-                            <StepDropDown
-                                onSelect={setGoToTypeStep}
-                                value={goTo?.type === GoToTypes.STEP ? goTo.id : 1}
-                                exclude={stepId}
-                            />
+                            <FormLine position={FormLinePosition.start}>
+                                <FormLabel>{labelSelectStep}</FormLabel>
+                            </FormLine>
+                            <FormLine position={FormLinePosition.start}>
+                                <StepDropDown
+                                    onSelect={setGoToTypeStep}
+                                    value={goTo?.type === GoToTypes.STEP ? goTo.id : 1}
+                                    exclude={stepId}
+                                />
+                            </FormLine>
                         </FormLine>
+
                         <FormLine>
-                            <FormLabel>{labelCreateStep}</FormLabel>
-                            <DavitAddButton onClick={createGoToStep} />
+                            <FormLine position={FormLinePosition.start}>
+                                <FormLabel>{labelCreateStep}</FormLabel>
+                            </FormLine>
+                            <FormLine position={FormLinePosition.start}>
+                                <DavitAddButton onClick={createGoToStep} />
+                            </FormLine>
                         </FormLine>
                     </>
                 )}
 
                 {goTo!.type === GoToTypes.DEC && (
                     <>
-                        <FormDivider />
 
                         <FormLine>
-                            <FormLabel>{labelSelectDecision}</FormLabel>
-                            <DecisionDropDown
-                                onSelect={setGoToTypeDecision}
-                                value={goTo?.type === GoToTypes.DEC ? goTo.id : 1}
-                            />
+                            <FormLine position={FormLinePosition.start}>
+                                <FormLabel>{labelSelectDecision}</FormLabel>
+                            </FormLine>
+                            <FormLine position={FormLinePosition.start}>
+                                <DecisionDropDown
+                                    onSelect={setGoToTypeDecision}
+                                    value={goTo?.type === GoToTypes.DEC ? goTo.id : 1}
+                                />
+                            </FormLine>
                         </FormLine>
+
                         <FormLine>
-                            <FormLabel>{labelCreateDecision}</FormLabel>
-                            <DavitAddButton onClick={createGoToDecision} />
+                            <FormLine position={FormLinePosition.start}>
+                                <FormLabel>{labelCreateDecision}</FormLabel>
+                            </FormLine>
+                            <FormLine position={FormLinePosition.start}>
+                                <DavitAddButton onClick={createGoToDecision} />
+                            </FormLine>
                         </FormLine>
                     </>
                 )}
-            </FormBody>
 
-            <FormDivider />
+                <FormDivider />
+
+            </FormBody>
 
             <FormFooter>
                 <DavitDeleteButton onClick={deleteSequenceStep} />
