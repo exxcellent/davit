@@ -104,7 +104,7 @@ export const useSequenceViewModel = () => {
     };
 
     const saveNote = (text: string) => {
-        if (!DavitUtil.isNullOrUndefined(sequenceToEdit) && text !== "") {
+        if (!DavitUtil.isNullOrUndefined(sequenceToEdit)) {
             const copySequenceToEdit: SequenceTO = DavitUtil.deepCopy(sequenceToEdit);
             copySequenceToEdit.note = text;
             dispatch(EditSequence.save(copySequenceToEdit));
