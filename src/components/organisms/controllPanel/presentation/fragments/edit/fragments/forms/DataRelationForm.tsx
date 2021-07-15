@@ -45,9 +45,9 @@ export const DataRelationForm: FunctionComponent<DataRelationFormProps> = () => 
                 <h2>Data Relation</h2>
             </FormHeader>
 
-            <FormDivider />
 
             <FormBody>
+                <FormDivider />
 
                 <FormLine>
                     <FormLabel align={FormlabelAlign.center}>FROM</FormLabel>
@@ -74,8 +74,6 @@ export const DataRelationForm: FunctionComponent<DataRelationFormProps> = () => 
                     />
                 </FormLine>
 
-                <FormDivider />
-
                 <FormLine>
                     <FormLabel align={FormlabelAlign.center}>TO</FormLabel>
                 </FormLine>
@@ -99,10 +97,10 @@ export const DataRelationForm: FunctionComponent<DataRelationFormProps> = () => 
                         value={direction2}
                     />
                 </FormLine>
+                <FormDivider />
 
             </FormBody>
 
-            <FormDivider />
 
             <FormFooter>
                 <DavitDeleteButton onClick={deleteRelation} />

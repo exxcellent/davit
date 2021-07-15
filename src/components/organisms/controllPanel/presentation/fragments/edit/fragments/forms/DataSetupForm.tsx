@@ -85,9 +85,9 @@ export const DataSetupForm: FunctionComponent<DataSetupFormProps> = () => {
                 <h2>Data Setup</h2>
             </FormHeader>
 
-            <FormDivider />
 
             <FormBody>
+                <FormDivider />
 
                 <FormLine>
                     <DavitTextInput
@@ -118,9 +118,11 @@ export const DataSetupForm: FunctionComponent<DataSetupFormProps> = () => {
                         </tbody>
                     </table>
                 </FormLine>
+
+                <FormDivider />
+
             </FormBody>
 
-            <FormDivider />
 
             <FormFooter>
                 <DavitDeleteButton onClick={deleteDataSetup} />
