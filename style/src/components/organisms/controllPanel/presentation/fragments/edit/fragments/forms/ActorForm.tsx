@@ -4,6 +4,7 @@ import { DavitButton } from "../../../../../../../atomic/buttons/DavitButton";
 import { DavitDeleteButton } from "../../../../../../../atomic/buttons/DavitDeleteButton";
 import { Form } from "../../../../../../../atomic/forms/Form";
 import { FormBody } from "../../../../../../../atomic/forms/fragments/FormBody";
+import { FormFooter } from "../../../../../../../atomic/forms/fragments/FormFooter";
 import { FormHeader } from "../../../../../../../atomic/forms/fragments/FormHeader";
 import { DavitTextInput } from "../../../../../../../atomic/textinput/DavitTextInput";
 import { DavitCommentButton } from "../../../../../../../molecules";
@@ -54,7 +55,7 @@ export const ActorForm: FunctionComponent<ActorFormProps> = () => {
 
             <FormDivider />
 
-            <FormLine>
+            <FormFooter>
                 <DavitDeleteButton onClick={deleteActor} />
                 <DavitCommentButton onSaveCallback={saveNote}
                                     comment={note}
@@ -67,7 +68,7 @@ export const ActorForm: FunctionComponent<ActorFormProps> = () => {
                     {"Create another"}
                 </DavitButton>
                 <DavitBackButton onClick={saveActor} />
-            </FormLine>
+            </FormFooter>
 
 
         </Form>
