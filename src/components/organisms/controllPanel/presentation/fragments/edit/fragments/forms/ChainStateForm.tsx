@@ -21,10 +21,6 @@ export const ChainStateForm: FunctionComponent<ChainStateFormProps> = () => {
 
     const chainStates: ChainStateTO[] = useSelector(masterDataSelectors.selectChainStateByChainId(id));
 
-    const create = () => {
-        createState();
-    };
-
     const closeStateForm = () => {
         if (!chainStates.some(state => state.label === "")) {
             chainStates.forEach(saveState);
@@ -36,10 +32,6 @@ export const ChainStateForm: FunctionComponent<ChainStateFormProps> = () => {
         const copyStateToToggle: StateTO = DavitUtil.deepCopy(stateToToggle);
         copyStateToToggle.isState = is;
         saveState(copyStateToToggle as ChainStateTO);
-    };
-
-    const delState = (stateId: number) => {
-        deleteState(stateId);
     };
 
     const changeName = (name: string, stateId: number) => {
@@ -62,8 +54,8 @@ export const ChainStateForm: FunctionComponent<ChainStateFormProps> = () => {
             <FormBody>
 
                 <StateTable statesToEdit={chainStates}
-                            addStateCallback={create}
-                            removeStateCallback={delState}
+                            addStateCallback={createState}
+                            removeStateCallback={deleteState}
                             setActiveCallback={setIsState}
                             changeName={changeName}
                 />

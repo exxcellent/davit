@@ -21,10 +21,6 @@ export const SequenceStateForm: FunctionComponent<StateFormProps> = () => {
 
     const sequenceStates: SequenceStateTO[] = useSelector(masterDataSelectors.selectSequenceStateBySequenceId(id));
 
-    const create = () => {
-        createState();
-    };
-
     const closeStateForm = () => {
         if (!sequenceStates.some(state => state.label === "")) {
             sequenceStates.forEach(saveState);
@@ -36,10 +32,6 @@ export const SequenceStateForm: FunctionComponent<StateFormProps> = () => {
         const copyStateToToggle: StateTO = DavitUtil.deepCopy(stateToToggle);
         copyStateToToggle.isState = is;
         saveState(copyStateToToggle as SequenceStateTO);
-    };
-
-    const delState = (stateId: number) => {
-        deleteState(stateId);
     };
 
     const changeName = (name: string, stateId: number) => {
@@ -62,8 +54,8 @@ export const SequenceStateForm: FunctionComponent<StateFormProps> = () => {
             <FormBody>
 
                 <StateTable statesToEdit={sequenceStates}
-                            addStateCallback={create}
-                            removeStateCallback={delState}
+                            addStateCallback={createState}
+                            removeStateCallback={deleteState}
                             setActiveCallback={setIsState}
                             changeName={changeName}
                 />
