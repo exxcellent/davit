@@ -10,6 +10,7 @@ import { ActorDropDown } from "../../../../../../../atomic/dropdowns/ActorDropDo
 import { DecisionDropDown } from "../../../../../../../atomic/dropdowns/DecisionDropDown";
 import { GoToOptionDropDown } from "../../../../../../../atomic/dropdowns/GoToOptionDropDown";
 import { InstanceDropDown } from "../../../../../../../atomic/dropdowns/InstanceDropDown";
+import { SequenceStateDropDown } from "../../../../../../../atomic/dropdowns/SequenceStateDropDown";
 import { StepDropDown } from "../../../../../../../atomic/dropdowns/StepDropDown";
 import { Form } from "../../../../../../../atomic/forms/Form";
 import { FormBody } from "../../../../../../../atomic/forms/fragments/FormBody";
@@ -47,8 +48,13 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
         note,
         saveNote,
         deleteCondition,
+        deleteState,
         saveCondition,
         saveAndGoBack,
+        stateFks,
+        createState,
+        seqeuenceFk,
+        updateState,
     } = useDecisionViewModel();
 
 
@@ -68,7 +74,7 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
         return (
             <tr key={copyCondition.id}>
                 <td>
-                    <div style={{display: "flex", justifyContent: "space-between"}}>
+                    <div className="flex content-space-between">
                         <ActorDropDown
                             onSelect={(actor) => {
                                 copyCondition.actorFk = actor ? actor.actor.id : -1;
@@ -103,13 +109,38 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
         );
     };
 
+    const buildStateTableRow = (stateFk: number, index: number): JSX.Element => {
+
+        return (
+            <tr key={stateFk}>
+                <td>
+                    <div className="flex content-space-between">
+
+                        <SequenceStateDropDown onSelect={(newState) => updateState(newState, index)}
+                                               sequenceFk={seqeuenceFk}
+                                               value={stateFk.toString()}
+                                               placeholder="Select sequence state"
+                        />
+
+                        <DavitDeleteButton onClick={() => {
+                            deleteState(stateFk);
+                        }}
+                                           noConfirm
+                        />
+                    </div>
+                </td>
+            </tr>
+        );
+    };
+
     return (
         <Form>
             <FormHeader><h2>Decision</h2></FormHeader>
 
-            <FormDivider />
 
             <FormBody>
+
+                <FormDivider />
 
                 <FormLine>
                     <DavitTextInput
@@ -125,17 +156,34 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
 
                 <FormLine>
                     <table className={"border"}
-                           style={{width: "40em", minHeight: "30vh"}}
+                           style={{width: "40em"}}
                     >
                         <thead>
                         <tr>
-                            <td style={{textAlign: "center"}}>Actor</td>
-                            <td style={{textAlign: "center"}}>Data Instance</td>
+                            <td>Actor</td>
+                            <td>Data Instance</td>
                             <td className={"flex flex-end"}><DavitAddButton onClick={createCondition} /></td>
                         </tr>
                         </thead>
-                        <tbody style={{maxHeight: "40vh"}}>
+                        <tbody style={{maxHeight: "20vh"}}>
                         {conditions.map(buildConditionTableRow)}
+                        </tbody>
+                    </table>
+                </FormLine>
+
+                {/*------------------------- State -------------------------*/}
+                <FormLine>
+                    <table className="border"
+                           style={{width: "40em"}}
+                    >
+                        <thead>
+                        <tr>
+                            <td>State</td>
+                            <td className={"flex flex-end"}><DavitAddButton onClick={createState} /></td>
+                        </tr>
+                        </thead>
+                        <tbody style={{maxHeight: "20vh"}}>
+                        {stateFks.map((state, index) => buildStateTableRow(state, index))}
                         </tbody>
                     </table>
                 </FormLine>
@@ -240,8 +288,10 @@ export const DecisionForm: FunctionComponent<DecisionFormProps> = () => {
                         </FormLine>
                     </>
                 )}
+
+                <FormDivider />
+
             </FormBody>
-            <FormDivider />
             <FormFooter>
                 <DavitDeleteButton onClick={deleteDecision} />
                 <DavitCommentButton onSaveCallback={saveNote}

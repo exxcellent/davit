@@ -35,7 +35,7 @@ export const SequenceStateRepository = {
     },
 
     delete(sequenceMock: SequenceStateTO): SequenceStateTO {
-        ConstraintsHelper.deleteSequenceMockConstraintCheck(sequenceMock.id, dataStore.getDataStore());
+        ConstraintsHelper.deleteSequenceStateConstraintCheck(sequenceMock.id, dataStore.getDataStore());
 
         const success = dataStore.getDataStore().sequenceStates.delete(sequenceMock.id);
 

@@ -3,6 +3,7 @@ import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
 import { DecisionTO } from "../dataAccess/access/to/DecisionTO";
+import { SequenceStateTO } from "../dataAccess/access/to/SequenceStateTO";
 import { ActionType } from "../dataAccess/access/types/ActionType";
 import { GoTo, GoToTypes, Terminal } from "../dataAccess/access/types/GoToType";
 import { SequenceActionReducer, SequenceActionResult, SequenceDecisionResult } from "../reducer/SequenceActionReducer";
@@ -16,6 +17,7 @@ export interface CalculatedStep {
     stepId: string;
     actorDatas: ActorData[];
     errors: ActionTO[];
+    stateErrors: SequenceStateTO[];
 }
 
 export interface CalcSequence {
@@ -96,6 +98,7 @@ export const SequenceService = {
                             errors: result.errors,
                             modelElementFk: step.sequenceStepTO.id,
                             type: "STEP",
+                            stateErrors: result.errorStates
                         });
 
                         if (!isLooping(loopStartingStep)) {
@@ -112,6 +115,7 @@ export const SequenceService = {
                         const result: SequenceDecisionResult = SequenceActionReducer.executeDecisionCheck(
                             decision,
                             actorDatas,
+                            sequence.sequenceStates,
                         );
                         actorDatas = result.actorDatas;
 
@@ -128,6 +132,7 @@ export const SequenceService = {
                             errors: [],
                             modelElementFk: decision.id,
                             type: "DECISION",
+                            stateErrors: result.errorStates,
                         });
                     }
                 }
@@ -142,6 +147,7 @@ export const SequenceService = {
                         actorDatas: terminalResult.actorDatas,
                         type: "TERMINAL",
                         errors: terminalResult.errors,
+                        stateErrors: terminalResult.errorStates,
                     });
 
                     stepIds.push(stepId + "_" + (stepOrDecision as Terminal).type);
@@ -159,7 +165,13 @@ export const SequenceService = {
 // ------------------------------------------ PRIVATE FUNCTIONS --------------------------------------
 
 const getInitStep = (result: SequenceActionResult): CalculatedStep => {
-    return {stepId: "root", actorDatas: result.actorDatas, type: "INIT", errors: result.errors};
+    return {
+        stepId: "root",
+        actorDatas: result.actorDatas,
+        type: "INIT",
+        errors: result.errors,
+        stateErrors: result.errorStates
+    };
 };
 
 const getStepFromSequence = (stepId: number, sequence: SequenceCTO): SequenceStepCTO | undefined => {
