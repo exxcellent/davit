@@ -174,6 +174,26 @@ export const useDecisionViewModel = () => {
         }
     };
 
+    const deleteState = (stateFkToRemove: number) => {
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
+            const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
+            copyDecision.stateFks = copyDecision.stateFks.filter(stateFk => stateFk !== stateFkToRemove);
+            updateDecision(copyDecision);
+        }
+    };
+
+    const updateState = (newState: number | undefined, index: number) => {
+        if (newState) {
+            if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
+                const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
+                console.info("New State: " + newState);
+                copyDecision.stateFks[index] = newState;
+                console.info("State on index: " + index + " is: " + newState);
+                updateDecision(copyDecision);
+            }
+        }
+    };
+
     const saveCondition = (conditionToSave: ConditionTO) => {
         if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
             const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
@@ -186,6 +206,15 @@ export const useDecisionViewModel = () => {
             } else {
                 copyDecision.conditions.push(conditionToSave);
             }
+            updateDecision(copyDecision);
+        }
+    };
+
+    const createState = () => {
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
+            const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
+            copyDecision.stateFks.push(-1);
+
             updateDecision(copyDecision);
         }
     };
@@ -241,5 +270,10 @@ export const useDecisionViewModel = () => {
         deleteCondition,
         saveCondition,
         saveAndGoBack,
+        stateFks: decisionToEdit?.stateFks || [],
+        deleteState,
+        createState,
+        seqeuenceFk: decisionToEdit?.sequenceFk || -1,
+        updateState,
     };
 };

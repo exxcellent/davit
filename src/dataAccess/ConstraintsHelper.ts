@@ -6,11 +6,15 @@ import { GoToTypes } from "./access/types/GoToType";
 
 export const ConstraintsHelper = {
 
-    deleteSequenceMockConstraintCheck(sequenceMockId: number, dataStore: DataStoreCTO) {
-        // TODO: check if mock is part of an decision.
+    deleteSequenceStateConstraintCheck(sequenceStateId: number, dataStore: DataStoreCTO) {
+        const decisionIsUsingSequenceState: boolean = Array.from(dataStore.decisions.values())
+            .some(decision => decision.stateFks.some(stateFk => stateFk === sequenceStateId));
+        if (decisionIsUsingSequenceState) {
+            throw new Error(`Sequence state.error! state with id: ${sequenceStateId} is still connected to decisions(s)!`);
+        }
     },
 
-    deleteChainMockConstraintCheck(sequenceMockId: number, dataStore: DataStoreCTO) {
+    deleteChainStateConstraintCheck(sequenceMockId: number, dataStore: DataStoreCTO) {
         // TODO: check if mock is part of an decision.
     },
 

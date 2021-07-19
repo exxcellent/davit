@@ -1,5 +1,6 @@
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
 import { DecisionTO } from "../dataAccess/access/to/DecisionTO";
+import { SequenceStateTO } from "../dataAccess/access/to/SequenceStateTO";
 import { ActionType } from "../dataAccess/access/types/ActionType";
 import { GoTo } from "../dataAccess/access/types/GoToType";
 import { ActorData } from "../viewDataTypes/ActorData";
@@ -10,10 +11,12 @@ import { ActorDataState } from "../viewDataTypes/ActorDataState";
 export interface SequenceActionResult {
     actorDatas: ActorData[];
     errors: ActionTO[];
+    errorStates: SequenceStateTO[];
 }
 
 export interface SequenceDecisionResult {
     actorDatas: ActorData[];
+    errorStates: SequenceStateTO[];
     goto: GoTo;
 }
 
@@ -115,10 +118,10 @@ export const SequenceActionReducer = {
                     break;
             }
         });
-        return {actorDatas: newActorDatas, errors};
+        return {actorDatas: newActorDatas, errors: errors, errorStates: []};
     },
 
-    executeDecisionCheck(decision: DecisionTO, actorDatas: ActorData[]): SequenceDecisionResult {
+    executeDecisionCheck(decision: DecisionTO, actorDatas: ActorData[], states: SequenceStateTO[]): SequenceDecisionResult {
         /**
          * Remove with status "deleted" and "check failed"
          * Change rest to status "persistent".
@@ -149,7 +152,19 @@ export const SequenceActionReducer = {
             }
         });
 
-        return {actorDatas: updatedActorDatas, goto: goTo};
+        const errorStates: SequenceStateTO[] = [];
+
+        decision.stateFks.forEach(stateFk => {
+            const stateToCheck: SequenceStateTO | undefined = states.find(state => state.id === stateFk);
+            if (stateToCheck) {
+                if (!stateToCheck.isState) {
+                    errorStates.push(stateToCheck);
+                    goTo = decision.elseGoTo;
+                }
+            }
+        });
+
+        return {actorDatas: updatedActorDatas, goto: goTo, errorStates: errorStates};
     },
 };
 

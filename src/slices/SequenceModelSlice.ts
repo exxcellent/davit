@@ -10,6 +10,7 @@ import { ActionTO } from "../dataAccess/access/to/ActionTO";
 import { ChainDecisionTO } from "../dataAccess/access/to/ChainDecisionTO";
 import { ChainTO } from "../dataAccess/access/to/ChainTO";
 import { InitDataTO } from "../dataAccess/access/to/InitDataTO";
+import { SequenceStateTO } from "../dataAccess/access/to/SequenceStateTO";
 import { ActionType } from "../dataAccess/access/types/ActionType";
 import { Terminal } from "../dataAccess/access/types/GoToType";
 import { DataAccess } from "../dataAccess/DataAccess";
@@ -421,6 +422,10 @@ export const sequenceModelSelectors = {
     selectErrors: (state: RootState): ActionTO[] => {
         const filteredSteps = getFilteredSteps(state);
         return filteredSteps[state.sequenceModel.currentStepIndex]?.errors || [];
+    },
+    selectStateErrors: (state: RootState): SequenceStateTO[] => {
+        const filteredSteps = getFilteredSteps(state);
+        return filteredSteps[state.sequenceModel.currentStepIndex]?.stateErrors || [];
     },
     selectActions: (state: RootState): ActionTO[] => {
         const filteredSteps = getFilteredSteps(state);

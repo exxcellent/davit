@@ -11,6 +11,7 @@ import { ChainTO } from "../../../../dataAccess/access/to/ChainTO";
 import { ConditionTO } from "../../../../dataAccess/access/to/ConditionTO";
 import { DataSetupTO } from "../../../../dataAccess/access/to/DataSetupTO";
 import { DecisionTO } from "../../../../dataAccess/access/to/DecisionTO";
+import { SequenceStateTO } from "../../../../dataAccess/access/to/SequenceStateTO";
 import { SequenceTO } from "../../../../dataAccess/access/to/SequenceTO";
 import { CalcChain } from "../../../../services/SequenceChainService";
 import { CalculatedStep } from "../../../../services/SequenceService";
@@ -22,6 +23,7 @@ import { TabPanel } from "../fragments/TabPanel";
 import { useGetCalcErrorActionsTableData } from "../tables/calculated/CalcErrorActions";
 import { useGetCalcLinkTableData } from "../tables/calculated/CalcLink";
 import { useGetCalcSequenceTableData } from "../tables/calculated/CalcSequence";
+import { useGetErrorState } from "../tables/calculated/useGetErrorState";
 import { useGetChainModelsTableData } from "../tables/model/ModelChain";
 import { useGetModelChainDecisionTableData } from "../tables/model/ModelChainDecision";
 import { useGetModelChainLinkTableData } from "../tables/model/ModelChainLink";
@@ -48,6 +50,7 @@ export enum ActiveTab {
     sequenceModels = "sequenceModels",
     chainModel = "chainModels",
     dataSetup = "dataSetup",
+    errorState = "errorState",
 }
 
 export const TableModelController: FunctionComponent<TableModelControllerProps> = () => {
@@ -58,6 +61,7 @@ export const TableModelController: FunctionComponent<TableModelControllerProps> 
         showCalcSequenceTab,
         showErrorTab,
         activeTab,
+        showStateErrorTab,
         setActiveTab,
         activeTableData,
         tableHeight,
@@ -77,6 +81,7 @@ export const TableModelController: FunctionComponent<TableModelControllerProps> 
                     activeTab={activeTab}
                     setActiveTab={setActiveTab}
                     showErrorTab={showErrorTab}
+                    showStateErrorTab={showStateErrorTab}
                 />
                 <DavitTable {...activeTableData} tableHeight={tableHeight} />
             </div>
@@ -100,6 +105,7 @@ const useSequenceTableViewModel = () => {
     const selectedDecisionToEdit: DecisionTO | null = useSelector(editSelectors.selectDecisionToEdit);
     const selectedConditionToEdit: ConditionTO | null = useSelector(editSelectors.selectConditionToEdit);
     const selectedErrors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
+    const selectedStateErrors: SequenceStateTO[] = useSelector(sequenceModelSelectors.selectStateErrors);
 
     const [activeTab, setActiveTab] = useState<ActiveTab>(ActiveTab.sequence);
 
@@ -181,6 +187,7 @@ const useSequenceTableViewModel = () => {
     const calcLinkData = useGetCalcLinkTableData(calcChain);
 
     const calcErrorAction = useGetCalcErrorActionsTableData(selectedErrors);
+    const calcErrorState = useGetErrorState(selectedStateErrors);
 
     const getActiveTableData = () => {
         switch (activeTab) {
@@ -208,6 +215,8 @@ const useSequenceTableViewModel = () => {
                 return dataSetupData;
             case ActiveTab.errorAction:
                 return calcErrorAction;
+            case ActiveTab.errorState:
+                return calcErrorState;
             default:
                 return {header: [], bodyData: []};
         }
@@ -238,9 +247,9 @@ const useSequenceTableViewModel = () => {
         showCalcChainTab: !DavitUtil.isNullOrUndefined(calcChain),
         showCalcSequenceTab: calcSteps.length > 0,
         showErrorTab: selectedErrors.length > 0,
+        showStateErrorTab: selectedStateErrors.length > 0,
         activeTab,
         setActiveTab,
-
         activeTableData: getActiveTableData(),
         tableHeight,
         parentRef,
