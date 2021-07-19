@@ -35,7 +35,7 @@ export const ChainStateRepository = {
     },
 
     delete(chainState: ChainStateTO): ChainStateTO {
-        ConstraintsHelper.deleteChainMockConstraintCheck(chainState.id, dataStore.getDataStore());
+        ConstraintsHelper.deleteChainStateConstraintCheck(chainState.id, dataStore.getDataStore());
 
         const success = dataStore.getDataStore().chainStates.delete(chainState.id);
 

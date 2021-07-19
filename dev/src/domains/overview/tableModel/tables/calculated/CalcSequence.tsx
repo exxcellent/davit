@@ -36,7 +36,7 @@ export const useGetCalcSequenceTableData = (calcSteps: CalculatedStep[], selecte
     };
 };
 
-const header = ["INDEX", "NAME", "TYPE", "ACTION-ERROR"];
+const header = ["INDEX", "NAME", "TYPE", "ERROR"];
 
 const createCalcSequenceStepColumn = (
     selectedSequence: SequenceCTO | null,
@@ -61,7 +61,7 @@ const createCalcSequenceStepColumn = (
         }
     }
 
-    const hasError = step.errors.length > 0;
+    const hasError = step.errors.length > 0 || step.stateErrors.length > 0;
 
     return {
         actions: [],
