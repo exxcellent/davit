@@ -4,6 +4,7 @@ import { ChainDecisionTO } from "../../../../../../../../dataAccess/access/to/Ch
 import { ChainlinkTO } from "../../../../../../../../dataAccess/access/to/ChainlinkTO";
 import { ChainTO } from "../../../../../../../../dataAccess/access/to/ChainTO";
 import { ConditionTO } from "../../../../../../../../dataAccess/access/to/ConditionTO";
+import { StateFkAndStateCondition } from "../../../../../../../../dataAccess/access/to/DecisionTO";
 import { GoToChain, GoToTypesChain } from "../../../../../../../../dataAccess/access/types/GoToTypeChain";
 import { EditActions, editSelectors } from "../../../../../../../../slices/EditSlice";
 import { GlobalActions } from "../../../../../../../../slices/GlobalSlice";
@@ -167,6 +168,34 @@ export const useChainDecisionViewModel = () => {
         }
     };
 
+    // ------------------------------------- State ------------------------------------
+
+    const createStateFkAndStateCondition = () => {
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
+            const copyDecision: ChainDecisionTO = DavitUtil.deepCopy(decisionToEdit);
+            copyDecision.stateFkAndStateConditions.push({stateFk: -1, stateCondition: true});
+
+            updateChainDecision(copyDecision);
+        }
+    };
+
+    const updateStateFkAndStateCondition = (newState: StateFkAndStateCondition | undefined, index: number) => {
+        if (newState) {
+            if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
+                const copyDecision: ChainDecisionTO = DavitUtil.deepCopy(decisionToEdit);
+                copyDecision.stateFkAndStateConditions[index] = newState;
+                updateChainDecision(copyDecision);
+            }
+        }
+    };
+
+    const deleteStateFkAndStateCondition = (stateFkToRemove: number) => {
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
+            const copyDecision: ChainDecisionTO = DavitUtil.deepCopy(decisionToEdit);
+            copyDecision.stateFkAndStateConditions = copyDecision.stateFkAndStateConditions.filter(stateFkStateCondition => stateFkStateCondition.stateFk !== stateFkToRemove);
+            updateChainDecision(copyDecision);
+        }
+    };
 
     return {
         name: decisionToEdit?.name,
@@ -188,5 +217,9 @@ export const useChainDecisionViewModel = () => {
         saveCondition,
         deleteCondition,
         createCondition,
+        stateFkAndStateConditions: decisionToEdit?.stateFkAndStateConditions || [],
+        createStateFkAndStateCondition,
+        updateStateFkAndStateCondition,
+        deleteStateFkAndStateCondition,
     };
 };

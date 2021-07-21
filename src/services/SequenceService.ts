@@ -17,7 +17,7 @@ export interface CalculatedStep {
     stepId: string;
     actorDatas: ActorData[];
     errors: ActionTO[];
-    stateErrors: SequenceStateTO[];
+    falseStates: SequenceStateTO[];
 }
 
 export interface CalcSequence {
@@ -98,7 +98,7 @@ export const SequenceService = {
                             errors: result.errors,
                             modelElementFk: step.sequenceStepTO.id,
                             type: "STEP",
-                            stateErrors: result.errorStates
+                            falseStates: result.errorStates
                         });
 
                         if (!isLooping(loopStartingStep)) {
@@ -132,7 +132,7 @@ export const SequenceService = {
                             errors: [],
                             modelElementFk: decision.id,
                             type: "DECISION",
-                            stateErrors: result.errorStates,
+                            falseStates: result.falseStates,
                         });
                     }
                 }
@@ -147,7 +147,7 @@ export const SequenceService = {
                         actorDatas: terminalResult.actorDatas,
                         type: "TERMINAL",
                         errors: terminalResult.errors,
-                        stateErrors: terminalResult.errorStates,
+                        falseStates: terminalResult.errorStates,
                     });
 
                     stepIds.push(stepId + "_" + (stepOrDecision as Terminal).type);
@@ -170,7 +170,7 @@ const getInitStep = (result: SequenceActionResult): CalculatedStep => {
         actorDatas: result.actorDatas,
         type: "INIT",
         errors: result.errors,
-        stateErrors: result.errorStates
+        falseStates: result.errorStates
     };
 };
 

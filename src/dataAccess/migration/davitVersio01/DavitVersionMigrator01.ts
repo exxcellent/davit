@@ -1,4 +1,4 @@
-import { DataAndInstanceId } from "../../../components/atomic/dropdowns/InstanceDropDown";
+import { DataAndInstanceId } from "../../../components/atomic";
 import { DEFAULT_PROJECT_NAME } from "../../../DavitConstants";
 import { ActionTO } from "../../access/to/ActionTO";
 import { ActorTO } from "../../access/to/ActorTO";
@@ -90,6 +90,7 @@ export const DavitVersionMigrator01 = {
                     name: chainDecision.name,
                     chainFk: chainDecision.chainFk,
                     conditions: chainDecision.dataAndInstaceIds.map(dataInstanceId => buildConditionFromDataAndInstance(dataInstanceId, chainDecision.actorFk, chainDecision.id)),
+                    stateFkAndStateConditions: [],
                     ifGoTo: chainDecision.ifGoTo,
                     elseGoTo: chainDecision.elseGoTo,
                 };
