@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { SequenceCTO } from "../../../../../../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../../../../../../dataAccess/access/cto/SequenceStepCTO";
 import { ConditionTO } from "../../../../../../../../dataAccess/access/to/ConditionTO";
-import { DecisionTO } from "../../../../../../../../dataAccess/access/to/DecisionTO";
+import { DecisionTO, StateFkAndStateCondition } from "../../../../../../../../dataAccess/access/to/DecisionTO";
 import { GoTo, GoToTypes } from "../../../../../../../../dataAccess/access/types/GoToType";
 import { EditActions, editSelectors } from "../../../../../../../../slices/EditSlice";
 import { GlobalActions } from "../../../../../../../../slices/GlobalSlice";
@@ -151,73 +151,6 @@ export const useDecisionViewModel = () => {
         }
     };
 
-    const createCondition = () => {
-        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
-            const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
-            copyDecision.conditions.push({
-                decisionFk: copyDecision.id,
-                id: -1,
-                actorFk: -1,
-                instanceFk: -1,
-                dataFk: -1,
-            });
-            updateDecision(copyDecision);
-
-        }
-    };
-
-    const deleteCondition = (conditionId: number) => {
-        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
-            const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
-            copyDecision.conditions = copyDecision.conditions.filter(condition => condition.id !== conditionId);
-            updateDecision(copyDecision);
-        }
-    };
-
-    const deleteState = (stateFkToRemove: number) => {
-        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
-            const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
-            copyDecision.stateFks = copyDecision.stateFks.filter(stateFk => stateFk !== stateFkToRemove);
-            updateDecision(copyDecision);
-        }
-    };
-
-    const updateState = (newState: number | undefined, index: number) => {
-        if (newState) {
-            if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
-                const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
-                console.info("New State: " + newState);
-                copyDecision.stateFks[index] = newState;
-                console.info("State on index: " + index + " is: " + newState);
-                updateDecision(copyDecision);
-            }
-        }
-    };
-
-    const saveCondition = (conditionToSave: ConditionTO) => {
-        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
-            const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
-            // TODO: ConditonThunk soll das machen.
-            let conditionToUpdate: ConditionTO | undefined = copyDecision.conditions.find(condition => condition.id === conditionToSave.id);
-            if (conditionToUpdate) {
-                let filteredConditions: ConditionTO[] = copyDecision.conditions.filter(condition => condition.id !== conditionToSave.id);
-                filteredConditions.push(conditionToSave);
-                copyDecision.conditions = filteredConditions;
-            } else {
-                copyDecision.conditions.push(conditionToSave);
-            }
-            updateDecision(copyDecision);
-        }
-    };
-
-    const createState = () => {
-        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
-            const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
-            copyDecision.stateFks.push(-1);
-
-            updateDecision(copyDecision);
-        }
-    };
 
     const checkGoTos = (goto: GoTo): GoTo => {
         const copyGoto: GoTo = DavitUtil.deepCopy(goto);
@@ -241,6 +174,76 @@ export const useDecisionViewModel = () => {
             } else {
                 deleteDecision();
             }
+        }
+    };
+
+    // ------------------------------------- Condition ------------------------------------
+
+    const createCondition = () => {
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
+            const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
+            copyDecision.conditions.push({
+                decisionFk: copyDecision.id,
+                id: -1,
+                actorFk: -1,
+                instanceFk: -1,
+                dataFk: -1,
+            });
+            updateDecision(copyDecision);
+
+        }
+    };
+
+    const deleteCondition = (conditionId: number) => {
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
+            const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
+            copyDecision.conditions = copyDecision.conditions.filter(condition => condition.id !== conditionId);
+            updateDecision(copyDecision);
+        }
+    };
+
+    const saveCondition = (conditionToSave: ConditionTO) => {
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
+            const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
+            // TODO: ConditonThunk soll das machen.
+            let conditionToUpdate: ConditionTO | undefined = copyDecision.conditions.find(condition => condition.id === conditionToSave.id);
+            if (conditionToUpdate) {
+                let filteredConditions: ConditionTO[] = copyDecision.conditions.filter(condition => condition.id !== conditionToSave.id);
+                filteredConditions.push(conditionToSave);
+                copyDecision.conditions = filteredConditions;
+            } else {
+                copyDecision.conditions.push(conditionToSave);
+            }
+            updateDecision(copyDecision);
+        }
+    };
+
+    // ------------------------------------- State ------------------------------------
+
+    const updateStateFkAndStateCondition = (newState: StateFkAndStateCondition | undefined, index: number) => {
+        if (newState) {
+            if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
+                const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
+                copyDecision.stateFkAndStateConditions[index] = newState;
+                updateDecision(copyDecision);
+            }
+        }
+    };
+
+    const createStateFkAndStateCondition = () => {
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
+            const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
+            copyDecision.stateFkAndStateConditions.push({stateFk: -1, stateCondition: true});
+
+            updateDecision(copyDecision);
+        }
+    };
+
+    const deleteStateFkAndStateCondition = (stateFkToRemove: number) => {
+        if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
+            const copyDecision: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
+            copyDecision.stateFkAndStateConditions = copyDecision.stateFkAndStateConditions.filter(stateFkStateCondition => stateFkStateCondition.stateFk !== stateFkToRemove);
+            updateDecision(copyDecision);
         }
     };
 
@@ -270,10 +273,10 @@ export const useDecisionViewModel = () => {
         deleteCondition,
         saveCondition,
         saveAndGoBack,
-        stateFks: decisionToEdit?.stateFks || [],
-        deleteState,
-        createState,
-        seqeuenceFk: decisionToEdit?.sequenceFk || -1,
-        updateState,
+        stateFkAndStateConditions: decisionToEdit?.stateFkAndStateConditions || [],
+        deleteStateFkAndStateCondition,
+        createStateFkAndStateCondition,
+        updateStateFkAndStateCondition,
+        sequenceFk: decisionToEdit?.sequenceFk || -1,
     };
 };

@@ -195,8 +195,7 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
                 }
 
                 {renderFlowChart() && <>
-                    {/*TODO: try to move this in to a css class.*/}
-                    <div style={{display: "flex", position: "absolute", zIndex: 99, width: "47vw"}}>
+                    <div className="flowChartHeader">
                         {chain && (
                             <TabGroupFragment label="Mode"
                                               style={{backgroundColor: "var(--background-color-header)"}}

@@ -17,13 +17,19 @@ interface ChainStateFormProps {
 
 export const ChainStateForm: FunctionComponent<ChainStateFormProps> = () => {
 
-    const {saveState, editChain, createState, deleteState, id} = useChainViewModel();
+    const {
+        saveStateFkAndStateCondition,
+        editChain,
+        createStateFkAndStateCondition,
+        deleteStateFkAndStateCondition,
+        id
+    } = useChainViewModel();
 
     const chainStates: ChainStateTO[] = useSelector(masterDataSelectors.selectChainStateByChainId(id));
 
     const closeStateForm = () => {
         if (!chainStates.some(state => state.label === "")) {
-            chainStates.forEach(saveState);
+            chainStates.forEach(saveStateFkAndStateCondition);
             editChain();
         }
     };
@@ -31,7 +37,7 @@ export const ChainStateForm: FunctionComponent<ChainStateFormProps> = () => {
     const setIsState = (stateToToggle: StateTO, is: boolean) => {
         const copyStateToToggle: StateTO = DavitUtil.deepCopy(stateToToggle);
         copyStateToToggle.isState = is;
-        saveState(copyStateToToggle as ChainStateTO);
+        saveStateFkAndStateCondition(copyStateToToggle as ChainStateTO);
     };
 
     const changeName = (name: string, stateId: number) => {
@@ -39,7 +45,7 @@ export const ChainStateForm: FunctionComponent<ChainStateFormProps> = () => {
         if (stateToChangeName) {
             const copyStateToChangeName: ChainStateTO = DavitUtil.deepCopy(stateToChangeName);
             copyStateToChangeName.label = name;
-            saveState(copyStateToChangeName);
+            saveStateFkAndStateCondition(copyStateToChangeName);
         }
     };
 
@@ -54,8 +60,8 @@ export const ChainStateForm: FunctionComponent<ChainStateFormProps> = () => {
             <FormBody>
 
                 <StateTable statesToEdit={chainStates}
-                            addStateCallback={createState}
-                            removeStateCallback={deleteState}
+                            addStateCallback={createStateFkAndStateCondition}
+                            removeStateCallback={deleteStateFkAndStateCondition}
                             setActiveCallback={setIsState}
                             changeName={changeName}
                 />

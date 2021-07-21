@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { StateTO } from "../../../../../../../../../dataAccess/access/to/StateTO";
-import { DavitAddButton, DavitButton, DavitDeleteButton, DavitTextInput } from "../../../../../../../../atomic";
+import { DavitAddButton, DavitDeleteButton, DavitTextInput } from "../../../../../../../../atomic";
+import { ToggleButton } from "../../../../../../../../molecules/ToggleButton";
 import "./StateTable.css";
 
 interface StateTableProps {
@@ -32,14 +33,12 @@ export const StateTable: FunctionComponent<StateTableProps> = (props) => {
                 </td>
                 <td className="flex flex-center">
 
-                    <DavitButton
-                        className={state.isState ? " active" : ""}
-                        onClick={() => setActiveCallback(state, true)}
-                    >TRUE</DavitButton>
-                    <DavitButton
-                        className={state.isState ? "" : " active"}
-                        onClick={() => setActiveCallback(state, false)}
-                    >FALSE</DavitButton>
+                    <ToggleButton toggleCallback={(is) => setActiveCallback(state, is)}
+                                  isLeft={state.isState}
+                                  leftLabel="TRUE"
+                                  rightLabel="FLASE"
+                    />
+
                 </td>
                 <td className="flex flex-center">
                     <DavitDeleteButton onClick={() => removeStateCallback(state.id)}

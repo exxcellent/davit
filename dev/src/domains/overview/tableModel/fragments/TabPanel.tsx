@@ -13,7 +13,7 @@ interface TabPanelProps {
     showCalcChainTab: boolean;
     showCalcSequenceTab: boolean;
     showErrorTab: boolean;
-    showStateErrorTab: boolean;
+    showFalseStateTab: boolean;
 }
 
 interface TabGroupDefinition {
@@ -37,7 +37,7 @@ export const TabPanel: FunctionComponent<TabPanelProps> = (props) => {
         showChainModelTab,
         showSequenceModelTabs,
         showErrorTab,
-        showStateErrorTab,
+        showFalseStateTab,
     } = props;
 
     const mode: Mode = useSelector(editSelectors.selectMode);
@@ -90,9 +90,9 @@ export const TabPanel: FunctionComponent<TabPanelProps> = (props) => {
                     condition: showErrorTab,
                 },
                 {
-                    label: "Error States",
-                    identifier: ActiveTab.errorState,
-                    condition: showStateErrorTab,
+                    label: "False States",
+                    identifier: ActiveTab.falseState,
+                    condition: showFalseStateTab,
                 },
             ],
         },

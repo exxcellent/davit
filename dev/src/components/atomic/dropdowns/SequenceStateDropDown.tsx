@@ -5,7 +5,7 @@ import { masterDataSelectors } from "../../../slices/MasterDataSlice";
 import { DavitDropDown, DavitDropDownItemProps } from "./DavitDropDown";
 
 interface SequenceStateDropDownProps {
-    onSelect: (stateFk: number | undefined) => void;
+    onSelect: (sequenceState: SequenceStateTO | undefined) => void;
     sequenceFk: number;
     placeholder?: string;
     value?: string;
@@ -22,7 +22,7 @@ export const SequenceStateDropDown: FunctionComponent<SequenceStateDropDownProps
     return (
         <DavitDropDown
             dropdownItems={sequenceStates.map(sequenceStateToDavitDropDownItem)}
-            onSelect={(item) => onSelect(Number(item.value))}
+            onSelect={(item) => onSelect(sequenceStates.find(state => state.id === Number(item.value)))}
             placeholder={placeholder}
             value={value}
         />

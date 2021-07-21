@@ -423,10 +423,12 @@ export const sequenceModelSelectors = {
         const filteredSteps = getFilteredSteps(state);
         return filteredSteps[state.sequenceModel.currentStepIndex]?.errors || [];
     },
-    selectStateErrors: (state: RootState): SequenceStateTO[] => {
+
+    selectFalseStates: (state: RootState): SequenceStateTO[] => {
         const filteredSteps = getFilteredSteps(state);
-        return filteredSteps[state.sequenceModel.currentStepIndex]?.stateErrors || [];
+        return filteredSteps[state.sequenceModel.currentStepIndex]?.falseStates || [];
     },
+
     selectActions: (state: RootState): ActionTO[] => {
         const filteredSteps = getFilteredSteps(state);
         const stepId: number | undefined = filteredSteps[state.sequenceModel.currentStepIndex]?.modelElementFk;
