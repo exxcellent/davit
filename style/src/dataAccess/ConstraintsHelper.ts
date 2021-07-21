@@ -8,14 +8,18 @@ export const ConstraintsHelper = {
 
     deleteSequenceStateConstraintCheck(sequenceStateId: number, dataStore: DataStoreCTO) {
         const decisionIsUsingSequenceState: boolean = Array.from(dataStore.decisions.values())
-            .some(decision => decision.stateFks.some(stateFk => stateFk === sequenceStateId));
+            .some(decision => decision.stateFkAndStateConditions.some(stateFkAndCondition => stateFkAndCondition.stateFk === sequenceStateId));
         if (decisionIsUsingSequenceState) {
             throw new Error(`Sequence state.error! state with id: ${sequenceStateId} is still connected to decisions(s)!`);
         }
     },
 
-    deleteChainStateConstraintCheck(sequenceMockId: number, dataStore: DataStoreCTO) {
-        // TODO: check if mock is part of an decision.
+    deleteChainStateConstraintCheck(chainStateId: number, dataStore: DataStoreCTO) {
+        const decisionIsUsingChainState: boolean = Array.from(dataStore.chaindecisions.values())
+            .some(decision => decision.stateFkAndStateConditions.some(stateFkAndCondition => stateFkAndCondition.stateFk === chainStateId));
+        if (decisionIsUsingChainState) {
+            throw new Error(`Sequence state.error! state with id: ${chainStateId} is still connected to decisions(s)!`);
+        }
     },
 
     deleteDataConstraintCheck(dataId: number, dataStore: DataStoreCTO) {

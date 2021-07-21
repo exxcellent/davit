@@ -3,6 +3,7 @@ import { ChainlinkCTO } from "../dataAccess/access/cto/ChainlinkCTO";
 import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
 import { ChainDecisionTO } from "../dataAccess/access/to/ChainDecisionTO";
+import { ChainStateTO } from "../dataAccess/access/to/ChainStateTO";
 import { GoToChain, GoToTypesChain, TerminalChain } from "../dataAccess/access/types/GoToTypeChain";
 import { DavitUtil } from "../utils/DavitUtil";
 import { ActorData } from "../viewDataTypes/ActorData";
@@ -79,7 +80,7 @@ export const SequenceChainService = {
                     if (type === GoToTypesChain.DEC) {
                         const decision: ChainDecisionTO = step as ChainDecisionTO;
 
-                        const goTo: GoToChain = executeChainDecisionCheck(decision, actorDatas);
+                        const goTo: GoToChain = executeChainDecisionCheck(decision, actorDatas, sequenceChain.chainStates);
                         step = getNext(goTo, sequenceChain);
                         type = getType(step);
 
@@ -98,9 +99,9 @@ export const SequenceChainService = {
     },
 };
 
-const executeChainDecisionCheck = (chainDecision: ChainDecisionTO, actorDatas: ActorData[]): GoToChain => {
-    // const filteredCompData: ActorData[] = actorDatas.filter((actorData) => actorData.actorFk === chainDecision.actorFk);
+const executeChainDecisionCheck = (chainDecision: ChainDecisionTO, actorDatas: ActorData[], chainStates: ChainStateTO[]): GoToChain => {
     let goTo: GoToChain | undefined;
+    // check conditions
     if (chainDecision.conditions !== []) {
         chainDecision.conditions.forEach((condition) => {
             const isIncluded: boolean = actorDatas.some(
@@ -111,6 +112,17 @@ const executeChainDecisionCheck = (chainDecision: ChainDecisionTO, actorDatas: A
             }
         });
     }
+
+    // check states
+    chainDecision.stateFkAndStateConditions.forEach(stateFkAndStateCondition => {
+        const stateToCheck: ChainStateTO | undefined = chainStates.find(state => state.id === stateFkAndStateCondition.stateFk);
+        if (stateToCheck) {
+            if (stateToCheck.isState !== stateFkAndStateCondition.stateCondition) {
+                goTo = chainDecision.elseGoTo;
+            }
+        }
+    });
+
     return goTo || chainDecision.ifGoTo;
 };
 

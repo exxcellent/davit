@@ -16,7 +16,7 @@ export interface SequenceActionResult {
 
 export interface SequenceDecisionResult {
     actorDatas: ActorData[];
-    errorStates: SequenceStateTO[];
+    falseStates: SequenceStateTO[];
     goto: GoTo;
 }
 
@@ -152,19 +152,19 @@ export const SequenceActionReducer = {
             }
         });
 
-        const errorStates: SequenceStateTO[] = [];
+        const falseStates: SequenceStateTO[] = [];
 
-        decision.stateFks.forEach(stateFk => {
-            const stateToCheck: SequenceStateTO | undefined = states.find(state => state.id === stateFk);
+        decision.stateFkAndStateConditions.forEach(stateFkAndStateCondition => {
+            const stateToCheck: SequenceStateTO | undefined = states.find(state => state.id === stateFkAndStateCondition.stateFk);
             if (stateToCheck) {
-                if (!stateToCheck.isState) {
-                    errorStates.push(stateToCheck);
+                if (stateToCheck.isState !== stateFkAndStateCondition.stateCondition) {
+                    falseStates.push(stateToCheck);
                     goTo = decision.elseGoTo;
                 }
             }
         });
 
-        return {actorDatas: updatedActorDatas, goto: goTo, errorStates: errorStates};
+        return {actorDatas: updatedActorDatas, goto: goTo, falseStates: falseStates};
     },
 };
 

@@ -98,19 +98,19 @@ export const useChainViewModel = () => {
 
     // ---------------------- STATE ----------------------
 
-    const saveState = (stateToSave: ChainStateTO) => {
+    const saveStateFkAndStateCondition = (stateToSave: ChainStateTO) => {
         dispatch(EditChainState.save(stateToSave));
     };
 
-    const createState = () => {
+    const createStateFkAndStateCondition = () => {
         if (!DavitUtil.isNullOrUndefined(selectedChain)) {
             let newChainState: ChainStateTO = new ChainStateTO();
             newChainState.chainFk = selectedChain!.id;
-            saveState(newChainState);
+            saveStateFkAndStateCondition(newChainState);
         }
     };
 
-    const deleteState = (stateToDeleteId: number) => {
+    const deleteStateFkAndStateCondition = (stateToDeleteId: number) => {
         dispatch(EditChainState.delete(stateToDeleteId));
     };
 
@@ -139,9 +139,9 @@ export const useChainViewModel = () => {
         editOrAddChainDecision,
         editOrAddChainLink,
         editStates,
-        saveState,
         editChain,
-        createState,
-        deleteState,
+        saveStateFkAndStateCondition,
+        createStateFkAndStateCondition,
+        deleteStateFkAndStateCondition,
     };
 };

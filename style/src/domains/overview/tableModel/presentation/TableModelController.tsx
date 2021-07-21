@@ -23,7 +23,7 @@ import { TabPanel } from "../fragments/TabPanel";
 import { useGetCalcErrorActionsTableData } from "../tables/calculated/CalcErrorActions";
 import { useGetCalcLinkTableData } from "../tables/calculated/CalcLink";
 import { useGetCalcSequenceTableData } from "../tables/calculated/CalcSequence";
-import { useGetErrorState } from "../tables/calculated/useGetErrorState";
+import { useGetFalseState } from "../tables/calculated/useGetFalseState";
 import { useGetChainModelsTableData } from "../tables/model/ModelChain";
 import { useGetModelChainDecisionTableData } from "../tables/model/ModelChainDecision";
 import { useGetModelChainLinkTableData } from "../tables/model/ModelChainLink";
@@ -50,7 +50,7 @@ export enum ActiveTab {
     sequenceModels = "sequenceModels",
     chainModel = "chainModels",
     dataSetup = "dataSetup",
-    errorState = "errorState",
+    falseState = "falseState",
 }
 
 export const TableModelController: FunctionComponent<TableModelControllerProps> = () => {
@@ -81,7 +81,7 @@ export const TableModelController: FunctionComponent<TableModelControllerProps> 
                     activeTab={activeTab}
                     setActiveTab={setActiveTab}
                     showErrorTab={showErrorTab}
-                    showStateErrorTab={showStateErrorTab}
+                    showFalseStateTab={showStateErrorTab}
                 />
                 <DavitTable {...activeTableData} tableHeight={tableHeight} />
             </div>
@@ -105,7 +105,7 @@ const useSequenceTableViewModel = () => {
     const selectedDecisionToEdit: DecisionTO | null = useSelector(editSelectors.selectDecisionToEdit);
     const selectedConditionToEdit: ConditionTO | null = useSelector(editSelectors.selectConditionToEdit);
     const selectedErrors: ActionTO[] = useSelector(sequenceModelSelectors.selectErrors);
-    const selectedStateErrors: SequenceStateTO[] = useSelector(sequenceModelSelectors.selectStateErrors);
+    const selectedFalseStates: SequenceStateTO[] = useSelector(sequenceModelSelectors.selectFalseStates);
 
     const [activeTab, setActiveTab] = useState<ActiveTab>(ActiveTab.sequence);
 
@@ -187,7 +187,7 @@ const useSequenceTableViewModel = () => {
     const calcLinkData = useGetCalcLinkTableData(calcChain);
 
     const calcErrorAction = useGetCalcErrorActionsTableData(selectedErrors);
-    const calcErrorState = useGetErrorState(selectedStateErrors);
+    const calcFalseState = useGetFalseState(selectedFalseStates);
 
     const getActiveTableData = () => {
         switch (activeTab) {
@@ -215,8 +215,8 @@ const useSequenceTableViewModel = () => {
                 return dataSetupData;
             case ActiveTab.errorAction:
                 return calcErrorAction;
-            case ActiveTab.errorState:
-                return calcErrorState;
+            case ActiveTab.falseState:
+                return calcFalseState;
             default:
                 return {header: [], bodyData: []};
         }
@@ -247,7 +247,7 @@ const useSequenceTableViewModel = () => {
         showCalcChainTab: !DavitUtil.isNullOrUndefined(calcChain),
         showCalcSequenceTab: calcSteps.length > 0,
         showErrorTab: selectedErrors.length > 0,
-        showStateErrorTab: selectedStateErrors.length > 0,
+        showStateErrorTab: selectedFalseStates.length > 0,
         activeTab,
         setActiveTab,
         activeTableData: getActiveTableData(),

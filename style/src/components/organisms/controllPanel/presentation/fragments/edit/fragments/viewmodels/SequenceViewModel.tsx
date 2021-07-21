@@ -113,19 +113,19 @@ export const useSequenceViewModel = () => {
 
     // ---------------------- STATE ----------------------
 
-    const saveState = (stateToSave: SequenceStateTO) => {
+    const saveSequenceState = (stateToSave: SequenceStateTO) => {
         dispatch(EditSequenceState.save(stateToSave));
     };
 
-    const createState = () => {
+    const createSequenceState = () => {
         if (!DavitUtil.isNullOrUndefined(sequenceToEdit)) {
             let newSequenceState: SequenceStateTO = new SequenceStateTO();
             newSequenceState.sequenceFk = sequenceToEdit!.id;
-            saveState(newSequenceState);
+            saveSequenceState(newSequenceState);
         }
     };
 
-    const deleteState = (stateToDeleteId: number) => {
+    const deleteSequenceState = (stateToDeleteId: number) => {
         dispatch(EditSequenceState.delete(stateToDeleteId));
     };
 
@@ -156,9 +156,9 @@ export const useSequenceViewModel = () => {
         id: sequenceToEdit?.id || -1,
         note: sequenceToEdit ? sequenceToEdit.note : "",
         saveNote,
-        saveState,
-        deleteState,
-        createState,
+        saveSequenceState,
+        deleteSequenceState,
+        createSequenceState,
         editStates,
         editSequence,
     };

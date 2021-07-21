@@ -17,13 +17,19 @@ interface StateFormProps {
 
 export const SequenceStateForm: FunctionComponent<StateFormProps> = () => {
 
-    const {saveState, editSequence, createState, deleteState, id} = useSequenceViewModel();
+    const {
+        saveSequenceState,
+        editSequence,
+        createSequenceState,
+        deleteSequenceState,
+        id,
+    } = useSequenceViewModel();
 
     const sequenceStates: SequenceStateTO[] = useSelector(masterDataSelectors.selectSequenceStateBySequenceId(id));
 
     const closeStateForm = () => {
         if (!sequenceStates.some(state => state.label === "")) {
-            sequenceStates.forEach(saveState);
+            sequenceStates.forEach(saveSequenceState);
             editSequence();
         }
     };
@@ -31,7 +37,7 @@ export const SequenceStateForm: FunctionComponent<StateFormProps> = () => {
     const setIsState = (stateToToggle: StateTO, is: boolean) => {
         const copyStateToToggle: StateTO = DavitUtil.deepCopy(stateToToggle);
         copyStateToToggle.isState = is;
-        saveState(copyStateToToggle as SequenceStateTO);
+        saveSequenceState(copyStateToToggle as SequenceStateTO);
     };
 
     const changeName = (name: string, stateId: number) => {
@@ -39,7 +45,7 @@ export const SequenceStateForm: FunctionComponent<StateFormProps> = () => {
         if (stateToChangeName) {
             const copyStatToChangeName: SequenceStateTO = DavitUtil.deepCopy(stateToChangeName);
             copyStatToChangeName.label = name;
-            saveState(copyStatToChangeName);
+            saveSequenceState(copyStatToChangeName);
         }
     };
 
@@ -54,8 +60,8 @@ export const SequenceStateForm: FunctionComponent<StateFormProps> = () => {
             <FormBody>
 
                 <StateTable statesToEdit={sequenceStates}
-                            addStateCallback={createState}
-                            removeStateCallback={deleteState}
+                            addStateCallback={createSequenceState}
+                            removeStateCallback={deleteSequenceState}
                             setActiveCallback={setIsState}
                             changeName={changeName}
                 />
