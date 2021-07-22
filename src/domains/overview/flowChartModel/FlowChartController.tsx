@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { ArcherContainer, ArcherElement, Relation } from "react-archer";
 import { useSelector } from "react-redux";
+import { StateView } from "../../../components/molecules/StateView";
 import { ChainCTO } from "../../../dataAccess/access/cto/ChainCTO";
 import { ChainlinkCTO } from "../../../dataAccess/access/cto/ChainlinkCTO";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
@@ -196,20 +197,27 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
 
                 {renderFlowChart() && <>
                     <div className="flowChartHeader">
-                        {chain && (
-                            <TabGroupFragment label="Mode"
-                                              style={{backgroundColor: "var(--background-color-header)"}}
-                            >
-                                <TabFragment label="Chain"
-                                             isActive={showChain}
-                                             onClick={() => setShowChain(true)}
-                                />
-                                <TabFragment label="Sequence"
-                                             isActive={!showChain}
-                                             onClick={() => setShowChain(false)}
-                                />
-                            </TabGroupFragment>
-                        )}
+                        <div className="flex flex-column">
+                            {chain && (
+
+                                //TODO: Create component for this.
+                                <TabGroupFragment label="Mode"
+                                                  style={{backgroundColor: "var(--background-color-header)"}}
+                                >
+                                    <TabFragment label="Chain"
+                                                 isActive={showChain}
+                                                 onClick={() => setShowChain(true)}
+                                    />
+                                    <TabFragment label="Sequence"
+                                                 isActive={!showChain}
+                                                 onClick={() => setShowChain(false)}
+                                    />
+                                </TabGroupFragment>
+                            )}
+
+                            <StateView showChain={showChain} />
+                        </div>
+
                         <div style={{marginLeft: "auto"}}>
                             <FlowChartlabel label="CHAIN:"
                                             text={chainName}
