@@ -1,17 +1,17 @@
 button {
-    display: flex;
-    justify-content: center;
+    --size: 42px;
     align-items: center;
-
-    color: var(--primary-text-color);
     background-color: transparent;
 
-    border-style: solid;
     border-color: var(--border-color);
     border-radius: var(--border-radius);
 
-    --size: 42px;
+    border-style: solid;
+    color: var(--primary-text-color);
+    display: flex;
+
     height: var(--size); /* TODO do not use pixel perfect definitions */
+    justify-content: center;
     min-height: var(--size);
     min-width: var(--size);
 
@@ -26,6 +26,7 @@ button:hover {
 
 button.tiny {
     --size: 1rem;
+    border-width: var(--border-size-small);
     height: var(--size);
     min-height: var(--size);
     min-width: var(--size);
@@ -35,6 +36,7 @@ button.tiny {
 
 button.small {
     --size: 1.8rem;
+    border-width: var(--border-size-small);
     height: var(--size);
     min-height: var(--size);
     min-width: var(--size);
