@@ -36,7 +36,7 @@ export const useGetCalcSequenceTableData = (calcSteps: CalculatedStep[], selecte
     };
 };
 
-const header = ["INDEX", "NAME", "TYPE", "ERROR", "STATE FLASE"];
+const header = ["INDEX", "NAME", "TYPE", "ERROR"];
 
 const createCalcSequenceStepColumn = (
     selectedSequence: SequenceCTO | null,
@@ -62,7 +62,6 @@ const createCalcSequenceStepColumn = (
     }
 
     const hasError = step.errors.length > 0;
-    const hasFalseState = step.falseStates.length > 0;
 
     return {
         actions: [],
@@ -71,7 +70,6 @@ const createCalcSequenceStepColumn = (
             getModelElementName(step, selectedSequence, terminal),
             step.type,
             hasError ? <FontAwesomeIcon icon={DavitIcons.warning} /> : "",
-            hasFalseState ? <FontAwesomeIcon icon={DavitIcons.warning} /> : "",
         ],
         trClass: "clickable " + trClass,
         onClick: clickEvent,

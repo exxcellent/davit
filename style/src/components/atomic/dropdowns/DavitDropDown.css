@@ -1,9 +1,9 @@
 .react-select-container {
-    min-width: 15rem;
+    background-color: transparent;
     border: var(--border-size-medium) solid var(--border-color);
     border-radius: var(--border-radius);
-    background-color: transparent;
     color: var(--primary-text-color);
+    min-width: 15rem;
 }
 
 .react-select__control {
@@ -22,21 +22,21 @@
 
 .react-select__menu {
     position: absolute;
-    z-index: 99;
+    z-index: 99 !important;
 }
 
 .react-select__menu-list {
     background-color: var(--background-color);
     border: var(--border-color) solid var(--border-size-medium);
     border-radius: var(--border-radius);
+    max-width: fit-content;
     position: fixed !important;
     z-index: 99 !important;
-    max-width: fit-content;
 }
 
 .react-select__option.react-select__option--is-focused, .react-select__option:hover {
-    color: var(--secondary-color);
     background-color: transparent;
+    color: var(--secondary-color);
     cursor: pointer;
 }
 
@@ -52,11 +52,11 @@
 /*======================================== label dropdown ========================================*/
 
 .react-select-label-container {
-    min-width: 9rem;
+    background-color: transparent;
     border: var(--border-size-medium) solid var(--border-color);
     border-radius: var(--border-radius);
-    background-color: transparent;
     color: var(--primary-text-color);
+    min-width: 9rem;
 }
 
 .react-select-label__control {
@@ -66,8 +66,8 @@
 }
 
 .react-select-label__control:hover {
-    border: none !important;
     background-color: var(--color-hover) !important;
+    border: none !important;
     cursor: pointer;
 }
 
@@ -75,18 +75,22 @@
     color: var(--primary-text-color) !important;
 }
 
+.react-select-label__menu {
+    z-index: 99 !important;
+}
+
 .react-select-label__menu-list {
     background-color: var(--background-color);
     border: var(--border-color) solid var(--border-size-medium);
     border-radius: var(--border-radius);
+    max-width: fit-content;
     position: fixed !important;
     z-index: 99 !important;
-    max-width: fit-content;
 }
 
 .react-select-label__option.react-select-label__option--is-focused, .react-select-label__option:hover {
-    color: var(--secondary-color);
     background-color: transparent;
+    color: var(--secondary-color);
     cursor: pointer;
 }
 
