@@ -429,6 +429,11 @@ export const sequenceModelSelectors = {
         return filteredSteps[state.sequenceModel.currentStepIndex]?.falseStates || [];
     },
 
+    selectTrueStates: (state: RootState): SequenceStateTO[] => {
+        const filteredSteps = getFilteredSteps(state);
+        return filteredSteps[state.sequenceModel.currentStepIndex]?.trueStates || [];
+    },
+
     selectActions: (state: RootState): ActionTO[] => {
         const filteredSteps = getFilteredSteps(state);
         const stepId: number | undefined = filteredSteps[state.sequenceModel.currentStepIndex]?.modelElementFk;
