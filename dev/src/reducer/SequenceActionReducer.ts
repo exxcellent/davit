@@ -11,12 +11,14 @@ import { ActorDataState } from "../viewDataTypes/ActorDataState";
 export interface SequenceActionResult {
     actorDatas: ActorData[];
     errors: ActionTO[];
-    errorStates: SequenceStateTO[];
+    falseStates: SequenceStateTO[];
+    trueStates: SequenceStateTO[];
 }
 
 export interface SequenceDecisionResult {
     actorDatas: ActorData[];
     falseStates: SequenceStateTO[];
+    trueStates: SequenceStateTO[];
     goto: GoTo;
 }
 
@@ -118,7 +120,7 @@ export const SequenceActionReducer = {
                     break;
             }
         });
-        return {actorDatas: newActorDatas, errors: errors, errorStates: []};
+        return {actorDatas: newActorDatas, errors: errors, falseStates: [], trueStates: []};
     },
 
     executeDecisionCheck(decision: DecisionTO, actorDatas: ActorData[], states: SequenceStateTO[]): SequenceDecisionResult {
@@ -153,6 +155,7 @@ export const SequenceActionReducer = {
         });
 
         const falseStates: SequenceStateTO[] = [];
+        const trueStates: SequenceStateTO[] = [];
 
         decision.stateFkAndStateConditions.forEach(stateFkAndStateCondition => {
             const stateToCheck: SequenceStateTO | undefined = states.find(state => state.id === stateFkAndStateCondition.stateFk);
@@ -160,11 +163,13 @@ export const SequenceActionReducer = {
                 if (stateToCheck.isState !== stateFkAndStateCondition.stateCondition) {
                     falseStates.push(stateToCheck);
                     goTo = decision.elseGoTo;
+                } else {
+                    trueStates.push(stateToCheck);
                 }
             }
         });
 
-        return {actorDatas: updatedActorDatas, goto: goTo, falseStates: falseStates};
+        return {actorDatas: updatedActorDatas, goto: goTo, falseStates: falseStates, trueStates: trueStates};
     },
 };
 

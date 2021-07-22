@@ -95,6 +95,7 @@ export const DavitCard: FunctionComponent<DavitCardProps> = (props) => {
                                          onClick={() => {
                                              setShowMenu(!showMenu);
                                          }}
+                                         show={showMenu}
                     />
                 </div>
             </div>
