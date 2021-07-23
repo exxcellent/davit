@@ -30,13 +30,13 @@ export const StateView: FunctionComponent<StateViewProps> = (props) => {
 
             return (
                 <div key={index}
-                     className={"stateViewState flex content-space-between padding-small " + (index !== 0 ? "stateViewBorder" : "")}
+                     className={"stateViewState flex content-space-between " + (index !== 0 ? "stateViewBorder" : "")}
                 >
-                    <div className="flex flex-start align-center">
+                    <div className="flex flex-start align-center padding-small">
                         <label>{state.label}</label>
                     </div>
 
-                    <div className="flex flex-end align-center">
+                    <div className="flex flex-end align-center padding-small">
                         <svg className="stateViewSvgField">
                             <line className={state.isState ? "stateViewIsTrue" : "stateViewIsFalse"}
                                   x1="0"
@@ -56,7 +56,7 @@ export const StateView: FunctionComponent<StateViewProps> = (props) => {
 
     return (
         <div className="stateView flex flex-column border border-small">
-            <div className="stateViewHeader flex content-space-around padding-small">
+            <div className="stateViewHeader flex content-space-between padding-small">
                 <label>{HEADER}</label>
                 <DavitShowMoreButton show={showStates}
                                      onClick={setShowStates}
