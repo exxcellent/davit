@@ -88,7 +88,7 @@ export const useChainViewModel = () => {
     };
 
     const createAnother = () => {
-        dispatch(EditActions.setMode.editSequence());
+        dispatch(EditActions.setMode.editChain());
     };
 
     const updateSequence = () => {
