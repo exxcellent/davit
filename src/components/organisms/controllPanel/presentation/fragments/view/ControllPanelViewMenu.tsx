@@ -5,10 +5,12 @@ import { SequenceCTO } from "../../../../../../dataAccess/access/cto/SequenceCTO
 import { ChainTO } from "../../../../../../dataAccess/access/to/ChainTO";
 import { DataSetupTO } from "../../../../../../dataAccess/access/to/DataSetupTO";
 import { SequenceTO } from "../../../../../../dataAccess/access/to/SequenceTO";
+import { FlowChartlabel } from "../../../../../../domains/overview/flowChartModel/fragments/FlowChartlabel";
+import { EditActions } from "../../../../../../slices/EditSlice";
 import { SequenceModelActions, sequenceModelSelectors } from "../../../../../../slices/SequenceModelSlice";
 import { DavitUtil } from "../../../../../../utils/DavitUtil";
 import { useStepAndLinkNavigation } from "../../../../../../utils/WindowUtil";
-import { ChainDropDown, DataSetupDropDown, SequenceDropDown } from "../../../../../atomic";
+import { DavitButton } from "../../../../../atomic";
 import { ControlPanel } from "../edit/common/ControlPanel";
 import { OptionField } from "../edit/common/OptionField";
 import { ViewNavigator } from "./fragments/ViewNavigator";
@@ -22,12 +24,9 @@ export const ControlPanelViewMenu: FunctionComponent<ControlPanelViewMenuProps> 
     const {
         stepIndex,
         linkIndex,
-        selectSequence,
-        selectDataSetup,
-        currentDataSetup,
-        currentSequence,
-        currentChain,
-        selectChain,
+        selectedChainName,
+        selectedSequenceName,
+        editConfiguration,
     } = useControlPanelViewMenuViewModel();
 
     const {stepBack, stepNext, linkBack, linkNext} = useStepAndLinkNavigation();
@@ -41,30 +40,24 @@ export const ControlPanelViewMenu: FunctionComponent<ControlPanelViewMenuProps> 
     return (
         <ControlPanel>
 
-            <OptionField label="Data - Setup">
-                <DataSetupDropDown
-                    onSelect={selectDataSetup}
-                    placeholder="Select Data Setup ..."
-                    value={currentDataSetup}
-                />
+            <OptionField label="Configuration">
+                <DavitButton onClick={editConfiguration}>Configuration</DavitButton>
             </OptionField>
 
-            <OptionField label="SEQUENCE">
-                <SequenceDropDown onSelect={selectSequence}
-                                  value={currentSequence}
-                />
-            </OptionField>
-
-            <OptionField label="CHAIN"
-                         divider={true}
-            >
-                <ChainDropDown onSelect={selectChain}
-                               value={currentChain}
-                />
+            <OptionField />
+            <OptionField>
+                <div style={{marginLeft: "auto"}}>
+                    <FlowChartlabel label="CHAIN:"
+                                    text={selectedChainName}
+                    />
+                    <FlowChartlabel label="SEQU.:"
+                                    text={selectedSequenceName}
+                    />
+                </div>
             </OptionField>
 
             <OptionField label="STEP"
-                         divider={true}
+                         divider={false}
             >
                 <ViewNavigator fastBackward={linkBack}
                                fastForward={linkNext}
@@ -73,13 +66,12 @@ export const ControlPanelViewMenu: FunctionComponent<ControlPanelViewMenuProps> 
                                index={getIndex()}
                 />
             </OptionField>
-
         </ControlPanel>
     );
 };
 
 const useControlPanelViewMenuViewModel = () => {
-    const sequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
+    const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
     const stepIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentStepIndex);
     const selectedDataSetup: DataSetupCTO | null = useSelector(sequenceModelSelectors.selectDataSetup);
     const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
@@ -123,18 +115,18 @@ const useControlPanelViewMenuViewModel = () => {
     };
 
     const getSequenceName = (): string => {
-        if (sequence) {
-            return " * " + sequence.sequenceTO.name;
+        if (selectedSequence) {
+            return " * " + selectedSequence.sequenceTO.name;
         } else {
             return "";
         }
     };
 
     const getStepName = (): string => {
-        if (stepIndex && sequence) {
+        if (stepIndex && selectedSequence) {
             return (
                 " * " +
-                sequence.sequenceStepCTOs.find((step) => step.sequenceStepTO.id === stepIndex)?.sequenceStepTO.name
+                selectedSequence.sequenceStepCTOs.find((step) => step.sequenceStepTO.id === stepIndex)?.sequenceStepTO.name
             );
         } else {
             return "";
@@ -143,14 +135,17 @@ const useControlPanelViewMenuViewModel = () => {
 
     return {
         label: "VIEW" + getDataSetupName() + getSequenceName() + getStepName(),
-        sequence,
+        sequence: selectedSequence,
         stepIndex,
         linkIndex,
         selectSequence,
         selectDataSetup,
         currentDataSetup: selectedDataSetup?.dataSetup.id || -1,
-        currentSequence: sequence?.sequenceTO.id || -1,
+        currentSequence: selectedSequence?.sequenceTO.id || -1,
         currentChain: selectedChain?.id || -1,
         selectChain,
+        selectedSequenceName: selectedSequence?.sequenceTO.name || "",
+        selectedChainName: selectedChain?.name || "",
+        editConfiguration: () => dispatch(EditActions.setMode.editConfiguration())
     };
 };
