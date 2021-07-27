@@ -16,6 +16,9 @@ interface StateTableProps {
 export const StateTable: FunctionComponent<StateTableProps> = (props) => {
     const {statesToEdit, addStateCallback, changeName, removeStateCallback, setActiveCallback, stateColumnName} = props;
 
+    const trueLabel: string = "TRUE";
+    const falseLabel: string = "FALSE";
+
     const buildStateTableRow = (state: StateTO, index: number): JSX.Element => {
 
         const inputClasses: string = state.label === "" ? "border border-warning border-animation" : "";
@@ -37,8 +40,8 @@ export const StateTable: FunctionComponent<StateTableProps> = (props) => {
 
                     <ToggleButton toggleCallback={(is) => setActiveCallback(state, is)}
                                   isLeft={state.isState}
-                                  leftLabel="TRUE"
-                                  rightLabel="FLASE"
+                                  leftLabel={trueLabel}
+                                  rightLabel={falseLabel}
                     />
 
                 </td>
