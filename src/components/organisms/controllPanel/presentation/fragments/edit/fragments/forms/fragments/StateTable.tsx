@@ -6,14 +6,15 @@ import "./StateTable.css";
 
 interface StateTableProps {
     statesToEdit: StateTO[];
-    addStateCallback: () => void;
-    changeName: (name: string, stateId: number) => void;
-    removeStateCallback: (stateId: number) => void;
+    stateColumnName: string
     setActiveCallback: (state: StateTO, active: boolean) => void;
+    changeName?: (name: string, stateId: number) => void;
+    removeStateCallback?: (stateId: number) => void;
+    addStateCallback?: () => void;
 }
 
 export const StateTable: FunctionComponent<StateTableProps> = (props) => {
-    const {statesToEdit, addStateCallback, changeName, removeStateCallback, setActiveCallback} = props;
+    const {statesToEdit, addStateCallback, changeName, removeStateCallback, setActiveCallback, stateColumnName} = props;
 
     const buildStateTableRow = (state: StateTO, index: number): JSX.Element => {
 
@@ -24,12 +25,13 @@ export const StateTable: FunctionComponent<StateTableProps> = (props) => {
                 key={index}
             >
                 <td className={inputClasses}>
-                    <DavitTextInput
+                    {changeName && <DavitTextInput
                         onChangeCallback={(name) => changeName(name, state.id)}
                         placeholder="State Name"
                         value={state.label}
                         focus
-                    />
+                    />}
+                    {!changeName && <div className="flex align-center width-fluid height-fluid padding-left-m"><label>{state.label}</label> </div>}
                 </td>
                 <td className="flex flex-center">
 
@@ -40,11 +42,11 @@ export const StateTable: FunctionComponent<StateTableProps> = (props) => {
                     />
 
                 </td>
-                <td className="flex flex-center">
+                {removeStateCallback && <td className="flex flex-center">
                     <DavitDeleteButton onClick={() => removeStateCallback(state.id)}
                                        noConfirm
                     />
-                </td>
+                </td>}
             </tr>
         );
     };
@@ -56,8 +58,8 @@ export const StateTable: FunctionComponent<StateTableProps> = (props) => {
 
             <tr className="flex content-space-between fluid">
                 <td className="flex flex-center">Name</td>
-                <td className="flex flex-center">Default</td>
-                <td className={"flex flex-center"}><DavitAddButton onClick={addStateCallback} /></td>
+                <td className="flex flex-center">{stateColumnName}</td>
+                {addStateCallback && <td className={"flex flex-center"}><DavitAddButton onClick={addStateCallback} /></td>}
             </tr>
 
             </thead>
