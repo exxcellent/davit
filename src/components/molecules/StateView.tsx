@@ -21,7 +21,7 @@ export const StateView: FunctionComponent<StateViewProps> = (props) => {
     const trueStates: SequenceStateTO[] = useSelector(sequenceModelSelectors.selectTrueStates);
 
     const HEADER: string = "State";
-    const [showStates, setShowStates] = useState<boolean>(true);
+    const [showStates, setShowStates] = useState<boolean>(false);
 
     const buildStateRow = (state: StateTO, index: number): JSX.Element => {
 
