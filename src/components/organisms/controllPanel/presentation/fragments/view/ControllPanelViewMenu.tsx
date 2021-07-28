@@ -80,7 +80,7 @@ const useControlPanelViewMenuViewModel = () => {
 
     const selectSequence = (sequence: SequenceTO | undefined) => {
         if (!DavitUtil.isNullOrUndefined(sequence)) {
-            dispatch(SequenceModelActions.setCurrentSequence(sequence!.id));
+            dispatch(SequenceModelActions.setCurrentSequenceById(sequence!.id));
         }
         if (sequence === undefined) {
             dispatch(SequenceModelActions.resetCurrentStepIndex);
@@ -102,7 +102,7 @@ const useControlPanelViewMenuViewModel = () => {
         if (DavitUtil.isNullOrUndefined(dataSetup)) {
             dispatch(SequenceModelActions.resetCurrentDataSetup);
         } else {
-            dispatch(SequenceModelActions.setCurrentDataSetup(dataSetup!.id));
+            dispatch(SequenceModelActions.setCurrentDataSetupById(dataSetup!.id));
         }
     };
 

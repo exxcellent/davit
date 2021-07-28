@@ -11,7 +11,7 @@ export const useGetDataSetupTableData = (dataSetups: DataSetupTO[]) => {
     bodyData = dataSetups.map((dataSetup) => {
         const onClickEdit = () => dispatch(EditActions.setMode.editDataSetup(dataSetup.id));
         const onClickSelect = () => {
-            dispatch(SequenceModelActions.setCurrentDataSetup(dataSetup.id));
+            dispatch(SequenceModelActions.setCurrentDataSetupById(dataSetup.id));
             dispatch(EditActions.setMode.view());
         };
         return createModelDataSetupColumn(dataSetup, onClickEdit, onClickSelect);

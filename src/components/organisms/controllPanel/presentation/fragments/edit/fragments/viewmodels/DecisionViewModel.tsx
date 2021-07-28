@@ -31,7 +31,7 @@ export const useDecisionViewModel = () => {
             copyConditionToEdit.name = name;
             // TODO: das geht einfacher!
             dispatch(EditActions.setMode.editDecision(copyConditionToEdit));
-            dispatch(SequenceModelActions.setCurrentSequence(copyConditionToEdit.sequenceFk));
+            dispatch(SequenceModelActions.setCurrentSequenceById(copyConditionToEdit.sequenceFk));
         }
     };
 
@@ -40,7 +40,7 @@ export const useDecisionViewModel = () => {
             const copyConditionToEdit: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
             copyConditionToEdit.note = text;
             dispatch(EditActions.setMode.editDecision(copyConditionToEdit));
-            dispatch(SequenceModelActions.setCurrentSequence(copyConditionToEdit.sequenceFk));
+            dispatch(SequenceModelActions.setCurrentSequenceById(copyConditionToEdit.sequenceFk));
         }
     };
 
@@ -84,7 +84,7 @@ export const useDecisionViewModel = () => {
             const copyDecisionToEdit: DecisionTO = DavitUtil.deepCopy(decisionToEdit);
             ifGoTo ? (copyDecisionToEdit.ifGoTo = goTo) : (copyDecisionToEdit.elseGoTo = goTo);
             updateDecision(copyDecisionToEdit);
-            dispatch(SequenceModelActions.setCurrentSequence(copyDecisionToEdit.sequenceFk));
+            dispatch(SequenceModelActions.setCurrentSequenceById(copyDecisionToEdit.sequenceFk));
         }
     };
 
