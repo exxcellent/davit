@@ -14,7 +14,7 @@ export const Table: FunctionComponent<TableProps> = (props) => {
     const {headers, tableRows} = props;
 
     const buildHeader = (header: JSX.Element, index: number): JSX.Element => {
-        return <th key={index}>{header}</th>;
+        return <th key={index}><div className="flex flex-center align-center width-fluid height-fluid">{header}</div></th>;
     };
 
     const buildCell = (jsx: JSX.Element, index: number): JSX.Element => {

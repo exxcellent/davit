@@ -11,6 +11,10 @@
         animation-duration: 0.2s;
 }
 
+th{
+    height: 3rem;
+}
+
 tr:nth-child(odd) {
     background-color: var(--data-table-row-odd-color);
 }

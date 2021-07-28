@@ -33,10 +33,9 @@ export const StateTable: FunctionComponent<StateTableProps> = (props) => {
                         focus
                     />
                 </div>
-                : <div className="flex align-center width-fluid height-fluid padding-left-m"
-                       key={index}
-                >
-                    <label>{state.label}</label></div>;
+                : <label key={index}
+                         className="padding-small"
+                >{state.label}</label>;
         };
 
         const getToggleButton = (): JSX.Element => {
@@ -51,9 +50,11 @@ export const StateTable: FunctionComponent<StateTableProps> = (props) => {
 
         const getDeleteButton = (): JSX.Element => {
             return removeStateCallback
-                ? <DavitDeleteButton onClick={() => removeStateCallback(state.id)}
-                                     noConfirm
-                />
+                ? <div className="flex flex-center align-center width-fluid height-fluid">
+                    <DavitDeleteButton onClick={() => removeStateCallback(state.id)}
+                                       noConfirm
+                    />
+                </div>
                 : <div />;
         };
 
@@ -64,10 +65,20 @@ export const StateTable: FunctionComponent<StateTableProps> = (props) => {
 
     const getHeaders = (): JSX.Element[] => {
         return addStateCallback
-            ? [<label key={1}>Name</label>, <label key={2}>{stateColumnName}</label>, <DavitAddButton key={3}
-                                                                                                      onClick={addStateCallback}
+            ? [<div key={1}
+                    className="padding-small"
+            ><label
+
+            >Name</label></div>, <label key={2}
+                                        className="padding-small"
+            >{stateColumnName}</label>, <DavitAddButton key={3}
+                                                        onClick={addStateCallback}
             />]
-            : [<label key={1}>Name</label>, <label key={2}>{stateColumnName}</label>];
+            : [<label key={1}
+                      className="padding-small"
+            >Name</label>, <label key={2}
+                                  className="padding-small"
+            >{stateColumnName}</label>];
     };
 
     const getRows = (): TableRow[] => {
