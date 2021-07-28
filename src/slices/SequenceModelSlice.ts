@@ -199,30 +199,6 @@ function resetState(state: SequenceModelState) {
 
 // =============================================== THUNKS ===============================================
 
-const calcModelsThunk = (): AppThunk => (dispatch, getState) => {
-    if (
-        getState().edit.mode === Mode.VIEW &&
-        getState().sequenceModel.selectedChain !== null &&
-        getRoot(getState().sequenceModel.selectedChain || null)
-    ) {
-        dispatch(SequenceModelActions.setCurrentChain(getState().sequenceModel.selectedChain!.chain));
-        dispatch(
-            SequenceModelSlice.actions.setCalcChain(
-                SequenceChainService.calculateChain(getState().sequenceModel.selectedChain),
-            ),
-        );
-    } else if (
-        getState().edit.mode === Mode.VIEW &&
-        getState().sequenceModel.selectedSequenceModel !== null &&
-        getState().sequenceModel.selectedDataSetup !== null
-    ) {
-        dispatch(
-            SequenceModelActions.setCurrentSequence(getState().sequenceModel.selectedSequenceModel!.sequenceTO.id),
-        );
-        dispatch(SequenceModelActions.setCurrentDataSetup(getState().sequenceModel.selectedDataSetup!.dataSetup.id));
-    }
-};
-
 const stepNext = (currentIndex: number): AppThunk => (dispatch) => {
     dispatch(SequenceModelActions.setCurrentStepIndex(currentIndex + 1));
 };
@@ -258,19 +234,31 @@ const setSelectedChainThunk = (chain: ChainTO): AppThunk => (dispatch, getState)
     }
 };
 
+const setSelectedSequenceByIdThunk = (sequenceId: number): AppThunk => (dispatch) => {
+    const response: DataAccessResponse<SequenceCTO> = DataAccess.findSequenceCTO(sequenceId);
+    if (response.code !== 200) {
+        console.warn(response.message);
+    } else {
+        dispatch(SequenceModelSlice.actions.setSelectedSequence(response.object));
+    }
+};
+
+const setSelectedSequenceByIdWithStatesThunk = (sequenceId: number, states: SequenceStateTO[]): AppThunk => (dispatch) => {
+    const response: DataAccessResponse<SequenceCTO> = DataAccess.findSequenceCTO(sequenceId);
+    if (response.code !== 200) {
+        console.warn(response.message);
+    } else {
+        // set states
+        const sequence: SequenceCTO = response.object;
+        sequence.sequenceStates = states;
+        dispatch(SequenceModelSlice.actions.setSelectedSequence(sequence));
+    }
+};
+
 const getDataSetupCTOFromBackend = (dataSetupId: number): AppThunk => (dispatch) => {
     const response: DataAccessResponse<DataSetupCTO> = DataAccess.findDataSetupCTO(dataSetupId);
     if (response.code === 200) {
         dispatch(SequenceModelSlice.actions.setSelectedDataSetup(response.object));
-    } else {
-        dispatch(GlobalActions.handleError(response.message));
-    }
-};
-
-const getSequenceCTOFromBackend = (sequenceId: number): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<SequenceCTO> = DataAccess.findSequenceCTO(sequenceId);
-    if (response.code === 200) {
-        dispatch(SequenceModelSlice.actions.setSelectedSequence(response.object));
     } else {
         dispatch(GlobalActions.handleError(response.message));
     }
@@ -483,30 +471,6 @@ export const sequenceModelSelectors = {
         getCurrentCalcSequence(state.sequenceModel)?.loopStartingStepIndex || null,
 };
 
-// =============================================== ACTIONS ===============================================
-
-export const SequenceModelActions = {
-    setCurrentSequence: getSequenceCTOFromBackend,
-    setCurrentDataSetup: getDataSetupCTOFromBackend,
-    resetCurrentDataSetup: SequenceModelSlice.actions.setSelectedDataSetup(null),
-    resetCurrentStepIndex: SequenceModelSlice.actions.setCurrentStepIndex(-1),
-    resetCurrentSequence: SequenceModelSlice.actions.setSelectedSequence(null),
-    resetCurrentChain: SequenceModelSlice.actions.setSelectedChain(null),
-    setCurrentStepIndex: SequenceModelSlice.actions.setCurrentStepIndex,
-    setCurrentLinkIndex: SequenceModelSlice.actions.setCurrentLinkIndex,
-    handleActorClickEvent: handleActorClickEvent,
-    handleDataClickEvent,
-    stepNext,
-    stepBack,
-    linkBack,
-    linkNext,
-    setCurrentChain: setSelectedChainThunk,
-    addDataFilters: SequenceModelSlice.actions.addDataFilter,
-    removeDataFilters: SequenceModelSlice.actions.removeDataFilter,
-    addActorFilters: SequenceModelSlice.actions.addActorFilters,
-    removeActorFilter: SequenceModelSlice.actions.removeActorFilter,
-    calcChain: calcModelsThunk,
-};
 
 function getFilteredSteps(state: RootState): CalculatedStep[] {
     return state.edit.mode === Mode.VIEW
@@ -543,4 +507,31 @@ const mapInitDataToActorData = (initData: InitDataTO): ActorData => {
         dataFk: initData.dataFk,
         instanceFk: initData.instanceFk,
     };
+};
+// =============================================== ACTIONS ===============================================
+
+export const SequenceModelActions = {
+    setCurrentSequence: SequenceModelSlice.actions.setSelectedSequence,
+    setCurrentSequenceById: setSelectedSequenceByIdThunk,
+    setCurrentSequenceByIdWithStates: setSelectedSequenceByIdWithStatesThunk,
+    setCurrentDataSetupById: getDataSetupCTOFromBackend,
+    setCurrentDataSetup: SequenceModelSlice.actions.setSelectedDataSetup,
+    resetCurrentDataSetup: SequenceModelSlice.actions.setSelectedDataSetup(null),
+    resetCurrentStepIndex: SequenceModelSlice.actions.setCurrentStepIndex(-1),
+    resetCurrentSequence: SequenceModelSlice.actions.setSelectedSequence(null),
+    resetCurrentChain: SequenceModelSlice.actions.setSelectedChain(null),
+    setCurrentStepIndex: SequenceModelSlice.actions.setCurrentStepIndex,
+    setCurrentLinkIndex: SequenceModelSlice.actions.setCurrentLinkIndex,
+    handleActorClickEvent: handleActorClickEvent,
+    handleDataClickEvent,
+    stepNext,
+    stepBack,
+    linkBack,
+    linkNext,
+    setCurrentChain: setSelectedChainThunk,
+    addDataFilters: SequenceModelSlice.actions.addDataFilter,
+    removeDataFilters: SequenceModelSlice.actions.removeDataFilter,
+    addActorFilters: SequenceModelSlice.actions.addActorFilters,
+    removeActorFilter: SequenceModelSlice.actions.removeActorFilter,
+    // calcChain: calcModelsThunk,
 };

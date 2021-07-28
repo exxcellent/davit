@@ -243,7 +243,6 @@ const setModeToTabThunk = (): AppThunk => (dispatch) => {
 const setModeToViewThunk = (): AppThunk => (dispatch) => {
     dispatch(EditSlice.actions.clearObjectToEdit());
     dispatch(setModeWithStorageThunk(Mode.VIEW));
-    dispatch(SequenceModelActions.calcChain());
 };
 
 const setModeToEditThunk = (): AppThunk => (dispatch, getState) => {
@@ -347,11 +346,10 @@ const setModeToEditSequenceStatesThunk = (): AppThunk => (dispatch) => {
 const setModeToEditSequenceThunk = (sequenceId?: number): AppThunk => (dispatch) => {
     dispatch(setModeWithStorageThunk(Mode.EDIT_SEQUENCE));
     if (sequenceId) {
-        // TODO: change CTO to TO.
         const response: DataAccessResponse<SequenceCTO> = DataAccess.findSequenceCTO(sequenceId);
         if (response.code === 200) {
             dispatch(EditSlice.actions.setSequenceToEdit(DavitUtil.deepCopy(response.object.sequenceTO)));
-            dispatch(SequenceModelActions.setCurrentSequence(sequenceId));
+            dispatch(SequenceModelActions.setCurrentSequence(response.object));
         } else {
             dispatch(GlobalActions.handleError(response.message));
         }
