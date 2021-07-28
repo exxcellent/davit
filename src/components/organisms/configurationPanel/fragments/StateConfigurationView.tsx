@@ -14,14 +14,11 @@ export const StateConfigurationView: FunctionComponent<StateConfigurationViewPro
     const HEADER: string = "State";
 
     return (
-        <div>
-
-            <StateTable
-                statesToEdit={states}
-                stateColumnName={HEADER}
-                setActiveCallback={setStateCallback}
-            />
-        </div>
+        <StateTable
+            statesToEdit={states}
+            stateColumnName={HEADER}
+            setActiveCallback={setStateCallback}
+        />
     );
 };
 
