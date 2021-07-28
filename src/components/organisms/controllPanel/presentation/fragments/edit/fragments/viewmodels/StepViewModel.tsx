@@ -41,7 +41,7 @@ export const useStepViewModel = () => {
             copySequenceStep.sequenceStepTO.name = name;
             dispatch(EditActions.setMode.editStep(copySequenceStep));
             dispatch(EditStep.save(copySequenceStep));
-            dispatch(SequenceModelActions.setCurrentSequence(copySequenceStep.sequenceStepTO.sequenceFk));
+            dispatch(SequenceModelActions.setCurrentSequenceById(copySequenceStep.sequenceStepTO.sequenceFk));
         }
     };
 
@@ -104,7 +104,7 @@ export const useStepViewModel = () => {
             copySequenceStep.sequenceStepTO.goto = goTo;
             dispatch(EditStep.update(copySequenceStep));
             dispatch(EditStep.save(copySequenceStep));
-            dispatch(SequenceModelActions.setCurrentSequence(copySequenceStep.sequenceStepTO.sequenceFk));
+            dispatch(SequenceModelActions.setCurrentSequenceById(copySequenceStep.sequenceStepTO.sequenceFk));
         }
     };
 
@@ -146,7 +146,7 @@ export const useStepViewModel = () => {
             const copyStepToEdit: SequenceStepCTO = DavitUtil.deepCopy(stepToEdit);
             setKey(key + 1);
             dispatch(EditActions.setMode.editStep(goToStep, copyStepToEdit));
-            dispatch(SequenceModelActions.setCurrentSequence(goToStep.sequenceStepTO.sequenceFk));
+            dispatch(SequenceModelActions.setCurrentSequenceById(goToStep.sequenceStepTO.sequenceFk));
         }
     };
 
@@ -179,7 +179,7 @@ export const useStepViewModel = () => {
             copySequenceStep.sequenceStepTO.note = text;
             dispatch(EditActions.setMode.editStep(copySequenceStep));
             dispatch(EditStep.save(copySequenceStep));
-            dispatch(SequenceModelActions.setCurrentSequence(copySequenceStep.sequenceStepTO.sequenceFk));
+            dispatch(SequenceModelActions.setCurrentSequenceById(copySequenceStep.sequenceStepTO.sequenceFk));
         }
     };
 
@@ -199,7 +199,7 @@ export const useStepViewModel = () => {
             dispatch(EditStep.save(copyStep));
 
             // load sequence from backend
-            dispatch(SequenceModelActions.setCurrentSequence(copyStep.sequenceStepTO.sequenceFk));
+            dispatch(SequenceModelActions.setCurrentSequenceById(copyStep.sequenceStepTO.sequenceFk));
 
             // update current step if object to edit
             dispatch(EditStep.update(copyStep));
