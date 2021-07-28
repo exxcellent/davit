@@ -4,6 +4,7 @@ import React, { FunctionComponent } from "react";
 import { ElementSize } from "../../../style/Theme";
 import { DavitButton, DavitButtonProps } from "./DavitButton";
 import "./DavitButton.css";
+import "./DavitIconButton.css";
 
 interface DavitIconButtonProps extends DavitButtonProps {
     iconName?: IconDefinition;
@@ -19,7 +20,7 @@ export const DavitIconButton: FunctionComponent<DavitIconButtonProps> = (props) 
                      size={size}
                      className={className}
         >
-            {iconName && <FontAwesomeIcon icon={iconName} />}
+            {iconName && <FontAwesomeIcon className={children ? "iconButtonIcon" : ""} icon={iconName} />}
             {children}
         </DavitButton>
     );

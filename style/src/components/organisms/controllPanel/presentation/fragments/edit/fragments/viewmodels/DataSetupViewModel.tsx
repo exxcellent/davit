@@ -46,7 +46,6 @@ export const useDataSetupViewModel = () => {
 
     const deleteDataSetup = () => {
         dispatch(EditDataSetup.delete(dataSetupToEdit!));
-        dispatch(EditActions.setMode.edit());
     };
 
     const createAnother = () => {
@@ -79,26 +78,9 @@ export const useDataSetupViewModel = () => {
         return dataIds;
     };
 
-    const editInitData = (initData: InitDataTO | undefined) => {
-        if (initData) {
-            dispatch(EditActions.setMode.editInitData(initData));
-        }
-    };
-
-    const createInitData = () => {
-        if (!DavitUtil.isNullOrUndefined(dataSetupToEdit)) {
-            const initData: InitDataTO = new InitDataTO();
-            initData.dataSetupFk = dataSetupToEdit!.dataSetup.id;
-            dispatch(EditInitData.save(initData));
-            dispatch(EditActions.setMode.editDataSetup(dataSetupToEdit!.dataSetup?.id));
-        }
-    };
-
     const saveInitData = (initData: InitDataTO) => {
-        console.info(initData);
         if (!DavitUtil.isNullOrUndefined(initData) && !DavitUtil.isNullOrUndefined(dataSetupToEdit)) {
             let copyInitData: InitDataTO = DavitUtil.deepCopy(initData);
-            console.info(copyInitData);
             dispatch(EditInitData.save(copyInitData));
             dispatch(EditActions.setMode.editDataSetup(dataSetupToEdit!.dataSetup?.id));
         }
@@ -119,6 +101,15 @@ export const useDataSetupViewModel = () => {
         }
     };
 
+    const createInitData = () => {
+        if (!DavitUtil.isNullOrUndefined(dataSetupToEdit)) {
+            const newInitData: InitDataTO = new InitDataTO();
+            newInitData.dataSetupFk = dataSetupToEdit!.dataSetup.id;
+            dispatch(EditInitData.save(newInitData));
+            dispatch(EditActions.setMode.editDataSetup(dataSetupToEdit!.dataSetup?.id));
+        }
+    };
+
     return {
         label: "EDIT * " + (dataSetupToEdit?.dataSetup.name || ""),
         name: dataSetupToEdit?.dataSetup.name,
@@ -131,12 +122,11 @@ export const useDataSetupViewModel = () => {
         getDatas,
         createAnother,
         updateDataSetup,
-        editInitData,
-        createInitData,
         note: dataSetupToEdit ? dataSetupToEdit.dataSetup.note : "",
         saveNote,
         initDatas: dataSetupToEdit?.initDatas || [],
         saveInitData,
         deleteInitData,
+        createInitData,
     };
 };

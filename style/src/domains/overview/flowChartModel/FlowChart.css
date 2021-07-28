@@ -101,8 +101,10 @@
 }
 
 .flowChartHeader {
-    display: flex;
     position: absolute;
-    width: 47vw;
     z-index: 3;
+    right: 0;
+    max-height: 40vh;
+    max-width: 15vw;
+    overflow-y: auto;
 }

@@ -4,20 +4,20 @@ import React, { FunctionComponent, useState } from "react";
 import { ActionTO } from "../../../../../../../../dataAccess/access/to/ActionTO";
 import { GoToTypes } from "../../../../../../../../dataAccess/access/types/GoToType";
 import { DavitIconButton } from "../../../../../../../atomic";
-import { DavitAddButton } from "../../../../../../../atomic/buttons/DavitAddButton";
-import { DavitBackButton } from "../../../../../../../atomic/buttons/DavitBackButton";
-import { DavitButton } from "../../../../../../../atomic/buttons/DavitButton";
-import { DavitDeleteButton } from "../../../../../../../atomic/buttons/DavitDeleteButton";
-import { DavitEditButton } from "../../../../../../../atomic/buttons/DavitEditButton";
-import { DavitShowMoreButton } from "../../../../../../../atomic/buttons/DavitShowMoreButton";
-import { DecisionDropDown } from "../../../../../../../atomic/dropdowns/DecisionDropDown";
-import { GoToOptionDropDown } from "../../../../../../../atomic/dropdowns/GoToOptionDropDown";
-import { StepDropDown } from "../../../../../../../atomic/dropdowns/StepDropDown";
-import { Form } from "../../../../../../../atomic/forms/Form";
+import { DavitAddButton } from "../../../../../../../atomic";
+import { DavitBackButton } from "../../../../../../../atomic";
+import { DavitButton } from "../../../../../../../atomic";
+import { DavitDeleteButton } from "../../../../../../../atomic";
+import { DavitEditButton } from "../../../../../../../atomic";
+import { DavitShowMoreButton } from "../../../../../../../atomic";
+import { DecisionDropDown } from "../../../../../../../atomic";
+import { GoToOptionDropDown } from "../../../../../../../atomic";
+import { StepDropDown } from "../../../../../../../atomic";
+import { Form } from "../../../../../../../atomic";
 import { FormBody } from "../../../../../../../atomic/forms/fragments/FormBody";
 import { FormFooter } from "../../../../../../../atomic/forms/fragments/FormFooter";
 import { FormHeader } from "../../../../../../../atomic/forms/fragments/FormHeader";
-import { DavitTextInput } from "../../../../../../../atomic/textinput/DavitTextInput";
+import { DavitTextInput } from "../../../../../../../atomic";
 import { DavitCommentButton } from "../../../../../../../molecules";
 import { useActionViewModel } from "../viewmodels/ActionViewModel";
 import { useStepViewModel } from "../viewmodels/StepViewModel";
@@ -66,7 +66,7 @@ export const StepForm: FunctionComponent<StepFormProps> = () => {
                 <td>
                     <label>{getOptionText(action)}</label>
                 </td>
-                <td style={{textAlign: "end"}}>
+                <td className="flex flex-end">
                     <DavitDeleteButton onClick={() => {
                         deleteAction(action);
                         updateStep();
@@ -86,13 +86,13 @@ export const StepForm: FunctionComponent<StepFormProps> = () => {
 
     const buildActionTable = (actions: ActionTO[]): JSX.Element => {
         return (
-            <table className={"border"}
+            <table className="border"
                    style={{width: "40em", overflow: "hidden"}}
             >
                 <thead>
-                <tr>
-                    <td style={{textAlign: "center"}}>Action</td>
-                    <td style={{textAlign: "end"}}>
+                <tr className="flex content-space-between align-center">
+                    <td>Action</td>
+                    <td>
                         <DavitAddButton onClick={() => {
                             editOrAddAction();
                             updateStep();
