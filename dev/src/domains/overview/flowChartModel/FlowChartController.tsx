@@ -16,7 +16,6 @@ import { DavitUtil } from "../../../utils/DavitUtil";
 import { TabFragment } from "../tableModel/fragments/TabFragment";
 import { TabGroupFragment } from "../tableModel/fragments/TabGroupFragment";
 import "./FlowChart.css";
-import { FlowChartlabel } from "./fragments/FlowChartlabel";
 
 interface FlowChartControllerProps {
 }
@@ -32,8 +31,6 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
             currentLinkId,
             chain,
             sequence,
-            chainName,
-            sequenceName,
             chainLineColor,
         } = useFlowChartViewModel();
 
@@ -218,14 +215,7 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
                             <StateView showChain={showChain} />
                         </div>
 
-                        <div style={{marginLeft: "auto"}}>
-                            <FlowChartlabel label="CHAIN:"
-                                            text={chainName}
-                            />
-                            <FlowChartlabel label="SEQU.:"
-                                            text={sequenceName}
-                            />
-                        </div>
+
                     </div>
 
                     <div className="flowChart padding-small"

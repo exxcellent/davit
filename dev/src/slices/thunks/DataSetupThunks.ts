@@ -35,7 +35,7 @@ const deleteDataSetupThunk = (dataSetup: DataSetupCTO): AppThunk => (dispatch) =
 const setDataSetupThunk = (dataSetup: DataSetupCTO): AppThunk => (dispatch, getState) => {
     const mode: Mode = getState().edit.mode;
 
-    if (mode === Mode.EDIT_DATASETUP) {
+    if (mode === Mode.EDIT_CONFIGURATION) {
         dispatch(editActions.setDataSetupToEdit(dataSetup));
     } else {
         dispatch(GlobalActions.handleError("Try to set dataSetup to edit in mode: " + mode));

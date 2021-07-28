@@ -1,71 +1,93 @@
 import React, { FunctionComponent } from "react";
 import { StateTO } from "../../../../../../../../../dataAccess/access/to/StateTO";
 import { DavitAddButton, DavitDeleteButton, DavitTextInput } from "../../../../../../../../atomic";
+import { Table, TableRow } from "../../../../../../../../atomic/Table";
 import { ToggleButton } from "../../../../../../../../molecules/ToggleButton";
-import "./StateTable.css";
 
 interface StateTableProps {
     statesToEdit: StateTO[];
-    addStateCallback: () => void;
-    changeName: (name: string, stateId: number) => void;
-    removeStateCallback: (stateId: number) => void;
+    stateColumnName: string
     setActiveCallback: (state: StateTO, active: boolean) => void;
+    changeName?: (name: string, stateId: number) => void;
+    removeStateCallback?: (stateId: number) => void;
+    addStateCallback?: () => void;
 }
 
 export const StateTable: FunctionComponent<StateTableProps> = (props) => {
-    const {statesToEdit, addStateCallback, changeName, removeStateCallback, setActiveCallback} = props;
+    const {statesToEdit, addStateCallback, changeName, removeStateCallback, setActiveCallback, stateColumnName} = props;
 
-    const buildStateTableRow = (state: StateTO, index: number): JSX.Element => {
+    const trueLabel: string = "TRUE";
+    const falseLabel: string = "FALSE";
 
-        const inputClasses: string = state.label === "" ? "border border-warning border-animation" : "";
+    const buildTableRow = (state: StateTO, index: number): TableRow => {
 
-        return (
-            <tr className="flex content-space-between fluid"
-                key={index}
-            >
-                <td className={inputClasses}>
+        const getLabel = (): JSX.Element => {
+            return changeName
+                ?
+                <div className="flex flex-center align-center">
                     <DavitTextInput
-                        onChangeCallback={(name) => changeName(name, state.id)}
+                        key={index}
+                        onChangeCallback={(name) => changeName ? changeName(name, state.id) : {}}
                         placeholder="State Name"
                         value={state.label}
                         focus
                     />
-                </td>
-                <td className="flex flex-center">
+                </div>
+                : <label key={index}
+                         className="padding-small"
+                >{state.label}</label>;
+        };
 
-                    <ToggleButton toggleCallback={(is) => setActiveCallback(state, is)}
-                                  isLeft={state.isState}
-                                  leftLabel="TRUE"
-                                  rightLabel="FLASE"
-                    />
+        const getToggleButton = (): JSX.Element => {
+            return (<ToggleButton
+                key={index}
+                toggleCallback={(is) => setActiveCallback(state, is)}
+                isLeft={state.isState}
+                leftLabel={trueLabel}
+                rightLabel={falseLabel}
+            />);
+        };
 
-                </td>
-                <td className="flex flex-center">
+        const getDeleteButton = (): JSX.Element => {
+            return removeStateCallback
+                ? <div className="flex flex-center align-center width-fluid height-fluid">
                     <DavitDeleteButton onClick={() => removeStateCallback(state.id)}
                                        noConfirm
                     />
-                </td>
-            </tr>
-        );
+                </div>
+                : <div />;
+        };
+
+        return {
+            cellElements: [getLabel(), getToggleButton(), getDeleteButton()]
+        };
+    };
+
+    const getHeaders = (): JSX.Element[] => {
+        return addStateCallback
+            ? [<div key={1}
+                    className="padding-small"
+            ><label
+
+            >Name</label></div>, <label key={2}
+                                        className="padding-small"
+            >{stateColumnName}</label>, <DavitAddButton key={3}
+                                                        onClick={addStateCallback}
+            />]
+            : [<label key={1}
+                      className="padding-small"
+            >Name</label>, <label key={2}
+                                  className="padding-small"
+            >{stateColumnName}</label>];
+    };
+
+    const getRows = (): TableRow[] => {
+        return statesToEdit.map(buildTableRow);
     };
 
     return (
-        <table className={"border table"}>
-
-            <thead className="flex content-space-between padding-medium">
-
-            <tr className="flex content-space-between fluid">
-                <td className="flex flex-center">Name</td>
-                <td className="flex flex-center">Default</td>
-                <td className={"flex flex-center"}><DavitAddButton onClick={addStateCallback} /></td>
-            </tr>
-
-            </thead>
-
-            <tbody className="body">
-            {statesToEdit.map((state, index) => buildStateTableRow(state, index))}
-            </tbody>
-
-        </table>
+        <Table headers={getHeaders()}
+               tableRows={getRows()}
+        />
     );
 };

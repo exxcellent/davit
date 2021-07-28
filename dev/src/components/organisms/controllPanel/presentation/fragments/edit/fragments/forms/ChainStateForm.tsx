@@ -60,6 +60,7 @@ export const ChainStateForm: FunctionComponent<ChainStateFormProps> = () => {
             <FormBody>
 
                 <StateTable statesToEdit={chainStates}
+                            stateColumnName="Default"
                             addStateCallback={createStateFkAndStateCondition}
                             removeStateCallback={deleteStateFkAndStateCondition}
                             setActiveCallback={setIsState}
