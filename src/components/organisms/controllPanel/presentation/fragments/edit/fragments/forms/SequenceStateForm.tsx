@@ -59,13 +59,15 @@ export const SequenceStateForm: FunctionComponent<StateFormProps> = () => {
 
             <FormBody>
 
-                <StateTable statesToEdit={sequenceStates}
-                            stateColumnName="Default"
-                            addStateCallback={createSequenceState}
-                            removeStateCallback={deleteSequenceState}
-                            setActiveCallback={setIsState}
-                            changeName={changeName}
-                />
+                <div className="border border-small width-fluid">
+                    <StateTable statesToEdit={sequenceStates}
+                                stateColumnName="Default"
+                                addStateCallback={createSequenceState}
+                                removeStateCallback={deleteSequenceState}
+                                setActiveCallback={setIsState}
+                                changeName={changeName}
+                    />
+                </div>
 
             </FormBody>
 
