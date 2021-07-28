@@ -1,28 +1,24 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DataSetupTO } from "../../../dataAccess/access/to/DataSetupTO";
+import { DataSetupCTO } from "../../../dataAccess/access/cto/DataSetupCTO";
+import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { InitDataTO } from "../../../dataAccess/access/to/InitDataTO";
 import { SequenceStateTO } from "../../../dataAccess/access/to/SequenceStateTO";
 import { SequenceTO } from "../../../dataAccess/access/to/SequenceTO";
 import { StateTO } from "../../../dataAccess/access/to/StateTO";
-import { Configuration, editActions, EditActions, editSelectors } from "../../../slices/EditSlice";
+import { EditActions } from "../../../slices/EditSlice";
 import { masterDataSelectors } from "../../../slices/MasterDataSlice";
-import { SequenceModelActions } from "../../../slices/SequenceModelSlice";
+import { SequenceModelActions, sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
 import { DavitUtil } from "../../../utils/DavitUtil";
 import {
     ActorDropDown,
-    DataSetupLabelDropDown,
     DavitAddButton,
     DavitButton,
     DavitDeleteButton,
     DavitIconButton,
-    DavitTextInput,
     InstanceDropDown
 } from "../../atomic";
 import { DavitIcons } from "../../atomic/icons/IconSet";
-import { AddOrEdit } from "../../molecules";
-import { useDataSetupViewModel } from "../controllPanel/presentation/fragments/edit/fragments/viewmodels/DataSetupViewModel";
-import { useSequenceViewModel } from "../controllPanel/presentation/fragments/edit/fragments/viewmodels/SequenceViewModel";
 import "./Configuration.css";
 import { StateConfigurationView } from "./fragments/StateConfigurationView";
 
@@ -34,58 +30,73 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
 
     const dispatch = useDispatch();
 
-    const {saveSequenceState} = useSequenceViewModel();
-    const {
-        name,
-        changeName,
-        deleteDataSetup,
-        updateDataSetup,
-        initDatas,
-        saveInitData,
-        deleteInitData,
-        createInitData,
-    } = useDataSetupViewModel();
+    const [states, setStates] = useState<StateTO[]>([]);
+    const [dataSetup, setDataSetup] = useState<DataSetupCTO>(new DataSetupCTO());
 
-    const configurationToEdit: Configuration | null = useSelector(editSelectors.selectConfigurationToEdit);
-    // const chains: ChainTO[] = useSelector(masterDataSelectors.selectChains);
     const sequences: SequenceTO[] = useSelector(masterDataSelectors.selectSequences);
-    const sequenceStates: SequenceStateTO[] = useSelector(masterDataSelectors.selectSequenceStateBySequenceId(configurationToEdit?.sequence.id || -1));
+    const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
 
     const setIsState = (stateToToggle: StateTO, is: boolean) => {
-        const copyStateToToggle: StateTO = DavitUtil.deepCopy(stateToToggle);
-        copyStateToToggle.isState = is;
-        saveSequenceState(copyStateToToggle as SequenceStateTO);
-    };
-
-    const setDataSetup = (dataSetup?: DataSetupTO) => {
-        dispatch(EditActions.setMode.setDataSetupInConfiguration(dataSetup ? dataSetup.id : undefined));
+        const copyStates: StateTO[] = DavitUtil.deepCopy(states);
+        copyStates.map(state => {
+            if (state.id === stateToToggle.id) {
+                state.isState = is;
+            }
+            return state;
+        });
+        setStates(copyStates);
     };
 
     const runCalc = () => {
-        console.info(configurationToEdit);
-
-        if (!DavitUtil.isNullOrUndefined(configurationToEdit)
-            && !DavitUtil.isNullOrUndefined(configurationToEdit?.sequence
-                && !DavitUtil.isNullOrUndefined(configurationToEdit.dataSetup))) {
-
-            dispatch(SequenceModelActions.setCurrentSequence(configurationToEdit!.sequence.id));
-            dispatch(SequenceModelActions.setCurrentDataSetup(configurationToEdit!.dataSetup.dataSetup.id));
+        if(selectedSequence !== null){
+            const copySequence: SequenceCTO = DavitUtil.deepCopy(selectedSequence);
+            dispatch(SequenceModelActions.setCurrentSequenceByIdWithStates(copySequence.sequenceTO.id, (states as SequenceStateTO[])));
+            dispatch(SequenceModelActions.setCurrentDataSetup(dataSetup));
             dispatch(EditActions.setMode.view());
+        }
+    };
+
+    const setSequence = (sequenceId: number) => {
+        dispatch(SequenceModelActions.setCurrentSequenceById(sequenceId));
+        if (selectedSequence) {
+            const copyStates: StateTO[] = DavitUtil.deepCopy(selectedSequence.sequenceStates);
+            setStates(copyStates);
         }
     };
 
     const buildSequenceButton = (sequence: SequenceTO): JSX.Element => {
         return (
             <DavitButton key={sequence.id}
-                         onClick={() => {
-                             let copyConfig: Configuration = DavitUtil.deepCopy(configurationToEdit);
-                             const copySequence: SequenceTO = DavitUtil.deepCopy(sequence);
-                             copyConfig.sequence = copySequence;
-                             dispatch(editActions.setConfigurationToEdit(copyConfig));
-                             dispatch(SequenceModelActions.setCurrentSequence(copySequence.id));
-                         }}
+                         onClick={() => setSequence(sequence.id)}
             >{sequence.name}</DavitButton>
         );
+    };
+
+    const saveInitData = (initData: InitDataTO) => {
+        const copyDataSetup: DataSetupCTO = DavitUtil.deepCopy(dataSetup);
+        copyDataSetup.initDatas.map(iData => {
+            if (iData.id === initData.id) {
+                iData.actorFk = initData.actorFk;
+                iData.dataFk = initData.dataFk;
+                iData.instanceFk = initData.instanceFk;
+            }
+            return iData;
+        });
+        setDataSetup(copyDataSetup);
+    };
+
+    const createInitData = () => {
+        const copyDataSetup: DataSetupCTO = DavitUtil.deepCopy(dataSetup);
+        const newInitData: InitDataTO = new InitDataTO();
+        newInitData.id = copyDataSetup.initDatas.length;
+        copyDataSetup.initDatas.push(newInitData);
+        setDataSetup(copyDataSetup);
+    };
+
+    const deleteInitData = (initDataToDelete: InitDataTO) => {
+        const copyDataSetup: DataSetupCTO = DavitUtil.deepCopy(dataSetup);
+        copyDataSetup.initDatas.filter(iData => iData.id !== initDataToDelete.id);
+        setDataSetup(copyDataSetup);
     };
 
     const buildActorDataTableRow = (initData: InitDataTO): JSX.Element => {
@@ -137,7 +148,7 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
                 <h1>Configuration</h1>
 
                 <DavitButton onClick={() => {
-                    dispatch(EditActions.setMode.edit());
+                    dispatch(EditActions.setMode.view());
                     dispatch(SequenceModelActions.resetCurrentSequence);
                     dispatch(SequenceModelActions.resetCurrentDataSetup);
                 }}
@@ -175,37 +186,14 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
                 <div className="configurationStateColumn flex flex-column border border-medium">
                     <div>
                         {/*    State*/}
-                        <StateConfigurationView states={sequenceStates}
+                        <StateConfigurationView states={states}
                                                 setStateCallback={setIsState}
                         />
                     </div>
                     <div>
                         {/*    Data setup*/}
-                        <div className="configurationPanelHeader padding-medium border border-medium width-fluid">
+                        <div className="configurationPanelHeader border border-medium width-fluid">
                             <h2>Data-Setup</h2>
-                        </div>
-
-                        <div className="flex content-space-around align-center">
-                            <AddOrEdit
-                                addCallBack={() => setDataSetup()}
-                                dropDown={<DataSetupLabelDropDown
-                                    onSelect={(dataSetup) => setDataSetup(dataSetup)}
-                                    label="Data-Setup"
-                                />}
-                            />
-
-                            <DavitTextInput
-                                label="Name:"
-                                placeholder="Data Setup Name ..."
-                                onChangeCallback={(name: string) => changeName(name)}
-                                value={name}
-                                focus={true}
-                                onBlur={updateDataSetup}
-                            />
-
-                            {configurationToEdit?.dataSetup.dataSetup.name !== undefined &&
-                            <DavitDeleteButton onClick={deleteDataSetup} />}
-
                         </div>
 
                         <table className="border"
@@ -219,7 +207,7 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
                             </tr>
                             </thead>
                             <tbody style={{maxHeight: "40vh"}}>
-                            {initDatas.map(buildActorDataTableRow)}
+                            {dataSetup.initDatas.map(buildActorDataTableRow)}
                             </tbody>
                         </table>
                     </div>
