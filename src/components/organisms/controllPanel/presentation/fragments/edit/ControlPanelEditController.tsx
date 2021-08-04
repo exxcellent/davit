@@ -49,8 +49,8 @@ export const ControlPanelEditController: FunctionComponent<ControlPanelEditContr
                 return <EditChainLinkModal />;
             case Mode.EDIT_CHAIN_DECISION:
                 return <EditChainDecisionModal />;
-                case Mode.EDIT_CONFIGURATION:
-                    return <ConfigurationPanel />;
+            case Mode.EDIT_CONFIGURATION:
+                return <ConfigurationPanel />;
             default:
                 return <ControlPanelEditMenu />;
         }

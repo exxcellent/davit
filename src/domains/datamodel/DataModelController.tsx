@@ -1,18 +1,16 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DavitPathProps, DavitPathTypes } from "../../components/atomic/svg/DavitPath";
-import { DavitCard, DavitCardProps } from "../../components/molecules/card/DavitCard";
+import { DavitCard, DavitCardProps } from "../../components/molecules";
 import { DnDBox, DnDBoxElement, DnDBoxType } from "../../components/organisms/dndBox/DnDBox";
 import { ActorCTO } from "../../dataAccess/access/cto/ActorCTO";
 import { DataCTO } from "../../dataAccess/access/cto/DataCTO";
-import { DataSetupCTO } from "../../dataAccess/access/cto/DataSetupCTO";
 import { GeometricalDataCTO } from "../../dataAccess/access/cto/GeometraicalDataCTO";
 import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../../dataAccess/access/to/ActionTO";
 import { ConditionTO } from "../../dataAccess/access/to/ConditionTO";
 import { DataRelationTO } from "../../dataAccess/access/to/DataRelationTO";
 import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
-import { InitDataTO } from "../../dataAccess/access/to/InitDataTO";
 import { ActionType } from "../../dataAccess/access/types/ActionType";
 import { editSelectors } from "../../slices/EditSlice";
 import { GlobalActions, globalSelectors } from "../../slices/GlobalSlice";
@@ -77,8 +75,6 @@ const useMetaDataModelViewModel = () => {
         const actionToEdit: ActionTO | null = useSelector(editSelectors.selectActionToEdit);
         const decisionToEdit: DecisionTO | null = useSelector(editSelectors.selectDecisionToEdit);
         const conditionToEdit: ConditionTO | null = useSelector(editSelectors.selectConditionToEdit);
-        const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.selectDataSetupToEdit);
-        const initDataToEdit: InitDataTO | null = useSelector(editSelectors.selectInitDataToEdit);
         // ----- VIEW -----
         const actions: ActionTO[] = useSelector(sequenceModelSelectors.selectActions);
 
@@ -136,22 +132,16 @@ const useMetaDataModelViewModel = () => {
             const actorDataFromActionToEdit: ViewFragmentProps | undefined = actionToEdit
                 ? mapActionToActorDatas(actionToEdit)
                 : undefined;
-            const actorDataFromInitDataToEdit: ViewFragmentProps | undefined = initDataToEdit
-                ? mapInitDataToActorData(initDataToEdit)
-                : undefined;
+
             const actorDataFromDecisionToEdit: ViewFragmentProps[] = mapDecisionToActorData(decisionToEdit);
-            const actorDatasFromDataSetup: ViewFragmentProps[] = dataSetupToEdit
-                ? dataSetupToEdit.initDatas.map(mapInitDataToActorData)
-                : [];
+
             actorDatas.push(...actorDatasFromStepToEdit);
             actorDatas.push(...actorDataFromDecisionToEdit);
-            actorDatas.push(...actorDatasFromDataSetup);
+
             if (actorDataFromActionToEdit) {
                 actorDatas.push(actorDataFromActionToEdit);
             }
-            if (actorDataFromInitDataToEdit) {
-                actorDatas.push(actorDataFromInitDataToEdit);
-            }
+
             if (conditionToEdit) {
                 actorDatas.push(mapConditionToActorData(conditionToEdit));
             }
@@ -207,16 +197,16 @@ const useMetaDataModelViewModel = () => {
             };
         };
 
-        const mapInitDataToActorData = (initData: InitDataTO): ViewFragmentProps => {
-            return {
-                parentId:
-                    initData.instanceFk > -1
-                        ? {dataId: initData.dataFk, instanceId: initData.instanceFk}
-                        : initData.dataFk,
-                name: getActorNameById(initData.actorFk),
-                state: ActorDataState.NEW,
-            };
-        };
+        // const mapInitDataToActorData = (initData: InitDataTO): ViewFragmentProps => {
+        //     return {
+        //         parentId:
+        //             initData.instanceFk > -1
+        //                 ? {dataId: initData.dataFk, instanceId: initData.instanceFk}
+        //                 : initData.dataFk,
+        //         name: getActorNameById(initData.actorFk),
+        //         state: ActorDataState.NEW,
+        //     };
+        // };
 
         const actorDataExists = (propOne: ViewFragmentProps, propTwo: ViewFragmentProps) => {
             const dataId1 = (propOne.parentId as { dataId: number; instanceId: number }).dataId || propOne.parentId;
