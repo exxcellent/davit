@@ -50,7 +50,7 @@ const useControlPanelViewModel = () => {
                 dispatch(EditActions.setMode.editData());
                 break;
             case "DATASETUP":
-                dispatch(EditActions.setMode.editDataSetup());
+                dispatch(EditActions.setMode.editSequenceConfiguration());
                 break;
             case "SEQUENCE":
                 dispatch(EditActions.setMode.editSequence());
