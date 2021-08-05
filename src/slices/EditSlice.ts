@@ -6,6 +6,7 @@ import { GeometricalDataCTO } from "../dataAccess/access/cto/GeometraicalDataCTO
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
+import { ChainConfigurationTO } from "../dataAccess/access/to/ChainConfigurationTO";
 import { ChainDecisionTO } from "../dataAccess/access/to/ChainDecisionTO";
 import { ChainLinkTO } from "../dataAccess/access/to/ChainLinkTO";
 import { ChainTO } from "../dataAccess/access/to/ChainTO";
@@ -87,6 +88,7 @@ interface EditState {
         | ChainDecisionTO
         | ActionTO
         | ConditionTO
+        | ChainConfigurationTO
         | EmptyObjectToEdit;
     instanceId: number;
 }
@@ -101,6 +103,13 @@ const EditSlice = createSlice({
     name: "edit",
     initialState: getInitialState,
     reducers: {
+        setChainConfiguration: (state, action: PayloadAction<ChainConfigurationTO>) => {
+            if (state.mode === Mode.EDIT_CONFIGURATION) {
+                state.objectToEdit = action.payload;
+            } else {
+                console.warn("Try to set chain configuration to edit, in mode: " + state.mode);
+            }
+        },
         setChainLinkToEdit: (state, action: PayloadAction<ChainLinkTO>) => {
             if (state.mode === Mode.EDIT_CHAIN_LINK) {
                 state.objectToEdit = action.payload;
@@ -410,7 +419,7 @@ const setModeToEditSequenceConfigurationThunk = (id?: number): AppThunk => (disp
         } else {
             dispatch(GlobalActions.handleError(response.message));
         }
-    }else{
+    } else {
         dispatch(SequenceModelActions.resetCurrentSequence);
         dispatch(SequenceModelActions.resetCurrentSequenceConfiguration);
     }
@@ -521,6 +530,11 @@ export const editSelectors = {
     selectActorToEdit: (state: RootState): ActorCTO | null => {
         return state.edit.mode === Mode.EDIT_ACTOR && (state.edit.objectToEdit as ActorCTO).actor
             ? (state.edit.objectToEdit as ActorCTO)
+            : null;
+    },
+    selectChainConfiguration: (state: RootState): ChainConfigurationTO | null => {
+        return state.edit.mode === Mode.EDIT_CONFIGURATION && (state.edit.objectToEdit as ChainConfigurationTO).stateValues
+            ? (state.edit.objectToEdit as ChainConfigurationTO)
             : null;
     },
     selectChainLinkToEdit: (state: RootState): ChainLinkTO | null => {

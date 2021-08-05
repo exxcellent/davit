@@ -6,6 +6,7 @@ import { GeometricalDataCTO } from "../dataAccess/access/cto/GeometraicalDataCTO
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
+import { ChainConfigurationTO } from "../dataAccess/access/to/ChainConfigurationTO";
 import { ChainDecisionTO } from "../dataAccess/access/to/ChainDecisionTO";
 import { ChainTO } from "../dataAccess/access/to/ChainTO";
 import { InitDataTO } from "../dataAccess/access/to/InitDataTO";
@@ -40,6 +41,7 @@ interface SequenceModelState {
     actorDatas: ActorData[];
     activeFilter: Filter[];
     selectedChain: ChainCTO | null;
+    selectedChainConfiguration: ChainConfigurationTO | null;
 }
 
 const getInitialState: SequenceModelState = {
@@ -54,6 +56,7 @@ const getInitialState: SequenceModelState = {
     actorDatas: [],
     activeFilter: [],
     selectedChain: null,
+    selectedChainConfiguration: null,
 };
 
 const SequenceModelSlice = createSlice({
@@ -96,6 +99,11 @@ const SequenceModelSlice = createSlice({
             state.selectedSequenceConfiguration = null;
             state.currentLinkIndex = 0;
             state.currentStepIndex = 0;
+        },
+        setSelectedChainConfiguration: (state, action: PayloadAction<ChainConfigurationTO | null>) => {
+          state.selectedChainConfiguration = action.payload;
+          state.currentLinkIndex = 0;
+          state.currentStepIndex = 0;
         },
         setCalcChain: (state, action: PayloadAction<CalcChain | null>) => {
             state.calcChain = action.payload;
@@ -228,7 +236,7 @@ const setSelectedChainThunk = (chain: ChainTO): AppThunk => (dispatch, getState)
     } else {
         const chainCTO: ChainCTO = response.object;
         dispatch(SequenceModelSlice.actions.setSelectedChain(chainCTO));
-        if (chainCTO && mode === Mode.VIEW && getRoot(chainCTO)) {
+        if (chainCTO && mode === Mode.VIEW && getState().sequenceModel.selectedChainConfiguration !== null && getRoot(chainCTO)) {
             dispatch(SequenceModelSlice.actions.setCalcChain(SequenceChainService.calculateChain(chainCTO)));
         }
     }
@@ -537,6 +545,7 @@ export const SequenceModelActions = {
     linkBack,
     linkNext,
     setCurrentChain: setSelectedChainThunk,
+    setCurrentChainConfiguration: SequenceModelSlice.actions.setSelectedChainConfiguration,
     addDataFilters: SequenceModelSlice.actions.addDataFilter,
     removeDataFilters: SequenceModelSlice.actions.removeDataFilter,
     addActorFilters: SequenceModelSlice.actions.addActorFilters,
