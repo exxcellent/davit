@@ -1,17 +1,30 @@
+:root{
+    --configurationBodyMinHeight: 20rem;
+}
+
 .configurationPanel {
     position: fixed;
     z-index: 99;
     top: 2rem;
     left: 5rem;
-}
-
-.configurationBody {
-    background-color: var(--background-color);
+    display: inline-flex;
+    flex-direction: column;
+    flex-wrap: wrap;
 }
 
 .configurationPanelHeader {
     background-color: var(--background-color-header);
-    width: 14rem;
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    min-width: 30vw;
+}
+
+.configurationBody {
+    background-color: var(--background-color);
+    animation-name: growFromTopToBottom;
+    animation-duration: var(--animation-time);
+    animation-timing-function: ease-in-out;
 }
 
 .configurationSequenceChainColumn {
@@ -20,5 +33,25 @@
 }
 
 .configurationStateColumn{
-    min-width: 20rem;
+    /*min-width: 20rem;*/
+}
+
+.selectedColor{
+    color: var(--secondary-color);
+}
+
+@keyframes growFromTopToBottom {
+    0%{
+        opacity: 0;
+        height: 0;
+    }
+
+    70%{
+        opacity: 0;
+        height: var(--configurationBodyMinHeight);
+    }
+
+    100%{
+        opacity: 1;
+    }
 }
