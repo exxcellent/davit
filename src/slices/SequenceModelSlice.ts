@@ -264,6 +264,13 @@ const getSequenceConfigurationFromBackend = (dataSetupId: number): AppThunk => (
     }
 };
 
+const resetAll = (): AppThunk => (dispatch) => {
+    dispatch(SequenceModelSlice.actions.setSelectedSequenceConfiguration(null));
+    dispatch(SequenceModelSlice.actions.setCurrentStepIndex(-1));
+    dispatch(SequenceModelSlice.actions.setSelectedSequence(null));
+    dispatch(SequenceModelSlice.actions.setSelectedChain(null));
+};
+
 const handleActorClickEvent = (actorId: number): AppThunk => (dispatch) => {
     const filter: Filter[] = [];
     filter.push({type: "ACTOR", id: actorId});
@@ -520,6 +527,7 @@ export const SequenceModelActions = {
     resetCurrentStepIndex: SequenceModelSlice.actions.setCurrentStepIndex(-1),
     resetCurrentSequence: SequenceModelSlice.actions.setSelectedSequence(null),
     resetCurrentChain: SequenceModelSlice.actions.setSelectedChain(null),
+    resetAll: resetAll(),
     setCurrentStepIndex: SequenceModelSlice.actions.setCurrentStepIndex,
     setCurrentLinkIndex: SequenceModelSlice.actions.setCurrentLinkIndex,
     handleActorClickEvent: handleActorClickEvent,

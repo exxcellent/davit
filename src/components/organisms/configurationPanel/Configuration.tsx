@@ -153,6 +153,13 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
         );
     };
 
+    // ---------------------------- private ----------------------------
+
+    const toggleSequenceChain = () => {
+        setSequenceOptions(!sequenceOptions);
+        dispatch(SequenceModelActions.resetAll);
+    };
+
     return (
         <div className="configurationPanel border border-medium">
 
@@ -164,7 +171,7 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
                     <div className="padding-horizontal-m">
 
                         <DavitToggleButton
-                            toggle={() => setSequenceOptions(!sequenceOptions)}
+                            toggle={toggleSequenceChain}
                             value={sequenceOptions}
                         />
                     </div>
