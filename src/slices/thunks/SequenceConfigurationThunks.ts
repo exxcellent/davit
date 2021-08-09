@@ -51,7 +51,7 @@ const deleteSequenceConfigurationThunk = (sequenceConfigurationTO: SequenceConfi
 const setSequenceConfigurationThunk = (sequenceConfiguration: SequenceConfigurationTO): AppThunk => (dispatch, getState) => {
     const mode: Mode = getState().edit.mode;
 
-    if (mode === Mode.EDIT_CONFIGURATION) {
+    if (mode === Mode.VIEW_CONFIGURATION) {
         dispatch(editActions.setSequenceConfigurationToEdit(sequenceConfiguration));
     } else {
         dispatch(GlobalActions.handleError("Try to set Sequence Configuration to edit in mode: " + mode));

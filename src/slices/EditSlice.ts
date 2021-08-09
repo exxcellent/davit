@@ -41,13 +41,13 @@ export enum Mode {
     TAB = "TAB",
     FILE = "FILE",
     VIEW = "VIEW",
+    VIEW_CONFIGURATION = "VIEW_CONFIGURATION",
     EDIT = "EDIT",
     EDIT_ACTOR = "EDIT_ACTOR",
     EDIT_GROUP = "EDIT_GROUP",
     EDIT_DATA = "EDIT_DATA",
     EDIT_DATA_INSTANCE = "EDIT_DATA_INSTANCE",
     EDIT_RELATION = "EDIT_RELATION",
-    EDIT_CONFIGURATION = "EDIT_CONFIGURATION",
     EDIT_CHAIN = "EDIT_CHAIN",
     EDIT_CHAIN_STATES = "EDIT_CHAIN_STATES",
     EDIT_CHAIN_DECISION = "EDIT_CHAIN_DECISION",
@@ -104,7 +104,7 @@ const EditSlice = createSlice({
     initialState: getInitialState,
     reducers: {
         setChainConfiguration: (state, action: PayloadAction<ChainConfigurationTO>) => {
-            if (state.mode === Mode.EDIT_CONFIGURATION) {
+            if (state.mode === Mode.VIEW_CONFIGURATION) {
                 state.objectToEdit = action.payload;
             } else {
                 console.warn("Try to set chain configuration to edit, in mode: " + state.mode);
@@ -177,7 +177,7 @@ const EditSlice = createSlice({
             }
         },
         setSequenceConfigurationToEdit: (state, action: PayloadAction<SequenceConfigurationTO>) => {
-            if (state.mode === Mode.EDIT_CONFIGURATION) {
+            if (state.mode === Mode.VIEW_CONFIGURATION) {
                 (state.objectToEdit as SequenceConfigurationTO) = action.payload;
             } else {
                 console.warn("Try to set Sequence Configuration to edit in mode: " + state.mode);
@@ -411,7 +411,7 @@ const setModeToEditGroupThunk = (group?: GroupTO): AppThunk => (dispatch) => {
 };
 
 const setModeToEditSequenceConfigurationThunk = (id?: number): AppThunk => (dispatch) => {
-    dispatch(setModeWithStorageThunk(Mode.EDIT_CONFIGURATION));
+    dispatch(setModeWithStorageThunk(Mode.VIEW_CONFIGURATION));
     if (id) {
         const response: DataAccessResponse<SequenceConfigurationTO> = DataAccess.findSequenceConfiguration(id);
         if (response.code === 200) {
@@ -533,7 +533,7 @@ export const editSelectors = {
             : null;
     },
     selectChainConfiguration: (state: RootState): ChainConfigurationTO | null => {
-        return state.edit.mode === Mode.EDIT_CONFIGURATION && (state.edit.objectToEdit as ChainConfigurationTO).stateValues
+        return state.edit.mode === Mode.VIEW_CONFIGURATION && (state.edit.objectToEdit as ChainConfigurationTO).stateValues
             ? (state.edit.objectToEdit as ChainConfigurationTO)
             : null;
     },
@@ -570,7 +570,7 @@ export const editSelectors = {
             return (state.edit.objectToEdit as SequenceTO);
         }
 
-        if ((state.edit.mode === Mode.EDIT_CONFIGURATION && (state.edit.objectToEdit as SequenceConfigurationTO))) {
+        if ((state.edit.mode === Mode.VIEW_CONFIGURATION && (state.edit.objectToEdit as SequenceConfigurationTO))) {
             return (state.edit.objectToEdit as SequenceConfigurationTO);
         }
 
@@ -623,11 +623,11 @@ export const editSelectors = {
     },
     selectSequenceConfigurationToEdit: (state: RootState): SequenceConfigurationTO | null => {
 
-        if (state.edit.mode === Mode.EDIT_CONFIGURATION && (state.edit.objectToEdit as SequenceConfigurationTO).stateValues) {
+        if (state.edit.mode === Mode.VIEW_CONFIGURATION && (state.edit.objectToEdit as SequenceConfigurationTO).stateValues) {
             return (state.edit.objectToEdit as SequenceConfigurationTO);
         }
 
-        if (state.edit.mode === Mode.EDIT_CONFIGURATION && (state.edit.objectToEdit as SequenceConfigurationTO).stateValues) {
+        if (state.edit.mode === Mode.VIEW_CONFIGURATION && (state.edit.objectToEdit as SequenceConfigurationTO).stateValues) {
             return (state.edit.objectToEdit as SequenceConfigurationTO);
         }
 

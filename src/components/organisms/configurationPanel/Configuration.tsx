@@ -18,7 +18,6 @@ import {
     ActorDropDown,
     ChainDropDown,
     DavitAddButton,
-    DavitBackButton,
     DavitDeleteButton,
     DavitIconButton,
     InstanceDropDown,
@@ -307,14 +306,6 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
                 {!sequenceOptions && <ChainDropDown onSelect={setChain}
                                                     value={selectedChain?.chain.id}
                 />}
-
-                <DavitBackButton
-                    onClick={() => {
-                        dispatch(EditActions.setMode.view());
-                        dispatch(SequenceModelActions.resetCurrentSequence);
-                        dispatch(SequenceModelActions.resetCurrentSequenceConfiguration);
-                    }}
-                />
 
                 <DavitIconButton onClick={runCalc}
                                  iconLeft={true}
