@@ -10,7 +10,7 @@ import { FormFooter } from "../../../../../../../atomic/forms/fragments/FormFoot
 import { FormHeader } from "../../../../../../../atomic/forms/fragments/FormHeader";
 import { useSequenceViewModel } from "../viewmodels/SequenceViewModel";
 import { FormDivider } from "./fragments/FormDivider";
-import { StateTable } from "./fragments/StateTable";
+import { StateList } from "./fragments/StateList";
 
 interface StateFormProps {
 }
@@ -60,12 +60,12 @@ export const SequenceStateForm: FunctionComponent<StateFormProps> = () => {
             <FormBody>
 
                 <div className="border border-small width-fluid">
-                    <StateTable statesToEdit={sequenceStates}
-                                stateColumnName="Default"
-                                addStateCallback={createSequenceState}
-                                removeStateCallback={deleteSequenceState}
-                                setActiveCallback={setIsState}
-                                changeName={changeName}
+                    <StateList statesToEdit={sequenceStates}
+                               stateColumnName="Default"
+                               addStateCallback={createSequenceState}
+                               removeStateCallback={deleteSequenceState}
+                               setActiveCallback={setIsState}
+                               changeName={changeName}
                     />
                 </div>
 

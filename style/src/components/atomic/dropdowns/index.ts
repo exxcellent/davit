@@ -7,7 +7,6 @@ export * from "./ChainLinkDropDown";
 export * from "./ConditionDropDown";
 export * from "./DataDropDown";
 export * from "./DataInstanceDropDown";
-export * from "./DataSetupDropDown";
 export * from "./DecisionDropDown";
 export * from "./GoToChainOptionDropDown";
 export * from "./GoToOptionDropDown";

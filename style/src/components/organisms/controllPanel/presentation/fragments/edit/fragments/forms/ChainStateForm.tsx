@@ -10,7 +10,7 @@ import { FormFooter } from "../../../../../../../atomic/forms/fragments/FormFoot
 import { FormHeader } from "../../../../../../../atomic/forms/fragments/FormHeader";
 import { useChainViewModel } from "../viewmodels/ChainViewModel";
 import { FormDivider } from "./fragments/FormDivider";
-import { StateTable } from "./fragments/StateTable";
+import { StateList } from "./fragments/StateList";
 
 interface ChainStateFormProps {
 }
@@ -59,12 +59,12 @@ export const ChainStateForm: FunctionComponent<ChainStateFormProps> = () => {
 
             <FormBody>
 
-                <StateTable statesToEdit={chainStates}
-                            stateColumnName="Default"
-                            addStateCallback={createStateFkAndStateCondition}
-                            removeStateCallback={deleteStateFkAndStateCondition}
-                            setActiveCallback={setIsState}
-                            changeName={changeName}
+                <StateList statesToEdit={chainStates}
+                           stateColumnName="Default"
+                           addStateCallback={createStateFkAndStateCondition}
+                           removeStateCallback={deleteStateFkAndStateCondition}
+                           setActiveCallback={setIsState}
+                           changeName={changeName}
                 />
 
             </FormBody>

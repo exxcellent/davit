@@ -1,16 +1,14 @@
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Arrow, ArrowType, DavitPathHead, DavitPathProps, DavitPathTypes } from "../../components/atomic/svg/DavitPath";
-import { DavitCard, DavitCardProps } from "../../components/molecules/card/DavitCard";
+import { DavitCard, DavitCardProps } from "../../components/molecules";
 import { DnDBox, DnDBoxElement, DnDBoxType } from "../../components/organisms/dndBox/DnDBox";
 import { ActorCTO } from "../../dataAccess/access/cto/ActorCTO";
 import { DataCTO } from "../../dataAccess/access/cto/DataCTO";
-import { DataSetupCTO } from "../../dataAccess/access/cto/DataSetupCTO";
 import { SequenceStepCTO } from "../../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../../dataAccess/access/to/ActionTO";
 import { ConditionTO } from "../../dataAccess/access/to/ConditionTO";
 import { DecisionTO } from "../../dataAccess/access/to/DecisionTO";
-import { InitDataTO } from "../../dataAccess/access/to/InitDataTO";
 import { ActionType } from "../../dataAccess/access/types/ActionType";
 import { editSelectors } from "../../slices/EditSlice";
 import { GlobalActions, globalSelectors } from "../../slices/GlobalSlice";
@@ -69,8 +67,6 @@ const useViewModel = () => {
         const actionToEdit: ActionTO | null = useSelector(editSelectors.selectActionToEdit);
         const decisionToEdit: DecisionTO | null = useSelector(editSelectors.selectDecisionToEdit);
         const conditionToEdit: ConditionTO | null = useSelector(editSelectors.selectConditionToEdit);
-        const dataSetupToEdit: DataSetupCTO | null = useSelector(editSelectors.selectDataSetupToEdit);
-        const initDataToEdit: InitDataTO | null = useSelector(editSelectors.selectInitDataToEdit);
         const editArrow: Arrow | null = useSelector(editSelectors.selectEditActionArrow);
         const editStepArrows: Arrow[] = useSelector(editSelectors.selectEditStepArrows);
         // ----- VIEW -----
@@ -117,21 +113,14 @@ const useViewModel = () => {
                 stepToEdit?.actions.map((action) => (action ? mapActionToActorDatas(action) : [])).flat(1) || [];
             const actorDataFromActionToEdit: ViewFragmentProps[] = actionToEdit ? mapActionToActorDatas(actionToEdit) : [];
             const actorDataFromDecisionToEdit: ViewFragmentProps[] = mapDecisionToActorData(decisionToEdit);
-            const actorDatasFromDataSetupEdit: ViewFragmentProps[] = dataSetupToEdit
-                ? dataSetupToEdit.initDatas.map(mapInitDataToActorData)
-                : [];
-            const actorDatasFromInitData: ViewFragmentProps | undefined = initDataToEdit
-                ? mapInitDataToActorData(initDataToEdit)
-                : undefined;
+
             actorDatasFromStepToEdit.forEach((actorData) => {
                 actorData && actorDatas.push(actorData);
             });
+
             actorDatas.push(...actorDataFromDecisionToEdit);
-            actorDatas.push(...actorDatasFromDataSetupEdit);
             actorDatas.push(...actorDataFromActionToEdit);
-            if (actorDatasFromInitData) {
-                actorDatas.push(actorDatasFromInitData);
-            }
+
             if (conditionToEdit) {
                 actorDatas.push(mapConditionToActorData(conditionToEdit));
             }
@@ -206,13 +195,13 @@ const useViewModel = () => {
             };
         };
 
-        const mapInitDataToActorData = (initData: InitDataTO): ViewFragmentProps => {
-            return {
-                parentId: initData.actorFk,
-                name: getDataNameById(initData.dataFk, initData.instanceFk),
-                state: ActorDataState.NEW,
-            };
-        };
+        // const mapInitDataToActorData = (initData: InitDataTO): ViewFragmentProps => {
+        //     return {
+        //         parentId: initData.actorFk,
+        //         name: getDataNameById(initData.dataFk, initData.instanceFk),
+        //         state: ActorDataState.NEW,
+        //     };
+        // };
 
         const getDataNameById = (dataId: number, instanceId?: number): string => {
             let dataName: string = "Could not find Data";

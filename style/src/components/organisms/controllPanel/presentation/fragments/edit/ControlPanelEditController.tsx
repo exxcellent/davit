@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { editSelectors, Mode } from "../../../../../../slices/EditSlice";
-import { ConfigurationPanel } from "../../../../configurationPanel/Configuration";
 import { ControlPanelEditChain } from "./fragments/ControlPanelEditChain";
 import { ControlPanelEditMenu } from "./fragments/ControlPanelEditMenu";
 import { ControlPanelEditSequence } from "./fragments/ControlPanelEditSequence";
@@ -49,8 +48,6 @@ export const ControlPanelEditController: FunctionComponent<ControlPanelEditContr
                 return <EditChainLinkModal />;
             case Mode.EDIT_CHAIN_DECISION:
                 return <EditChainDecisionModal />;
-                case Mode.EDIT_CONFIGURATION:
-                    return <ConfigurationPanel />;
             default:
                 return <ControlPanelEditMenu />;
         }

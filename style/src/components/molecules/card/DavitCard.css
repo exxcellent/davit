@@ -8,7 +8,7 @@
     box-shadow: 0 0 0 1px var(--border-color), 0 0 5px 5px rgba(0, 0, 0, 0.199);
     background-color: var(--background-color-header);
     animation-duration: var(--animation-time);
-    animation-name: grow;
+    animation-name: growHeight;
     animation-timing-function: ease-in-out;
     transition: width var(--animation-time), box-shadow var(--animation-time);
     cursor: grab;

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent } from "react";
 import "./DavitToggleButton.css";
 
 interface DavitToggleButtonProps {
@@ -9,20 +9,13 @@ interface DavitToggleButtonProps {
 export const DavitToggleButton: FunctionComponent<DavitToggleButtonProps> = (props) => {
     const {toggle, value} = props;
 
-    const [isChecked, setIsChecked] = useState(value);
-
-    const privateToggle = () => {
-        toggle();
-        setIsChecked(!isChecked);
-    };
-
     return (
         <label className="switch">
             <input type="checkbox"
-                   onChange={privateToggle}
-                   checked={isChecked}
+                   onChange={toggle}
+                   checked={value}
             />
-            <span className="slider round"></span>
+            <span className="slider round"/>
         </label>
     );
 };

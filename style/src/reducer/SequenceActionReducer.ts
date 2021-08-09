@@ -1,5 +1,6 @@
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
 import { DecisionTO } from "../dataAccess/access/to/DecisionTO";
+import { SequenceStateValue } from "../dataAccess/access/to/SequenceConfigurationTO";
 import { SequenceStateTO } from "../dataAccess/access/to/SequenceStateTO";
 import { ActionType } from "../dataAccess/access/types/ActionType";
 import { GoTo } from "../dataAccess/access/types/GoToType";
@@ -123,7 +124,12 @@ export const SequenceActionReducer = {
         return {actorDatas: newActorDatas, errors: errors, falseStates: [], trueStates: []};
     },
 
-    executeDecisionCheck(decision: DecisionTO, actorDatas: ActorData[], states: SequenceStateTO[]): SequenceDecisionResult {
+    executeDecisionCheck(
+        decision: DecisionTO,
+        actorDatas: ActorData[],
+        states: SequenceStateTO[],
+        stateValues: SequenceStateValue[]
+    ): SequenceDecisionResult {
         /**
          * Remove with status "deleted" and "check failed"
          * Change rest to status "persistent".
@@ -157,8 +163,17 @@ export const SequenceActionReducer = {
         const falseStates: SequenceStateTO[] = [];
         const trueStates: SequenceStateTO[] = [];
 
+        const configuredStates: SequenceStateTO[] = states.map(state => {
+            stateValues.forEach(stateValue => {
+                if(state.id === stateValue.sequenceStateFk){
+                    state.isState = stateValue.value;
+                }
+            });
+            return state;
+        });
+
         decision.stateFkAndStateConditions.forEach(stateFkAndStateCondition => {
-            const stateToCheck: SequenceStateTO | undefined = states.find(state => state.id === stateFkAndStateCondition.stateFk);
+            const stateToCheck: SequenceStateTO | undefined = configuredStates.find(state => state.id === stateFkAndStateCondition.stateFk);
             if (stateToCheck) {
                 if (stateToCheck.isState !== stateFkAndStateCondition.stateCondition) {
                     falseStates.push(stateToCheck);
