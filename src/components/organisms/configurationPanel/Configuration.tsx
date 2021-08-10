@@ -279,6 +279,14 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
         dispatch(SequenceModelActions.resetAll);
     };
 
+    const getCalcButton = (): JSX.Element => {
+        return (<DavitIconButton onClick={runCalc}
+                                 iconLeft={true}
+                                 iconName={DavitIcons.play}
+                                 className="calcButton"
+        />);
+    };
+
     return (
         <div className="configurationPanel border border-medium">
 
@@ -307,10 +315,6 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
                                                     value={selectedChain?.chain.id}
                 />}
 
-                <DavitIconButton onClick={runCalc}
-                                 iconLeft={true}
-                                 iconName={DavitIcons.play}
-                />
             </div>
 
             {/* ------------- sequence -----------*/}
@@ -325,7 +329,8 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
                             <h1 className="padding-medium">Sequence States</h1>
                         </div>
                         {/*    State*/}
-                        {selectedSequence.sequenceStates.length > 0 && <StateConfigurationView states={getUpdateStatesByConfiguration(selectedSequence.sequenceStates || [])}
+                        {selectedSequence.sequenceStates.length > 0 &&
+                        <StateConfigurationView states={getUpdateStatesByConfiguration(selectedSequence.sequenceStates || [])}
                                                 setStateCallback={setIsStateInSequenceConfiguration}
                         />}
                         {selectedSequence.sequenceStates.length === 0
@@ -352,8 +357,8 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
                             <h2 className="padding-medium">-- no init datas declared --</h2>
                         </div>}
                     </div>
+                    {getCalcButton()}
                 </div>
-
             </div>}
 
             {/* ------------- chain -----------*/}
@@ -368,8 +373,9 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
                             <h1 className="padding-medium">Chain States</h1>
                         </div>
 
-                        {chainConfigurationToEdit && chainConfigurationToEdit.stateValues.length > 0 && <StateConfigurationView states={getUpdateChainStatesByConfiguration(selectedChain.chainStates || [])}
-                                                                                                  setStateCallback={setIsStateInChainConfiguration}
+                        {chainConfigurationToEdit && chainConfigurationToEdit.stateValues.length > 0 &&
+                        <StateConfigurationView states={getUpdateChainStatesByConfiguration(selectedChain.chainStates || [])}
+                                                setStateCallback={setIsStateInChainConfiguration}
                         />}
                         {chainConfigurationToEdit && chainConfigurationToEdit.stateValues.length === 0
                         && <div className="flex flex-center align-center">
@@ -395,10 +401,12 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
                         <div className="flex flex-center align-center">
                             <h2 className="padding-medium">-- no init datas declared --</h2>
                         </div>}
-                    </div>
-                </div>
 
+                    </div>
+                    {getCalcButton()}
+                </div>
             </div>}
+
 
         </div>
     );

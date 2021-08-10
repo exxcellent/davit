@@ -1,15 +1,15 @@
-:root{
+:root {
     --configurationBodyMinHeight: 20rem;
 }
 
 .configurationPanel {
-    position: fixed;
-    z-index: 99;
-    top: 2rem;
-    left: 5rem;
     display: inline-flex;
     flex-direction: column;
     flex-wrap: wrap;
+    left: 5rem;
+    position: fixed;
+    top: 2rem;
+    z-index: 99;
 }
 
 .configurationPanelHeader {
@@ -21,37 +21,41 @@
 }
 
 .configurationBody {
-    background-color: var(--background-color);
-    animation-name: growFromTopToBottom;
     animation-duration: var(--animation-time);
+    animation-name: growFromTopToBottom;
     animation-timing-function: ease-in-out;
+    background-color: var(--background-color);
 }
 
 .configurationSequenceChainColumn {
-    min-width: 15rem;
     min-height: 20rem;
+    min-width: 15rem;
 }
 
-.configurationStateColumn{
+.configurationStateColumn {
     /*min-width: 20rem;*/
 }
 
-.selectedColor{
+.selectedColor {
     color: var(--secondary-color);
 }
 
+.calcButton {
+    background-color: var(--secondary-color);
+}
+
 @keyframes growFromTopToBottom {
-    0%{
+    0% {
         opacity: 0;
         height: 0;
     }
 
-    70%{
+    70% {
         opacity: 0;
         height: var(--configurationBodyMinHeight);
     }
 
-    100%{
+    100% {
         opacity: 1;
     }
 }
