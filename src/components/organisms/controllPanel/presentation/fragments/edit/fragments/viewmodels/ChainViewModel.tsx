@@ -126,6 +126,14 @@ export const useChainViewModel = () => {
         }
     };
 
+    const saveNote = (note: string) => {
+        if (!DavitUtil.isNullOrUndefined(selectedChain)) {
+            const copyChain: ChainTO = DavitUtil.deepCopy(selectedChain);
+            copyChain.note = note;
+            dispatch(EditChain.save(copyChain));
+        }
+    };
+
     return {
         label: "EDIT * " + (selectedChain?.name || ""),
         name: selectedChain?.name,
@@ -143,5 +151,7 @@ export const useChainViewModel = () => {
         saveStateFkAndStateCondition,
         createStateFkAndStateCondition,
         deleteStateFkAndStateCondition,
+        note: selectedChain?.note || "",
+        saveNote,
     };
 };

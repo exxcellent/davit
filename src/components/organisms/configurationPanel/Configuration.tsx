@@ -367,9 +367,9 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
 
                 {/*/!*----- States -----*!/*/}
                 <div className="configurationStateColumn flex flex-column width-fluid">
-                    <div>
+                    <div className="padding-bottom-l">
                         {/*State*/}
-                        <div className="flex flex-center align-center border border-small">
+                        <div className="flex flex-center align-center border border-large">
                             <h1 className="padding-medium">Chain States</h1>
                         </div>
 
@@ -382,7 +382,7 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
                             <h2 className="padding-medium">-- no state declared --</h2>
                         </div>}
                     </div>
-                    <div className="flex-inline flex-wrap flex-column">
+                    <div className="flex-inline flex-wrap flex-column padding-bottom-l">
                         {/*    Data setup*/}
                         <div className="flex flex-center align-center border border-small">
                             <h1 className="padding-medium">Data-Setup</h1>
