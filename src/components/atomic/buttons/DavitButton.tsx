@@ -7,14 +7,15 @@ export interface DavitButtonProps {
     disabled?: boolean;
     size?: ElementSize;
     className?: string;
+    active?: boolean;
 }
 
 export const DavitButton: FunctionComponent<DavitButtonProps> = (props) => {
-    const {onClick, size = ElementSize.medium, className, children, disabled} = props;
+    const {onClick, size = ElementSize.medium, className, children, disabled, active} = props;
 
     return (
         <button onClick={onClick}
-                className={ElementSize[size] + " " + className}
+                className={ElementSize[size] + " " + className + " " + (active ? "activeButton" : "")}
                 disabled={disabled}
         >
             {children}

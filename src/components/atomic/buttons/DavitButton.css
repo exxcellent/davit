@@ -57,6 +57,6 @@ button.large {
 }
 
 button.activeButton {
-    background-color: var(--border-color);
+    background-color: var(--secondary-color);
     border-color: var(--primary-text-color);
 }

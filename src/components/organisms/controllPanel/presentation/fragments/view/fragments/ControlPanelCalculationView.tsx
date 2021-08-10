@@ -1,18 +1,19 @@
 import React, { FunctionComponent, useState } from "react";
 import { FlowChartlabel } from "../../../../../../../domains/overview/flowChartModel/fragments/FlowChartlabel";
 import { useStepAndLinkNavigation } from "../../../../../../../utils/WindowUtil";
+import { DavitButton } from "../../../../../../atomic";
 import { StateView } from "../../../../../../molecules/StateView";
 import { ControlPanel } from "../../edit/common/ControlPanel";
 import { OptionField } from "../../edit/common/OptionField";
 import { useViewViewModel } from "../viewmodels/ViewViewModel";
-import "./ControlPanelView.css";
+import "./ControlPanelCalculationView.css";
 import { ViewNavigator } from "./ViewNavigator";
 
 export interface ControlPanelViewProps {
 
 }
 
-export const ControlPanelView: FunctionComponent<ControlPanelViewProps> = () => {
+export const ControlPanelCalculationView: FunctionComponent<ControlPanelViewProps> = () => {
 
     const {
         stepIndex,
@@ -44,11 +45,24 @@ export const ControlPanelView: FunctionComponent<ControlPanelViewProps> = () => 
                                         text={selectedSequenceName}
                         />
                     </div>
+                    {selectedChainName !== "" && (
+                        <div className="flex-column">
+                            <DavitButton onClick={() => setShowChain(true)}
+                                         active={showChain}
+                            >Show</DavitButton>
+                            <DavitButton onClick={() => setShowChain(false)}
+                                         active={!showChain}
+                            >Show</DavitButton>
+                        </div>
+                    )}
                 </OptionField>
 
                 <OptionField>
                     {/*    States*/}
-                    <StateView showChain={showChain} />
+                    <div className="stateViewWrapper">
+
+                        <StateView showChain={showChain} />
+                    </div>
 
                 </OptionField>
 
