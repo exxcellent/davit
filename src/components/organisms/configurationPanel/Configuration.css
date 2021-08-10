@@ -40,6 +40,11 @@
     color: var(--secondary-color);
 }
 
+.configurationHeader {
+    background-color: var(--secondary-color);
+    color: var(--color-dark);
+}
+
 .calcButton {
     background-color: var(--secondary-color);
 }
