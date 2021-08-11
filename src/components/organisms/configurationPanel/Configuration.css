@@ -1,5 +1,6 @@
 :root {
     --configurationBodyMinHeight: 20rem;
+    --configurationBodyMinWidth: 15rem;
 }
 
 .configurationPanel {
@@ -28,8 +29,8 @@
 }
 
 .configurationSequenceChainColumn {
-    min-height: 20rem;
-    min-width: 15rem;
+    min-height: var(--configurationBodyMinHeight);
+    min-width: var(--configurationBodyMinWidth);
 }
 
 .configurationStateColumn {
@@ -43,6 +44,14 @@
 .configurationHeader {
     background-color: var(--secondary-color);
     color: var(--color-dark);
+}
+
+.noteTextarea {
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+    color: var(--primary-text-color);
+    max-width: 100%;
+    resize: none;
 }
 
 .calcButton {
