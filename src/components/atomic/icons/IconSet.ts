@@ -1,4 +1,4 @@
-import { faPencilAlt, faPlay, faPlus, faReply } from "@fortawesome/free-solid-svg-icons";
+import { faComment, faCommentDots, faPencilAlt, faPlay, faPlus, faReply } from "@fortawesome/free-solid-svg-icons";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons/faAngleDown";
 import { faAngleUp } from "@fortawesome/free-solid-svg-icons/faAngleUp";
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons/faExclamationTriangle";
@@ -27,4 +27,6 @@ export const DavitIcons = {
     error: faMinusCircle,
     info: faInfoCircle,
     play: faPlay,
+    noteEmpty: faComment,
+    noteFilled: faCommentDots,
 };
