@@ -20,11 +20,13 @@ import {
     DavitAddButton,
     DavitDeleteButton,
     DavitIconButton,
+    DavitShowMoreButton,
     InstanceDropDown,
     SequenceDropDown,
 } from "../../atomic";
 import { DavitToggleButton } from "../../atomic/buttons/DavitToggleButton";
 import { DavitIcons } from "../../atomic/icons/IconSet";
+import { NoteIcon } from "../../atomic/icons/NoteIcon";
 import "./Configuration.css";
 import { StateConfigurationView } from "./fragments/StateConfigurationView";
 
@@ -36,7 +38,8 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
 
         const dispatch = useDispatch();
 
-        const [sequenceOptions, setSequenceOptions] = useState<boolean>(true);
+        const [sequenceOptions, setSequenceOptions] = useState<boolean>(false);
+        const [showMore, setShowMore] = useState<boolean>(true);
 
         const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
         const sequenceConfigurationToEdit: SequenceConfigurationTO | null = useSelector(editSelectors.selectSequenceConfigurationToEdit);
@@ -355,6 +358,17 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
             }
         };
 
+        const getNote = (): string => {
+            let noteToReturn: string = "";
+            if (!DavitUtil.isNullOrUndefined(selectedSequence)) {
+                noteToReturn = selectedSequence!.sequenceTO!.note;
+            }
+            if (!DavitUtil.isNullOrUndefined(selectedChain)) {
+                noteToReturn = selectedChain!.chain.note;
+            }
+            return noteToReturn;
+        };
+
 // ===============================================================================================================
 
         return (
@@ -385,13 +399,31 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
                                                         value={selectedChain?.chain.id}
                     />}
 
+                    <DavitShowMoreButton onClick={setShowMore}
+                                         show={showMore}
+                    />
+
                 </div>
 
-                {(selectedSequence || selectedChain) && <div className="configurationBody flex">
+                {/* --------------- Body ---------------*/}
+                {(selectedSequence || selectedChain) && showMore && <div className="configurationBody flex">
 
-                    {/*/!*----- States -----*!/*/}
                     <div className="configurationStateColumn flex flex-column width-fluid">
+
+                        {/*------ note -----*/}
+                        <div className="flex flex-center padding-small">
+                            <NoteIcon size="2x"
+                                      className="margin-medium padding-small border border-medium"
+                            />
+                            <textarea className="noteTextarea border border-medium padding-medium"
+                                      value={getNote()}
+                            >
+                                {/*<label>{getNote()}</label>*/}
+                            </textarea>
+                        </div>
+
                         <div>
+                            {/*/!*----- States -----*!/*/}
                             <div className="configurationHeader flex flex-center align-center">
                                 <h1 className="padding-medium">{selectedSequence ? "Sequence States" : "Chain States"}</h1>
                             </div>
@@ -423,10 +455,10 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
 
                         </div>
                         <DavitIconButton onClick={runCalc}
-                                         iconLeft={true}
+                                         iconLeft={false}
                                          iconName={DavitIcons.play}
                                          className="calcButton"
-                        />
+                        >Calculate</DavitIconButton>
                     </div>
                 </div>}
 
