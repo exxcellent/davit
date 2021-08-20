@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { ArcherContainer, ArcherElement, Relation } from "react-archer";
 import { useSelector } from "react-redux";
+import { StateView } from "../../../components/molecules/StateView";
 import { ChainCTO } from "../../../dataAccess/access/cto/ChainCTO";
 import { ChainLinkCTO } from "../../../dataAccess/access/cto/ChainLinkCTO";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
@@ -193,6 +194,9 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
                 <div className="flowChart padding-small"
                      style={{height: tableHeight}}
                 >
+                    <div className="flowChartHeader">
+                        <StateView showChain={showChain} />
+                    </div>
                     {!showChain && sequence && buildFlowChart()}
                     {showChain && chain && buildChainFlowChart()}
                 </div>}
