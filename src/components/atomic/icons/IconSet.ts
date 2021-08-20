@@ -8,6 +8,7 @@ import { faFilter } from "@fortawesome/free-solid-svg-icons/faFilter";
 import { faHandPointer } from "@fortawesome/free-solid-svg-icons/faHandPointer";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons/faInfoCircle";
 import { faMinusCircle } from "@fortawesome/free-solid-svg-icons/faMinusCircle";
+import { faSave } from "@fortawesome/free-solid-svg-icons/faSave";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { faWrench } from "@fortawesome/free-solid-svg-icons/faWrench";
 
@@ -29,4 +30,5 @@ export const DavitIcons = {
     play: faPlay,
     noteEmpty: faComment,
     noteFilled: faCommentDots,
+    save: faSave,
 };
