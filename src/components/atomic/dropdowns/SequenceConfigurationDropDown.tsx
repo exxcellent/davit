@@ -6,11 +6,12 @@ import { DavitDropDown, DavitDropDownItemProps } from "./DavitDropDown";
 
 interface SequenceConfigurationDropDownProps {
     sequenceId?: number;
+    selectedSequenceConfiguration?: number;
     onSelectCallback: (sequenceConfiguration: SequenceConfigurationTO | undefined) => void;
 }
 
 export const SequenceConfigurationDropDown: FunctionComponent<SequenceConfigurationDropDownProps> = (props) => {
-    const {sequenceId, onSelectCallback} = props;
+    const {sequenceId, onSelectCallback, selectedSequenceConfiguration} = props;
 
     const sequenceConfigurations: SequenceConfigurationTO[] = useSelector(masterDataSelectors.selectSequenceConfigurationsBySequenceId(sequenceId));
 
@@ -37,6 +38,7 @@ export const SequenceConfigurationDropDown: FunctionComponent<SequenceConfigurat
                        dropdownItems={sequenceConfigurations.map(buildDropDownItemFromSequenceConfiguration)}
                        clearable
                        placeholder={sequenceConfigurations.length === 0 ? "No configuration available" : "Select configuration"}
+                       value={selectedSequenceConfiguration ? selectedSequenceConfiguration.toString() : undefined}
         />
     );
 };

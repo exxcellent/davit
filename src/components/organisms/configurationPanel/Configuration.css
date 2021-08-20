@@ -33,8 +33,17 @@
     min-width: var(--configurationBodyMinWidth);
 }
 
-.configurationStateColumn {
-    /*min-width: 20rem;*/
+.configList {
+    max-height: 20vh;
+    overflow: auto;
+}
+
+.clickAble {
+    cursor: pointer;
+}
+
+.greenBorder {
+    border-color: var(--color-green);
 }
 
 .selectedColor {

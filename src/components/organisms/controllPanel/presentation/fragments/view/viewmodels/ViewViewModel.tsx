@@ -33,6 +33,22 @@ export const useViewViewModel = () => {
         }
     };
 
+    const getSequenceNote = (): string => {
+        let note: string = "";
+        if (!DavitUtil.isNullOrUndefined(selectedSequence)) {
+            note = selectedSequence!.sequenceTO.note;
+        }
+        return note;
+    };
+
+    const getChainNote = (): string => {
+        let note: string = "";
+        if (!DavitUtil.isNullOrUndefined(selectedChain)) {
+            note = selectedChain!.note;
+        }
+        return note;
+    };
+
     return {
         sequence: selectedSequence,
         stepIndex,
@@ -43,6 +59,8 @@ export const useViewViewModel = () => {
         selectChain,
         selectedSequenceName: selectedSequence?.sequenceTO.name || "",
         selectedChainName: selectedChain?.name || "",
-        editConfiguration: () => dispatch(EditActions.setMode.editConfiguration())
+        editConfiguration: () => dispatch(EditActions.setMode.editConfiguration()),
+        getSequenceNote,
+        getChainNote,
     };
 };
