@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState } from "react";
 import { FlowChartlabel } from "../../../../../../../domains/overview/flowChartModel/fragments/FlowChartlabel";
 import { useStepAndLinkNavigation } from "../../../../../../../utils/WindowUtil";
 import { DavitButton } from "../../../../../../atomic";
-import { StateView } from "../../../../../../molecules/StateView";
+import { NoteIcon } from "../../../../../../atomic/icons/NoteIcon";
 import { ControlPanel } from "../../edit/common/ControlPanel";
 import { OptionField } from "../../edit/common/OptionField";
 import { useViewViewModel } from "../viewmodels/ViewViewModel";
@@ -20,6 +20,8 @@ export const ControlPanelCalculationView: FunctionComponent<ControlPanelViewProp
         linkIndex,
         selectedChainName,
         selectedSequenceName,
+        getSequenceNote,
+        getChainNote,
     } = useViewViewModel();
 
     const {stepBack, stepNext, linkBack, linkNext} = useStepAndLinkNavigation();
@@ -58,16 +60,18 @@ export const ControlPanelCalculationView: FunctionComponent<ControlPanelViewProp
                 </OptionField>
 
                 <OptionField>
-                    {/*    States*/}
-                    <div className="stateViewWrapper">
-
-                        <StateView showChain={showChain} />
-                    </div>
+                    {/*------ note -----*/}
+                    <NoteIcon size="2x"
+                              className="margin-medium padding-small border border-medium"
+                    />
+                    <textarea className="noteTextarea border border-medium padding-medium width-fluid"
+                              value={showChain ? getChainNote() : getSequenceNote()}
+                              readOnly
+                    />
 
                 </OptionField>
 
                 <OptionField>
-                    {/*    Notes*/}
 
                 </OptionField>
 
