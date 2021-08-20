@@ -1,5 +1,5 @@
 :root {
-    --animation-time: 0.6s;
+    --animation-time: 0.8s;
 }
 
 @keyframes appearTabGroup {
@@ -72,7 +72,7 @@
     }
 }
 
-@keyframes grow {
+@keyframes growHeight {
     from {
         background-color: transparent;
         box-shadow: 0 0 0 1px transparent, 0 0 5px 5px transparent;
@@ -101,12 +101,10 @@
 @keyframes slideIn {
     from {
         margin-bottom: 11em;
-        /* height: 300%; */
     }
 
     to {
         margin-bottom: 0;
-        /* height: 100%; */
     }
 }
 

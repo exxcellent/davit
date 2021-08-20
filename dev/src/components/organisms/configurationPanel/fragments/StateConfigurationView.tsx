@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { StateTO } from "../../../../dataAccess/access/to/StateTO";
-import { StateTable } from "../../controllPanel/presentation/fragments/edit/fragments/forms/fragments/StateTable";
+import { StateList } from "../../controllPanel/presentation/fragments/edit/fragments/forms/fragments/StateList";
 
 interface StateConfigurationViewProps {
     states: StateTO[];
@@ -14,7 +14,7 @@ export const StateConfigurationView: FunctionComponent<StateConfigurationViewPro
     const HEADER: string = "State";
 
     return (
-        <StateTable
+        <StateList
             statesToEdit={states}
             stateColumnName={HEADER}
             setActiveCallback={setStateCallback}

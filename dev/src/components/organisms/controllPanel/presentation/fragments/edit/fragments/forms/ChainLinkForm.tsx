@@ -3,7 +3,6 @@ import { GoToTypesChain } from "../../../../../../../../dataAccess/access/types/
 import {
     ChainDecisionDropDown,
     ChainLinkDropDown,
-    DataSetupDropDown,
     DavitAddButton,
     DavitBackButton,
     DavitButton,
@@ -32,7 +31,6 @@ export const ChainLinkForm: FunctionComponent<ChainLinkFormProps> = () => {
         changeName,
         chainId,
         createNewChainLink,
-        currentDataSetup,
         currentSequence,
         deleteChainLink,
         goTo,
@@ -40,7 +38,6 @@ export const ChainLinkForm: FunctionComponent<ChainLinkFormProps> = () => {
         isRoot,
         linkId,
         saveChainLink,
-        setDataSetup,
         setNextDecision,
         setNextLink,
         setRoot,
@@ -79,11 +76,7 @@ export const ChainLinkForm: FunctionComponent<ChainLinkFormProps> = () => {
 
                 <FormLine>
                     <FormLabel>{labelDataSetup}</FormLabel>
-                    <DataSetupDropDown
-                        onSelect={(dataSetup) => setDataSetup(dataSetup)}
-                        placeholder="Select Data Setup ..."
-                        value={currentDataSetup}
-                    />
+                {/*    TODO: add sequence configuration drop down*/}
                 </FormLine>
 
                 <FormDivider />

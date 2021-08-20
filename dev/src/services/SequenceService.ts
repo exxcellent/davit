@@ -1,8 +1,8 @@
-import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
 import { DecisionTO } from "../dataAccess/access/to/DecisionTO";
+import { SequenceConfigurationTO } from "../dataAccess/access/to/SequenceConfigurationTO";
 import { SequenceStateTO } from "../dataAccess/access/to/SequenceStateTO";
 import { ActionType } from "../dataAccess/access/types/ActionType";
 import { GoTo, GoToTypes, Terminal } from "../dataAccess/access/types/GoToType";
@@ -34,7 +34,7 @@ export interface CalcSequence {
 export const SequenceService = {
     calculateSequence: (
         sequence: SequenceCTO | null,
-        dataSetup: DataSetupCTO,
+        configuration: SequenceConfigurationTO,
         persistentDatas?: ActorData[],
     ): CalcSequence => {
         const calcSequence: CalcSequence = {
@@ -47,9 +47,9 @@ export const SequenceService = {
         let loopStartingStep: number = -1;
 
         /**  Start calculation if sequence and data setup are selected */
-        if (sequence && dataSetup) {
+        if (sequence && configuration) {
             /** Execute data setup */
-            const dataSetupActions: ActionTO[] = dataSetup.initDatas.map((data, index) => {
+            const dataSetupActions: ActionTO[] = configuration.initDatas.map((data, index) => {
                 return {
                     actionType: ActionType.ADD,
                     receivingActorFk: data.actorFk,
@@ -118,6 +118,7 @@ export const SequenceService = {
                             decision,
                             actorDatas,
                             sequence.sequenceStates,
+                            configuration.stateValues,
                         );
                         actorDatas = result.actorDatas;
 

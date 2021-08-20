@@ -1,17 +1,15 @@
 import { DavitUtil } from "../../utils/DavitUtil";
 import { ChainCTO } from "../access/cto/ChainCTO";
-import { ChainlinkCTO } from "../access/cto/ChainlinkCTO";
-import { DataSetupCTO } from "../access/cto/DataSetupCTO";
+import { ChainLinkCTO } from "../access/cto/ChainLinkCTO";
 import { SequenceCTO } from "../access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../access/cto/SequenceStepCTO";
 import { ActionTO } from "../access/to/ActionTO";
 import { ChainDecisionTO } from "../access/to/ChainDecisionTO";
-import { ChainlinkTO } from "../access/to/ChainlinkTO";
+import { ChainLinkTO } from "../access/to/ChainLinkTO";
 import { ChainStateTO } from "../access/to/ChainStateTO";
 import { ChainTO } from "../access/to/ChainTO";
-import { DataSetupTO } from "../access/to/DataSetupTO";
 import { DecisionTO } from "../access/to/DecisionTO";
-import { InitDataTO } from "../access/to/InitDataTO";
+import { SequenceConfigurationTO } from "../access/to/SequenceConfigurationTO";
 import { SequenceStateTO } from "../access/to/SequenceStateTO";
 import { SequenceStepTO } from "../access/to/SequenceStepTO";
 import { SequenceTO } from "../access/to/SequenceTO";
@@ -21,9 +19,8 @@ import { ChainDecisionRepository } from "../repositories/ChainDecisionRepository
 import { ChainLinkRepository } from "../repositories/ChainLinkRepository";
 import { ChainRepository } from "../repositories/ChainRepository";
 import { ChainStateRepository } from "../repositories/ChainStateRepository";
-import { DataSetupRepository } from "../repositories/DataSetupRepository";
 import { DecisionRepository } from "../repositories/DecisionRepository";
-import { InitDataRepository } from "../repositories/InitDataRepository";
+import { SequenceConfigurationRepository } from "../repositories/SequenceConfigurationRepository";
 import { SequenceRepository } from "../repositories/SequenceRepository";
 import { SequenceStateRepository } from "../repositories/SequenceStateRepository";
 import { SequenceStepRepository } from "../repositories/SequenceStepRepository";
@@ -131,10 +128,10 @@ export const SequenceDataAccessService = {
         }
     },
 
-    setChainRoot(chainId: number, id: number, isDecision: boolean): ChainlinkTO | ChainDecisionTO {
-        let root: ChainlinkTO | ChainDecisionTO | null = null;
+    setChainRoot(chainId: number, id: number, isDecision: boolean): ChainLinkTO | ChainDecisionTO {
+        let root: ChainLinkTO | ChainDecisionTO | null = null;
         const copyDecisions: ChainDecisionTO[] = ChainDecisionRepository.findAllForChain(chainId);
-        const copySteps: ChainlinkTO[] = ChainLinkRepository.findAllForChain(chainId);
+        const copySteps: ChainLinkTO[] = ChainLinkRepository.findAllForChain(chainId);
         // set root
         copyDecisions.forEach((decision) => {
             if (isDecision) {
@@ -238,64 +235,23 @@ export const SequenceDataAccessService = {
 
     // --------------------------------------------- Data Setup -------------------------------------------
 
-    findAllDataSetup(): DataSetupTO[] {
-        return DataSetupRepository.findAll();
+    findAllSequenceConfigurations(): SequenceConfigurationTO[] {
+        return SequenceConfigurationRepository.findAll();
     },
 
-    findDatSetupCTO(dataId: number): DataSetupCTO {
-        return createDataSetupCTO(DataSetupRepository.find(dataId));
+    findSequenceConfigurationTO(sequenceConfigurationFk: number): SequenceConfigurationTO {
+        return SequenceConfigurationRepository.find(sequenceConfigurationFk);
     },
 
-    saveDataSetup(dataSetup: DataSetupTO): DataSetupTO {
-        CheckHelper.nullCheck(dataSetup, "dataSetup");
-        return DataSetupRepository.save(dataSetup);
+    saveSequenceConfigurationTO(sequenceConfigurationTO: SequenceConfigurationTO): SequenceConfigurationTO {
+        CheckHelper.nullCheck(sequenceConfigurationTO, "sequenceConfiguration");
+        return SequenceConfigurationRepository.save(sequenceConfigurationTO);
     },
 
-    saveDataSetupCTO(dataSetupCTO: DataSetupCTO): DataSetupCTO {
-        CheckHelper.nullCheck(dataSetupCTO, "dataSetupCTO");
-        const copyDataSetupCTO: DataSetupCTO = DavitUtil.deepCopy(dataSetupCTO);
-        const savedDataSetupTO: DataSetupTO = DataSetupRepository.save(dataSetupCTO.dataSetup);
-        // remove old init data.
-        InitDataRepository.findAllForSetup(dataSetupCTO.dataSetup.id).forEach((initData) =>
-            InitDataRepository.delete(initData.id),
-        );
-        // update and save new init data.
-        copyDataSetupCTO.initDatas.forEach((initData) => {
-            initData.dataSetupFk = savedDataSetupTO.id;
-            InitDataRepository.save(initData);
-        });
-        const savedInitDatas: InitDataTO[] = InitDataRepository.findAllForSetup(savedDataSetupTO.id);
-        return {dataSetup: savedDataSetupTO, initDatas: savedInitDatas};
-    },
-
-    deleteDataSetup(dataSetup: DataSetupCTO): DataSetupCTO {
-        CheckHelper.nullCheck(dataSetup, "dataSetup");
-        dataSetup.initDatas.forEach((initData) => InitDataRepository.delete(initData.id));
-        DataSetupRepository.delete(dataSetup.dataSetup);
-        return dataSetup;
-    },
-
-    // ----------------------------------------------- Init Data --------------------------------------------
-    findAllInitDatas(): InitDataTO[] {
-        return InitDataRepository.findAll();
-    },
-
-    findInitData(id: number): InitDataTO {
-        const initData: InitDataTO | undefined = InitDataRepository.find(id);
-        if (!initData) {
-            throw new Error("Could not find Init Data with id: " + id);
-        } else {
-            return initData;
-        }
-    },
-
-    saveInitData(initData: InitDataTO): InitDataTO {
-        CheckHelper.nullCheck(initData, "initData");
-        return InitDataRepository.save(initData);
-    },
-
-    deleteInitData(id: number): InitDataTO {
-        return InitDataRepository.delete(id);
+    deleteSequenceConfiguration(sequenceConfigurationTO: SequenceConfigurationTO): SequenceConfigurationTO {
+        CheckHelper.nullCheck(sequenceConfigurationTO, "sequenceConfiguration");
+        SequenceConfigurationRepository.delete(sequenceConfigurationTO);
+        return sequenceConfigurationTO;
     },
 
     // --------------------------------------------------- Sequence State ------------------------------------------------
@@ -374,22 +330,22 @@ export const SequenceDataAccessService = {
     },
 
     deleteChain(chain: ChainTO): ChainTO {
-        const linksToDelete: ChainlinkTO[] = ChainLinkRepository.findAllForChain(chain.id);
+        const linksToDelete: ChainLinkTO[] = ChainLinkRepository.findAllForChain(chain.id);
         const decisionsToDelete: ChainDecisionTO[] = ChainDecisionRepository.findAllForChain(chain.id);
         linksToDelete.forEach((link) => ChainLinkRepository.delete(link));
         decisionsToDelete.forEach((dec) => ChainDecisionRepository.delete(dec));
         return ChainRepository.delete(chain);
     },
 
-    saveChainLink(link: ChainlinkTO): ChainlinkTO {
+    saveChainLink(link: ChainLinkTO): ChainLinkTO {
         return ChainLinkRepository.save(link);
     },
 
-    findAllChainLinks(): ChainlinkTO[] {
+    findAllChainLinks(): ChainLinkTO[] {
         return ChainLinkRepository.findAll();
     },
 
-    deleteChainTO(chainLink: ChainlinkTO): ChainlinkTO {
+    deleteChainTO(chainLink: ChainLinkTO): ChainLinkTO {
         return ChainLinkRepository.delete(chainLink);
     },
 
@@ -405,8 +361,8 @@ export const SequenceDataAccessService = {
         return ChainDecisionRepository.delete(decision);
     },
 
-    findChainLink(id: number): ChainlinkTO {
-        const link: ChainlinkTO | undefined = ChainLinkRepository.find(id);
+    findChainLink(id: number): ChainLinkTO {
+        const link: ChainLinkTO | undefined = ChainLinkRepository.find(id);
         if (link) {
             return link;
         } else {
@@ -456,25 +412,15 @@ const createSequenceStepCTO = (sequenceStepTO: SequenceStepTO | undefined): Sequ
     };
 };
 
-const createDataSetupCTO = (dataSetupTO: DataSetupTO | undefined): DataSetupCTO => {
-    CheckHelper.nullCheck(dataSetupTO, "dataSetupTO");
-    const initDatas: InitDataTO[] = InitDataRepository.findAllForSetup(dataSetupTO!.id);
-    return {
-        dataSetup: dataSetupTO!,
-        initDatas: initDatas,
-    };
-};
-
-const createChainLinkCTO = (link: ChainlinkTO | undefined): ChainlinkCTO => {
+const createChainLinkCTO = (link: ChainLinkTO | undefined): ChainLinkCTO => {
     CheckHelper.nullCheck(link, "chainlink");
-    const chainLinkCTO: ChainlinkCTO = new ChainlinkCTO();
+    const chainLinkCTO: ChainLinkCTO = new ChainLinkCTO();
     chainLinkCTO.chainLink = link!;
-    const dataSetupTO: DataSetupTO | undefined = DataSetupRepository.find(link!.dataSetupFk);
+    const sequenceConfiguration: SequenceConfigurationTO | undefined = SequenceConfigurationRepository.find(link!.sequenceConfigurationFk);
     const sequenceTO: SequenceTO | undefined = SequenceRepository.find(link!.sequenceFk);
-    if (dataSetupTO && sequenceTO) {
-        const dataSetupCTO: DataSetupCTO = createDataSetupCTO(dataSetupTO);
+    if (sequenceConfiguration && sequenceTO) {
         const sequenceCTO: SequenceCTO = createSequenceCTO(sequenceTO);
-        chainLinkCTO.dataSetup = dataSetupCTO;
+        chainLinkCTO.sequenceConfiguration = sequenceConfiguration;
         chainLinkCTO.sequence = sequenceCTO;
     }
     return chainLinkCTO;
@@ -485,9 +431,9 @@ const crateChainCTO = (chain: ChainTO): ChainCTO => {
 
     const copyChain: ChainTO = DavitUtil.deepCopy(chain);
 
-    const chainLinkTOs: ChainlinkTO[] | undefined = ChainLinkRepository.findAllForChain(copyChain.id);
+    const chainLinkTOs: ChainLinkTO[] | undefined = ChainLinkRepository.findAllForChain(copyChain.id);
 
-    let chainLinkCTOs: ChainlinkCTO[] = [];
+    let chainLinkCTOs: ChainLinkCTO[] = [];
 
     if (chainLinkTOs) {
         chainLinkCTOs = chainLinkTOs.map((link) => createChainLinkCTO(link));

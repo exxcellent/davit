@@ -1,6 +1,0 @@
-.headerGrid {
-    display: grid;
-    grid-template-columns: auto auto auto auto;
-    align-items: center;
-    height: 100%;
-}

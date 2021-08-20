@@ -43,6 +43,10 @@ export const ControlPanelEditSequence: FunctionComponent<ControlPanelEditSequenc
                     focus={true}
                     onBlur={updateSequence}
                 />
+
+                <DavitCommentButton onSaveCallback={saveNote}
+                                    comment={note}
+                />
             </OptionField>
             <OptionField label="Create / Edit | Sequence - Step"
                          divider={true}
@@ -72,9 +76,6 @@ export const ControlPanelEditSequence: FunctionComponent<ControlPanelEditSequenc
                     {"Create another"}
                 </DavitButton>
                 <DavitBackButton onClick={saveSequence} />
-                <DavitCommentButton onSaveCallback={saveNote}
-                                    comment={note}
-                />
                 <DavitDeleteButton onClick={deleteSequence} />
             </OptionField>
         </ControlPanel>

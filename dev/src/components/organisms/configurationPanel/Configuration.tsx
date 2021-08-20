@@ -1,25 +1,36 @@
 import React, { FunctionComponent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DataSetupCTO } from "../../../dataAccess/access/cto/DataSetupCTO";
+import { ChainCTO } from "../../../dataAccess/access/cto/ChainCTO";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
+import { ChainConfigurationTO } from "../../../dataAccess/access/to/ChainConfigurationTO";
+import { ChainStateTO } from "../../../dataAccess/access/to/ChainStateTO";
+import { ChainTO } from "../../../dataAccess/access/to/ChainTO";
 import { InitDataTO } from "../../../dataAccess/access/to/InitDataTO";
+import { SequenceConfigurationTO } from "../../../dataAccess/access/to/SequenceConfigurationTO";
 import { SequenceStateTO } from "../../../dataAccess/access/to/SequenceStateTO";
-import { SequenceTO } from "../../../dataAccess/access/to/SequenceTO";
 import { StateTO } from "../../../dataAccess/access/to/StateTO";
-import { EditActions } from "../../../slices/EditSlice";
-import { masterDataSelectors } from "../../../slices/MasterDataSlice";
+import { editActions, EditActions, editSelectors } from "../../../slices/EditSlice";
 import { SequenceModelActions, sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
+import { EditChainConfiguration } from "../../../slices/thunks/ChainConfigurationThunks";
+import { EditSequenceConfiguration } from "../../../slices/thunks/SequenceConfigurationThunks";
+import { ElementSize } from "../../../style/Theme";
 import { DavitUtil } from "../../../utils/DavitUtil";
 import {
     ActorDropDown,
+    ChainDropDown,
     DavitAddButton,
-    DavitButton,
     DavitDeleteButton,
     DavitIconButton,
-    InstanceDropDown
+    DavitShowMoreButton,
+    InstanceDropDown,
+    SequenceDropDown,
 } from "../../atomic";
+import { DavitToggleButton } from "../../atomic/buttons/DavitToggleButton";
+import { SequenceConfigurationDropDown } from "../../atomic/dropdowns/SequenceConfigurationDropDown";
 import { DavitIcons } from "../../atomic/icons/IconSet";
+import { NoteIcon } from "../../atomic/icons/NoteIcon";
 import "./Configuration.css";
+import { SaveConfigurationModal } from "./fragments/SaveConfigurationModal";
 import { StateConfigurationView } from "./fragments/StateConfigurationView";
 
 export interface ConfigurationPanelProps {
@@ -30,86 +41,149 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
 
     const dispatch = useDispatch();
 
-    const [states, setStates] = useState<StateTO[]>([]);
-    const [dataSetup, setDataSetup] = useState<DataSetupCTO>(new DataSetupCTO());
+    const [sequenceOptions, setSequenceOptions] = useState<boolean>(false);
+    const [showMore, setShowMore] = useState<boolean>(true);
+    const [showSaveConfiguration, setShowSaveConfiguration] = useState<boolean>(false);
 
-    const sequences: SequenceTO[] = useSelector(masterDataSelectors.selectSequences);
     const selectedSequence: SequenceCTO | null = useSelector(sequenceModelSelectors.selectSequence);
+    const sequenceConfigurationToEdit: SequenceConfigurationTO | null = useSelector(editSelectors.selectSequenceConfigurationToEdit);
 
-    const setIsState = (stateToToggle: StateTO, is: boolean) => {
-        const copyStates: StateTO[] = DavitUtil.deepCopy(states);
-        copyStates.map(state => {
-            if (state.id === stateToToggle.id) {
-                state.isState = is;
-            }
-            return state;
-        });
-        setStates(copyStates);
-    };
+    const selectedChain: ChainCTO | null = useSelector(sequenceModelSelectors.selectChainCTO);
+    const chainConfigurationToEdit: ChainConfigurationTO | null = useSelector(editSelectors.selectChainConfiguration);
 
     const runCalc = () => {
-        if(selectedSequence !== null){
-            const copySequence: SequenceCTO = DavitUtil.deepCopy(selectedSequence);
-            dispatch(SequenceModelActions.setCurrentSequenceByIdWithStates(copySequence.sequenceTO.id, (states as SequenceStateTO[])));
-            dispatch(SequenceModelActions.setCurrentDataSetup(dataSetup));
+        if (selectedSequence !== null && sequenceConfigurationToEdit !== null) {
+            dispatch(SequenceModelActions.setCurrentSequenceById(selectedSequence.sequenceTO.id));
+            dispatch(SequenceModelActions.setCurrentSequenceConfiguration(sequenceConfigurationToEdit));
             dispatch(EditActions.setMode.view());
         }
-    };
 
-    const setSequence = (sequenceId: number) => {
-        dispatch(SequenceModelActions.setCurrentSequenceById(sequenceId));
-        if (selectedSequence) {
-            const copyStates: StateTO[] = DavitUtil.deepCopy(selectedSequence.sequenceStates);
-            setStates(copyStates);
+        if (selectedChain !== null && chainConfigurationToEdit !== null) {
+            const copyChainTO: ChainTO = DavitUtil.deepCopy(selectedChain.chain);
+            dispatch(SequenceModelActions.setCurrentChainConfiguration(chainConfigurationToEdit));
+            dispatch(EditActions.setMode.view());
+            dispatch(SequenceModelActions.setCurrentChain(copyChainTO));
         }
     };
 
-    const buildSequenceButton = (sequence: SequenceTO): JSX.Element => {
-        return (
-            <DavitButton key={sequence.id}
-                         onClick={() => setSequence(sequence.id)}
-            >{sequence.name}</DavitButton>
-        );
+    // ------------------------------- sequence ------------------------------
+
+    const newSequenceConfiguration = (sequenceId: number) => {
+        dispatch(EditSequenceConfiguration.create(sequenceId));
     };
 
-    const saveInitData = (initData: InitDataTO) => {
-        const copyDataSetup: DataSetupCTO = DavitUtil.deepCopy(dataSetup);
-        copyDataSetup.initDatas.map(iData => {
-            if (iData.id === initData.id) {
-                iData.actorFk = initData.actorFk;
-                iData.dataFk = initData.dataFk;
-                iData.instanceFk = initData.instanceFk;
+    const setSequenceConfiguration = (sequenceConfiguration: SequenceConfigurationTO | undefined) => {
+        if (sequenceConfiguration === undefined) {
+            if (sequenceConfigurationToEdit !== null && sequenceConfigurationToEdit.name === "") {
+                deleteSequenceConfiguration();
+            } else {
+                newSequenceConfiguration(selectedSequence!.sequenceTO.id);
             }
-            return iData;
-        });
-        setDataSetup(copyDataSetup);
+        } else {
+            dispatch(EditSequenceConfiguration.update(sequenceConfiguration));
+        }
     };
 
-    const createInitData = () => {
-        const copyDataSetup: DataSetupCTO = DavitUtil.deepCopy(dataSetup);
-        const newInitData: InitDataTO = new InitDataTO();
-        newInitData.id = copyDataSetup.initDatas.length;
-        copyDataSetup.initDatas.push(newInitData);
-        setDataSetup(copyDataSetup);
+    const saveSequenceConfiguration = (name?: string) => {
+        if (!DavitUtil.isNullOrUndefined(sequenceConfigurationToEdit) && !DavitUtil.isNullOrUndefined(selectedSequence)) {
+            if (sequenceConfigurationToEdit!.name !== "" || (name !== "" && name !== undefined)) {
+                const copySequenceConfiguration: SequenceConfigurationTO = DavitUtil.deepCopy(sequenceConfigurationToEdit);
+                // set new name if given
+                if (name !== "" && name !== undefined) {
+                    copySequenceConfiguration.name = name;
+                }
+                // remove empty init data's
+                copySequenceConfiguration.initDatas = copySequenceConfiguration.initDatas.filter(initD => initD.actorFk !== -1 && initD.dataFk !== -1 && initD.instanceFk !== -1);
+                // save sequence configuration
+                dispatch(EditSequenceConfiguration.save(copySequenceConfiguration));
+            } else {
+                deleteSequenceConfiguration();
+            }
+        }
     };
 
-    const deleteInitData = (initDataToDelete: InitDataTO) => {
-        const copyDataSetup: DataSetupCTO = DavitUtil.deepCopy(dataSetup);
-        copyDataSetup.initDatas.filter(iData => iData.id !== initDataToDelete.id);
-        setDataSetup(copyDataSetup);
+    const deleteSequenceConfiguration = () => {
+        if (!DavitUtil.isNullOrUndefined(sequenceConfigurationToEdit) && !DavitUtil.isNullOrUndefined(selectedSequence)) {
+            dispatch(EditSequenceConfiguration.delete(sequenceConfigurationToEdit!));
+            newSequenceConfiguration(selectedSequence!.sequenceTO.id);
+        }
     };
 
-    const buildActorDataTableRow = (initData: InitDataTO): JSX.Element => {
+    const setIsStateInSequenceConfiguration = (stateToToggle: StateTO, is: boolean) => {
+        if (sequenceConfigurationToEdit) {
+            const updatedSequenceConfiguration: SequenceConfigurationTO = DavitUtil.deepCopy(sequenceConfigurationToEdit);
+            updatedSequenceConfiguration.stateValues.forEach(sv => {
+                if (sv.sequenceStateFk === stateToToggle.id) {
+                    sv.value = is;
+                }
+                return sv;
+            });
+            dispatch(EditSequenceConfiguration.update(updatedSequenceConfiguration));
+        }
+    };
+
+    const setSequence = (sequenceId: number | undefined) => {
+        if (sequenceId !== undefined) {
+            dispatch(SequenceModelActions.setCurrentSequenceById(sequenceId));
+            newSequenceConfiguration(sequenceId);
+        } else {
+            dispatch(SequenceModelActions.resetCurrentSequence);
+            dispatch(SequenceModelActions.resetCurrentSequenceConfiguration);
+            dispatch(editActions.clearObjectToEdit());
+        }
+    };
+
+    const getUpdateStatesByConfiguration = (states: SequenceStateTO[]): SequenceStateTO[] => {
+        const statesToUpdate: SequenceStateTO[] = DavitUtil.deepCopy(states);
+        if (selectedSequence && sequenceConfigurationToEdit) {
+            statesToUpdate.map(state => {
+                sequenceConfigurationToEdit.stateValues.forEach(sv => {
+                    if (sv.sequenceStateFk === state.id) {
+                        state.isState = sv.value;
+                    }
+                });
+                return state;
+            });
+        }
+        return statesToUpdate;
+    };
+
+
+    const createSequenceInitData = () => {
+        if (!DavitUtil.isNullOrUndefined(sequenceConfigurationToEdit)) {
+            const copySequenceConfiguration: SequenceConfigurationTO = DavitUtil.deepCopy(sequenceConfigurationToEdit);
+            copySequenceConfiguration.initDatas.push(new InitDataTO());
+            dispatch(EditSequenceConfiguration.update(copySequenceConfiguration));
+        }
+    };
+
+    const deleteSequenceInitData = (index: number) => {
+        if (!DavitUtil.isNullOrUndefined(sequenceConfigurationToEdit)) {
+            const copySequenceConfiguration: SequenceConfigurationTO = DavitUtil.deepCopy(sequenceConfigurationToEdit);
+            copySequenceConfiguration.initDatas = copySequenceConfiguration.initDatas.filter((iData, iex) => iex !== index);
+            dispatch(EditSequenceConfiguration.update(copySequenceConfiguration));
+        }
+    };
+
+    const saveSequenceInitData = (initData: InitDataTO, index: number) => {
+        if (!DavitUtil.isNullOrUndefined(sequenceConfigurationToEdit)) {
+            const copySequenceConfiguration: SequenceConfigurationTO = DavitUtil.deepCopy(sequenceConfigurationToEdit);
+            copySequenceConfiguration.initDatas[index] = initData;
+            dispatch(EditSequenceConfiguration.update(copySequenceConfiguration));
+        }
+    };
+
+    const buildSequenceActorDataTableRow = (initData: InitDataTO, index: number): JSX.Element => {
         let copyInitData: InitDataTO = DavitUtil.deepCopy(initData);
 
         return (
-            <tr key={copyInitData.id}>
+            <tr key={index}>
                 <td>
                     <div className="flex content-space-between">
                         <ActorDropDown
                             onSelect={(actor) => {
                                 copyInitData.actorFk = actor ? actor.actor.id : -1;
-                                saveInitData(copyInitData);
+                                saveSequenceInitData(copyInitData, index);
                             }}
                             placeholder={"Select Actor..."}
                             value={copyInitData.actorFk}
@@ -119,7 +193,7 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
                                 if (!DavitUtil.isNullOrUndefined(dataAndInstance)) {
                                     copyInitData.dataFk = dataAndInstance!.dataFk;
                                     copyInitData.instanceFk = dataAndInstance!.instanceId;
-                                    saveInitData(copyInitData);
+                                    saveSequenceInitData(copyInitData, index);
                                 }
                             }}
                             placeholder={"Select Data Instance..."}
@@ -129,91 +203,345 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
                             })
                             }
                         />
-                        {copyInitData.id !== -1 && <DavitDeleteButton onClick={() => {
-                            deleteInitData(copyInitData);
+                        <DavitDeleteButton onClick={() => {
+                            deleteSequenceInitData(index);
                         }}
-                                                                      noConfirm
-                        />}
+                                           noConfirm
+                        />
                     </div>
                 </td>
             </tr>
         );
     };
 
-    return (
-        <div className="configurationPanel flex flex-column content-space-around border border-medium">
-            {/*----- Header -----*/}
-            <div className="configurationPanelHeader flex content-space-around width-fluid align-center border border-medium padding-small">
+    // ------------------------------- chain ------------------------------
 
-                <h1>Configuration</h1>
+    const setChain = (chain: ChainTO | undefined) => {
+        if (chain !== undefined) {
+            const copyChain: ChainTO = DavitUtil.deepCopy(chain);
+            dispatch(SequenceModelActions.setCurrentChain(copyChain));
+            dispatch(EditChainConfiguration.create(copyChain.id));
+        } else {
+            dispatch(SequenceModelActions.resetCurrentChain);
+            dispatch(editActions.clearObjectToEdit());
+        }
+    };
 
-                <DavitButton onClick={() => {
-                    dispatch(EditActions.setMode.view());
-                    dispatch(SequenceModelActions.resetCurrentSequence);
-                    dispatch(SequenceModelActions.resetCurrentDataSetup);
-                }}
-                >Cancel</DavitButton>
-
-                <DavitIconButton onClick={runCalc}
-                                 iconLeft={true}
-                                 iconName={DavitIcons.play}
-                >
-                    <label>
-                        Calculate
-                    </label>
-                </DavitIconButton>
-            </div>
-
-            <div className="configurationBody flex">
-
-                {/*----- Sequence / Chain -----*/}
-                <div className="configurationSequenceChainColumn flex flex-column">
-                    {/*{(chains.length > 0) &&*/}
-                    {/*<div className="configurationPanelHeader padding-medium border border-medium">*/}
-                    {/*    <h2>Chains</h2>*/}
-                    {/*</div>*/}
-                    {/*}*/}
-                    {/*{(chains.length > 0) && chains.map(buildChainButton)}*/}
-                    {sequences.length > 0 &&
-                    <div className="configurationPanelHeader padding-medium border border-medium">
-                        <h2>Sequences</h2>
-                    </div>
+    const getUpdateChainStatesByConfiguration = (states: ChainStateTO[]): ChainStateTO[] => {
+        const statesToUpdate: ChainStateTO[] = DavitUtil.deepCopy(states);
+        if (selectedChain && chainConfigurationToEdit) {
+            statesToUpdate.map(state => {
+                chainConfigurationToEdit.stateValues.forEach(sv => {
+                    if (sv.chainStateFk === state.id) {
+                        state.isState = sv.value;
                     }
-                    {sequences.length > 0 && sequences.map(buildSequenceButton)}
-                </div>
+                });
+                return state;
+            });
+        }
+        return statesToUpdate;
+    };
 
-                {/*----- States -----*/}
-                <div className="configurationStateColumn flex flex-column border border-medium">
-                    <div>
-                        {/*    State*/}
-                        <StateConfigurationView states={states}
-                                                setStateCallback={setIsState}
+    const setIsStateInChainConfiguration = (stateToToggle: StateTO, is: boolean) => {
+        if (sequenceConfigurationToEdit) {
+            const updatedChainConfiguration: ChainConfigurationTO = DavitUtil.deepCopy(sequenceConfigurationToEdit);
+            updatedChainConfiguration.stateValues.forEach(sv => {
+                if (sv.chainStateFk === stateToToggle.id) {
+                    sv.value = is;
+                }
+                return sv;
+            });
+            dispatch(EditChainConfiguration.update(updatedChainConfiguration));
+        }
+    };
+
+    const createChainInitData = () => {
+        if (!DavitUtil.isNullOrUndefined(chainConfigurationToEdit)) {
+            const copyChainConfiguration: ChainConfigurationTO = DavitUtil.deepCopy(chainConfigurationToEdit);
+            copyChainConfiguration.initDatas.push(new InitDataTO());
+            dispatch(EditChainConfiguration.update(copyChainConfiguration));
+        }
+    };
+
+    const deleteChainInitData = (index: number) => {
+        if (!DavitUtil.isNullOrUndefined(chainConfigurationToEdit)) {
+            const copyChainConfiguration: ChainConfigurationTO = DavitUtil.deepCopy(chainConfigurationToEdit);
+            copyChainConfiguration.initDatas = copyChainConfiguration.initDatas.filter((iData, iex) => iex !== index);
+            dispatch(EditChainConfiguration.update(copyChainConfiguration));
+        }
+    };
+
+    const saveChainInitData = (initData: InitDataTO, index: number) => {
+        if (!DavitUtil.isNullOrUndefined(chainConfigurationToEdit)) {
+            const copyChainConfiguration: ChainConfigurationTO = DavitUtil.deepCopy(chainConfigurationToEdit);
+            copyChainConfiguration.initDatas[index] = initData;
+            dispatch(EditChainConfiguration.update(copyChainConfiguration));
+        }
+    };
+
+    const buildChainActorDataTableRow = (initData: InitDataTO, index: number): JSX.Element => {
+        let copyInitData: InitDataTO = DavitUtil.deepCopy(initData);
+
+        return (
+            <tr key={index}>
+                <td>
+                    <div className="flex content-space-between">
+                        <ActorDropDown
+                            onSelect={(actor) => {
+                                copyInitData.actorFk = actor ? actor.actor.id : -1;
+                                saveChainInitData(copyInitData, index);
+                            }}
+                            placeholder={"Select Actor..."}
+                            value={copyInitData.actorFk}
+                        />
+                        <InstanceDropDown
+                            onSelect={(dataAndInstance) => {
+                                if (!DavitUtil.isNullOrUndefined(dataAndInstance)) {
+                                    copyInitData.dataFk = dataAndInstance!.dataFk;
+                                    copyInitData.instanceFk = dataAndInstance!.instanceId;
+                                    saveChainInitData(copyInitData, index);
+                                }
+                            }}
+                            placeholder={"Select Data Instance..."}
+                            value={JSON.stringify({
+                                dataFk: copyInitData!.dataFk,
+                                instanceId: copyInitData!.instanceFk,
+                            })
+                            }
+                        />
+                        <DavitDeleteButton onClick={() => {
+                            deleteChainInitData(index);
+                        }}
+                                           noConfirm
                         />
                     </div>
-                    <div>
-                        {/*    Data setup*/}
-                        <div className="configurationPanelHeader border border-medium width-fluid">
-                            <h2>Data-Setup</h2>
-                        </div>
+                </td>
+            </tr>
+        );
+    };
 
-                        <table className="border"
-                               style={{width: "40em", minHeight: "30vh"}}
-                        >
-                            <thead>
-                            <tr>
-                                <td style={{textAlign: "center"}}>Actor</td>
-                                <td style={{textAlign: "center"}}>Data Instance</td>
-                                <td className={"flex flex-end"}><DavitAddButton onClick={createInitData} /></td>
-                            </tr>
-                            </thead>
-                            <tbody style={{maxHeight: "40vh"}}>
-                            {dataSetup.initDatas.map(buildActorDataTableRow)}
-                            </tbody>
-                        </table>
+
+    // ---------------------------- ui parts ----------------------------
+
+    const toggleSequenceChain = (toggleValue?: boolean) => {
+        setSequenceOptions((toggleValue !== undefined) ? toggleValue : (!sequenceOptions));
+        dispatch(SequenceModelActions.resetAll);
+    };
+
+    const getSequenceStates = () => {
+        if (!DavitUtil.isNullOrUndefined(selectedSequence) && !DavitUtil.isNullOrUndefined(sequenceConfigurationToEdit)) {
+
+            if (selectedSequence!.sequenceStates.length > 0) {
+                return (
+                    <StateConfigurationView states={getUpdateStatesByConfiguration(selectedSequence!.sequenceStates || [])}
+                                            setStateCallback={setIsStateInSequenceConfiguration}
+                    />
+                );
+            }
+
+            if (selectedSequence!.sequenceStates.length === 0) {
+                return (
+                    <div className="flex flex-center align-center">
+                        <h2 className="padding-medium">-- no states declared --</h2>
                     </div>
+                );
+            }
+        }
+    };
+
+    const getChainStates = () => {
+        if (!DavitUtil.isNullOrUndefined(selectedChain) && !DavitUtil.isNullOrUndefined(chainConfigurationToEdit)) {
+
+            if (chainConfigurationToEdit!.stateValues.length > 0) {
+                return (
+                    <StateConfigurationView states={getUpdateChainStatesByConfiguration(selectedChain!.chainStates || [])}
+                                            setStateCallback={setIsStateInChainConfiguration}
+                    />
+                );
+            }
+
+            if (chainConfigurationToEdit!.stateValues.length === 0) {
+                return (
+                    <div className="flex flex-center align-center">
+                        <h2 className="padding-medium">-- no states declared --</h2>
+                    </div>
+                );
+            }
+        }
+    };
+
+    const getSequenceInitDatas = () => {
+        if (!DavitUtil.isNullOrUndefined(sequenceConfigurationToEdit) && !DavitUtil.isNullOrUndefined(selectedSequence)) {
+
+            if (sequenceConfigurationToEdit!.initDatas.length > 0) {
+                return sequenceConfigurationToEdit!.initDatas.map(buildSequenceActorDataTableRow);
+            }
+
+            if (sequenceConfigurationToEdit!.initDatas.length === 0) {
+                return (
+                    <div className="flex flex-center align-center">
+                        <h2 className="padding-medium">-- no init datas declared --</h2>
+                    </div>
+                );
+            }
+        }
+    };
+
+    const getChainInitDatas = () => {
+        if (!DavitUtil.isNullOrUndefined(chainConfigurationToEdit) && !DavitUtil.isNullOrUndefined(selectedChain)) {
+
+            if (chainConfigurationToEdit!.initDatas.length > 0) {
+                return chainConfigurationToEdit!.initDatas.map(buildChainActorDataTableRow);
+            }
+
+            if (chainConfigurationToEdit!.initDatas.length === 0) {
+                return (
+                    <div className="flex flex-center align-center">
+                        <h2 className="padding-medium">-- no init datas declared --</h2>
+                    </div>
+                );
+            }
+        }
+    };
+
+    const getNote = (): string => {
+        let noteToReturn: string = "";
+        if (!DavitUtil.isNullOrUndefined(selectedSequence)) {
+            noteToReturn = selectedSequence!.sequenceTO!.note;
+        }
+        if (!DavitUtil.isNullOrUndefined(selectedChain)) {
+            noteToReturn = selectedChain!.chain.note;
+        }
+        return noteToReturn;
+    };
+
+// ===============================================================================================================
+
+    return (
+        <div className="configurationPanel border border-medium">
+
+            {/*----- Header -----*/}
+            <div className="configurationPanelHeader content-space-around align-center padding-medium">
+
+                <div className="flex align-center">
+                    <h3 className={sequenceOptions ? "clickAble" : "selectedColor"}
+                        onClick={() => toggleSequenceChain(false)}
+                    >Chain</h3>
+                    <div className="padding-horizontal-m">
+
+                        <DavitToggleButton
+                            toggle={() => toggleSequenceChain()}
+                            value={sequenceOptions}
+                        />
+                    </div>
+                    <h3 className={sequenceOptions ? "selectedColor" : "clickAble"}
+                        onClick={() => toggleSequenceChain(true)}
+                    >Sequence</h3>
                 </div>
 
+                {sequenceOptions && <SequenceDropDown onSelect={(sequence) => {
+                    setSequence(sequence?.id);
+                }}
+                                                      value={selectedSequence?.sequenceTO.id}
+
+                />}
+                {!sequenceOptions && <ChainDropDown onSelect={setChain}
+                                                    value={selectedChain?.chain.id}
+                />}
+
+                {(selectedSequence !== null || selectedChain !== null)
+                && < DavitShowMoreButton onClick={setShowMore}
+                                         show={showMore}
+                                         size={ElementSize.medium}
+                />}
+
             </div>
-        </div>
-    );
+
+            {/* --------------- Body ---------------*/}
+            {(selectedSequence || selectedChain) && showMore &&
+            <div className="configurationBody flex border-top border-medium">
+
+                <div className="configurationStateColumn flex flex-column width-fluid">
+
+                    {/*------ configuration ------*/}
+                    <div className="flex content-space-around align-center padding-small border-bottom border-medium">
+
+                        <h2>Configuration</h2>
+
+                        {selectedSequence && <SequenceConfigurationDropDown
+                            onSelectCallback={setSequenceConfiguration}
+                            sequenceId={selectedSequence?.sequenceTO?.id}
+                            selectedSequenceConfiguration={sequenceConfigurationToEdit?.id}
+                        />}
+
+                        {sequenceConfigurationToEdit?.id !== -1 &&
+                        <DavitDeleteButton onClick={deleteSequenceConfiguration} />}
+
+                    </div>
+
+                    {/*------ note -----*/}
+                    <div className="flex flex-center padding-small">
+                        <NoteIcon size="2x"
+                                  className="margin-medium padding-small border border-medium"
+                        />
+                        <textarea className="noteTextarea border border-medium padding-medium"
+                                  value={getNote()}
+                                  readOnly
+                        />
+                    </div>
+
+                    <div>
+                        {/*/!*----- States -----*!/*/}
+                        <div className="configurationHeader flex flex-center align-center">
+                            <h1 className="padding-medium">{selectedSequence ? "Sequence States" : "Chain States"}</h1>
+                        </div>
+
+                        {/*    State*/}
+                        <div className="configList padding-bottom-l">
+                            {getSequenceStates()}
+                            {getChainStates()}
+                        </div>
+
+                    </div>
+
+                    <div className="flex-inline flex-wrap flex-column">
+                        {/*    Data setup*/}
+                        <div className="configurationHeader flex flex-center align-center">
+                            <h1 className="padding-medium">Data-Setup</h1>
+                        </div>
+
+                        <div className="configurationPanelHeader content-space-around align-center border-bottom border-medium">
+                            <label>Actor</label>
+                            <label>Data Instance</label>
+                            <DavitAddButton onClick={selectedSequence ? createSequenceInitData : createChainInitData} />
+                        </div>
+
+                        <div className="configList padding-bottom-l">
+                            {getSequenceInitDatas()}
+                            {getChainInitDatas()}
+                        </div>
+
+                    </div>
+                    <div className="flex content-space-around padding-small border-top border-medium">
+
+                        <DavitIconButton onClick={() => setShowSaveConfiguration(true)}
+                                         iconLeft={false}
+                                         iconName={DavitIcons.save}
+                                         className="greenBorder"
+                        >Save Config</DavitIconButton>
+
+                        <DavitIconButton onClick={runCalc}
+                                         iconLeft={false}
+                                         iconName={DavitIcons.play}
+                                         className="calcButton"
+                        >Calculate</DavitIconButton>
+                    </div>
+                </div>
+            </div>}
+
+            {showSaveConfiguration && <SaveConfigurationModal onSaveCallback={saveSequenceConfiguration}
+                                                              onCloseCallback={() => setShowSaveConfiguration(false)}
+                                                              name={sequenceConfigurationToEdit?.name || ""}
+            />}
+        </div>);
 };

@@ -12,18 +12,18 @@ export interface SidePanelProps {
 }
 
 export const SidePanelController: FunctionComponent<SidePanelProps> = () => {
-    const {setModeToEdit, setModeToFile, setModeToView, mode} = useSidePanelViewModel();
+    const {setModeToEdit, setModeToFile, setModeToConfiguration, mode} = useSidePanelViewModel();
 
     return (
         <div className="leftPanel">
             <DavitIconButton iconName={DavitIcons.pencil}
                              size={ElementSize.large}
-                             className={"sidePanelButton" + (mode.includes(Mode.EDIT.toString()) ? " active" : "")}
+                             className={"sidePanelButton" + ((mode.includes(Mode.EDIT.toString()) && mode !== Mode.VIEW_CONFIGURATION) ? " active" : "")}
                              onClick={setModeToEdit}
             />
             <DavitIconButton iconName={DavitIcons.eye}
-                             className={"sidePanelButton" + (mode === Mode.VIEW ? " active" : "")}
-                             onClick={setModeToView}
+                             className={"sidePanelButton" + (mode === Mode.VIEW || mode === Mode.VIEW_CONFIGURATION ? " active" : "")}
+                             onClick={setModeToConfiguration}
             />
             <DavitIconButton iconName={DavitIcons.file}
                              className={"sidePanelButton" + (mode === Mode.FILE ? " active" : "")}
@@ -53,8 +53,8 @@ const useSidePanelViewModel = () => {
         dispatch(EditActions.setMode.edit());
     };
 
-    const setModeToView = () => {
-        dispatch(EditActions.setMode.view());
+    const setModeToConfiguration = () => {
+        dispatch(EditActions.setMode.editConfiguration());
     };
 
     const setModeToFile = () => {
@@ -67,7 +67,7 @@ const useSidePanelViewModel = () => {
 
     return {
         setModeToEdit,
-        setModeToView,
+        setModeToConfiguration,
         setModeToFile,
         setModeToTab,
         mode,

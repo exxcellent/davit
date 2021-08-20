@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ChainDecisionTO } from "../../../../../../../../dataAccess/access/to/ChainDecisionTO";
-import { ChainlinkTO } from "../../../../../../../../dataAccess/access/to/ChainlinkTO";
+import { ChainLinkTO } from "../../../../../../../../dataAccess/access/to/ChainLinkTO";
 import { ChainStateTO } from "../../../../../../../../dataAccess/access/to/ChainStateTO";
 import { ChainTO } from "../../../../../../../../dataAccess/access/to/ChainTO";
 import { SequenceTO } from "../../../../../../../../dataAccess/access/to/SequenceTO";
@@ -68,10 +68,10 @@ export const useChainViewModel = () => {
         }
     };
 
-    const editOrAddChainLink = (link?: ChainlinkTO) => {
-        let chainLinkToEdit: ChainlinkTO | undefined = link;
+    const editOrAddChainLink = (link?: ChainLinkTO) => {
+        let chainLinkToEdit: ChainLinkTO | undefined = link;
         if (chainLinkToEdit === undefined) {
-            chainLinkToEdit = new ChainlinkTO();
+            chainLinkToEdit = new ChainLinkTO();
             chainLinkToEdit.chainFk = selectedChain?.id || -1;
             chainLinkToEdit.root = isFirst;
         }
@@ -126,6 +126,14 @@ export const useChainViewModel = () => {
         }
     };
 
+    const saveNote = (note: string) => {
+        if (!DavitUtil.isNullOrUndefined(selectedChain)) {
+            const copyChain: ChainTO = DavitUtil.deepCopy(selectedChain);
+            copyChain.note = note;
+            dispatch(EditChain.save(copyChain));
+        }
+    };
+
     return {
         label: "EDIT * " + (selectedChain?.name || ""),
         name: selectedChain?.name,
@@ -143,5 +151,7 @@ export const useChainViewModel = () => {
         saveStateFkAndStateCondition,
         createStateFkAndStateCondition,
         deleteStateFkAndStateCondition,
+        note: selectedChain?.note || "",
+        saveNote,
     };
 };

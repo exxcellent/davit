@@ -1,15 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Arrow, ArrowType } from "../components/atomic/svg/DavitPath";
 import { ChainCTO } from "../dataAccess/access/cto/ChainCTO";
-import { ChainlinkCTO } from "../dataAccess/access/cto/ChainlinkCTO";
-import { DataSetupCTO } from "../dataAccess/access/cto/DataSetupCTO";
+import { ChainLinkCTO } from "../dataAccess/access/cto/ChainLinkCTO";
 import { GeometricalDataCTO } from "../dataAccess/access/cto/GeometraicalDataCTO";
 import { SequenceCTO } from "../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
+import { ChainConfigurationTO } from "../dataAccess/access/to/ChainConfigurationTO";
 import { ChainDecisionTO } from "../dataAccess/access/to/ChainDecisionTO";
 import { ChainTO } from "../dataAccess/access/to/ChainTO";
 import { InitDataTO } from "../dataAccess/access/to/InitDataTO";
+import { SequenceConfigurationTO } from "../dataAccess/access/to/SequenceConfigurationTO";
 import { SequenceStateTO } from "../dataAccess/access/to/SequenceStateTO";
 import { ActionType } from "../dataAccess/access/types/ActionType";
 import { Terminal } from "../dataAccess/access/types/GoToType";
@@ -30,7 +31,7 @@ export interface Filter {
 
 interface SequenceModelState {
     selectedSequenceModel: SequenceCTO | null;
-    selectedDataSetup: DataSetupCTO | null;
+    selectedSequenceConfiguration: SequenceConfigurationTO | null;
     calcSequence: CalcSequence | null;
     calcChain: CalcChain | null;
     currentStepIndex: number;
@@ -40,11 +41,12 @@ interface SequenceModelState {
     actorDatas: ActorData[];
     activeFilter: Filter[];
     selectedChain: ChainCTO | null;
+    selectedChainConfiguration: ChainConfigurationTO | null;
 }
 
 const getInitialState: SequenceModelState = {
     selectedSequenceModel: null,
-    selectedDataSetup: null,
+    selectedSequenceConfiguration: null,
     calcSequence: null,
     calcChain: null,
     currentStepIndex: 0,
@@ -54,6 +56,7 @@ const getInitialState: SequenceModelState = {
     actorDatas: [],
     activeFilter: [],
     selectedChain: null,
+    selectedChainConfiguration: null,
 };
 
 const SequenceModelSlice = createSlice({
@@ -67,15 +70,15 @@ const SequenceModelSlice = createSlice({
             state.calcChain = null;
             state.currentLinkIndex = 0;
             state.currentStepIndex = 0;
-            if (action.payload && state.selectedDataSetup) {
-                calcSequenceAndSetState(action.payload, state.selectedDataSetup, state);
+            if (action.payload && state.selectedSequenceConfiguration) {
+                calcSequenceAndSetState(action.payload, state.selectedSequenceConfiguration, state);
             } else {
                 resetState(state);
             }
         },
         recalcSequence: (state) => {
-            if (state.selectedSequenceModel && state.selectedDataSetup) {
-                calcSequenceAndSetState(state.selectedSequenceModel, state.selectedDataSetup, state);
+            if (state.selectedSequenceModel && state.selectedSequenceConfiguration) {
+                calcSequenceAndSetState(state.selectedSequenceModel, state.selectedSequenceConfiguration, state);
             }
         },
         setCurrentLinkIndex: (state, action: PayloadAction<number>) => {
@@ -93,19 +96,24 @@ const SequenceModelSlice = createSlice({
             state.selectedChain = action.payload;
             resetState(state);
             state.selectedSequenceModel = null;
-            state.selectedDataSetup = null;
+            state.selectedSequenceConfiguration = null;
             state.currentLinkIndex = 0;
             state.currentStepIndex = 0;
+        },
+        setSelectedChainConfiguration: (state, action: PayloadAction<ChainConfigurationTO | null>) => {
+          state.selectedChainConfiguration = action.payload;
+          state.currentLinkIndex = 0;
+          state.currentStepIndex = 0;
         },
         setCalcChain: (state, action: PayloadAction<CalcChain | null>) => {
             state.calcChain = action.payload;
         },
-        setSelectedDataSetup: (state, action: PayloadAction<DataSetupCTO | null>) => {
-            state.selectedDataSetup = action.payload;
-            // TODO: in extra method und nur ausführen wenn sequence und datasetup gestezt sind sonst reset.
+        setSelectedSequenceConfiguration: (state, action: PayloadAction<SequenceConfigurationTO | null>) => {
+            state.selectedSequenceConfiguration = action.payload;
             state.selectedChain = null;
             state.calcChain = null;
             state.currentLinkIndex = 0;
+
             if (action.payload && state.selectedSequenceModel) {
                 calcSequenceAndSetState(state.selectedSequenceModel, action.payload, state);
             } else {
@@ -182,8 +190,8 @@ const SequenceModelSlice = createSlice({
     },
 });
 
-function calcSequenceAndSetState(sequenceModel: SequenceCTO, dataSetup: DataSetupCTO, state: SequenceModelState) {
-    const result: CalcSequence = SequenceService.calculateSequence(sequenceModel, dataSetup);
+function calcSequenceAndSetState(sequenceModel: SequenceCTO, sequenceConfiguration: SequenceConfigurationTO, state: SequenceModelState) {
+    const result: CalcSequence = SequenceService.calculateSequence(sequenceModel, sequenceConfiguration);
     state.currentStepIndex = 0;
     state.errorActions = result.calculatedSteps[state.currentStepIndex]?.errors || [];
     state.actorDatas = result.calculatedSteps[state.currentStepIndex]?.actorDatas || [];
@@ -228,7 +236,7 @@ const setSelectedChainThunk = (chain: ChainTO): AppThunk => (dispatch, getState)
     } else {
         const chainCTO: ChainCTO = response.object;
         dispatch(SequenceModelSlice.actions.setSelectedChain(chainCTO));
-        if (chainCTO && mode === Mode.VIEW && getRoot(chainCTO)) {
+        if (chainCTO && mode === Mode.VIEW && getState().sequenceModel.selectedChainConfiguration !== null && getRoot(chainCTO)) {
             dispatch(SequenceModelSlice.actions.setCalcChain(SequenceChainService.calculateChain(chainCTO)));
         }
     }
@@ -255,13 +263,20 @@ const setSelectedSequenceByIdWithStatesThunk = (sequenceId: number, states: Sequ
     }
 };
 
-const getDataSetupCTOFromBackend = (dataSetupId: number): AppThunk => (dispatch) => {
-    const response: DataAccessResponse<DataSetupCTO> = DataAccess.findDataSetupCTO(dataSetupId);
+const getSequenceConfigurationFromBackend = (dataSetupId: number): AppThunk => (dispatch) => {
+    const response: DataAccessResponse<SequenceConfigurationTO> = DataAccess.findSequenceConfiguration(dataSetupId);
     if (response.code === 200) {
-        dispatch(SequenceModelSlice.actions.setSelectedDataSetup(response.object));
+        dispatch(SequenceModelSlice.actions.setSelectedSequenceConfiguration(response.object));
     } else {
         dispatch(GlobalActions.handleError(response.message));
     }
+};
+
+const resetAll = (): AppThunk => (dispatch) => {
+    dispatch(SequenceModelSlice.actions.setSelectedSequenceConfiguration(null));
+    dispatch(SequenceModelSlice.actions.setCurrentStepIndex(-1));
+    dispatch(SequenceModelSlice.actions.setSelectedSequence(null));
+    dispatch(SequenceModelSlice.actions.setSelectedChain(null));
 };
 
 const handleActorClickEvent = (actorId: number): AppThunk => (dispatch) => {
@@ -364,7 +379,7 @@ export const sequenceModelSelectors = {
     selectSequence: (state: RootState): SequenceCTO | null => getCurrentSequenceModel(state.sequenceModel),
     selectChain: (state: RootState): ChainTO | null => state.sequenceModel.selectedChain?.chain || null,
     selectChainCTO: (state: RootState): ChainCTO | null => state.sequenceModel.selectedChain || null,
-    selectCurrentChainLinks: (state: RootState): ChainlinkCTO[] => state.sequenceModel.selectedChain?.links || [],
+    selectCurrentChainLinks: (state: RootState): ChainLinkCTO[] => state.sequenceModel.selectedChain?.links || [],
     selectCurrentChainDecisions: (state: RootState): ChainDecisionTO[] =>
         state.sequenceModel.selectedChain?.decisions || [],
     selectCalcChain: (state: RootState): CalcChain | null => state.sequenceModel.calcChain || null,
@@ -385,9 +400,9 @@ export const sequenceModelSelectors = {
         state.edit.mode === Mode.VIEW ? getCurrentCalcSequence(state.sequenceModel)?.stepIds || [] : [],
     selectTerminalStep: (state: RootState): Terminal | null =>
         state.edit.mode === Mode.VIEW ? getCurrentCalcSequence(state.sequenceModel)?.terminal || null : null,
-    selectDataSetup: (state: RootState): DataSetupCTO | null => {
+    selectSequenceConfiguration: (state: RootState): SequenceConfigurationTO | null => {
         if (state.edit.mode === Mode.VIEW) {
-            return getCurrentDataSetup(state.sequenceModel);
+            return getCurrentSequenceConfiguration(state.sequenceModel);
         } else {
             return null;
         }
@@ -400,8 +415,8 @@ export const sequenceModelSelectors = {
             actorDatas.push(...filteredSteps[state.sequenceModel.currentStepIndex]?.actorDatas || []);
         }
         // Get date-setup init data's if NO calculation is present
-        if (state.sequenceModel.selectedDataSetup && !state.sequenceModel.calcSequence && !state.sequenceModel.calcChain) {
-            const initDatasFormDataSetup = state.sequenceModel.selectedDataSetup?.initDatas || [];
+        if (state.sequenceModel.selectedSequenceConfiguration && !state.sequenceModel.calcSequence && !state.sequenceModel.calcChain) {
+            const initDatasFormDataSetup = state.sequenceModel.selectedSequenceConfiguration?.initDatas || [];
             actorDatas.push(...initDatasFormDataSetup.map(mapInitDataToActorData));
         }
 
@@ -494,10 +509,10 @@ function getCurrentSequenceModel(state: SequenceModelState): SequenceCTO | null 
         : state.selectedSequenceModel;
 }
 
-function getCurrentDataSetup(state: SequenceModelState): DataSetupCTO | null {
+function getCurrentSequenceConfiguration(state: SequenceModelState): SequenceConfigurationTO | null {
     return state.selectedChain
-        ? state.calcChain?.calcLinks[state.currentLinkIndex].dataSetup || null
-        : state.selectedDataSetup;
+        ? state.calcChain?.calcLinks[state.currentLinkIndex].sequenceConfiguration || null
+        : state.selectedSequenceConfiguration;
 }
 
 const mapInitDataToActorData = (initData: InitDataTO): ActorData => {
@@ -514,12 +529,13 @@ export const SequenceModelActions = {
     setCurrentSequence: SequenceModelSlice.actions.setSelectedSequence,
     setCurrentSequenceById: setSelectedSequenceByIdThunk,
     setCurrentSequenceByIdWithStates: setSelectedSequenceByIdWithStatesThunk,
-    setCurrentDataSetupById: getDataSetupCTOFromBackend,
-    setCurrentDataSetup: SequenceModelSlice.actions.setSelectedDataSetup,
-    resetCurrentDataSetup: SequenceModelSlice.actions.setSelectedDataSetup(null),
+    setCurrentSequenceConfigurationById: getSequenceConfigurationFromBackend,
+    setCurrentSequenceConfiguration: SequenceModelSlice.actions.setSelectedSequenceConfiguration,
+    resetCurrentSequenceConfiguration: SequenceModelSlice.actions.setSelectedSequenceConfiguration(null),
     resetCurrentStepIndex: SequenceModelSlice.actions.setCurrentStepIndex(-1),
     resetCurrentSequence: SequenceModelSlice.actions.setSelectedSequence(null),
     resetCurrentChain: SequenceModelSlice.actions.setSelectedChain(null),
+    resetAll: resetAll(),
     setCurrentStepIndex: SequenceModelSlice.actions.setCurrentStepIndex,
     setCurrentLinkIndex: SequenceModelSlice.actions.setCurrentLinkIndex,
     handleActorClickEvent: handleActorClickEvent,
@@ -529,9 +545,9 @@ export const SequenceModelActions = {
     linkBack,
     linkNext,
     setCurrentChain: setSelectedChainThunk,
+    setCurrentChainConfiguration: SequenceModelSlice.actions.setSelectedChainConfiguration,
     addDataFilters: SequenceModelSlice.actions.addDataFilter,
     removeDataFilters: SequenceModelSlice.actions.removeDataFilter,
     addActorFilters: SequenceModelSlice.actions.addActorFilters,
     removeActorFilter: SequenceModelSlice.actions.removeActorFilter,
-    // calcChain: calcModelsThunk,
 };

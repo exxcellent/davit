@@ -3,7 +3,7 @@ import { ArcherContainer, ArcherElement, Relation } from "react-archer";
 import { useSelector } from "react-redux";
 import { StateView } from "../../../components/molecules/StateView";
 import { ChainCTO } from "../../../dataAccess/access/cto/ChainCTO";
-import { ChainlinkCTO } from "../../../dataAccess/access/cto/ChainlinkCTO";
+import { ChainLinkCTO } from "../../../dataAccess/access/cto/ChainLinkCTO";
 import { SequenceCTO } from "../../../dataAccess/access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../../../dataAccess/access/cto/SequenceStepCTO";
 import { ChainDecisionTO } from "../../../dataAccess/access/to/ChainDecisionTO";
@@ -13,8 +13,6 @@ import { GoToChain, GoToTypesChain, TerminalChain } from "../../../dataAccess/ac
 import { CalcChain } from "../../../services/SequenceChainService";
 import { sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
 import { DavitUtil } from "../../../utils/DavitUtil";
-import { TabFragment } from "../tableModel/fragments/TabFragment";
-import { TabGroupFragment } from "../tableModel/fragments/TabGroupFragment";
 import "./FlowChart.css";
 
 interface FlowChartControllerProps {
@@ -192,39 +190,16 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
                 <h2 className={"fluid flex flex-center"}>{"Select a sequence or chain to see the flow chart"}</h2>
                 }
 
-                {renderFlowChart() && <>
+                {renderFlowChart() &&
+                <div className="flowChart padding-small"
+                     style={{height: tableHeight}}
+                >
                     <div className="flowChartHeader">
-                        <div className="flex flex-column">
-                            {chain && (
-
-                                //TODO: Create component for this.
-                                <TabGroupFragment label="Mode"
-                                                  style={{backgroundColor: "var(--background-color-header)"}}
-                                >
-                                    <TabFragment label="Chain"
-                                                 isActive={showChain}
-                                                 onClick={() => setShowChain(true)}
-                                    />
-                                    <TabFragment label="Sequence"
-                                                 isActive={!showChain}
-                                                 onClick={() => setShowChain(false)}
-                                    />
-                                </TabGroupFragment>
-                            )}
-
-                            <StateView showChain={showChain} />
-                        </div>
-
-
+                        <StateView showChain={showChain} />
                     </div>
-
-                    <div className="flowChart padding-small"
-                         style={{height: tableHeight}}
-                    >
-                        {!showChain && sequence && buildFlowChart()}
-                        {showChain && chain && buildChainFlowChart()}
-                    </div>
-                </>}
+                    {!showChain && sequence && buildFlowChart()}
+                    {showChain && chain && buildChainFlowChart()}
+                </div>}
             </div>
         );
     }
@@ -255,7 +230,7 @@ interface Node {
 }
 
 interface NodeChain {
-    value: ChainlinkCTO | ChainDecisionTO | TerminalChain;
+    value: ChainLinkCTO | ChainDecisionTO | TerminalChain;
     isLoop: boolean;
     type: GoToTypesChain;
 }
@@ -302,7 +277,7 @@ const useFlowChartViewModel = () => {
                 isLoop: false,
             };
             if (!DavitUtil.isNullOrUndefined(chain)) {
-                const rootStep: ChainlinkCTO | undefined = chain!.links.find((link) => link.chainLink.root);
+                const rootStep: ChainLinkCTO | undefined = chain!.links.find((link) => link.chainLink.root);
                 if (rootStep) {
                     root.type = GoToTypesChain.LINK;
                     root.value = rootStep;
@@ -377,7 +352,7 @@ const useFlowChartViewModel = () => {
                 switch (goto.type) {
                     case GoToTypesChain.LINK:
                         // eslint-disable-next-line no-case-declarations
-                        const link: ChainlinkCTO | null =
+                        const link: ChainLinkCTO | null =
                             chain!.links.find((link) => link.chainLink.id === goto.id) || null;
                         if (link) {
                             const prefix: string = "_LINK_" + link.chainLink.id;
@@ -462,11 +437,11 @@ const useFlowChartViewModel = () => {
             const parentIds: string[] = [];
             const nodeModel: NodeModelChain = {id: "", label: "", leafType: node.type, childs: []};
             parentIds.push(nodeModel.id);
-            if ((node.value as ChainlinkCTO).chainLink) {
-                nodeModel.id = (node.value as ChainlinkCTO).chainLink.id.toString();
-                nodeModel.label = (node.value as ChainlinkCTO).chainLink.name;
+            if ((node.value as ChainLinkCTO).chainLink) {
+                nodeModel.id = (node.value as ChainLinkCTO).chainLink.id.toString();
+                nodeModel.label = (node.value as ChainLinkCTO).chainLink.name;
                 nodeModel.childs.push(
-                    setGoToAsNodeChain((node.value as ChainlinkCTO).chainLink.goto, nodeModel.id, parentIds),
+                    setGoToAsNodeChain((node.value as ChainLinkCTO).chainLink.goto, nodeModel.id, parentIds),
                 );
             }
             return nodeModel;

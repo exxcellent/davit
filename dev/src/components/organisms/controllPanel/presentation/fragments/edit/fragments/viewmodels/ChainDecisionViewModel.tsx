@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ChainDecisionTO } from "../../../../../../../../dataAccess/access/to/ChainDecisionTO";
-import { ChainlinkTO } from "../../../../../../../../dataAccess/access/to/ChainlinkTO";
+import { ChainLinkTO } from "../../../../../../../../dataAccess/access/to/ChainLinkTO";
 import { ChainTO } from "../../../../../../../../dataAccess/access/to/ChainTO";
 import { ConditionTO } from "../../../../../../../../dataAccess/access/to/ConditionTO";
 import { StateFkAndStateCondition } from "../../../../../../../../dataAccess/access/to/DecisionTO";
@@ -95,7 +95,7 @@ export const useChainDecisionViewModel = () => {
         }
     };
 
-    const setGoToTypeStep = (ifGoTo: boolean, link?: ChainlinkTO) => {
+    const setGoToTypeStep = (ifGoTo: boolean, link?: ChainLinkTO) => {
         if (link) {
             const newGoTo: GoToChain = {type: GoToTypesChain.LINK, id: link.id};
             saveGoToType(ifGoTo, newGoTo);
@@ -112,7 +112,7 @@ export const useChainDecisionViewModel = () => {
     const createGoToLink = (ifGoTo: boolean) => {
         if (!DavitUtil.isNullOrUndefined(decisionToEdit)) {
             const copyDecision: ChainDecisionTO = DavitUtil.deepCopy(decisionToEdit);
-            const goToLink: ChainlinkTO = new ChainlinkTO();
+            const goToLink: ChainLinkTO = new ChainLinkTO();
             goToLink.chainFk = decisionToEdit!.chainFk;
             dispatch(EditActions.setMode.editChainLink(goToLink, copyDecision, ifGoTo));
         }

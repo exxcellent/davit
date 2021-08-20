@@ -1,19 +1,17 @@
 import { ActorCTO } from "./access/cto/ActorCTO";
 import { ChainCTO } from "./access/cto/ChainCTO";
 import { DataCTO } from "./access/cto/DataCTO";
-import { DataSetupCTO } from "./access/cto/DataSetupCTO";
 import { SequenceCTO } from "./access/cto/SequenceCTO";
 import { SequenceStepCTO } from "./access/cto/SequenceStepCTO";
 import { ActionTO } from "./access/to/ActionTO";
 import { ChainDecisionTO } from "./access/to/ChainDecisionTO";
-import { ChainlinkTO } from "./access/to/ChainlinkTO";
+import { ChainLinkTO } from "./access/to/ChainLinkTO";
 import { ChainStateTO } from "./access/to/ChainStateTO";
 import { ChainTO } from "./access/to/ChainTO";
 import { DataRelationTO } from "./access/to/DataRelationTO";
-import { DataSetupTO } from "./access/to/DataSetupTO";
 import { DecisionTO } from "./access/to/DecisionTO";
 import { GroupTO } from "./access/to/GroupTO";
-import { InitDataTO } from "./access/to/InitDataTO";
+import { SequenceConfigurationTO } from "./access/to/SequenceConfigurationTO";
 import { SequenceStateTO } from "./access/to/SequenceStateTO";
 import { SequenceStepTO } from "./access/to/SequenceStepTO";
 import { SequenceTO } from "./access/to/SequenceTO";
@@ -148,43 +146,22 @@ export const DataAccess = {
 
     // ========================================= DATA SETUP =========================================
 
-    findAllDataSetups(): DataAccessResponse<DataSetupTO[]> {
-        return makeTransactional(SequenceDataAccessService.findAllDataSetup);
+    findAllSequenceConfigurations(): DataAccessResponse<SequenceConfigurationTO[]> {
+        return makeTransactional(SequenceDataAccessService.findAllSequenceConfigurations);
     },
 
-    findDataSetupCTO(dataSetupId: number): DataAccessResponse<DataSetupCTO> {
-        return makeTransactional(() => SequenceDataAccessService.findDatSetupCTO(dataSetupId));
+    findSequenceConfiguration(sequenceConfigurationFk: number): DataAccessResponse<SequenceConfigurationTO> {
+        return makeTransactional(() => SequenceDataAccessService.findSequenceConfigurationTO(sequenceConfigurationFk));
     },
 
-    saveDataSetup(dataSetup: DataSetupTO): DataAccessResponse<DataSetupTO> {
-        return makeTransactional(() => SequenceDataAccessService.saveDataSetup(dataSetup));
+    deleteSequenceConfiguration(sequenceConfiguration: SequenceConfigurationTO): DataAccessResponse<SequenceConfigurationTO> {
+        return makeTransactional(() => SequenceDataAccessService.deleteSequenceConfiguration(sequenceConfiguration));
     },
 
-    deleteDataSetup(dataSetup: DataSetupCTO): DataAccessResponse<DataSetupCTO> {
-        return makeTransactional(() => SequenceDataAccessService.deleteDataSetup(dataSetup));
+    saveSequenceConfigurationTO(sequenceConfigurationTO: SequenceConfigurationTO): DataAccessResponse<SequenceConfigurationTO> {
+        return makeTransactional(() => SequenceDataAccessService.saveSequenceConfigurationTO(sequenceConfigurationTO));
     },
 
-    saveDataSetupCTO(dataSetup: DataSetupCTO): DataAccessResponse<DataSetupCTO> {
-        return makeTransactional(() => SequenceDataAccessService.saveDataSetupCTO(dataSetup));
-    },
-
-    // ========================================= INIT DATA =========================================
-
-    findAllInitDatas(): DataAccessResponse<InitDataTO[]> {
-        return makeTransactional(SequenceDataAccessService.findAllInitDatas);
-    },
-
-    findInitData(id: number): DataAccessResponse<InitDataTO> {
-        return makeTransactional(() => SequenceDataAccessService.findInitData(id));
-    },
-
-    saveInitData(initData: InitDataTO): DataAccessResponse<InitDataTO> {
-        return makeTransactional(() => SequenceDataAccessService.saveInitData(initData));
-    },
-
-    deleteInitData(id: number): DataAccessResponse<InitDataTO> {
-        return makeTransactional(() => SequenceDataAccessService.deleteInitData(id));
-    },
     // ========================================= DATA =========================================
 
     findAllDatas(): DataAccessResponse<DataCTO[]> {
@@ -269,15 +246,15 @@ export const DataAccess = {
         return makeTransactional(() => SequenceDataAccessService.deleteChain(chain));
     },
 
-    saveChainlink(link: ChainlinkTO): DataAccessResponse<ChainlinkTO> {
+    saveChainlink(link: ChainLinkTO): DataAccessResponse<ChainLinkTO> {
         return makeTransactional(() => SequenceDataAccessService.saveChainLink(link));
     },
 
-    findAllChainLinks(): DataAccessResponse<ChainlinkTO[]> {
+    findAllChainLinks(): DataAccessResponse<ChainLinkTO[]> {
         return makeTransactional(SequenceDataAccessService.findAllChainLinks);
     },
 
-    deleteChainLink(step: ChainlinkTO): DataAccessResponse<ChainlinkTO> {
+    deleteChainLink(step: ChainLinkTO): DataAccessResponse<ChainLinkTO> {
         return makeTransactional(() => SequenceDataAccessService.deleteChainTO(step));
     },
 
@@ -293,7 +270,7 @@ export const DataAccess = {
         return makeTransactional(() => SequenceDataAccessService.deleteChainDecision(decision));
     },
 
-    setChainRoot(chainId: number, id: number, isDecision: boolean): DataAccessResponse<ChainlinkTO | ChainDecisionTO> {
+    setChainRoot(chainId: number, id: number, isDecision: boolean): DataAccessResponse<ChainLinkTO | ChainDecisionTO> {
         return makeTransactional(() => SequenceDataAccessService.setChainRoot(chainId, id, isDecision));
     },
 
@@ -301,7 +278,7 @@ export const DataAccess = {
         return makeTransactional(() => SequenceDataAccessService.findChainDecision(id));
     },
 
-    findChainLink(id: number): DataAccessResponse<ChainlinkTO> {
+    findChainLink(id: number): DataAccessResponse<ChainLinkTO> {
         return makeTransactional(() => SequenceDataAccessService.findChainLink(id));
     },
 

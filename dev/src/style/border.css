@@ -6,15 +6,23 @@
 }
 
 .border-top {
-    border-radius: var(--border-radius);
     border-top-color: var(--border-color);
     border-top-style: solid;
 }
 
 .border-bottom {
-    border-radius: var(--border-radius);
     border-bottom-color: var(--border-color);
     border-bottom-style: solid;
+}
+
+.border-right {
+    border-right-color: var(--border-color);
+    border-right-style: solid;
+}
+
+.border-left {
+    border-left-color: var(--border-color);
+    border-left-style: solid;
 }
 
 .border-small {

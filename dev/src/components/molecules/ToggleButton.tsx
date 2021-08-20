@@ -14,11 +14,11 @@ export const ToggleButton: FunctionComponent<ToggleButtonProps> = (props) => {
     return (
         <div className="flex flex-center">
             <DavitButton
-                className={isLeft ? " active" : ""}
+                className={isLeft ? " activeButton" : ""}
                 onClick={() => toggleCallback(true)}
             >{leftLabel}</DavitButton>
             <DavitButton
-                className={isLeft ? "" : " active"}
+                className={isLeft ? "" : " activeButton"}
                 onClick={() => toggleCallback(false)}
             >{rightLabel}</DavitButton>
         </div>
