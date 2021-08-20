@@ -11,7 +11,9 @@ const createSequenceConfigurationThunk = (sequenceId: number): AppThunk => (disp
     const sequenceConfigurationTO: SequenceConfigurationTO = new SequenceConfigurationTO();
 
     sequenceConfigurationTO.sequenceFk = sequenceId;
+    // sequenceConfigurationTO.name = "New configuration";
 
+    // load and set sequence default states
     const sequenceStates: DataAccessResponse<SequenceStateTO[]> = DataAccess.findAllSequenceStatesBySequenceFk(sequenceId);
 
     if (sequenceStates.code === 200) {
@@ -19,15 +21,6 @@ const createSequenceConfigurationThunk = (sequenceId: number): AppThunk => (disp
             return {sequenceStateFk: state.id, value: state.isState};
         });
     }
-
-    //TODO: To be enabled as soon we can save and load configurations.
-    // const response: DataAccessResponse<SequenceConfigurationTO> = DataAccess.saveSequenceConfigurationTO(sequenceConfigurationTO);
-    //
-    // if (response.code !== 200) {
-    //     dispatch(GlobalActions.handleError(response.message));
-    // }
-    // dispatch(MasterDataActions.loadSequenceConfigurationsFromBackend());
-    // dispatch(setSequenceConfigurationThunk(response.object));
 
     dispatch(setSequenceConfigurationThunk(sequenceConfigurationTO));
 };
@@ -38,6 +31,7 @@ const saveSequenceConfigurationThunk = (sequenceConfigurationTO: SequenceConfigu
         dispatch(GlobalActions.handleError(response.message));
     }
     dispatch(MasterDataActions.loadSequenceConfigurationsFromBackend());
+    dispatch(EditSequenceConfiguration.update(response.object));
 };
 
 const deleteSequenceConfigurationThunk = (sequenceConfigurationTO: SequenceConfigurationTO): AppThunk => (dispatch) => {

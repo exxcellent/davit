@@ -13,8 +13,6 @@ import { GoToChain, GoToTypesChain, TerminalChain } from "../../../dataAccess/ac
 import { CalcChain } from "../../../services/SequenceChainService";
 import { sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
 import { DavitUtil } from "../../../utils/DavitUtil";
-import { TabFragment } from "../tableModel/fragments/TabFragment";
-import { TabGroupFragment } from "../tableModel/fragments/TabGroupFragment";
 import "./FlowChart.css";
 
 interface FlowChartControllerProps {
@@ -192,39 +190,16 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
                 <h2 className={"fluid flex flex-center"}>{"Select a sequence or chain to see the flow chart"}</h2>
                 }
 
-                {renderFlowChart() && <>
+                {renderFlowChart() &&
+                <div className="flowChart padding-small"
+                     style={{height: tableHeight}}
+                >
                     <div className="flowChartHeader">
-                        <div className="flex flex-column">
-                            {chain && (
-
-                                //TODO: Create component for this.
-                                <TabGroupFragment label="Mode"
-                                                  style={{backgroundColor: "var(--background-color-header)"}}
-                                >
-                                    <TabFragment label="Chain"
-                                                 isActive={showChain}
-                                                 onClick={() => setShowChain(true)}
-                                    />
-                                    <TabFragment label="Sequence"
-                                                 isActive={!showChain}
-                                                 onClick={() => setShowChain(false)}
-                                    />
-                                </TabGroupFragment>
-                            )}
-
-                            <StateView showChain={showChain} />
-                        </div>
-
-
+                        <StateView showChain={showChain} />
                     </div>
-
-                    <div className="flowChart padding-small"
-                         style={{height: tableHeight}}
-                    >
-                        {!showChain && sequence && buildFlowChart()}
-                        {showChain && chain && buildChainFlowChart()}
-                    </div>
-                </>}
+                    {!showChain && sequence && buildFlowChart()}
+                    {showChain && chain && buildChainFlowChart()}
+                </div>}
             </div>
         );
     }

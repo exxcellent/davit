@@ -9,8 +9,8 @@ import { ActionTO } from "../../../../dataAccess/access/to/ActionTO";
 import { ChainDecisionTO } from "../../../../dataAccess/access/to/ChainDecisionTO";
 import { ChainTO } from "../../../../dataAccess/access/to/ChainTO";
 import { ConditionTO } from "../../../../dataAccess/access/to/ConditionTO";
-import { SequenceConfigurationTO } from "../../../../dataAccess/access/to/SequenceConfigurationTO";
 import { DecisionTO } from "../../../../dataAccess/access/to/DecisionTO";
+import { SequenceConfigurationTO } from "../../../../dataAccess/access/to/SequenceConfigurationTO";
 import { SequenceTO } from "../../../../dataAccess/access/to/SequenceTO";
 import { CalcChain } from "../../../../services/SequenceChainService";
 import { CalculatedStep } from "../../../../services/SequenceService";
@@ -91,7 +91,7 @@ const useSequenceTableViewModel = () => {
     const calcSteps: CalculatedStep[] = useSelector(sequenceModelSelectors.selectCalcSteps);
     const calcChain: CalcChain | null = useSelector(sequenceModelSelectors.selectCalcChain);
     const sequences: SequenceTO[] = useSelector(masterDataSelectors.selectSequences);
-    const dataSetups: SequenceConfigurationTO[] = useSelector(masterDataSelectors.selectDataSetups);
+    const dataSetups: SequenceConfigurationTO[] = useSelector(masterDataSelectors.selectSequenceConfigurations);
     const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
     const chainModels: ChainTO[] = useSelector(masterDataSelectors.selectChains);
     const selectedChainlinks: ChainLinkCTO[] = useSelector(sequenceModelSelectors.selectCurrentChainLinks);

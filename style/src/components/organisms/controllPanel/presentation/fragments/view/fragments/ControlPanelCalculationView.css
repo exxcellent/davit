@@ -1,6 +1,6 @@
 .animator {
-    animation-name: showNavigator;
     animation-duration: var(--animation-time);
+    animation-name: showNavigator;
     animation-timing-function: ease-in-out;
 }
 
@@ -10,6 +10,7 @@
     right: 50%;
     top: var(--header-height);
     transform: translate(50%);
+    z-index: 4;
 }
 
 @keyframes showNavigator {
@@ -26,4 +27,8 @@
     100% {
         opacity: 1;
     }
+}
+
+.stateViewWrapper {
+    position: absolute;
 }

@@ -7,7 +7,7 @@ import {
     DavitDeleteButton,
     DavitTextInput
 } from "../../../../../../atomic";
-import { AddOrEdit } from "../../../../../../molecules";
+import { AddOrEdit, DavitCommentButton } from "../../../../../../molecules";
 import { ControlPanel } from "../common/ControlPanel";
 import { OptionField } from "../common/OptionField";
 import { useChainViewModel } from "./viewmodels/ChainViewModel";
@@ -25,7 +25,9 @@ export const ControlPanelEditChain: FunctionComponent<ControlPanelEditChainProps
         deleteChain,
         id,
         editOrAddChainLink,
-        editStates
+        editStates,
+        note,
+        saveNote,
     } = useChainViewModel();
 
     return (
@@ -37,6 +39,10 @@ export const ControlPanelEditChain: FunctionComponent<ControlPanelEditChainProps
                     onChangeCallback={(name: string) => changeName(name)}
                     value={name}
                     focus={true}
+                />
+
+                <DavitCommentButton onSaveCallback={saveNote}
+                                    comment={note}
                 />
             </OptionField>
 

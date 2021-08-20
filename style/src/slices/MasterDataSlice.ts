@@ -7,8 +7,8 @@ import { ChainLinkTO } from "../dataAccess/access/to/ChainLinkTO";
 import { ChainStateTO } from "../dataAccess/access/to/ChainStateTO";
 import { ChainTO } from "../dataAccess/access/to/ChainTO";
 import { DataRelationTO } from "../dataAccess/access/to/DataRelationTO";
-import { SequenceConfigurationTO } from "../dataAccess/access/to/SequenceConfigurationTO";
 import { GroupTO } from "../dataAccess/access/to/GroupTO";
+import { SequenceConfigurationTO } from "../dataAccess/access/to/SequenceConfigurationTO";
 import { SequenceStateTO } from "../dataAccess/access/to/SequenceStateTO";
 import { SequenceTO } from "../dataAccess/access/to/SequenceTO";
 import { DataAccess } from "../dataAccess/DataAccess";
@@ -23,7 +23,7 @@ interface MasterDataState {
     datas: DataCTO[];
     relations: DataRelationTO[];
     sequences: SequenceTO[];
-    dataSetups: SequenceConfigurationTO[];
+    sequenceConfigurations: SequenceConfigurationTO[];
     chains: ChainTO[];
     chainLinks: ChainLinkTO[];
     chainDecisions: ChainDecisionTO[];
@@ -37,7 +37,7 @@ const getInitialState: MasterDataState = {
     datas: [],
     relations: [],
     sequences: [],
-    dataSetups: [],
+    sequenceConfigurations: [],
     chains: [],
     chainLinks: [],
     chainDecisions: [],
@@ -65,7 +65,7 @@ const MasterDataSlice = createSlice({
             state.sequences = action.payload;
         },
         setSequenceConfigurations: (state, action: PayloadAction<SequenceConfigurationTO[]>) => {
-            state.dataSetups = action.payload;
+            state.sequenceConfigurations = action.payload;
         },
         setChains: (state, action: PayloadAction<ChainTO[]>) => {
             state.chains = action.payload;
@@ -222,10 +222,18 @@ export const masterDataSelectors = {
     selectChains: (state: RootState): ChainTO[] => state.masterData.chains,
     selectChainLinks: (state: RootState): ChainLinkTO[] => state.masterData.chainLinks,
     selectChainDecisions: (state: RootState): ChainDecisionTO[] => state.masterData.chainDecisions,
-    selectDataSetups: (state: RootState): SequenceConfigurationTO[] => state.masterData.dataSetups,
+    selectSequenceConfigurations: (state: RootState): SequenceConfigurationTO[] => state.masterData.sequenceConfigurations,
 
     selectSequenceTOById: (id: number) => (state: RootState): SequenceTO | undefined => {
         return state.masterData.sequences.find((sequence) => sequence.id === id);
+    },
+
+    selectSequenceConfigurationsBySequenceId: (sequenceId: number | undefined) => (state: RootState): SequenceConfigurationTO[] => {
+        if (sequenceId !== undefined) {
+            return state.masterData.sequenceConfigurations.filter(config => config.sequenceFk !== sequenceId);
+        } else {
+            return state.masterData.sequenceConfigurations;
+        }
     },
 
     selectActorById: (id: number) => {
@@ -252,11 +260,12 @@ export const masterDataSelectors = {
         };
     },
 
-    selectDataSetupToById: (id: number) => {
+    selectSequenceConfigurationToById: (id: number) => {
         return (state: RootState): SequenceConfigurationTO | null => {
-            return state.masterData.dataSetups.find((dataSetup) => dataSetup.id === id) || null;
+            return state.masterData.sequenceConfigurations.find((config) => config.id === id) || null;
         };
     },
+
     isFirstChainElement: (id: number) => {
         return (state: RootState): boolean => {
             let isFirst: boolean = true;
