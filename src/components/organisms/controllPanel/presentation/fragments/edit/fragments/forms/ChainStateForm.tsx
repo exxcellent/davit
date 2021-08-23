@@ -59,13 +59,15 @@ export const ChainStateForm: FunctionComponent<ChainStateFormProps> = () => {
 
             <FormBody>
 
-                <StateList statesToEdit={chainStates}
-                           stateColumnName="Default"
-                           addStateCallback={createStateFkAndStateCondition}
-                           removeStateCallback={deleteStateFkAndStateCondition}
-                           setActiveCallback={setIsState}
-                           changeName={changeName}
-                />
+                <div className="width-fluid">
+                    <StateList statesToEdit={chainStates}
+                               stateColumnName="Default"
+                               addStateCallback={createStateFkAndStateCondition}
+                               removeStateCallback={deleteStateFkAndStateCondition}
+                               setActiveCallback={setIsState}
+                               changeName={changeName}
+                    />
+                </div>
 
             </FormBody>
 
