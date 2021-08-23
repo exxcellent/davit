@@ -4,14 +4,8 @@ import { CheckHelper } from "../util/CheckHelper";
 import { DataAccessUtil } from "../util/DataAccessUtil";
 
 export const SequenceConfigurationRepository = {
-    find(sequenceConfigurationFk: number): SequenceConfigurationTO {
-        const sequenceConfiguration: SequenceConfigurationTO | undefined = dataStore.getDataStore().sequenceConfigurations.get(sequenceConfigurationFk);
-
-        if (sequenceConfiguration === undefined) {
-            throw new Error("Could not find Sequence Configuration with ID: " + sequenceConfigurationFk);
-        } else {
-            return sequenceConfiguration;
-        }
+    find(sequenceConfigurationFk: number): SequenceConfigurationTO | undefined {
+        return dataStore.getDataStore().sequenceConfigurations.get(sequenceConfigurationFk);
     },
 
     findAll(): SequenceConfigurationTO[] {

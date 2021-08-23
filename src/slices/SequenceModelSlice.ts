@@ -101,9 +101,9 @@ const SequenceModelSlice = createSlice({
             state.currentStepIndex = 0;
         },
         setSelectedChainConfiguration: (state, action: PayloadAction<ChainConfigurationTO | null>) => {
-          state.selectedChainConfiguration = action.payload;
-          state.currentLinkIndex = 0;
-          state.currentStepIndex = 0;
+            state.selectedChainConfiguration = action.payload;
+            state.currentLinkIndex = 0;
+            state.currentStepIndex = 0;
         },
         setCalcChain: (state, action: PayloadAction<CalcChain | null>) => {
             state.calcChain = action.payload;
@@ -232,7 +232,7 @@ const setSelectedChainThunk = (chain: ChainTO): AppThunk => (dispatch, getState)
     const mode: Mode = getState().edit.mode;
     const response: DataAccessResponse<ChainCTO> = DataAccess.getChainCTO(chain);
     if (response.code !== 200) {
-        console.warn(response.message);
+        dispatch(GlobalActions.handleError(response.message));
     } else {
         const chainCTO: ChainCTO = response.object;
         dispatch(SequenceModelSlice.actions.setSelectedChain(chainCTO));
@@ -245,7 +245,7 @@ const setSelectedChainThunk = (chain: ChainTO): AppThunk => (dispatch, getState)
 const setSelectedSequenceByIdThunk = (sequenceId: number): AppThunk => (dispatch) => {
     const response: DataAccessResponse<SequenceCTO> = DataAccess.findSequenceCTO(sequenceId);
     if (response.code !== 200) {
-        console.warn(response.message);
+        dispatch(GlobalActions.handleError(response.message));
     } else {
         dispatch(SequenceModelSlice.actions.setSelectedSequence(response.object));
     }
@@ -254,7 +254,7 @@ const setSelectedSequenceByIdThunk = (sequenceId: number): AppThunk => (dispatch
 const setSelectedSequenceByIdWithStatesThunk = (sequenceId: number, states: SequenceStateTO[]): AppThunk => (dispatch) => {
     const response: DataAccessResponse<SequenceCTO> = DataAccess.findSequenceCTO(sequenceId);
     if (response.code !== 200) {
-        console.warn(response.message);
+        dispatch(GlobalActions.handleError(response.message));
     } else {
         // set states
         const sequence: SequenceCTO = response.object;

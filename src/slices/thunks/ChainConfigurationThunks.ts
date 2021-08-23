@@ -10,15 +10,15 @@ const createChainConfigurationThunk = (chainId: number): AppThunk => (dispatch) 
     const chainConfiguration: ChainConfigurationTO = new ChainConfigurationTO();
     chainConfiguration.chainFk = chainId;
 
-    const chainStates: DataAccessResponse<ChainStateTO[]> = DataAccess.findAllChainStatesByChainFk(chainId);
+    const response: DataAccessResponse<ChainStateTO[]> = DataAccess.findAllChainStatesByChainFk(chainId);
 
-    if (chainStates.code === 200) {
-        chainConfiguration.stateValues = chainStates.object.map(state => {
+    if (response.code === 200) {
+        chainConfiguration.stateValues = response.object.map(state => {
             return {chainStateFk: state.id, value: state.isState};
         });
     }
 
-    dispatch(editActions.setChainConfiguration(chainConfiguration));
+    dispatch(setChainConfigurationThunk(chainConfiguration));
 };
 
 const setChainConfigurationThunk = (chainConfiguration: ChainConfigurationTO): AppThunk => (dispatch) => {

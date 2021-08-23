@@ -240,7 +240,12 @@ export const SequenceDataAccessService = {
     },
 
     findSequenceConfigurationTO(sequenceConfigurationFk: number): SequenceConfigurationTO {
-        return SequenceConfigurationRepository.find(sequenceConfigurationFk);
+        const sequenceConfiguration: SequenceConfigurationTO | undefined = SequenceConfigurationRepository.find(sequenceConfigurationFk);
+        if (!sequenceConfiguration) {
+            throw new Error("Could not find Sequence configuration with ID: " + sequenceConfigurationFk);
+        } else {
+            return sequenceConfiguration;
+        }
     },
 
     saveSequenceConfigurationTO(sequenceConfigurationTO: SequenceConfigurationTO): SequenceConfigurationTO {
@@ -413,16 +418,25 @@ const createSequenceStepCTO = (sequenceStepTO: SequenceStepTO | undefined): Sequ
 };
 
 const createChainLinkCTO = (link: ChainLinkTO | undefined): ChainLinkCTO => {
-    CheckHelper.nullCheck(link, "chainlink");
+    CheckHelper.nullCheck(link, "ChainLink");
+
     const chainLinkCTO: ChainLinkCTO = new ChainLinkCTO();
     chainLinkCTO.chainLink = link!;
+
     const sequenceConfiguration: SequenceConfigurationTO | undefined = SequenceConfigurationRepository.find(link!.sequenceConfigurationFk);
+
     const sequenceTO: SequenceTO | undefined = SequenceRepository.find(link!.sequenceFk);
-    if (sequenceConfiguration && sequenceTO) {
-        const sequenceCTO: SequenceCTO = createSequenceCTO(sequenceTO);
-        chainLinkCTO.sequenceConfiguration = sequenceConfiguration;
-        chainLinkCTO.sequence = sequenceCTO;
+
+    if (sequenceTO) {
+        chainLinkCTO.sequence = createSequenceCTO(sequenceTO);
     }
+
+    if (sequenceConfiguration) {
+        chainLinkCTO.sequenceConfiguration = sequenceConfiguration;
+    } else {
+        chainLinkCTO.sequenceConfiguration = new SequenceConfigurationTO("", "", sequenceTO?.id || -1, [], []);
+    }
+
     return chainLinkCTO;
 };
 
