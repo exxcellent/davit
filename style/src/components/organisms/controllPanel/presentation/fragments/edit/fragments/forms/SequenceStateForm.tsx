@@ -59,7 +59,7 @@ export const SequenceStateForm: FunctionComponent<StateFormProps> = () => {
 
             <FormBody>
 
-                <div className="border border-small width-fluid">
+                <div className="width-fluid">
                     <StateList statesToEdit={sequenceStates}
                                stateColumnName="Default"
                                addStateCallback={createSequenceState}

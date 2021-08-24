@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { ArcherContainer, ArcherElement, Relation } from "react-archer";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { StateView } from "../../../components/molecules/StateView";
 import { ChainCTO } from "../../../dataAccess/access/cto/ChainCTO";
 import { ChainLinkCTO } from "../../../dataAccess/access/cto/ChainLinkCTO";
@@ -11,7 +11,7 @@ import { DecisionTO } from "../../../dataAccess/access/to/DecisionTO";
 import { GoTo, GoToTypes, Terminal } from "../../../dataAccess/access/types/GoToType";
 import { GoToChain, GoToTypesChain, TerminalChain } from "../../../dataAccess/access/types/GoToTypeChain";
 import { CalcChain } from "../../../services/SequenceChainService";
-import { sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
+import { SequenceModelActions, sequenceModelSelectors, ViewLevel } from "../../../slices/SequenceModelSlice";
 import { DavitUtil } from "../../../utils/DavitUtil";
 import "./FlowChart.css";
 
@@ -30,14 +30,23 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
             chain,
             sequence,
             chainLineColor,
+            viewLevel,
+            setViewLevelToChain,
+            setViewLevelToSequence,
         } = useFlowChartViewModel();
 
-        const [showChain, setShowChain] = useState<boolean>(false);
-        useEffect(() => {
-            setShowChain(!DavitUtil.isNullOrUndefined(chain));
-        }, [chain]);
-        const parentRef = useRef<HTMLDivElement>(null);
+        // const [showChain, setShowChain] = useState<boolean>(false);
         const [tableHeight, setTableHeight] = useState<number>(0);
+
+        const parentRef = useRef<HTMLDivElement>(null);
+
+        useEffect(() => {
+            if (!DavitUtil.isNullOrUndefined(chain)) {
+                setViewLevelToChain();
+            } else {
+                setViewLevelToSequence();
+            }
+        }, [chain, setViewLevelToChain, setViewLevelToSequence]);
 
         // TODO: move this in to custom hook in WindowUtils
         useEffect(() => {
@@ -195,10 +204,10 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
                      style={{height: tableHeight}}
                 >
                     <div className="flowChartHeader">
-                        <StateView showChain={showChain} />
+                        <StateView showChain={viewLevel === ViewLevel.chain} />
                     </div>
-                    {!showChain && sequence && buildFlowChart()}
-                    {showChain && chain && buildChainFlowChart()}
+                    {viewLevel === ViewLevel.sequence && sequence && buildFlowChart()}
+                    {viewLevel === ViewLevel.chain && chain && buildChainFlowChart()}
                 </div>}
             </div>
         );
@@ -245,6 +254,9 @@ const useFlowChartViewModel = () => {
         const calcChain: CalcChain | null = useSelector(sequenceModelSelectors.selectCalcChain);
         const currentStepId: string = useSelector(sequenceModelSelectors.selectCurrentStepId);
         const currentLinkId: string = useSelector(sequenceModelSelectors.selectCurrentLinkId);
+        const viewLevel: ViewLevel = useSelector(sequenceModelSelectors.selectViewLevel);
+
+        const dispatch = useDispatch();
 
         const getRoot = (sequence: SequenceCTO | null): Node => {
             const root: Node = {
@@ -481,6 +493,14 @@ const useFlowChartViewModel = () => {
             }
         };
 
+        const setViewLevelToChain = () => {
+            dispatch(SequenceModelActions.setViewLevel(ViewLevel.chain));
+        };
+
+        const setViewLevelToSequence = () => {
+            dispatch(SequenceModelActions.setViewLevel(ViewLevel.sequence));
+        };
+
         return {
             nodeModelTree: buildNodeModelTree(getDataSetup()),
             nodeModelChainTree: buildNodeModelChainTree(getChainRoot(chain)),
@@ -494,6 +514,9 @@ const useFlowChartViewModel = () => {
             chain,
             chainName: chain?.chain.name || "",
             sequenceName: sequence?.sequenceTO.name || "",
+            viewLevel,
+            setViewLevelToChain,
+            setViewLevelToSequence,
         };
     }
 ;
