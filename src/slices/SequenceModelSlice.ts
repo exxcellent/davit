@@ -29,6 +29,11 @@ export interface Filter {
     id: number;
 }
 
+export enum ViewLevel {
+    sequence = "sequence",
+    chain = "chain",
+}
+
 interface SequenceModelState {
     selectedSequenceModel: SequenceCTO | null;
     selectedSequenceConfiguration: SequenceConfigurationTO | null;
@@ -42,6 +47,7 @@ interface SequenceModelState {
     activeFilter: Filter[];
     selectedChain: ChainCTO | null;
     selectedChainConfiguration: ChainConfigurationTO | null;
+    viewLevel: ViewLevel;
 }
 
 const getInitialState: SequenceModelState = {
@@ -57,12 +63,17 @@ const getInitialState: SequenceModelState = {
     activeFilter: [],
     selectedChain: null,
     selectedChainConfiguration: null,
+    viewLevel: ViewLevel.sequence,
 };
 
 const SequenceModelSlice = createSlice({
     name: "sequenceModel",
     initialState: getInitialState,
     reducers: {
+        setViewLevel: (state, action: PayloadAction<ViewLevel>) => {
+            state.viewLevel = action.payload;
+        },
+
         setSelectedSequence: (state, action: PayloadAction<SequenceCTO | null>) => {
             state.selectedSequenceModel = action.payload;
             // TODO: in extra method und nur ausführen wenn sequence und datasetup gestezt sind sonst reset.
@@ -209,6 +220,21 @@ function resetState(state: SequenceModelState) {
 
 const stepNext = (currentIndex: number): AppThunk => (dispatch) => {
     dispatch(SequenceModelActions.setCurrentStepIndex(currentIndex + 1));
+};
+
+const setViewLevelThunk = (viewLevel: ViewLevel): AppThunk => (dispatch, getState) => {
+    switch (viewLevel) {
+        case ViewLevel.chain:
+            if (getState().sequenceModel.selectedChain !== null) {
+                dispatch(SequenceModelSlice.actions.setViewLevel(viewLevel));
+            }
+            break;
+        case ViewLevel.sequence:
+            if (getState().sequenceModel.selectedSequenceModel !== null) {
+                dispatch(SequenceModelSlice.actions.setViewLevel(viewLevel));
+            }
+            break;
+    }
 };
 
 const stepBack = (currentIndex: number): AppThunk => (dispatch) => {
@@ -396,6 +422,11 @@ export const sequenceModelSelectors = {
             return [];
         }
     },
+
+    selectViewLevel: (state: RootState): ViewLevel => {
+        return state.sequenceModel.viewLevel;
+    },
+
     selectCalcStepIds: (state: RootState): string[] =>
         state.edit.mode === Mode.VIEW ? getCurrentCalcSequence(state.sequenceModel)?.stepIds || [] : [],
     selectTerminalStep: (state: RootState): Terminal | null =>
@@ -550,4 +581,5 @@ export const SequenceModelActions = {
     removeDataFilters: SequenceModelSlice.actions.removeDataFilter,
     addActorFilters: SequenceModelSlice.actions.addActorFilters,
     removeActorFilter: SequenceModelSlice.actions.removeActorFilter,
+    setViewLevel: setViewLevelThunk,
 };

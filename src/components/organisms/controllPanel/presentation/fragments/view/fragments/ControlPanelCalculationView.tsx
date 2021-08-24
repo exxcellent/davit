@@ -1,5 +1,6 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent } from "react";
 import { FlowChartlabel } from "../../../../../../../domains/overview/flowChartModel/fragments/FlowChartlabel";
+import { ViewLevel } from "../../../../../../../slices/SequenceModelSlice";
 import { useStepAndLinkNavigation } from "../../../../../../../utils/WindowUtil";
 import { DavitButton } from "../../../../../../atomic";
 import { NoteIcon } from "../../../../../../atomic/icons/NoteIcon";
@@ -22,12 +23,12 @@ export const ControlPanelCalculationView: FunctionComponent<ControlPanelViewProp
         selectedSequenceName,
         getSequenceNote,
         getChainNote,
+        viewLevel,
+        setViewLevelToChain,
+        setViewLevelToSequence,
     } = useViewViewModel();
 
     const {stepBack, stepNext, linkBack, linkNext} = useStepAndLinkNavigation();
-
-    const [showChain, setShowChain] = useState<boolean>(false);
-
 
     const getIndex = (): string => {
         const link: string = (linkIndex + 1).toString() || "0";
@@ -49,11 +50,11 @@ export const ControlPanelCalculationView: FunctionComponent<ControlPanelViewProp
                     </div>
                     {selectedChainName !== "" && (
                         <div className="flex-column">
-                            <DavitButton onClick={() => setShowChain(true)}
-                                         active={showChain}
+                            <DavitButton onClick={setViewLevelToChain}
+                                         active={viewLevel === ViewLevel.chain}
                             >Show</DavitButton>
-                            <DavitButton onClick={() => setShowChain(false)}
-                                         active={!showChain}
+                            <DavitButton onClick={setViewLevelToSequence}
+                                         active={viewLevel === ViewLevel.sequence}
                             >Show</DavitButton>
                         </div>
                     )}
@@ -65,7 +66,7 @@ export const ControlPanelCalculationView: FunctionComponent<ControlPanelViewProp
                               className="margin-medium padding-small border border-medium"
                     />
                     <textarea className="noteTextarea border border-medium padding-medium width-fluid"
-                              value={showChain ? getChainNote() : getSequenceNote()}
+                              value={viewLevel === ViewLevel.chain ? getChainNote() : getSequenceNote()}
                               readOnly
                     />
 

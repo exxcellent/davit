@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ActorCTO } from "../dataAccess/access/cto/ActorCTO";
 import { DataCTO } from "../dataAccess/access/cto/DataCTO";
 import { SequenceStepCTO } from "../dataAccess/access/cto/SequenceStepCTO";
+import { ChainConfigurationTO } from "../dataAccess/access/to/ChainConfigurationTO";
 import { ChainDecisionTO } from "../dataAccess/access/to/ChainDecisionTO";
 import { ChainLinkTO } from "../dataAccess/access/to/ChainLinkTO";
 import { ChainStateTO } from "../dataAccess/access/to/ChainStateTO";
@@ -29,6 +30,7 @@ interface MasterDataState {
     chainDecisions: ChainDecisionTO[];
     sequenceState: SequenceStateTO[];
     chainState: ChainStateTO[];
+    chainConfigurations: ChainConfigurationTO[];
 }
 
 const getInitialState: MasterDataState = {
@@ -43,6 +45,7 @@ const getInitialState: MasterDataState = {
     chainDecisions: [],
     sequenceState: [],
     chainState: [],
+    chainConfigurations: [],
 };
 
 const MasterDataSlice = createSlice({
@@ -81,7 +84,10 @@ const MasterDataSlice = createSlice({
         },
         setChainStates: (state, action: PayloadAction<ChainStateTO[]>) => {
             state.chainState = action.payload;
-        }
+        },
+        setChainConfigurations: (state, action: PayloadAction<ChainConfigurationTO[]>) => {
+            state.chainConfigurations = action.payload;
+        },
     },
 });
 
@@ -136,6 +142,15 @@ const loadSequenceConfigurationsFromBackend = (): AppThunk => (dispatch) => {
     const response: DataAccessResponse<SequenceConfigurationTO[]> = DataAccess.findAllSequenceConfigurations();
     if (response.code === 200) {
         dispatch(MasterDataSlice.actions.setSequenceConfigurations(response.object));
+    } else {
+        dispatch(GlobalActions.handleError(response.message));
+    }
+};
+
+const loadChainConfigurationsFromBackend = (): AppThunk => (dispatch) => {
+    const response: DataAccessResponse<ChainConfigurationTO[]> = DataAccess.findAllChainConfigurations();
+    if (response.code === 200) {
+        dispatch(MasterDataSlice.actions.setChainConfigurations(response.object));
     } else {
         dispatch(GlobalActions.handleError(response.message));
     }
@@ -207,6 +222,7 @@ const loadAll = (): AppThunk => (dispatch) => {
     dispatch(loadChainDecisionsFromBackend());
     dispatch(loadChainStatesFromBackend());
     dispatch(loadSequenceStatesFromBackend());
+    dispatch(loadChainConfigurationsFromBackend());
 };
 
 // =============================================== SELECTORS ===============================================
@@ -233,6 +249,14 @@ export const masterDataSelectors = {
             return state.masterData.sequenceConfigurations.filter(config => config.sequenceFk !== sequenceId);
         } else {
             return state.masterData.sequenceConfigurations;
+        }
+    },
+
+    selectChainConfigurationsByChainId: (chainId: number | undefined) => (state: RootState): ChainConfigurationTO[] => {
+        if (chainId !== undefined) {
+            return state.masterData.chainConfigurations.filter(config => config.chainFk !== chainId);
+        } else {
+            return state.masterData.chainConfigurations;
         }
     },
 
@@ -294,6 +318,7 @@ export const MasterDataActions = {
     loadSequencesFromBackend,
     loadSequenceStatesFromBackend,
     loadDatasFromBackend,
+    loadChainConfigurationsFromBackend,
     loadAll,
     find: {
         findSequenceStepCTO,

@@ -12,19 +12,19 @@ export const SequenceConfigurationRepository = {
         return Array.from(dataStore.getDataStore().sequenceConfigurations.values());
     },
 
-    save(dataSetup: SequenceConfigurationTO) {
-        CheckHelper.nullCheck(dataSetup, "dataSetup");
-        let dataSetupTO: SequenceConfigurationTO;
-        if (dataSetup.id === -1) {
-            dataSetupTO = {
-                ...dataSetup,
+    save(sequenceConfiguration: SequenceConfigurationTO) {
+        CheckHelper.nullCheck(sequenceConfiguration, "sequenceConfiguration");
+        let sequenceConfigurationTO: SequenceConfigurationTO;
+        if (sequenceConfiguration.id === -1) {
+            sequenceConfigurationTO = {
+                ...sequenceConfiguration,
                 id: DataAccessUtil.determineNewId(this.findAll()),
             };
         } else {
-            dataSetupTO = {...dataSetup};
+            sequenceConfigurationTO = {...sequenceConfiguration};
         }
-        dataStore.getDataStore().sequenceConfigurations.set(dataSetupTO.id!, dataSetupTO);
-        return dataSetupTO;
+        dataStore.getDataStore().sequenceConfigurations.set(sequenceConfigurationTO.id!, sequenceConfigurationTO);
+        return sequenceConfigurationTO;
     },
 
     delete(sequenceConfigurationTO: SequenceConfigurationTO): SequenceConfigurationTO {

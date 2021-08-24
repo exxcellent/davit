@@ -3,7 +3,11 @@ import { SequenceCTO } from "../../../../../../../dataAccess/access/cto/Sequence
 import { ChainTO } from "../../../../../../../dataAccess/access/to/ChainTO";
 import { SequenceTO } from "../../../../../../../dataAccess/access/to/SequenceTO";
 import { EditActions } from "../../../../../../../slices/EditSlice";
-import { SequenceModelActions, sequenceModelSelectors } from "../../../../../../../slices/SequenceModelSlice";
+import {
+    SequenceModelActions,
+    sequenceModelSelectors,
+    ViewLevel
+} from "../../../../../../../slices/SequenceModelSlice";
 import { DavitUtil } from "../../../../../../../utils/DavitUtil";
 
 export const useViewViewModel = () => {
@@ -11,6 +15,7 @@ export const useViewViewModel = () => {
     const stepIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentStepIndex);
     const selectedChain: ChainTO | null = useSelector(sequenceModelSelectors.selectChain);
     const linkIndex: number | null = useSelector(sequenceModelSelectors.selectCurrentLinkIndex);
+    const viewLevel: ViewLevel = useSelector(sequenceModelSelectors.selectViewLevel);
     const dispatch = useDispatch();
 
     const selectSequence = (sequence: SequenceTO | undefined) => {
@@ -49,6 +54,14 @@ export const useViewViewModel = () => {
         return note;
     };
 
+    const setViewLevelToChain = () => {
+        dispatch(SequenceModelActions.setViewLevel(ViewLevel.chain));
+    };
+
+    const setViewLevelToSequence = () => {
+        dispatch(SequenceModelActions.setViewLevel(ViewLevel.sequence));
+    };
+
     return {
         sequence: selectedSequence,
         stepIndex,
@@ -62,5 +75,8 @@ export const useViewViewModel = () => {
         editConfiguration: () => dispatch(EditActions.setMode.editConfiguration()),
         getSequenceNote,
         getChainNote,
+        viewLevel,
+        setViewLevelToSequence,
+        setViewLevelToChain,
     };
 };

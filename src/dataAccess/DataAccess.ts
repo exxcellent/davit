@@ -4,6 +4,7 @@ import { DataCTO } from "./access/cto/DataCTO";
 import { SequenceCTO } from "./access/cto/SequenceCTO";
 import { SequenceStepCTO } from "./access/cto/SequenceStepCTO";
 import { ActionTO } from "./access/to/ActionTO";
+import { ChainConfigurationTO } from "./access/to/ChainConfigurationTO";
 import { ChainDecisionTO } from "./access/to/ChainDecisionTO";
 import { ChainLinkTO } from "./access/to/ChainLinkTO";
 import { ChainStateTO } from "./access/to/ChainStateTO";
@@ -144,7 +145,7 @@ export const DataAccess = {
         return makeTransactional(() => SequenceDataAccessService.findSequenceStepCTO(id));
     },
 
-    // ========================================= DATA SETUP =========================================
+    // ========================================= SEQUENCE CONFIGURATION =========================================
 
     findAllSequenceConfigurations(): DataAccessResponse<SequenceConfigurationTO[]> {
         return makeTransactional(SequenceDataAccessService.findAllSequenceConfigurations);
@@ -160,6 +161,24 @@ export const DataAccess = {
 
     saveSequenceConfigurationTO(sequenceConfigurationTO: SequenceConfigurationTO): DataAccessResponse<SequenceConfigurationTO> {
         return makeTransactional(() => SequenceDataAccessService.saveSequenceConfigurationTO(sequenceConfigurationTO));
+    },
+
+    // ========================================= CHAIN CONFIGURATION =========================================
+
+    findAllChainConfigurations(): DataAccessResponse<ChainConfigurationTO[]> {
+        return makeTransactional(SequenceDataAccessService.findAllChainConfigurations);
+    },
+
+    findChainConfiguration(chainFk: number): DataAccessResponse<ChainConfigurationTO> {
+        return makeTransactional(() => SequenceDataAccessService.findChainConfigurationTO(chainFk));
+    },
+
+    deleteChainConfiguration(chainConfiguration: ChainConfigurationTO): DataAccessResponse<ChainConfigurationTO> {
+        return makeTransactional(() => SequenceDataAccessService.deleteChainConfiguration(chainConfiguration));
+    },
+
+    saveChainConfigurationTO(chainConfiguration: ChainConfigurationTO): DataAccessResponse<ChainConfigurationTO> {
+        return makeTransactional(() => SequenceDataAccessService.saveChainConfigurationTO(chainConfiguration));
     },
 
     // ========================================= DATA =========================================

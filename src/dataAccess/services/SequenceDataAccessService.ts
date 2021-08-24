@@ -4,6 +4,7 @@ import { ChainLinkCTO } from "../access/cto/ChainLinkCTO";
 import { SequenceCTO } from "../access/cto/SequenceCTO";
 import { SequenceStepCTO } from "../access/cto/SequenceStepCTO";
 import { ActionTO } from "../access/to/ActionTO";
+import { ChainConfigurationTO } from "../access/to/ChainConfigurationTO";
 import { ChainDecisionTO } from "../access/to/ChainDecisionTO";
 import { ChainLinkTO } from "../access/to/ChainLinkTO";
 import { ChainStateTO } from "../access/to/ChainStateTO";
@@ -15,6 +16,7 @@ import { SequenceStepTO } from "../access/to/SequenceStepTO";
 import { SequenceTO } from "../access/to/SequenceTO";
 import { GoToTypes } from "../access/types/GoToType";
 import { ActionRepository } from "../repositories/ActionRepository";
+import { ChainConfigurationRepository } from "../repositories/ChainConfigurationRepository";
 import { ChainDecisionRepository } from "../repositories/ChainDecisionRepository";
 import { ChainLinkRepository } from "../repositories/ChainLinkRepository";
 import { ChainRepository } from "../repositories/ChainRepository";
@@ -233,7 +235,7 @@ export const SequenceDataAccessService = {
         return action;
     },
 
-    // --------------------------------------------- Data Setup -------------------------------------------
+    // --------------------------------------------- Sequence Configuration -------------------------------------------
 
     findAllSequenceConfigurations(): SequenceConfigurationTO[] {
         return SequenceConfigurationRepository.findAll();
@@ -382,6 +384,28 @@ export const SequenceDataAccessService = {
         } else {
             throw Error("Try to find chain decision: Could not find chain decision with ID: " + id);
         }
+    },
+
+    // --------------------------------------------- Chain Configuration --------------------------------------------
+    findAllChainConfigurations(): ChainConfigurationTO[] {
+        return ChainConfigurationRepository.findAll();
+    },
+
+    findChainConfigurationTO(chainFk: number): ChainConfigurationTO {
+        const chainConfiguration: ChainConfigurationTO | undefined = ChainConfigurationRepository.find(chainFk);
+        if (chainConfiguration) {
+            return chainConfiguration;
+        } else {
+            throw Error("Try to find chain configuration: Could not find chain configuration with ID: " + chainFk);
+        }
+    },
+
+    deleteChainConfiguration(chainConfiguration: ChainConfigurationTO): ChainConfigurationTO {
+        return ChainConfigurationRepository.delete(chainConfiguration);
+    },
+
+    saveChainConfigurationTO(chainConfiguration: ChainConfigurationTO): ChainConfigurationTO {
+        return ChainConfigurationRepository.save(chainConfiguration);
     },
 };
 // ================================================== PRIVATE ====================================================
