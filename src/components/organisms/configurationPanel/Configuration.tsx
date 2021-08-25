@@ -496,6 +496,17 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
 
                 <div className="configurationStateColumn flex flex-column width-fluid">
 
+                    {/*------ note -----*/}
+                    <div className="flex flex-center padding-small border-bottom border-medium">
+                        <NoteIcon size="2x"
+                                  className="margin-medium padding-small border border-medium"
+                        />
+                        <textarea className="noteTextarea border border-medium padding-medium"
+                                  value={getNote()}
+                                  readOnly
+                        />
+                    </div>
+
                     {/*------ configuration ------*/}
                     <div className="flex content-space-around align-center padding-small border-bottom border-medium">
 
@@ -510,17 +521,6 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
                         {sequenceConfigurationToEdit?.id !== -1 &&
                         <DavitDeleteButton onClick={deleteSequenceConfiguration} />}
 
-                    </div>
-
-                    {/*------ note -----*/}
-                    <div className="flex flex-center padding-small">
-                        <NoteIcon size="2x"
-                                  className="margin-medium padding-small border border-medium"
-                        />
-                        <textarea className="noteTextarea border border-medium padding-medium"
-                                  value={getNote()}
-                                  readOnly
-                        />
                     </div>
 
                     <div>
@@ -578,9 +578,19 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
 
             <div className="configurationBody flex-column border-top border-medium">
 
+                {/*------ note -----*/}
+                <div className="flex flex-center padding-small  border-bottom border-medium">
+                    <NoteIcon size="2x"
+                              className="margin-medium padding-small border border-medium"
+                    />
+                    <textarea className="noteTextarea border border-medium padding-medium"
+                              value={getNote()}
+                              readOnly
+                    />
+                </div>
 
                 {/*------ configuration ------*/}
-                <div className="flex content-space-around align-center padding-small border-bottom border-medium">
+                <div className="flex content-space-around align-center padding-small">
 
                     <h2>Configuration</h2>
 
@@ -593,17 +603,6 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
                     {chainConfigurationToEdit?.id !== -1 &&
                     <DavitDeleteButton onClick={deleteChainConfiguration} />}
 
-                </div>
-
-                {/*------ note -----*/}
-                <div className="flex flex-center padding-small">
-                    <NoteIcon size="2x"
-                              className="margin-medium padding-small border border-medium"
-                    />
-                    <textarea className="noteTextarea border border-medium padding-medium"
-                              value={getNote()}
-                              readOnly
-                    />
                 </div>
 
                 <div className="flex border-top border-medium">
