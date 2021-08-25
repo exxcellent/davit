@@ -10,7 +10,7 @@ import { SequenceConfigurationTO } from "../../../dataAccess/access/to/SequenceC
 import { SequenceStateTO } from "../../../dataAccess/access/to/SequenceStateTO";
 import { StateTO } from "../../../dataAccess/access/to/StateTO";
 import { editActions, EditActions, editSelectors } from "../../../slices/EditSlice";
-import { SequenceModelActions, sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
+import { SequenceModelActions, sequenceModelSelectors, ViewLevel } from "../../../slices/SequenceModelSlice";
 import { EditChainConfiguration } from "../../../slices/thunks/ChainConfigurationThunks";
 import { EditSequenceConfiguration } from "../../../slices/thunks/SequenceConfigurationThunks";
 import { ElementSize } from "../../../style/Theme";
@@ -63,6 +63,7 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
         if (selectedChain !== null && chainConfigurationToEdit !== null) {
             const copyChainTO: ChainTO = DavitUtil.deepCopy(selectedChain.chain);
             dispatch(SequenceModelActions.setCurrentChainConfiguration(chainConfigurationToEdit));
+            // We have to set first the mode so the slice will call the calculation!
             dispatch(EditActions.setMode.view());
             dispatch(SequenceModelActions.setCurrentChain(copyChainTO));
         }
@@ -125,8 +126,9 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
     };
 
     const setSequence = (sequenceId: number | undefined) => {
-        if (sequenceId !== undefined) {
+        if (sequenceId) {
             dispatch(SequenceModelActions.setCurrentSequenceById(sequenceId));
+            dispatch(SequenceModelActions.setViewLevel(ViewLevel.sequence));
             newSequenceConfiguration(sequenceId);
         } else {
             dispatch(SequenceModelActions.resetCurrentSequence);
@@ -219,9 +221,11 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
     // ------------------------------- chain ------------------------------
 
     const setChain = (chain: ChainTO | undefined) => {
-        if (chain !== undefined) {
+        if (chain) {
             const copyChain: ChainTO = DavitUtil.deepCopy(chain);
             dispatch(SequenceModelActions.setCurrentChain(copyChain));
+            // We have to set first the chain, so the slice will set the view level.
+            dispatch(SequenceModelActions.setViewLevel(ViewLevel.chain));
             dispatch(EditChainConfiguration.create(copyChain.id));
         } else {
             dispatch(SequenceModelActions.resetCurrentChain);

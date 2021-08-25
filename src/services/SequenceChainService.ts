@@ -1,8 +1,8 @@
 import { ChainCTO } from "../dataAccess/access/cto/ChainCTO";
 import { ChainLinkCTO } from "../dataAccess/access/cto/ChainLinkCTO";
 import { ActionTO } from "../dataAccess/access/to/ActionTO";
+import { ChainConfigurationTO, ChainStateValue } from "../dataAccess/access/to/ChainConfigurationTO";
 import { ChainDecisionTO } from "../dataAccess/access/to/ChainDecisionTO";
-import { ChainStateTO } from "../dataAccess/access/to/ChainStateTO";
 import { SequenceConfigurationTO } from "../dataAccess/access/to/SequenceConfigurationTO";
 import { GoToChain, GoToTypesChain, TerminalChain } from "../dataAccess/access/types/GoToTypeChain";
 import { DavitUtil } from "../utils/DavitUtil";
@@ -26,7 +26,7 @@ export interface CalcChain {
 }
 
 export const SequenceChainService = {
-    calculateChain: (sequenceChain: ChainCTO | null): CalcChain => {
+    calculateChain: (sequenceChain: ChainCTO | null, chainConfiguration: ChainConfigurationTO): CalcChain => {
         const calcSequenceChain: CalcChain = {calcLinks: [], linkIds: [], terminal: {type: GoToTypesChain.ERROR}};
         let loopStartingStep: number = -1;
         let actorDatas: ActorData[] = [];
@@ -80,7 +80,7 @@ export const SequenceChainService = {
                     if (type === GoToTypesChain.DEC) {
                         const decision: ChainDecisionTO = step as ChainDecisionTO;
 
-                        const goTo: GoToChain = executeChainDecisionCheck(decision, actorDatas, sequenceChain.chainStates);
+                        const goTo: GoToChain = executeChainDecisionCheck(decision, actorDatas, chainConfiguration.stateValues);
                         step = getNext(goTo, sequenceChain);
                         type = getType(step);
 
@@ -99,7 +99,7 @@ export const SequenceChainService = {
     },
 };
 
-const executeChainDecisionCheck = (chainDecision: ChainDecisionTO, actorDatas: ActorData[], chainStates: ChainStateTO[]): GoToChain => {
+const executeChainDecisionCheck = (chainDecision: ChainDecisionTO, actorDatas: ActorData[], chainStates: ChainStateValue[]): GoToChain => {
     let goTo: GoToChain | undefined;
     // check conditions
     if (chainDecision.conditions !== []) {
@@ -115,9 +115,9 @@ const executeChainDecisionCheck = (chainDecision: ChainDecisionTO, actorDatas: A
 
     // check states
     chainDecision.stateFkAndStateConditions.forEach(stateFkAndStateCondition => {
-        const stateToCheck: ChainStateTO | undefined = chainStates.find(state => state.id === stateFkAndStateCondition.stateFk);
+        const stateToCheck: ChainStateValue | undefined = chainStates.find(state => state.chainStateFk === stateFkAndStateCondition.stateFk);
         if (stateToCheck) {
-            if (stateToCheck.isState !== stateFkAndStateCondition.stateCondition) {
+            if (stateToCheck.value !== stateFkAndStateCondition.stateCondition) {
                 goTo = chainDecision.elseGoTo;
             }
         }
