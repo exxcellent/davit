@@ -54,14 +54,6 @@ export const useViewViewModel = () => {
         return note;
     };
 
-    const setViewLevelToChain = () => {
-        dispatch(SequenceModelActions.setViewLevel(ViewLevel.chain));
-    };
-
-    const setViewLevelToSequence = () => {
-        dispatch(SequenceModelActions.setViewLevel(ViewLevel.sequence));
-    };
-
     return {
         sequence: selectedSequence,
         stepIndex,
@@ -76,7 +68,5 @@ export const useViewViewModel = () => {
         getSequenceNote,
         getChainNote,
         viewLevel,
-        setViewLevelToSequence,
-        setViewLevelToChain,
     };
 };

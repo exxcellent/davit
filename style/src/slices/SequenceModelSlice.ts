@@ -230,9 +230,9 @@ const setViewLevelThunk = (viewLevel: ViewLevel): AppThunk => (dispatch, getStat
             }
             break;
         case ViewLevel.sequence:
-            if (getState().sequenceModel.selectedSequenceModel !== null) {
-                dispatch(SequenceModelSlice.actions.setViewLevel(viewLevel));
-            }
+            // if (getState().sequenceModel.selectedSequenceModel !== null) {
+            dispatch(SequenceModelSlice.actions.setViewLevel(viewLevel));
+            // }
             break;
     }
 };
@@ -262,8 +262,9 @@ const setSelectedChainThunk = (chain: ChainTO): AppThunk => (dispatch, getState)
     } else {
         const chainCTO: ChainCTO = response.object;
         dispatch(SequenceModelSlice.actions.setSelectedChain(chainCTO));
-        if (chainCTO && mode === Mode.VIEW && getState().sequenceModel.selectedChainConfiguration !== null && getRoot(chainCTO)) {
-            dispatch(SequenceModelSlice.actions.setCalcChain(SequenceChainService.calculateChain(chainCTO)));
+        const selectedChainConfiguration: ChainConfigurationTO | null = getState().sequenceModel.selectedChainConfiguration;
+        if (chainCTO && mode === Mode.VIEW && selectedChainConfiguration !== null && getRoot(chainCTO)) {
+            dispatch(SequenceModelSlice.actions.setCalcChain(SequenceChainService.calculateChain(chainCTO, selectedChainConfiguration)));
         }
     }
 };
