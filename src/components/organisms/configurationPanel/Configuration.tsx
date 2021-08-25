@@ -91,6 +91,8 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
         if (!DavitUtil.isNullOrUndefined(sequenceConfigurationToEdit) && !DavitUtil.isNullOrUndefined(selectedSequence)) {
             if (sequenceConfigurationToEdit!.name !== "" || (name !== "" && name !== undefined)) {
                 const copySequenceConfiguration: SequenceConfigurationTO = DavitUtil.deepCopy(sequenceConfigurationToEdit);
+                // set sequence id
+                copySequenceConfiguration.sequenceFk = selectedSequence!.sequenceTO.id;
                 // set new name if given
                 if (name !== "" && name !== undefined) {
                     copySequenceConfiguration.name = name;
@@ -444,7 +446,7 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
         return noteToReturn;
     };
 
-// ===============================================================================================================
+// ============================================== configuration panel ===============================================
 
     return (
         <div className="configurationPanel border border-medium">
@@ -487,6 +489,8 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
             </div>
 
             {/* --------------- Body ---------------*/}
+
+            {/*------------- sequence ------------- */}
             {selectedSequence && showMore &&
             <div className="configurationBody flex border-top border-medium">
 
@@ -499,7 +503,7 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
 
                         {selectedSequence && <SequenceConfigurationDropDown
                             onSelectCallback={setSequenceConfiguration}
-                            sequenceId={selectedSequence?.sequenceTO?.id}
+                            sequenceId={selectedSequence.sequenceTO.id}
                             selectedSequenceConfiguration={sequenceConfigurationToEdit?.id}
                         />}
 
@@ -567,6 +571,8 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
                     </div>
                 </div>
             </div>}
+
+            {/*------------- chain ------------- */}
 
             {selectedChain && showMore &&
 

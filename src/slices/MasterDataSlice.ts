@@ -246,7 +246,7 @@ export const masterDataSelectors = {
 
     selectSequenceConfigurationsBySequenceId: (sequenceId: number | undefined) => (state: RootState): SequenceConfigurationTO[] => {
         if (sequenceId !== undefined) {
-            return state.masterData.sequenceConfigurations.filter(config => config.sequenceFk !== sequenceId);
+            return state.masterData.sequenceConfigurations.filter(config => config.sequenceFk === sequenceId);
         } else {
             return state.masterData.sequenceConfigurations;
         }
