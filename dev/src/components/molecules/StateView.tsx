@@ -57,7 +57,24 @@ export const StateView: FunctionComponent<StateViewProps> = (props) => {
     return (
         <div className="stateView flex flex-column border border-small">
             <div className="stateViewHeader flex content-space-between padding-small">
-                <label>{HEADER}</label>
+
+                <div className="flex flex-start align-center">
+                    <label>{HEADER}</label>
+                </div>
+
+                <div className="flex flex-end align-center">
+                    <svg className="stateViewSvgField">
+                        <line className={falseStates.length > 0 ? "stateViewIsFalse" : "stateViewIsTrue"}
+                              x1="0"
+                              y1="0"
+                              x2="1rem"
+                              y2="0"
+                        />
+                    </svg>
+                    {falseStates.length <= 0 && trueStates.length > 0 && <div className="gg-check-o" />}
+                    {falseStates.length > 0 && <div className="gg-close-o" />}
+                    {falseStates.length <= 0 && trueStates.length <= 0 && <div className="stateViewSpacer" />}
+                </div>
                 <DavitShowMoreButton show={showStates}
                                      onClick={setShowStates}
                 />

@@ -10,7 +10,7 @@ import { SequenceConfigurationTO } from "../../../dataAccess/access/to/SequenceC
 import { SequenceStateTO } from "../../../dataAccess/access/to/SequenceStateTO";
 import { StateTO } from "../../../dataAccess/access/to/StateTO";
 import { editActions, EditActions, editSelectors } from "../../../slices/EditSlice";
-import { SequenceModelActions, sequenceModelSelectors } from "../../../slices/SequenceModelSlice";
+import { SequenceModelActions, sequenceModelSelectors, ViewLevel } from "../../../slices/SequenceModelSlice";
 import { EditChainConfiguration } from "../../../slices/thunks/ChainConfigurationThunks";
 import { EditSequenceConfiguration } from "../../../slices/thunks/SequenceConfigurationThunks";
 import { ElementSize } from "../../../style/Theme";
@@ -63,6 +63,7 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
         if (selectedChain !== null && chainConfigurationToEdit !== null) {
             const copyChainTO: ChainTO = DavitUtil.deepCopy(selectedChain.chain);
             dispatch(SequenceModelActions.setCurrentChainConfiguration(chainConfigurationToEdit));
+            // We have to set first the mode so the slice will call the calculation!
             dispatch(EditActions.setMode.view());
             dispatch(SequenceModelActions.setCurrentChain(copyChainTO));
         }
@@ -90,6 +91,8 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
         if (!DavitUtil.isNullOrUndefined(sequenceConfigurationToEdit) && !DavitUtil.isNullOrUndefined(selectedSequence)) {
             if (sequenceConfigurationToEdit!.name !== "" || (name !== "" && name !== undefined)) {
                 const copySequenceConfiguration: SequenceConfigurationTO = DavitUtil.deepCopy(sequenceConfigurationToEdit);
+                // set sequence id
+                copySequenceConfiguration.sequenceFk = selectedSequence!.sequenceTO.id;
                 // set new name if given
                 if (name !== "" && name !== undefined) {
                     copySequenceConfiguration.name = name;
@@ -125,8 +128,9 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
     };
 
     const setSequence = (sequenceId: number | undefined) => {
-        if (sequenceId !== undefined) {
+        if (sequenceId) {
             dispatch(SequenceModelActions.setCurrentSequenceById(sequenceId));
+            dispatch(SequenceModelActions.setViewLevel(ViewLevel.sequence));
             newSequenceConfiguration(sequenceId);
         } else {
             dispatch(SequenceModelActions.resetCurrentSequence);
@@ -219,9 +223,11 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
     // ------------------------------- chain ------------------------------
 
     const setChain = (chain: ChainTO | undefined) => {
-        if (chain !== undefined) {
+        if (chain) {
             const copyChain: ChainTO = DavitUtil.deepCopy(chain);
             dispatch(SequenceModelActions.setCurrentChain(copyChain));
+            // We have to set first the chain, so the slice will set the view level.
+            dispatch(SequenceModelActions.setViewLevel(ViewLevel.chain));
             dispatch(EditChainConfiguration.create(copyChain.id));
         } else {
             dispatch(SequenceModelActions.resetCurrentChain);
@@ -440,7 +446,7 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
         return noteToReturn;
     };
 
-// ===============================================================================================================
+// ============================================== configuration panel ===============================================
 
     return (
         <div className="configurationPanel border border-medium">
@@ -483,10 +489,23 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
             </div>
 
             {/* --------------- Body ---------------*/}
+
+            {/*------------- sequence ------------- */}
             {selectedSequence && showMore &&
             <div className="configurationBody flex border-top border-medium">
 
                 <div className="configurationStateColumn flex flex-column width-fluid">
+
+                    {/*------ note -----*/}
+                    <div className="flex flex-center padding-small border-bottom border-medium">
+                        <NoteIcon size="2x"
+                                  className="margin-medium padding-small border border-medium"
+                        />
+                        <textarea className="noteTextarea border border-medium padding-medium"
+                                  value={getNote()}
+                                  readOnly
+                        />
+                    </div>
 
                     {/*------ configuration ------*/}
                     <div className="flex content-space-around align-center padding-small border-bottom border-medium">
@@ -495,24 +514,13 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
 
                         {selectedSequence && <SequenceConfigurationDropDown
                             onSelectCallback={setSequenceConfiguration}
-                            sequenceId={selectedSequence?.sequenceTO?.id}
+                            sequenceId={selectedSequence.sequenceTO.id}
                             selectedSequenceConfiguration={sequenceConfigurationToEdit?.id}
                         />}
 
                         {sequenceConfigurationToEdit?.id !== -1 &&
                         <DavitDeleteButton onClick={deleteSequenceConfiguration} />}
 
-                    </div>
-
-                    {/*------ note -----*/}
-                    <div className="flex flex-center padding-small">
-                        <NoteIcon size="2x"
-                                  className="margin-medium padding-small border border-medium"
-                        />
-                        <textarea className="noteTextarea border border-medium padding-medium"
-                                  value={getNote()}
-                                  readOnly
-                        />
                     </div>
 
                     <div>
@@ -564,13 +572,25 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
                 </div>
             </div>}
 
+            {/*------------- chain ------------- */}
+
             {selectedChain && showMore &&
 
             <div className="configurationBody flex-column border-top border-medium">
 
+                {/*------ note -----*/}
+                <div className="flex flex-center padding-small  border-bottom border-medium">
+                    <NoteIcon size="2x"
+                              className="margin-medium padding-small border border-medium"
+                    />
+                    <textarea className="noteTextarea border border-medium padding-medium"
+                              value={getNote()}
+                              readOnly
+                    />
+                </div>
 
                 {/*------ configuration ------*/}
-                <div className="flex content-space-around align-center padding-small border-bottom border-medium">
+                <div className="flex content-space-around align-center padding-small">
 
                     <h2>Configuration</h2>
 
@@ -583,17 +603,6 @@ export const ConfigurationPanel: FunctionComponent<ConfigurationPanelProps> = ()
                     {chainConfigurationToEdit?.id !== -1 &&
                     <DavitDeleteButton onClick={deleteChainConfiguration} />}
 
-                </div>
-
-                {/*------ note -----*/}
-                <div className="flex flex-center padding-small">
-                    <NoteIcon size="2x"
-                              className="margin-medium padding-small border border-medium"
-                    />
-                    <textarea className="noteTextarea border border-medium padding-medium"
-                              value={getNote()}
-                              readOnly
-                    />
                 </div>
 
                 <div className="flex border-top border-medium">

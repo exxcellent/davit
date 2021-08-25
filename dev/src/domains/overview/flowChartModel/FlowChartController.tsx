@@ -13,6 +13,8 @@ import { GoToChain, GoToTypesChain, TerminalChain } from "../../../dataAccess/ac
 import { CalcChain } from "../../../services/SequenceChainService";
 import { SequenceModelActions, sequenceModelSelectors, ViewLevel } from "../../../slices/SequenceModelSlice";
 import { DavitUtil } from "../../../utils/DavitUtil";
+import { TabFragment } from "../tableModel/fragments/TabFragment";
+import { TabGroupFragment } from "../tableModel/fragments/TabGroupFragment";
 import "./FlowChart.css";
 
 interface FlowChartControllerProps {
@@ -35,18 +37,9 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
             setViewLevelToSequence,
         } = useFlowChartViewModel();
 
-        // const [showChain, setShowChain] = useState<boolean>(false);
         const [tableHeight, setTableHeight] = useState<number>(0);
 
         const parentRef = useRef<HTMLDivElement>(null);
-
-        useEffect(() => {
-            if (!DavitUtil.isNullOrUndefined(chain)) {
-                setViewLevelToChain();
-            } else {
-                setViewLevelToSequence();
-            }
-        }, [chain, setViewLevelToChain, setViewLevelToSequence]);
 
         // TODO: move this in to custom hook in WindowUtils
         useEffect(() => {
@@ -204,6 +197,16 @@ export const FlowChartController: FunctionComponent<FlowChartControllerProps> = 
                      style={{height: tableHeight}}
                 >
                     <div className="flowChartHeader">
+                        {chain && <TabGroupFragment label="Mode">
+                            <TabFragment label="Chain"
+                                         isActive={viewLevel === ViewLevel.chain}
+                                         onClick={setViewLevelToChain}
+                            />
+                            <TabFragment label="Sequence"
+                                         isActive={viewLevel === ViewLevel.sequence}
+                                         onClick={setViewLevelToSequence}
+                            />
+                        </TabGroupFragment>}
                         <StateView showChain={viewLevel === ViewLevel.chain} />
                     </div>
                     {viewLevel === ViewLevel.sequence && sequence && buildFlowChart()}
@@ -255,7 +258,6 @@ const useFlowChartViewModel = () => {
         const currentStepId: string = useSelector(sequenceModelSelectors.selectCurrentStepId);
         const currentLinkId: string = useSelector(sequenceModelSelectors.selectCurrentLinkId);
         const viewLevel: ViewLevel = useSelector(sequenceModelSelectors.selectViewLevel);
-
         const dispatch = useDispatch();
 
         const getRoot = (sequence: SequenceCTO | null): Node => {
@@ -515,8 +517,8 @@ const useFlowChartViewModel = () => {
             chainName: chain?.chain.name || "",
             sequenceName: sequence?.sequenceTO.name || "",
             viewLevel,
-            setViewLevelToChain,
             setViewLevelToSequence,
+            setViewLevelToChain
         };
     }
 ;
